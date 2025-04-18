@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
 
 const prisma = new PrismaClient();
 
@@ -12,6 +13,7 @@ async function main() {
     });
     console.log(`Seeded role: ${name}`);
   }
+  console.log("Seeded all roles successfully");
 }
 
 main()
