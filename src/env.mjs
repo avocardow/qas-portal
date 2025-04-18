@@ -7,24 +7,25 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z.string().url(),
+    DATABASE_URL: z.string().url({ message: "DATABASE_URL must be a valid URL (e.g., postgresql://...)" }),
+    DIRECT_URL: z.string().url({ message: "DIRECT_URL must be a valid URL (e.g., postgresql://...)" }),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === "production"
-        ? z.string().min(1)
-        : z.string().min(1).optional(),
+        ? z.string().min(16, { message: "NEXTAUTH_SECRET must be at least 16 characters long" })
+        : z.string().min(16, { message: "NEXTAUTH_SECRET must be at least 16 characters long" }).optional(),
     NEXTAUTH_URL: z.preprocess(
       // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string().min(1) : z.string().url()
+      process.env.VERCEL ? z.string().min(1) : z.string().url().optional()
     ),
-    // Add `.env` variables here (e.g. Dis):
-    // DISCORD_CLIENT_ID: z.string().min(1),
-    // DISCORD_CLIENT_SECRET: z.string().min(1),
+    AZURE_AD_CLIENT_ID: z.string().min(1, { message: "AZURE_AD_CLIENT_ID is required" }),
+    AZURE_AD_CLIENT_SECRET: z.string().min(1, { message: "AZURE_AD_CLIENT_SECRET is required" }),
+    AZURE_AD_TENANT_ID: z.string().min(1, { message: "AZURE_AD_TENANT_ID is required" }),
   },
 
   /**
@@ -34,6 +35,8 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_SUPABASE_URL: z.string().url({ message: "NEXT_PUBLIC_SUPABASE_URL must be a valid URL" }),
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, { message: "NEXT_PUBLIC_SUPABASE_ANON_KEY is required" }),
   },
 
   /**
@@ -42,10 +45,16 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
+    DIRECT_URL: process.env.DIRECT_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    AZURE_AD_CLIENT_ID: process.env.AZURE_AD_CLIENT_ID,
+    AZURE_AD_CLIENT_SECRET: process.env.AZURE_AD_CLIENT_SECRET,
+    AZURE_AD_TENANT_ID: process.env.AZURE_AD_TENANT_ID,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION=1` to skip env validation. This is especially
