@@ -1,7 +1,9 @@
-import AppHeader from "@/layout/AppHeader";
+"use client";
+export const dynamic = "force-dynamic";
+import React from "react";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
-import React from "react";
+import AppHeader from "@/layout/AppHeader";
 
 export default function AdminLayout({
   children,

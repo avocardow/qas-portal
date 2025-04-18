@@ -1,3 +1,5 @@
+"use client";
+export const dynamic = "force-dynamic";
 import AcquisitionChannelChart from "@/components/analytics/AcquisitionChannelChart";
 import ActiveUsersChart from "@/components/analytics/ActiveUsersChart";
 import AnalyticsBarChart from "@/components/analytics/AnalyticsBarChart";
@@ -7,14 +9,7 @@ import SessionChart from "@/components/analytics/SessionChart";
 import TopChannel from "@/components/analytics/TopChannel";
 import TopPages from "@/components/analytics/TopPages";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
-import { Metadata } from "next";
 import React from "react";
-
-export const metadata: Metadata = {
-  title: "Next.js Analytics Dashboard | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Analytics Dashboard page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-};
 
 export default function Analytics() {
   return (
