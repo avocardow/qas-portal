@@ -36,16 +36,12 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, user }) {
-      const dbUser = await db.user.findUnique({
-        where: { id: user.id },
-        include: { role: true },
-      });
       return {
         ...session,
         user: {
           ...session.user,
           id: user.id,
-          role: dbUser?.role.name ?? "",
+          role: user.role ?? "",
         },
       };
     },
