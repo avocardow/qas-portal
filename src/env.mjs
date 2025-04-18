@@ -22,6 +22,9 @@ export const env = createEnv({
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
       process.env.VERCEL ? z.string().min(1) : z.string().url()
     ),
+    AZURE_AD_CLIENT_ID: z.string().min(1),
+    AZURE_AD_CLIENT_SECRET: z.string().min(1),
+    AZURE_AD_TENANT_ID: z.string().min(1),
     // Add `.env` variables here (e.g. Dis):
     // DISCORD_CLIENT_ID: z.string().min(1),
     // DISCORD_CLIENT_SECRET: z.string().min(1),
@@ -45,6 +48,9 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    AZURE_AD_CLIENT_ID: process.env.AZURE_AD_CLIENT_ID,
+    AZURE_AD_CLIENT_SECRET: process.env.AZURE_AD_CLIENT_SECRET,
+    AZURE_AD_TENANT_ID: process.env.AZURE_AD_TENANT_ID,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
