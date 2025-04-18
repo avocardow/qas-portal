@@ -3,7 +3,6 @@ import { signIn } from "next-auth/react";
 import { ChevronLeftIcon } from "@/icons";
 import Link from "next/link";
 import React from "react";
-import Button from "@/components/ui/button/Button";
 
 export default function SignInForm() {
   return (
@@ -22,13 +21,18 @@ export default function SignInForm() {
           <h1 className="text-title-sm sm:text-title-md mb-4 font-semibold text-gray-800 dark:text-white/90">
             Sign In
           </h1>
-          <Button
+          <button
             onClick={() => signIn("azure-ad")}
-            className="mb-4 w-full"
-            size="sm"
+            className="mb-4 inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-sm border border-[#767676] bg-[#F3F3F3] px-8 font-sans text-sm font-normal text-black hover:bg-[#e1e1e1]"
           >
+            <img
+              src="/assets/microsoft-logo.svg"
+              alt=""
+              aria-hidden="true"
+              className="mr-2 h-[18px] w-[18px]"
+            />
             Sign in with Microsoft
-          </Button>
+          </button>
           <p className="text-center text-sm text-gray-500 dark:text-gray-400">
             Don&apos;t have an account?{" "}
             <Link
