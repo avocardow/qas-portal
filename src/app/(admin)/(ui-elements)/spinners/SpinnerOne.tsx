@@ -3,7 +3,7 @@ import React from "react";
 export default function SpinnerOne() {
   return (
     <div className="flex items-center justify-center gap-4 sm:justify-normal">
-      <div className="text-gray-200 animate-spin stroke-brand-500 dark:text-gray-800">
+      <div className="stroke-brand-500 animate-spin text-gray-200 dark:text-gray-800">
         <svg
           width="20"
           height="20"
@@ -30,7 +30,7 @@ export default function SpinnerOne() {
         </svg>
       </div>
 
-      <div className="text-gray-200 animate-spin stroke-brand-500 dark:text-gray-800">
+      <div className="stroke-brand-500 animate-spin text-gray-200 dark:text-gray-800">
         <svg
           width="28"
           height="28"
@@ -57,7 +57,7 @@ export default function SpinnerOne() {
         </svg>
       </div>
 
-      <div className="text-gray-200 animate-spin stroke-brand-500 dark:text-gray-800">
+      <div className="stroke-brand-500 animate-spin text-gray-200 dark:text-gray-800">
         <svg
           width="36"
           height="36"
@@ -84,7 +84,7 @@ export default function SpinnerOne() {
         </svg>
       </div>
 
-      <div className="text-gray-200 animate-spin stroke-brand-500 dark:text-gray-800">
+      <div className="stroke-brand-500 animate-spin text-gray-200 dark:text-gray-800">
         <svg
           width="40"
           height="40"
@@ -111,7 +111,7 @@ export default function SpinnerOne() {
         </svg>
       </div>
 
-      <div className="text-gray-200 animate-spin stroke-brand-500 dark:text-gray-800">
+      <div className="stroke-brand-500 animate-spin text-gray-200 dark:text-gray-800">
         <svg
           width="48"
           height="48"

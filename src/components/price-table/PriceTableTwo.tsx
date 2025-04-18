@@ -28,15 +28,15 @@ const enterprisePack = [
 
 export default function PriceTableTwo() {
   return (
-    <div className="grid gap-5 gird-cols-1 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+    <div className="gird-cols-1 grid gap-5 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
       {/* <!-- Pricing item --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03] xl:p-8">
-        <div className="flex items-start justify-between -mb-4">
-          <span className="block font-semibold text-gray-800 text-theme-xl dark:text-white/90">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 xl:p-8 dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="-mb-4 flex items-start justify-between">
+          <span className="text-theme-xl block font-semibold text-gray-800 dark:text-white/90">
             Personal
           </span>
 
-          <span className="flex h-[56px] w-[56px] items-center justify-center rounded-[10.5px] bg-brand-50 text-brand-500">
+          <span className="bg-brand-50 text-brand-500 flex size-[56px] items-center justify-center rounded-[10.5px]">
             <svg
               className="fill-current"
               width="29"
@@ -56,11 +56,11 @@ export default function PriceTableTwo() {
         </div>
 
         <div className="flex items-end">
-          <h2 className="font-bold text-gray-800 text-title-md dark:text-white/90">
+          <h2 className="text-title-md font-bold text-gray-800 dark:text-white/90">
             $59.00
           </h2>
 
-          <span className="inline-block mb-1 text-sm text-gray-500 dark:text-gray-400">
+          <span className="mb-1 inline-block text-sm text-gray-500 dark:text-gray-400">
             / Lifetime
           </span>
         </div>
@@ -69,13 +69,13 @@ export default function PriceTableTwo() {
           For solo designers & freelancers
         </p>
 
-        <div className="w-full h-px my-6 bg-gray-200 dark:bg-gray-800"></div>
+        <div className="my-6 h-px w-full bg-gray-200 dark:bg-gray-800"></div>
 
         <ul className="mb-8 space-y-3">
           {personalPack.map((item, index) => (
             <li
               key={index}
-              className={`flex items-center gap-3 text-sm  ${
+              className={`flex items-center gap-3 text-sm ${
                 item.included
                   ? "text-gray-700 dark:text-gray-400"
                   : "text-gray-400"
@@ -91,19 +91,19 @@ export default function PriceTableTwo() {
           ))}
         </ul>
 
-        <button className="flex w-full items-center justify-center rounded-lg bg-gray-800 p-3.5 text-sm font-medium text-white shadow-theme-xs transition-colors hover:bg-brand-500 dark:bg-white/10">
+        <button className="shadow-theme-xs hover:bg-brand-500 flex w-full items-center justify-center rounded-lg bg-gray-800 p-3.5 text-sm font-medium text-white transition-colors dark:bg-white/10">
           Choose Starter
         </button>
       </div>
 
       {/* <!-- Pricing item --> */}
-      <div className="rounded-2xl border-2 border-brand-500 bg-white p-6 dark:border-brand-500 dark:bg-white/[0.03] xl:p-8">
-        <div className="flex items-start justify-between -mb-4">
-          <span className="block font-semibold text-gray-800 text-theme-xl dark:text-white/90">
+      <div className="border-brand-500 dark:border-brand-500 rounded-2xl border-2 bg-white p-6 xl:p-8 dark:bg-white/[0.03]">
+        <div className="-mb-4 flex items-start justify-between">
+          <span className="text-theme-xl block font-semibold text-gray-800 dark:text-white/90">
             Professional
           </span>
 
-          <span className="flex h-[56px] w-[56px] items-center justify-center rounded-[10.5px] bg-brand-50 text-brand-500">
+          <span className="bg-brand-50 text-brand-500 flex size-[56px] items-center justify-center rounded-[10.5px]">
             <svg
               className="fill-current"
               width="29"
@@ -123,11 +123,11 @@ export default function PriceTableTwo() {
         </div>
 
         <div className="flex items-end">
-          <h2 className="font-bold text-gray-800 text-title-md dark:text-white/90">
+          <h2 className="text-title-md font-bold text-gray-800 dark:text-white/90">
             $199.00
           </h2>
 
-          <span className="inline-block mb-1 text-sm text-gray-500 dark:text-gray-400">
+          <span className="mb-1 inline-block text-sm text-gray-500 dark:text-gray-400">
             / Lifetime
           </span>
         </div>
@@ -136,13 +136,13 @@ export default function PriceTableTwo() {
           For working on commercial projects
         </p>
 
-        <div className="w-full h-px my-6 bg-white/20"></div>
+        <div className="my-6 h-px w-full bg-white/20"></div>
 
         <ul className="mb-8 space-y-3">
           {professionalPack.map((item, index) => (
             <li
               key={index}
-              className={`flex items-center gap-3 text-sm  ${
+              className={`flex items-center gap-3 text-sm ${
                 item.included
                   ? "text-gray-700 dark:text-gray-400"
                   : "text-gray-400"
@@ -158,19 +158,19 @@ export default function PriceTableTwo() {
           ))}
         </ul>
 
-        <button className="flex w-full items-center justify-center rounded-lg bg-brand-500 p-3.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">
+        <button className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg p-3.5 text-sm font-medium text-white">
           Choose This Plan
         </button>
       </div>
 
       {/* <!-- Pricing item --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03] xl:p-8">
-        <div className="flex items-start justify-between -mb-4">
-          <span className="block font-semibold text-gray-800 text-theme-xl dark:text-white/90">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 xl:p-8 dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="-mb-4 flex items-start justify-between">
+          <span className="text-theme-xl block font-semibold text-gray-800 dark:text-white/90">
             Enterprise
           </span>
 
-          <span className="flex h-[56px] w-[56px] items-center justify-center rounded-[10.5px] bg-brand-50 text-brand-500">
+          <span className="bg-brand-50 text-brand-500 flex size-[56px] items-center justify-center rounded-[10.5px]">
             <svg
               className="fill-current"
               width="28"
@@ -190,11 +190,11 @@ export default function PriceTableTwo() {
         </div>
 
         <div className="flex items-end">
-          <h2 className="font-bold text-gray-800 text-title-md dark:text-white/90">
+          <h2 className="text-title-md font-bold text-gray-800 dark:text-white/90">
             $599.00
           </h2>
 
-          <span className="inline-block mb-1 text-sm text-gray-500 dark:text-gray-400">
+          <span className="mb-1 inline-block text-sm text-gray-500 dark:text-gray-400">
             / Lifetime
           </span>
         </div>
@@ -203,14 +203,14 @@ export default function PriceTableTwo() {
           For teams larger than 5 members
         </p>
 
-        <div className="w-full h-px my-6 bg-gray-200 dark:bg-gray-800"></div>
+        <div className="my-6 h-px w-full bg-gray-200 dark:bg-gray-800"></div>
 
         <ul className="mb-8 space-y-3">
           <ul className="mb-8 space-y-3">
             {enterprisePack.map((item, index) => (
               <li
                 key={index}
-                className={`flex items-center gap-3 text-sm  ${
+                className={`flex items-center gap-3 text-sm ${
                   item.included
                     ? "text-gray-700 dark:text-gray-400"
                     : "text-gray-400"
@@ -227,7 +227,7 @@ export default function PriceTableTwo() {
           </ul>
         </ul>
 
-        <button className="flex w-full items-center justify-center rounded-lg bg-gray-800 p-3.5 text-sm font-medium text-white shadow-theme-xs transition-colors hover:bg-brand-500 dark:bg-white/10">
+        <button className="shadow-theme-xs hover:bg-brand-500 flex w-full items-center justify-center rounded-lg bg-gray-800 p-3.5 text-sm font-medium text-white transition-colors dark:bg-white/10">
           Choose This Plan
         </button>
       </div>

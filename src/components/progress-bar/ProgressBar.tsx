@@ -33,7 +33,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       );
     } else if (label === "inside") {
       return (
-        <span className="absolute inset-0 flex items-center justify-center text-white font-medium text-[10px] leading-tight">
+        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-medium leading-tight text-white">
           {progress}%
         </span>
       );

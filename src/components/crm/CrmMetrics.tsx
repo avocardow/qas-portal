@@ -34,15 +34,15 @@ export default function CrmMetrics() {
       {mockData.map((item) => (
         <div
           key={item.id}
-          className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6"
+          className="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]"
         >
-          <h4 className="font-bold text-gray-800 text-title-sm dark:text-white/90">
+          <h4 className="text-title-sm font-bold text-gray-800 dark:text-white/90">
             {item.value}
           </h4>
 
-          <div className="flex items-end justify-between mt-4 sm:mt-5">
+          <div className="mt-4 flex items-end justify-between sm:mt-5">
             <div>
-              <p className="text-gray-700 text-theme-sm dark:text-gray-400">
+              <p className="text-theme-sm text-gray-700 dark:text-gray-400">
                 {item.title}
               </p>
             </div>
@@ -54,14 +54,14 @@ export default function CrmMetrics() {
                   item.direction === "up"
                     ? "success"
                     : item.direction === "down"
-                    ? "error"
-                    : "warning"
+                      ? "error"
+                      : "warning"
                 }
               >
                 {" "}
                 {item.change}
               </Badge>
-              <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                 {item.comparisonText}
               </span>
             </div>

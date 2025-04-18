@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "generatedAt": "2025-04-18T12:31:10.299Z",
+    "tasksAnalyzed": 7,
+    "thresholdScore": 5,
+    "projectName": "Your Project Name",
+    "usedResearch": true
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 1,
+      "taskTitle": "Configure Environment Variables and Project Setup",
+      "complexityScore": 6,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "List and describe the key steps required to set up environment variables, configure code quality tools, document deployment variables, and prepare onboarding documentation for a new TypeScript/Next.js project.",
+      "reasoning": "This task involves multiple setup activities that are standard but critical for project stability and onboarding. The complexity is moderate due to the need for accuracy in environment configuration, integration of linting tools, and comprehensive documentation. Each step is distinct and can be broken down cleanly, but the task does not involve deep technical challenges or novel implementation hurdles."
+    },
+    {
+      "taskId": 2,
+      "taskTitle": "Implement Prisma Client Singleton",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the process of implementing a singleton pattern for Prisma Client in a Next.js project, including environment-specific handling, error management, and connection testing.",
+      "reasoning": "Implementing a database client singleton is a common but nuanced backend pattern, especially in serverless or hot-reload environments. The task requires careful handling of global state, environment differences, and robust error handling, making it moderately complex. Testing and validation steps are essential to ensure reliability."
+    },
+    {
+      "taskId": 3,
+      "taskTitle": "Set Up NextAuth.js with Microsoft 365 Provider",
+      "complexityScore": 8,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Detail the steps to integrate NextAuth.js with Microsoft 365 (Azure AD) as an authentication provider, configure the Prisma Adapter, set up session strategies, and implement custom callbacks and UI components.",
+      "reasoning": "This task is complex due to the integration of multiple systems (OAuth, database, session management), the need for secure configuration, and the implementation of both backend and frontend components. It requires a strong understanding of authentication flows and careful handling of sensitive data."
+    },
+    {
+      "taskId": 4,
+      "taskTitle": "Implement tRPC API Layer",
+      "complexityScore": 8,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Outline the steps to set up a tRPC API layer in a Next.js project, including context creation for Prisma and session data, error handling, and client integration.",
+      "reasoning": "Setting up tRPC involves both backend and frontend integration, context management, and error handling. The need to provide secure access to database and session data, along with proper API route setup and client wiring, adds to the complexity. This layer is foundational for scalable API development."
+    },
+    {
+      "taskId": 5,
+      "taskTitle": "Create Application Layouts with Route Protection",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Describe the steps to implement root and protected layouts in a Next.js app, including authentication checks, UI scaffolding, and basic navigation.",
+      "reasoning": "While layout and route protection are standard in modern web apps, integrating authentication checks and ensuring seamless user experience across public and protected routes requires careful planning. The task also involves UI composition and basic access control logic."
+    },
+    {
+      "taskId": 6,
+      "taskTitle": "Implement Role Seeding and Database Initialization",
+      "complexityScore": 6,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "List the steps to create and test a database seed script for initializing user roles, ensuring idempotency, error handling, and integration with package scripts.",
+      "reasoning": "Database seeding is a routine but essential task for initializing application state. Ensuring idempotency and robust error handling adds some complexity, but the steps are well-defined and can be broken down into discrete actions."
+    },
+    {
+      "taskId": 7,
+      "taskTitle": "Document Admin User Assignment Process",
+      "complexityScore": 5,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Detail the process for documenting and implementing admin role assignment, including SQL/Prisma commands, safety checks, and verification steps.",
+      "reasoning": "This is primarily a documentation and scripting task with some minor implementation. The complexity is lower as it involves clear, sequential steps and limited technical depth, but accuracy and safety are important."
+    }
+  ]
+}

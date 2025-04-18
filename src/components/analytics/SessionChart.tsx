@@ -105,8 +105,8 @@ export default function SessionChart() {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
-      <div className="flex items-center justify-between mb-9">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-9 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Sessions By Device
         </h3>
@@ -121,13 +121,13 @@ export default function SessionChart() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -135,7 +135,7 @@ export default function SessionChart() {
         </div>
       </div>
       <div>
-        <div className="flex justify-center mx-auto" id="chartDarkStyle">
+        <div className="mx-auto flex justify-center" id="chartDarkStyle">
           <ReactApexChart
             options={options}
             series={series}

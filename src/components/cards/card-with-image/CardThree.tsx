@@ -25,7 +25,7 @@ export default function CardThree() {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-1 mt-4 text-sm text-brand-500 hover:text-brand-600"
+          className="text-brand-500 hover:text-brand-600 mt-4 inline-flex items-center gap-1 text-sm"
         >
           <svg
             className="fill-current"

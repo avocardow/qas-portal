@@ -25,22 +25,22 @@ export default function TaskHeader() {
   };
   return (
     <>
-      <div className="flex flex-col items-center px-4 py-5 xl:px-6 xl:py-6">
-        <div className="flex flex-col w-full gap-5 sm:justify-between xl:flex-row xl:items-center">
-          <div className="grid grid-cols-2 sm:grid-cols-4 items-center gap-x-1 gap-y-2 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
+      <div className="flex flex-col items-center px-4 py-5 xl:p-6">
+        <div className="flex w-full flex-col gap-5 sm:justify-between xl:flex-row xl:items-center">
+          <div className="grid grid-cols-2 items-center gap-x-1 gap-y-2 rounded-lg bg-gray-100 p-0.5 sm:grid-cols-4 dark:bg-gray-900">
             {taskGroups.map((group) => (
               <button
                 key={group.key}
                 onClick={() => setSelectedTaskGroup(group.key)}
-                className={`inline-flex items-center xl:justify-start justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md group hover:text-gray-900 dark:hover:text-white ${
+                className={`group inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium hover:text-gray-900 xl:justify-start dark:hover:text-white ${
                   selectedTaskGroup === group.key
-                    ? "text-gray-900 dark:text-white bg-white dark:bg-gray-800"
+                    ? "bg-white text-gray-900 dark:bg-gray-800 dark:text-white"
                     : "text-gray-500 dark:text-gray-400"
                 }`}
               >
                 {group.name}
                 <span
-                  className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 ${
+                  className={`group-hover:bg-brand-50 group-hover:text-brand-500 dark:group-hover:bg-brand-500/15 dark:group-hover:text-brand-400 inline-flex rounded-full px-2 py-0.5 text-xs font-medium leading-normal ${
                     selectedTaskGroup === group.key
                       ? "text-brand-500 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/15"
                       : "bg-white dark:bg-white/[0.03]"
@@ -93,19 +93,19 @@ export default function TaskHeader() {
       <Modal
         isOpen={isOpen}
         onClose={closeModal}
-        className="max-w-[700px] p-5 lg:p-10 m-4"
+        className="m-4 max-w-[700px] p-5 lg:p-10"
       >
         <div className="px-2">
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
             Add a new task
           </h4>
-          <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+          <p className="mb-6 text-sm text-gray-500 lg:mb-7 dark:text-gray-400">
             Effortlessly manage your to-do list: add a new task
           </p>
         </div>
 
         <form className="flex flex-col">
-          <div className="custom-scrollbar h-[350px] sm:h-[450px] overflow-y-auto px-2">
+          <div className="custom-scrollbar h-[350px] overflow-y-auto px-2 sm:h-[450px]">
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <Label>Task Title</Label>
@@ -138,8 +138,8 @@ export default function TaskHeader() {
 
               <div>
                 <Label>Status</Label>
-                <div className="relative z-20 bg-transparent dark:bg-form-input">
-                  <select className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+                <div className="dark:bg-form-input relative z-20 bg-transparent">
+                  <select className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
                     <option
                       value=""
                       className="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
@@ -159,7 +159,7 @@ export default function TaskHeader() {
                       Completed
                     </option>
                   </select>
-                  <span className="absolute z-30 text-gray-500 -translate-y-1/2 right-4 top-1/2 dark:text-gray-400">
+                  <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                     <svg
                       className="stroke-current"
                       width="16"
@@ -184,8 +184,8 @@ export default function TaskHeader() {
                 <Label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                   Tags
                 </Label>
-                <div className="relative z-20 bg-transparent dark:bg-form-input">
-                  <select className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+                <div className="dark:bg-form-input relative z-20 bg-transparent">
+                  <select className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
                     <option
                       value=""
                       className="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
@@ -205,7 +205,7 @@ export default function TaskHeader() {
                       Development
                     </option>
                   </select>
-                  <span className="absolute z-30 text-gray-500 -translate-y-1/2 right-4 top-1/2 dark:text-gray-400">
+                  <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                     <svg
                       className="stroke-current"
                       width="16"
@@ -228,8 +228,8 @@ export default function TaskHeader() {
 
               <div>
                 <Label>Assignees</Label>
-                <div className="relative z-20 bg-transparent dark:bg-form-input">
-                  <select className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+                <div className="dark:bg-form-input relative z-20 bg-transparent">
+                  <select className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
                     <option
                       value=""
                       className="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
@@ -249,7 +249,7 @@ export default function TaskHeader() {
                       Mahim Ahmed
                     </option>
                   </select>
-                  <span className="absolute z-30 text-gray-500 -translate-y-1/2 right-4 top-1/2 dark:text-gray-400">
+                  <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                     <svg
                       className="stroke-current"
                       width="16"
@@ -281,24 +281,24 @@ export default function TaskHeader() {
               </div>
             </div>
 
-            <div className="relative p-3 mt-6 border border-gray-200 rounded-xl bg-gray-50 dark:border-gray-800 dark:bg-gray-900 sm:p-5">
+            <div className="relative mt-6 rounded-xl border border-gray-200 bg-gray-50 p-3 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
               <input type="file" id="upload-file" className="sr-only" />
-              <div className="flex items-center gap-3 mb-5">
+              <div className="mb-5 flex items-center gap-3">
                 <span className="text-lg font-medium text-gray-800 dark:text-white/90">
                   Attachments
                 </span>
-                <span className="block w-px h-4 bg-gray-200 dark:bg-gray-800"></span>
+                <span className="block h-4 w-px bg-gray-200 dark:bg-gray-800"></span>
                 <label
                   htmlFor="upload-file"
-                  className="text-sm font-medium text-brand-500"
+                  className="text-brand-500 text-sm font-medium"
                 >
                   Upload file
                 </label>
               </div>
 
               <div className="flex flex-col items-center gap-3 sm:flex-row">
-                <div className="group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 dark:border-gray-800 dark:bg-white/5 sm:w-auto">
-                  <span className="absolute flex items-center justify-center w-5 h-5 text-gray-400 bg-white border border-gray-200 rounded-full opacity-0 -right-2 -top-2 group-hover:opacity-100 dark:border-gray-800 dark:bg-gray-900">
+                <div className="group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 sm:w-auto dark:border-gray-800 dark:bg-white/5">
+                  <span className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 opacity-0 group-hover:opacity-100 dark:border-gray-800 dark:bg-gray-900">
                     <svg
                       className="fill-current"
                       width="12"
@@ -316,7 +316,7 @@ export default function TaskHeader() {
                     </svg>
                   </span>
 
-                  <div className="w-full h-10 max-w-10">
+                  <div className="h-10 w-full max-w-10">
                     <Image
                       width={40}
                       height={40}
@@ -329,19 +329,19 @@ export default function TaskHeader() {
                       Guidelines.pdf
                     </p>
                     <span className="flex items-center gap-1.5">
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                         PDF
                       </span>
-                      <span className="inline-block w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="inline-block size-1 rounded-full bg-gray-400"></span>
+                      <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                         Download
                       </span>
                     </span>
                   </div>
                 </div>
 
-                <div className="group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 dark:border-gray-800 dark:bg-white/5 sm:w-auto">
-                  <span className="absolute flex items-center justify-center w-5 h-5 text-gray-400 bg-white border border-gray-200 rounded-full opacity-0 -right-2 -top-2 group-hover:opacity-100 dark:border-gray-800 dark:bg-gray-900">
+                <div className="group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 sm:w-auto dark:border-gray-800 dark:bg-white/5">
+                  <span className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-400 opacity-0 group-hover:opacity-100 dark:border-gray-800 dark:bg-gray-900">
                     <svg
                       className="fill-current"
                       width="12"
@@ -359,7 +359,7 @@ export default function TaskHeader() {
                     </svg>
                   </span>
 
-                  <div className="w-full h-10 max-w-10">
+                  <div className="h-10 w-full max-w-10">
                     <Image
                       width={40}
                       height={40}
@@ -372,18 +372,18 @@ export default function TaskHeader() {
                       Branding Assets
                     </p>
                     <span className="flex items-center gap-1.5">
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                         Media
                       </span>
-                      <span className="inline-block w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="inline-block size-1 rounded-full bg-gray-400"></span>
+                      <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                         Download
                       </span>
                     </span>
                   </div>
                 </div>
 
-                <div className="flex h-[60px] w-full cursor-pointer items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-700 dark:border-gray-800 dark:bg-white/5 dark:text-gray-400 sm:w-[60px]">
+                <div className="flex h-[60px] w-full cursor-pointer items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-700 sm:w-[60px] dark:border-gray-800 dark:bg-white/5 dark:text-gray-400">
                   <svg
                     className="fill-current"
                     width="24"
@@ -403,13 +403,13 @@ export default function TaskHeader() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center gap-6 px-2 mt-6 sm:flex-row sm:justify-between">
+          <div className="mt-6 flex flex-col items-center gap-6 px-2 sm:flex-row sm:justify-between">
             <div className="flex flex-col items-center gap-3 sm:flex-row">
               <p className="text-sm text-gray-700 dark:text-gray-400">
                 Viewers:
               </p>
               <div className="flex -space-x-2">
-                <div className="w-8 h-8 overflow-hidden border border-white rounded-full dark:border-gray-900">
+                <div className="size-8 overflow-hidden rounded-full border border-white dark:border-gray-900">
                   <Image
                     width={40}
                     height={40}
@@ -417,7 +417,7 @@ export default function TaskHeader() {
                     alt="user"
                   />
                 </div>
-                <div className="w-8 h-8 overflow-hidden border border-white rounded-full dark:border-gray-900">
+                <div className="size-8 overflow-hidden rounded-full border border-white dark:border-gray-900">
                   <Image
                     width={40}
                     height={40}
@@ -425,7 +425,7 @@ export default function TaskHeader() {
                     alt="user"
                   />
                 </div>
-                <div className="w-8 h-8 overflow-hidden border border-white rounded-full dark:border-gray-900">
+                <div className="size-8 overflow-hidden rounded-full border border-white dark:border-gray-900">
                   <Image
                     width={40}
                     height={40}
@@ -436,18 +436,18 @@ export default function TaskHeader() {
               </div>
             </div>
 
-            <div className="flex items-center w-full gap-3 sm:w-auto">
+            <div className="flex w-full items-center gap-3 sm:w-auto">
               <button
                 onClick={closeModal}
                 type="button"
-                className="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                className="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 sm:w-auto dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]"
               >
                 Cancel
               </button>
               <button
                 onClick={closeModal}
                 type="button"
-                className="flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
+                className="bg-brand-500 hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white sm:w-auto"
               >
                 Create Task
               </button>

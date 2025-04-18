@@ -20,7 +20,7 @@ export default function ListWithCheckbox() {
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] sm:w-fit">
+    <div className="rounded-lg border border-gray-200 bg-white sm:w-fit dark:border-gray-800 dark:bg-white/[0.03]">
       <ul className="flex flex-col">
         {[
           "Lorem ipsum dolor sit amet",
@@ -43,7 +43,7 @@ export default function ListWithCheckbox() {
                 />
                 <label
                   htmlFor={id} // Use the same id for the label
-                  className="flex items-center text-sm text-gray-500 cursor-pointer select-none dark:text-gray-400"
+                  className="flex cursor-pointer select-none items-center text-sm text-gray-500 dark:text-gray-400"
                 >
                   {item}
                 </label>

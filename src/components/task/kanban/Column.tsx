@@ -31,23 +31,20 @@ const Column: React.FC<ColumnProps> = ({
     setIsOpen(false);
   }
   return (
-    <div className="flex flex-col gap-5 p-4 swim-lane xl:p-6">
-      <div className="flex items-center justify-between mb-1">
+    <div className="swim-lane flex flex-col gap-5 p-4 xl:p-6">
+      <div className="mb-1 flex items-center justify-between">
         <h3 className="flex items-center gap-3 text-base font-medium text-gray-800 dark:text-white/90">
           {title}
           <span
-            className={`
-    inline-flex rounded-full px-2 py-0.5 text-theme-xs font-medium 
-    ${
-      status === "todo"
-        ? "bg-gray-100 text-gray-700 dark:bg-white/[0.03] dark:text-white/80 "
-        : status === "inProgress"
-        ? "text-warning-700 bg-warning-50 dark:bg-warning-500/15 dark:text-orange-400"
-        : status === "completed"
-        ? "bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500"
-        : ""
-    }
-  `}
+            className={`text-theme-xs inline-flex rounded-full px-2 py-0.5 font-medium ${
+              status === "todo"
+                ? "bg-gray-100 text-gray-700 dark:bg-white/[0.03] dark:text-white/80"
+                : status === "inProgress"
+                  ? "text-warning-700 bg-warning-50 dark:bg-warning-500/15 dark:text-orange-400"
+                  : status === "completed"
+                    ? "bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500"
+                    : ""
+            } `}
           >
             {tasks.length}
           </span>
@@ -59,23 +56,23 @@ const Column: React.FC<ColumnProps> = ({
           <Dropdown
             isOpen={isOpen}
             onClose={closeDropdown}
-            className="absolute right-0 top-full z-40 w-[140px] space-y-1 rounded-2xl border border-gray-200 bg-white p-2 shadow-theme-md dark:border-gray-800 dark:bg-gray-dark"
+            className="shadow-theme-md dark:bg-gray-dark absolute right-0 top-full z-40 w-[140px] space-y-1 rounded-2xl border border-gray-200 bg-white p-2 dark:border-gray-800"
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Edit
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Clear All
             </DropdownItem>

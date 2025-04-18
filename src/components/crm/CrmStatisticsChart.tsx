@@ -128,13 +128,13 @@ export default function CrmStatisticsChart() {
     },
   ];
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Statistics
           </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
+          <p className="text-theme-sm mt-1 text-gray-500 dark:text-gray-400">
             Target you’ve set for each month
           </p>
         </div>
@@ -144,34 +144,34 @@ export default function CrmStatisticsChart() {
       <div className="flex flex-col gap-4 sm:flex-row sm:gap-9">
         <div className="flex items-start gap-2">
           <div>
-            <h4 className="text-base font-bold text-gray-800 dark:text-white/90 sm:text-theme-xl">
+            <h4 className="sm:text-theme-xl text-base font-bold text-gray-800 dark:text-white/90">
               $212,142.12
             </h4>
-            <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+            <span className="text-theme-xs text-gray-500 dark:text-gray-400">
               Avg. Yearly Profit
             </span>
           </div>
-          <span className="mt-1.5 flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+          <span className="bg-success-50 text-theme-xs text-success-600 dark:bg-success-500/15 dark:text-success-500 mt-1.5 flex items-center gap-1 rounded-full px-2 py-0.5 font-medium">
             +23.2%
           </span>
         </div>
         <div className="flex items-start gap-2">
           <div>
-            <h4 className="text-base font-bold text-gray-800 dark:text-white/90 sm:text-theme-xl">
+            <h4 className="sm:text-theme-xl text-base font-bold text-gray-800 dark:text-white/90">
               $30,321.23
             </h4>
-            <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+            <span className="text-theme-xs text-gray-500 dark:text-gray-400">
               Avg. Yearly Profit
             </span>
           </div>
-          <span className="mt-1.5 flex items-center gap-1 rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
+          <span className="bg-error-50 text-theme-xs text-error-600 dark:bg-error-500/15 dark:text-error-500 mt-1.5 flex items-center gap-1 rounded-full px-2 py-0.5 font-medium">
             -12.3%
           </span>
         </div>
       </div>
 
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="-ml-4  min-w-[650px] xl:min-w-full pl-2">
+      <div className="custom-scrollbar max-w-full overflow-x-auto">
+        <div className="-ml-4 min-w-[650px] pl-2 xl:min-w-full">
           <ReactApexChart
             options={options}
             series={series}

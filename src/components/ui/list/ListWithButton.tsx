@@ -2,10 +2,10 @@ import React from "react";
 
 export default function ListWithButton() {
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] sm:w-[228px]">
+    <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white sm:w-[228px] dark:border-gray-800 dark:bg-white/[0.03]">
       <ul className="flex flex-col">
         <li className="border-b border-gray-200 last:border-b-0 dark:border-gray-800">
-          <button className="flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400">
+          <button className="hover:bg-brand-50 hover:text-brand-500 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400 flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400">
             <span>
               <svg
                 className="fill-current"
@@ -29,7 +29,7 @@ export default function ListWithButton() {
         </li>
 
         <li className="border-b border-gray-200 last:border-b-0 dark:border-gray-800">
-          <button className="flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400">
+          <button className="hover:bg-brand-50 hover:text-brand-500 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400 flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400">
             <span>
               <svg
                 className="fill-current"
@@ -53,7 +53,7 @@ export default function ListWithButton() {
         </li>
 
         <li className="border-b border-gray-200 last:border-b-0 dark:border-gray-800">
-          <button className="flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400">
+          <button className="hover:bg-brand-50 hover:text-brand-500 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400 flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400">
             <span>
               <svg
                 className="fill-current"
@@ -77,7 +77,7 @@ export default function ListWithButton() {
         </li>
 
         <li className="border-b border-gray-200 last:border-b-0 dark:border-gray-800">
-          <button className="flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400">
+          <button className="hover:bg-brand-50 hover:text-brand-500 dark:hover:bg-brand-500/[0.12] dark:hover:text-brand-400 flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400">
             <span>
               <svg
                 className="fill-current"

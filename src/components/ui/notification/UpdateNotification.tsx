@@ -34,17 +34,17 @@ const UpdateNotification: React.FC<UpdateNotificationProps> = ({
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center w-full gap-3 sm:max-w-fit">
+          <div className="flex w-full items-center gap-3 sm:max-w-fit">
             <button
               type="button"
-              className="flex justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+              className="shadow-theme-xs flex justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
               onClick={onLaterClick}
             >
               Later
             </button>
             <button
               type="button"
-              className="flex justify-center px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+              className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex justify-center rounded-lg px-4 py-3 text-sm font-medium text-white"
               onClick={onUpdateClick}
             >
               Update Now

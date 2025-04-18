@@ -130,7 +130,7 @@ export default function ActiveUsersChart() {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex items-start justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Active Users
@@ -147,13 +147,13 @@ export default function ActiveUsersChart() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -163,17 +163,17 @@ export default function ActiveUsersChart() {
 
       <div className="mt-6 flex items-end gap-1.5">
         <div className="flex items-center gap-2.5">
-          <span className="relative inline-block w-5 h-5">
-            <span className="absolute w-2 h-2 transform -translate-x-1/2 -translate-y-1/2 rounded-full top-1/2 left-1/2 bg-error-500">
-              <span className="absolute inline-flex w-4 h-4 rounded-full opacity-75 bg-error-400 animate-ping -top-1 -left-1"></span>
+          <span className="relative inline-block size-5">
+            <span className="bg-error-500 absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full">
+              <span className="bg-error-400 absolute -left-1 -top-1 inline-flex size-4 animate-ping rounded-full opacity-75"></span>
             </span>
           </span>
 
-          <span className="font-semibold text-gray-800 activeUsers text-title-sm dark:text-white/90">
+          <span className="activeUsers text-title-sm font-semibold text-gray-800 dark:text-white/90">
             364
           </span>
         </div>
-        <span className="block mb-1 text-gray-500 text-theme-sm dark:text-gray-400">
+        <span className="text-theme-sm mb-1 block text-gray-500 dark:text-gray-400">
           Live visitors
         </span>
       </div>
@@ -191,32 +191,32 @@ export default function ActiveUsersChart() {
 
       <div className="flex items-center justify-center gap-6">
         <div>
-          <p className="text-lg font-semibold text-center text-gray-800 dark:text-white/90">
+          <p className="text-center text-lg font-semibold text-gray-800 dark:text-white/90">
             224
           </p>
-          <p className="mt-0.5 text-center text-theme-xs text-gray-500 dark:text-gray-400">
+          <p className="text-theme-xs mt-0.5 text-center text-gray-500 dark:text-gray-400">
             Avg, Daily
           </p>
         </div>
 
-        <div className="w-px bg-gray-200 h-11 dark:bg-gray-800"></div>
+        <div className="h-11 w-px bg-gray-200 dark:bg-gray-800"></div>
 
         <div>
-          <p className="text-lg font-semibold text-center text-gray-800 dark:text-white/90">
+          <p className="text-center text-lg font-semibold text-gray-800 dark:text-white/90">
             1.4K
           </p>
-          <p className="mt-0.5 text-center text-theme-xs text-gray-500 dark:text-gray-400">
+          <p className="text-theme-xs mt-0.5 text-center text-gray-500 dark:text-gray-400">
             Avg, Weekly
           </p>
         </div>
 
-        <div className="w-px bg-gray-200 h-11 dark:bg-gray-800"></div>
+        <div className="h-11 w-px bg-gray-200 dark:bg-gray-800"></div>
 
         <div>
-          <p className="text-lg font-semibold text-center text-gray-800 dark:text-white/90">
+          <p className="text-center text-lg font-semibold text-gray-800 dark:text-white/90">
             22.1K
           </p>
-          <p className="mt-0.5 text-center text-theme-xs text-gray-500 dark:text-gray-400">
+          <p className="text-theme-xs mt-0.5 text-center text-gray-500 dark:text-gray-400">
             Avg, Monthly
           </p>
         </div>

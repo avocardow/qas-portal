@@ -62,7 +62,7 @@ const fileData = [
 export default function AllMediaCard() {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="px-4 py-4 sm:pl-6 sm:pr-4">
+      <div className="p-4 sm:pl-6 sm:pr-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             All Media
@@ -70,7 +70,7 @@ export default function AllMediaCard() {
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative">
-              <button className="absolute text-gray-500 -translate-y-1/2 left-4 top-1/2 dark:text-gray-400">
+              <button className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 <svg
                   width="20"
                   height="20"
@@ -90,11 +90,11 @@ export default function AllMediaCard() {
               <input
                 type="text"
                 placeholder="Search..."
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-3.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[300px]"
+                className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-3.5 text-sm text-gray-800 placeholder:text-gray-400 xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
               />
             </div>
 
-            <button className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
+            <button className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white sm:w-auto">
               <svg
                 className="fill-current"
                 width="20"
@@ -115,7 +115,7 @@ export default function AllMediaCard() {
           </div>
         </div>
       </div>
-      <div className="p-4 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+      <div className="border-t border-gray-100 p-4 sm:p-6 dark:border-gray-800">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {fileData.map((item, i) => (
             <FileCard

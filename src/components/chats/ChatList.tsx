@@ -21,15 +21,15 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
   }
   return (
     <div
-      className={`flex-col overflow-auto no-scrollbar transition-all duration-300 ${
+      className={`no-scrollbar flex-col overflow-auto transition-all duration-300 ${
         isOpen
-          ? "fixed top-0 left-0 z-999999 h-screen bg-white dark:bg-gray-900"
+          ? "z-999999 fixed left-0 top-0 h-screen bg-white dark:bg-gray-900"
           : "hidden xl:flex"
       }`}
     >
-      <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-800 xl:hidden">
+      <div className="flex items-center justify-between border-b border-gray-200 p-5 xl:hidden dark:border-gray-800">
         <div>
-          <h3 className="font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
+          <h3 className="text-theme-xl font-semibold text-gray-800 sm:text-2xl dark:text-white/90">
             Chat
           </h3>
         </div>
@@ -45,13 +45,13 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
             >
               <DropdownItem
                 onItemClick={closeDropdownTwo}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 View More
               </DropdownItem>
               <DropdownItem
                 onItemClick={closeDropdownTwo}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 Delete
               </DropdownItem>
@@ -59,7 +59,7 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
           </div>
           <button
             onClick={onToggle}
-            className="flex items-center justify-center w-10 h-10 text-gray-700 transition border border-gray-300 rounded-full dark:border-gray-700 dark:text-gray-400 dark:hover:text-white/90"
+            className="flex size-10 items-center justify-center rounded-full border border-gray-300 text-gray-700 transition dark:border-gray-700 dark:text-gray-400 dark:hover:text-white/90"
           >
             <svg
               width="24"
@@ -78,8 +78,8 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
           </button>
         </div>
       </div>
-      <div className="flex flex-col max-h-full px-4 overflow-auto sm:px-5">
-        <div className="max-h-full space-y-1 overflow-auto custom-scrollbar">
+      <div className="flex max-h-full flex-col overflow-auto px-4 sm:px-5">
+        <div className="custom-scrollbar max-h-full space-y-1 overflow-auto">
           {/* <!-- Chat List Item --> */}
           <div className="flex cursor-pointer items-center gap-3 rounded-lg p-3 hover:bg-gray-100 dark:hover:bg-white/[0.03]">
             <div className="relative h-12 w-full max-w-[48px] rounded-full">
@@ -88,9 +88,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-18.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -98,11 +98,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Kaiya George
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Project Manager
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 15 mins </span>
+                <span className="text-theme-xs text-gray-400"> 15 mins </span>
               </div>
             </div>
           </div>
@@ -115,9 +115,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-17.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -125,11 +125,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Lindsey Curtis
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Designer
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 30 mins </span>
+                <span className="text-theme-xs text-gray-400"> 30 mins </span>
               </div>
             </div>
           </div>
@@ -142,9 +142,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-19.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -152,11 +152,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Zain Geidt
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Content Writer
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 45 mins </span>
+                <span className="text-theme-xs text-gray-400"> 45 mins </span>
               </div>
             </div>
           </div>
@@ -169,9 +169,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-05.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
+              <span className="bg-warning-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -179,11 +179,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Carla George
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Front-end Developer
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 2 days </span>
+                <span className="text-theme-xs text-gray-400"> 2 days </span>
               </div>
             </div>
           </div>
@@ -196,9 +196,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-20.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -206,11 +206,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Abram Schleifer
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Digital Marketer
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 1 hour </span>
+                <span className="text-theme-xs text-gray-400"> 1 hour </span>
               </div>
             </div>
           </div>
@@ -223,9 +223,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-34.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -233,11 +233,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Lincoln Donin
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Project ManagerProduct Designer
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 3 days </span>
+                <span className="text-theme-xs text-gray-400"> 3 days </span>
               </div>
             </div>
           </div>
@@ -250,9 +250,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-35.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -260,11 +260,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Erin Geidthem
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Copyrighter
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 5 days </span>
+                <span className="text-theme-xs text-gray-400"> 5 days </span>
               </div>
             </div>
           </div>
@@ -277,9 +277,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-36.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-error-500 dark:border-gray-900"></span>
+              <span className="bg-error-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -287,11 +287,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Alena Baptista
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     SEO Expert
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 2 hours </span>
+                <span className="text-theme-xs text-gray-400"> 2 hours </span>
               </div>
             </div>
           </div>
@@ -304,9 +304,9 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                 height={48}
                 src="/images/user/user-37.jpg"
                 alt="profile"
-                className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+                className="size-full overflow-hidden rounded-full object-cover object-center"
               />
-              <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+              <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
             </div>
             <div className="w-full">
               <div className="flex items-start justify-between">
@@ -314,11 +314,11 @@ export default function ChatList({ isOpen, onToggle }: ChatListProps) {
                   <h5 className="text-sm font-medium text-gray-800 dark:text-white/90">
                     Wilium vamos
                   </h5>
-                  <p className="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-theme-xs mt-0.5 text-gray-500 dark:text-gray-400">
                     Content Writer
                   </p>
                 </div>
-                <span className="text-gray-400 text-theme-xs"> 5 days </span>
+                <span className="text-theme-xs text-gray-400"> 5 days </span>
               </div>
             </div>
           </div>

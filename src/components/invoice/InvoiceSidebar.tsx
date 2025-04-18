@@ -3,10 +3,10 @@ import React from "react";
 
 export default function InvoiceSidebar() {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03] xl:w-1/5">
-      <div className="relative w-full mb-5">
+    <div className="rounded-2xl border border-gray-200 bg-white p-4 xl:w-1/5 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="relative mb-5 w-full">
         <form>
-          <button className="absolute -translate-y-1/2 left-4 top-1/2">
+          <button className="absolute left-4 top-1/2 -translate-y-1/2">
             <svg
               className="fill-gray-500 dark:fill-gray-400"
               width="20"
@@ -27,14 +27,14 @@ export default function InvoiceSidebar() {
           <input
             type="text"
             placeholder="Search Invoice..."
-            className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-3.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+            className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-3.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
           />
         </form>
       </div>
 
       <div className="space-y-1">
         <div className="flex cursor-pointer items-center gap-3 rounded-lg bg-gray-100 p-2 hover:bg-gray-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.03]">
-          <div className="w-12 h-12 overflow-hidden rounded-full">
+          <div className="size-12 overflow-hidden rounded-full">
             <Image
               width={48}
               height={48}
@@ -47,14 +47,14 @@ export default function InvoiceSidebar() {
             <span className="mb-0.5 block text-sm font-medium text-gray-800 dark:text-white/90">
               Zain Geidt
             </span>
-            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+            <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
               ID: #348
             </span>
           </div>
         </div>
 
         <div className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-white/[0.03]">
-          <div className="w-12 h-12 overflow-hidden rounded-full">
+          <div className="size-12 overflow-hidden rounded-full">
             <Image
               width={48}
               height={48}
@@ -67,14 +67,14 @@ export default function InvoiceSidebar() {
             <span className="mb-0.5 block text-sm font-medium text-gray-800 dark:text-white/90">
               Carla George
             </span>
-            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+            <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
               ID: #982
             </span>
           </div>
         </div>
 
         <div className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-white/[0.03]">
-          <div className="w-12 h-12 overflow-hidden rounded-full">
+          <div className="size-12 overflow-hidden rounded-full">
             <Image
               width={48}
               height={48}
@@ -87,14 +87,14 @@ export default function InvoiceSidebar() {
             <span className="mb-0.5 block text-sm font-medium text-gray-800 dark:text-white/90">
               Abram Schleifer
             </span>
-            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+            <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
               ID: #289
             </span>
           </div>
         </div>
 
         <div className="flex cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-white/[0.03]">
-          <div className="w-12 h-12 overflow-hidden rounded-full">
+          <div className="size-12 overflow-hidden rounded-full">
             <Image
               width={48}
               height={48}
@@ -107,7 +107,7 @@ export default function InvoiceSidebar() {
             <span className="mb-0.5 block text-sm font-medium text-gray-800 dark:text-white/90">
               Lincoln Donin
             </span>
-            <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+            <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
               ID: #522
             </span>
           </div>

@@ -119,8 +119,8 @@ export default function BasicTableFour() {
     setIsOpen(false);
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pb-3 pt-4 dark:border-white/[0.05] dark:bg-white/[0.03] sm:px-6">
-      <div className="flex justify-between gap-2 mb-4 sm:items-center">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pb-3 pt-4 sm:px-6 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <div className="mb-4 flex justify-between gap-2 sm:items-center">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Featured Campaigns
@@ -138,13 +138,13 @@ export default function BasicTableFour() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -154,23 +154,23 @@ export default function BasicTableFour() {
 
       <div className="max-w-full overflow-x-auto">
         <Table>
-          <TableHeader className="border-gray-100 border-y dark:border-white/[0.05]">
+          <TableHeader className="border-y border-gray-100 dark:border-white/[0.05]">
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs py-3 text-start font-medium text-gray-500 dark:text-gray-400"
               >
                 Products
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs py-3 text-start font-medium text-gray-500 dark:text-gray-400"
               >
                 Campaign
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs py-3 text-start font-medium text-gray-500 dark:text-gray-400"
               >
                 Status
               </TableCell>
@@ -182,7 +182,7 @@ export default function BasicTableFour() {
               <TableRow key={item.id} className="">
                 <TableCell className="py-3">
                   <div className="flex items-center gap-[18px]">
-                    <div className="w-10 h-10 overflow-hidden rounded-full">
+                    <div className="size-10 overflow-hidden rounded-full">
                       <Image
                         width={40}
                         height={40}
@@ -192,14 +192,14 @@ export default function BasicTableFour() {
                       />
                     </div>
                     <div>
-                      <p className="text-gray-700 text-theme-sm dark:text-gray-400">
+                      <p className="text-theme-sm text-gray-700 dark:text-gray-400">
                         {item.creator.name}
                       </p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="py-3">
-                  <div className="flex items-center w-full gap-5">
+                  <div className="flex w-full items-center gap-5">
                     <div className="w-full max-w-8">
                       <Image
                         width={32}
@@ -210,10 +210,10 @@ export default function BasicTableFour() {
                       />
                     </div>
                     <div className="truncate">
-                      <p className="mb-0.5 truncate text-theme-sm font-medium text-gray-700 dark:text-gray-400">
+                      <p className="text-theme-sm mb-0.5 truncate font-medium text-gray-700 dark:text-gray-400">
                         {item.campaign.name}
                       </p>
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                         {item.campaign.type}
                       </span>
                     </div>
@@ -226,8 +226,8 @@ export default function BasicTableFour() {
                       item.status === "Success"
                         ? "success"
                         : item.status === "Pending"
-                        ? "warning"
-                        : "error"
+                          ? "warning"
+                          : "error"
                     }
                   >
                     {item.status}

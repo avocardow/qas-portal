@@ -22,8 +22,8 @@ const StockCard: React.FC<StockCardProps> = ({
 }) => {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-6 pb-5 pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="size-10">
           <Image
             width={40}
             height={40}
@@ -36,7 +36,7 @@ const StockCard: React.FC<StockCardProps> = ({
           <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
             {companyName}
           </h3>
-          <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
             {companyName}
           </span>
         </div>

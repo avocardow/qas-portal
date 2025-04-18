@@ -56,10 +56,10 @@ export default function PaginationWithIcon({
           e.preventDefault();
           handlePageChange(page);
         }}
-        className={`flex items-center justify-center w-10 h-10 text-sm font-medium rounded-lg ${
+        className={`flex size-10 items-center justify-center rounded-lg text-sm font-medium ${
           currentPage === page
-            ? "text-white bg-brand-500 hover:bg-brand-600"
-            : "text-gray-700 hover:bg-brand-500 hover:text-white dark:text-gray-400 dark:hover:text-white"
+            ? "bg-brand-500 hover:bg-brand-600 text-white"
+            : "hover:bg-brand-500 text-gray-700 hover:text-white dark:text-gray-400 dark:hover:text-white"
         }`}
       >
         {page}
@@ -69,14 +69,14 @@ export default function PaginationWithIcon({
 
   const renderEllipsis = () => (
     <li key="ellipsis">
-      <span className="flex items-center justify-center w-10 h-10 text-sm font-medium text-gray-700 dark:text-gray-400">
+      <span className="flex size-10 items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-400">
         ...
       </span>
     </li>
   );
   const renderEllipsisTwo = () => (
     <li key="ellipsisTwo">
-      <span className="flex items-center justify-center w-10 h-10 text-sm font-medium text-gray-700 dark:text-gray-400">
+      <span className="flex size-10 items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-400">
         ...
       </span>
     </li>
@@ -87,7 +87,7 @@ export default function PaginationWithIcon({
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 sm:p-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50 sm:p-2.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
         <span>
           <svg
@@ -108,7 +108,7 @@ export default function PaginationWithIcon({
         </span>
       </button>
 
-      <span className="block text-sm font-medium text-gray-700 dark:text-gray-400 sm:hidden">
+      <span className="block text-sm font-medium text-gray-700 sm:hidden dark:text-gray-400">
         Page {currentPage} of {totalPages}
       </span>
 
@@ -119,7 +119,7 @@ export default function PaginationWithIcon({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 sm:p-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="shadow-theme-xs flex items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50 sm:p-2.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
         <span>
           <svg

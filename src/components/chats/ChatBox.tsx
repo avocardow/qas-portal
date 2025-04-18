@@ -81,10 +81,10 @@ const chatList: ChatItem[] = [
 
 export default function ChatBox() {
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-3/4">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white xl:w-3/4 dark:border-gray-800 dark:bg-white/[0.03]">
       {/* <!-- ====== Chat Box Start --> */}
       <ChatBoxHeader />
-      <div className="flex-1 max-h-full p-5 space-y-6 overflow-auto custom-scrollbar xl:space-y-8 xl:p-6">
+      <div className="custom-scrollbar max-h-full flex-1 space-y-6 overflow-auto p-5 xl:space-y-8 xl:p-6">
         {chatList.map((chat) => (
           <div
             key={chat.id}
@@ -93,13 +93,13 @@ export default function ChatBox() {
             }`}
           >
             {!chat.isSender && (
-              <div className="w-10 h-10 overflow-hidden rounded-full">
+              <div className="size-10 overflow-hidden rounded-full">
                 <Image
                   width={40}
                   height={40}
                   src={chat.profileImage}
                   alt={`${chat.name} profile`}
-                  className="object-cover object-center w-full h-full"
+                  className="size-full object-cover object-center"
                 />
               </div>
             )}
@@ -112,21 +112,21 @@ export default function ChatBox() {
                     height={150}
                     src={chat.imagePreview}
                     alt="chat"
-                    className="object-cover w-full"
+                    className="w-full object-cover"
                   />
                 </div>
               )}
 
               <div
-                className={`px-3 py-2 rounded-lg ${
+                className={`rounded-lg px-3 py-2 ${
                   chat.isSender
-                    ? "bg-brand-500 text-white dark:bg-brand-500"
-                    : "bg-gray-100 dark:bg-white/5 text-gray-800 dark:text-white/90"
+                    ? "bg-brand-500 dark:bg-brand-500 text-white"
+                    : "bg-gray-100 text-gray-800 dark:bg-white/5 dark:text-white/90"
                 } ${chat.isSender ? "rounded-tr-sm" : "rounded-tl-sm"}`}
               >
-                <p className="text-sm ">{chat.message}</p>
+                <p className="text-sm">{chat.message}</p>
               </div>
-              <p className="mt-2 text-gray-500 text-theme-xs dark:text-gray-400">
+              <p className="text-theme-xs mt-2 text-gray-500 dark:text-gray-400">
                 {chat.isSender
                   ? chat.lastActive
                   : `${chat.name}, ${chat.lastActive}`}

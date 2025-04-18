@@ -5,7 +5,7 @@ export default function SpinnerFour() {
     <div className="flex items-center gap-5">
       <button
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-5 py-3.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600"
+        className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex items-center justify-center gap-2 rounded-lg px-5 py-3.5 text-sm font-medium text-white"
       >
         <span className="animate-spin">
           <svg
@@ -39,9 +39,9 @@ export default function SpinnerFour() {
 
       <button
         type="button"
-        className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+        className="shadow-theme-xs flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
-        <span className="text-gray-200 animate-spin stroke-brand-500 dark:text-gray-800">
+        <span className="stroke-brand-500 animate-spin text-gray-200 dark:text-gray-800">
           <svg
             width="20"
             height="20"

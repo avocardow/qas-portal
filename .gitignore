@@ -30,10 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Environment Variables
-# Ignore all .env files by default...
+# env files
+# Ignore all .env files...
 .env*
-# ...but explicitly allow .env.example
+# ...but allow .env.example
 !.env.example
 
 # vercel
@@ -49,7 +49,7 @@ logs
 *.log
 dev-debug.log
 # Dependency directories
-# node_modules/ # Already ignored above
+node_modules/
 # Environment variables
 # Editor directories and files
 .idea

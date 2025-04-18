@@ -21,8 +21,8 @@ const FolderCard: React.FC<FolderCardProps> = ({ title, fileCount, size }) => {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-100 bg-gray-50 px-6 py-6 dark:border-gray-800 dark:bg-white/[0.03] xl:py-[27px]">
-      <div className="flex justify-between mb-6">
+    <div className="rounded-2xl border border-gray-100 bg-gray-50 p-6 xl:py-[27px] dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex justify-between">
         <div>
           <svg
             width="36"
@@ -63,13 +63,13 @@ const FolderCard: React.FC<FolderCardProps> = ({ title, fileCount, size }) => {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -83,7 +83,7 @@ const FolderCard: React.FC<FolderCardProps> = ({ title, fileCount, size }) => {
         <span className="block text-sm text-gray-500 dark:text-gray-400">
           {fileCount} Files
         </span>
-        <span className="block text-sm text-right text-gray-500 dark:text-gray-400">
+        <span className="block text-right text-sm text-gray-500 dark:text-gray-400">
           {size}
         </span>
       </div>

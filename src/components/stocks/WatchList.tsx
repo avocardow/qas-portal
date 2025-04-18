@@ -91,26 +91,26 @@ const WatchlistItem: React.FC<WatchlistItemProps> = ({
   brandImage,
 }) => {
   return (
-    <div className="flex items-center justify-between pt-4 pb-4 border-b border-gray-200 first:pt-0 last:border-b-0 last:pb-0 dark:border-gray-800">
+    <div className="flex items-center justify-between border-b border-gray-200 py-4 first:pt-0 last:border-b-0 last:pb-0 dark:border-gray-800">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10">
+        <div className="size-10">
           <Image width={40} height={40} src={brandImage} alt={companyName} />
         </div>
         <div>
           <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
             {symbol}
           </h3>
-          <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+          <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
             {companyName}
           </span>
         </div>
       </div>
       <div>
-        <h4 className="mb-1 font-medium text-right text-gray-700 text-theme-sm dark:text-gray-400">
+        <h4 className="text-theme-sm mb-1 text-right font-medium text-gray-700 dark:text-gray-400">
           {price}
         </h4>
         <span
-          className={`flex items-center justify-end gap-1 font-medium text-theme-xs ${
+          className={`text-theme-xs flex items-center justify-end gap-1 font-medium ${
             changeDirection === "up"
               ? "text-success-600 dark:text-success-500"
               : "text-error-600 dark:text-error-500"
@@ -136,7 +136,7 @@ export default function WatchList() {
   }
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           My Watchlist
         </h3>
@@ -151,13 +151,13 @@ export default function WatchList() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -166,7 +166,7 @@ export default function WatchList() {
       </div>
 
       <div className="flex h-[372px] flex-col">
-        <div className="flex flex-col h-auto pr-3 overflow-y-auto custom-scrollbar">
+        <div className="custom-scrollbar flex h-auto flex-col overflow-y-auto pr-3">
           {watchlistData.map((item, i) => (
             <WatchlistItem key={i + 1} {...item} />
           ))}

@@ -80,9 +80,9 @@ const tableData: Product[] = [
 
 export default function RecentOrderAnalytics() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  dark:border-white/[0.05] dark:bg-white/[0.03] ">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="px-4 pt-4 sm:px-6">
-        <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
               Recent Orders
@@ -92,7 +92,7 @@ export default function RecentOrderAnalytics() {
           <div className="flex items-center gap-3">
             <Button size="sm" variant="outline">
               <svg
-                className="stroke-current fill-white dark:fill-gray-800"
+                className="fill-white stroke-current dark:fill-gray-800"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -134,39 +134,39 @@ export default function RecentOrderAnalytics() {
           </div>
         </div>
       </div>
-      <div className="max-w-full ">
+      <div className="max-w-full">
         <div className="overflow-x-auto">
           <Table>
             {/* Table Header */}
-            <TableHeader className="border-gray-100 border-y dark:border-white/[0.05]">
+            <TableHeader className="border-y border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                  className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
                 >
                   Products
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                  className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
                 >
                   Category
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                  className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
                 >
                   Country
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                  className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
                 >
                   CR
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                  className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
                 >
                   Value
                 </TableCell>
@@ -178,27 +178,27 @@ export default function RecentOrderAnalytics() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {tableData.map((product) => (
                 <TableRow key={product.id}>
-                  <TableCell className="px-4 py-3 font-medium text-gray-800 sm:px-6 text-start text-theme-sm dark:text-white/90">
+                  <TableCell className="text-theme-sm px-4 py-3 text-start font-medium text-gray-800 sm:px-6 dark:text-white/90">
                     {product.name}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 sm:px-6 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 sm:px-6 dark:text-gray-400">
                     {product.category}
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 sm:px-6 text-start text-theme-sm dark:text-gray-400">
-                    <div className="w-5 h-5 overflow-hidden rounded-full">
+                  <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 sm:px-6 dark:text-gray-400">
+                    <div className="size-5 overflow-hidden rounded-full">
                       <Image
                         src={product.country}
-                        className="w-5 h-5 rounded-full"
+                        className="size-5 rounded-full"
                         alt="country"
                         width={20}
                         height={20}
                       />
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 sm:px-6 text-start text-theme-sm dark:text-gray-400">
+                  <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 sm:px-6 dark:text-gray-400">
                     {product.cr}
                   </TableCell>
-                  <TableCell className="px-4 text-theme-sm sm:px-6 text-start text-success-600">
+                  <TableCell className="text-theme-sm text-success-600 px-4 text-start sm:px-6">
                     ${product.value}
                   </TableCell>
                 </TableRow>

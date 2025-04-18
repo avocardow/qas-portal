@@ -2,7 +2,7 @@ import React from "react";
 
 export default function FaqsThree() {
   return (
-    <div className="grid gird-cols-1 gap-x-8 xl:grid-cols-2">
+    <div className="gird-cols-1 grid gap-x-8 xl:grid-cols-2">
       <div className="space-y-3 sm:space-y-5">
         {/* <!-- item--> */}
         <div className="py-4">
@@ -42,7 +42,7 @@ export default function FaqsThree() {
         </div>
 
         {/* <!-- divider --> */}
-        <div className="w-full h-px bg-gray-200 dark:bg-gray-800"></div>
+        <div className="h-px w-full bg-gray-200 dark:bg-gray-800"></div>
 
         {/* <!-- item--> */}
         <div className="py-4">
@@ -78,7 +78,7 @@ export default function FaqsThree() {
         </div>
 
         {/* <!-- divider --> */}
-        <div className="w-full h-px bg-gray-200 dark:bg-gray-800"></div>
+        <div className="h-px w-full bg-gray-200 dark:bg-gray-800"></div>
 
         {/* <!-- item--> */}
         <div className="py-4">
@@ -154,7 +154,7 @@ export default function FaqsThree() {
         </div>
 
         {/* <!-- divider --> */}
-        <div className="w-full h-px bg-gray-200 dark:bg-gray-800"></div>
+        <div className="h-px w-full bg-gray-200 dark:bg-gray-800"></div>
 
         {/* <!-- item--> */}
         <div className="py-4">

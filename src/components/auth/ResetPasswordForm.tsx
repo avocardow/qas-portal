@@ -5,8 +5,8 @@ import Input from "@/components/form/input/InputField";
 
 export default function ResetPasswordForm() {
   return (
-    <div className="flex flex-col flex-1 lg:w-1/2 w-full">
-      <div className="w-full max-w-md pt-10 mx-auto">
+    <div className="flex w-full flex-1 flex-col lg:w-1/2">
+      <div className="mx-auto w-full max-w-md pt-10">
         <Link
           href="/"
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
@@ -30,9 +30,9 @@ export default function ResetPasswordForm() {
           Back to dashboard
         </Link>
       </div>
-      <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
         <div className="mb-5 sm:mb-8">
-          <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+          <h1 className="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
             Forgot Your Password?
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -58,14 +58,14 @@ export default function ResetPasswordForm() {
 
               {/* <!-- Button --> */}
               <div>
-                <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                <button className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition">
                   Send Reset Link
                 </button>
               </div>
             </div>
           </form>
           <div className="mt-5">
-            <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
+            <p className="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
               Wait, I remember my password...
               <Link
                 href="/"

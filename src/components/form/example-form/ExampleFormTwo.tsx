@@ -47,7 +47,7 @@ export default function ExampleFormTwo() {
       <Form onSubmit={handleSubmit}>
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="col-span-full">
-            <h4 className="pb-4 text-base font-medium text-gray-800 border-b border-gray-200 dark:border-gray-800 dark:text-white/90">
+            <h4 className="border-b border-gray-200 pb-4 text-base font-medium text-gray-800 dark:border-gray-800 dark:text-white/90">
               Personal Info
             </h4>
           </div>
@@ -93,7 +93,7 @@ export default function ExampleFormTwo() {
             />
           </div>
           <div className="col-span-2">
-            <h4 className="pb-4 text-base font-medium text-gray-800 border-b border-gray-200 dark:border-gray-800 dark:text-white/90">
+            <h4 className="border-b border-gray-200 pb-4 text-base font-medium text-gray-800 dark:border-gray-800 dark:text-white/90">
               Address
             </h4>
           </div>
@@ -123,7 +123,7 @@ export default function ExampleFormTwo() {
               className="bg-gray-50 dark:bg-gray-800"
             />
           </div>
-          <div className="flex items-center gap-3 col-span-full">
+          <div className="col-span-full flex items-center gap-3">
             <Label className="m-0">Membership:</Label>
             <div className="flex flex-wrap items-center gap-4">
               <Radio

@@ -4,9 +4,9 @@ import Link from "next/link";
 
 export default function CardIconTwo() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
+    <div className="rounded-xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
       <div>
-        <div className="mb-5 flex h-14 max-w-14 items-center justify-center rounded-[10.5px] bg-brand-50 text-brand-500 dark:bg-brand-500/10">
+        <div className="bg-brand-50 text-brand-500 dark:bg-brand-500/10 mb-5 flex h-14 max-w-14 items-center justify-center rounded-[10.5px]">
           <svg
             width="28"
             height="28"
@@ -32,7 +32,7 @@ export default function CardIconTwo() {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-1 mt-4 text-sm text-brand-500 hover:text-brand-600"
+          className="text-brand-500 hover:text-brand-600 mt-4 inline-flex items-center gap-1 text-sm"
         >
           Read more
           <svg

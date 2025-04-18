@@ -18,13 +18,13 @@ export default function SaasMetrics() {
               $200,45.87
             </h4>
             <div>
-              <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+              <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                 +2.5%
               </span>
             </div>
           </div>
         </div>
-        <div className="border-b border-gray-200 px-6 py-5 xl:border-r xl:border-b-0 dark:border-gray-800">
+        <div className="border-b border-gray-200 px-6 py-5 xl:border-b-0 xl:border-r dark:border-gray-800">
           <span className="text-sm text-gray-500 dark:text-gray-400">
             Active Users
           </span>
@@ -33,13 +33,13 @@ export default function SaasMetrics() {
               9,528
             </h4>
             <div>
-              <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+              <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                 + 9.5%
               </span>
             </div>
           </div>
         </div>
-        <div className="border-b border-gray-200 px-6 py-5 sm:border-r sm:border-b-0 dark:border-gray-800">
+        <div className="border-b border-gray-200 px-6 py-5 sm:border-b-0 sm:border-r dark:border-gray-800">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
               Customer Lifetime Value
@@ -49,7 +49,7 @@ export default function SaasMetrics() {
                 $849.54
               </h4>
               <div>
-                <span className="bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                <span className="bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                   -1.6%
                 </span>
               </div>
@@ -65,7 +65,7 @@ export default function SaasMetrics() {
               9,528
             </h4>
             <div>
-              <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+              <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                 +3.5%
               </span>
             </div>

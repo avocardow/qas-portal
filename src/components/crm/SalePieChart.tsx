@@ -119,8 +119,8 @@ export default function SalePieChart() {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
-      <div className="flex items-center justify-between mb-5">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-5 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Sales Category
         </h3>
@@ -135,13 +135,13 @@ export default function SalePieChart() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -159,17 +159,17 @@ export default function SalePieChart() {
         </div>
         <div className="flex flex-col items-start gap-6 sm:flex-row xl:flex-col">
           <div className="flex items-start gap-2.5">
-            <div className="mt-1.5 h-2 w-2 rounded-full bg-brand-500"></div>
+            <div className="bg-brand-500 mt-1.5 size-2 rounded-full"></div>
             <div>
-              <h5 className="mb-1 font-medium text-gray-800 text-theme-sm dark:text-white/90">
+              <h5 className="text-theme-sm mb-1 font-medium text-gray-800 dark:text-white/90">
                 Affiliate Program
               </h5>
               <div className="flex items-center gap-2">
-                <p className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                <p className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                   48%
                 </p>
-                <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <p className="text-gray-500 text-theme-sm dark:text-gray-400">
+                <div className="size-1 rounded-full bg-gray-400"></div>
+                <p className="text-theme-sm text-gray-500 dark:text-gray-400">
                   2,040 Products
                 </p>
               </div>
@@ -177,17 +177,17 @@ export default function SalePieChart() {
           </div>
 
           <div className="flex items-start gap-2.5">
-            <div className="mt-1.5 h-2 w-2 rounded-full bg-brand-500"></div>
+            <div className="bg-brand-500 mt-1.5 size-2 rounded-full"></div>
             <div>
-              <h5 className="mb-1 font-medium text-gray-800 text-theme-sm dark:text-white/90">
+              <h5 className="text-theme-sm mb-1 font-medium text-gray-800 dark:text-white/90">
                 Direct Buy
               </h5>
               <div className="flex items-center gap-2">
-                <p className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                <p className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                   33%
                 </p>
-                <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <p className="text-gray-400 text-theme-sm dark:text-gray-400">
+                <div className="size-1 rounded-full bg-gray-400"></div>
+                <p className="text-theme-sm text-gray-400 dark:text-gray-400">
                   1,402 Products
                 </p>
               </div>
@@ -195,17 +195,17 @@ export default function SalePieChart() {
           </div>
 
           <div className="flex items-start gap-2.5">
-            <div className="mt-1.5 h-2 w-2 rounded-full bg-brand-300"></div>
+            <div className="bg-brand-300 mt-1.5 size-2 rounded-full"></div>
             <div>
-              <h5 className="mb-1 font-medium text-gray-800 text-theme-sm dark:text-white/90">
+              <h5 className="text-theme-sm mb-1 font-medium text-gray-800 dark:text-white/90">
                 Adsense
               </h5>
               <div className="flex items-center gap-2">
-                <p className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                <p className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                   19%
                 </p>
-                <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                <p className="text-gray-500 text-theme-sm dark:text-gray-400">
+                <div className="size-1 rounded-full bg-gray-400"></div>
+                <p className="text-theme-sm text-gray-500 dark:text-gray-400">
                   510 Products
                 </p>
               </div>

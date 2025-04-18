@@ -100,8 +100,8 @@ export default function TrafficStats() {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-1 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex items-center justify-between gap-2 mb-6">
+    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-1 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex items-center justify-between gap-2">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Traffic Stats
@@ -118,13 +118,13 @@ export default function TrafficStats() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -136,7 +136,7 @@ export default function TrafficStats() {
         {/* <!-- Stats item --> */}
         <div className="flex items-end justify-between py-5">
           <div>
-            <p className="mb-1 text-gray-500 text-theme-sm dark:text-gray-400">
+            <p className="text-theme-sm mb-1 text-gray-500 dark:text-gray-400">
               New Subscribers
             </p>
             <h4 className="mb-1 text-2xl font-semibold text-gray-800 dark:text-white/90">
@@ -144,7 +144,7 @@ export default function TrafficStats() {
             </h4>
             <span className="flex items-center gap-1.5">
               <span className="text-success-600"> +3.85% </span>
-              <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                 then last Week
               </span>
             </span>
@@ -161,9 +161,9 @@ export default function TrafficStats() {
           </div>
         </div>
         {/* <!-- Stats item --> */}
-        <div className="flex items-end justify-between py-5 border-gray-100 border-y dark:border-gray-800">
+        <div className="flex items-end justify-between border-y border-gray-100 py-5 dark:border-gray-800">
           <div>
-            <p className="mb-1 text-gray-500 text-theme-sm dark:text-gray-400">
+            <p className="text-theme-sm mb-1 text-gray-500 dark:text-gray-400">
               Conversion Rate
             </p>
             <h4 className="mb-1 text-2xl font-semibold text-gray-800 dark:text-white/90">
@@ -171,14 +171,14 @@ export default function TrafficStats() {
             </h4>
             <span className="flex items-center gap-1.5">
               <span className="text-error-600"> -5.39% </span>
-              <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                 then last Week
               </span>
             </span>
           </div>
 
           <div className="w-full max-w-[150px]">
-            <div className="chartTen ">
+            <div className="chartTen">
               <ReactApexChart
                 options={optionsOne}
                 series={series}
@@ -191,7 +191,7 @@ export default function TrafficStats() {
         {/* <!-- Stats item --> */}
         <div className="flex items-end justify-between py-5">
           <div>
-            <p className="mb-1 text-gray-500 text-theme-sm dark:text-gray-400">
+            <p className="text-theme-sm mb-1 text-gray-500 dark:text-gray-400">
               Page Bounce Rate
             </p>
             <h4 className="mb-1 text-2xl font-semibold text-gray-800 dark:text-white/90">
@@ -199,7 +199,7 @@ export default function TrafficStats() {
             </h4>
             <span className="flex items-center gap-1.5">
               <span className="text-success-600"> +12.74% </span>
-              <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                 then last Week
               </span>
             </span>

@@ -63,12 +63,12 @@ const Notification: React.FC<NotificationProps> = ({
 
   return (
     <div
-      className={`flex items-center justify-between gap-3 w-full sm:max-w-[340px] rounded-md border-b-4 p-3 shadow-theme-sm dark:bg-[#1E2634] ${borderColor}`}
+      className={`shadow-theme-sm flex w-full items-center justify-between gap-3 rounded-md border-b-4 p-3 sm:max-w-[340px] dark:bg-[#1E2634] ${borderColor}`}
     >
       <div className="flex items-center gap-4">
         {/* Icon */}
         <div
-          className={`flex items-center justify-center w-10 h-10 rounded-lg ${iconBg}`}
+          className={`flex size-10 items-center justify-center rounded-lg ${iconBg}`}
         >
           {icon}
         </div>

@@ -26,7 +26,7 @@ export default function ActivitiesCard() {
         </div>
         <div className="relative inline-block">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+            <MoreDotIcon className="size-6 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
           </button>
           <Dropdown
             isOpen={isOpen}
@@ -35,13 +35,13 @@ export default function ActivitiesCard() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -50,11 +50,11 @@ export default function ActivitiesCard() {
       </div>
       <div className="relative">
         {/* <!-- Timeline line --> */}
-        <div className="absolute top-6 bottom-10 left-5 w-px bg-gray-200 dark:bg-gray-800"></div>
+        <div className="absolute bottom-10 left-5 top-6 w-px bg-gray-200 dark:bg-gray-800"></div>
 
         {/* <!-- Francisco Grbbs --> */}
         <div className="relative mb-6 flex">
-          <div className="z-10 flex-shrink-0">
+          <div className="z-10 shrink-0">
             <Image
               src="/images/user/user-01.jpg"
               alt="Francisco Grbbs"
@@ -101,7 +101,7 @@ export default function ActivitiesCard() {
 
         {/* <!-- Courtney Henry --> */}
         <div className="relative mb-6 flex">
-          <div className="z-10 flex-shrink-0">
+          <div className="z-10 shrink-0">
             <Image
               src="/images/user/user-03.jpg"
               alt="Courtney Henry"
@@ -128,7 +128,7 @@ export default function ActivitiesCard() {
 
         {/* <!-- Bessie Cooper --> */}
         <div className="relative mb-6 flex">
-          <div className="z-10 flex-shrink-0">
+          <div className="z-10 shrink-0">
             <Image
               src="/images/user/user-04.jpg"
               alt="Bessie Cooper"
@@ -155,7 +155,7 @@ export default function ActivitiesCard() {
 
         {/* <!-- Theresa Web --> */}
         <div className="relative flex">
-          <div className="z-10 flex-shrink-0">
+          <div className="z-10 shrink-0">
             <Image
               src="/images/user/user-05.jpg"
               alt="Theresa Web"

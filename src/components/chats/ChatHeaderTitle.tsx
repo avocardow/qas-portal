@@ -17,7 +17,7 @@ export default function ChatHeaderTitle() {
   return (
     <div className="flex items-start justify-between">
       <div>
-        <h3 className="font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
+        <h3 className="text-theme-xl font-semibold text-gray-800 sm:text-2xl dark:text-white/90">
           Chats
         </h3>
       </div>
@@ -28,13 +28,13 @@ export default function ChatHeaderTitle() {
         <Dropdown isOpen={isOpen} onClose={closeDropdown} className="w-40 p-2">
           <DropdownItem
             onItemClick={closeDropdown}
-            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+            className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
           >
             View More
           </DropdownItem>
           <DropdownItem
             onItemClick={closeDropdown}
-            className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+            className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
           >
             Delete
           </DropdownItem>

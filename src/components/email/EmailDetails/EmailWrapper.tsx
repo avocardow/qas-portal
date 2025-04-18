@@ -7,12 +7,12 @@ import EmailDetailsBottom from "./EmailDetailsBottom";
 
 export default function EmailWrapper() {
   return (
-    <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:h-full">
+    <div className="flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-200 bg-white xl:h-full dark:border-gray-800 dark:bg-white/[0.03]">
       <EmailDetailsHeader />
       <SimpleBar className="custom-scrollbar max-h-[500px] 2xl:max-h-[780px]">
-        <div className=" p-5  xl:p-6">
-          <div className="flex items-center gap-3 mb-9">
-            <div className="w-12 h-12 overflow-hidden rounded-full">
+        <div className="p-5 xl:p-6">
+          <div className="mb-9 flex items-center gap-3">
+            <div className="size-12 overflow-hidden rounded-full">
               <Image
                 width={48}
                 height={48}
@@ -25,12 +25,12 @@ export default function EmailWrapper() {
               <span className="mb-0.5 block text-sm font-medium text-gray-800 dark:text-white/90">
                 Contact For “Website Design”
               </span>
-              <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+              <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                 Codescandy hello@example.com
               </span>
             </div>
           </div>
-          <div className="text-sm text-gray-500 mb-7 dark:text-gray-400">
+          <div className="mb-7 text-sm text-gray-500 dark:text-gray-400">
             <p className="mb-4">Hello Dear Alexander,</p>
 
             <p className="mb-4">
@@ -70,8 +70,8 @@ export default function EmailWrapper() {
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-900 sm:p-4">
-            <div className="flex items-center gap-2 mb-5">
+          <div className="rounded-xl bg-gray-50 p-3 sm:p-4 dark:bg-gray-900">
+            <div className="mb-5 flex items-center gap-2">
               <span className="text-gray-500 dark:text-gray-400">
                 <svg
                   className="fill-current"
@@ -96,8 +96,8 @@ export default function EmailWrapper() {
             </div>
 
             <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <div className="relative hover:border-gray-300 dark:hover:border-white/[0.05] flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 dark:border-gray-800 dark:bg-white/5 sm:w-auto">
-                <div className="w-full h-10 max-w-10">
+              <div className="relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 hover:border-gray-300 sm:w-auto dark:border-gray-800 dark:bg-white/5 dark:hover:border-white/[0.05]">
+                <div className="h-10 w-full max-w-10">
                   <Image
                     src="./images/task/pdf.svg"
                     width={40}
@@ -111,19 +111,19 @@ export default function EmailWrapper() {
                     Guidelines.pdf
                   </p>
                   <span className="flex items-center gap-1.5">
-                    <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                       PDF
                     </span>
-                    <span className="inline-block w-1 h-1 bg-gray-400 rounded-full"></span>
-                    <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="inline-block size-1 rounded-full bg-gray-400"></span>
+                    <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                       Download
                     </span>
                   </span>
                 </div>
               </div>
 
-              <div className="relative hover:border-gray-300 dark:hover:border-white/[0.05] flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 dark:border-gray-800 dark:bg-white/5 sm:w-auto">
-                <div className="w-full h-10 max-w-10">
+              <div className="relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 hover:border-gray-300 sm:w-auto dark:border-gray-800 dark:bg-white/5 dark:hover:border-white/[0.05]">
+                <div className="h-10 w-full max-w-10">
                   <Image
                     width={40}
                     height={40}
@@ -136,11 +136,11 @@ export default function EmailWrapper() {
                     Branding Assets
                   </p>
                   <span className="flex items-center gap-1.5">
-                    <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                       Media
                     </span>
-                    <span className="inline-block w-1 h-1 bg-gray-400 rounded-full"></span>
-                    <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="inline-block size-1 rounded-full bg-gray-400"></span>
+                    <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                       Download
                     </span>
                   </span>

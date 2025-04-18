@@ -35,16 +35,16 @@ export default function EmailHeader({
   }
 
   return (
-    <div className="flex flex-col justify-between gap-3 p-4 border-b border-gray-200 dark:border-gray-800 sm:flex-row">
-      <div className="flex items-center w-full gap-2">
+    <div className="flex flex-col justify-between gap-3 border-b border-gray-200 p-4 sm:flex-row dark:border-gray-800">
+      <div className="flex w-full items-center gap-2">
         <div className="relative w-full sm:w-auto">
-          <button className="flex items-center dropdown-toggle justify-between w-full gap-3 p-3 border border-gray-200 rounded-lg dark:border-gray-800 sm:justify-center">
+          <button className="dropdown-toggle flex w-full items-center justify-between gap-3 rounded-lg border border-gray-200 p-3 sm:justify-center dark:border-gray-800">
             <Checkbox checked={isChecked} onChange={onSelectAll} />
             <span
               onClick={toggleDropdown}
               className={`${
                 isOpen ? "rotate-180" : ""
-              } text-gray-500 duration-300 dropdown-toggle ease-linear dark:text-gray-40`}
+              } dropdown-toggle dark:text-gray-40 text-gray-500 duration-300 ease-linear`}
             >
               <svg
                 width="16"
@@ -66,30 +66,30 @@ export default function EmailHeader({
           <Dropdown
             isOpen={isOpen}
             onClose={closeDropdown}
-            className="absolute left-0 z-40 w-40 p-2 mt-1 space-y-1 bg-white border border-gray-200 top-full rounded-2xl shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark"
+            className="shadow-theme-lg dark:bg-gray-dark absolute left-0 top-full z-40 mt-1 w-40 space-y-1 rounded-2xl border border-gray-200 bg-white p-2 dark:border-gray-800"
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="text-theme-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               All
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="text-theme-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Read
             </DropdownItem>{" "}
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full px-3 py-2 font-medium text-left text-gray-500 rounded-lg text-theme-xs hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="text-theme-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Unread
             </DropdownItem>
           </Dropdown>
         </div>
 
-        <button className="flex items-center justify-center w-full h-10 text-gray-500 transition-colors border border-gray-200 rounded-lg max-w-10 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+        <button className="flex h-10 w-full max-w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
           <svg
             width="20"
             height="20"
@@ -106,7 +106,7 @@ export default function EmailHeader({
           </svg>
         </button>
 
-        <button className="flex items-center justify-center w-full h-10 text-gray-500 transition-colors border border-gray-200 rounded-lg max-w-10 hover:bg-gray-100 hover:text-error-500 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-error-500">
+        <button className="hover:text-error-500 dark:hover:text-error-500 flex h-10 w-full max-w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800">
           <svg
             className="fill-current"
             width="20"
@@ -124,7 +124,7 @@ export default function EmailHeader({
           </svg>
         </button>
 
-        <button className="flex items-center justify-center w-full h-10 text-gray-500 border border-gray-200 rounded-lg max-w-10 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
+        <button className="flex h-10 w-full max-w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
           <svg
             width="20"
             height="20"
@@ -144,9 +144,9 @@ export default function EmailHeader({
         <div className="relative inline-block">
           <button
             onClick={toggleDropdownTwo}
-            className="flex items-center w-10 dropdown-toggle text-gray-500 justify-center  h-10 transition-colors border border-gray-200 rounded-lg max-w-10 dark:text-gray-400 hover:bg-gray-100 dark:border-white/[0.05] dark:hover:bg-gray-800"
+            className="dropdown-toggle flex size-10 max-w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 dark:border-white/[0.05] dark:text-gray-400 dark:hover:bg-gray-800"
           >
-            <MoreDotIcon className="text-gray-400 dropdown-toggle  hover:text-gray-700 dark:hover:text-gray-300" />
+            <MoreDotIcon className="dropdown-toggle text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
           </button>
           <Dropdown
             isOpen={isOpenTwo}
@@ -155,13 +155,13 @@ export default function EmailHeader({
           >
             <DropdownItem
               onItemClick={closeDropdownTwo}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdownTwo}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -171,7 +171,7 @@ export default function EmailHeader({
 
       <div className="relative w-full sm:max-w-[236px]">
         <form>
-          <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2">
             <svg
               className="fill-gray-500 dark:fill-gray-400"
               width="20"
@@ -191,7 +191,7 @@ export default function EmailHeader({
           <input
             type="text"
             placeholder="Search..."
-            className="dark:bg-dark-900 h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[42px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+            className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[42px] text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30"
           />
         </form>
       </div>

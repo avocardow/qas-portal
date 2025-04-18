@@ -27,7 +27,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
     <div className="relative w-full max-w-[577px] rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-[#1E2634]">
       {/* Close Button */}
       <button
-        className="absolute text-gray-400 right-3 top-3 hover:text-gray-800 dark:hover:text-white/90"
+        className="absolute right-3 top-3 text-gray-400 hover:text-gray-800 dark:hover:text-white/90"
         onClick={handleClose}
         aria-label="Close"
       >
@@ -35,7 +35,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
       </button>
 
       {/* Message */}
-      <p className="pr-4 mb-6 text-sm text-gray-700 dark:text-gray-400">
+      <p className="mb-6 pr-4 text-sm text-gray-700 dark:text-gray-400">
         {message}
       </p>
 
@@ -44,17 +44,17 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
         {/* Cookie Settings */}
         <button
           type="button"
-          className="text-sm font-medium text-left text-gray-700 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+          className="text-left text-sm font-medium text-gray-700 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
           onClick={onCookieSettings}
         >
           Cookie Settings
         </button>
 
         {/* Deny All & Accept All */}
-        <div className="flex items-center w-full gap-3 sm:w-auto">
+        <div className="flex w-full items-center gap-3 sm:w-auto">
           <button
             type="button"
-            className="flex w-full sm:w-auto justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+            className="shadow-theme-xs flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 sm:w-auto dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
             onClick={() => {
               onDenyAll?.(); // Optional callback
               handleClose();
@@ -64,7 +64,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
           </button>
           <button
             type="button"
-            className="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg sm:w-auto bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+            className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full justify-center rounded-lg px-4 py-3 text-sm font-medium text-white sm:w-auto"
             onClick={() => {
               onAcceptAll?.(); // Optional callback
               handleClose();

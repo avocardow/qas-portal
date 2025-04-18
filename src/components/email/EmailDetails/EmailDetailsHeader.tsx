@@ -5,11 +5,11 @@ import React from "react";
 export default function EmailDetailsHeader() {
   const goBack = useGoBack();
   return (
-    <div className="flex flex-col justify-between border-b border-gray-200 dark:border-gray-800 sm:flex-row">
-      <div className="flex items-center justify-between w-full gap-3 px-4 py-4 sm:justify-normal">
+    <div className="flex flex-col justify-between border-b border-gray-200 sm:flex-row dark:border-gray-800">
+      <div className="flex w-full items-center justify-between gap-3 p-4 sm:justify-normal">
         <button
           onClick={goBack}
-          className="flex h-10 w-full max-w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] transition dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-200"
+          className="flex h-10 w-full max-w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-700 transition hover:bg-gray-100 hover:text-gray-800 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-200"
         >
           <svg
             width="16"
@@ -29,7 +29,7 @@ export default function EmailDetailsHeader() {
 
         <div className="flex items-center gap-3">
           <div className="flex">
-            <button className="flex h-10 w-10 items-center justify-center text-gray-500 ring-1 ring-inset ring-gray-200 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-100 transition hover:text-error-500 dark:bg-white/[0.03] dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.05] dark:hover:text-error-500">
+            <button className="hover:text-error-500 dark:hover:text-error-500 flex size-10 items-center justify-center text-gray-500 ring-1 ring-inset ring-gray-200 transition first:rounded-l-lg last:rounded-r-lg hover:bg-gray-100 dark:bg-white/[0.03] dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.05]">
               <svg
                 width="20"
                 height="20"
@@ -45,7 +45,7 @@ export default function EmailDetailsHeader() {
                 />
               </svg>
             </button>
-            <button className="-ml-px flex h-10 w-10 items-center justify-center text-gray-500 ring-1 ring-inset ring-gray-200 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-100 transition hover:text-gray-700 dark:bg-white/[0.03] dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.05] dark:hover:text-white">
+            <button className="-ml-px flex size-10 items-center justify-center text-gray-500 ring-1 ring-inset ring-gray-200 transition first:rounded-l-lg last:rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-white/[0.03] dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.05] dark:hover:text-white">
               <svg
                 width="20"
                 height="20"
@@ -61,7 +61,7 @@ export default function EmailDetailsHeader() {
                 />
               </svg>
             </button>
-            <button className="-ml-px flex h-10 w-10 items-center justify-center rounded-r-lg text-gray-500 ring-1 ring-inset ring-gray-200 first:rounded-l-lg last:rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-white/[0.03] dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.05] transition dark:hover:text-white">
+            <button className="-ml-px flex size-10 items-center justify-center rounded-r-lg text-gray-500 ring-1 ring-inset ring-gray-200 transition first:rounded-l-lg last:rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-white/[0.03] dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.05] dark:hover:text-white">
               <svg
                 width="20"
                 height="20"
@@ -79,7 +79,7 @@ export default function EmailDetailsHeader() {
             </button>
           </div>
 
-          <button className="flex h-10 transition w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button className="flex size-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
             <svg
               className="fill-current"
               width="20"
@@ -99,10 +99,10 @@ export default function EmailDetailsHeader() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between w-full gap-4 px-4 py-3 border-t border-gray-200 dark:border-gray-800 sm:justify-end sm:border-t-0 sm:py-5">
+      <div className="flex w-full items-center justify-between gap-4 border-t border-gray-200 px-4 py-3 sm:justify-end sm:border-t-0 sm:py-5 dark:border-gray-800">
         <p className="text-sm text-gray-500 dark:text-gray-400">4 of 120</p>
         <div className="flex items-center justify-end gap-2">
-          <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 dark:border-gray-800 dark:bg-white/[0.03] dark:hover:text-gray-200 dark:text-gray-400 dark:hover:bg-white/[0.07] transition">
+          <button className="flex size-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-50 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-200">
             <svg
               width="20"
               height="20"
@@ -119,7 +119,7 @@ export default function EmailDetailsHeader() {
               />
             </svg>
           </button>
-          <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 dark:border-gray-800 dark:bg-white/[0.03]  dark:hover:text-gray-200 dark:text-gray-400 dark:hover:bg-white/[0.07] transition">
+          <button className="flex size-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-50 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-200">
             <svg
               width="20"
               height="20"

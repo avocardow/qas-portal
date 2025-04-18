@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function CardFive() {
   return (
     <div>
-      <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03] sm:flex-row sm:items-center sm:gap-6">
+      <div className="flex flex-col gap-5 rounded-xl border border-gray-200 bg-white p-4 sm:flex-row sm:items-center sm:gap-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <div className="overflow-hidden rounded-lg">
           <Image
             width={224}
@@ -24,7 +24,7 @@ export default function CardFive() {
           </CardDescription>
           <Link
             href="/"
-            className="inline-flex items-center gap-1 mt-4 text-sm text-brand-500 hover:text-brand-600"
+            className="text-brand-500 hover:text-brand-600 mt-4 inline-flex items-center gap-1 text-sm"
           >
             <svg
               className="fill-current"

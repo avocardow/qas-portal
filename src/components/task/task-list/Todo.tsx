@@ -3,11 +3,11 @@ import React from "react";
 
 export default function Todo() {
   return (
-    <div className="flex flex-col gap-4 swim-lane">
-      <div className="flex items-center justify-between mb-2">
+    <div className="swim-lane flex flex-col gap-4">
+      <div className="mb-2 flex items-center justify-between">
         <h3 className="flex items-center gap-3 text-base font-medium text-gray-800 dark:text-white/90">
           To Do
-          <span className="inline-flex rounded-full bg-gray-100 px-2 py-0.5 text-theme-xs font-medium text-gray-700 dark:bg-white/[0.03] dark:text-white/80">
+          <span className="text-theme-xs inline-flex rounded-full bg-gray-100 px-2 py-0.5 font-medium text-gray-700 dark:bg-white/[0.03] dark:text-white/80">
             3
           </span>
         </h3>
@@ -36,10 +36,10 @@ export default function Todo() {
       {/* <!-- task item --> */}
       <div
         draggable="true"
-        className="p-5 bg-white border border-gray-200 task rounded-xl shadow-theme-sm dark:border-gray-800 dark:bg-white/5"
+        className="task shadow-theme-sm rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/5"
       >
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex items-start w-full gap-4">
+          <div className="flex w-full items-start gap-4">
             <span className="text-gray-400">
               <svg
                 className="fill-current"
@@ -63,9 +63,9 @@ export default function Todo() {
                 <input
                   type="checkbox"
                   id="taskCheckbox1"
-                  className="sr-only taskCheckbox"
+                  className="taskCheckbox sr-only"
                 />
-                <div className="flex items-center justify-center w-full h-5 mr-3 border border-gray-300 rounded-md box max-w-5 dark:border-gray-700">
+                <div className="box mr-3 flex h-5 w-full max-w-5 items-center justify-center rounded-md border border-gray-300 dark:border-gray-700">
                   <span className="opacity-0">
                     <svg
                       width="14"
@@ -91,14 +91,14 @@ export default function Todo() {
             </label>
           </div>
 
-          <div className="flex flex-col-reverse items-start justify-end w-full gap-3 xl:flex-row xl:items-center xl:gap-5">
-            <span className="inline-flex rounded-full bg-brand-50 px-2 py-0.5 text-theme-xs font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">
+          <div className="flex w-full flex-col-reverse items-start justify-end gap-3 xl:flex-row xl:items-center xl:gap-5">
+            <span className="bg-brand-50 text-theme-xs text-brand-500 dark:bg-brand-500/15 dark:text-brand-400 inline-flex rounded-full px-2 py-0.5 font-medium">
               Marketing
             </span>
 
-            <div className="flex items-center justify-between w-full gap-5 xl:w-auto xl:justify-normal">
+            <div className="flex w-full items-center justify-between gap-5 xl:w-auto xl:justify-normal">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="fill-current"
                     width="16"
@@ -117,7 +117,7 @@ export default function Todo() {
                   Tomorrow
                 </span>
 
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="stroke-current"
                     width="18"
@@ -153,10 +153,10 @@ export default function Todo() {
       {/* <!-- task item --> */}
       <div
         draggable="true"
-        className="p-5 bg-white border border-gray-200 task rounded-xl shadow-theme-sm dark:border-gray-800 dark:bg-white/5"
+        className="task shadow-theme-sm rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/5"
       >
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex items-start w-full gap-4">
+          <div className="flex w-full items-start gap-4">
             <span className="text-gray-400">
               <svg
                 className="fill-current"
@@ -180,10 +180,10 @@ export default function Todo() {
                 <input
                   type="checkbox"
                   id="taskCheckbox2"
-                  className="sr-only taskCheckbox"
+                  className="taskCheckbox sr-only"
                   checked
                 />
-                <div className="flex items-center justify-center w-full h-5 mr-3 border border-gray-300 rounded-md box max-w-5 dark:border-gray-700">
+                <div className="box mr-3 flex h-5 w-full max-w-5 items-center justify-center rounded-md border border-gray-300 dark:border-gray-700">
                   <span className="opacity-0">
                     <svg
                       width="14"
@@ -209,10 +209,10 @@ export default function Todo() {
             </label>
           </div>
 
-          <div className="flex flex-col-reverse items-start justify-end w-full gap-3 xl:flex-row xl:items-center xl:gap-5">
-            <div className="flex items-center justify-between w-full gap-5 xl:w-auto xl:justify-normal">
+          <div className="flex w-full flex-col-reverse items-start justify-end gap-3 xl:flex-row xl:items-center xl:gap-5">
+            <div className="flex w-full items-center justify-between gap-5 xl:w-auto xl:justify-normal">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="fill-current"
                     width="16"
@@ -231,7 +231,7 @@ export default function Todo() {
                   Jan 8, 2027
                 </span>
 
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="stroke-current"
                     width="18"
@@ -250,7 +250,7 @@ export default function Todo() {
                   2
                 </span>
 
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="fill-current"
                     width="16"
@@ -286,10 +286,10 @@ export default function Todo() {
       {/* <!-- task item --> */}
       <div
         draggable="true"
-        className="p-5 bg-white border border-gray-200 task rounded-xl shadow-theme-sm dark:border-gray-800 dark:bg-white/5"
+        className="task shadow-theme-sm rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/5"
       >
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex items-start w-full gap-4">
+          <div className="flex w-full items-start gap-4">
             <span className="text-gray-400">
               <svg
                 className="fill-current"
@@ -313,10 +313,10 @@ export default function Todo() {
                 <input
                   type="checkbox"
                   id="taskCheckbox3"
-                  className="sr-only taskCheckbox"
+                  className="taskCheckbox sr-only"
                   checked
                 />
-                <div className="flex items-center justify-center w-full h-5 mr-3 border border-gray-300 rounded-md box max-w-5 dark:border-gray-700">
+                <div className="box mr-3 flex h-5 w-full max-w-5 items-center justify-center rounded-md border border-gray-300 dark:border-gray-700">
                   <span className="opacity-0">
                     <svg
                       width="14"
@@ -342,14 +342,14 @@ export default function Todo() {
             </label>
           </div>
 
-          <div className="flex flex-col-reverse items-start justify-end w-full gap-3 xl:flex-row xl:items-center xl:gap-5">
-            <span className="inline-flex rounded-full bg-brand-50 px-2 py-0.5 text-theme-xs font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">
+          <div className="flex w-full flex-col-reverse items-start justify-end gap-3 xl:flex-row xl:items-center xl:gap-5">
+            <span className="bg-brand-50 text-theme-xs text-brand-500 dark:bg-brand-500/15 dark:text-brand-400 inline-flex rounded-full px-2 py-0.5 font-medium">
               Marketing
             </span>
 
-            <div className="flex items-center justify-between w-full gap-5 xl:w-auto xl:justify-normal">
+            <div className="flex w-full items-center justify-between gap-5 xl:w-auto xl:justify-normal">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="fill-current"
                     width="16"
@@ -368,7 +368,7 @@ export default function Todo() {
                   Feb 12, 2027
                 </span>
 
-                <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+                <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <svg
                     className="fill-current"
                     width="16"

@@ -323,13 +323,13 @@ export default function PortfolioPerformance() {
     },
   ];
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-5">
-      <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:px-6 sm:pt-5 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Portfolio Performance
           </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
+          <p className="text-theme-sm mt-1 text-gray-500 dark:text-gray-400">
             Here is your performance stats of each month
           </p>
         </div>
@@ -337,10 +337,10 @@ export default function PortfolioPerformance() {
           <ChartTab />
         </div>
       </div>
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
+      <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div
           id="chartFourteen"
-          className="-ml-4  min-w-[900px] xl:min-w-full pl-2"
+          className="-ml-4 min-w-[900px] pl-2 xl:min-w-full"
         >
           <ReactApexChart
             options={options}

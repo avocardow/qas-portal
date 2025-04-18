@@ -16,11 +16,11 @@ export default function InboxDetails() {
     <div>
       <PageBreadcrumb pageTitle="Inbox Details" />
       <div className="sm:h-[calc(100vh-174px)] xl:h-[calc(100vh-186px)]">
-        <div className="xl:grid xl:grid-cols-12 flex flex-col gap-5 sm:gap-5">
-          <div className="xl:col-span-3 col-span-full">
+        <div className="flex flex-col gap-5 sm:gap-5 xl:grid xl:grid-cols-12">
+          <div className="col-span-full xl:col-span-3">
             <EmailSidebar />
           </div>
-          <div className="xl:col-span-9 w-full">
+          <div className="w-full xl:col-span-9">
             <EmailWrapper />
           </div>
         </div>

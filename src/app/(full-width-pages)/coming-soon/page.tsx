@@ -15,12 +15,12 @@ export default function ComingSoon() {
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + 29);
   return (
-    <div className="relative flex flex-col items-center justify-center w-full min-h-screen p-6 overflow-hidden z-1">
+    <div className="z-1 relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
 
       <div>
         <div className="mx-auto w-full max-w-[460px] text-center">
-          <Link href="/" className="inline-block mb-6">
+          <Link href="/" className="mb-6 inline-block">
             <Image
               className="dark:hidden"
               src="./images/logo/logo.svg"
@@ -37,11 +37,11 @@ export default function ComingSoon() {
             />
           </Link>
 
-          <h1 className="mb-3 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-xl">
+          <h1 className="text-title-md xl:text-title-xl mb-3 font-bold text-gray-800 dark:text-white/90">
             Coming Soon
           </h1>
 
-          <p className="text-base text-gray-500 mb-9 dark:text-gray-400">
+          <p className="mb-9 text-base text-gray-500 dark:text-gray-400">
             Our website is currently under construction, enter your email id to
             get latest updates and notifications about the website.
           </p>
@@ -62,13 +62,13 @@ export default function ComingSoon() {
                   name="email"
                   id="email"
                   placeholder="Email address"
-                  className="w-full px-4 py-3 text-sm text-gray-800 bg-transparent border border-gray-300 rounded-lg h-11 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:shadow-focus-ring focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-400 dark:focus:border-brand-300"
+                  className="shadow-theme-xs focus:border-brand-300 focus:shadow-focus-ring dark:focus:border-brand-300 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-400"
                 />
               </div>
 
               <button
                 type="submit"
-                className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm font-medium text-white bg-gray-800 rounded-lg hover:bg-brand-600 dark:bg-brand-500 dark:hover:bg-brand-600 sm:w-auto"
+                className="hover:bg-brand-600 dark:bg-brand-500 dark:hover:bg-brand-600 flex w-full items-center justify-center gap-2 rounded-lg bg-gray-800 px-4 py-3 text-sm font-medium text-white sm:w-auto"
               >
                 <svg
                   className="fill-current"
@@ -91,8 +91,8 @@ export default function ComingSoon() {
           </form>
         </div>
 
-        <div className="absolute -translate-x-1/2 bottom-6 left-1/2">
-          <p className="mt-20 mb-6 text-base text-center text-gray-500 dark:text-gray-400">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+          <p className="mb-6 mt-20 text-center text-base text-gray-500 dark:text-gray-400">
             Follow Us On
           </p>
 

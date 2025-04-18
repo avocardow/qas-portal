@@ -18,10 +18,10 @@ export const exampleRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     // Replace with your actual database query if needed
     // return ctx.db.example.findMany();
-    return [{id: "1", createdAt: new Date(), updatedAt: new Date()}]; // Placeholder
+    return [{ id: "1", createdAt: new Date(), updatedAt: new Date() }]; // Placeholder
   }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
-}); 
+});

@@ -16,7 +16,7 @@ interface CardDescriptionProps {
 // Card Component
 const Card: React.FC<CardProps> = ({ children }) => {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
+    <div className="rounded-xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
       {children}
     </div>
   );
@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({ children }) => {
 // CardTitle Component
 const CardTitle: React.FC<CardTitleProps> = ({ children }) => {
   return (
-    <h4 className="mb-1 font-medium text-gray-800 text-theme-xl dark:text-white/90">
+    <h4 className="text-theme-xl mb-1 font-medium text-gray-800 dark:text-white/90">
       {children}
     </h4>
   );

@@ -15,7 +15,7 @@ export default function TopPages() {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex items-start justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Top Pages
@@ -31,13 +31,13 @@ export default function TopPages() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -46,46 +46,46 @@ export default function TopPages() {
       </div>
 
       <div className="my-6">
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
-          <span className="text-gray-400 text-theme-xs"> Source </span>
-          <span className="text-right text-gray-400 text-theme-xs">
+        <div className="flex items-center justify-between border-b border-gray-100 pb-4 dark:border-gray-800">
+          <span className="text-theme-xs text-gray-400"> Source </span>
+          <span className="text-theme-xs text-right text-gray-400">
             {" "}
             Pageview{" "}
           </span>
         </div>
 
-        <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
-          <span className="text-gray-500 text-theme-sm dark:text-gray-400">
+        <div className="flex items-center justify-between border-b border-gray-100 py-3 dark:border-gray-800">
+          <span className="text-theme-sm text-gray-500 dark:text-gray-400">
             tailadmin.com
           </span>
-          <span className="text-right text-gray-500 text-theme-sm dark:text-gray-400">
+          <span className="text-theme-sm text-right text-gray-500 dark:text-gray-400">
             4.7K
           </span>
         </div>
 
-        <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
-          <span className="text-gray-500 text-theme-sm dark:text-gray-400">
+        <div className="flex items-center justify-between border-b border-gray-100 py-3 dark:border-gray-800">
+          <span className="text-theme-sm text-gray-500 dark:text-gray-400">
             preview.tailadmin.com
           </span>
-          <span className="text-right text-gray-500 text-theme-sm dark:text-gray-400">
+          <span className="text-theme-sm text-right text-gray-500 dark:text-gray-400">
             3.4K
           </span>
         </div>
 
-        <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
-          <span className="text-gray-500 text-theme-sm dark:text-gray-400">
+        <div className="flex items-center justify-between border-b border-gray-100 py-3 dark:border-gray-800">
+          <span className="text-theme-sm text-gray-500 dark:text-gray-400">
             docs.tailadmin.com
           </span>
-          <span className="text-right text-gray-500 text-theme-sm dark:text-gray-400">
+          <span className="text-theme-sm text-right text-gray-500 dark:text-gray-400">
             2.9K
           </span>
         </div>
 
-        <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800">
-          <span className="text-gray-500 text-theme-sm dark:text-gray-400">
+        <div className="flex items-center justify-between border-b border-gray-100 py-3 dark:border-gray-800">
+          <span className="text-theme-sm text-gray-500 dark:text-gray-400">
             tailadmin.com/componetns
           </span>
-          <span className="text-right text-gray-500 text-theme-sm dark:text-gray-400">
+          <span className="text-theme-sm text-right text-gray-500 dark:text-gray-400">
             1.5K
           </span>
         </div>
@@ -93,7 +93,7 @@ export default function TopPages() {
 
       <a
         href="#"
-        className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white p-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]"
+        className="text-theme-sm shadow-theme-xs flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white p-2.5 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]"
       >
         Channels Report
         <svg

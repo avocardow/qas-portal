@@ -11,16 +11,16 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
+    <div className="z-1 relative bg-white p-6 sm:p-0 dark:bg-gray-900">
       <ThemeProvider>
-        <div className="relative flex lg:flex-row w-full h-screen justify-center flex-col  dark:bg-gray-900 sm:p-0">
+        <div className="relative flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
           {children}
-          <div className="lg:w-1/2 w-full h-full bg-brand-950 dark:bg-white/5 lg:grid items-center hidden">
-            <div className="relative items-center justify-center  flex z-1">
+          <div className="bg-brand-950 hidden size-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
+            <div className="z-1 relative flex items-center justify-center">
               {/* <!-- ===== Common Grid Shape Start ===== --> */}
               <GridShape />
-              <div className="flex flex-col items-center max-w-xs">
-                <Link href="/" className="block mb-4">
+              <div className="flex max-w-xs flex-col items-center">
+                <Link href="/" className="mb-4 block">
                   <Image
                     width={231}
                     height={48}

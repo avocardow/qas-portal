@@ -30,7 +30,7 @@ export default function WithIndicators() {
     },
   };
   return (
-    <div className="relative border border-gray-200 rounded-lg carouselThree dark:border-gray-800">
+    <div className="carouselThree relative rounded-lg border border-gray-200 dark:border-gray-800">
       <Swiper {...swiperOptions}>
         {/* <!-- slider item --> */}
         {carouselData.map((item, i) => (

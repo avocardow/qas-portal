@@ -28,6 +28,7 @@ To get started with TailAdmin, ensure you have the following prerequisites insta
    # or
    yarn install
    ```
+
    > Use `--legacy-peer-deps` flag if you face peer-dependency error during installation.
 
 2. Start the development server:

@@ -161,12 +161,12 @@ export default function DataTableTwo() {
 
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
-      <div className="flex flex-col gap-2 px-4 py-4 border border-b-0 border-gray-100 dark:border-white/[0.05] rounded-t-xl sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
         <div className="flex items-center gap-3">
           <span className="text-gray-500 dark:text-gray-400"> Show </span>
           <div className="relative z-20 bg-transparent">
             <select
-              className="w-full py-2 pl-3 pr-8 text-sm text-gray-800 bg-transparent border border-gray-300 rounded-lg appearance-none dark:bg-dark-900 h-9 bg-none shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+              className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-9 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none py-2 pl-3 pr-8 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
               value={itemsPerPage}
               onChange={(e) => setItemsPerPage(Number(e.target.value))}
             >
@@ -180,7 +180,7 @@ export default function DataTableTwo() {
                 </option>
               ))}
             </select>
-            <span className="absolute z-30 text-gray-500 -translate-y-1/2 right-2 top-1/2 dark:text-gray-400">
+            <span className="absolute right-2 top-1/2 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <svg
                 className="stroke-current"
                 width="16"
@@ -203,7 +203,7 @@ export default function DataTableTwo() {
         </div>
 
         <div className="relative">
-          <button className="absolute text-gray-500 -translate-y-1/2 left-4 top-1/2 dark:text-gray-400">
+          <button className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
             <svg
               className="fill-current"
               width="20"
@@ -225,12 +225,12 @@ export default function DataTableTwo() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search..."
-            className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-11 pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[300px]"
+            className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-11 pr-4 text-sm text-gray-800 placeholder:text-gray-400 xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
           />
         </div>
       </div>
 
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
+      <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div>
           <Table>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
@@ -246,13 +246,13 @@ export default function DataTableTwo() {
                   <TableCell
                     key={key}
                     isHeader
-                    className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]"
+                    className="border border-gray-100 px-4 py-3 dark:border-white/[0.05]"
                   >
                     <div
-                      className="flex items-center justify-between cursor-pointer"
+                      className="flex cursor-pointer items-center justify-between"
                       onClick={() => handleSort(key as SortKey)}
                     >
-                      <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">
+                      <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                         {label}
                       </p>
                       <button className="flex flex-col gap-0.5">
@@ -276,9 +276,9 @@ export default function DataTableTwo() {
                 ))}
                 <TableCell
                   isHeader
-                  className="px-4 py-3 border border-gray-100 dark:border-white/[0.05]"
+                  className="border border-gray-100 px-4 py-3 dark:border-white/[0.05]"
                 >
-                  <p className="font-medium text-gray-700 text-theme-xs dark:text-gray-400">
+                  <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                     Action
                   </p>
                 </TableCell>
@@ -287,27 +287,27 @@ export default function DataTableTwo() {
             <TableBody>
               {currentData.map((item, i) => (
                 <TableRow key={i + 1}>
-                  <TableCell className="px-4 py-4 font-medium text-gray-800 border border-gray-100 dark:border-white/[0.05] dark:text-white text-theme-sm whitespace-nowrap ">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-medium text-gray-800 dark:border-white/[0.05] dark:text-white">
                     {item.name}
                   </TableCell>
-                  <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                     {item.position}
                   </TableCell>
-                  <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                     {item.location}
                   </TableCell>
-                  <TableCell className="px-4 py-4 font-normal text-gray-800 border dark:border-white/[0.05] border-gray-100 text-theme-sm dark:text-gray-400 whitespace-nowrap ">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                     {item.age}
                   </TableCell>
-                  <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100  dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                     {item.date}
                   </TableCell>
-                  <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100  dark:border-white/[0.05] text-theme-sm dark:text-gray-400 whitespace-nowrap ">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                     {item.salary}
                   </TableCell>
-                  <TableCell className="px-4 py-4 font-normal text-gray-800 border border-gray-100 dark:border-white/[0.05] text-theme-sm dark:text-white/90 whitespace-nowrap ">
-                    <div className="flex items-center w-full gap-2">
-                      <button className="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">
+                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-white/90">
+                    <div className="flex w-full items-center gap-2">
+                      <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">
                         <TrashBinIcon />
                       </button>
                       <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
@@ -322,7 +322,7 @@ export default function DataTableTwo() {
         </div>
       </div>
 
-      <div className="border border-t-0 rounded-b-xl border-gray-100 py-4 pl-[18px] pr-4 dark:border-white/[0.05]">
+      <div className="rounded-b-xl border border-t-0 border-gray-100 py-4 pl-[18px] pr-4 dark:border-white/[0.05]">
         <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between">
           {/* Left side: Showing entries */}
 
@@ -332,7 +332,7 @@ export default function DataTableTwo() {
             onPageChange={handlePageChange}
           />
           <div className="pt-3 xl:pt-0">
-            <p className="pt-3 text-sm font-medium text-center text-gray-500 border-t border-gray-100 dark:border-gray-800 dark:text-gray-400 xl:border-t-0 xl:pt-0 xl:text-left">
+            <p className="border-t border-gray-100 pt-3 text-center text-sm font-medium text-gray-500 xl:border-t-0 xl:pt-0 xl:text-left dark:border-gray-800 dark:text-gray-400">
               Showing {startIndex + 1} to {endIndex} of {totalItems} entries
             </p>
           </div>

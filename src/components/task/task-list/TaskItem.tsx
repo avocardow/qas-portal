@@ -22,10 +22,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
       id={`task-${id}`}
       draggable="true"
       onDragStart={onDragStart}
-      className="p-5 mb-4 bg-white border border-gray-200 task rounded-xl shadow-theme-sm dark:border-gray-800 dark:bg-white/5"
+      className="task shadow-theme-sm mb-4 rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/5"
     >
       <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-        <div className="flex items-start w-full gap-4">
+        <div className="flex w-full items-start gap-4">
           <span className="text-gray-400">
             <svg
               width="20"
@@ -51,11 +51,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
               <input
                 type="checkbox"
                 id={`taskCheckbox${id}`}
-                className="sr-only taskCheckbox"
+                className="taskCheckbox sr-only"
                 checked={isChecked}
                 onChange={toggleChecked}
               />
-              <div className="flex items-center justify-center w-full h-5 mr-3 border border-gray-300 rounded-md box max-w-5 dark:border-gray-700">
+              <div className="box mr-3 flex h-5 w-full max-w-5 items-center justify-center rounded-md border border-gray-300 dark:border-gray-700">
                 <span className={`opacity-${isChecked ? "100" : "0"}`}>
                   <svg
                     width="14"
@@ -81,16 +81,16 @@ const TaskItem: React.FC<TaskItemProps> = ({
           </label>
         </div>
 
-        <div className="flex flex-col-reverse items-start justify-end w-full gap-3 xl:flex-row xl:items-center xl:gap-5">
+        <div className="flex w-full flex-col-reverse items-start justify-end gap-3 xl:flex-row xl:items-center xl:gap-5">
           {category && (
-            <span className="inline-flex rounded-full bg-brand-50 px-2 py-0.5 text-theme-xs font-medium text-brand-500 dark:bg-brand-500/15 dark:text-brand-400">
+            <span className="bg-brand-50 text-theme-xs text-brand-500 dark:bg-brand-500/15 dark:text-brand-400 inline-flex rounded-full px-2 py-0.5 font-medium">
               {category}
             </span>
           )}
 
-          <div className="flex items-center justify-between w-full gap-5 xl:w-auto xl:justify-normal">
+          <div className="flex w-full items-center justify-between gap-5 xl:w-auto xl:justify-normal">
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+              <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   className="fill-current"
                   width="16"
@@ -109,7 +109,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
                 {dueDate}
               </span>
 
-              <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+              <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   width="18"
                   height="18"

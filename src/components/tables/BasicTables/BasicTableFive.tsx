@@ -79,9 +79,9 @@ const tableData: Product[] = [
 
 export default function BasicTableFive() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="px-4 pt-4 sm:px-6">
-        <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
               Recent Orders
@@ -89,9 +89,9 @@ export default function BasicTableFive() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+            <button className="text-theme-sm shadow-theme-xs inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
               <svg
-                className="stroke-current fill-white dark:fill-gray-800"
+                className="fill-white stroke-current dark:fill-gray-800"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -127,7 +127,7 @@ export default function BasicTableFive() {
               </svg>
               Filter
             </button>
-            <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+            <button className="text-theme-sm shadow-theme-xs inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
               See all
             </button>
           </div>
@@ -136,35 +136,35 @@ export default function BasicTableFive() {
       <div className="max-w-full overflow-x-auto">
         <Table>
           {/* Table Header */}
-          <TableHeader className="border-gray-100 border-y dark:border-white/[0.05]">
+          <TableHeader className="border-y border-gray-100 dark:border-white/[0.05]">
             <TableRow>
               <TableCell
                 isHeader
-                className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
               >
                 Products
               </TableCell>
               <TableCell
                 isHeader
-                className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
               >
                 Category
               </TableCell>
               <TableCell
                 isHeader
-                className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
               >
                 Country
               </TableCell>
               <TableCell
                 isHeader
-                className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
               >
                 CR
               </TableCell>
               <TableCell
                 isHeader
-                className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-start text-theme-xs dark:text-gray-400"
+                className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400"
               >
                 Value
               </TableCell>
@@ -175,27 +175,27 @@ export default function BasicTableFive() {
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {tableData.map((product) => (
               <TableRow key={product.id}>
-                <TableCell className="px-4 py-3 font-medium text-gray-800 sm:px-6 text-start text-theme-sm dark:text-white/90">
+                <TableCell className="text-theme-sm px-4 py-3 text-start font-medium text-gray-800 sm:px-6 dark:text-white/90">
                   {product.name}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 sm:px-6 text-start text-theme-sm dark:text-gray-400">
+                <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 sm:px-6 dark:text-gray-400">
                   {product.category}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 sm:px-6 text-start text-theme-sm dark:text-gray-400">
-                  <div className="w-5 h-5 overflow-hidden rounded-full">
+                <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 sm:px-6 dark:text-gray-400">
+                  <div className="size-5 overflow-hidden rounded-full">
                     <Image
                       width={20}
                       height={20}
                       src={product.country}
-                      className="w-5 h-5 rounded-full"
+                      className="size-5 rounded-full"
                       alt="country"
                     />
                   </div>
                 </TableCell>
-                <TableCell className="px-4 py-3 text-gray-500 sm:px-6 text-start text-theme-sm dark:text-gray-400">
+                <TableCell className="text-theme-sm px-4 py-3 text-start text-gray-500 sm:px-6 dark:text-gray-400">
                   {product.cr}
                 </TableCell>
-                <TableCell className="px-4 text-theme-sm sm:px-6 text-start text-success-600">
+                <TableCell className="text-theme-sm text-success-600 px-4 text-start sm:px-6">
                   ${product.value}
                 </TableCell>
               </TableRow>

@@ -26,14 +26,14 @@ export default function TrendingStocks() {
     },
   };
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
-      <div className="flex justify-between mb-6">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Trending Stocks
         </h3>
 
         <div className="stocks-slider-outer relative flex items-center gap-1.5">
-          <div className="swiper-button-prev ">
+          <div className="swiper-button-prev">
             <svg
               width="16"
               height="16"
@@ -76,9 +76,9 @@ export default function TrendingStocks() {
           {/* <!-- Stocks Item --> */}
           <SwiperSlide className="swiper-slide">
             <div className="rounded-2xl bg-gray-100 p-5 dark:bg-white/[0.03]">
-              <div className="flex items-center justify-between pb-5 mb-5 border-b border-gray-200 dark:border-gray-800">
+              <div className="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10">
+                  <div className="size-10">
                     <Image
                       width={40}
                       height={40}
@@ -91,7 +91,7 @@ export default function TrendingStocks() {
                     <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                       TSLA
                     </h3>
-                    <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                       Tesla, Inc
                     </span>
                   </div>
@@ -99,12 +99,12 @@ export default function TrendingStocks() {
 
                 <div>
                   <div>
-                    <h4 className="mb-1 font-medium text-right text-gray-700 text-theme-sm dark:text-gray-400">
+                    <h4 className="text-theme-sm mb-1 text-right font-medium text-gray-700 dark:text-gray-400">
                       $192.53
                     </h4>
                   </div>
 
-                  <span className="flex items-center justify-end gap-1 font-medium text-theme-xs text-success-600 dark:text-success-500">
+                  <span className="text-theme-xs text-success-600 dark:text-success-500 flex items-center justify-end gap-1 font-medium">
                     <svg
                       className="fill-current"
                       width="12"
@@ -126,11 +126,11 @@ export default function TrendingStocks() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                <button className="text-theme-sm shadow-theme-xs flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
                   Short Stock
                 </button>
 
-                <button className="flex items-center justify-center w-full p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600">
+                <button className="bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg p-3 font-medium text-white">
                   Buy Stock
                 </button>
               </div>
@@ -140,9 +140,9 @@ export default function TrendingStocks() {
           {/* <!-- Stocks Item --> */}
           <SwiperSlide className="swiper-slide">
             <div className="rounded-2xl bg-gray-100 p-5 dark:bg-white/[0.03]">
-              <div className="flex items-center justify-between pb-5 mb-5 border-b border-gray-200 dark:border-gray-800">
+              <div className="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10">
+                  <div className="size-10">
                     <Image
                       width={40}
                       height={40}
@@ -155,7 +155,7 @@ export default function TrendingStocks() {
                     <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                       AAPL
                     </h3>
-                    <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                       Apple, Inc
                     </span>
                   </div>
@@ -163,12 +163,12 @@ export default function TrendingStocks() {
 
                 <div>
                   <div>
-                    <h4 className="mb-1 font-medium text-right text-gray-700 text-theme-sm dark:text-gray-400">
+                    <h4 className="text-theme-sm mb-1 text-right font-medium text-gray-700 dark:text-gray-400">
                       $192.53
                     </h4>
                   </div>
 
-                  <span className="flex items-center justify-end gap-1 font-medium text-theme-xs text-success-600 dark:text-success-500">
+                  <span className="text-theme-xs text-success-600 dark:text-success-500 flex items-center justify-end gap-1 font-medium">
                     <svg
                       className="fill-current"
                       width="12"
@@ -190,11 +190,11 @@ export default function TrendingStocks() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                <button className="text-theme-sm shadow-theme-xs flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
                   Short Stock
                 </button>
 
-                <button className="flex items-center justify-center w-full p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600">
+                <button className="bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg p-3 font-medium text-white">
                   Buy Stock
                 </button>
               </div>
@@ -204,9 +204,9 @@ export default function TrendingStocks() {
           {/* <!-- Stocks Item --> */}
           <SwiperSlide className="swiper-slide">
             <div className="rounded-2xl bg-gray-100 p-5 dark:bg-white/[0.03]">
-              <div className="flex items-center justify-between pb-5 mb-5 border-b border-gray-200 dark:border-gray-800">
+              <div className="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10">
+                  <div className="size-10">
                     <Image
                       width={40}
                       height={40}
@@ -219,7 +219,7 @@ export default function TrendingStocks() {
                     <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                       SPOT
                     </h3>
-                    <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                       Spotify, Inc
                     </span>
                   </div>
@@ -227,12 +227,12 @@ export default function TrendingStocks() {
 
                 <div>
                   <div>
-                    <h4 className="mb-1 font-medium text-right text-gray-700 text-theme-sm dark:text-gray-400">
+                    <h4 className="text-theme-sm mb-1 text-right font-medium text-gray-700 dark:text-gray-400">
                       $192.53
                     </h4>
                   </div>
 
-                  <span className="flex items-center justify-end gap-1 font-medium text-theme-xs text-success-600 dark:text-success-500">
+                  <span className="text-theme-xs text-success-600 dark:text-success-500 flex items-center justify-end gap-1 font-medium">
                     <svg
                       className="fill-current"
                       width="12"
@@ -254,11 +254,11 @@ export default function TrendingStocks() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                <button className="text-theme-sm shadow-theme-xs flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
                   Short Stock
                 </button>
 
-                <button className="flex items-center justify-center w-full p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600">
+                <button className="bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg p-3 font-medium text-white">
                   Buy Stock
                 </button>
               </div>
@@ -268,9 +268,9 @@ export default function TrendingStocks() {
           {/* <!-- Stocks Item --> */}
           <SwiperSlide className="swiper-slide">
             <div className="rounded-2xl bg-gray-100 p-5 dark:bg-white/[0.03]">
-              <div className="flex items-center justify-between pb-5 mb-5 border-b border-gray-200 dark:border-gray-800">
+              <div className="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10">
+                  <div className="size-10">
                     <Image
                       width={40}
                       height={40}
@@ -283,7 +283,7 @@ export default function TrendingStocks() {
                     <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                       PYPL
                     </h3>
-                    <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                       Paypal, Inc
                     </span>
                   </div>
@@ -291,12 +291,12 @@ export default function TrendingStocks() {
 
                 <div>
                   <div>
-                    <h4 className="mb-1 font-medium text-right text-gray-700 text-theme-sm dark:text-gray-400">
+                    <h4 className="text-theme-sm mb-1 text-right font-medium text-gray-700 dark:text-gray-400">
                       $192.53
                     </h4>
                   </div>
 
-                  <span className="flex items-center justify-end gap-1 font-medium text-theme-xs text-success-600 dark:text-success-500">
+                  <span className="text-theme-xs text-success-600 dark:text-success-500 flex items-center justify-end gap-1 font-medium">
                     <svg
                       className="fill-current"
                       width="12"
@@ -318,11 +318,11 @@ export default function TrendingStocks() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                <button className="text-theme-sm shadow-theme-xs flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
                   Short Stock
                 </button>
 
-                <button className="flex items-center justify-center w-full p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600">
+                <button className="bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg p-3 font-medium text-white">
                   Buy Stock
                 </button>
               </div>
@@ -332,9 +332,9 @@ export default function TrendingStocks() {
           {/* <!-- Stocks Item --> */}
           <SwiperSlide className="swiper-slide">
             <div className="rounded-2xl bg-gray-100 p-5 dark:bg-white/[0.03]">
-              <div className="flex items-center justify-between pb-5 mb-5 border-b border-gray-200 dark:border-gray-800">
+              <div className="mb-5 flex items-center justify-between border-b border-gray-200 pb-5 dark:border-gray-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10">
+                  <div className="size-10">
                     <Image
                       width={40}
                       height={40}
@@ -347,7 +347,7 @@ export default function TrendingStocks() {
                     <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                       AMZN
                     </h3>
-                    <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span className="text-theme-xs block text-gray-500 dark:text-gray-400">
                       Amazone, Inc
                     </span>
                   </div>
@@ -355,12 +355,12 @@ export default function TrendingStocks() {
 
                 <div>
                   <div>
-                    <h4 className="mb-1 font-medium text-right text-gray-700 text-theme-sm dark:text-gray-400">
+                    <h4 className="text-theme-sm mb-1 text-right font-medium text-gray-700 dark:text-gray-400">
                       $192.53
                     </h4>
                   </div>
 
-                  <span className="flex items-center justify-end gap-1 font-medium text-theme-xs text-success-600 dark:text-success-500">
+                  <span className="text-theme-xs text-success-600 dark:text-success-500 flex items-center justify-end gap-1 font-medium">
                     <svg
                       className="fill-current"
                       width="12"
@@ -382,11 +382,11 @@ export default function TrendingStocks() {
               </div>
 
               <div className="flex items-center gap-3">
-                <button className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
+                <button className="text-theme-sm shadow-theme-xs flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]">
                   Short Stock
                 </button>
 
-                <button className="flex items-center justify-center w-full p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600">
+                <button className="bg-brand-500 text-theme-sm shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg p-3 font-medium text-white">
                   Buy Stock
                 </button>
               </div>

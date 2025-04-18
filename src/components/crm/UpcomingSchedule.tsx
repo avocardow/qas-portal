@@ -30,8 +30,8 @@ export default function UpcomingSchedule() {
     setIsOpen(false);
   }
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Upcoming Schedule
         </h3>
@@ -47,13 +47,13 @@ export default function UpcomingSchedule() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -61,7 +61,7 @@ export default function UpcomingSchedule() {
         </div>
       </div>
 
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
+      <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div className="min-w-[500px] xl:min-w-full">
           <div className="flex flex-col gap-2">
             {/* Item 1 */}
@@ -69,25 +69,25 @@ export default function UpcomingSchedule() {
               <div className="flex items-start gap-3">
                 <div>
                   <Checkbox
-                    className="w-5 h-5 rounded-md"
+                    className="size-5 rounded-md"
                     checked={checkedItems["wed-11-jan"]}
                     onChange={() => handleCheckboxChange("wed-11-jan")}
                   />
                 </div>
                 <div>
-                  <span className="mb-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-theme-xs mb-0.5 block text-gray-500 dark:text-gray-400">
                     Wed, 11 Jan
                   </span>
-                  <span className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  <span className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                     09:20 AM
                   </span>
                 </div>
               </div>
               <div>
-                <span className="block mb-1 font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                <span className="text-theme-sm mb-1 block font-medium text-gray-700 dark:text-gray-400">
                   Business Analytics Press
                 </span>
-                <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                   Exploring the Future of Data-Driven +6 more
                 </span>
               </div>
@@ -98,25 +98,25 @@ export default function UpcomingSchedule() {
               <div className="flex items-start gap-3">
                 <div>
                   <Checkbox
-                    className="w-5 h-5 rounded-md"
+                    className="size-5 rounded-md"
                     checked={checkedItems["fri-15-feb"]}
                     onChange={() => handleCheckboxChange("fri-15-feb")}
                   />
                 </div>
                 <div>
-                  <span className="mb-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-theme-xs mb-0.5 block text-gray-500 dark:text-gray-400">
                     Fri, 15 Feb
                   </span>
-                  <span className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  <span className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                     10:35 AM
                   </span>
                 </div>
               </div>
               <div>
-                <span className="block mb-1 font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                <span className="text-theme-sm mb-1 block font-medium text-gray-700 dark:text-gray-400">
                   Business Sprint
                 </span>
-                <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                   Techniques from Business Sprint +2 more
                 </span>
               </div>
@@ -127,25 +127,25 @@ export default function UpcomingSchedule() {
               <div className="flex items-start gap-3">
                 <div>
                   <Checkbox
-                    className="w-5 h-5 rounded-md"
+                    className="size-5 rounded-md"
                     checked={checkedItems["thu-18-mar"]}
                     onChange={() => handleCheckboxChange("thu-18-mar")}
                   />
                 </div>
                 <div>
-                  <span className="mb-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
+                  <span className="text-theme-xs mb-0.5 block text-gray-500 dark:text-gray-400">
                     Thu, 18 Mar
                   </span>
-                  <span className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  <span className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                     1:15 AM
                   </span>
                 </div>
               </div>
               <div>
-                <span className="block mb-1 font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                <span className="text-theme-sm mb-1 block font-medium text-gray-700 dark:text-gray-400">
                   Customer Review Meeting
                 </span>
-                <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+                <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                   Insights from the Customer Review Meeting +8 more
                 </span>
               </div>

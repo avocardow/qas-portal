@@ -122,17 +122,17 @@ export default function EmailContent() {
   const allChecked = checkedItems.every(Boolean);
 
   return (
-    <div className="rounded-2xl xl:col-span-9 w-full border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div className="w-full rounded-2xl border border-gray-200 bg-white xl:col-span-9 dark:border-gray-800 dark:bg-white/[0.03]">
       <EmailHeader isChecked={allChecked} onSelectAll={handleSelectAll} />
       <SimpleBar className="max-h-[510px] 2xl:max-h-[630px]">
         <div className="divide-y divide-gray-200 dark:divide-gray-800">
           {mailData.map((mail, index) => (
             <div
               key={index}
-              className="flex cursor-pointer items-center px-4 py-4 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/[0.03]"
+              className="flex cursor-pointer items-center p-4 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/[0.03]"
             >
               {/* Left Section */}
-              <div className="flex items-center w-1/5">
+              <div className="flex w-1/5 items-center">
                 {/* Custom Checkbox */}
                 <Checkbox
                   checked={checkedItems[index]}
@@ -141,7 +141,7 @@ export default function EmailContent() {
 
                 {/* Star */}
                 <span
-                  className="ml-3 text-gray-400 cursor-pointer"
+                  className="ml-3 cursor-pointer text-gray-400"
                   onClick={() => toggleStar(index)}
                 >
                   {starredItems[index] ? (
@@ -173,22 +173,22 @@ export default function EmailContent() {
                 </span>
 
                 {/* Subject */}
-                <span className="ml-3 text-sm text-gray-700 truncate dark:text-gray-400">
+                <span className="ml-3 truncate text-sm text-gray-700 dark:text-gray-400">
                   {mail.subject}
                 </span>
               </div>
 
               {/* Middle Section */}
-              <div className="flex items-center w-3/5 gap-3">
-                <p className="text-sm text-gray-500 truncate">{mail.content}</p>
+              <div className="flex w-3/5 items-center gap-3">
+                <p className="truncate text-sm text-gray-500">{mail.content}</p>
                 {mail.badge && (
                   <span
                     className={`hidden rounded-full px-2 py-0.5 text-xs font-medium sm:inline-block ${
                       mail.badge === "Important"
-                        ? "text-red-700 bg-red-100"
+                        ? "bg-red-100 text-red-700"
                         : mail.badge === "Social"
-                        ? "text-green-700 bg-green-100"
-                        : "text-blue-700 bg-blue-100"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-blue-100 text-blue-700"
                     }`}
                   >
                     {mail.badge}

@@ -18,11 +18,11 @@ const AccountMenuDropdown: React.FC = () => {
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="inline-flex items-center dropdown-toggle gap-2 px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 hover:bg-brand-600"
+        className="dropdown-toggle bg-brand-500 hover:bg-brand-600 inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white"
       >
         Account Menu
         <svg
-          className={`duration-200 ease-in-out stroke-current ${
+          className={`stroke-current duration-200 ease-in-out ${
             isOpen ? "rotate-180" : ""
           }`}
           width="20"
@@ -44,15 +44,13 @@ const AccountMenuDropdown: React.FC = () => {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute left-0 top-full z-40 mt-2 w-full min-w-[260px] rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-[#1E2635]"
+        className="shadow-theme-lg absolute left-0 top-full z-40 mt-2 w-full min-w-[260px] rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-[#1E2635]"
       >
         <ul className="flex flex-col gap-1">
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex rounded-lg px-3 py-2.5 text-sm font-medium
-              text-gray-700 hover:bg-gray-100 dark:text-gray-300
-              dark:hover:bg-white/5"
+              className="flex rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5"
             >
               Edit Profile
             </DropdownItem>
@@ -60,9 +58,7 @@ const AccountMenuDropdown: React.FC = () => {
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex rounded-lg px-3 py-2.5 text-sm font-medium
-              text-gray-700 hover:bg-gray-100 dark:text-gray-300
-              dark:hover:bg-white/5"
+              className="flex rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5"
             >
               Account Settings
             </DropdownItem>
@@ -70,9 +66,7 @@ const AccountMenuDropdown: React.FC = () => {
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex rounded-lg px-3 py-2.5 text-sm font-medium
-              text-gray-700 hover:bg-gray-100 dark:text-gray-300
-              dark:hover:bg-white/5"
+              className="flex rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5"
             >
               License
             </DropdownItem>
@@ -80,9 +74,7 @@ const AccountMenuDropdown: React.FC = () => {
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex rounded-lg px-3 py-2.5 text-sm font-medium
-              text-gray-700 hover:bg-gray-100 dark:text-gray-300
-              dark:hover:bg-white/5"
+              className="flex rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5"
             >
               Support
             </DropdownItem>

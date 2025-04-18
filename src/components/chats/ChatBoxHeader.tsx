@@ -17,7 +17,7 @@ export default function ChatBoxHeader() {
   }
 
   return (
-    <div className="sticky flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800 xl:px-6">
+    <div className="sticky flex items-center justify-between border-b border-gray-200 px-5 py-4 xl:px-6 dark:border-gray-800">
       <div className="flex items-center gap-3">
         <div className="relative h-12 w-full max-w-[48px] rounded-full">
           <Image
@@ -25,9 +25,9 @@ export default function ChatBoxHeader() {
             height={48}
             src="/images/user/user-17.jpg"
             alt="profile"
-            className="object-cover object-center w-full h-full overflow-hidden rounded-full"
+            className="size-full overflow-hidden rounded-full object-cover object-center"
           />
-          <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
+          <span className="bg-success-500 absolute bottom-0 right-0 block size-3 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
         </div>
 
         <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -36,7 +36,7 @@ export default function ChatBoxHeader() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="text-gray-700 hover:text-brand-500 dark:text-gray-400 dark:hover:text-white/90">
+        <button className="hover:text-brand-500 text-gray-700 dark:text-gray-400 dark:hover:text-white/90">
           <svg
             className="stroke-current"
             width="24"
@@ -53,7 +53,7 @@ export default function ChatBoxHeader() {
           </svg>
         </button>
 
-        <button className="text-gray-700 hover:text-brand-500 dark:text-gray-400 dark:hover:text-white/90">
+        <button className="hover:text-brand-500 text-gray-700 dark:text-gray-400 dark:hover:text-white/90">
           <svg
             className="fill-current"
             width="24"
@@ -82,13 +82,13 @@ export default function ChatBoxHeader() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>

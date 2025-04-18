@@ -105,7 +105,7 @@ export default function BarChartTwo() {
   };
 
   return (
-    <div className="max-w-full overflow-x-auto custom-scrollbar">
+    <div className="custom-scrollbar max-w-full overflow-x-auto">
       <div id="chartSix" className="min-w-[1000px] xl:min-w-full">
         <ReactApexChart
           options={options}

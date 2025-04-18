@@ -160,16 +160,16 @@ export default function CrmRecentOrderTable() {
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Recent Orders
           </h3>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button className="text-theme-sm shadow-theme-xs inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
             <svg
-              className="stroke-current fill-white dark:fill-gray-800"
+              className="fill-white stroke-current dark:fill-gray-800"
               width="20"
               height="20"
               viewBox="0 0 20 20"
@@ -205,7 +205,7 @@ export default function CrmRecentOrderTable() {
             </svg>
             Filter
           </button>
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button className="text-theme-sm shadow-theme-xs inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
             See all
           </button>
         </div>
@@ -214,9 +214,9 @@ export default function CrmRecentOrderTable() {
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[617px] 2xl:min-w-[808px]">
           <Table>
-            <TableHeader className="px-6 py-3 border-t border-gray-100 border-y bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
+            <TableHeader className="border-y border-gray-100 bg-gray-50 px-6 py-3 dark:border-gray-800 dark:bg-gray-900">
               <TableRow>
-                <TableCell className="px-4 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-4 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   <div className="flex items-center gap-3">
                     <div>
                       <Checkbox
@@ -225,28 +225,28 @@ export default function CrmRecentOrderTable() {
                       />
                     </div>
                     <div>
-                      <span className="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                      <span className="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
                         Deal ID
                       </span>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-6 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   Customer
                 </TableCell>
-                <TableCell className="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-6 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   Product/Service
                 </TableCell>
-                <TableCell className="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-6 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   Deal Value
                 </TableCell>
-                <TableCell className="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-6 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   Close Date
                 </TableCell>
-                <TableCell className="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-6 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   Status
                 </TableCell>
-                <TableCell className="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <TableCell className="text-theme-xs px-6 py-3 text-start font-medium text-gray-500 sm:px-6 dark:text-gray-400">
                   Action
                 </TableCell>
               </TableRow>
@@ -254,7 +254,7 @@ export default function CrmRecentOrderTable() {
             <TableBody>
               {tableRowData.map((row: TableRowData) => (
                 <TableRow key={row.id}>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
                     <div className="flex items-center gap-3">
                       <div>
                         <Checkbox
@@ -263,59 +263,59 @@ export default function CrmRecentOrderTable() {
                         />
                       </div>
                       <div>
-                        <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                        <span className="text-theme-sm block font-medium text-gray-700 dark:text-gray-400">
                           {row.id}
                         </span>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
                     <div className="flex items-center gap-3">
-                      <AvatarText name={row.user.name} className="w-10 h-10" />
+                      <AvatarText name={row.user.name} className="size-10" />
                       <div>
-                        <span className="mb-0.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
+                        <span className="text-theme-sm mb-0.5 block font-medium text-gray-700 dark:text-gray-400">
                           {row.user.name}
                         </span>
-                        <span className="text-gray-500 text-theme-sm dark:text-gray-400">
+                        <span className="text-theme-sm text-gray-500 dark:text-gray-400">
                           {row.user.email}
                         </span>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
-                    <p className="text-gray-700 text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
+                    <p className="text-theme-sm text-gray-700 dark:text-gray-400">
                       {row.product.name}
                     </p>
                   </TableCell>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
-                    <p className="text-gray-700 text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
+                    <p className="text-theme-sm text-gray-700 dark:text-gray-400">
                       {row.product.price}
                     </p>
                   </TableCell>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
-                    <p className="text-gray-700 text-theme-sm dark:text-gray-400">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
+                    <p className="text-theme-sm text-gray-700 dark:text-gray-400">
                       {row.product.purchaseDate}
                     </p>
                   </TableCell>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
                     <Badge
                       variant="light"
                       color={
                         row.status.type === "Complete"
                           ? "success"
                           : row.status.type === "Pending"
-                          ? "warning"
-                          : "error"
+                            ? "warning"
+                            : "error"
                       }
                       size="sm"
                     >
                       {row.status.type}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-4 sm:px-6 py-3.5">
+                  <TableCell className="px-4 py-3.5 sm:px-6">
                     {row.actions.delete && (
                       <button>
-                        <TrashBinIcon className="text-gray-700 cursor-pointer hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500" />
+                        <TrashBinIcon className="hover:text-error-500 dark:hover:text-error-500 cursor-pointer text-gray-700 dark:text-gray-400" />
                       </button>
                     )}
                   </TableCell>

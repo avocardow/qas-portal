@@ -27,7 +27,7 @@ export default function SlideOnly() {
     },
   };
   return (
-    <div className="border border-gray-200 rounded-lg carouselOne dark:border-gray-800">
+    <div className="carouselOne rounded-lg border border-gray-200 dark:border-gray-800">
       <Swiper {...swiperOptions}>
         {carouselData.map((item, i) => (
           <SwiperSlide key={i + 1}>

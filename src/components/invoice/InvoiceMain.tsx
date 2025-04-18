@@ -3,9 +3,9 @@ import InvoiceTable from "./InvoiceTable";
 
 export default function InvoiceMain() {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] xl:w-4/5">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-        <h3 className="font-medium text-gray-800 text-theme-xl dark:text-white/90">
+    <div className="rounded-2xl border border-gray-200 bg-white xl:w-4/5 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+        <h3 className="text-theme-xl font-medium text-gray-800 dark:text-white/90">
           Invoice
         </h3>
 
@@ -15,9 +15,9 @@ export default function InvoiceMain() {
       </div>
 
       <div className="p-5 xl:p-8">
-        <div className="flex flex-col gap-6 mb-9 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-9 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <span className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-400">
+            <span className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-400">
               From
             </span>
 
@@ -39,10 +39,10 @@ export default function InvoiceMain() {
             </span>
           </div>
 
-          <div className="h-px w-full bg-gray-200 dark:bg-gray-800 sm:h-[158px] sm:w-px"></div>
+          <div className="h-px w-full bg-gray-200 sm:h-[158px] sm:w-px dark:bg-gray-800"></div>
 
           <div className="sm:text-right">
-            <span className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-400">
+            <span className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-400">
               To
             </span>
 
@@ -69,7 +69,7 @@ export default function InvoiceMain() {
         <InvoiceTable />
         {/* <!-- Invoice Table End --> */}
 
-        <div className="pb-6 my-6 text-right border-b border-gray-100 dark:border-gray-800">
+        <div className="my-6 border-b border-gray-100 pb-6 text-right dark:border-gray-800">
           <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
             Sub Total amount: $3,098
           </p>
@@ -83,11 +83,11 @@ export default function InvoiceMain() {
         </div>
 
         <div className="flex items-center justify-end gap-3">
-          <button className="flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+          <button className="shadow-theme-xs flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
             Proceed to payment
           </button>
 
-          <button className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+          <button className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white">
             <svg
               className="fill-current"
               width="20"

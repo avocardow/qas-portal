@@ -105,13 +105,13 @@ export default function ImpressionChart() {
   ];
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Impression & Data Traffic
           </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
+          <p className="text-theme-sm mt-1 text-gray-500 dark:text-gray-400">
             Jun 1, 2024 - Dec 1, 2025
           </p>
         </div>
@@ -122,18 +122,18 @@ export default function ImpressionChart() {
               $9,758.00
             </h4>
 
-            <span className="flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+            <span className="bg-success-50 text-theme-xs text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full px-2 py-0.5 font-medium">
               +7.96%
             </span>
           </div>
 
-          <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+          <span className="text-theme-xs text-gray-500 dark:text-gray-400">
             Total Revenue
           </span>
         </div>
       </div>
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="min-w-[1000px] xl:min-w-full -ml-4 pl-2">
+      <div className="custom-scrollbar max-w-full overflow-x-auto">
+        <div className="-ml-4 min-w-[1000px] pl-2 xl:min-w-full">
           <ReactApexChart
             options={options}
             series={series}

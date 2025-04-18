@@ -14,9 +14,9 @@ export default function Inbox() {
   return (
     <div className="">
       <PageBreadcrumb pageTitle="Inbox" />
-      <div className="sm:h-[calc(100vh-174px)] h-screen xl:h-[calc(100vh-186px)">
-        <div className="xl:grid xl:grid-cols-12 flex flex-col gap-5 sm:gap-5">
-          <div className="xl:col-span-3 col-span-full">
+      <div className="xl:h-[calc(100vh-186px) h-screen sm:h-[calc(100vh-174px)]">
+        <div className="flex flex-col gap-5 sm:gap-5 xl:grid xl:grid-cols-12">
+          <div className="col-span-full xl:col-span-3">
             <EmailSidebar />
           </div>
           <EmailContent />

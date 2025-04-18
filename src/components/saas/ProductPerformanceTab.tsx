@@ -29,7 +29,7 @@ export default function ProductPerformanceTab() {
         </div>
         <div className="relative inline-block">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
+            <MoreDotIcon className="size-6 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
           </button>
           <Dropdown
             isOpen={isOpen}
@@ -38,13 +38,13 @@ export default function ProductPerformanceTab() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -55,9 +55,9 @@ export default function ProductPerformanceTab() {
         <div className="flex w-full items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
           <button
             onClick={() => setSelected("daily")}
-            className={`text-sm w-full rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white ${
+            className={`w-full rounded-md px-3 py-2 text-sm font-medium hover:text-gray-900 dark:hover:text-white ${
               selected === "daily"
-                ? "shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-800"
+                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-white"
                 : "text-gray-500 dark:text-gray-400"
             }`}
           >
@@ -65,9 +65,9 @@ export default function ProductPerformanceTab() {
           </button>
           <button
             onClick={() => setSelected("online")}
-            className={`text-sm w-full rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white ${
+            className={`w-full rounded-md px-3 py-2 text-sm font-medium hover:text-gray-900 dark:hover:text-white ${
               selected === "online"
-                ? "shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-800"
+                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-white"
                 : "text-gray-500 dark:text-gray-400"
             }`}
           >
@@ -75,9 +75,9 @@ export default function ProductPerformanceTab() {
           </button>
           <button
             onClick={() => setSelected("new")}
-            className={`text-sm w-full rounded-md px-3 py-2 font-medium hover:text-gray-900 dark:hover:text-white ${
+            className={`w-full rounded-md px-3 py-2 text-sm font-medium hover:text-gray-900 dark:hover:text-white ${
               selected === "new"
-                ? "shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-800"
+                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-white"
                 : "text-gray-500 dark:text-gray-400"
             }`}
           >
@@ -155,7 +155,7 @@ export default function ProductPerformanceTab() {
                     </h3>
                   </div>
                   <div>
-                    <span className="bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                    <span className="bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12"
@@ -250,7 +250,7 @@ export default function ProductPerformanceTab() {
                     </h3>
                   </div>
                   <div>
-                    <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                    <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12"
@@ -331,7 +331,7 @@ export default function ProductPerformanceTab() {
                     </h3>
                   </div>
                   <div>
-                    <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pr-2.5 pl-2 text-sm font-medium">
+                    <span className="bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500 flex items-center gap-1 rounded-full py-0.5 pl-2 pr-2.5 text-sm font-medium">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12"

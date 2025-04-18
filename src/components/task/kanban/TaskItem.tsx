@@ -77,7 +77,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
     <div
       ref={ref}
       style={{ opacity }}
-      className="relative p-5 bg-white border border-gray-200 task rounded-xl shadow-theme-sm dark:border-gray-800 dark:bg-white/5"
+      className="task shadow-theme-sm relative rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/5"
       data-handler-id={handlerId}
     >
       <div className="space-y-4">
@@ -97,12 +97,12 @@ const TaskItem: React.FC<TaskItemProps> = ({
                 height={140}
                 src={task.projectImg}
                 alt="task"
-                className="overflow-hidden w-full rounded-xl border-[0.5px] border-gray-200 dark:border-gray-800"
+                className="w-full overflow-hidden rounded-xl border-[0.5px] border-gray-200 dark:border-gray-800"
               />
             </div>
           )}
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+            <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
               <svg
                 className="fill-current"
                 width="16"
@@ -120,7 +120,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
               </svg>
               {task.dueDate}
             </span>
-            <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+            <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
               <svg
                 className="stroke-current"
                 width="18"
@@ -139,7 +139,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
               {task.comments}
             </span>
             {task.links && (
-              <span className="flex items-center gap-1 text-sm text-gray-500 cursor-pointer dark:text-gray-400">
+              <span className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   className="fill-current"
                   width="16"
@@ -160,7 +160,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
             )}
           </div>
           <span
-            className={`mt-3 inline-flex rounded-full px-2 py-0.5 text-theme-xs font-medium ${getCategoryStyles(
+            className={`text-theme-xs mt-3 inline-flex rounded-full px-2 py-0.5 font-medium ${getCategoryStyles(
               task.category.color
             )}`}
           >
@@ -168,7 +168,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
           </span>
         </div>
       </div>
-      <div className="h-6 absolute top-5 right-5 top w-full max-w-6 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
+      <div className="top absolute right-5 top-5 h-6 w-full max-w-6 overflow-hidden rounded-full border-[0.5px] border-gray-200 dark:border-gray-800">
         <Image width={24} height={24} src={task.assignee} alt="user" />
       </div>
     </div>

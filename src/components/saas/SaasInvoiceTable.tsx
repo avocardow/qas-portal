@@ -50,19 +50,19 @@ export default function SaasInvoiceTable() {
         <table className="min-w-full">
           <thead>
             <tr className="bg-gray-50 dark:bg-gray-900">
-              <th className="px-6 py-4 text-left text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+              <th className="whitespace-nowrap px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                 Serial No:
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+              <th className="whitespace-nowrap px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                 Close Date
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+              <th className="whitespace-nowrap px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                 User
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+              <th className="whitespace-nowrap px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                 Amount
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium whitespace-nowrap text-gray-500 dark:text-gray-400">
+              <th className="whitespace-nowrap px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
                 Status
               </th>
             </tr>
@@ -165,16 +165,16 @@ export default function SaasInvoiceTable() {
             </tr> */}
             {transactions.map((transaction) => (
               <tr key={transaction.id}>
-                <td className="px-6 py-4 text-left text-sm whitespace-nowrap text-gray-700 dark:text-gray-400">
+                <td className="whitespace-nowrap px-6 py-4 text-left text-sm text-gray-700 dark:text-gray-400">
                   {transaction.id}
                 </td>
-                <td className="px-6 py-4 text-left text-sm whitespace-nowrap text-gray-700 dark:text-gray-400">
+                <td className="whitespace-nowrap px-6 py-4 text-left text-sm text-gray-700 dark:text-gray-400">
                   {transaction.date}
                 </td>
-                <td className="px-6 py-4 text-left text-sm whitespace-nowrap text-gray-700 dark:text-gray-400">
+                <td className="whitespace-nowrap px-6 py-4 text-left text-sm text-gray-700 dark:text-gray-400">
                   {transaction.user}
                 </td>
-                <td className="px-6 py-4 text-left text-sm whitespace-nowrap text-gray-700 dark:text-gray-400">
+                <td className="whitespace-nowrap px-6 py-4 text-left text-sm text-gray-700 dark:text-gray-400">
                   {transaction.amount}
                 </td>
                 <td className="px-6 py-4 text-left">
@@ -184,8 +184,8 @@ export default function SaasInvoiceTable() {
                       transaction.status === "Complete"
                         ? "success"
                         : transaction.status === "Pending"
-                        ? "warning"
-                        : "error"
+                          ? "warning"
+                          : "error"
                     }
                   >
                     {transaction.status}

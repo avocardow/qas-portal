@@ -48,7 +48,7 @@ export default function DefaultInputs() {
             />
             <button
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+              className="absolute right-4 top-1/2 z-30 -translate-y-1/2 cursor-pointer"
             >
               {showPassword ? (
                 <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
@@ -80,7 +80,7 @@ export default function DefaultInputs() {
               name="tm"
               onChange={(e) => console.log(e.target.value)}
             />
-            <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <TimeIcon />
             </span>
           </div>

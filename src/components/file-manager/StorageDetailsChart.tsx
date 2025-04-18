@@ -108,8 +108,8 @@ const StorageDetailsChart: React.FC = () => {
   const series = [45, 65, 25, 25];
 
   return (
-    <div className="px-4 pt-6 pb-6 bg-white border border-gray-200 rounded-2xl dark:border-gray-800 dark:bg-gray-900 sm:px-6">
-      <div className="flex items-start justify-between mb-4">
+    <div className="rounded-2xl border border-gray-200 bg-white px-4 py-6 sm:px-6 dark:border-gray-800 dark:bg-gray-900">
+      <div className="mb-4 flex items-start justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
             Storage Details
@@ -119,7 +119,7 @@ const StorageDetailsChart: React.FC = () => {
           </p>
         </div>
       </div>
-      <div className="flex justify-center mx-auto " id="chartDarkStyle">
+      <div className="mx-auto flex justify-center" id="chartDarkStyle">
         <ReactApexChart
           options={options}
           series={series}

@@ -50,7 +50,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   };
 
   return (
-    <div className="relative inline-block group">
+    <div className="group relative inline-block">
       {children}
       <div
         className={`invisible absolute z-30 opacity-0 transition-opacity duration-300 group-hover:visible group-hover:opacity-100 ${getPositionClasses(
@@ -61,7 +61,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
           <div
             className={`${getThemeClasses(
               theme
-            )} whitespace-nowrap rounded-lg  px-3 py-2 text-xs font-medium text-gray-700 drop-shadow-4xl dark:bg-[#1E2634] dark:text-white`}
+            )} drop-shadow-4xl whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium text-gray-700 dark:bg-[#1E2634] dark:text-white`}
           >
             {content}
           </div>

@@ -13,7 +13,11 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
-export default function TRPCProvider({ children }: { children: React.ReactNode }) {
+export default function TRPCProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [queryClient] = useState(() => new QueryClient());
 
   const [trpcClient] = useState(() =>
@@ -37,4 +41,4 @@ export default function TRPCProvider({ children }: { children: React.ReactNode }
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </api.Provider>
   );
-} 
+}

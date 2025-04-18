@@ -80,7 +80,7 @@ const tableData = [
 export default function RecentFileTable() {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between px-6 mb-4">
+      <div className="mb-4 flex items-center justify-between px-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Recent Files
@@ -89,7 +89,7 @@ export default function RecentFileTable() {
 
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-500"
+          className="hover:text-brand-500 dark:hover:text-brand-500 inline-flex items-center gap-2 text-gray-500 dark:text-gray-400"
         >
           View All
           <ArrowRightIcon />
@@ -97,23 +97,23 @@ export default function RecentFileTable() {
       </div>
 
       <div className="max-w-full overflow-x-auto">
-        <table className="w-full border-collapse table-auto">
+        <table className="w-full table-auto border-collapse">
           {/* Table Header */}
           <thead>
             <tr className="border-t border-gray-200 dark:border-gray-800">
-              <th className="px-6 py-3 font-medium text-left text-gray-500 text-theme-sm dark:text-gray-400">
+              <th className="text-theme-sm px-6 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
                 File Name
               </th>
-              <th className="px-6 py-3 font-medium text-left text-gray-500 text-theme-sm dark:text-gray-400">
+              <th className="text-theme-sm px-6 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
                 Category
               </th>
-              <th className="px-6 py-3 font-medium text-left text-gray-500 text-theme-sm dark:text-gray-400">
+              <th className="text-theme-sm px-6 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
                 Size
               </th>
-              <th className="px-6 py-3 font-medium text-left text-gray-500 text-theme-sm dark:text-gray-400">
+              <th className="text-theme-sm px-6 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
                 Date Modified
               </th>
-              <th className="px-6 py-3 font-medium text-center text-gray-500 text-theme-sm dark:text-gray-400">
+              <th className="text-theme-sm px-6 py-3 text-center font-medium text-gray-500 dark:text-gray-400">
                 Action
               </th>
             </tr>
@@ -145,18 +145,18 @@ export default function RecentFileTable() {
                     {row.fileName}
                   </div>
                 </td>
-                <td className="px-6 py-[18px] text-gray-700 text-theme-sm dark:text-gray-400">
+                <td className="text-theme-sm px-6 py-[18px] text-gray-700 dark:text-gray-400">
                   {row.category}
                 </td>
-                <td className="px-6 py-[18px] text-gray-700 text-theme-sm dark:text-gray-400">
+                <td className="text-theme-sm px-6 py-[18px] text-gray-700 dark:text-gray-400">
                   {row.size}
                 </td>
-                <td className="px-6 py-[18px] text-gray-700 text-theme-sm dark:text-gray-400">
+                <td className="text-theme-sm px-6 py-[18px] text-gray-700 dark:text-gray-400">
                   {row.dateModified}
                 </td>
                 <td className="px-6 py-[18px] text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <button className="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">
+                    <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">
                       <svg
                         className="fill-current"
                         width="21"

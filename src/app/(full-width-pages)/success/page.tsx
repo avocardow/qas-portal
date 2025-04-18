@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Success() {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">
+    <div className="z-1 relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
       <div className="mx-auto w-full max-w-[274px] text-center sm:max-w-[555px]">
         <div className="mx-auto mb-10 w-full max-w-[100px] text-center sm:max-w-[160px]">
@@ -32,24 +32,24 @@ export default function Success() {
           />
         </div>
 
-        <h1 className="mb-2 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl">
+        <h1 className="text-title-md xl:text-title-2xl mb-2 font-bold text-gray-800 dark:text-white/90">
           SUCCESS !
         </h1>
 
-        <p className="mt-6 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
+        <p className="my-6 text-base text-gray-700 sm:text-lg dark:text-gray-400">
           Awesome! your message has been sent successfully, Our support team
           will get back to you as soon as possible.
         </p>
 
         <Link
           href="/"
-          className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+          className="shadow-theme-xs inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
         >
           Back to Home Page
         </Link>
       </div>
       {/* <!-- Footer --> */}
-      <p className="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
+      <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center text-sm text-gray-500 dark:text-gray-400">
         &copy; {new Date().getFullYear()} - TailAdmin
       </p>
     </div>

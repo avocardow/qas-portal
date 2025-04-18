@@ -2,12 +2,12 @@ import React from "react";
 
 export default function ButtonGroupWithLeftIcon() {
   return (
-    <div className="max-w-full pb-3 overflow-x-auto custom-scrollbar sm:pb-0">
+    <div className="custom-scrollbar max-w-full overflow-x-auto pb-3 sm:pb-0">
       <div className="min-w-[393px]">
-        <div className="inline-flex items-center shadow-theme-xs">
+        <div className="shadow-theme-xs inline-flex items-center">
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition bg-brand-500 ring-1 ring-inset ring-brand-500 first:rounded-l-lg last:rounded-r-lg hover:bg-brand-500"
+            className="bg-brand-500 ring-brand-500 hover:bg-brand-500 inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white ring-1 ring-inset transition first:rounded-l-lg last:rounded-r-lg"
           >
             <svg
               className="fill-current"
@@ -28,7 +28,7 @@ export default function ButtonGroupWithLeftIcon() {
           </button>
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-brand-500 ring-1 ring-inset ring-brand-500 first:rounded-l-lg last:rounded-r-lg hover:bg-brand-500 hover:text-white"
+            className="text-brand-500 ring-brand-500 hover:bg-brand-500 -ml-px inline-flex items-center gap-2 bg-transparent px-4 py-3 text-sm font-medium ring-1 ring-inset first:rounded-l-lg last:rounded-r-lg hover:text-white"
           >
             <svg
               className="fill-current"
@@ -49,7 +49,7 @@ export default function ButtonGroupWithLeftIcon() {
           </button>
           <button
             type="button"
-            className="inline-flex items-center gap-2 px-4 py-3 -ml-px text-sm font-medium bg-transparent text-brand-500 ring-1 ring-inset ring-brand-500 first:rounded-l-lg last:rounded-r-lg hover:bg-brand-500 hover:text-white"
+            className="text-brand-500 ring-brand-500 hover:bg-brand-500 -ml-px inline-flex items-center gap-2 bg-transparent px-4 py-3 text-sm font-medium ring-1 ring-inset first:rounded-l-lg last:rounded-r-lg hover:text-white"
           >
             <svg
               className="fill-current"

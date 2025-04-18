@@ -4,7 +4,7 @@ import Button from "../button/Button";
 
 export default function PopoverButton() {
   return (
-    <div className="max-w-full overflow-auto custom-scrollbar sm:overflow-visible">
+    <div className="custom-scrollbar max-w-full overflow-auto sm:overflow-visible">
       <div className="min-w-[750px]">
         <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:gap-5">
           <div className="flex flex-col flex-wrap items-center gap-4 sm:flex-row sm:gap-5">
@@ -31,7 +31,7 @@ export default function PopoverButton() {
                 position="bottom"
                 trigger={<Button size="sm"> Popover on Bottom</Button>}
               >
-                <div className="rounded-t-xl border-b relative  border-gray-200  bg-gray-200 px-5 py-3 dark:border-white/[0.03] dark:bg-[#252D3A]">
+                <div className="relative rounded-t-xl border-b border-gray-200 bg-gray-200 px-5 py-3 dark:border-white/[0.03] dark:bg-[#252D3A]">
                   <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                     Top Popover
                   </h3>
@@ -49,7 +49,7 @@ export default function PopoverButton() {
                 position="right"
                 trigger={<Button size="sm"> Popover on Bottom</Button>}
               >
-                <div className="rounded-t-xl border-b relative  border-gray-200  bg-gray-200 px-5 py-3 dark:border-white/[0.03] dark:bg-[#252D3A]">
+                <div className="relative rounded-t-xl border-b border-gray-200 bg-gray-200 px-5 py-3 dark:border-white/[0.03] dark:bg-[#252D3A]">
                   <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                     Top Popover
                   </h3>
@@ -67,7 +67,7 @@ export default function PopoverButton() {
                 position="left"
                 trigger={<Button size="sm"> Popover on Bottom</Button>}
               >
-                <div className="rounded-t-xl border-b relative  border-gray-200  bg-gray-200 px-5 py-3 dark:border-white/[0.03] dark:bg-[#252D3A]">
+                <div className="relative rounded-t-xl border-b border-gray-200 bg-gray-200 px-5 py-3 dark:border-white/[0.03] dark:bg-[#252D3A]">
                   <h3 className="text-base font-semibold text-gray-800 dark:text-white/90">
                     Top Popover
                   </h3>

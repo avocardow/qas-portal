@@ -45,11 +45,11 @@ export default function PaginationWithIcon({
     return (
       <button
         onClick={() => handlePageChange(page)}
-        className={`px-4 py-2 rounded ${
+        className={`rounded px-4 py-2 ${
           currentPage === page
             ? "bg-brand-500 text-white"
             : "text-gray-700 dark:text-gray-400"
-        } flex w-10 items-center justify-center h-10 rounded-lg text-sm font-medium hover:bg-blue-500/[0.08] hover:text-brand-500 dark:hover:text-brand-500`}
+        } hover:text-brand-500 dark:hover:text-brand-500 flex size-10 items-center justify-center rounded-lg text-sm font-medium hover:bg-blue-500/[0.08]`}
       >
         {page}
       </button>
@@ -58,7 +58,7 @@ export default function PaginationWithIcon({
 
   const renderEllipsis = () => {
     return (
-      <span className="flex items-center justify-center w-10 h-10 text-sm font-medium text-gray-700 dark:text-gray-400">
+      <span className="flex size-10 items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-400">
         ...
       </span>
     );
@@ -69,7 +69,7 @@ export default function PaginationWithIcon({
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 sm:p-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="shadow-theme-xs flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50 sm:p-2.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
         <svg
           width="20"
@@ -92,7 +92,7 @@ export default function PaginationWithIcon({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 sm:p-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="shadow-theme-xs flex h-10 items-center gap-2 rounded-lg border border-gray-300 bg-white p-2 text-gray-700 hover:bg-gray-50 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50 sm:p-2.5 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
         <svg
           width="20"

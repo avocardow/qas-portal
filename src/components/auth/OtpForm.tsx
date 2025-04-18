@@ -73,8 +73,8 @@ export default function OtpForm() {
     alert(`Submitted OTP: ${otp.join("")}`);
   };
   return (
-    <div className="flex flex-col flex-1 lg:w-1/2 w-full">
-      <div className="w-full max-w-md pt-10 mx-auto">
+    <div className="flex w-full flex-1 flex-col lg:w-1/2">
+      <div className="mx-auto w-full max-w-md pt-10">
         <Link
           href="/"
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
@@ -98,9 +98,9 @@ export default function OtpForm() {
           Back to dashboard
         </Link>
       </div>
-      <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
         <div className="mb-5 sm:mb-8">
-          <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+          <h1 className="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
             Two Step Verification
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -130,7 +130,7 @@ export default function OtpForm() {
                           inputsRef.current[index] = el;
                         }
                       }}
-                      className="dark:bg-dark-900 otp-input h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-center text-xl font-semibold text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      className="dark:bg-dark-900 otp-input shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-center text-xl font-semibold text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                     />
                   ))}
                 </div>
@@ -140,7 +140,7 @@ export default function OtpForm() {
               <div>
                 <button
                   onClick={handleSubmit}
-                  className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+                  className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium text-white transition"
                 >
                   Verify My Account
                 </button>
@@ -148,7 +148,7 @@ export default function OtpForm() {
             </div>
           </form>
           <div className="mt-5">
-            <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
+            <p className="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
               Didn’t get the code?{" "}
               <Link
                 href="/"

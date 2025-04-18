@@ -56,7 +56,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
       case "default":
         return <span> / </span>;
       case "dotted":
-        return <span className="block w-1 h-1 bg-gray-400 rounded-full"></span>;
+        return <span className="block size-1 rounded-full bg-gray-400"></span>;
       case "chevron":
         return <ChevronRightIcon />;
       default:
@@ -81,7 +81,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
             {item.href ? (
               <Link
                 href={item.href}
-                className="flex items-center gap-1 text-sm text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400"
+                className="hover:text-brand-500 dark:hover:text-brand-400 flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400"
               >
                 {index === 0 && variant === "withIcon" && <HomeIcon />}
                 {item.label}

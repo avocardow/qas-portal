@@ -167,7 +167,7 @@ export default function BasicTableThree() {
   };
   return (
     <div className="rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <div className="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="mb-4 flex flex-col gap-2 px-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Latest Transactions
@@ -176,7 +176,7 @@ export default function BasicTableThree() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <form>
             <div className="relative">
-              <button className="absolute -translate-y-1/2 left-4 top-1/2">
+              <button className="absolute left-4 top-1/2 -translate-y-1/2">
                 <svg
                   className="fill-gray-500 dark:fill-gray-400"
                   width="20"
@@ -196,7 +196,7 @@ export default function BasicTableThree() {
               <input
                 type="text"
                 placeholder="Search..."
-                className="dark:bg-dark-900 h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[300px]"
+                className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-800 placeholder:text-gray-400 xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
               />
             </div>
           </form>
@@ -204,37 +204,37 @@ export default function BasicTableThree() {
       </div>
 
       <div className="overflow-hidden">
-        <div className="max-w-full px-5 overflow-x-auto sm:px-6">
+        <div className="max-w-full overflow-x-auto px-5 sm:px-6">
           <Table>
-            <TableHeader className="border-gray-100 border-y dark:border-white/[0.05]">
+            <TableHeader className="border-y border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell
                   isHeader
-                  className="py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400"
+                  className="text-theme-sm py-3 text-start font-normal text-gray-500 dark:text-gray-400"
                 >
                   Name
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400"
+                  className="text-theme-sm px-4 py-3 text-start font-normal text-gray-500 dark:text-gray-400"
                 >
                   Date
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400"
+                  className="text-theme-sm px-4 py-3 text-start font-normal text-gray-500 dark:text-gray-400"
                 >
                   Price
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400"
+                  className="text-theme-sm px-4 py-3 text-start font-normal text-gray-500 dark:text-gray-400"
                 >
                   Category
                 </TableCell>
                 <TableCell
                   isHeader
-                  className="px-4 py-3 font-normal text-gray-500 text-start text-theme-sm dark:text-gray-400"
+                  className="text-theme-sm px-4 py-3 text-start font-normal text-gray-500 dark:text-gray-400"
                 >
                   Status
                 </TableCell>
@@ -243,9 +243,9 @@ export default function BasicTableThree() {
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {currentItems.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell className="px-4 py-4">
+                  <TableCell className="p-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8">
+                      <div className="size-8">
                         <Image
                           width={32}
                           height={32}
@@ -254,30 +254,30 @@ export default function BasicTableThree() {
                         />
                       </div>
                       <div>
-                        <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                        <span className="text-theme-sm block font-medium text-gray-700 dark:text-gray-400">
                           {item.action}
                         </span>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="px-4 py-4 text-gray-700 whitespace-nowrap text-theme-sm dark:text-gray-400">
+                  <TableCell className="text-theme-sm whitespace-nowrap p-4 text-gray-700 dark:text-gray-400">
                     {item.date}
                   </TableCell>
-                  <TableCell className="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400">
+                  <TableCell className="text-theme-sm p-4 text-gray-700 dark:text-gray-400">
                     {item.amount}
                   </TableCell>
-                  <TableCell className="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400">
+                  <TableCell className="text-theme-sm p-4 text-gray-700 dark:text-gray-400">
                     {item.category}
                   </TableCell>
-                  <TableCell className="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400">
+                  <TableCell className="text-theme-sm p-4 text-gray-700 dark:text-gray-400">
                     <Badge
                       size="sm"
                       color={
                         item.status === "Success"
                           ? "success"
                           : item.status === "Pending"
-                          ? "warning"
-                          : "error"
+                            ? "warning"
+                            : "error"
                       }
                     >
                       {item.status}
@@ -291,7 +291,7 @@ export default function BasicTableThree() {
       </div>
 
       {/* Pagination Controls */}
-      <div className="px-6 py-4 border-t border-gray-200 dark:border-white/[0.05]">
+      <div className="border-t border-gray-200 px-6 py-4 dark:border-white/[0.05]">
         <div className="flex items-center justify-between">
           {/* Previous Button */}
           <Button
@@ -318,7 +318,7 @@ export default function BasicTableThree() {
             <span className="hidden sm:inline">Previous</span>
           </Button>
           {/* Page Info */}
-          <span className="block text-sm font-medium text-gray-700 dark:text-gray-400 sm:hidden">
+          <span className="block text-sm font-medium text-gray-700 sm:hidden dark:text-gray-400">
             Page {currentPage} of {totalPages}
           </span>
           {/* Page Numbers */}
@@ -327,10 +327,10 @@ export default function BasicTableThree() {
               <li key={idx}>
                 <button
                   onClick={() => goToPage(idx + 1)}
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg text-theme-sm font-medium ${
+                  className={`text-theme-sm flex size-10 items-center justify-center rounded-lg font-medium ${
                     currentPage === idx + 1
                       ? "bg-brand-500 text-white"
-                      : "text-gray-700 hover:bg-brand-500/[0.08] dark:hover:bg-brand-500 dark:hover:text-white hover:text-brand-500 dark:text-gray-400 "
+                      : "hover:bg-brand-500/[0.08] dark:hover:bg-brand-500 hover:text-brand-500 text-gray-700 dark:text-gray-400 dark:hover:text-white"
                   }`}
                 >
                   {idx + 1}

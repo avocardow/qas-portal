@@ -67,7 +67,7 @@ const FaqTwo: React.FC<FaqTwoProps> = ({
 
       {/* Content */}
       {isOpen && (
-        <div className="p-6 border-t border-brand-100 dark:border-brand-200">
+        <div className="border-brand-100 dark:border-brand-200 border-t p-6">
           <p className="text-base text-gray-800">{content}</p>
         </div>
       )}

@@ -136,7 +136,7 @@ const KanbanBoard: React.FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="grid grid-cols-1 border-t border-gray-200 divide-x divide-gray-200 dark:divide-white/[0.05] mt-7 dark:border-white/[0.05] sm:mt-0 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-7 grid grid-cols-1 divide-x divide-gray-200 border-t border-gray-200 sm:mt-0 sm:grid-cols-2 xl:grid-cols-3 dark:divide-white/[0.05] dark:border-white/[0.05]">
         <Column
           title="To Do"
           tasks={tasks.filter((task) => task.status === "todo")}

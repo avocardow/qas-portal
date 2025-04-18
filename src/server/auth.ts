@@ -1,5 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { getServerSession, type DefaultSession, type NextAuthOptions } from "next-auth";
+import {
+  getServerSession,
+  type DefaultSession,
+  type NextAuthOptions,
+} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials"; // Example provider
 
 import { env } from "@/env.mjs";
@@ -64,8 +68,11 @@ export const authOptions: NextAuthOptions = {
 
         // For now, returning a dummy user for setup purposes
         // IMPORTANT: Replace this with real authentication logic!
-        if (credentials?.username === "admin" && credentials?.password === "password") {
-           return { id: "1", name: "Admin User", email: "admin@example.com" };
+        if (
+          credentials?.username === "admin" &&
+          credentials?.password === "password"
+        ) {
+          return { id: "1", name: "Admin User", email: "admin@example.com" };
         }
 
         // Return null if user data could not be retrieved
@@ -94,4 +101,4 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = () => getServerSession(authOptions); 
+export const getServerAuthSession = () => getServerSession(authOptions);

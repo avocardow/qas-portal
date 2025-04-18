@@ -70,13 +70,13 @@ export default function EstimatedRevenue() {
   };
   const series = [90];
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
             Estimated Revenue
           </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
+          <p className="text-theme-sm mt-1 text-gray-500 dark:text-gray-400">
             Target you’ve set for each month
           </p>
         </div>
@@ -92,13 +92,13 @@ export default function EstimatedRevenue() {
           >
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               View More
             </DropdownItem>
             <DropdownItem
               onItemClick={closeDropdown}
-              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+              className="flex w-full rounded-lg text-left font-normal text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               Delete
             </DropdownItem>
@@ -120,9 +120,9 @@ export default function EstimatedRevenue() {
         </span>
       </div>
 
-      <div className="pt-6 mt-6 space-y-5 border-t border-gary-200 dark:border-gray-800">
+      <div className="border-gary-200 mt-6 space-y-5 border-t pt-6 dark:border-gray-800">
         <div>
-          <p className="mb-2 text-gray-500 text-theme-sm dark:text-gray-400">
+          <p className="text-theme-sm mb-2 text-gray-500 dark:text-gray-400">
             Marketing
           </p>
           <div className="flex items-center justify-between">
@@ -136,9 +136,9 @@ export default function EstimatedRevenue() {
 
             <div className="flex w-full max-w-[140px] items-center gap-3">
               <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
-                <div className="absolute left-0 top-0 flex h-full w-[85%] items-center justify-center rounded-sm bg-brand-500 text-xs font-medium text-white"></div>
+                <div className="bg-brand-500 absolute left-0 top-0 flex h-full w-[85%] items-center justify-center rounded-sm text-xs font-medium text-white"></div>
               </div>
-              <p className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+              <p className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                 85%
               </p>
             </div>
@@ -146,7 +146,7 @@ export default function EstimatedRevenue() {
         </div>
 
         <div>
-          <p className="mb-2 text-gray-500 text-theme-sm dark:text-gray-400">
+          <p className="text-theme-sm mb-2 text-gray-500 dark:text-gray-400">
             Sales
           </p>
           <div className="flex items-center justify-between">
@@ -160,9 +160,9 @@ export default function EstimatedRevenue() {
 
             <div className="flex w-full max-w-[140px] items-center gap-3">
               <div className="relative block h-2 w-full max-w-[100px] rounded-sm bg-gray-200 dark:bg-gray-800">
-                <div className="absolute left-0 top-0 flex h-full w-[55%] items-center justify-center rounded-sm bg-brand-500 text-xs font-medium text-white"></div>
+                <div className="bg-brand-500 absolute left-0 top-0 flex h-full w-[55%] items-center justify-center rounded-sm text-xs font-medium text-white"></div>
               </div>
-              <p className="font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+              <p className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                 55%
               </p>
             </div>

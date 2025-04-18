@@ -17,11 +17,11 @@ export default function DropdownWithIcon() {
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="inline-flex items-center dropdown-toggle gap-2 px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 hover:bg-brand-600"
+        className="dropdown-toggle bg-brand-500 hover:bg-brand-600 inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white"
       >
         Account Menu
         <svg
-          className={`duration-200 ease-in-out stroke-current ${
+          className={`stroke-current duration-200 ease-in-out ${
             isOpen ? "rotate-180" : ""
           }`}
           width="20"
@@ -41,7 +41,7 @@ export default function DropdownWithIcon() {
       </button>
 
       <Dropdown
-        className="absolute left-0 top-full z-40 mt-2 w-full min-w-[260px] rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-[#1E2635]"
+        className="shadow-theme-lg absolute left-0 top-full z-40 mt-2 w-full min-w-[260px] rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-[#1E2635]"
         isOpen={isOpen}
         onClose={closeDropdown}
       >

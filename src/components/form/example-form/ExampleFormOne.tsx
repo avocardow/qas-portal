@@ -61,7 +61,7 @@ export default function ExampleFormOne() {
               rows={6}
               value={message}
               onChange={handleTextareaChange}
-              className=" bg-gray-50 dark:bg-gray-800"
+              className="bg-gray-50 dark:bg-gray-800"
             />
           </div>
           <div className="col-span-2">

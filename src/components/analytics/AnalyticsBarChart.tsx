@@ -115,20 +115,20 @@ export default function AnalyticsBarChart() {
     },
   ];
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
+    <div className="rounded-2xl border border-gray-200 bg-white px-5 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div>
           <h3 className="mb-1 text-lg font-semibold text-gray-800 dark:text-white/90">
             Analytics
           </h3>
-          <span className="block text-gray-500 text-theme-sm dark:text-gray-400">
+          <span className="text-theme-sm block text-gray-500 dark:text-gray-400">
             Visitor analytics of last 30 days
           </span>
         </div>
         <ChartTab />
       </div>
-      <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="-ml-5 min-w-[1300px] xl:min-w-full pl-2">
+      <div className="custom-scrollbar max-w-full overflow-x-auto">
+        <div className="-ml-5 min-w-[1300px] pl-2 xl:min-w-full">
           <ReactApexChart
             options={options}
             series={series}

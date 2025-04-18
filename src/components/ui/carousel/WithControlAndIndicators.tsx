@@ -35,7 +35,7 @@ export default function WithControlAndIndicators() {
     },
   };
   return (
-    <div className="relative border border-gray-200 rounded-lg carouselFour dark:border-gray-800">
+    <div className="carouselFour relative rounded-lg border border-gray-200 dark:border-gray-800">
       <Swiper {...swiperOptions}>
         {/* <!-- slider item --> */}
         {carouselData.map((item, i) => (
@@ -58,7 +58,7 @@ export default function WithControlAndIndicators() {
       {/* <!-- If we need navigation buttons --> */}
       <div className="swiper-button-prev prev-style-two">
         <svg
-          className="w-auto h-auto stroke-current"
+          className="size-auto stroke-current"
           width="24"
           height="24"
           viewBox="0 0 24 24"
