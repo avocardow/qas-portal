@@ -38,6 +38,33 @@ To get started with TailAdmin, ensure you have the following prerequisites insta
    yarn dev
    ```
 
+### Environment Variables
+
+Copy `.env.example` to `.env.local` in the project root and fill in the following variables:
+
+- ANTHROPIC_API_KEY (Required)
+- PERPLEXITY_API_KEY (Optional)
+- MODEL (e.g., claude-3-opus-20240229)
+- PERPLEXITY_MODEL (Optional)
+- MAX_TOKENS (e.g., 64000)
+- TEMPERATURE (e.g., 0.2)
+- DEBUG (true/false)
+- LOG_LEVEL (debug | info | warn | error)
+- DEFAULT_SUBTASKS (e.g., 5)
+- DEFAULT_PRIORITY (high | medium | low)
+- PROJECT_NAME (e.g., qas-portal)
+- DATABASE_URL (Your PostgreSQL connection string)
+- DIRECT_URL (Alternate DB connection string)
+- NEXTAUTH_URL (Base URL for authentication)
+- NEXTAUTH_SECRET (Secret for NextAuth)
+- AZURE_AD_CLIENT_ID
+- AZURE_AD_CLIENT_SECRET
+- AZURE_AD_TENANT_ID
+
+### Vercel Deployment
+
+For Vercel deployments, configure these variables under Settings > Environment Variables in your Vercel project. Ensure `.env.local` is added to `.gitignore` to prevent committing secrets.
+
 ## Changelog
 
 ### Version 2.1.1 - [March 25, 2025]
