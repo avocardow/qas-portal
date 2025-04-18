@@ -1,21 +1,410 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../node_modules/.pnpm/@prisma+client@6.6.0_prisma@6.6.0_typescript@5.8.3__typescript@5.8.3/node_modules/.prisma/client"
 }
 
+// CORRECTED DATASOURCE BLOCK:
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Reads the pooled connection string from the DATABASE_URL environment variable
+  url       = env("DATABASE_URL")
+  // Reads the direct connection string from the DIRECT_URL environment variable (used by Prisma Migrate)
+  directUrl = env("DIRECT_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// ========== Enums ==========
+
+enum ClientStatus {
+  prospect
+  active
+  archived
+}
+
+enum LicenseHolderType {
+  client
+  contact
+}
+
+// ========== Core Entities ==========
+
+model Client {
+  id                 String         @id @default(uuid()) @db.Uuid
+  clientName         String
+  abn                String?
+  address            String?
+  city               String?
+  postcode           String?
+  status             ClientStatus   @default(active)
+  auditMonthEnd      Int? // 1-12, validation maybe in application layer
+  nextContactDate    DateTime?      @db.Timestamptz
+  estAnnFees         Decimal?       @db.Decimal(10, 2)
+  softwareAccess     String? // Consider Enum if values are fixed
+  sharepointFolderId String? // Store SharePoint Folder ID or relative path
+  xeroContactId      String?        @unique
+  notes              String?
+  createdAt          DateTime       @default(now()) @db.Timestamptz
+  updatedAt          DateTime       @updatedAt @db.Timestamptz
+
+  contacts      Contact[]
+  trustAccounts TrustAccount[]
+  licenses      License[]
+  audits        Audit[]
+  documents     DocumentReference[] // If linking directly
+  callLogs      CallLog[]
+
+  @@map("clients") // Maps model to the 'clients' table
+}
+
+model Contact {
+  id               String    @id @default(uuid()) @db.Uuid
+  clientId         String    @db.Uuid
+  name             String
+  email            String?   @unique // Make email optional but unique if present
+  phone            String?
+  title            String?
+  isPrimary        Boolean   @default(false)
+  canLoginToPortal Boolean   @default(false)
+  portalUserId     String?   @unique @db.Uuid // Link to user account if they can log in
+  createdAt        DateTime  @default(now()) @db.Timestamptz
+  updatedAt        DateTime  @updatedAt @db.Timestamptz
+
+  client     Client     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  portalUser User?      @relation(fields: [portalUserId], references: [id], onDelete: SetNull)
+  licenses   License[]
+  callLogs   CallLog[]
+
+  @@index([clientId])
+  @@map("contacts")
+}
+
+model TrustAccount {
+  id                  String   @id @default(uuid()) @db.Uuid
+  clientId            String   @db.Uuid
+  accountName         String?
+  bankName            String
+  bsb                 String?
+  accountNumberMasked String?
+  notes               String?
+  createdAt           DateTime @default(now()) @db.Timestamptz
+  updatedAt           DateTime @updatedAt @db.Timestamptz
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@map("trustAccounts")
+}
+
+model License {
+  id             String            @id @default(uuid()) @db.Uuid
+  holderType     LicenseHolderType
+  clientId       String?           @db.Uuid // Link if holderType is 'client'
+  contactId      String?           @db.Uuid // Link if holderType is 'contact'
+  licenseNumber  String
+  licenseType    String?
+  renewalMonth   Int? // 1-12
+  expiryDate     DateTime?         @db.Timestamptz
+  notes          String?
+  createdAt      DateTime          @default(now()) @db.Timestamptz
+  updatedAt      DateTime          @updatedAt @db.Timestamptz
+
+  client  Client?  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  // Note: The SQL CHECK constraint logic needs to be handled in application layer
+  // to ensure only clientId OR contactId is set based on holderType.
+
+  @@index([clientId])
+  @@index([contactId])
+  @@map("licenses")
+}
+
+// ========== User Authentication & Roles ==========
+
+model User {
+  id                String    @id @default(uuid()) @db.Uuid
+  name              String?
+  email             String?   @unique
+  emailVerified     DateTime? @map("emailVerified") @db.Timestamptz
+  image             String?
+  roleId            Int
+  m365ObjectId      String?   @unique // Store the Azure AD Object ID for team members
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now()) @db.Timestamptz
+  updatedAt         DateTime  @updatedAt @db.Timestamptz
+
+  role              Role                @relation(fields: [roleId], references: [id])
+  accounts          Account[]
+  sessions          Session[]
+  clientContact     Contact? // Relation back to Contact if this user is a client portal user
+  auditAssignments  AuditAssignment[] // Audits this user is assigned to
+  assignedTasks     Task[] // Tasks assigned to this user
+  uploadedDocuments DocumentReference[] @relation("UploadedDocuments") // Docs uploaded by user
+  notifications     Notification[]
+  sentMessages      Message[] // Messages sent by this user
+  callLogs          CallLog[] // Calls made by this user
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(uuid()) @db.Uuid
+  userId            String  @map("userId") @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String  @map("providerAccountId")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid()) @db.Uuid
+  sessionToken String   @unique @map("sessionToken")
+  userId       String   @map("userId") @db.Uuid
+  expires      DateTime @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime @db.Timestamptz
+
+  @@unique([identifier, token])
+  @@map("verificationTokens")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // 'Admin', 'Manager', 'Auditor', 'Staff', 'Client'
+  description String?
+  users       User[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+// Optional but recommended for fine-grained control later
+model Permission {
+  id          Int      @id @default(autoincrement())
+  action      String   @unique // e.g., 'client:create', 'task:delete', 'user:manage'
+  description String?
+  roles       RolePermission[]
+
+  @@map("permissions")
+}
+
+// Optional join table for many-to-many roles/permissions
+model RolePermission {
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("rolePermissions")
+}
+
+// ========== Audit & Task Management ==========
+
+model AuditStage {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique // 'Planning', 'Interim Review 1', etc.
+  description  String?
+  displayOrder Int?
+  audits       Audit[]
+
+  @@map("auditStages")
+}
+
+model AuditStatus {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique // 'Not Started', 'Awaiting Documents', etc.
+  description String?
+  audits      Audit[]
+
+  @@map("auditStatuses")
+}
+
+model Audit {
+  id                String    @id @default(uuid()) @db.Uuid
+  clientId          String    @db.Uuid
+  auditYear         Int // e.g., 2024 (representing year ending)
+  stageId           Int?
+  statusId          Int?
+  reportDueDate     DateTime? @db.Timestamptz
+  agreedFee         Decimal?  @db.Decimal(10, 2)
+  lodgedWithOFTDate DateTime? @db.Timestamptz
+  notes             String?
+  createdAt         DateTime  @default(now()) @db.Timestamptz
+  updatedAt         DateTime  @updatedAt @db.Timestamptz
+
+  client      Client            @relation(fields: [clientId], references: [id], onDelete: Restrict)
+  stage       AuditStage?       @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  status      AuditStatus?      @relation(fields: [statusId], references: [id], onDelete: SetNull)
+  assignments AuditAssignment[] // Team members assigned
+  tasks       Task[]
+  documents   DocumentReference[]
+  messages    Message[]
+
+  @@unique([clientId, auditYear])
+  @@index([clientId])
+  @@index([stageId])
+  @@index([statusId])
+  @@map("audits")
+}
+
+// Many-to-Many relationship for Audit Assignments
+model AuditAssignment {
+  id         String   @id @default(uuid()) @db.Uuid
+  auditId    String   @db.Uuid
+  userId     String   @db.Uuid // Team member user ID
+  role       String? // e.g., 'Primary', 'Reviewer', 'Assistant'
+  assignedAt DateTime @default(now()) @db.Timestamptz
+
+  audit Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([auditId, userId])
+  @@index([auditId])
+  @@index([userId])
+  @@map("auditAssignments")
+}
+
+model Task {
+  id                   String    @id @default(uuid()) @db.Uuid
+  auditId              String    @db.Uuid
+  name                 String
+  description          String?
+  assignedUserId       String?   @db.Uuid // User assigned to the task
+  status               String    @default("To Do") // 'To Do', 'In Progress', 'Done', 'Blocked'
+  dueDate              DateTime? @db.Timestamptz
+  priority             String? // 'High', 'Medium', 'Low'
+  requiresClientAction Boolean   @default(false)
+  completedAt          DateTime? @db.Timestamptz
+  createdAt            DateTime  @default(now()) @db.Timestamptz
+  updatedAt            DateTime  @updatedAt @db.Timestamptz
+
+  audit        Audit              @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  assignedUser User?             @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
+  documents    DocumentReference[]
+
+  @@index([auditId])
+  @@index([assignedUserId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+// ========== Supporting Features ==========
+
+model DocumentReference {
+  id                 String    @id @default(uuid()) @db.Uuid
+  auditId            String?   @db.Uuid
+  taskId             String?   @db.Uuid
+  clientId           String?   @db.Uuid // Denormalized? Consider removing if always accessible via audit/task
+  fileName           String
+  fileType           String?
+  sharepointItemId   String?
+  sharepointFileUrl  String?
+  uploadedByUserId   String?   @db.Uuid
+  isClientUpload     Boolean   @default(false)
+  isSharedWithClient Boolean   @default(false)
+  esignProvider      String?
+  esignEnvelopeId    String?
+  esignStatus        String?
+  createdAt          DateTime  @default(now()) @db.Timestamptz
+  updatedAt          DateTime  @updatedAt @db.Timestamptz
+
+  audit          Audit? @relation(fields: [auditId], references: [id], onDelete: SetNull)
+  task           Task?  @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  client         Client? @relation(fields: [clientId], references: [id], onDelete: SetNull) // If keeping direct link
+  uploadedByUser User?  @relation(name: "UploadedDocuments", fields: [uploadedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([auditId])
+  @@index([taskId])
+  @@index([clientId]) // If keeping direct link
+  @@map("documentReferences")
+}
+
+model Notification {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid // The user receiving the notification
+  message   String
+  linkUrl   String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  auditId        String   @db.Uuid // Context for the message
+  senderUserId   String   @db.Uuid
+  content        String   @db.Text // Use Text for potentially long messages
+  isReadByTeam   Boolean  @default(false)
+  isReadByClient Boolean  @default(false)
+  createdAt      DateTime @default(now()) @db.Timestamptz
+
+  audit  Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  sender User  @relation(fields: [senderUserId], references: [id], onDelete: Cascade)
+
+  @@index([auditId])
+  @@map("messages")
+}
+
+model CallLog {
+  id            String    @id @default(uuid()) @db.Uuid
+  callingUserId String    @db.Uuid
+  clientId      String?   @db.Uuid
+  contactId     String?   @db.Uuid
+  dialedNumber  String
+  startTime     DateTime  @db.Timestamptz
+  endTime       DateTime? @db.Timestamptz
+  durationSeconds Int?
+  teamsCallId   String?
+  notes         String?   @db.Text
+  transcript    String?   @db.Text
+  createdAt     DateTime  @default(now()) @db.Timestamptz
+
+  callingUser User    @relation(fields: [callingUserId], references: [id], onDelete: Cascade)
+  client      Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  contact     Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([callingUserId])
+  @@index([clientId])
+  @@map("callLogs")
+}
+
+model EmailTemplate {
+  id                         String   @id @default(uuid()) @db.Uuid
+  name                       String   @unique
+  subject                    String
+  body                       String   @db.Text // Use Text for HTML/Markdown
+  isEditableByManagerAuditor Boolean  @default(false)
+  createdAt                  DateTime @default(now()) @db.Timestamptz
+  updatedAt                  DateTime @updatedAt @db.Timestamptz
+
+  @@map("emailTemplates")
 }
