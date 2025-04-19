@@ -1,12 +1,34 @@
-import { ReactNode } from "react";
-// import { requireAuth } from "@/lib/auth"; // auth temporarily disabled for testing
-import AdminLayout from "@/app/(admin)/layout";
+"use client";
+import React, { ReactNode } from "react";
+import { useSidebar } from "@/context/SidebarContext";
+import AppSidebar from "@/layout/AppSidebar";
+import Backdrop from "@/layout/Backdrop";
+import AppHeader from "@/layout/AppHeader";
 
 interface Props {
   children: ReactNode;
 }
 
-export default function AppLayout({ children }: Props) {
-  // requireAuth(); // bypass auth temporarily for testing
-  return <AdminLayout>{children}</AdminLayout>;
+export default function HomeLayout({ children }: Props) {
+  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const mainContentMargin = isMobileOpen
+    ? "ml-0"
+    : isExpanded || isHovered
+      ? "lg:ml-[290px]"
+      : "lg:ml-[90px]";
+
+  return (
+    <div className="min-h-screen lg:flex">
+      <AppSidebar />
+      <Backdrop />
+      <div
+        className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
+      >
+        <AppHeader />
+        <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 }
