@@ -6,7 +6,6 @@ generator client {
   output   = "../node_modules/.pnpm/@prisma+client@6.6.0_prisma@6.6.0_typescript@5.8.3__typescript@5.8.3/node_modules/.prisma/client"
 }
 
-// CORRECTED DATASOURCE BLOCK:
 datasource db {
   provider  = "postgresql"
   // Reads the pooled connection string from the DATABASE_URL environment variable
@@ -161,6 +160,8 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
+  // Add this field to accept the value from Azure AD
+  ext_expires_in    Int? // Add this line
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
