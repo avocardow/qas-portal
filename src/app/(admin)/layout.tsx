@@ -22,7 +22,7 @@ export default function AdminLayout({
           <AppSidebar />
           <Backdrop />
           {/* Main Content Area */}
-          <div className="flex-1 transition-all duration-300 ease-in-out">
+          <div className="flex-1 transition-all duration-300 ease-in-out lg:ml-[290px]">
             {/* Header */}
             <AppHeader />
             {/* Page Content */}
