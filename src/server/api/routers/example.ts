@@ -15,7 +15,7 @@ export const exampleRouter = createTRPCRouter({
       };
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
+  getAll: publicProcedure.query(() => {
     // Replace with your actual database query if needed
     // return ctx.db.example.findMany();
     return [{ id: "1", createdAt: new Date(), updatedAt: new Date() }]; // Placeholder
