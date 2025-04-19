@@ -27,14 +27,14 @@ export default function SignInForm() {
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button
                 type="button"
-                onClick={() => router.push("/protected/dashboard")}
+                onClick={() => router.push("/dashboard")}
                 className="mb-4 inline-flex w-full items-center justify-center gap-3 rounded-lg bg-gray-100 px-7 py-3 text-sm font-normal text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
               >
                 Sign in with Microsoft
               </button>
               <button
                 type="button"
-                onClick={() => router.push("/protected/dashboard")}
+                onClick={() => router.push("/dashboard")}
                 className="inline-flex items-center justify-center gap-3 rounded-lg bg-gray-100 px-7 py-3 text-sm font-normal text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
               >
                 <svg
@@ -65,7 +65,7 @@ export default function SignInForm() {
               </button>
               <button
                 type="button"
-                onClick={() => router.push("/protected/dashboard")}
+                onClick={() => router.push("/dashboard")}
                 className="inline-flex items-center justify-center gap-3 rounded-lg bg-gray-100 px-7 py-3 text-sm font-normal text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
               >
                 <svg
@@ -137,7 +137,7 @@ export default function SignInForm() {
                 <div>
                   <button
                     type="button"
-                    onClick={() => router.push("/protected/dashboard")}
+                    onClick={() => router.push("/dashboard")}
                     className="w-full"
                   >
                     Sign in

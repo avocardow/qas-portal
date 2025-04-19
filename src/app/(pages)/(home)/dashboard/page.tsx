@@ -1,3 +1,6 @@
+// Removed client directive to allow server component for metadata
+// "use client";
+
 import type { Metadata } from "next";
 import React from "react";
 import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
