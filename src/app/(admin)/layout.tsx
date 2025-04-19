@@ -4,6 +4,7 @@ import React from "react";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
 import AppHeader from "@/layout/AppHeader";
+import { SidebarProvider } from "@/context/SidebarContext";
 
 export default function AdminLayout({
   children,
@@ -13,19 +14,21 @@ export default function AdminLayout({
   // Server component: static layout without client-only hooks
 
   return (
-    <div className="min-h-screen xl:flex">
-      {/* Sidebar and Backdrop */}
-      <AppSidebar />
-      <Backdrop />
-      {/* Main Content Area */}
-      <div className="flex-1 transition-all duration-300 ease-in-out">
-        {/* Header */}
-        <AppHeader />
-        {/* Page Content */}
-        <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
-          {children}
+    <SidebarProvider>
+      <div className="min-h-screen xl:flex">
+        {/* Sidebar and Backdrop */}
+        <AppSidebar />
+        <Backdrop />
+        {/* Main Content Area */}
+        <div className="flex-1 transition-all duration-300 ease-in-out">
+          {/* Header */}
+          <AppHeader />
+          {/* Page Content */}
+          <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
