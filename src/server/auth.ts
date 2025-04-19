@@ -3,54 +3,58 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
+  type User as NextAuthUser, // Import base User type
 } from "next-auth";
-import AzureADProvider from "next-auth/providers/azure-ad"; // Or MicrosoftEntraIdProvider
+import AzureADProvider from "next-auth/providers/azure-ad";
 
-import { env } from "@/env.mjs"; // Using T3 Env validation
-import { db } from "@/server/db"; // Your Prisma client instance
-import { type Role } from "@prisma/client"; // Import Role type if needed elsewhere, otherwise Prisma handles it
+import { env } from "@/env.mjs";
+import { db } from "@/server/db";
+import { type Role } from "@prisma/client";
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
+// --- Module Augmentation (Session only) ---
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // Add your role type here - adjust if your role name isn't just string
-      role: Role["name"] | null; // Use Role['name'] for type safety if Role model exists
+      role: Role["name"] | null;
     } & DefaultSession["user"];
   }
-
-  // If you need to augment the User object passed to callbacks (optional)
-  // interface User {
-  //   roleId: number; // Assuming roleId is on the User model from DB
-  // }
+  // No User augmentation here to avoid recursion
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- * THIS is where authOptions should be defined and exported.
- * @see https://next-auth.js.org/configuration/options
- */
+// Define a local type extending the base NextAuth User to include our optional roleId
+interface UserForSignIn extends NextAuthUser {
+  roleId?: number;
+}
+
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    // Corrected session callback: Fetch role from DB using user.id
-    session: async ({ session, user }) => {
-      if (session.user) {
-        session.user.id = user.id; // Add the user ID to the session
-
-        // Fetch the user from DB to get the role
-        const userWithRole = await db.user.findUnique({
-          where: { id: user.id },
-          include: { role: true }, // Include the related Role record
+    // --- CORRECTED signIn CALLBACK ---
+    async signIn({ user, account }) {
+      if (account?.provider === "azure-ad" && user.email) {
+        const userExists = await db.user.findUnique({
+          where: { email: user.email },
         });
 
-        // Assign the role name to the session user
-        session.user.role = userWithRole?.role?.name ?? null; // Handle case where role might not be found
+        if (!userExists) {
+          // !!!!! REPLACE '4' with the ACTUAL ID of your default role !!!!!
+          const defaultRoleId = 4; // <--- Set your correct default Role ID
+
+          // Assert 'user' to our extended type before assigning roleId
+          (user as UserForSignIn).roleId = defaultRoleId;
+        }
+      }
+      return true;
+    },
+    // --- Session callback (Unchanged) ---
+    session: async ({ session, user }) => {
+      if (session.user) {
+        session.user.id = user.id;
+        const userWithRole = await db.user.findUnique({
+          where: { id: user.id },
+          include: { role: true },
+        });
+        session.user.role = userWithRole?.role?.name ?? null;
       }
       return session;
     },
@@ -58,33 +62,21 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     AzureADProvider({
-      // Or MicrosoftEntraIdProvider
       clientId: env.AZURE_AD_CLIENT_ID,
       clientSecret: env.AZURE_AD_CLIENT_SECRET,
       tenantId: env.AZURE_AD_TENANT_ID,
-      // Define scopes needed for profile info and potentially refresh tokens
       authorization: {
         params: {
-          scope: "openid profile email offline_access User.Read", // Added User.Read as a common one
+          scope: "openid profile email offline_access User.Read",
         },
       },
     }),
-    /**
-     * ...add more providers here if needed (e.g., EmailProvider for client login)
-     */
+    // Add EmailProvider here later
   ],
   session: {
-    strategy: "database", // Use database session strategy for persistence
+    strategy: "database",
   },
-  // secret: env.NEXTAUTH_SECRET, // Secret is generally needed, ensure it's set in env
-  // pages: { // Optional: Define custom sign-in pages if needed later
-  //   signIn: '/signin',
-  // }
+  // secret: env.NEXTAUTH_SECRET, // Ensure this is set
 };
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- * This should be the ONLY definition of this function.
- * @see https://next-auth.js.org/configuration/nextjs
- */
 export const getServerAuthSession = () => getServerSession(authOptions);
