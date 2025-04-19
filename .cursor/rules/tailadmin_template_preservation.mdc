@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Enforce preserving TailAdmin template pages and components for consistency and future reference
+globs:
+  - 'src/app/**'
+  - 'src/components/**'
+alwaysApply: true
+---
+
+- **Preserve TailAdmin Template Pages**
+  - After customizing a TailAdmin template page, retain the original by renaming it with `_backup` (e.g., `Dashboard_backup.tsx`) so it's not served at its original URL.
+  - Do not delete or overwrite the original template file; keeping backups ensures consistency and a reference for future scaffolding.
+
+- **Preserve TailAdmin Template Components**
+  - After customizing a TailAdmin template component, rename the original with a `_template` suffix (e.g., `Sidebar_template.tsx`) for future reference and to avoid naming conflicts.
+  - Do not remove or override original components; templates should guide the creation of new components to maintain styling and structure.
+
+- **Always Scaffold from Templates**
+  - New pages and components must be created by copying from existing TailAdmin templates rather than coding from scratch.
+  - Templates live in `src/app/(admin)`, `src/app/(app)`, `src/app/(full-width-pages)`, and `src/components` directories, whereas our customized page templates live in `src/app/(pages)/`; referencing these ensures adherence to design and code standards.
+
+**Examples**
+
+```tsx
+// src/pages/Dashboard_backup.tsx
+// Original TailAdmin template renamed as backup
+```
+
+```tsx
+// src/components/Sidebar_template.tsx
+// Original TailAdmin component kept for reference
+```
