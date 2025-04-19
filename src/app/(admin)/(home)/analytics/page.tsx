@@ -1,4 +1,3 @@
-"use client";
 export const dynamic = "force-dynamic";
 import AcquisitionChannelChart from "@/components/analytics/AcquisitionChannelChart";
 import ActiveUsersChart from "@/components/analytics/ActiveUsersChart";
