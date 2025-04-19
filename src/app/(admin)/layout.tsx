@@ -17,7 +17,7 @@ export default function AdminLayout({
   return (
     <ThemeProvider>
       <SidebarProvider>
-        <div className="min-h-screen xl:flex">
+        <div className="min-h-screen lg:flex">
           {/* Sidebar and Backdrop */}
           <AppSidebar />
           <Backdrop />
