@@ -75,16 +75,14 @@
         {
           "id": 1,
           "title": "Set Up Utility File and Install Dependencies",
-          "description": "Create the utility file and install all necessary packages for Microsoft Graph API integration.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create a new file at src/server/utils/msGraphEmail.ts. Install @azure/msal-node and @microsoft/microsoft-graph-client using your package manager. Ensure these dependencies are listed in your package.json."
         },
         {
           "id": 2,
           "title": "Implement Token Acquisition with Client Credentials Flow",
-          "description": "Develop a function to securely acquire an access token from Microsoft Graph using application (client credentials) permissions.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],
