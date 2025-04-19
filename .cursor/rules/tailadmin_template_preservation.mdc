@@ -16,7 +16,7 @@ alwaysApply: true
   - Do not delete or overwrite the original template file; keeping backups ensures consistency and a reference for future scaffolding.
 
 - **Preserve TailAdmin Template Components**
-  - After customizing a TailAdmin template component, rename the original with a `_template` suffix (e.g., `Sidebar_template.tsx`) for future reference and to avoid naming conflicts.
+  - After customizing a TailAdmin template component that will no longer be used, rename the original with a `_template` suffix (e.g., `Sidebar_template.tsx`) for future reference and to avoid naming conflicts.
   - Do not remove or override original components; templates should guide the creation of new components to maintain styling and structure.
 
 - **Always Scaffold from Templates**
