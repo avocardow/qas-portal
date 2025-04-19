@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "generatedAt": "2025-04-19T08:32:57.203Z",
+    "tasksAnalyzed": 8,
+    "thresholdScore": 5,
+    "projectName": "Your Project Name",
+    "usedResearch": true
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 1,
+      "taskTitle": "Configure Microsoft Graph API Permissions and Environment Variables",
+      "complexityScore": 5,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the process of configuring Microsoft Graph API permissions in Azure AD, setting environment variables in both .env and deployment environments, and documenting the setup for future reference.",
+      "reasoning": "This task involves several distinct configuration steps, including Azure AD portal navigation, permission management, environment variable setup, and documentation. While each step is straightforward, the need for precision and potential for misconfiguration increases the overall complexity moderately."
+    },
+    {
+      "taskId": 2,
+      "taskTitle": "Implement Microsoft Graph API Email Sending Utility",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Detail the steps to create a reusable server-side utility for sending emails via Microsoft Graph API, including dependency installation, authentication, API call implementation, error handling, logging, and testing.",
+      "reasoning": "This task requires integrating with external APIs, handling authentication flows, robust error handling, and ensuring reusability and testability. The complexity is elevated due to the need for secure token management and comprehensive error/logging strategies."
+    },
+    {
+      "taskId": 3,
+      "taskTitle": "Configure NextAuth.js Email Provider with Custom sendVerificationRequest",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "List the steps to add and configure the Email Provider in NextAuth.js, implement a custom sendVerificationRequest using the Graph API utility, set token expiration, handle user creation with Prisma Adapter, and ensure error handling and logging.",
+      "reasoning": "This task involves customizing authentication flows, integrating with a custom email utility, and ensuring compatibility with the user management system. The need to coordinate multiple libraries and handle edge cases increases complexity."
+    },
+    {
+      "taskId": 4,
+      "taskTitle": "Update Sign In Page UI for Client Login",
+      "complexityScore": 6,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Describe the steps to update the sign-in page UI to support client login, including form creation, validation, submission handling, feedback messaging, error handling, and ensuring accessibility and responsiveness.",
+      "reasoning": "This task requires significant UI changes, form handling, and user feedback mechanisms. While not algorithmically complex, attention to UX, accessibility, and error states adds to the implementation effort."
+    },
+    {
+      "taskId": 5,
+      "taskTitle": "Implement Client Invitation Backend (tRPC Procedure)",
+      "complexityScore": 8,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Break down the implementation of a secure tRPC mutation for inviting client contacts, including RBAC checks, user and contact record management, token generation and storage, email sending, transaction handling, and response formatting.",
+      "reasoning": "This backend task involves multiple moving parts: security checks, database operations, transactional integrity, token management, and integration with the email utility. Ensuring atomicity and robust error handling makes it complex."
+    },
+    {
+      "taskId": 6,
+      "taskTitle": "Implement Client Invitation Frontend UI",
+      "complexityScore": 5,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Outline the steps to add an 'Invite to Portal' button on the client detail page, handle API calls, manage UI states, display notifications, and update the UI based on invitation status.",
+      "reasoning": "This task is primarily UI-focused with some API integration. The complexity is moderate, mainly due to state management, feedback messaging, and ensuring the UI accurately reflects backend changes."
+    },
+    {
+      "taskId": 7,
+      "taskTitle": "Create Account Activation Backend Procedure",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "List the steps to implement a tRPC mutation for account activation, including token validation, user record updates, token invalidation, transaction handling, response formatting, and logging.",
+      "reasoning": "This backend task requires secure token validation, atomic updates, and careful error handling. Ensuring security and consistency in account activation flows adds to the complexity."
+    },
+    {
+      "taskId": 8,
+      "taskTitle": "Implement Account Activation Page",
+      "complexityScore": 6,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Detail the steps to build the account activation page, including route setup, token extraction, mutation call, loading and feedback states, error handling, and UI consistency.",
+      "reasoning": "This task involves frontend logic for handling asynchronous activation flows, user feedback, and error states. While not deeply technical, it requires careful handling of edge cases and user experience considerations."
+    }
+  ]
+}

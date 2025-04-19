@@ -1,129 +1,114 @@
 <context>
-# Overview
-**Project:** QAS Portal - Client Authentication Setup (MVP Phase 0b)
-**Context7 Usage:** Leverage Context7 for referencing official NextAuth.js, Next.js, Supabase, Prisma, and tRPC documentation.
-**Cursor Rules:** Follow the established Cursor rules for file structure, naming conventions, and templating guidelines.
+# QAS Portal - Client Authentication Setup (MVP Phase 0b) - Revised
+
+## 1. Introduction
+
+### 1.1 Purpose
+To define the requirements for implementing the client-facing authentication mechanism for the QLD Audit Specialists (QAS) Portal. This phase builds upon the existing NextAuth.js infrastructure established in Phase 0a (Team Member Auth) by adding the Passwordless Email (Magic Link) provider specifically for Client users, utilizing the Microsoft Graph API for email delivery.
+
+### 1.2 Scope
+This PRD covers the implementation and configuration of:
+- NextAuth.js Email Provider configured for passwordless authentication using a custom sendVerificationRequest function.
+- Implementation of the custom sendVerificationRequest function to send magic link emails via the Microsoft Graph API using Application Permissions.
+- Ensuring necessary Microsoft Graph API Application Permissions (Mail.Send) are configured and consented to in Azure AD.
+- Updates to the Sign In page UI to accommodate the client email login flow.
+- Backend logic/process (tRPC procedure) for Admins to invite Client Contacts and trigger the account activation flow (including sending invites via Graph API).
+- The client-facing Account Activation page (/complete-setup).
+
+### 1.3 Out of Scope
+This PRD does not cover:
+- Setup of external transactional email services (e.g., Resend, SendGrid).
+- Any pages or functionality within the Client Portal itself (Dashboard, Document Upload, etc.). This phase only enables clients to log in and activate their accounts.
+- Implementation of client password reset functionality beyond magic link expiration.
+
+### 1.4 Context
+This phase assumes completion of MVP Phase 0a. The project uses Next.js (App Router), TypeScript, Supabase (PostgreSQL), Prisma, tRPC, and NextAuth.js. Team Member authentication via Microsoft 365 is functional. The database schema includes users and contacts tables. Required Azure AD App Registration exists. Environment variables for Azure AD app credentials are set.
+
+### 1.5 Guidelines
+- Cursor Rules: Follow [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) guidelines for rule structure and consistency.
+- Context7: Refer to Context7-compatible official documentation for NextAuth.js, Microsoft Graph API, Azure AD, and related libraries to inform implementation details and ensure best practices.
 </context>
+
 <PRD>
-# 1. Introduction
+## 2. Goals
+- Enable secure, passwordless authentication for registered Client Contacts via email magic links sent through the QAS Microsoft 365 infrastructure.
+- Provide a mechanism for Admins to initiate the Client Portal onboarding process for specific contacts, triggering invitation emails via the Graph API.
+- Establish a clear and distinct login path for Clients on the main Sign In page.
+- Ensure client user accounts are correctly created and linked within the database upon successful activation.
+- Configure and verify the reliable delivery of authentication and invitation emails via the Microsoft Graph API from a designated address (e.g., no-reply@qaspecialists.com.au).
+- Avoid reliance on third-party transactional email services for core authentication flows.
 
-## 1.1 Purpose
-To define the requirements for implementing the client-facing passwordless authentication mechanism for the QLD Audit Specialists (QAS) Portal using NextAuth.js Email Provider (Magic Link).
+## 3. Specific Requirements
 
-## 1.2 Scope
-This PRD covers:
-- NextAuth.js EmailProvider configuration for Magic Link passwordless authentication.
-- Transactional email service setup for delivering magic links (Resend, SendGrid, SES).
-- Sign In page UI updates to support the client login flow.
-- Backend tRPC logic for Admins to invite Client Contacts and trigger account activation.
-- Client-facing Account Activation page to complete setup.
+### 3.1 Microsoft Graph API Permissions & Configuration
+#### 3.1.1 Application Permission
+The existing Azure AD App Registration for the QAS Portal must have the Mail.Send Application Permission granted and consented to by an M365 administrator.
+#### 3.1.2 Environment Variables
+Confirm AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, AZURE_AD_TENANT_ID are correctly set in .env / Vercel. Add EMAIL_FROM (e.g., no-reply@qaspecialists.com.au) to environment variables.
+#### 3.1.3 Email Sending Utility
+Implement a reusable server-side utility function (e.g., in src/server/utils/msGraphEmail.ts) that:
+- Uses @azure/msal-node (or similar) to acquire a Graph API application token using the app credentials (client credentials flow).
+- Accepts recipient email, subject, and HTML body as parameters.
+- Uses @microsoft/microsoft-graph-client (or fetch) with the application token to call the Graph API /users/{EMAIL_FROM}/sendMail endpoint.
+- Includes robust error handling for token acquisition and API calls.
 
-## 1.3 Out of Scope
-- Dashboard and document upload pages or any client portal feature beyond authentication.
-- Client password reset flows (not required for passwordless).
-- Team Member authentication (already implemented in Phase 0a).
+### 3.2 Authentication Provider (NextAuth.js EmailProvider)
+#### 3.2.1 Provider Configuration
+Add the EmailProvider to the providers array in authOptions (src/server/auth.ts).
+#### 3.2.2 Custom sendVerificationRequest
+Implement the sendVerificationRequest function within the EmailProvider options. This function must:
+- Receive the identifier (email) and url (magic link) from NextAuth.
+- Construct an appropriate email subject and HTML body containing the magic link url.
+- Call the Graph API email sending utility to send the email from the address specified in EMAIL_FROM.
+#### 3.2.3 Adapter Compatibility
+Ensure the Prisma Adapter configuration correctly handles user lookup and creation initiated via the Email provider flow.
 
-## 1.4 Context
-- Assumes completion of MVP Phase 0a with M365 (Team Member) auth via NextAuth.js.
-- Stack: Next.js (App Router), TypeScript, Supabase (PostgreSQL), Prisma, tRPC, NextAuth.js.
-- Database includes `users` and `contacts` tables linked by `contacts.portalUserId`.
+### 3.3 Sign In Page UI (/signin)
+#### 3.3.1 Client Login Section
+Add a distinct section for client login including an email input and Send Login Link button.
+#### 3.3.2 Email Input & Submit
+Implement the email input field and a Send Login Link button.
+#### 3.3.3 Form Handling
+Use react-hook-form or basic state to manage the email input. The submit handler should call signIn('email', { email: enteredEmail, redirect: false }).
+#### 3.3.4 User Feedback
+Display a confirmation message (e.g., Check your email for a magic link) upon successful triggering of the magic link send. Display loading states and handle potential errors from signIn.
+#### 3.3.5 User Guidance
+Clearly differentiate the Team Member (Microsoft 365) and Client (Email) login methods on the UI.
 
-# 2. Goals
-- Enable secure, passwordless authentication for registered Client Contacts via email magic links.
-- Provide Admins a mechanism to invite Client Contacts and initiate their portal onboarding.
-- Distinct client login path on the main Sign In page.
-- Correctly create and link client user accounts in the database upon activation.
-- Ensure reliable delivery and verification of authentication emails.
+### 3.4 Client Invitation & Account Creation (Admin Initiated)
+#### 3.4.1 Backend (tRPC Procedure)
+Create user.inviteClientContact mutation (Input: contactId).  
+- Implement RBAC check (Admin only).  
+- Fetch contact, validate eligibility (email exists, not already active).  
+- Create User record (Client role) and update Contact record (canLoginToPortal, portalUserId).  
+- Generate secure activation token (store in VerificationToken table).  
+- Construct invitation email content (subject and body with activation link).  
+- Call the Graph API email sending utility to send the invitation email from EMAIL_FROM.
+#### 3.4.2 Frontend (UI Trigger)
+Implement the Invite to Portal button on the Client Detail page for eligible contacts. Button calls the user.inviteClientContact mutation and provides feedback on success or error.
 
-# 3. Specific Requirements
+### 3.5 Account Activation Page (/complete-setup)
+#### 3.5.1 Page Creation
+Create the public page route at src/app/complete-setup/page.tsx.
+#### 3.5.2 Token Handling
+Read the activation token from the URL query parameter.
+#### 3.5.3 Backend (Token Validation Procedure)
+Create user.activateClientAccount mutation (Input: token).  
+- Validate token and expiry in VerificationToken table.  
+- If valid: Update associated User record emailVerified timestamp, invalidate or delete token, and return success.  
+- If invalid: Return an error response.
+#### 3.5.4 Frontend UI
+Call the user.activateClientAccount mutation on page load. Display loading state, success message (Account activated, proceed to sign in), or error message (Invalid or expired link). Provide a link back to /signin on success.
 
-## 3.1 Authentication Provider (NextAuth.js)
-
-### 3.1.1 Email Provider Configuration
-- Add `EmailProvider` to NextAuth.js options (`app/api/auth/[...nextauth]/route.ts`).
-- Configure `server` option with environment variables:
-  - `EMAIL_SERVER_HOST`
-  - `EMAIL_SERVER_PORT`
-  - `EMAIL_SERVER_USER`
-  - `EMAIL_SERVER_PASSWORD`
-  - `EMAIL_FROM`
-- Set `from` address for magic link emails.
-- Ensure Prisma Adapter supports EmailProvider user creation and linking.
-
-### 3.1.2 Email Service Setup
-- Set up transactional email service (e.g., Resend) account and obtain API keys.
-- Configure domain verification (DKIM, SPF) for high deliverability.
-
-## 3.2 Sign In Page UI (`/signin`)
-
-### 3.2.1 Client Login Section
-- Add a separate section or card for client email login.
-
-### 3.2.2 Email Input
-- Provide an input field for client email address.
-
-### 3.2.3 Submit Button
-- Add button labeled `Send Login Link` to initiate magic link flow.
-
-### 3.2.4 User Guidance
-- Clearly differentiate between:
-  - Team Member (M365) authentication button.
-  - Client (Email) login form.
-
-## 3.3 Client Invitation & Account Creation (Admin Initiated)
-
-### 3.3.1 Backend (tRPC Procedure)
-- Create `user.inviteClientContact` mutation:
-  - **Input:** `contactId`
-  - **Logic:**
-    1. Verify caller has `Admin` role.
-    2. Fetch `Contact` by `contactId` (must have email, `portalUserId` null).
-    3. Create `User` record:
-       - `email` from `Contact`
-       - `roleId = Client`
-       - `emailVerified = null`
-    4. Update `Contact`:
-       - `canLoginToPortal = true`
-       - `portalUserId` link to new user.
-    5. Generate secure, time-limited activation token (store in `VerificationToken`).
-    6. Send `Client Portal Invitation` email including activation link with token.
-
-### 3.3.2 Frontend (UI Trigger)
-- On `/clients/[clientId]`, next to each contact:
-  - Show `Invite to Portal` button if `canLoginToPortal = false`.
-  - On click, call `user.inviteClientContact` mutation.
-  - Provide success/error feedback (e.g., toast notifications).
-
-## 3.4 Account Activation Page (`/complete-setup`)
-
-### 3.4.1 Page Creation
-- Create public route `src/app/complete-setup/page.tsx`.
-
-### 3.4.2 Token Handling
-- Read `activationToken` from URL query.
-- Call tRPC or API route to validate token.
-
-### 3.4.3 Backend (Token Validation)
-- Create `user.activateClientAccount` procedure:
-  - **Input:** `activationToken`
-  - **Logic:**
-    1. Validate token (existence, expiry).
-    2. Mark `User.emailVerified` with current timestamp.
-    3. Delete or invalidate token.
-    4. Return success or error.
-
-### 3.4.4 Frontend UI
-- Show loading state during validation.
-- On success: display confirmation and link to `/signin`.
-- On failure: show error message and support instructions.
-
-# 4. Acceptance Criteria
-- EmailProvider configured and magic link emails send successfully.
-- Sign In page displays separate login options clearly.
-- Clients receive magic links and authenticate successfully (redirect to placeholder `/portal/dashboard`).
-- Admin can invite contacts via UI, creating `User` and updating `Contact`.
-- Invitation email link navigates to `/complete-setup`.
-- Activation token validated, `emailVerified` set.
-- Clear success/error messages on activation page.
-- Post-activation, clients log in via magic link flow as expected.
+## 4. Acceptance Criteria
+- The Azure AD App Registration has the Mail.Send Application Permission granted and consented.
+- Required environment variables (AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, AZURE_AD_TENANT_ID, EMAIL_FROM) are configured.
+- The Graph API email utility successfully sends emails from EMAIL_FROM using application credentials.
+- The NextAuth.js Email provider is configured with the custom sendVerificationRequest function.
+- Clients entering a registered contact email on /signin receive a magic link via Graph API from EMAIL_FROM.
+- Clicking a valid magic link authenticates the client and creates/updates the User record.
+- Admins can trigger the Invite to Portal action and send invitation emails via Graph API.
+- Invitation email links direct clients to /complete-setup.
+- The activation page validates the token and updates emailVerified status on success.
+- Appropriate success and error messages are displayed during the activation flow.
 </PRD> 

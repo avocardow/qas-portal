@@ -3,7 +3,7 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-  type User as NextAuthUser, // Import base User type
+  type User as NextAuthUser,
 } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
 
@@ -19,7 +19,6 @@ declare module "next-auth" {
       role: Role["name"] | null;
     } & DefaultSession["user"];
   }
-  // No User augmentation here to avoid recursion
 }
 
 // Define a local type extending the base NextAuth User to include our optional roleId
@@ -29,7 +28,7 @@ interface UserForSignIn extends NextAuthUser {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    // --- CORRECTED signIn CALLBACK ---
+    // --- signIn Callback (Unchanged) ---
     async signIn({ user, account }) {
       if (account?.provider === "azure-ad" && user.email) {
         const userExists = await db.user.findUnique({
@@ -37,25 +36,35 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!userExists) {
-          // !!!!! REPLACE '4' with the ACTUAL ID of your default role !!!!!
-          const defaultRoleId = 4; // <--- Set your correct default Role ID
+          // !!!!! Ensure '4' is the correct default role ID !!!!!
+          const defaultRoleId = 4; // <--- Your default Role ID
 
-          // Assert 'user' to our extended type before assigning roleId
           (user as UserForSignIn).roleId = defaultRoleId;
         }
       }
       return true;
     },
-    // --- Session callback (Unchanged) ---
+    // --- Session callback (Logs Removed) ---
     session: async ({ session, user }) => {
+      // console.log(">>> Session callback hit for user:", user.id); // REMOVED
       if (session.user) {
         session.user.id = user.id;
-        const userWithRole = await db.user.findUnique({
-          where: { id: user.id },
-          include: { role: true },
-        });
-        session.user.role = userWithRole?.role?.name ?? null;
+        try {
+          const userWithRole = await db.user.findUnique({
+            where: { id: user.id },
+            include: { role: true },
+          });
+          // console.log(">>> User fetched in session callback:", userWithRole); // REMOVED
+          session.user.role = userWithRole?.role?.name ?? null;
+        } catch (error) {
+          console.error(
+            ">>> Error fetching user/role in session callback:",
+            error
+          ); // Keep error log
+          session.user.role = null;
+        }
       }
+      // console.log(">>> Returning session:", session); // REMOVED
       return session;
     },
   },
