@@ -1,0 +1,484 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Configure Microsoft Graph API Permissions and Environment Variables",
+      "description": "Set up the necessary Microsoft Graph API permissions in Azure AD and configure required environment variables for the application.",
+      "status": "done",
+      "dependencies": [],
+      "priority": "high",
+      "details": "1. Access the Azure AD portal and locate the existing App Registration for QAS Portal.\n2. Add the Mail.Send Application Permission to the API permissions.\n3. Request admin consent for the Mail.Send permission.\n4. Verify that AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, and AZURE_AD_TENANT_ID are correctly set in .env file and Vercel environment.\n5. Add EMAIL_FROM environment variable with the value no-reply@qaspecialists.com.au.\n6. Document the permission setup process for future reference.",
+      "testStrategy": "Verify permissions are correctly assigned in Azure AD portal. Confirm all environment variables are accessible in the application by creating a simple test endpoint that logs these values (for development only).",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Access Azure AD and Locate App Registration",
+          "description": "Navigate to the Azure AD portal and find the existing App Registration for the QAS Portal.",
+          "status": "done",
+          "dependencies": [],
+          "details": "Log in to the Azure portal, go to Azure Active Directory > App registrations, and search for the QAS Portal application to ensure you are modifying the correct registration.[5]\n\n<info added on 2025-04-19T08:42:09.481Z>\nTo access the Azure AD portal and locate the App Registration:\n\n1. Navigate to Azure portal at https://portal.azure.com\n2. Sign in with an account that has admin privileges (Global Administrator, Application Administrator, or Cloud Application Administrator role)\n3. In the search bar at the top, type \"Azure Active Directory\" and select it\n4. In the left sidebar, select \"App registrations\"\n5. Use the search field to find \"QAS Portal\" application\n6. Once located, from the overview page, copy these important identifiers:\n   - Application (client) ID: This GUID will be needed for authentication\n   - Directory (tenant) ID: Required for configuring authentication endpoints\n\n7. Click on \"API permissions\" in the left menu to verify existing permissions\n   - Note any Microsoft Graph or other API permissions already granted\n   - Check if admin consent has been provided for these permissions\n\n8. Also review the \"Authentication\" tab to understand current redirect URIs and token configuration\n</info added on 2025-04-19T08:42:09.481Z>"
+        },
+        {
+          "id": 2,
+          "title": "Add Mail.Send Application Permission",
+          "description": "Add the Mail.Send application permission to the QAS Portal App Registration in Azure AD.",
+          "status": "done",
+          "dependencies": [
+            1
+          ],
+          "details": "Within the App Registration, select 'API permissions', click 'Add a permission', choose 'Microsoft Graph', select 'Application permissions', and add 'Mail.Send'.[4][2]\n\n<info added on 2025-04-19T08:44:56.116Z>\nAfter adding the Mail.Send permission, you'll need to grant admin consent for this permission:\n\n1. In the API permissions page, look for the newly added Mail.Send permission\n2. Click the \"Grant admin consent for [your directory]\" button at the top of the permissions list\n3. Confirm in the dialog that appears\n\nThis step is crucial because Mail.Send is a high-privilege application permission that requires explicit admin approval before it can be used. Without admin consent, any attempts to send emails will fail with authorization errors.\n\nAfter granting consent, verify the permission status shows as \"Granted for [your tenant name]\" with a green checkmark.\n</info added on 2025-04-19T08:44:56.116Z>"
+        },
+        {
+          "id": 3,
+          "title": "Request and Grant Admin Consent for Mail.Send",
+          "description": "Request and obtain admin consent for the Mail.Send permission to enable the application to send emails.",
+          "status": "done",
+          "dependencies": [
+            2
+          ],
+          "details": "Click 'Grant admin consent for [TenantName]' in the API permissions section. If you lack the necessary rights, contact a Global Administrator or Privileged Role Administrator to perform this action.[5]\n\n<info added on 2025-04-19T08:46:45.098Z>\nTo grant admin consent for Mail.Send permission:\n\n1. Navigate to Azure Portal (portal.azure.com)\n2. Go to Azure Active Directory > App registrations > QAS Portal application\n3. Select API permissions from the left menu\n4. Locate the Mail.Send permission under Microsoft Graph\n5. Click the \"Grant admin consent for <Your Tenant Name>\" button at the top of the permissions list\n6. In the confirmation dialog, review the permissions and click \"Yes\"\n7. Verify success by checking that the Mail.Send permission shows \"Status: Granted for <Your Tenant Name>\" with a green checkmark\n8. If consent fails, check the following:\n   - Your account must have Global Administrator or Privileged Role Administrator role\n   - The tenant policy must allow application permission grants\n   - Record any error messages for troubleshooting\n\nNote: Admin consent is a one-time operation that applies tenant-wide. All users in your organization will be affected by this permission grant.\n</info added on 2025-04-19T08:46:45.098Z>"
+        },
+        {
+          "id": 4,
+          "title": "Configure and Verify Environment Variables",
+          "description": "Ensure AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, AZURE_AD_TENANT_ID, and EMAIL_FROM are correctly set in both the .env file and Vercel environment.",
+          "status": "done",
+          "dependencies": [
+            3
+          ],
+          "details": "Update the .env file and Vercel project settings with the correct values for AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, AZURE_AD_TENANT_ID, and set EMAIL_FROM to no-reply@qaspecialists.com.au. Double-check for typos and confirm that the values match those in Azure AD.\n\n<info added on 2025-04-19T08:47:58.538Z>\nTo enhance this subtask, here's the additional information:\n\nFor local development:\n1. Create a `.env.local` file based on `.env.example` if not already present\n2. Set `NEXTAUTH_URL` to `http://localhost:3000` for local development\n3. Generate a secure `NEXTAUTH_SECRET` using `openssl rand -base64 32` or similar method\n4. Ensure all Azure AD credentials are copied exactly from the Azure portal\n\nFor Vercel deployment:\n1. Navigate to Vercel dashboard > Project > Settings > Environment Variables\n2. Set `NEXTAUTH_URL` to your production URL (e.g., `https://your-app.vercel.app`)\n3. Generate a different `NEXTAUTH_SECRET` for production\n4. Use Vercel's \"Preview Environment Variables\" feature to set different values for preview deployments\n\nTesting verification:\n1. Local test: Run `next-auth-cli debug` to verify environment variables are loaded correctly\n2. Check for proper redirection to Microsoft login page\n3. Verify successful authentication flow with Azure AD\n4. Test email functionality by triggering a workflow that sends an email\n\nTroubleshooting:\n1. If authentication fails, check Azure AD app registration for correct redirect URIs\n2. Verify that the app has proper API permissions in Azure\n3. Check Vercel deployment logs for environment variable related errors\n</info added on 2025-04-19T08:47:58.538Z>"
+        },
+        {
+          "id": 5,
+          "title": "Document Permission and Environment Setup",
+          "description": "Create documentation outlining the steps taken to configure Microsoft Graph API permissions and environment variables for future reference.",
+          "status": "done",
+          "dependencies": [
+            4
+          ],
+          "details": "Write a step-by-step guide detailing the permission addition, admin consent process, and environment variable configuration. Store this documentation in the project repository or internal wiki for easy access by future developers.\n\n<info added on 2025-04-19T08:49:03.184Z>\n# Additional Information for Documentation Task\n\n## Document Structure\nCreate a `docs/graph-api-setup.md` file with the following sections:\n\n1. **Prerequisites**\n   - Azure AD administrator account requirements\n   - Node.js and npm version requirements\n   - Required Azure subscription details\n\n2. **Azure AD App Registration**\n   - Step-by-step screenshots for navigating Azure Portal\n   - Creating the app registration with proper redirect URIs\n   - Configuring authentication settings (single vs multi-tenant)\n   - Generating client secrets with appropriate expiration policies\n\n3. **Microsoft Graph API Permissions**\n   - Detailed explanation of Mail.Send permission scope and its implications\n   - Comparison with alternative permission scopes (Mail.ReadWrite, etc.)\n   - Admin consent workflow with screenshots\n   - Verification steps to confirm permissions are properly granted\n\n4. **Environment Variables**\n   - Complete list with descriptions:\n     ```\n     AZURE_AD_TENANT_ID=\"your-tenant-id\"\n     AZURE_AD_CLIENT_ID=\"your-client-id\"\n     AZURE_AD_CLIENT_SECRET=\"your-client-secret\"\n     GRAPH_API_ENDPOINT=\"https://graph.microsoft.com/v1.0\"\n     EMAIL_SENDER=\"sender@yourdomain.com\"\n     ```\n   - Instructions for both `.env` local setup and Vercel environment configuration\n   - Security best practices for handling secrets\n\n5. **Testing the Configuration**\n   - Simple code snippet to verify connectivity:\n     ```javascript\n     const { Client } = require('@microsoft/microsoft-graph-client');\n     require('isomorphic-fetch');\n     \n     async function testGraphConnection() {\n       // Authentication and connection test code\n       // ...\n     }\n     ```\n   - Expected responses and error handling\n\n6. **Troubleshooting Guide**\n   - Common permission errors and their solutions\n   - Token acquisition failures and debugging steps\n   - Environment variable loading issues\n\n7. **Security Considerations**\n   - Least privilege principles\n   - Token handling best practices\n   - Periodic secret rotation procedures\n\nInclude a version history section at the bottom to track document updates.\n</info added on 2025-04-19T08:49:03.184Z>"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Implement Microsoft Graph API Email Sending Utility",
+      "description": "Create a reusable server-side utility function to send emails via Microsoft Graph API using application permissions.",
+      "status": "pending",
+      "dependencies": [
+        1
+      ],
+      "priority": "high",
+      "details": "1. Create a new file at src/server/utils/msGraphEmail.ts.\n2. Install required dependencies: @azure/msal-node and @microsoft/microsoft-graph-client.\n3. Implement a function that acquires a Graph API token using client credentials flow.\n4. Create the main sendEmail function that accepts recipient email, subject, and HTML body parameters.\n5. Use the acquired token to call the Graph API /users/{EMAIL_FROM}/sendMail endpoint.\n6. Implement comprehensive error handling for token acquisition and API call failures.\n7. Add logging for debugging purposes.\n8. Create a simple test function to verify email sending works correctly.",
+      "testStrategy": "Create a test script that calls the utility with test parameters. Verify email delivery to a test account. Check error handling by testing with invalid parameters and ensuring errors are properly caught and logged.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set Up Utility File and Install Dependencies",
+          "description": "Create the utility file and install all necessary packages for Microsoft Graph API integration.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Create a new file at src/server/utils/msGraphEmail.ts. Install @azure/msal-node and @microsoft/microsoft-graph-client using your package manager. Ensure these dependencies are listed in your package.json."
+        },
+        {
+          "id": 2,
+          "title": "Implement Token Acquisition with Client Credentials Flow",
+          "description": "Develop a function to securely acquire an access token from Microsoft Graph using application (client credentials) permissions.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Use @azure/msal-node to implement a function that authenticates with Azure AD using tenant ID, client ID, and client secret, and retrieves an access token for the Graph API. Ensure the function handles token caching and expiration."
+        },
+        {
+          "id": 3,
+          "title": "Develop sendEmail Function Interface and Input Validation",
+          "description": "Define the main sendEmail function, specifying parameters for recipient email, subject, and HTML body, and validate inputs.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Create the sendEmail function signature in msGraphEmail.ts. Validate that recipient email, subject, and HTML body are provided and correctly formatted. Prepare the function to accept these parameters for further processing."
+        },
+        {
+          "id": 4,
+          "title": "Integrate Graph API Call to Send Email",
+          "description": "Use the acquired token to call the Microsoft Graph /users/{EMAIL_FROM}/sendMail endpoint and send the email.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Leverage @microsoft/microsoft-graph-client to construct and send a POST request to /users/{EMAIL_FROM}/sendMail. Use the access token from the token acquisition function. Build the email message payload according to Graph API requirements, supporting HTML content and recipient details[2][5]."
+        },
+        {
+          "id": 5,
+          "title": "Implement Robust Error Handling and Logging",
+          "description": "Add comprehensive error handling for both token acquisition and API call failures, and implement logging for debugging.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Wrap token acquisition and API call logic in try/catch blocks. Log errors and relevant debug information (such as request/response status and error messages) using your server's logging framework. Ensure sensitive information is not logged."
+        },
+        {
+          "id": 6,
+          "title": "Create and Run Test Function for Email Sending",
+          "description": "Develop a simple test function to verify that the sendEmail utility works as expected.",
+          "status": "pending",
+          "dependencies": [
+            5
+          ],
+          "details": "Implement a test script or function that calls sendEmail with test parameters. Run the test to confirm successful email delivery and validate error handling and logging behavior."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Configure NextAuth.js Email Provider with Custom sendVerificationRequest",
+      "description": "Add the Email Provider to NextAuth.js configuration and implement a custom sendVerificationRequest function that uses the Graph API email utility.",
+      "status": "pending",
+      "dependencies": [
+        2
+      ],
+      "priority": "high",
+      "details": "1. Update src/server/auth.ts to add EmailProvider to the providers array.\n2. Implement the custom sendVerificationRequest function that:\n   - Receives identifier (email) and url (magic link) from NextAuth\n   - Constructs an appropriate email subject and HTML body with the magic link\n   - Calls the Graph API email utility to send the email\n3. Configure appropriate token expiration time (e.g., 24 hours).\n4. Ensure the Prisma Adapter configuration correctly handles user creation and lookup for the Email provider flow.\n5. Add proper error handling and logging within the sendVerificationRequest function.",
+      "testStrategy": "Test the authentication flow by attempting to sign in with a test email. Verify the magic link email is sent via Graph API. Confirm the email contains the correct magic link. Test error scenarios such as invalid email formats or Graph API failures.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Add Email Provider to NextAuth.js Configuration",
+          "description": "Integrate the Email Provider into the NextAuth.js providers array in src/server/auth.ts, preparing for custom email handling.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Import EmailProvider from 'next-auth/providers/email' and add it to the providers array in your NextAuth.js configuration. Set up the provider with placeholders for server and from settings, and prepare to inject a custom sendVerificationRequest function. Ensure environment variables for email server configuration are present as required by NextAuth.js.[1][3]"
+        },
+        {
+          "id": 2,
+          "title": "Implement Custom sendVerificationRequest Function",
+          "description": "Create a custom sendVerificationRequest function that formats the verification email and sends it using the Graph API email utility.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Define a function that receives identifier (email), url (magic link), and provider details. Construct a subject and HTML body containing the magic link. Use the Graph API email utility to send the email. Replace the default sendVerificationRequest in the EmailProvider configuration with this custom function.[1][4]"
+        },
+        {
+          "id": 3,
+          "title": "Configure Token Expiration for Magic Link",
+          "description": "Set the magic link token expiration time to 24 hours in the Email Provider configuration.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "In the EmailProvider configuration object, set the maxAge property to 60 * 60 * 24 (seconds in 24 hours) to ensure the magic link expires after one day. This aligns with security best practices for email-based authentication.[4]"
+        },
+        {
+          "id": 4,
+          "title": "Ensure Prisma Adapter Handles Email Provider Flow",
+          "description": "Verify and update the Prisma Adapter configuration to support user creation and lookup for email-based authentication.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Check that the Prisma Adapter is correctly set up in NextAuth.js. Ensure that user creation and lookup logic works seamlessly with the Email Provider, handling cases where users sign in with email for the first time or return for subsequent logins.[2][3][4]"
+        },
+        {
+          "id": 5,
+          "title": "Add Error Handling and Logging to sendVerificationRequest",
+          "description": "Enhance the custom sendVerificationRequest function with robust error handling and logging for observability and debugging.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Within the custom sendVerificationRequest function, implement try/catch blocks to handle errors from the Graph API email utility. Log relevant information for both successful and failed email sends, using your application's preferred logging solution. Ensure that errors are surfaced appropriately to aid in debugging and monitoring.[1][4]"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Update Sign In Page UI for Client Login",
+      "description": "Modify the existing Sign In page to include a distinct section for client login with email input and magic link submission.",
+      "status": "pending",
+      "dependencies": [
+        3
+      ],
+      "priority": "medium",
+      "details": "1. Update the /signin page to add a separate section for client login.\n2. Implement an email input field and 'Send Login Link' button.\n3. Use react-hook-form for form validation and submission.\n4. Create a submit handler that calls signIn('email', { email: enteredEmail, redirect: false }).\n5. Add loading states during form submission.\n6. Implement success feedback message ('Check your email for a magic link').\n7. Add error handling for failed signIn attempts.\n8. Clearly differentiate between Team Member (Microsoft 365) and Client (Email) login methods with appropriate headings and descriptions.\n9. Ensure the UI is responsive and accessible.",
+      "testStrategy": "Test the UI in various screen sizes to ensure responsiveness. Verify form validation works correctly for invalid email formats. Test the submission flow and confirm appropriate loading states and success/error messages are displayed. Conduct accessibility testing to ensure the form is usable by all users.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Redesign Sign In Page Layout for Dual Login Methods",
+          "description": "Update the /signin page layout to clearly separate Team Member (Microsoft 365) and Client (Email) login methods, using distinct headings and descriptions for each.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Refactor the page structure to visually differentiate the two login options. Use clear section headings, concise descriptions, and appropriate spacing to guide users. Ensure the design follows best practices for clarity and visual hierarchy[4]."
+        },
+        {
+          "id": 2,
+          "title": "Implement Client Login Section with Email Input and Button",
+          "description": "Add a new section for client login that includes an email input field and a 'Send Login Link' button.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Create a form within the client login section containing an accessible email input and a button labeled 'Send Login Link'. Ensure the form is visually distinct from the Team Member login and follows accessibility guidelines[4]."
+        },
+        {
+          "id": 3,
+          "title": "Integrate react-hook-form for Form Validation and Submission",
+          "description": "Set up react-hook-form to manage the client login form, including validation for the email field and handling form submission.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Configure react-hook-form to validate the email input (e.g., required, valid email format). On submit, trigger a handler function for authentication. Display inline validation errors as needed."
+        },
+        {
+          "id": 4,
+          "title": "Implement Magic Link Submission Handler",
+          "description": "Create a submit handler that calls signIn('email', { email: enteredEmail, redirect: false }) when the form is submitted.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "In the form submit handler, use the signIn function to initiate the magic link flow. Pass the entered email and set redirect to false. Handle the promise response to determine success or failure."
+        },
+        {
+          "id": 5,
+          "title": "Add Loading, Success, and Error Feedback States",
+          "description": "Enhance the client login form with loading indicators during submission, a success message on completion, and error feedback for failed attempts.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Show a loading spinner or disable the button during submission. On success, display a message like 'Check your email for a magic link.' On error, show a clear error message. Ensure feedback is accessible and visually prominent[4]."
+        },
+        {
+          "id": 6,
+          "title": "Ensure Responsiveness and Accessibility of the Updated UI",
+          "description": "Test and refine the updated Sign In page to ensure it is fully responsive across devices and meets accessibility standards.",
+          "status": "pending",
+          "dependencies": [
+            5
+          ],
+          "details": "Use responsive design techniques to ensure the layout adapts to different screen sizes. Verify keyboard navigation, screen reader compatibility, and color contrast. Make adjustments as needed to meet accessibility guidelines[4]."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Implement Client Invitation Backend (tRPC Procedure)",
+      "description": "Create a tRPC mutation procedure for admins to invite client contacts to the portal, which creates user records and sends invitation emails.",
+      "status": "pending",
+      "dependencies": [
+        2
+      ],
+      "priority": "high",
+      "details": "1. Create a new tRPC mutation procedure user.inviteClientContact that accepts contactId as input.\n2. Implement RBAC check to ensure only Admins can call this procedure.\n3. Fetch the contact record and validate eligibility (email exists, not already active).\n4. Create a User record with Client role and update the Contact record (set canLoginToPortal=true and link portalUserId).\n5. Generate a secure activation token and store it in the VerificationToken table with an expiry date.\n6. Construct an invitation email with subject and body containing the activation link (/complete-setup?token=xyz).\n7. Call the Graph API email utility to send the invitation.\n8. Return appropriate success or error responses.\n9. Add transaction handling to ensure database operations are atomic.",
+      "testStrategy": "Create unit tests for the tRPC procedure with various scenarios: valid contact, already active contact, non-existent contact. Test RBAC by attempting to call the procedure with non-admin users. Verify database records are correctly created/updated. Confirm invitation emails are sent with the correct activation link."
+    },
+    {
+      "id": 6,
+      "title": "Implement Client Invitation Frontend UI",
+      "description": "Add an 'Invite to Portal' button on the Client Detail page that triggers the invitation process for eligible contacts.",
+      "status": "pending",
+      "dependencies": [
+        5
+      ],
+      "priority": "medium",
+      "details": "1. Locate the Client Detail page component.\n2. Add an 'Invite to Portal' button for contacts that have an email and are not already portal users.\n3. Implement a click handler that calls the user.inviteClientContact mutation with the contact ID.\n4. Add loading state to the button during the API call.\n5. Display success toast/notification when invitation is sent successfully.\n6. Show appropriate error messages for failed invitations.\n7. Optionally, add confirmation dialog before sending invitation.\n8. Update the UI to reflect the new portal access status after successful invitation.",
+      "testStrategy": "Test the button visibility logic for different contact states. Verify the invitation flow works end-to-end by clicking the button and confirming the API call is made. Test error handling by simulating API failures. Confirm UI updates correctly after successful invitation.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Identify Eligible Contacts and Render 'Invite to Portal' Button",
+          "description": "Update the Client Detail page to display an 'Invite to Portal' button only for contacts who have an email and are not already portal users.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Locate the Client Detail page component. Implement logic to filter contacts based on eligibility (must have an email and not be a portal user). Render the 'Invite to Portal' button conditionally next to each eligible contact."
+        },
+        {
+          "id": 2,
+          "title": "Implement Confirmation Dialog Before Sending Invitation",
+          "description": "Add a confirmation dialog that appears when the 'Invite to Portal' button is clicked, asking the user to confirm the invitation action.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Create a modal or dialog component that triggers on button click. The dialog should display a message confirming the intent to invite the contact and provide 'Confirm' and 'Cancel' options."
+        },
+        {
+          "id": 3,
+          "title": "Integrate Invitation API Call with Loading State",
+          "description": "Implement the click handler for the confirmation dialog to call the user.inviteClientContact mutation, and show a loading state on the button during the API call.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "On confirmation, trigger the API call with the selected contact's ID. Disable the button and show a loading spinner or indicator while the request is in progress. Ensure proper error handling for failed requests."
+        },
+        {
+          "id": 4,
+          "title": "Display Success and Error Notifications",
+          "description": "Show a success toast/notification when the invitation is sent successfully, and display appropriate error messages if the invitation fails.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Implement notification logic to display a toast or alert on successful invitation. Handle and display specific error messages for different failure scenarios, such as network errors or invalid contact state."
+        },
+        {
+          "id": 5,
+          "title": "Update UI to Reflect Portal Access Status After Invitation",
+          "description": "After a successful invitation, update the UI to indicate the contact's new portal access status, removing or disabling the 'Invite to Portal' button as appropriate.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Refresh the contact's status in the UI, either by refetching data or updating local state. Ensure the 'Invite to Portal' button is hidden or disabled for newly invited contacts, and display their updated portal access status."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Create Account Activation Backend Procedure",
+      "description": "Implement a tRPC mutation procedure to validate activation tokens and activate client accounts.",
+      "status": "pending",
+      "dependencies": [
+        5
+      ],
+      "priority": "high",
+      "details": "1. Create a new tRPC mutation procedure user.activateClientAccount that accepts token as input.\n2. Query the VerificationToken table to find the token and check if it's valid and not expired.\n3. If valid, retrieve the associated User record.\n4. Update the User record by setting the emailVerified timestamp to the current time.\n5. Delete or invalidate the used token from the VerificationToken table.\n6. Return a success response with the user's email for confirmation.\n7. If invalid or expired, return an appropriate error response.\n8. Use database transactions to ensure atomicity of operations.\n9. Add logging for successful activations and failed attempts.",
+      "testStrategy": "Test the procedure with valid tokens, expired tokens, and invalid tokens. Verify the User record is correctly updated on successful activation. Confirm tokens are properly invalidated after use. Test error handling for various failure scenarios.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define tRPC Mutation Procedure and Input Validation",
+          "description": "Set up the user.activateClientAccount mutation in the tRPC router, specifying the expected input schema for the activation token.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Use tRPC's .mutation() method and Zod to validate the input token. Ensure the procedure is registered in the appropriate router and is ready to receive a string token as input.[1][2][5]"
+        },
+        {
+          "id": 2,
+          "title": "Implement Token Lookup and Validation Logic",
+          "description": "Query the VerificationToken table to find the provided token, checking for existence and expiration.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Fetch the token record from the database, verify it exists, and ensure it has not expired. If the token is missing or expired, prepare to return an error response."
+        },
+        {
+          "id": 3,
+          "title": "Retrieve Associated User Record",
+          "description": "Fetch the User record linked to the valid activation token.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Using the information from the valid token, query the User table to retrieve the corresponding user. Handle cases where the user does not exist by returning an error."
+        },
+        {
+          "id": 4,
+          "title": "Perform Atomic Account Activation and Token Invalidation",
+          "description": "Within a database transaction, update the User record to set emailVerified and remove or invalidate the used token.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Use a database transaction to ensure both the user update (setting emailVerified to the current timestamp) and token deletion/invalidation occur atomically. Roll back if any step fails to maintain consistency."
+        },
+        {
+          "id": 5,
+          "title": "Implement Success and Error Response Handling",
+          "description": "Return a success response with the user's email if activation succeeds, or an appropriate error if validation fails.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Structure the mutation's return value to include the user's email on success. On failure (invalid/expired token, missing user), return a clear error message using tRPC's error handling mechanisms."
+        },
+        {
+          "id": 6,
+          "title": "Add Logging for Activation Attempts",
+          "description": "Integrate logging for both successful activations and failed attempts for audit and debugging purposes.",
+          "status": "pending",
+          "dependencies": [
+            5
+          ],
+          "details": "Log relevant details (e.g., user ID, email, timestamp, reason for failure) for each activation attempt. Ensure logs do not expose sensitive information and are compliant with security best practices."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Implement Account Activation Page",
+      "description": "Create the public /complete-setup page that validates activation tokens and displays appropriate success or error messages.",
+      "status": "pending",
+      "dependencies": [
+        7
+      ],
+      "priority": "medium",
+      "details": "1. Create the page route at src/app/complete-setup/page.tsx.\n2. Extract the activation token from the URL query parameter.\n3. Implement a useEffect hook that calls the user.activateClientAccount mutation on page load with the token.\n4. Display a loading state while the validation is in progress.\n5. On successful activation, show a success message ('Account activated successfully').\n6. Provide a prominent button to navigate to the sign-in page after successful activation.\n7. For invalid or expired tokens, display an appropriate error message.\n8. Include instructions for requesting a new activation link if needed.\n9. Ensure the page is responsive and has appropriate styling consistent with the application design.",
+      "testStrategy": "Test the page with valid tokens, expired tokens, and invalid tokens. Verify appropriate messages are displayed in each scenario. Test the navigation to sign-in page after successful activation. Ensure the page handles URL parameters correctly, including missing or malformed tokens.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set Up Route and Page Structure",
+          "description": "Create the /complete-setup page route and establish the basic page structure in the application.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Add a new file at src/app/complete-setup/page.tsx. Set up the React component structure, ensuring the page is accessible via the /complete-setup route. Include a container for content and placeholders for future UI states (loading, success, error)."
+        },
+        {
+          "id": 2,
+          "title": "Extract Activation Token from URL",
+          "description": "Implement logic to extract the activation token from the URL query parameters when the page loads.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Use React Router or Next.js routing utilities (such as useRouter or useSearchParams) to retrieve the activation token from the URL. Store the token in a local state variable for use in subsequent activation logic."
+        },
+        {
+          "id": 3,
+          "title": "Implement Activation Logic and State Handling",
+          "description": "Trigger the account activation mutation using the extracted token and manage loading, success, and error states.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Use a useEffect hook to call the user.activateClientAccount mutation as soon as the token is available. Display a loading indicator while the request is in progress. Update the UI state based on the mutation result: show a success message on success, or an error message if the token is invalid or expired."
+        },
+        {
+          "id": 4,
+          "title": "Display User Feedback and Navigation Options",
+          "description": "Show appropriate messages and navigation controls based on activation outcome.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "On successful activation, display a prominent success message and a button that navigates the user to the sign-in page. On failure, show a clear error message and provide instructions or a link for requesting a new activation email."
+        },
+        {
+          "id": 5,
+          "title": "Apply Responsive Design and Consistent Styling",
+          "description": "Ensure the page is visually consistent with the rest of the application and works well on all devices.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Apply CSS modules, styled-components, or the project's preferred styling solution to match the application's design system. Test responsiveness across device sizes and adjust layout or typography as needed."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "projectName": "QAS Portal - Client Authentication Setup",
+    "totalTasks": 8,
+    "sourceFile": "scripts/PRD_mvp-phase0b.txt",
+    "generatedAt": "2023-11-10"
+  }
+}
