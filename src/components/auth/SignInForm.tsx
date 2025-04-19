@@ -2,7 +2,7 @@
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { EyeCloseIcon, EyeIcon } from "@/icons";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -12,15 +12,6 @@ export default function SignInForm() {
   const [isChecked, setIsChecked] = useState(false);
   return (
     <div className="flex w-full flex-1 flex-col lg:w-1/2">
-      <div className="mx-auto mb-5 w-full max-w-md sm:pt-10">
-        <Link
-          href="/"
-          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-        >
-          <ChevronLeftIcon />
-          Back to dashboard
-        </Link>
-      </div>
       <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
         <div>
           <div className="mb-5 sm:mb-8">
