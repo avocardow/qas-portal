@@ -26,7 +26,7 @@ export default function CompleteSetupPage() {
     if (!token) {
       return <Notification variant="error" title="Missing activation token." />;
     }
-    if (mutation.status === "loading") {
+    if (mutation.status === "pending") {
       return (
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Validating your activation token...
@@ -46,9 +46,9 @@ export default function CompleteSetupPage() {
             </Link>
             <Button
               onClick={() => resendMutation.mutate({ token })}
-              disabled={resendMutation.status === "loading"}
+              disabled={resendMutation.status === "pending"}
             >
-              {resendMutation.status === "loading"
+              {resendMutation.status === "pending"
                 ? "Resending..."
                 : "Resend Activation Link"}
             </Button>
