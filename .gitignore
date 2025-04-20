@@ -61,3 +61,6 @@ node_modules/
 *.sln
 *.sw?
 # OS specific
+
+# Private client data
+data/clients.csv

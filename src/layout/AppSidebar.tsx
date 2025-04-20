@@ -11,7 +11,6 @@ import { HorizontaLDots } from "../icons/index";
 // Define only Team and Client page links
 const teamPages: { name: string; path: string }[] = [
   { name: "Email", path: "/email" },
-  { name: "Blank Page", path: "/blank" },
   { name: "Tasks", path: "/tasks" },
   { name: "Settings", path: "/settings" },
   { name: "Account", path: "/account" },
