@@ -1,5 +1,8 @@
 # TailAdmin Pro - Next.js (v2.0)
 
+[![Vercel Deployment Status](https://vercel.com/avocardow/qas-portal/badge.svg)](https://vercel.com/avocardow/qas-portal)
+**✅ Sign-in and callback URL verified working**
+
 [TailAdmin](https://tailadmin.com) is a modern, responsive, and customizable admin dashboard template built using
 Tailwind CSS and Next.js. It is designed to help developers build beautiful and functional dashboards quickly and
 easily.
