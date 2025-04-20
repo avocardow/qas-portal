@@ -1,0 +1,47 @@
+# Task ID: 1
+# Title: Set up App Router folder structure
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Create the folder structure for the Next.js App Router based on the sitemap, including protected and public route groups.
+# Details:
+Create the following folder structure:
+- `src/app/(pages)/(app)` for protected internal pages
+- `src/app/(pages)/(portal)` for client portal pages
+
+Within the (app) group, create subfolders for routes like `/clients`, `/audits`, etc. Within the (portal) group, create subfolders for routes like `/dashboard`, `/documents`, etc. Use Context7 to resolve library IDs and fetch official documentation for Next.js App Router using `mcp_context7_resolve_library_id` and `mcp_context7_get_library_docs`.
+
+# Test Strategy:
+Verify the folder structure matches the sitemap. Ensure route groups are correctly set up for protected and public routes. Run `pnpm build` to confirm no routing errors.
+
+# Subtasks:
+## 1. Analyze Sitemap and Define Route Groups [done]
+### Dependencies: None
+### Description: Review the provided sitemap to identify all required routes, categorizing them into protected internal pages and client portal pages. Map each route to its appropriate group: (app) for protected internal pages and (portal) for client portal pages.
+### Details:
+List all routes from the sitemap. Assign each route to either the (app) or (portal) group based on access requirements. Document the mapping for reference in subsequent steps.
+
+## 2. Create Base App Router Directory Structure [done]
+### Dependencies: 1.1
+### Description: Set up the foundational folder structure in the Next.js project under src/app, including the (pages), (app), and (portal) route groups as per Next.js App Router conventions.
+### Details:
+Within src/app, create a (pages) folder. Inside (pages), create (app) and (portal) folders using parentheses to indicate route groups. This establishes the organizational hierarchy without affecting URL paths.[1][3][4][5]
+
+## 3. Implement Route Subfolders for Each Group [done]
+### Dependencies: 1.2
+### Description: Within the (app) and (portal) route groups, create subfolders for each mapped route (e.g., /clients, /audits in (app); /dashboard, /documents in (portal)), following the structure defined in the sitemap.
+### Details:
+For each route identified in the sitemap, create a corresponding subfolder inside its assigned group. Ensure folder names match the intended URL segments. For dynamic routes, use square brackets (e.g., [id]) as per Next.js conventions.[1][3][4][5]
+
+## 4. Add Required Next.js Route Files [done]
+### Dependencies: 1.3
+### Description: Populate each route subfolder with the necessary Next.js files (e.g., page.js, layout.js, error.js, loading.js) to enable routing and provide basic scaffolding for each route.
+### Details:
+In each subfolder, add a page.js file to make the route accessible. Optionally, add layout.js for custom layouts, error.js for error boundaries, and loading.js for loading states as needed. This ensures each route is properly initialized and follows Next.js best practices.[1][3][5]
+
+## 5. Integrate Context7 for Library ID Resolution and Documentation [done]
+### Dependencies: 1.4
+### Description: Use Context7 to resolve library IDs and fetch official Next.js App Router documentation, ensuring the folder structure and routing setup align with the latest best practices.
+### Details:
+Invoke Context7's mcp_context7_resolve_library_id and mcp_context7_get_library_docs to retrieve up-to-date documentation and confirm that the implemented structure adheres to official Next.js guidelines. Adjust the structure if any discrepancies are found.
+

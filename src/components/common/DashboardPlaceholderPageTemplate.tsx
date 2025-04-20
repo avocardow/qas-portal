@@ -14,8 +14,10 @@ const DashboardPlaceholderPageTemplate: React.FC<DashboardPlaceholderProps> = ({
   className = "",
 }) => (
   <div className={`placeholder-container ${className}`}>
-    <h1 className="mb-4 text-2xl font-semibold">{heading}</h1>
-    <p className="mb-6 text-gray-600">{message}</p>
+    <h1 className="mb-4 text-2xl font-semibold dark:text-white/90">
+      {heading}
+    </h1>
+    <p className="mb-6 text-gray-600 dark:text-gray-400">{message}</p>
     {children}
   </div>
 );

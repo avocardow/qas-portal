@@ -1,0 +1,143 @@
+# Task ID: 2
+# Title: Create placeholder page components
+# Status: in-progress
+# Dependencies: 1
+# Priority: high
+# Description: Develop minimal page.tsx components for each route with headings and 'coming soon' messages.
+# Details:
+For each route in the sitemap, create a `page.tsx` file with:
+- A heading that matches the route name
+- A 'Coming Soon' message describing the planned feature
+- Apply `ProtectedAppLayout` for routes in the (app) group
+- Use default layout for routes in the (portal) group
+
+Follow Cursor rules in `.cursor/rules` for templates, naming conventions, and best practices. Ensure TypeScript typing is properly implemented.
+
+# Test Strategy:
+Navigate to each route in the development environment to verify the placeholder content renders correctly. Check that layouts are applied properly for both protected and public routes.
+
+# Subtasks:
+## 1. Analyze Sitemap and Define Route Structure [done]
+### Dependencies: None
+### Description: Review the sitemap to identify all routes that require a placeholder page component. Categorize each route as belonging to either the (app) or (portal) group to determine the appropriate layout.
+### Details:
+Extract all route paths from the sitemap. For each route, record its group ((app) or (portal)) and intended feature. Prepare a checklist to ensure every route will receive a placeholder component.
+
+<info added on 2025-04-20T10:05:43.249Z>
+Based on the extracted route paths, here's a structured categorization:
+
+**App Group Routes (`/src/app/(app)/`):**
+- `/dashboard` - Main user dashboard
+- `/tasks` - Task management interface
+- `/invoices` - Invoice creation and management
+- `/clients` - Client database and relationship management
+- `/audits` - System audit logs and activity tracking
+- `/settings` - Application configuration
+- `/profile` - User profile management
+- `/phone` - Communication tools
+- `/files` - Document and file storage
+- `/chat` - Messaging interface
+- `/calendar` - Scheduling and calendar view
+
+**Portal Group Routes (`/src/app/(portal)/`):**
+- `/dashboard` - Client-facing dashboard
+- `/billing` - Payment and subscription management
+- `/profile` - Client profile settings
+- `/documents` - Document sharing and access
+
+Implementation note: Each route will need a corresponding page.tsx file with a placeholder component that includes the route name and group for easy identification during development. Consider implementing a consistent naming convention like `[GroupName][RouteName]Page` (e.g., `AppDashboardPage`, `PortalBillingPage`).
+</info added on 2025-04-20T10:05:43.249Z>
+
+## 2. Set Up Placeholder Component Templates with TypeScript Typing [done]
+### Dependencies: 2.1
+### Description: Create reusable TypeScript templates for placeholder page components, ensuring compliance with .cursor/rules for structure, naming, and best practices.
+### Details:
+Define a minimal functional component template in TypeScript, including a heading (matching the route name) and a 'Coming Soon' message describing the planned feature. Prepare two variants: one using ProtectedAppLayout for (app) group routes, and one using the default layout for (portal) group routes. Ensure all components are properly typed.
+
+<info added on 2025-04-20T10:09:33.365Z>
+Here's additional implementation information for the placeholder component templates:
+
+```typescript
+// Implementation details for AppPlaceholderPageTemplate.tsx
+interface AppPlaceholderProps {
+  heading: string;
+  message?: string;
+  children?: React.ReactNode;
+}
+
+// Example implementation:
+export const AppPlaceholderPageTemplate: React.FC<AppPlaceholderProps> = ({
+  heading,
+  message = "Coming Soon",
+  children
+}) => (
+  <ProtectedAppLayout>
+    <div className="placeholder-container">
+      <h1 className="text-2xl font-semibold mb-4">{heading}</h1>
+      <p className="text-gray-600 mb-6">{message}</p>
+      {children}
+    </div>
+  </ProtectedAppLayout>
+);
+```
+
+```typescript
+// Implementation details for PortalPlaceholderPageTemplate.tsx
+interface PortalPlaceholderProps {
+  heading: string;
+  message?: string;
+  children?: React.ReactNode;
+}
+
+// Example implementation:
+export const PortalPlaceholderPageTemplate: React.FC<PortalPlaceholderProps> = ({
+  heading,
+  message = "Coming Soon",
+  children
+}) => (
+  <div className="placeholder-container">
+    <h1 className="text-2xl font-semibold mb-4">{heading}</h1>
+    <p className="text-gray-600 mb-6">{message}</p>
+    {children}
+  </div>
+);
+```
+
+Usage example in route files:
+```typescript
+// For app routes: app/dashboard/page.tsx
+export default function DashboardPage() {
+  return (
+    <AppPlaceholderPageTemplate 
+      heading="Dashboard" 
+      message="Your personalized dashboard is coming soon"
+    />
+  );
+}
+
+// For portal routes: portal/login/page.tsx
+export default function LoginPage() {
+  return (
+    <PortalPlaceholderPageTemplate 
+      heading="Login" 
+      message="Secure authentication portal coming soon"
+    />
+  );
+}
+```
+
+Consider adding optional props for customization like `className` for styling overrides and `icon` for feature-specific visual indicators. Export both components from an index.ts file for cleaner imports.
+</info added on 2025-04-20T10:09:33.365Z>
+
+## 3. Generate page.tsx Files for Each Route [done]
+### Dependencies: 2.2
+### Description: For each route identified, create a page.tsx file using the appropriate template. Ensure the heading and 'Coming Soon' message are specific to the route's planned feature.
+### Details:
+In the directory for each route, add a page.tsx file. Use the correct template based on the route group. Set the heading to match the route name and customize the 'Coming Soon' message to briefly describe the planned feature. Follow naming conventions and directory structure as specified in .cursor/rules.
+
+## 4. Review, Refactor, and Validate Placeholder Components [in-progress]
+### Dependencies: 2.3
+### Description: Check all created page.tsx files for consistency, adherence to .cursor/rules, and correct TypeScript usage. Refactor as needed and validate that each component renders with the correct layout and content.
+### Details:
+Perform a code review to ensure all placeholder components follow the established templates, naming conventions, and TypeScript typing. Test rendering for both (app) and (portal) group routes to confirm correct layout usage and content display. Address any inconsistencies or errors.
+

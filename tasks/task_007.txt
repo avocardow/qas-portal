@@ -1,0 +1,43 @@
+# Task ID: 7
+# Title: Implement navigation between routes
+# Status: pending
+# Dependencies: 2
+# Priority: low
+# Description: Add basic navigation components to allow developers to move between placeholder pages.
+# Details:
+Create simple navigation components:
+- Add a sidebar or header navigation in the `ProtectedAppLayout` for internal routes
+- Add a simple navigation bar in the default layout for portal routes
+- Implement Next.js Link components for navigation between routes
+- Ensure active route is visually indicated
+
+Keep the implementation minimal as this is just for development navigation during this phase.
+
+# Test Strategy:
+Test navigation by clicking through all routes in both the internal and client portal sections. Verify that the active route is correctly indicated and that navigation preserves layout context.
+
+# Subtasks:
+## 1. Add navigation bar to default layout for portal routes [pending]
+### Dependencies: None
+### Description: Implement a simple navigation bar in the default layout to allow navigation between portal routes.
+### Details:
+In the default layout component, create a navigation bar using Next.js <Link> components for each portal route. Ensure the navigation bar is minimal and only includes links relevant to portal pages. Import Link from 'next/link' and use the href prop to specify target routes. Style the navigation bar for basic usability.
+
+## 2. Add sidebar or header navigation to ProtectedAppLayout for internal routes [pending]
+### Dependencies: 7.1
+### Description: Implement a sidebar or header navigation component within the ProtectedAppLayout to enable navigation between internal (protected) routes.
+### Details:
+Within the ProtectedAppLayout, add a sidebar or header containing <Link> components for each internal route. Import Link from 'next/link' and use the href prop for navigation. Keep the design minimal, focusing on development usability. Ensure the navigation is clearly separated from the main content area.
+
+## 3. Implement active route visual indication [pending]
+### Dependencies: 7.1, 7.2
+### Description: Ensure the currently active route is visually indicated in both navigation components.
+### Details:
+Use Next.js router hooks (such as useRouter) to determine the current route. Apply a distinct style (e.g., bold text, underline, or background color) to the active link in both the default layout navigation bar and the ProtectedAppLayout navigation. Ensure the indication is clear and updates correctly on navigation.
+
+## 4. Verify navigation functionality and minimalism [pending]
+### Dependencies: 7.3
+### Description: Test all navigation components to confirm correct routing and that the implementation remains minimal for development purposes.
+### Details:
+Manually test navigation between all linked routes in both layouts. Confirm that the active route indication works as expected and that navigation is smooth. Review the code to ensure no unnecessary complexity or features have been added beyond basic development navigation.
+

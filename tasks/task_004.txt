@@ -1,0 +1,57 @@
+# Task ID: 4
+# Title: Implement CSV parsing functionality
+# Status: pending
+# Dependencies: 3
+# Priority: medium
+# Description: Develop the CSV parsing portion of the migration script to read and transform client data.
+# Details:
+Create `scripts/migrateClients.ts` with:
+- Import and configure `csv-parse` library (use Context7 to resolve library ID)
+- Read the CSV file from `data/clients.csv`
+- Parse CSV headers and rows
+- Transform data into structured objects matching Prisma models
+- Implement data cleaning and validation
+- Log parsing results and any validation issues
+
+Handle edge cases like missing fields, data type conversions, and special characters.
+
+# Test Strategy:
+Create a test CSV with sample data. Run the script with `--dry-run` flag to verify parsing without database insertion. Check console output for correct data transformation and validation messages.
+
+# Subtasks:
+## 1. Set Up CSV Parsing Environment [pending]
+### Dependencies: None
+### Description: Initialize the migration script and configure the CSV parsing library.
+### Details:
+Create the file `scripts/migrateClients.ts`. Import and configure the `csv-parse` library (resolve the correct package using Context7). Ensure all necessary dependencies are installed and the script is ready to handle CSV input streams.[3]
+
+## 2. Implement CSV File Reading [pending]
+### Dependencies: 4.1
+### Description: Read the client data CSV file as a stream for efficient processing.
+### Details:
+Use Node.js file system APIs to read `data/clients.csv` as a readable stream. Prepare the stream to be piped into the CSV parser for further processing.[3][5]
+
+## 3. Parse CSV Headers and Rows [pending]
+### Dependencies: 4.2
+### Description: Parse the CSV file to extract headers and rows, handling special characters and delimiters.
+### Details:
+Configure the parser to correctly interpret headers, delimiters, and escape characters. Ensure that each row is parsed into a JavaScript object with keys matching the CSV headers.[3][5]
+
+## 4. Transform Parsed Data to Prisma Model Structure [pending]
+### Dependencies: 4.3
+### Description: Map and convert parsed CSV data into objects that match the Prisma client model schema.
+### Details:
+For each parsed row, transform the data fields to match the Prisma model structure. Handle data type conversions (e.g., strings to numbers or dates) and prepare objects for later migration steps.
+
+## 5. Implement Data Cleaning and Validation [pending]
+### Dependencies: 4.4
+### Description: Clean and validate the transformed data, addressing missing fields, type mismatches, and inconsistencies.
+### Details:
+Check each object for required fields, correct data types, and valid values. Apply cleaning rules (e.g., trimming whitespace, normalizing formats) and flag or correct invalid or missing data. Prepare a mechanism to collect validation issues for logging.
+
+## 6. Log Parsing Results and Validation Issues [pending]
+### Dependencies: 4.5
+### Description: Log the results of the parsing and validation process, including any errors or warnings.
+### Details:
+Implement structured logging to record the number of successfully parsed records, details of any validation issues, and summaries of data anomalies. Ensure logs are clear and actionable for further migration steps.
+

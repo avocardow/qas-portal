@@ -1,0 +1,56 @@
+# Task ID: 5
+# Title: Implement Prisma database seeding
+# Status: pending
+# Dependencies: 3, 4
+# Priority: medium
+# Description: Complete the migration script by adding Prisma Client integration to insert parsed data into Supabase.
+# Details:
+Extend `scripts/migrateClients.ts` to:
+- Initialize Prisma Client with proper environment variables for Supabase connection
+- Create transaction-wrapped database operations for inserting clients, contacts, licenses, and trust accounts
+- Handle relationships between entities correctly
+- Implement error handling and rollback for failed transactions
+- Add command-line options for dry run, verbose logging, and environment selection
+
+Ensure the script can be run multiple times without creating duplicates (upsert where appropriate).
+
+# Test Strategy:
+Run the complete migration script against the development Supabase instance. Verify data appears correctly in Supabase Table Editor. Test error scenarios by introducing invalid data and checking rollback functionality.
+
+# Subtasks:
+## 1. Initialize Prisma Client with Supabase Environment Variables [pending]
+### Dependencies: None
+### Description: Set up Prisma Client in the migration script to connect to the Supabase database using environment variables.
+### Details:
+Update `scripts/migrateClients.ts` to import and initialize Prisma Client. Ensure the script loads environment variables (e.g., using dotenv) for Supabase connection details. Validate that the connection is successful before proceeding with any operations.[3][4]
+
+## 2. Parse and Structure Input Data for Seeding [pending]
+### Dependencies: 5.1
+### Description: Parse the source data and structure it into objects representing clients, contacts, licenses, and trust accounts, ready for database insertion.
+### Details:
+Implement or update parsing logic to transform raw input (e.g., JSON, CSV) into structured JavaScript objects. Organize data to reflect entity relationships (e.g., clients with nested contacts and licenses). Ensure data integrity and readiness for transactional insertion.
+
+## 3. Implement Transactional Upsert Operations with Relationship Handling [pending]
+### Dependencies: 5.2
+### Description: Create transaction-wrapped upsert operations to insert or update clients, contacts, licenses, and trust accounts, maintaining correct relationships and ensuring idempotency.
+### Details:
+Use Prisma's transaction API to group all related inserts/updates in a single transaction. Use upsert operations to avoid duplicates, matching on unique fields. Correctly link related entities (e.g., connect contacts to clients). Roll back the transaction if any operation fails to maintain data consistency.[1][5]
+
+## 4. Implement Error Handling and Transaction Rollback [pending]
+### Dependencies: 5.3
+### Description: Add robust error handling to catch and log errors during the seeding process, ensuring transactions are rolled back on failure.
+### Details:
+Wrap the main seeding logic in try/catch blocks. On error, ensure Prisma disconnects and the transaction is rolled back. Log detailed error messages for debugging. Exit the process with a non-zero code on failure.[5]
+
+## 5. Add Command-Line Options for Dry Run, Verbose Logging, and Environment Selection [pending]
+### Dependencies: 5.4
+### Description: Enhance the script to accept command-line arguments for dry run mode, verbose logging, and selecting the environment (e.g., development, staging, production).
+### Details:
+Use a library like yargs or commander to parse CLI arguments. Implement dry run mode to simulate operations without writing to the database. Add verbose logging for detailed output. Allow specifying the environment to load the correct configuration.
+
+## 6. Test Idempotency and Multiple Runs [pending]
+### Dependencies: 5.5
+### Description: Verify that the script can be run multiple times without creating duplicate records, ensuring upsert logic and relationships work as intended.
+### Details:
+Run the script repeatedly against a test Supabase database. Confirm that no duplicates are created and relationships remain correct. Adjust upsert logic or unique constraints as needed to guarantee idempotency.[1][5]
+

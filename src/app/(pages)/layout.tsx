@@ -26,7 +26,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-50 dark:bg-slate-900`}>
+      <head>
+        {/* Prevent flash by applying stored theme before React mounts */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                const t = localStorage.getItem('theme') || 'light';
+                document.documentElement.classList.toggle('dark', t==='dark');
+              })()
+            `,
+          }}
+        />
+      </head>
+      <body
+        className={`${inter.className} overscroll-none bg-slate-50 transition-colors duration-300 ease-in-out dark:bg-slate-900`}
+      >
         <Providers>{children}</Providers>
         <SpeedInsights />
         <Analytics />

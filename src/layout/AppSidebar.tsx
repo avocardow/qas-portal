@@ -21,7 +21,8 @@ import {
   TaskIcon,
   UserCircleIcon,
 } from "../icons/index";
-import SidebarWidget from "./SidebarWidget";
+
+// import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
@@ -253,7 +254,7 @@ const AppSidebar: React.FC = () => {
                     : "0px",
               }}
             >
-              <ul className="ml-9 mt-2 space-y-1">
+              <ul className="mt-2 ml-9 space-y-1">
                 {nav.subItems.map((subItem) => (
                   <li key={subItem.name}>
                     <Link
@@ -375,7 +376,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 mt-16 flex h-full flex-col border-r border-gray-200 bg-white px-5 text-gray-900 transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:bg-gray-900 ${
+      className={`fixed top-0 left-0 z-50 mt-16 flex h-full flex-col border-r border-gray-200 bg-white px-5 text-gray-900 transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:bg-gray-900 ${
         isExpanded || isMobileOpen
           ? "w-[290px]"
           : isHovered
@@ -423,7 +424,7 @@ const AppSidebar: React.FC = () => {
           <div className="flex flex-col gap-4">
             <div>
               <h2
-                className={`mb-4 flex text-xs uppercase leading-[20px] text-gray-400 ${
+                className={`mb-4 flex text-xs leading-[20px] text-gray-400 uppercase ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
                     : "justify-start"
@@ -439,7 +440,7 @@ const AppSidebar: React.FC = () => {
             </div>
             <div>
               <h2
-                className={`mb-4 flex text-xs uppercase leading-[20px] text-gray-400 ${
+                className={`mb-4 flex text-xs leading-[20px] text-gray-400 uppercase ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
                     : "justify-start"
@@ -455,7 +456,7 @@ const AppSidebar: React.FC = () => {
             </div>
             <div>
               <h2
-                className={`mb-4 flex text-xs uppercase leading-[20px] text-gray-400 ${
+                className={`mb-4 flex text-xs leading-[20px] text-gray-400 uppercase ${
                   !isExpanded && !isHovered
                     ? "lg:justify-center"
                     : "justify-start"
@@ -471,7 +472,7 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+        {/*        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
       </div>
     </aside>
   );

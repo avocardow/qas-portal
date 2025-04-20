@@ -5,6 +5,7 @@ import Providers from "./providers";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
 import AppHeader from "@/layout/AppHeader";
+import ContentWrapper from "./ContentWrapper";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({
@@ -22,15 +23,14 @@ export default async function DashboardLayout({
         {/* Sidebar and Backdrop */}
         <AppSidebar />
         <Backdrop />
-        {/* Main Content Area */}
-        <div className="flex-1 transition-all duration-300 ease-in-out lg:ml-[290px]">
+        <ContentWrapper>
           {/* Header */}
           <AppHeader />
           {/* Page Content */}
           <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
             {children}
           </div>
-        </div>
+        </ContentWrapper>
       </div>
     </Providers>
   );

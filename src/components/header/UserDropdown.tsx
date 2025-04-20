@@ -35,7 +35,7 @@ export default function UserDropdown() {
 
   // --- Render dropdown when authenticated ---
   const user = session.user;
-  const userImage = user.image ?? "/images/user/default-avatar.png"; // Provide a default avatar
+  const userImage = user.image ?? "/images/user/user-placeholder.svg"; // Provide a default avatar
   const userName = user.name ?? user.email?.split("@")[0] ?? "User"; // Use name, fallback to email prefix or "User"
   const userEmail = user.email ?? "No email provided";
 
