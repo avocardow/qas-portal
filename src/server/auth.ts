@@ -92,7 +92,15 @@ export const authOptions: NextAuthOptions = {
       sendVerificationRequest: async ({ identifier: email, url, provider }) => {
         const subject = `Sign in to ${provider.name}`;
         const htmlBody = `<p>Click <a href="${url}">here</a> to sign in.</p>`;
-        await sendEmail({ to: email, subject, htmlBody });
+        try {
+          await sendEmail({ to: email, subject, htmlBody });
+          console.log(
+            `>>> Verification email sent to ${email} for provider ${provider.name}`
+          );
+        } catch (error) {
+          console.error("<<< Error sending verification email:", error);
+          throw error;
+        }
       },
     }),
   ],

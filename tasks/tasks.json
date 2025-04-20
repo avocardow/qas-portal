@@ -134,7 +134,7 @@
       "id": 3,
       "title": "Configure NextAuth.js Email Provider with Custom sendVerificationRequest",
       "description": "Add the Email Provider to NextAuth.js configuration and implement a custom sendVerificationRequest function that uses the Graph API email utility.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -164,7 +164,7 @@
           "id": 3,
           "title": "Configure Token Expiration for Magic Link",
           "description": "Set the magic link token expiration time to 24 hours in the Email Provider configuration.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -174,7 +174,7 @@
           "id": 4,
           "title": "Ensure Prisma Adapter Handles Email Provider Flow",
           "description": "Verify and update the Prisma Adapter configuration to support user creation and lookup for email-based authentication.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -184,7 +184,7 @@
           "id": 5,
           "title": "Add Error Handling and Logging to sendVerificationRequest",
           "description": "Enhance the custom sendVerificationRequest function with robust error handling and logging for observability and debugging.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
