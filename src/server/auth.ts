@@ -69,6 +69,10 @@ export const authOptions: NextAuthOptions = {
       // console.log(">>> Returning session:", session); // REMOVED
       return session;
     },
+    // Always redirect authenticated users to the dashboard
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/dashboard`;
+    },
   },
   adapter: PrismaAdapter(db),
   providers: [
