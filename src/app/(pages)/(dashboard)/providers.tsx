@@ -1,16 +1,19 @@
 "use client";
 
-import React from "react";
-// Import SessionProvider
 import { SessionProvider } from "next-auth/react";
-import TRPCProvider from "@/app/_trpc/Provider"; // Assuming this is your tRPC Provider setup
+import type { Session } from "next-auth";
+import TRPCProvider from "@/app/_trpc/Provider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+interface ProvidersProps {
+  session: Session | null;
+  children: React.ReactNode;
+}
+
+export default function Providers({ session, children }: ProvidersProps) {
   return (
-    // Wrap everything with SessionProvider at the top level
-    <SessionProvider>
+    <SessionProvider session={session}>
       <TRPCProvider>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>
