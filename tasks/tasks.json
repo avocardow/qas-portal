@@ -64,7 +64,7 @@
       "id": 2,
       "title": "Implement Microsoft Graph API Email Sending Utility",
       "description": "Create a reusable server-side utility function to send emails via Microsoft Graph API using application permissions.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         1
       ],
@@ -122,7 +122,7 @@
           "id": 6,
           "title": "Create and Run Test Function for Email Sending",
           "description": "Develop a simple test function to verify that the sendEmail utility works as expected.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             5
           ],
@@ -146,7 +146,7 @@
           "id": 1,
           "title": "Add Email Provider to NextAuth.js Configuration",
           "description": "Integrate the Email Provider into the NextAuth.js providers array in src/server/auth.ts, preparing for custom email handling.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Import EmailProvider from 'next-auth/providers/email' and add it to the providers array in your NextAuth.js configuration. Set up the provider with placeholders for server and from settings, and prepare to inject a custom sendVerificationRequest function. Ensure environment variables for email server configuration are present as required by NextAuth.js.[1][3]"
         },

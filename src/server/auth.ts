@@ -6,6 +6,8 @@ import {
   type User as NextAuthUser,
 } from "next-auth";
 import AzureADProvider from "next-auth/providers/azure-ad";
+import EmailProvider from "next-auth/providers/email";
+import { sendEmail } from "@/server/utils/msGraphEmail";
 
 import { env } from "@/env.mjs";
 import { db } from "@/server/db";
@@ -80,7 +82,15 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
-    // Add EmailProvider here later
+    EmailProvider({
+      maxAge: 24 * 60 * 60, // 24 hours
+      from: env.EMAIL_FROM,
+      sendVerificationRequest: async ({ identifier: email, url, provider }) => {
+        const subject = `Sign in to ${provider.name}`;
+        const htmlBody = `<p>Click <a href="${url}">here</a> to sign in.</p>`;
+        await sendEmail({ to: email, subject, htmlBody });
+      },
+    }),
   ],
   session: {
     strategy: "database",
