@@ -1,0 +1,47 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- **Treat the Task List as Read-Only**
+  - Do not add, remove, or modify task definitions.
+  - Only update a task's status (mark `in-progress` when you begin and `done` when you complete).
+
+- **Start a Task**
+  ```bash
+  task-master next     # fetch the next available task
+  task-master set-status --id=<taskId> --status=in-progress
+  ```
+  - Always use the full task or subtask ID (e.g., `2.4`).
+
+- **Implement Code Changes**
+  - Proceed with implementation without asking for confirmation to proceed.
+  - Make necessary code edits according to the task details.
+  - After changes, run:
+    ```bash
+    pnpm lint --fix
+    pnpm test
+    pnpm build
+    ```
+  - Fix any errors or narrow types so that pre-commit hooks pass without prompting.
+
+- **Complete the Task**
+  ```bash
+  task-master set-status --id=<taskId> --status=done
+  ```
+  - When all subtasks under a parent are complete, mark the parent as `done`.
+
+- **Commit and Push**
+  ```bash
+  git add .
+  git commit -m "feat: implement task <taskId>"
+  git push
+  ```
+  - Do not automatically proceed to the next task after pushing.
+
+- **Tooling and Conventions**
+  - Never use `scripts/dev.js`; always use `task-master`.
+  - Only use `pnpm` for installing or updating dependencies (`pnpm install` / `pnpm up --latest`).
+  - Use Context7 for any new library: resolve the library ID then fetch docs before coding.
+  - Prioritize copying from existing TailAdmin templates in `src/app/(admin)`, `src/app/(app)`, `src/app/(full-width-pages)`, and `src/components` rather than building from scratch.
+  - Follow all project Cursor rules without exception. 

@@ -196,7 +196,7 @@
       "id": 4,
       "title": "Update Sign In Page UI for Client Login",
       "description": "Modify the existing Sign In page to include a distinct section for client login with email input and magic link submission.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         3
       ],
@@ -208,7 +208,7 @@
           "id": 1,
           "title": "Redesign Sign In Page Layout for Dual Login Methods",
           "description": "Update the /signin page layout to clearly separate Team Member (Microsoft 365) and Client (Email) login methods, using distinct headings and descriptions for each.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Refactor the page structure to visually differentiate the two login options. Use clear section headings, concise descriptions, and appropriate spacing to guide users. Ensure the design follows best practices for clarity and visual hierarchy[4]."
         },
@@ -216,7 +216,7 @@
           "id": 2,
           "title": "Implement Client Login Section with Email Input and Button",
           "description": "Add a new section for client login that includes an email input field and a 'Send Login Link' button.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -226,7 +226,7 @@
           "id": 3,
           "title": "Integrate react-hook-form for Form Validation and Submission",
           "description": "Set up react-hook-form to manage the client login form, including validation for the email field and handling form submission.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -236,7 +236,7 @@
           "id": 4,
           "title": "Implement Magic Link Submission Handler",
           "description": "Create a submit handler that calls signIn('email', { email: enteredEmail, redirect: false }) when the form is submitted.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -246,7 +246,7 @@
           "id": 5,
           "title": "Add Loading, Success, and Error Feedback States",
           "description": "Enhance the client login form with loading indicators during submission, a success message on completion, and error feedback for failed attempts.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -256,7 +256,7 @@
           "id": 6,
           "title": "Ensure Responsiveness and Accessibility of the Updated UI",
           "description": "Test and refine the updated Sign In page to ensure it is fully responsive across devices and meets accessibility standards.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5
           ],

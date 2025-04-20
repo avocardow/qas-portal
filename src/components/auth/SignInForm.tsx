@@ -64,105 +64,97 @@ export default function SignInForm() {
           <div>
             {" "}
             {/* Parent Div 2 */}
-            {/* === Team Member Login === */}
-            <div className="mb-4">
-              <h2 className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                QAS Team Members
-              </h2>
-              <button
-                type="button"
-                onClick={handleMicrosoftSignIn}
-                disabled={loading}
-                className="inline-flex w-full items-center justify-center gap-3 rounded-lg bg-gray-100 px-7 py-3 text-sm font-normal text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
-              >
-                Sign in with Microsoft 365
-              </button>
+            {/* === Dual Login Methods === */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              {/* Team Member Login */}
+              <div>
+                <h2 className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  QAS Team Members
+                </h2>
+                <button
+                  type="button"
+                  onClick={handleMicrosoftSignIn}
+                  disabled={loading}
+                  className="inline-flex w-full items-center justify-center gap-3 rounded-lg bg-gray-100 px-7 py-3 text-sm font-normal text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+                >
+                  Sign in with Microsoft 365
+                </button>
+              </div>
+              {/* Client Login */}
+              <div>
+                <h2 className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Clients
+                </h2>
+                {emailSent ? (
+                  <div className="border-success-300 bg-success-100 text-success-700 dark:border-success-700 dark:bg-success-900/30 dark:text-success-300 rounded border p-3 text-center text-sm">
+                    Check your email! A sign-in link has been sent to{" "}
+                    {sentEmailAddress}.
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit(onClientSubmit)}>
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="clientEmail">
+                          Enter your registered email address{" "}
+                          <span className="text-error-500">*</span>
+                        </Label>
+                        <Controller
+                          name="clientEmail"
+                          control={control}
+                          rules={{
+                            required: "Email address is required",
+                            pattern: {
+                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                              message: "Invalid email address",
+                            },
+                          }}
+                          render={({ field }) => (
+                            <Input
+                              id="clientEmail"
+                              type="email"
+                              placeholder="your.email@agency.com"
+                              disabled={loading}
+                              {...field}
+                              aria-invalid={
+                                errors.clientEmail ? "true" : "false"
+                              }
+                            />
+                          )}
+                        />
+                        {errors.clientEmail && (
+                          <p
+                            className="text-error-500 mt-1 text-xs"
+                            role="alert"
+                          >
+                            {errors.clientEmail.message}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {loading ? "Sending..." : "Send Login Link"}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                )}
+              </div>
             </div>
-            {/* === Separator === */}
-            <div className="relative py-3 sm:py-5">
+            {/* Separator on Mobile */}
+            <div className="relative py-3 sm:hidden">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-slate-50 p-2 text-gray-400 sm:px-5 sm:py-2 dark:bg-slate-900">
+                <span className="bg-slate-50 p-2 text-gray-400 dark:bg-slate-900">
                   Or
                 </span>
               </div>
             </div>
-            {/* === Client Login === */}
-            <div>
-              {" "}
-              {/* Parent Div for Client Section */}
-              <h2 className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-                Clients
-              </h2>
-              {emailSent ? ( // Start Conditional Rendering
-                <div className="border-success-300 bg-success-100 text-success-700 dark:border-success-700 dark:bg-success-900/30 dark:text-success-300 rounded border p-3 text-center text-sm">
-                  Check your email! A sign-in link has been sent to{" "}
-                  {sentEmailAddress}.
-                </div>
-              ) : (
-                // Else block for the form
-                <form onSubmit={handleSubmit(onClientSubmit)}>
-                  {" "}
-                  {/* Form Start */}
-                  <div className="space-y-4">
-                    {" "}
-                    {/* Form Content Div Start */}
-                    <div>
-                      {" "}
-                      {/* Email Input Section Div Start */}
-                      <Label htmlFor="clientEmail">
-                        Enter your registered email address{" "}
-                        <span className="text-error-500">*</span>{" "}
-                      </Label>
-                      <Controller
-                        name="clientEmail"
-                        control={control}
-                        rules={{
-                          required: "Email address is required",
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "Invalid email address",
-                          },
-                        }}
-                        render={({ field }) => (
-                          <Input
-                            id="clientEmail"
-                            type="email"
-                            placeholder="your.email@agency.com"
-                            disabled={loading}
-                            {...field} // Attempting spread again, assuming Input might handle it now
-                            aria-invalid={errors.clientEmail ? "true" : "false"}
-                          />
-                        )}
-                      />
-                      {errors.clientEmail && (
-                        <p className="text-error-500 mt-1 text-xs" role="alert">
-                          {errors.clientEmail.message}
-                        </p>
-                      )}
-                    </div>{" "}
-                    {/* Email Input Section Div End */}
-                    <div>
-                      {" "}
-                      {/* Submit Button Div Start */}
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        {loading ? "Sending..." : "Send Login Link"}
-                      </button>
-                    </div>{" "}
-                    {/* Submit Button Div End */}
-                  </div>{" "}
-                  {/* Form Content Div End */}
-                </form> // Form End - Check this closing tag carefully
-              )}{" "}
-              {/* Conditional Rendering End - Check this closing brace/paren carefully */}
-            </div>{" "}
-            {/* Parent Div for Client Section End - Check this closing tag */}
           </div>{" "}
           {/* Parent Div 2 End */}
         </div>{" "}
