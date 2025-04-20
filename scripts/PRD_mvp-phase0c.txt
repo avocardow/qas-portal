@@ -1,0 +1,67 @@
+<context>
+# Overview  
+The QAS Portal Phase 0c focuses on establishing the navigational skeleton of the application, including both internal Team Member and external Client Portal routes, scaffolding placeholder pages for future features, and migrating initial client data from a CSV spreadsheet into the Supabase PostgreSQL database. This phase must adhere to all project Cursor rules (`.cursor/rules`) and leverage Context7 for resolving library IDs and fetching official documentation.
+
+# Core Features  
+- **Sitemap-Based App Router Structure**  
+  - Set up folder and file structure within `src/app/(pages)/` to reflect the agreed sitemap for internal and client routes.  
+  - Includes protected `(app)` group and public `(portal)` group with relevant subpaths.  
+- **Placeholder Page Content**  
+  - Create minimal `page.tsx` components rendering headings and "coming soon" messages for each route.  
+  - Ensure correct layout usage via `ProtectedAppLayout` or default layout.  
+- **Data Migration Script**  
+  - Develop a standalone Node.js/TypeScript migration script (`scripts/migrateClients.ts`) to parse a provided CSV, transform the data, and seed the Supabase DB using Prisma.  
+  - Handle clients, contacts, licenses, trust accounts, and optional initial audits.  
+- **Development Governance**  
+  - Follow Cursor rules in `.cursor/rules` for templates, naming, and best practices.  
+  - Use Context7 to resolve library IDs and fetch official documentation for any new dependencies.
+
+# User Experience  
+- **Team Member Flow:** Developers navigate to internal URLs (e.g., `/clients`, `/audits`), see placeholder headings and messages, confirming routing and layouts are functional.  
+- **Client Flow:** End users access client portal URLs (e.g., `/dashboard`, `/documents`), observe placeholder content indicating planned features.  
+- **Data Verification:** Developers run the migration script and verify in Supabase Table Editor that client, contact, license, and trust account data appear correctly, ensuring realistic test data is available.
+
+</context>
+
+<PRD>
+# Technical Architecture  
+- Next.js App Router + TypeScript for frontend routing and page components.  
+- `src/app/(pages)/(app)` route group for protected internal pages using `ProtectedAppLayout`.  
+- `src/app/(pages)/(portal)` route group for client portal pages using default/root layout.  
+- Supabase PostgreSQL as the primary database backend.  
+- Prisma ORM for database schema and migrations (`schema.prisma`).  
+- Node.js + TypeScript migration script (`scripts/migrateClients.ts`) using `csv-parse` and Prisma Client.  
+- CI environment configured for Development Supabase instance.  
+- Context7 integrated for resolving library IDs and retrieving official documentation via `mcp_context7_resolve_library_id` and `mcp_context7_get_library_docs`.
+
+# Development Roadmap  
+- **Phase 0c (Current Phase)**  
+  1. Scaffold file/folder structure under `src/app/(pages)/` according to sitemap.  
+  2. Create placeholder `page.tsx` files with minimal content and apply correct layouts.  
+  3. Implement and test data migration script to seed Supabase with CSV data.  
+  4. Verify page navigation and data import in development environment.  
+- **Phase 1 (Future Phase)**  
+  - Replace placeholder pages with actual UI components and tRPC endpoints.  
+  - Implement CRUD operations for clients, audits, tasks, billing.
+
+# Logical Dependency Chain  
+1. Folder structure scaffolding → placeholder page creation.  
+2. Placeholder page implementation → layout and routing verification.  
+3. Migration script development → CSV parsing and Prisma seeding.  
+4. Data import verification in Dev Supabase → groundwork for feature development in Phase 1.
+
+# Risks and Mitigations  
+- **Risk:** Incorrect folder structure naming breaks routing.  
+  - **Mitigation:** Follow Cursor rules for file naming and route groups; use Context7 docs for Next.js App Router.  
+- **Risk:** Migration script errors or data mismatches.  
+  - **Mitigation:** Implement robust data cleaning, wrap inserts in transactions, and perform manual spot checks.  
+- **Risk:** CI environment misconfiguration.  
+  - **Mitigation:** Use environment variables for Supabase credentials; document setup and access steps.
+
+# Appendix  
+- Use Context7 to lookup official docs for Next.js App Router, Prisma, Supabase, and CSV parsing libraries.  
+- Review Cursor rules in `.cursor/rules`, especially `tailadmin_template_preservation.mdc`, `cursor_rules.mdc`, and project-specific rules.  
+- Reference the provided CSV template file `data/clients.csv`.  
+- Ensure all code changes pass `pnpm lint --fix`, `pnpm test`, and `pnpm build` before commit.
+
+</PRD> 

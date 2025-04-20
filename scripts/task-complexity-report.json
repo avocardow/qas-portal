@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2025-04-19T08:32:57.203Z",
+    "generatedAt": "2025-04-20T08:31:20.935Z",
     "tasksAnalyzed": 8,
     "thresholdScore": 5,
     "projectName": "Your Project Name",
@@ -9,67 +9,67 @@
   "complexityAnalysis": [
     {
       "taskId": 1,
-      "taskTitle": "Configure Microsoft Graph API Permissions and Environment Variables",
-      "complexityScore": 5,
+      "taskTitle": "Set up App Router folder structure",
+      "complexityScore": 6,
       "recommendedSubtasks": 5,
-      "expansionPrompt": "Break down the process of configuring Microsoft Graph API permissions in Azure AD, setting environment variables in both .env and deployment environments, and documenting the setup for future reference.",
-      "reasoning": "This task involves several distinct configuration steps, including Azure AD portal navigation, permission management, environment variable setup, and documentation. While each step is straightforward, the need for precision and potential for misconfiguration increases the overall complexity moderately."
+      "expansionPrompt": "Break down the process of designing and creating the Next.js App Router folder structure, including: analyzing the sitemap, mapping routes to folder groups, creating protected and public route groups, setting up subfolders for each route, and documenting the structure according to Next.js best practices.",
+      "reasoning": "This task involves architectural decisions, mapping the sitemap to Next.js route groups, and ensuring proper separation of protected and public routes. It requires understanding Next.js routing conventions and best practices, but is relatively straightforward once the sitemap is clear.[1][2][3][4][5]"
     },
     {
       "taskId": 2,
-      "taskTitle": "Implement Microsoft Graph API Email Sending Utility",
-      "complexityScore": 7,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Detail the steps to create a reusable server-side utility for sending emails via Microsoft Graph API, including dependency installation, authentication, API call implementation, error handling, logging, and testing.",
-      "reasoning": "This task requires integrating with external APIs, handling authentication flows, robust error handling, and ensuring reusability and testability. The complexity is elevated due to the need for secure token management and comprehensive error/logging strategies."
+      "taskTitle": "Create placeholder page components",
+      "complexityScore": 5,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "List the steps to generate minimal page.tsx components for each route, including: creating files, adding headings and messages, applying correct layouts, following naming conventions, and ensuring TypeScript typing.",
+      "reasoning": "This is a repetitive but simple task focused on scaffolding. The main complexity is ensuring consistency and adherence to layout and naming conventions, as well as TypeScript typing."
     },
     {
       "taskId": 3,
-      "taskTitle": "Configure NextAuth.js Email Provider with Custom sendVerificationRequest",
-      "complexityScore": 8,
+      "taskTitle": "Define Prisma schema for client data",
+      "complexityScore": 7,
       "recommendedSubtasks": 5,
-      "expansionPrompt": "List the steps to add and configure the Email Provider in NextAuth.js, implement a custom sendVerificationRequest using the Graph API utility, set token expiration, handle user creation with Prisma Adapter, and ensure error handling and logging.",
-      "reasoning": "This task involves customizing authentication flows, integrating with a custom email utility, and ensuring compatibility with the user management system. The need to coordinate multiple libraries and handle edge cases increases complexity."
+      "expansionPrompt": "Detail the steps to design and implement a Prisma schema for client data migration, including: modeling entities, defining relationships, validating schema design against best practices, and preparing for future extensibility.",
+      "reasoning": "Designing a relational schema with proper relationships and future extensibility requires careful planning and understanding of both the data and Prisma conventions. Mistakes here can have downstream effects."
     },
     {
       "taskId": 4,
-      "taskTitle": "Update Sign In Page UI for Client Login",
-      "complexityScore": 6,
+      "taskTitle": "Implement CSV parsing functionality",
+      "complexityScore": 7,
       "recommendedSubtasks": 6,
-      "expansionPrompt": "Describe the steps to update the sign-in page UI to support client login, including form creation, validation, submission handling, feedback messaging, error handling, and ensuring accessibility and responsiveness.",
-      "reasoning": "This task requires significant UI changes, form handling, and user feedback mechanisms. While not algorithmically complex, attention to UX, accessibility, and error states adds to the implementation effort."
+      "expansionPrompt": "Outline the steps to implement robust CSV parsing, including: configuring the parser, reading files, mapping data to models, cleaning and validating data, handling edge cases, and logging results.",
+      "reasoning": "Parsing and transforming CSV data is error-prone, especially with edge cases like missing fields and data inconsistencies. Proper validation and logging are crucial for reliable migration."
     },
     {
       "taskId": 5,
-      "taskTitle": "Implement Client Invitation Backend (tRPC Procedure)",
+      "taskTitle": "Implement Prisma database seeding",
       "complexityScore": 8,
-      "recommendedSubtasks": 7,
-      "expansionPrompt": "Break down the implementation of a secure tRPC mutation for inviting client contacts, including RBAC checks, user and contact record management, token generation and storage, email sending, transaction handling, and response formatting.",
-      "reasoning": "This backend task involves multiple moving parts: security checks, database operations, transactional integrity, token management, and integration with the email utility. Ensuring atomicity and robust error handling makes it complex."
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Enumerate the steps to extend the migration script for database seeding, including: initializing Prisma Client, handling transactions and relationships, implementing error handling and rollback, supporting dry runs, and ensuring idempotency.",
+      "reasoning": "Database seeding with transactional integrity, relationship handling, and idempotency is complex. Error handling and rollback add further challenges, especially when integrating with Supabase."
     },
     {
       "taskId": 6,
-      "taskTitle": "Implement Client Invitation Frontend UI",
-      "complexityScore": 5,
+      "taskTitle": "Configure CI environment for Supabase",
+      "complexityScore": 6,
       "recommendedSubtasks": 5,
-      "expansionPrompt": "Outline the steps to add an 'Invite to Portal' button on the client detail page, handle API calls, manage UI states, display notifications, and update the UI based on invitation status.",
-      "reasoning": "This task is primarily UI-focused with some API integration. The complexity is moderate, mainly due to state management, feedback messaging, and ensuring the UI accurately reflects backend changes."
+      "expansionPrompt": "Break down the steps to configure the CI environment for Supabase, including: setting environment variables, updating configuration files, documenting requirements, validating connections, and managing secrets.",
+      "reasoning": "CI configuration involves multiple systems (CI, Supabase, environment management), and mistakes can expose secrets or break deployments. Documentation and validation are important for reliability."
     },
     {
       "taskId": 7,
-      "taskTitle": "Create Account Activation Backend Procedure",
-      "complexityScore": 7,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "List the steps to implement a tRPC mutation for account activation, including token validation, user record updates, token invalidation, transaction handling, response formatting, and logging.",
-      "reasoning": "This backend task requires secure token validation, atomic updates, and careful error handling. Ensuring security and consistency in account activation flows adds to the complexity."
+      "taskTitle": "Implement navigation between routes",
+      "complexityScore": 4,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "List the steps to add basic navigation between placeholder pages, including: creating navigation components, integrating them into layouts, using Next.js Link, and indicating the active route.",
+      "reasoning": "This is a straightforward UI task with minimal complexity, mainly requiring knowledge of Next.js navigation and layout integration."
     },
     {
       "taskId": 8,
-      "taskTitle": "Implement Account Activation Page",
-      "complexityScore": 6,
+      "taskTitle": "Create documentation and verification guide",
+      "complexityScore": 5,
       "recommendedSubtasks": 5,
-      "expansionPrompt": "Detail the steps to build the account activation page, including route setup, token extraction, mutation call, loading and feedback states, error handling, and UI consistency.",
-      "reasoning": "This task involves frontend logic for handling asynchronous activation flows, user feedback, and error states. While not deeply technical, it requires careful handling of edge cases and user experience considerations."
+      "expansionPrompt": "Describe the steps to create comprehensive documentation and a verification guide, including: documenting folder structure, migration script usage, data verification steps, listing placeholder pages, and outlining next development steps.",
+      "reasoning": "Documentation is essential but not technically complex. The main challenge is ensuring clarity, completeness, and adherence to project conventions."
     }
   ]
 }

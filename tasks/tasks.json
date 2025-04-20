@@ -2,515 +2,510 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Configure Microsoft Graph API Permissions and Environment Variables",
-      "description": "Set up the necessary Microsoft Graph API permissions in Azure AD and configure required environment variables for the application.",
+      "title": "Set up App Router folder structure",
+      "description": "Create the folder structure for the Next.js App Router based on the sitemap, including protected and public route groups.",
       "status": "done",
       "dependencies": [],
       "priority": "high",
-      "details": "1. Access the Azure AD portal and locate the existing App Registration for QAS Portal.\n2. Add the Mail.Send Application Permission to the API permissions.\n3. Request admin consent for the Mail.Send permission.\n4. Verify that AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, and AZURE_AD_TENANT_ID are correctly set in .env file and Vercel environment.\n5. Add EMAIL_FROM environment variable with the value no-reply@qaspecialists.com.au.\n6. Document the permission setup process for future reference.",
-      "testStrategy": "Verify permissions are correctly assigned in Azure AD portal. Confirm all environment variables are accessible in the application by creating a simple test endpoint that logs these values (for development only).",
+      "details": "Create the following folder structure:\n- `src/app/(pages)/(app)` for protected internal pages\n- `src/app/(pages)/(portal)` for client portal pages\n\nWithin the (app) group, create subfolders for routes like `/clients`, `/audits`, etc. Within the (portal) group, create subfolders for routes like `/dashboard`, `/documents`, etc. Use Context7 to resolve library IDs and fetch official documentation for Next.js App Router using `mcp_context7_resolve_library_id` and `mcp_context7_get_library_docs`.",
+      "testStrategy": "Verify the folder structure matches the sitemap. Ensure route groups are correctly set up for protected and public routes. Run `pnpm build` to confirm no routing errors.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Access Azure AD and Locate App Registration",
-          "description": "Navigate to the Azure AD portal and find the existing App Registration for the QAS Portal.",
+          "title": "Analyze Sitemap and Define Route Groups",
+          "description": "Review the provided sitemap to identify all required routes, categorizing them into protected internal pages and client portal pages. Map each route to its appropriate group: (app) for protected internal pages and (portal) for client portal pages.",
           "status": "done",
           "dependencies": [],
-          "details": "Log in to the Azure portal, go to Azure Active Directory > App registrations, and search for the QAS Portal application to ensure you are modifying the correct registration.[5]\n\n<info added on 2025-04-19T08:42:09.481Z>\nTo access the Azure AD portal and locate the App Registration:\n\n1. Navigate to Azure portal at https://portal.azure.com\n2. Sign in with an account that has admin privileges (Global Administrator, Application Administrator, or Cloud Application Administrator role)\n3. In the search bar at the top, type \"Azure Active Directory\" and select it\n4. In the left sidebar, select \"App registrations\"\n5. Use the search field to find \"QAS Portal\" application\n6. Once located, from the overview page, copy these important identifiers:\n   - Application (client) ID: This GUID will be needed for authentication\n   - Directory (tenant) ID: Required for configuring authentication endpoints\n\n7. Click on \"API permissions\" in the left menu to verify existing permissions\n   - Note any Microsoft Graph or other API permissions already granted\n   - Check if admin consent has been provided for these permissions\n\n8. Also review the \"Authentication\" tab to understand current redirect URIs and token configuration\n</info added on 2025-04-19T08:42:09.481Z>"
+          "details": "List all routes from the sitemap. Assign each route to either the (app) or (portal) group based on access requirements. Document the mapping for reference in subsequent steps."
         },
         {
           "id": 2,
-          "title": "Add Mail.Send Application Permission",
-          "description": "Add the Mail.Send application permission to the QAS Portal App Registration in Azure AD.",
+          "title": "Create Base App Router Directory Structure",
+          "description": "Set up the foundational folder structure in the Next.js project under src/app, including the (pages), (app), and (portal) route groups as per Next.js App Router conventions.",
           "status": "done",
           "dependencies": [
             1
           ],
-          "details": "Within the App Registration, select 'API permissions', click 'Add a permission', choose 'Microsoft Graph', select 'Application permissions', and add 'Mail.Send'.[4][2]\n\n<info added on 2025-04-19T08:44:56.116Z>\nAfter adding the Mail.Send permission, you'll need to grant admin consent for this permission:\n\n1. In the API permissions page, look for the newly added Mail.Send permission\n2. Click the \"Grant admin consent for [your directory]\" button at the top of the permissions list\n3. Confirm in the dialog that appears\n\nThis step is crucial because Mail.Send is a high-privilege application permission that requires explicit admin approval before it can be used. Without admin consent, any attempts to send emails will fail with authorization errors.\n\nAfter granting consent, verify the permission status shows as \"Granted for [your tenant name]\" with a green checkmark.\n</info added on 2025-04-19T08:44:56.116Z>"
+          "details": "Within src/app, create a (pages) folder. Inside (pages), create (app) and (portal) folders using parentheses to indicate route groups. This establishes the organizational hierarchy without affecting URL paths.[1][3][4][5]"
         },
         {
           "id": 3,
-          "title": "Request and Grant Admin Consent for Mail.Send",
-          "description": "Request and obtain admin consent for the Mail.Send permission to enable the application to send emails.",
+          "title": "Implement Route Subfolders for Each Group",
+          "description": "Within the (app) and (portal) route groups, create subfolders for each mapped route (e.g., /clients, /audits in (app); /dashboard, /documents in (portal)), following the structure defined in the sitemap.",
           "status": "done",
           "dependencies": [
             2
           ],
-          "details": "Click 'Grant admin consent for [TenantName]' in the API permissions section. If you lack the necessary rights, contact a Global Administrator or Privileged Role Administrator to perform this action.[5]\n\n<info added on 2025-04-19T08:46:45.098Z>\nTo grant admin consent for Mail.Send permission:\n\n1. Navigate to Azure Portal (portal.azure.com)\n2. Go to Azure Active Directory > App registrations > QAS Portal application\n3. Select API permissions from the left menu\n4. Locate the Mail.Send permission under Microsoft Graph\n5. Click the \"Grant admin consent for <Your Tenant Name>\" button at the top of the permissions list\n6. In the confirmation dialog, review the permissions and click \"Yes\"\n7. Verify success by checking that the Mail.Send permission shows \"Status: Granted for <Your Tenant Name>\" with a green checkmark\n8. If consent fails, check the following:\n   - Your account must have Global Administrator or Privileged Role Administrator role\n   - The tenant policy must allow application permission grants\n   - Record any error messages for troubleshooting\n\nNote: Admin consent is a one-time operation that applies tenant-wide. All users in your organization will be affected by this permission grant.\n</info added on 2025-04-19T08:46:45.098Z>"
+          "details": "For each route identified in the sitemap, create a corresponding subfolder inside its assigned group. Ensure folder names match the intended URL segments. For dynamic routes, use square brackets (e.g., [id]) as per Next.js conventions.[1][3][4][5]"
         },
         {
           "id": 4,
-          "title": "Configure and Verify Environment Variables",
-          "description": "Ensure AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, AZURE_AD_TENANT_ID, and EMAIL_FROM are correctly set in both the .env file and Vercel environment.",
+          "title": "Add Required Next.js Route Files",
+          "description": "Populate each route subfolder with the necessary Next.js files (e.g., page.js, layout.js, error.js, loading.js) to enable routing and provide basic scaffolding for each route.",
           "status": "done",
           "dependencies": [
             3
           ],
-          "details": "Update the .env file and Vercel project settings with the correct values for AZURE_AD_CLIENT_ID, AZURE_AD_CLIENT_SECRET, AZURE_AD_TENANT_ID, and set EMAIL_FROM to no-reply@qaspecialists.com.au. Double-check for typos and confirm that the values match those in Azure AD.\n\n<info added on 2025-04-19T08:47:58.538Z>\nTo enhance this subtask, here's the additional information:\n\nFor local development:\n1. Create a `.env.local` file based on `.env.example` if not already present\n2. Set `NEXTAUTH_URL` to `http://localhost:3000` for local development\n3. Generate a secure `NEXTAUTH_SECRET` using `openssl rand -base64 32` or similar method\n4. Ensure all Azure AD credentials are copied exactly from the Azure portal\n\nFor Vercel deployment:\n1. Navigate to Vercel dashboard > Project > Settings > Environment Variables\n2. Set `NEXTAUTH_URL` to your production URL (e.g., `https://your-app.vercel.app`)\n3. Generate a different `NEXTAUTH_SECRET` for production\n4. Use Vercel's \"Preview Environment Variables\" feature to set different values for preview deployments\n\nTesting verification:\n1. Local test: Run `next-auth-cli debug` to verify environment variables are loaded correctly\n2. Check for proper redirection to Microsoft login page\n3. Verify successful authentication flow with Azure AD\n4. Test email functionality by triggering a workflow that sends an email\n\nTroubleshooting:\n1. If authentication fails, check Azure AD app registration for correct redirect URIs\n2. Verify that the app has proper API permissions in Azure\n3. Check Vercel deployment logs for environment variable related errors\n</info added on 2025-04-19T08:47:58.538Z>"
+          "details": "In each subfolder, add a page.js file to make the route accessible. Optionally, add layout.js for custom layouts, error.js for error boundaries, and loading.js for loading states as needed. This ensures each route is properly initialized and follows Next.js best practices.[1][3][5]"
         },
         {
           "id": 5,
-          "title": "Document Permission and Environment Setup",
-          "description": "Create documentation outlining the steps taken to configure Microsoft Graph API permissions and environment variables for future reference.",
+          "title": "Integrate Context7 for Library ID Resolution and Documentation",
+          "description": "Use Context7 to resolve library IDs and fetch official Next.js App Router documentation, ensuring the folder structure and routing setup align with the latest best practices.",
           "status": "done",
           "dependencies": [
             4
           ],
-          "details": "Write a step-by-step guide detailing the permission addition, admin consent process, and environment variable configuration. Store this documentation in the project repository or internal wiki for easy access by future developers.\n\n<info added on 2025-04-19T08:49:03.184Z>\n# Additional Information for Documentation Task\n\n## Document Structure\nCreate a `docs/graph-api-setup.md` file with the following sections:\n\n1. **Prerequisites**\n   - Azure AD administrator account requirements\n   - Node.js and npm version requirements\n   - Required Azure subscription details\n\n2. **Azure AD App Registration**\n   - Step-by-step screenshots for navigating Azure Portal\n   - Creating the app registration with proper redirect URIs\n   - Configuring authentication settings (single vs multi-tenant)\n   - Generating client secrets with appropriate expiration policies\n\n3. **Microsoft Graph API Permissions**\n   - Detailed explanation of Mail.Send permission scope and its implications\n   - Comparison with alternative permission scopes (Mail.ReadWrite, etc.)\n   - Admin consent workflow with screenshots\n   - Verification steps to confirm permissions are properly granted\n\n4. **Environment Variables**\n   - Complete list with descriptions:\n     ```\n     AZURE_AD_TENANT_ID=\"your-tenant-id\"\n     AZURE_AD_CLIENT_ID=\"your-client-id\"\n     AZURE_AD_CLIENT_SECRET=\"your-client-secret\"\n     GRAPH_API_ENDPOINT=\"https://graph.microsoft.com/v1.0\"\n     EMAIL_SENDER=\"sender@yourdomain.com\"\n     ```\n   - Instructions for both `.env` local setup and Vercel environment configuration\n   - Security best practices for handling secrets\n\n5. **Testing the Configuration**\n   - Simple code snippet to verify connectivity:\n     ```javascript\n     const { Client } = require('@microsoft/microsoft-graph-client');\n     require('isomorphic-fetch');\n     \n     async function testGraphConnection() {\n       // Authentication and connection test code\n       // ...\n     }\n     ```\n   - Expected responses and error handling\n\n6. **Troubleshooting Guide**\n   - Common permission errors and their solutions\n   - Token acquisition failures and debugging steps\n   - Environment variable loading issues\n\n7. **Security Considerations**\n   - Least privilege principles\n   - Token handling best practices\n   - Periodic secret rotation procedures\n\nInclude a version history section at the bottom to track document updates.\n</info added on 2025-04-19T08:49:03.184Z>"
+          "details": "Invoke Context7's mcp_context7_resolve_library_id and mcp_context7_get_library_docs to retrieve up-to-date documentation and confirm that the implemented structure adheres to official Next.js guidelines. Adjust the structure if any discrepancies are found."
         }
       ]
     },
     {
       "id": 2,
-      "title": "Implement Microsoft Graph API Email Sending Utility",
-      "description": "Create a reusable server-side utility function to send emails via Microsoft Graph API using application permissions.",
-      "status": "done",
+      "title": "Create placeholder page components",
+      "description": "Develop minimal page.tsx components for each route with headings and 'coming soon' messages.",
+      "status": "in-progress",
       "dependencies": [
         1
       ],
       "priority": "high",
-      "details": "1. Create a new file at src/server/utils/msGraphEmail.ts.\n2. Install required dependencies: @azure/msal-node and @microsoft/microsoft-graph-client.\n3. Implement a function that acquires a Graph API token using client credentials flow.\n4. Create the main sendEmail function that accepts recipient email, subject, and HTML body parameters.\n5. Use the acquired token to call the Graph API /users/{EMAIL_FROM}/sendMail endpoint.\n6. Implement comprehensive error handling for token acquisition and API call failures.\n7. Add logging for debugging purposes.\n8. Create a simple test function to verify email sending works correctly.",
-      "testStrategy": "Create a test script that calls the utility with test parameters. Verify email delivery to a test account. Check error handling by testing with invalid parameters and ensuring errors are properly caught and logged.",
+      "details": "For each route in the sitemap, create a `page.tsx` file with:\n- A heading that matches the route name\n- A 'Coming Soon' message describing the planned feature\n- Apply `ProtectedAppLayout` for routes in the (app) group\n- Use default layout for routes in the (portal) group\n\nFollow Cursor rules in `.cursor/rules` for templates, naming conventions, and best practices. Ensure TypeScript typing is properly implemented.",
+      "testStrategy": "Navigate to each route in the development environment to verify the placeholder content renders correctly. Check that layouts are applied properly for both protected and public routes.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Utility File and Install Dependencies",
+          "title": "Analyze Sitemap and Define Route Structure",
+          "description": "Review the sitemap to identify all routes that require a placeholder page component. Categorize each route as belonging to either the (app) or (portal) group to determine the appropriate layout.",
           "status": "done",
           "dependencies": [],
-          "details": "Create a new file at src/server/utils/msGraphEmail.ts. Install @azure/msal-node and @microsoft/microsoft-graph-client using your package manager. Ensure these dependencies are listed in your package.json."
+          "details": "Extract all route paths from the sitemap. For each route, record its group ((app) or (portal)) and intended feature. Prepare a checklist to ensure every route will receive a placeholder component.\n\n<info added on 2025-04-20T10:05:43.249Z>\nBased on the extracted route paths, here's a structured categorization:\n\n**App Group Routes (`/src/app/(app)/`):**\n- `/dashboard` - Main user dashboard\n- `/tasks` - Task management interface\n- `/invoices` - Invoice creation and management\n- `/clients` - Client database and relationship management\n- `/audits` - System audit logs and activity tracking\n- `/settings` - Application configuration\n- `/profile` - User profile management\n- `/phone` - Communication tools\n- `/files` - Document and file storage\n- `/chat` - Messaging interface\n- `/calendar` - Scheduling and calendar view\n\n**Portal Group Routes (`/src/app/(portal)/`):**\n- `/dashboard` - Client-facing dashboard\n- `/billing` - Payment and subscription management\n- `/profile` - Client profile settings\n- `/documents` - Document sharing and access\n\nImplementation note: Each route will need a corresponding page.tsx file with a placeholder component that includes the route name and group for easy identification during development. Consider implementing a consistent naming convention like `[GroupName][RouteName]Page` (e.g., `AppDashboardPage`, `PortalBillingPage`).\n</info added on 2025-04-20T10:05:43.249Z>"
         },
         {
           "id": 2,
-          "title": "Implement Token Acquisition with Client Credentials Flow",
+          "title": "Set Up Placeholder Component Templates with TypeScript Typing",
+          "description": "Create reusable TypeScript templates for placeholder page components, ensuring compliance with .cursor/rules for structure, naming, and best practices.",
           "status": "done",
           "dependencies": [
             1
           ],
-          "details": "Use @azure/msal-node to implement a function that authenticates with Azure AD using tenant ID, client ID, and client secret, and retrieves an access token for the Graph API. Ensure the function handles token caching and expiration."
+          "details": "Define a minimal functional component template in TypeScript, including a heading (matching the route name) and a 'Coming Soon' message describing the planned feature. Prepare two variants: one using ProtectedAppLayout for (app) group routes, and one using the default layout for (portal) group routes. Ensure all components are properly typed.\n\n<info added on 2025-04-20T10:09:33.365Z>\nHere's additional implementation information for the placeholder component templates:\n\n```typescript\n// Implementation details for AppPlaceholderPageTemplate.tsx\ninterface AppPlaceholderProps {\n  heading: string;\n  message?: string;\n  children?: React.ReactNode;\n}\n\n// Example implementation:\nexport const AppPlaceholderPageTemplate: React.FC<AppPlaceholderProps> = ({\n  heading,\n  message = \"Coming Soon\",\n  children\n}) => (\n  <ProtectedAppLayout>\n    <div className=\"placeholder-container\">\n      <h1 className=\"text-2xl font-semibold mb-4\">{heading}</h1>\n      <p className=\"text-gray-600 mb-6\">{message}</p>\n      {children}\n    </div>\n  </ProtectedAppLayout>\n);\n```\n\n```typescript\n// Implementation details for PortalPlaceholderPageTemplate.tsx\ninterface PortalPlaceholderProps {\n  heading: string;\n  message?: string;\n  children?: React.ReactNode;\n}\n\n// Example implementation:\nexport const PortalPlaceholderPageTemplate: React.FC<PortalPlaceholderProps> = ({\n  heading,\n  message = \"Coming Soon\",\n  children\n}) => (\n  <div className=\"placeholder-container\">\n    <h1 className=\"text-2xl font-semibold mb-4\">{heading}</h1>\n    <p className=\"text-gray-600 mb-6\">{message}</p>\n    {children}\n  </div>\n);\n```\n\nUsage example in route files:\n```typescript\n// For app routes: app/dashboard/page.tsx\nexport default function DashboardPage() {\n  return (\n    <AppPlaceholderPageTemplate \n      heading=\"Dashboard\" \n      message=\"Your personalized dashboard is coming soon\"\n    />\n  );\n}\n\n// For portal routes: portal/login/page.tsx\nexport default function LoginPage() {\n  return (\n    <PortalPlaceholderPageTemplate \n      heading=\"Login\" \n      message=\"Secure authentication portal coming soon\"\n    />\n  );\n}\n```\n\nConsider adding optional props for customization like `className` for styling overrides and `icon` for feature-specific visual indicators. Export both components from an index.ts file for cleaner imports.\n</info added on 2025-04-20T10:09:33.365Z>"
         },
         {
           "id": 3,
-          "title": "Develop sendEmail Function Interface and Input Validation",
-          "description": "Define the main sendEmail function, specifying parameters for recipient email, subject, and HTML body, and validate inputs.",
+          "title": "Generate page.tsx Files for Each Route",
+          "description": "For each route identified, create a page.tsx file using the appropriate template. Ensure the heading and 'Coming Soon' message are specific to the route's planned feature.",
           "status": "done",
           "dependencies": [
             2
           ],
-          "details": "Create the sendEmail function signature in msGraphEmail.ts. Validate that recipient email, subject, and HTML body are provided and correctly formatted. Prepare the function to accept these parameters for further processing."
+          "details": "In the directory for each route, add a page.tsx file. Use the correct template based on the route group. Set the heading to match the route name and customize the 'Coming Soon' message to briefly describe the planned feature. Follow naming conventions and directory structure as specified in .cursor/rules."
         },
         {
           "id": 4,
-          "title": "Integrate Graph API Call to Send Email",
-          "description": "Use the acquired token to call the Microsoft Graph /users/{EMAIL_FROM}/sendMail endpoint and send the email.",
-          "status": "done",
+          "title": "Review, Refactor, and Validate Placeholder Components",
+          "description": "Check all created page.tsx files for consistency, adherence to .cursor/rules, and correct TypeScript usage. Refactor as needed and validate that each component renders with the correct layout and content.",
+          "status": "in-progress",
           "dependencies": [
             3
           ],
-          "details": "Leverage @microsoft/microsoft-graph-client to construct and send a POST request to /users/{EMAIL_FROM}/sendMail. Use the access token from the token acquisition function. Build the email message payload according to Graph API requirements, supporting HTML content and recipient details[2][5]."
-        },
-        {
-          "id": 5,
-          "title": "Implement Robust Error Handling and Logging",
-          "description": "Add comprehensive error handling for both token acquisition and API call failures, and implement logging for debugging.",
-          "status": "done",
-          "dependencies": [
-            4
-          ],
-          "details": "Wrap token acquisition and API call logic in try/catch blocks. Log errors and relevant debug information (such as request/response status and error messages) using your server's logging framework. Ensure sensitive information is not logged."
-        },
-        {
-          "id": 6,
-          "title": "Create and Run Test Function for Email Sending",
-          "description": "Develop a simple test function to verify that the sendEmail utility works as expected.",
-          "status": "done",
-          "dependencies": [
-            5
-          ],
-          "details": "Implement a test script or function that calls sendEmail with test parameters. Run the test to confirm successful email delivery and validate error handling and logging behavior."
+          "details": "Perform a code review to ensure all placeholder components follow the established templates, naming conventions, and TypeScript typing. Test rendering for both (app) and (portal) group routes to confirm correct layout usage and content display. Address any inconsistencies or errors."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Configure NextAuth.js Email Provider with Custom sendVerificationRequest",
-      "description": "Add the Email Provider to NextAuth.js configuration and implement a custom sendVerificationRequest function that uses the Graph API email utility.",
-      "status": "done",
-      "dependencies": [
-        2
-      ],
+      "title": "Define Prisma schema for client data",
+      "description": "Create or update the Prisma schema to support client data migration from CSV.",
+      "status": "pending",
+      "dependencies": [],
       "priority": "high",
-      "details": "1. Update src/server/auth.ts to add EmailProvider to the providers array.\n2. Implement the custom sendVerificationRequest function that:\n   - Receives identifier (email) and url (magic link) from NextAuth\n   - Constructs an appropriate email subject and HTML body with the magic link\n   - Calls the Graph API email utility to send the email\n3. Configure appropriate token expiration time (e.g., 24 hours).\n4. Ensure the Prisma Adapter configuration correctly handles user creation and lookup for the Email provider flow.\n5. Add proper error handling and logging within the sendVerificationRequest function.",
-      "testStrategy": "Test the authentication flow by attempting to sign in with a test email. Verify the magic link email is sent via Graph API. Confirm the email contains the correct magic link. Test error scenarios such as invalid email formats or Graph API failures.",
+      "details": "Update `schema.prisma` to include models for:\n- Clients (name, address, status, etc.)\n- Contacts (name, email, phone, client relationship)\n- Licenses (type, number, expiration date, client relationship)\n- Trust accounts (account number, balance, client relationship)\n- Audits (initial placeholder for future development)\n\nEnsure proper relationships between models. Use Context7 to fetch official Prisma documentation for schema design best practices.",
+      "testStrategy": "Run `npx prisma validate` to verify schema correctness. Generate and apply migrations to the development Supabase instance with `npx prisma migrate dev`. Verify tables are created correctly in Supabase.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Add Email Provider to NextAuth.js Configuration",
-          "description": "Integrate the Email Provider into the NextAuth.js providers array in src/server/auth.ts, preparing for custom email handling.",
-          "status": "done",
+          "title": "Analyze and Document Client Data Requirements",
+          "description": "Review the CSV migration requirements and document all necessary fields and relationships for Clients, Contacts, Licenses, Trust Accounts, and Audits.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Import EmailProvider from 'next-auth/providers/email' and add it to the providers array in your NextAuth.js configuration. Set up the provider with placeholders for server and from settings, and prepare to inject a custom sendVerificationRequest function. Ensure environment variables for email server configuration are present as required by NextAuth.js.[1][3]"
+          "details": "List all fields for each model (e.g., Clients: name, address, status; Contacts: name, email, phone, clientId, etc.). Identify required data types, constraints, and how each entity relates to others (e.g., one-to-many between Clients and Contacts). Ensure the schema will support all data needed for migration and future extensibility."
         },
         {
           "id": 2,
-          "title": "Implement Custom sendVerificationRequest Function",
-          "description": "Create a custom sendVerificationRequest function that formats the verification email and sends it using the Graph API email utility.",
-          "status": "done",
+          "title": "Design Prisma Models and Relationships",
+          "description": "Draft the Prisma models for Clients, Contacts, Licenses, Trust Accounts, and Audits, specifying all fields and defining relationships according to best practices.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Define a function that receives identifier (email), url (magic link), and provider details. Construct a subject and HTML body containing the magic link. Use the Graph API email utility to send the email. Replace the default sendVerificationRequest in the EmailProvider configuration with this custom function.[1][4]"
+          "details": "Use singular, PascalCase model names and camelCase field names for clarity and convention compliance[4]. Define one-to-many and one-to-one relationships as appropriate (e.g., a Client has many Contacts, Licenses, and Trust Accounts). Include placeholder fields for the Audits model for future development. Reference official Prisma documentation for relationship syntax and best practices[2][4]."
         },
         {
           "id": 3,
-          "title": "Configure Token Expiration for Magic Link",
-          "description": "Set the magic link token expiration time to 24 hours in the Email Provider configuration.",
-          "status": "done",
-          "dependencies": [
-            1
-          ],
-          "details": "In the EmailProvider configuration object, set the maxAge property to 60 * 60 * 24 (seconds in 24 hours) to ensure the magic link expires after one day. This aligns with security best practices for email-based authentication.[4]"
-        },
-        {
-          "id": 4,
-          "title": "Ensure Prisma Adapter Handles Email Provider Flow",
-          "description": "Verify and update the Prisma Adapter configuration to support user creation and lookup for email-based authentication.",
-          "status": "done",
-          "dependencies": [
-            1
-          ],
-          "details": "Check that the Prisma Adapter is correctly set up in NextAuth.js. Ensure that user creation and lookup logic works seamlessly with the Email Provider, handling cases where users sign in with email for the first time or return for subsequent logins.[2][3][4]"
-        },
-        {
-          "id": 5,
-          "title": "Add Error Handling and Logging to sendVerificationRequest",
-          "description": "Enhance the custom sendVerificationRequest function with robust error handling and logging for observability and debugging.",
-          "status": "done",
+          "title": "Implement and Annotate schema.prisma File",
+          "description": "Update or create the `schema.prisma` file with the defined models, fields, and relationships, including comments for clarity and maintainability.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Within the custom sendVerificationRequest function, implement try/catch blocks to handle errors from the Graph API email utility. Log relevant information for both successful and failed email sends, using your application's preferred logging solution. Ensure that errors are surfaced appropriately to aid in debugging and monitoring.[1][4]"
+          "details": "Translate the model designs into Prisma Schema Language, ensuring all relationships and field types are correctly specified[2][3]. Add comments to explain model purposes, relationships, and any placeholder fields. Use environment variables for data source configuration if needed[2]."
+        },
+        {
+          "id": 4,
+          "title": "Validate Schema and Generate Migration",
+          "description": "Run Prisma validation tools and generate a migration to ensure the schema is syntactically correct and ready for database application.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Use `prisma validate` to check for schema errors and `prisma migrate dev` to generate and apply the migration to a development database[2][3]. Address any validation or migration issues, ensuring all relationships and constraints are enforced as intended."
+        },
+        {
+          "id": 5,
+          "title": "Review Schema for Best Practices and Future Extensibility",
+          "description": "Perform a final review of the schema for naming conventions, indexing, and extensibility, making adjustments as needed for maintainability and performance.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Check that model and field names follow Prisma and JavaScript conventions[4]. Ensure indexes are added to frequently queried fields and foreign keys for performance[4][5]. Confirm that placeholder models (e.g., Audits) are clearly marked for future development. Document any design decisions or areas for future improvement."
         }
       ]
     },
     {
       "id": 4,
-      "title": "Update Sign In Page UI for Client Login",
-      "description": "Modify the existing Sign In page to include a distinct section for client login with email input and magic link submission.",
-      "status": "done",
+      "title": "Implement CSV parsing functionality",
+      "description": "Develop the CSV parsing portion of the migration script to read and transform client data.",
+      "status": "pending",
       "dependencies": [
         3
       ],
       "priority": "medium",
-      "details": "1. Update the /signin page to add a separate section for client login.\n2. Implement an email input field and 'Send Login Link' button.\n3. Use react-hook-form for form validation and submission.\n4. Create a submit handler that calls signIn('email', { email: enteredEmail, redirect: false }).\n5. Add loading states during form submission.\n6. Implement success feedback message ('Check your email for a magic link').\n7. Add error handling for failed signIn attempts.\n8. Clearly differentiate between Team Member (Microsoft 365) and Client (Email) login methods with appropriate headings and descriptions.\n9. Ensure the UI is responsive and accessible.",
-      "testStrategy": "Test the UI in various screen sizes to ensure responsiveness. Verify form validation works correctly for invalid email formats. Test the submission flow and confirm appropriate loading states and success/error messages are displayed. Conduct accessibility testing to ensure the form is usable by all users.",
+      "details": "Create `scripts/migrateClients.ts` with:\n- Import and configure `csv-parse` library (use Context7 to resolve library ID)\n- Read the CSV file from `data/clients.csv`\n- Parse CSV headers and rows\n- Transform data into structured objects matching Prisma models\n- Implement data cleaning and validation\n- Log parsing results and any validation issues\n\nHandle edge cases like missing fields, data type conversions, and special characters.",
+      "testStrategy": "Create a test CSV with sample data. Run the script with `--dry-run` flag to verify parsing without database insertion. Check console output for correct data transformation and validation messages.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Redesign Sign In Page Layout for Dual Login Methods",
-          "description": "Update the /signin page layout to clearly separate Team Member (Microsoft 365) and Client (Email) login methods, using distinct headings and descriptions for each.",
-          "status": "done",
+          "title": "Set Up CSV Parsing Environment",
+          "description": "Initialize the migration script and configure the CSV parsing library.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Refactor the page structure to visually differentiate the two login options. Use clear section headings, concise descriptions, and appropriate spacing to guide users. Ensure the design follows best practices for clarity and visual hierarchy[4]."
+          "details": "Create the file `scripts/migrateClients.ts`. Import and configure the `csv-parse` library (resolve the correct package using Context7). Ensure all necessary dependencies are installed and the script is ready to handle CSV input streams.[3]"
         },
         {
           "id": 2,
-          "title": "Implement Client Login Section with Email Input and Button",
-          "description": "Add a new section for client login that includes an email input field and a 'Send Login Link' button.",
-          "status": "done",
+          "title": "Implement CSV File Reading",
+          "description": "Read the client data CSV file as a stream for efficient processing.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Create a form within the client login section containing an accessible email input and a button labeled 'Send Login Link'. Ensure the form is visually distinct from the Team Member login and follows accessibility guidelines[4]."
+          "details": "Use Node.js file system APIs to read `data/clients.csv` as a readable stream. Prepare the stream to be piped into the CSV parser for further processing.[3][5]"
         },
         {
           "id": 3,
-          "title": "Integrate react-hook-form for Form Validation and Submission",
-          "description": "Set up react-hook-form to manage the client login form, including validation for the email field and handling form submission.",
-          "status": "done",
+          "title": "Parse CSV Headers and Rows",
+          "description": "Parse the CSV file to extract headers and rows, handling special characters and delimiters.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Configure react-hook-form to validate the email input (e.g., required, valid email format). On submit, trigger a handler function for authentication. Display inline validation errors as needed."
+          "details": "Configure the parser to correctly interpret headers, delimiters, and escape characters. Ensure that each row is parsed into a JavaScript object with keys matching the CSV headers.[3][5]"
         },
         {
           "id": 4,
-          "title": "Implement Magic Link Submission Handler",
-          "description": "Create a submit handler that calls signIn('email', { email: enteredEmail, redirect: false }) when the form is submitted.",
-          "status": "done",
+          "title": "Transform Parsed Data to Prisma Model Structure",
+          "description": "Map and convert parsed CSV data into objects that match the Prisma client model schema.",
+          "status": "pending",
           "dependencies": [
             3
           ],
-          "details": "In the form submit handler, use the signIn function to initiate the magic link flow. Pass the entered email and set redirect to false. Handle the promise response to determine success or failure."
+          "details": "For each parsed row, transform the data fields to match the Prisma model structure. Handle data type conversions (e.g., strings to numbers or dates) and prepare objects for later migration steps."
         },
         {
           "id": 5,
-          "title": "Add Loading, Success, and Error Feedback States",
-          "description": "Enhance the client login form with loading indicators during submission, a success message on completion, and error feedback for failed attempts.",
-          "status": "done",
+          "title": "Implement Data Cleaning and Validation",
+          "description": "Clean and validate the transformed data, addressing missing fields, type mismatches, and inconsistencies.",
+          "status": "pending",
           "dependencies": [
             4
           ],
-          "details": "Show a loading spinner or disable the button during submission. On success, display a message like 'Check your email for a magic link.' On error, show a clear error message. Ensure feedback is accessible and visually prominent[4]."
+          "details": "Check each object for required fields, correct data types, and valid values. Apply cleaning rules (e.g., trimming whitespace, normalizing formats) and flag or correct invalid or missing data. Prepare a mechanism to collect validation issues for logging."
         },
         {
           "id": 6,
-          "title": "Ensure Responsiveness and Accessibility of the Updated UI",
-          "description": "Test and refine the updated Sign In page to ensure it is fully responsive across devices and meets accessibility standards.",
-          "status": "done",
+          "title": "Log Parsing Results and Validation Issues",
+          "description": "Log the results of the parsing and validation process, including any errors or warnings.",
+          "status": "pending",
           "dependencies": [
             5
           ],
-          "details": "Use responsive design techniques to ensure the layout adapts to different screen sizes. Verify keyboard navigation, screen reader compatibility, and color contrast. Make adjustments as needed to meet accessibility guidelines[4]."
+          "details": "Implement structured logging to record the number of successfully parsed records, details of any validation issues, and summaries of data anomalies. Ensure logs are clear and actionable for further migration steps."
         }
       ]
     },
     {
       "id": 5,
-      "title": "Implement Client Invitation Backend (tRPC Procedure)",
-      "description": "Create a tRPC mutation procedure for admins to invite client contacts to the portal, which creates user records and sends invitation emails.",
-      "status": "done",
+      "title": "Implement Prisma database seeding",
+      "description": "Complete the migration script by adding Prisma Client integration to insert parsed data into Supabase.",
+      "status": "pending",
       "dependencies": [
-        2
+        3,
+        4
       ],
-      "priority": "high",
-      "details": "1. Create a new tRPC mutation procedure user.inviteClientContact that accepts contactId as input.\n2. Implement RBAC check to ensure only Admins can call this procedure.\n3. Fetch the contact record and validate eligibility (email exists, not already active).\n4. Create a User record with Client role and update the Contact record (set canLoginToPortal=true and link portalUserId).\n5. Generate a secure activation token and store it in the VerificationToken table with an expiry date.\n6. Construct an invitation email with subject and body containing the activation link (/complete-setup?token=xyz).\n7. Call the Graph API email utility to send the invitation.\n8. Return appropriate success or error responses.\n9. Add transaction handling to ensure database operations are atomic.",
-      "testStrategy": "Create unit tests for the tRPC procedure with various scenarios: valid contact, already active contact, non-existent contact. Test RBAC by attempting to call the procedure with non-admin users. Verify database records are correctly created/updated. Confirm invitation emails are sent with the correct activation link.",
+      "priority": "medium",
+      "details": "Extend `scripts/migrateClients.ts` to:\n- Initialize Prisma Client with proper environment variables for Supabase connection\n- Create transaction-wrapped database operations for inserting clients, contacts, licenses, and trust accounts\n- Handle relationships between entities correctly\n- Implement error handling and rollback for failed transactions\n- Add command-line options for dry run, verbose logging, and environment selection\n\nEnsure the script can be run multiple times without creating duplicates (upsert where appropriate).",
+      "testStrategy": "Run the complete migration script against the development Supabase instance. Verify data appears correctly in Supabase Table Editor. Test error scenarios by introducing invalid data and checking rollback functionality.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create tRPC mutation procedure with RBAC and validation",
-          "description": "Implement the basic structure of the tRPC mutation procedure with admin-only access control and contact validation logic",
+          "title": "Initialize Prisma Client with Supabase Environment Variables",
+          "description": "Set up Prisma Client in the migration script to connect to the Supabase database using environment variables.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a new tRPC mutation procedure `user.inviteClientContact` in the appropriate router file\n2. Define the input schema using Zod to validate the contactId parameter\n3. Implement RBAC check using the existing authorization middleware to ensure only users with Admin role can call this procedure\n4. Fetch the contact record from the database using Prisma\n5. Validate that the contact has an email address and is not already an active portal user\n6. Add error handling for cases where contact doesn't exist, lacks email, or is already a portal user\n7. Test the procedure with both valid admin and non-admin users to verify RBAC works correctly\n8. Test with valid and invalid contact IDs to ensure validation logic works\n\n<info added on 2025-04-20T03:52:15.252Z>\n## Implementation Details\n\nFor the tRPC mutation procedure:\n\n```typescript\n// src/server/api/routers/user.ts\nimport { z } from \"zod\";\nimport { TRPCError } from \"@trpc/server\";\nimport { createTRPCRouter, protectedProcedure } from \"~/server/api/trpc\";\nimport { UserRole } from \"@prisma/client\"; // Import the enum for type safety\n\nexport const userRouter = createTRPCRouter({\n  inviteClientContact: protectedProcedure\n    .input(z.object({ \n      contactId: z.string().uuid(), // Ensure it's a valid UUID format\n      message: z.string().optional(), // Optional custom message\n    }))\n    .mutation(async ({ input, ctx }) => {\n      // RBAC check\n      if (ctx.session.user.role !== UserRole.ADMIN) {\n        throw new TRPCError({\n          code: \"FORBIDDEN\",\n          message: \"Only administrators can invite client contacts\",\n        });\n      }\n\n      // Fetch contact with related client for context\n      const contact = await ctx.prisma.contact.findUnique({\n        where: { id: input.contactId },\n        include: { client: true }\n      });\n\n      // Validation checks\n      if (!contact) {\n        throw new TRPCError({\n          code: \"NOT_FOUND\",\n          message: \"Contact not found\",\n        });\n      }\n\n      if (!contact.email) {\n        throw new TRPCError({\n          code: \"BAD_REQUEST\",\n          message: \"Contact must have an email address to be invited\",\n        });\n      }\n\n      if (contact.isPortalUser) {\n        throw new TRPCError({\n          code: \"CONFLICT\",\n          message: \"Contact is already a portal user\",\n        });\n      }\n\n      // Return success for now - actual invitation logic will be implemented in subsequent tasks\n      return {\n        success: true,\n        contact: {\n          id: contact.id,\n          email: contact.email,\n          name: `${contact.firstName} ${contact.lastName}`,\n          clientId: contact.clientId,\n          clientName: contact.client?.name\n        }\n      };\n    }),\n});\n```\n\nDon't forget to update the root.ts file:\n\n```typescript\n// In src/server/api/root.ts\nimport { userRouter } from \"~/server/api/routers/user\";\n\nexport const appRouter = createTRPCRouter({\n  // existing routers...\n  user: userRouter,\n});\n```\n</info added on 2025-04-20T03:52:15.252Z>",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Update `scripts/migrateClients.ts` to import and initialize Prisma Client. Ensure the script loads environment variables (e.g., using dotenv) for Supabase connection details. Validate that the connection is successful before proceeding with any operations.[3][4]"
         },
         {
           "id": 2,
-          "title": "Implement user creation and token generation with transaction handling",
-          "description": "Create the user record, update the contact record, and generate a secure activation token within a database transaction",
+          "title": "Parse and Structure Input Data for Seeding",
+          "description": "Parse the source data and structure it into objects representing clients, contacts, licenses, and trust accounts, ready for database insertion.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Set up a Prisma transaction to ensure all database operations are atomic\n2. Within the transaction, create a new User record with Client role, setting appropriate initial values (active=false)\n3. Update the Contact record to set canLoginToPortal=true and link the portalUserId to the newly created user\n4. Generate a cryptographically secure random token (use crypto library)\n5. Store the token in the VerificationToken table with an appropriate expiry date (e.g., 7 days from now)\n6. Link the token to the newly created user\n7. Handle potential database errors and roll back the transaction if any step fails\n8. Test the transaction with valid inputs to ensure all records are created correctly\n9. Test error scenarios to verify transaction rollback works properly",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Implement or update parsing logic to transform raw input (e.g., JSON, CSV) into structured JavaScript objects. Organize data to reflect entity relationships (e.g., clients with nested contacts and licenses). Ensure data integrity and readiness for transactional insertion."
         },
         {
           "id": 3,
-          "title": "Implement email sending and response formatting",
-          "description": "Construct and send the invitation email using Graph API and format the procedure's response",
+          "title": "Implement Transactional Upsert Operations with Relationship Handling",
+          "description": "Create transaction-wrapped upsert operations to insert or update clients, contacts, licenses, and trust accounts, maintaining correct relationships and ensuring idempotency.",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "1. Construct the activation URL with the generated token (e.g., `/complete-setup?token=xyz`)\n2. Create an email template for the invitation with appropriate subject line and body text\n3. Include the activation link in the email body with clear instructions for the recipient\n4. Call the existing Graph API email utility to send the invitation to the contact's email address\n5. Implement error handling for email sending failures\n6. Format the procedure's response to include appropriate success or error messages\n7. Return relevant data on success (e.g., the invited user's ID, email sent status)\n8. Test the email sending functionality with real email addresses (in development environment)\n9. Verify that the email contains the correct activation link and instructions\n10. Test error handling by simulating email sending failures",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Use Prisma's transaction API to group all related inserts/updates in a single transaction. Use upsert operations to avoid duplicates, matching on unique fields. Correctly link related entities (e.g., connect contacts to clients). Roll back the transaction if any operation fails to maintain data consistency.[1][5]"
+        },
+        {
+          "id": 4,
+          "title": "Implement Error Handling and Transaction Rollback",
+          "description": "Add robust error handling to catch and log errors during the seeding process, ensuring transactions are rolled back on failure.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Wrap the main seeding logic in try/catch blocks. On error, ensure Prisma disconnects and the transaction is rolled back. Log detailed error messages for debugging. Exit the process with a non-zero code on failure.[5]"
+        },
+        {
+          "id": 5,
+          "title": "Add Command-Line Options for Dry Run, Verbose Logging, and Environment Selection",
+          "description": "Enhance the script to accept command-line arguments for dry run mode, verbose logging, and selecting the environment (e.g., development, staging, production).",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Use a library like yargs or commander to parse CLI arguments. Implement dry run mode to simulate operations without writing to the database. Add verbose logging for detailed output. Allow specifying the environment to load the correct configuration."
+        },
+        {
+          "id": 6,
+          "title": "Test Idempotency and Multiple Runs",
+          "description": "Verify that the script can be run multiple times without creating duplicate records, ensuring upsert logic and relationships work as intended.",
+          "status": "pending",
+          "dependencies": [
+            5
+          ],
+          "details": "Run the script repeatedly against a test Supabase database. Confirm that no duplicates are created and relationships remain correct. Adjust upsert logic or unique constraints as needed to guarantee idempotency.[1][5]"
         }
       ]
     },
     {
       "id": 6,
-      "title": "Implement Client Invitation Frontend UI",
-      "description": "Add an 'Invite to Portal' button on the Client Detail page that triggers the invitation process for eligible contacts.",
-      "status": "in-progress",
+      "title": "Configure CI environment for Supabase",
+      "description": "Set up environment variables and configuration for the CI environment to connect to the Development Supabase instance.",
+      "status": "pending",
       "dependencies": [
         5
       ],
       "priority": "medium",
-      "details": "1. Locate the Client Detail page component.\n2. Add an 'Invite to Portal' button for contacts that have an email and are not already portal users.\n3. Implement a click handler that calls the user.inviteClientContact mutation with the contact ID.\n4. Add loading state to the button during the API call.\n5. Display success toast/notification when invitation is sent successfully.\n6. Show appropriate error messages for failed invitations.\n7. Optionally, add confirmation dialog before sending invitation.\n8. Update the UI to reflect the new portal access status after successful invitation.",
-      "testStrategy": "Test the button visibility logic for different contact states. Verify the invitation flow works end-to-end by clicking the button and confirming the API call is made. Test error handling by simulating API failures. Confirm UI updates correctly after successful invitation.",
+      "details": "Create or update configuration files for CI:\n- Add Supabase connection environment variables to `.env.example` and CI configuration\n- Document the required environment variables in README or documentation\n- Create a CI workflow step to validate database connection\n- Ensure secrets are properly managed and not exposed in logs\n\nFollow project-specific Cursor rules for environment configuration.",
+      "testStrategy": "Run a CI test job that connects to the Development Supabase instance and performs a simple query. Verify environment variables are correctly loaded and the connection succeeds.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Identify Eligible Contacts and Render 'Invite to Portal' Button",
-          "description": "Update the Client Detail page to display an 'Invite to Portal' button only for contacts who have an email and are not already portal users.",
-          "status": "in-progress",
+          "title": "Identify and Document Required Supabase Environment Variables",
+          "description": "List all environment variables needed for the CI environment to connect to the Development Supabase instance. Document their purpose and required values in the project README or documentation.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Locate the Client Detail page component. Implement logic to filter contacts based on eligibility (must have an email and not be a portal user). Render the 'Invite to Portal' button conditionally next to each eligible contact."
+          "details": "Review Supabase documentation and your project's requirements to determine which variables (e.g., SUPABASE_API_URL, SUPABASE_API_KEY, PROJECT_ID) are necessary. Add a section to the README or a dedicated documentation file explaining each variable, its purpose, and any security considerations.[1][2]"
         },
         {
           "id": 2,
-          "title": "Implement Confirmation Dialog Before Sending Invitation",
-          "description": "Add a confirmation dialog that appears when the 'Invite to Portal' button is clicked, asking the user to confirm the invitation action.",
+          "title": "Update .env.example and CI Configuration Files",
+          "description": "Add the identified Supabase environment variables to the .env.example file and ensure the CI configuration (e.g., GitHub Actions, GitLab CI) references these variables appropriately.",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Create a modal or dialog component that triggers on button click. The dialog should display a message confirming the intent to invite the contact and provide 'Confirm' and 'Cancel' options."
+          "details": "Edit the .env.example file to include placeholders for all required Supabase variables. Update the CI workflow configuration to reference these variables, using the CI platform's secret management features (e.g., GitHub Actions secrets). Ensure the variables are not hardcoded and are sourced securely.[1]"
         },
         {
           "id": 3,
-          "title": "Integrate Invitation API Call with Loading State",
-          "description": "Implement the click handler for the confirmation dialog to call the user.inviteClientContact mutation, and show a loading state on the button during the API call.",
+          "title": "Configure Secret Management in CI Platform",
+          "description": "Set up secure storage of Supabase credentials in the CI platform's secret management system to prevent accidental exposure.",
           "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "On confirmation, trigger the API call with the selected contact's ID. Disable the button and show a loading spinner or indicator while the request is in progress. Ensure proper error handling for failed requests."
+          "details": "Add Supabase credentials (such as API keys and project URLs) to the CI platform's secrets or environment variables section. Reference these secrets in the CI configuration, ensuring they are not printed or logged during workflow execution.[1]"
         },
         {
           "id": 4,
-          "title": "Display Success and Error Notifications",
-          "description": "Show a success toast/notification when the invitation is sent successfully, and display appropriate error messages if the invitation fails.",
+          "title": "Implement CI Workflow Step to Validate Supabase Database Connection",
+          "description": "Add a step in the CI workflow that attempts to connect to the Development Supabase instance using the configured environment variables, and fails the workflow if the connection is unsuccessful.",
           "status": "pending",
           "dependencies": [
             3
           ],
-          "details": "Implement notification logic to display a toast or alert on successful invitation. Handle and display specific error messages for different failure scenarios, such as network errors or invalid contact state."
+          "details": "Use the Supabase CLI or a custom script in the CI workflow to attempt a database connection. For example, run a simple Supabase CLI command that requires authentication, and check for success or failure. Ensure that any output does not leak secrets.[1][4]"
         },
         {
           "id": 5,
-          "title": "Update UI to Reflect Portal Access Status After Invitation",
-          "description": "After a successful invitation, update the UI to indicate the contact's new portal access status, removing or disabling the 'Invite to Portal' button as appropriate.",
+          "title": "Review and Enforce Security and Logging Best Practices",
+          "description": "Audit the CI configuration and workflow to ensure that secrets are not exposed in logs and that environment variables are handled according to project-specific Cursor rules.",
           "status": "pending",
           "dependencies": [
             4
           ],
-          "details": "Refresh the contact's status in the UI, either by refetching data or updating local state. Ensure the 'Invite to Portal' button is hidden or disabled for newly invited contacts, and display their updated portal access status."
+          "details": "Review the CI workflow for any steps that might inadvertently print secrets or sensitive information. Use the CI platform's features to mask secrets in logs. Confirm that all environment configuration follows Cursor rules and update documentation as needed to reflect security practices.[1]"
         }
       ]
     },
     {
       "id": 7,
-      "title": "Create Account Activation Backend Procedure",
-      "description": "Implement a tRPC mutation procedure to validate activation tokens and activate client accounts.",
-      "status": "done",
+      "title": "Implement navigation between routes",
+      "description": "Add basic navigation components to allow developers to move between placeholder pages.",
+      "status": "pending",
       "dependencies": [
-        5
+        2
       ],
-      "priority": "high",
-      "details": "1. Create a new tRPC mutation procedure user.activateClientAccount that accepts token as input.\n2. Query the VerificationToken table to find the token and check if it's valid and not expired.\n3. If valid, retrieve the associated User record.\n4. Update the User record by setting the emailVerified timestamp to the current time.\n5. Delete or invalidate the used token from the VerificationToken table.\n6. Return a success response with the user's email for confirmation.\n7. If invalid or expired, return an appropriate error response.\n8. Use database transactions to ensure atomicity of operations.\n9. Add logging for successful activations and failed attempts.",
-      "testStrategy": "Test the procedure with valid tokens, expired tokens, and invalid tokens. Verify the User record is correctly updated on successful activation. Confirm tokens are properly invalidated after use. Test error handling for various failure scenarios.",
+      "priority": "low",
+      "details": "Create simple navigation components:\n- Add a sidebar or header navigation in the `ProtectedAppLayout` for internal routes\n- Add a simple navigation bar in the default layout for portal routes\n- Implement Next.js Link components for navigation between routes\n- Ensure active route is visually indicated\n\nKeep the implementation minimal as this is just for development navigation during this phase.",
+      "testStrategy": "Test navigation by clicking through all routes in both the internal and client portal sections. Verify that the active route is correctly indicated and that navigation preserves layout context.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define tRPC Mutation Procedure and Input Validation",
-          "description": "Set up the user.activateClientAccount mutation in the tRPC router, specifying the expected input schema for the activation token.",
-          "status": "done",
+          "title": "Add navigation bar to default layout for portal routes",
+          "description": "Implement a simple navigation bar in the default layout to allow navigation between portal routes.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Use tRPC's .mutation() method and Zod to validate the input token. Ensure the procedure is registered in the appropriate router and is ready to receive a string token as input.[1][2][5]"
+          "details": "In the default layout component, create a navigation bar using Next.js <Link> components for each portal route. Ensure the navigation bar is minimal and only includes links relevant to portal pages. Import Link from 'next/link' and use the href prop to specify target routes. Style the navigation bar for basic usability."
         },
         {
           "id": 2,
-          "title": "Implement Token Lookup and Validation Logic",
-          "description": "Query the VerificationToken table to find the provided token, checking for existence and expiration.",
-          "status": "done",
+          "title": "Add sidebar or header navigation to ProtectedAppLayout for internal routes",
+          "description": "Implement a sidebar or header navigation component within the ProtectedAppLayout to enable navigation between internal (protected) routes.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Fetch the token record from the database, verify it exists, and ensure it has not expired. If the token is missing or expired, prepare to return an error response."
+          "details": "Within the ProtectedAppLayout, add a sidebar or header containing <Link> components for each internal route. Import Link from 'next/link' and use the href prop for navigation. Keep the design minimal, focusing on development usability. Ensure the navigation is clearly separated from the main content area."
         },
         {
           "id": 3,
-          "title": "Retrieve Associated User Record",
-          "description": "Fetch the User record linked to the valid activation token.",
-          "status": "done",
+          "title": "Implement active route visual indication",
+          "description": "Ensure the currently active route is visually indicated in both navigation components.",
+          "status": "pending",
           "dependencies": [
+            1,
             2
           ],
-          "details": "Using the information from the valid token, query the User table to retrieve the corresponding user. Handle cases where the user does not exist by returning an error."
+          "details": "Use Next.js router hooks (such as useRouter) to determine the current route. Apply a distinct style (e.g., bold text, underline, or background color) to the active link in both the default layout navigation bar and the ProtectedAppLayout navigation. Ensure the indication is clear and updates correctly on navigation."
         },
         {
           "id": 4,
-          "title": "Perform Atomic Account Activation and Token Invalidation",
-          "description": "Within a database transaction, update the User record to set emailVerified and remove or invalidate the used token.",
-          "status": "done",
+          "title": "Verify navigation functionality and minimalism",
+          "description": "Test all navigation components to confirm correct routing and that the implementation remains minimal for development purposes.",
+          "status": "pending",
           "dependencies": [
             3
           ],
-          "details": "Use a database transaction to ensure both the user update (setting emailVerified to the current timestamp) and token deletion/invalidation occur atomically. Roll back if any step fails to maintain consistency."
-        },
-        {
-          "id": 5,
-          "title": "Implement Success and Error Response Handling",
-          "description": "Return a success response with the user's email if activation succeeds, or an appropriate error if validation fails.",
-          "status": "done",
-          "dependencies": [
-            4
-          ],
-          "details": "Structure the mutation's return value to include the user's email on success. On failure (invalid/expired token, missing user), return a clear error message using tRPC's error handling mechanisms."
-        },
-        {
-          "id": 6,
-          "title": "Add Logging for Activation Attempts",
-          "description": "Integrate logging for both successful activations and failed attempts for audit and debugging purposes.",
-          "status": "done",
-          "dependencies": [
-            5
-          ],
-          "details": "Log relevant details (e.g., user ID, email, timestamp, reason for failure) for each activation attempt. Ensure logs do not expose sensitive information and are compliant with security best practices."
+          "details": "Manually test navigation between all linked routes in both layouts. Confirm that the active route indication works as expected and that navigation is smooth. Review the code to ensure no unnecessary complexity or features have been added beyond basic development navigation."
         }
       ]
     },
     {
       "id": 8,
-      "title": "Implement Account Activation Page",
-      "description": "Create the public /complete-setup page that validates activation tokens and displays appropriate success or error messages.",
-      "status": "done",
+      "title": "Create documentation and verification guide",
+      "description": "Document the implemented features, folder structure, and provide a verification guide for the development team.",
+      "status": "pending",
       "dependencies": [
+        1,
+        2,
+        5,
+        6,
         7
       ],
-      "priority": "medium",
-      "details": "1. Create the page route at src/app/complete-setup/page.tsx.\n2. Extract the activation token from the URL query parameter.\n3. Implement a useEffect hook that calls the user.activateClientAccount mutation on page load with the token.\n4. Display a loading state while the validation is in progress.\n5. On successful activation, show a success message ('Account activated successfully').\n6. Provide a prominent button to navigate to the sign-in page after successful activation.\n7. For invalid or expired tokens, display an appropriate error message.\n8. Include instructions for requesting a new activation link if needed.\n9. Ensure the page is responsive and has appropriate styling consistent with the application design.",
-      "testStrategy": "Test the page with valid tokens, expired tokens, and invalid tokens. Verify appropriate messages are displayed in each scenario. Test the navigation to sign-in page after successful activation. Ensure the page handles URL parameters correctly, including missing or malformed tokens.",
+      "priority": "low",
+      "details": "Create documentation that includes:\n- Overview of the implemented folder structure and routing\n- Guide to running the migration script with example commands\n- Instructions for verifying data in Supabase Table Editor\n- List of placeholder pages and their intended future functionality\n- Next steps for Phase 1 development\n\nPlace documentation in the project wiki or README.md file following project conventions.",
+      "testStrategy": "Have a team member follow the documentation to navigate the application and run the migration script. Collect feedback on clarity and completeness. Verify all commands and paths in the documentation are accurate.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Route and Page Structure",
-          "description": "Create the /complete-setup page route and establish the basic page structure in the application.",
-          "status": "done",
+          "title": "Document Folder Structure and Routing Overview",
+          "description": "Create a section that explains the project's folder structure and routing logic, referencing how files and folders map to application routes.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Add a new file at src/app/complete-setup/page.tsx. Set up the React component structure, ensuring the page is accessible via the /complete-setup route. Include a container for content and placeholders for future UI states (loading, success, error)."
+          "details": "Analyze the current project directory. Describe how the folder and file organization defines the application's routing, referencing conventions such as file-based routing (e.g., Next.js or Expo Router). Include a visual or tabular representation if helpful. Ensure this overview is clear for new developers to understand how navigation is structured.[1][2][5]"
         },
         {
           "id": 2,
-          "title": "Extract Activation Token from URL",
-          "description": "Implement logic to extract the activation token from the URL query parameters when the page loads.",
-          "status": "done",
+          "title": "Write Migration Script Usage Guide",
+          "description": "Provide step-by-step instructions for running the migration script, including example commands and expected outputs.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Use React Router or Next.js routing utilities (such as useRouter or useSearchParams) to retrieve the activation token from the URL. Store the token in a local state variable for use in subsequent activation logic."
+          "details": "Identify the migration script(s) used in the project. Document prerequisites, command-line usage, environment variables, and sample commands. Clarify where to find the script, how to execute it, and how to interpret success or error messages. Ensure instructions are platform-agnostic or specify OS-specific steps as needed."
         },
         {
           "id": 3,
-          "title": "Implement Activation Logic and State Handling",
-          "description": "Trigger the account activation mutation using the extracted token and manage loading, success, and error states.",
-          "status": "done",
+          "title": "Create Data Verification Instructions for Supabase Table Editor",
+          "description": "Detail the process for verifying migrated data using the Supabase Table Editor, including navigation steps and data validation tips.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Use a useEffect hook to call the user.activateClientAccount mutation as soon as the token is available. Display a loading indicator while the request is in progress. Update the UI state based on the mutation result: show a success message on success, or an error message if the token is invalid or expired."
+          "details": "Outline how to access the Supabase Table Editor, locate relevant tables, and check that data has been correctly migrated. Include screenshots or example queries if appropriate. Highlight common issues and troubleshooting steps for data verification."
         },
         {
           "id": 4,
-          "title": "Display User Feedback and Navigation Options",
-          "description": "Show appropriate messages and navigation controls based on activation outcome.",
-          "status": "done",
+          "title": "List Placeholder Pages and Intended Functionality",
+          "description": "Compile a list of all current placeholder pages in the application and describe their planned future functionality.",
+          "status": "pending",
           "dependencies": [
-            3
+            1
           ],
-          "details": "On successful activation, display a prominent success message and a button that navigates the user to the sign-in page. On failure, show a clear error message and provide instructions or a link for requesting a new activation email."
+          "details": "Review the routing and page structure to identify all placeholder or stub pages. For each, provide a brief description of its intended purpose and any relevant notes on future development. Organize this information in a clear, accessible format."
         },
         {
           "id": 5,
-          "title": "Apply Responsive Design and Consistent Styling",
-          "description": "Ensure the page is visually consistent with the rest of the application and works well on all devices.",
-          "status": "done",
+          "title": "Summarize Next Steps for Phase 1 Development and Finalize Documentation",
+          "description": "Outline the next development steps for Phase 1 and ensure all documentation is compiled and formatted according to project conventions.",
+          "status": "pending",
           "dependencies": [
+            1,
+            2,
+            3,
             4
           ],
-          "details": "Apply CSS modules, styled-components, or the project's preferred styling solution to match the application's design system. Test responsiveness across device sizes and adjust layout or typography as needed."
+          "details": "Work with the team to identify and summarize the immediate next steps for Phase 1. Review all documentation sections for clarity and completeness. Place the final documentation in the project wiki or README.md, following established formatting and organizational standards."
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "QAS Portal - Client Authentication Setup",
+    "projectName": "QAS Portal Phase 0c Implementation",
     "totalTasks": 8,
-    "sourceFile": "scripts/PRD_mvp-phase0b.txt",
-    "generatedAt": "2023-11-10"
+    "sourceFile": "scripts/PRD_mvp-phase0c.txt",
+    "generatedAt": "2023-11-14"
   }
 }
