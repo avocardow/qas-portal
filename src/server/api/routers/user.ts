@@ -70,4 +70,59 @@ export const userRouter = createTRPCRouter({
       });
       return { success: true };
     }),
+  activateClientAccount: protectedProcedure
+    .input(z.object({ token: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      console.info(`activateClientAccount called with token: ${input.token}`);
+      // Subtask 7.2: Token lookup and expiration validation
+      const tokenEntry = await ctx.db.verificationToken.findUnique({
+        where: { token: input.token },
+      });
+      if (!tokenEntry || tokenEntry.expires < new Date()) {
+        console.warn(
+          `activateClientAccount failed: invalid or expired token ${input.token}`
+        );
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid or expired activation token.",
+        });
+      }
+      // Subtask 7.3: Retrieve associated user record
+      const contact = await ctx.db.contact.findUnique({
+        where: { id: tokenEntry.identifier },
+      });
+      if (!contact || !contact.portalUserId) {
+        console.warn(
+          `activateClientAccount failed: associated contact/user not found for identifier ${tokenEntry.identifier}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Associated user not found.",
+        });
+      }
+      const user = await ctx.db.user.findUnique({
+        where: { id: contact.portalUserId },
+      });
+      if (!user) {
+        console.warn(
+          `activateClientAccount failed: user record not found for id ${contact.portalUserId}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User record not found.",
+        });
+      }
+      // Subtask 7.4: Perform atomic account activation and token invalidation
+      await ctx.db.$transaction(async (tx) => {
+        await tx.user.update({
+          where: { id: user.id },
+          data: { emailVerified: new Date() },
+        });
+        await tx.verificationToken.delete({ where: { token: input.token } });
+      });
+      console.info(
+        `activateClientAccount succeeded for user ${user.id} (${user.email})`
+      );
+      return { success: true, email: user.email };
+    }),
 });

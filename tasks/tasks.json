@@ -376,7 +376,7 @@
       "id": 7,
       "title": "Create Account Activation Backend Procedure",
       "description": "Implement a tRPC mutation procedure to validate activation tokens and activate client accounts.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         5
       ],
@@ -388,7 +388,7 @@
           "id": 1,
           "title": "Define tRPC Mutation Procedure and Input Validation",
           "description": "Set up the user.activateClientAccount mutation in the tRPC router, specifying the expected input schema for the activation token.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Use tRPC's .mutation() method and Zod to validate the input token. Ensure the procedure is registered in the appropriate router and is ready to receive a string token as input.[1][2][5]"
         },
@@ -396,7 +396,7 @@
           "id": 2,
           "title": "Implement Token Lookup and Validation Logic",
           "description": "Query the VerificationToken table to find the provided token, checking for existence and expiration.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -406,7 +406,7 @@
           "id": 3,
           "title": "Retrieve Associated User Record",
           "description": "Fetch the User record linked to the valid activation token.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -416,7 +416,7 @@
           "id": 4,
           "title": "Perform Atomic Account Activation and Token Invalidation",
           "description": "Within a database transaction, update the User record to set emailVerified and remove or invalidate the used token.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -426,7 +426,7 @@
           "id": 5,
           "title": "Implement Success and Error Response Handling",
           "description": "Return a success response with the user's email if activation succeeds, or an appropriate error if validation fails.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -436,7 +436,7 @@
           "id": 6,
           "title": "Add Logging for Activation Attempts",
           "description": "Integrate logging for both successful activations and failed attempts for audit and debugging purposes.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5
           ],
