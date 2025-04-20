@@ -42,8 +42,8 @@ const InviteToPortalButton: React.FC<InviteToPortalButtonProps> = ({
         <Notification variant="success" title={successMessage} />
       )}
       {errorMessage && <Notification variant="error" title={errorMessage} />}
-      <Button onClick={handleClick} disabled={mutation.isLoading}>
-        {mutation.isLoading ? "Sending..." : "Invite to Portal"}
+      <Button onClick={handleClick} disabled={mutation.status === "pending"}>
+        {mutation.status === "pending" ? "Sending..." : "Invite to Portal"}
       </Button>
     </div>
   );
