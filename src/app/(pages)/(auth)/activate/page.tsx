@@ -6,11 +6,8 @@ export const metadata = {
   description: "Complete your account activation.",
 };
 
-export default function ActivatePage({
-  searchParams,
-}: {
-  searchParams: { token?: string };
-}) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function ActivatePage({ searchParams }: any) {
   const token = searchParams.token ?? "";
   return <ActivateClient token={token} />;
 }
