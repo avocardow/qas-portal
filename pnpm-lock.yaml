@@ -14,6 +14,9 @@ importers:
       '@awesome.me/kit-15ae4c7e2f':
         specifier: ^1.0.4
         version: 1.0.4
+      '@azure/msal-node':
+        specifier: ^3.5.1
+        version: 3.5.1
       '@fullcalendar/core':
         specifier: ^6.1.15
         version: 6.1.17
@@ -32,6 +35,9 @@ importers:
       '@fullcalendar/timegrid':
         specifier: ^6.1.15
         version: 6.1.17(@fullcalendar/core@6.1.17)
+      '@microsoft/microsoft-graph-client':
+        specifier: ^3.0.7
+        version: 3.0.7
       '@next-auth/prisma-adapter':
         specifier: ^1.0.7
         version: 1.0.7(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(next-auth@4.24.11(next@15.3.1(@babel/core@7.26.10)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(nodemailer@6.10.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
@@ -259,6 +265,14 @@ packages:
 
   '@awesome.me/kit-15ae4c7e2f@1.0.4':
     resolution: {integrity: sha512-NlXrC9CA2EclS7d92kXRcnn82cMshKiaxCHdC6aE8jPTe4v+8vctSUD+0X1qSTaeOMUOq1gD6nq7+QASrpfVnA==, tarball: https://npm.fontawesome.com/@awesome.me/kit-15ae4c7e2f/-/1.0.4/kit-15ae4c7e2f-1.0.4.tgz}
+    engines: {node: '>=16'}
+
+  '@azure/msal-common@15.5.1':
+    resolution: {integrity: sha512-oxK0khbc4Bg1bKQnqDr7ikULhVL2OHgSrIq0Vlh4b6+hm4r0lr6zPMQE8ZvmacJuh+ZZGKBM5iIObhF1q1QimQ==}
+    engines: {node: '>=0.8.0'}
+
+  '@azure/msal-node@3.5.1':
+    resolution: {integrity: sha512-dkgMYM5B6tI88r/oqf5bYd93WkenQpaWwiszJDk7avVjso8cmuKRTW97dA1RMi6RhihZFLtY1VtWxU9+sW2T5g==}
     engines: {node: '>=16'}
 
   '@babel/code-frame@7.26.2':
@@ -1320,6 +1334,24 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@microsoft/microsoft-graph-client@3.0.7':
+    resolution: {integrity: sha512-/AazAV/F+HK4LIywF9C+NYHcJo038zEnWkteilcxC1FM/uK/4NVGDKGrxx7nNq1ybspAroRKT4I1FHfxQzxkUw==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@azure/identity': '*'
+      '@azure/msal-browser': '*'
+      buffer: '*'
+      stream-browserify: '*'
+    peerDependenciesMeta:
+      '@azure/identity':
+        optional: true
+      '@azure/msal-browser':
+        optional: true
+      buffer:
+        optional: true
+      stream-browserify:
+        optional: true
 
   '@modelcontextprotocol/sdk@1.10.0':
     resolution: {integrity: sha512-wijOavYZfSOADbVM0LA7mrQ17N4IKNdFcfezknCCsZ1Y1KstVWlkDZ5ebcxuQJmqTTxsNjBHLc7it1SV0TBiPg==}
@@ -4703,6 +4735,14 @@ snapshots:
     dependencies:
       '@fortawesome/fontawesome-common-types': 6.7.2
 
+  '@azure/msal-common@15.5.1': {}
+
+  '@azure/msal-node@3.5.1':
+    dependencies:
+      '@azure/msal-common': 15.5.1
+      jsonwebtoken: 9.0.2
+      uuid: 8.3.2
+
   '@babel/code-frame@7.26.2':
     dependencies:
       '@babel/helper-validator-identifier': 7.25.9
@@ -5823,6 +5863,11 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@microsoft/microsoft-graph-client@3.0.7':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      tslib: 2.8.1
 
   '@modelcontextprotocol/sdk@1.10.0':
     dependencies:
