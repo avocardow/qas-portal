@@ -17,6 +17,9 @@ const sendEmailInputSchema = z.object({
   htmlBody: z.string().min(1),
 });
 
+// Add type alias for sendEmail parameters
+type SendEmailParams = z.infer<typeof sendEmailInputSchema>;
+
 // Add in-memory token cache variables
 let cachedToken: string | null = null;
 let cachedTokenExpiry = 0;
@@ -72,14 +75,10 @@ function getAuthenticatedClient(accessToken: string): Client {
 /**
  * Send an email using Microsoft Graph API.
  */
-export async function sendEmail(
-  to: string,
-  subject: string,
-  htmlBody: string
-): Promise<void> {
+export async function sendEmail(params: SendEmailParams): Promise<void> {
   try {
-    // Validate inputs
-    sendEmailInputSchema.parse({ to, subject, htmlBody });
+    // Validate and destructure inputs
+    const { to, subject, htmlBody } = sendEmailInputSchema.parse(params);
     const accessToken = await getAccessToken();
     const client = getAuthenticatedClient(accessToken);
     const message = {
@@ -116,11 +115,11 @@ async function testSendEmail(): Promise<void> {
     return;
   }
   try {
-    await sendEmail(
-      testRecipient,
-      "Test Email",
-      "<p>This is a test email.</p>"
-    );
+    await sendEmail({
+      to: testRecipient,
+      subject: "Test Email",
+      htmlBody: "<p>This is a test email.</p>",
+    });
     console.log("Test email sent successfully.");
   } catch (error) {
     console.error("Test email failed:", error);
