@@ -53,6 +53,9 @@ async function getAccessToken(): Promise<string> {
     cachedToken = result.accessToken;
     if (result.expiresOn) {
       cachedTokenExpiry = result.expiresOn.getTime() - 60000;
+      console.info(
+        `Graph API token acquired; expires at ${result.expiresOn.toISOString()}`
+      );
     }
     return result.accessToken;
   } catch (error) {
@@ -72,6 +75,16 @@ function getAuthenticatedClient(accessToken: string): Client {
   });
 }
 
+// Add GraphError interface and type guard to avoid explicit any casts
+interface GraphError extends Error {
+  statusCode?: number;
+  code?: string;
+}
+
+function isGraphError(error: unknown): error is GraphError {
+  return typeof error === "object" && error !== null && "statusCode" in error;
+}
+
 /**
  * Send an email using Microsoft Graph API.
  */
@@ -80,6 +93,7 @@ export async function sendEmail(params: SendEmailParams): Promise<void> {
     // Validate and destructure inputs
     const { to, subject, htmlBody } = sendEmailInputSchema.parse(params);
     const accessToken = await getAccessToken();
+    console.debug(`Graph API access token obtained for sender ${EMAIL_FROM}`);
     const client = getAuthenticatedClient(accessToken);
     const message = {
       subject,
@@ -96,14 +110,25 @@ export async function sendEmail(params: SendEmailParams): Promise<void> {
       ],
     };
 
-    await client.api(`/users/${EMAIL_FROM}/sendMail`).post({
+    // Logging request details
+    console.debug(`Sending email to ${to} from ${EMAIL_FROM}`);
+    console.debug("Email message payload:", JSON.stringify(message));
+
+    const response = await client.api(`/users/${EMAIL_FROM}/sendMail`).post({
       message,
       saveToSentItems: true,
     });
-    console.log(`Email sent to ${to} from ${EMAIL_FROM}`);
-  } catch (error) {
-    console.error("Error sending email:", error);
-    throw error;
+    console.info(`Email sent successfully to ${to}`, response);
+  } catch (e) {
+    console.error("Error sending email:", e);
+    if (isGraphError(e) && e.statusCode) {
+      console.error(`Graph API error status ${e.statusCode}`, {
+        code: e.code,
+        message: e.message,
+      });
+    }
+    const message = e instanceof Error ? e.message : String(e);
+    throw new Error(`Failed to send email to ${params.to}: ${message}`);
   }
 }
 
