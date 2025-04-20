@@ -1,7 +1,8 @@
 import { ConfidentialClientApplication, Configuration } from "@azure/msal-node";
 import { Client } from "@microsoft/microsoft-graph-client";
-import { env } from "@/env.mjs";
+import { env } from "../../env.mjs";
 import { z } from "zod";
+import { fileURLToPath } from "node:url";
 
 // Ensure EMAIL_FROM environment variable is set
 const EMAIL_FROM = process.env.EMAIL_FROM;
@@ -30,6 +31,9 @@ let cachedTokenExpiry = 0;
 async function getAccessToken(): Promise<string> {
   const now = Date.now();
   if (cachedToken && now < cachedTokenExpiry) {
+    console.debug(
+      `Using cached access token; expires at ${new Date(cachedTokenExpiry).toISOString()}`
+    );
     return cachedToken;
   }
   const msalConfig: Configuration = {
@@ -114,11 +118,29 @@ export async function sendEmail(params: SendEmailParams): Promise<void> {
     console.debug(`Sending email to ${to} from ${EMAIL_FROM}`);
     console.debug("Email message payload:", JSON.stringify(message));
 
-    const response = await client.api(`/users/${EMAIL_FROM}/sendMail`).post({
-      message,
-      saveToSentItems: true,
-    });
-    console.info(`Email sent successfully to ${to}`, response);
+    const apiPath = `/users/${EMAIL_FROM}/sendMail`;
+    const apiPayload = { message, saveToSentItems: true };
+    const maxRetries = 3;
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await client.api(apiPath).post(apiPayload);
+        console.info(`Email sent successfully to ${to}`, response);
+        break;
+      } catch (err) {
+        const statusCode = isGraphError(err) ? err.statusCode : undefined;
+        const retryable =
+          statusCode && [429, 500, 502, 503, 504].includes(statusCode);
+        if (retryable && attempt < maxRetries) {
+          const delay = Math.pow(2, attempt) * 100;
+          console.warn(
+            `Attempt ${attempt} failed with status ${statusCode}. Retrying in ${delay}ms (attempt ${attempt + 1} of ${maxRetries})`
+          );
+          await new Promise((res) => setTimeout(res, delay));
+          continue;
+        }
+        throw err;
+      }
+    }
   } catch (e) {
     console.error("Error sending email:", e);
     if (isGraphError(e) && e.statusCode) {
@@ -151,7 +173,7 @@ async function testSendEmail(): Promise<void> {
   }
 }
 
-// If this script is run directly, execute the test
-if (require.main === module) {
+// If this script is run directly (ESM), execute the test
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   testSendEmail();
 }

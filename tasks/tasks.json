@@ -64,7 +64,7 @@
       "id": 2,
       "title": "Implement Microsoft Graph API Email Sending Utility",
       "description": "Create a reusable server-side utility function to send emails via Microsoft Graph API using application permissions.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         1
       ],
@@ -82,7 +82,7 @@
         {
           "id": 2,
           "title": "Implement Token Acquisition with Client Credentials Flow",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -92,7 +92,7 @@
           "id": 3,
           "title": "Develop sendEmail Function Interface and Input Validation",
           "description": "Define the main sendEmail function, specifying parameters for recipient email, subject, and HTML body, and validate inputs.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -102,7 +102,7 @@
           "id": 4,
           "title": "Integrate Graph API Call to Send Email",
           "description": "Use the acquired token to call the Microsoft Graph /users/{EMAIL_FROM}/sendMail endpoint and send the email.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -112,7 +112,7 @@
           "id": 5,
           "title": "Implement Robust Error Handling and Logging",
           "description": "Add comprehensive error handling for both token acquisition and API call failures, and implement logging for debugging.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -122,7 +122,7 @@
           "id": 6,
           "title": "Create and Run Test Function for Email Sending",
           "description": "Develop a simple test function to verify that the sendEmail utility works as expected.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             5
           ],
