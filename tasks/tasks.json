@@ -154,7 +154,7 @@
           "id": 2,
           "title": "Implement Custom sendVerificationRequest Function",
           "description": "Create a custom sendVerificationRequest function that formats the verification email and sends it using the Graph API email utility.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
