@@ -314,7 +314,7 @@
       "id": 6,
       "title": "Implement Client Invitation Frontend UI",
       "description": "Add an 'Invite to Portal' button on the Client Detail page that triggers the invitation process for eligible contacts.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         5
       ],
@@ -326,7 +326,7 @@
           "id": 1,
           "title": "Identify Eligible Contacts and Render 'Invite to Portal' Button",
           "description": "Update the Client Detail page to display an 'Invite to Portal' button only for contacts who have an email and are not already portal users.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Locate the Client Detail page component. Implement logic to filter contacts based on eligibility (must have an email and not be a portal user). Render the 'Invite to Portal' button conditionally next to each eligible contact."
         },
@@ -448,7 +448,7 @@
       "id": 8,
       "title": "Implement Account Activation Page",
       "description": "Create the public /complete-setup page that validates activation tokens and displays appropriate success or error messages.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         7
       ],
@@ -460,7 +460,7 @@
           "id": 1,
           "title": "Set Up Route and Page Structure",
           "description": "Create the /complete-setup page route and establish the basic page structure in the application.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Add a new file at src/app/complete-setup/page.tsx. Set up the React component structure, ensuring the page is accessible via the /complete-setup route. Include a container for content and placeholders for future UI states (loading, success, error)."
         },
@@ -468,7 +468,7 @@
           "id": 2,
           "title": "Extract Activation Token from URL",
           "description": "Implement logic to extract the activation token from the URL query parameters when the page loads.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -478,7 +478,7 @@
           "id": 3,
           "title": "Implement Activation Logic and State Handling",
           "description": "Trigger the account activation mutation using the extracted token and manage loading, success, and error states.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -488,7 +488,7 @@
           "id": 4,
           "title": "Display User Feedback and Navigation Options",
           "description": "Show appropriate messages and navigation controls based on activation outcome.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -498,7 +498,7 @@
           "id": 5,
           "title": "Apply Responsive Design and Consistent Styling",
           "description": "Ensure the page is visually consistent with the rest of the application and works well on all devices.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],

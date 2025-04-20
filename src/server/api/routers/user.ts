@@ -62,7 +62,7 @@ export const userRouter = createTRPCRouter({
       });
 
       // Send invitation email using Graph API
-      const activationLink = `${env.NEXTAUTH_URL}/complete-setup?token=${activationToken}`;
+      const activationLink = `${env.NEXTAUTH_URL}/activate?token=${activationToken}`;
       await sendEmail({
         to: contact.email,
         subject: "Invitation to QAS Portal",
@@ -124,5 +124,54 @@ export const userRouter = createTRPCRouter({
         `activateClientAccount succeeded for user ${user.id} (${user.email})`
       );
       return { success: true, email: user.email };
+    }),
+  resendActivationLink: protectedProcedure
+    .input(z.object({ token: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      // Find existing token entry (including expired)
+      const tokenEntry = await ctx.db.verificationToken.findUnique({
+        where: { token: input.token },
+      });
+      if (!tokenEntry) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid activation token.",
+        });
+      }
+      // Fetch contact
+      const contact = await ctx.db.contact.findUnique({
+        where: { id: tokenEntry.identifier },
+      });
+      if (!contact || !contact.email) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Contact not found or missing email.",
+        });
+      }
+      if (!contact.canLoginToPortal) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Contact is not invited yet.",
+        });
+      }
+      // Generate new token and clear previous ones
+      const newToken = randomBytes(32).toString("hex");
+      const expiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      await ctx.db.$transaction(async (tx) => {
+        await tx.verificationToken.deleteMany({
+          where: { identifier: contact.id },
+        });
+        await tx.verificationToken.create({
+          data: { identifier: contact.id, token: newToken, expires: expiry },
+        });
+      });
+      // Send the new activation email
+      const activationLink = `${env.NEXTAUTH_URL}/activate?token=${newToken}`;
+      await sendEmail({
+        to: contact.email,
+        subject: "Invitation to QAS Portal - Resend Activation Link",
+        htmlBody: `<p>Hello ${contact.name},</p><p>Please complete your account setup by clicking <a href="${activationLink}">here</a>. This link will expire in 24 hours.</p>`,
+      });
+      return { success: true };
     }),
 });
