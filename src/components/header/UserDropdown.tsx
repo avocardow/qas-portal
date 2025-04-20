@@ -10,6 +10,7 @@ import { useSession, signOut } from "next-auth/react";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
   // Get session data
   const { data: session, status } = useSession(); // Still need status to check for authenticated
 
@@ -35,8 +36,8 @@ export default function UserDropdown() {
 
   // --- Render dropdown when authenticated ---
   const user = session.user;
-  const userImage = user.image ?? "/images/user/user-placeholder.svg"; // Provide a default avatar
-  const userName = user.name ?? user.email?.split("@")[0] ?? "User"; // Use name, fallback to email prefix or "User"
+  const userImage = user.image; // Use user's image URL if available
+  const userName = user.name ?? user.email?.split("@")[0] ?? "User";
   const userEmail = user.email ?? "No email provided";
 
   return (
@@ -48,13 +49,31 @@ export default function UserDropdown() {
         aria-expanded={isOpen}
       >
         <span className="mr-3 h-11 w-11 overflow-hidden rounded-full">
-          <Image
-            width={44}
-            height={44}
-            src={userImage}
-            alt="User Avatar"
-            className="h-full w-full object-cover"
-          />
+          {userImage && !imgError ? (
+            <Image
+              width={44}
+              height={44}
+              src={userImage}
+              alt="User Avatar"
+              className="h-full w-full object-cover"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="relative h-full w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600">
+              <svg
+                className="absolute -left-1 h-12 w-12 text-gray-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                />
+              </svg>
+            </div>
+          )}
         </span>
         <span className="text-theme-sm mr-1 block font-medium">{userName}</span>
         <svg
