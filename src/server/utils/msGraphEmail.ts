@@ -17,10 +17,18 @@ const sendEmailInputSchema = z.object({
   htmlBody: z.string().min(1),
 });
 
+// Add in-memory token cache variables
+let cachedToken: string | null = null;
+let cachedTokenExpiry = 0;
+
 /**
  * Acquire an access token using client credentials flow.
  */
 async function getAccessToken(): Promise<string> {
+  const now = Date.now();
+  if (cachedToken && now < cachedTokenExpiry) {
+    return cachedToken;
+  }
   const msalConfig: Configuration = {
     auth: {
       clientId: env.AZURE_AD_CLIENT_ID,
@@ -37,6 +45,11 @@ async function getAccessToken(): Promise<string> {
     });
     if (!result || !result.accessToken) {
       throw new Error("Failed to acquire access token from Microsoft Graph");
+    }
+    // Cache token with 1 minute buffer before expiration
+    cachedToken = result.accessToken;
+    if (result.expiresOn) {
+      cachedTokenExpiry = result.expiresOn.getTime() - 60000;
     }
     return result.accessToken;
   } catch (error) {
