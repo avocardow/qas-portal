@@ -20,20 +20,20 @@ export default function CompleteSetupPage() {
       mutation.mutate({ token });
       setHasMutated(true);
     }
-  }, [token, hasMutated]);
+  }, [token, hasMutated, mutation]);
 
   const renderContent = () => {
     if (!token) {
       return <Notification variant="error" title="Missing activation token." />;
     }
-    if (mutation.isLoading) {
+    if (mutation.status === "loading") {
       return (
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Validating your activation token...
         </p>
       );
     }
-    if (mutation.isError) {
+    if (mutation.status === "error") {
       return (
         <>
           <Notification
@@ -46,17 +46,17 @@ export default function CompleteSetupPage() {
             </Link>
             <Button
               onClick={() => resendMutation.mutate({ token })}
-              disabled={resendMutation.isLoading}
+              disabled={resendMutation.status === "loading"}
             >
-              {resendMutation.isLoading
+              {resendMutation.status === "loading"
                 ? "Resending..."
                 : "Resend Activation Link"}
             </Button>
           </div>
-          {resendMutation.isSuccess && (
+          {resendMutation.status === "success" && (
             <Notification variant="success" title="New activation link sent." />
           )}
-          {resendMutation.isError && (
+          {resendMutation.status === "error" && (
             <Notification
               variant="error"
               title={resendMutation.error?.message || "Failed to resend link."}
@@ -65,7 +65,7 @@ export default function CompleteSetupPage() {
         </>
       );
     }
-    if (mutation.isSuccess) {
+    if (mutation.status === "success") {
       return (
         <>
           <Notification
