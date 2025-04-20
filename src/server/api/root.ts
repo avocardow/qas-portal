@@ -1,4 +1,5 @@
 import { exampleRouter } from "@/server/api/routers/example";
+import { userRouter } from "@/server/api/routers/user";
 import {
   createCallerFactory,
   createTRPCRouter,
@@ -12,6 +13,7 @@ import {
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
+  user: userRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });

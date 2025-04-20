@@ -268,13 +268,47 @@
       "id": 5,
       "title": "Implement Client Invitation Backend (tRPC Procedure)",
       "description": "Create a tRPC mutation procedure for admins to invite client contacts to the portal, which creates user records and sends invitation emails.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2
       ],
       "priority": "high",
       "details": "1. Create a new tRPC mutation procedure user.inviteClientContact that accepts contactId as input.\n2. Implement RBAC check to ensure only Admins can call this procedure.\n3. Fetch the contact record and validate eligibility (email exists, not already active).\n4. Create a User record with Client role and update the Contact record (set canLoginToPortal=true and link portalUserId).\n5. Generate a secure activation token and store it in the VerificationToken table with an expiry date.\n6. Construct an invitation email with subject and body containing the activation link (/complete-setup?token=xyz).\n7. Call the Graph API email utility to send the invitation.\n8. Return appropriate success or error responses.\n9. Add transaction handling to ensure database operations are atomic.",
-      "testStrategy": "Create unit tests for the tRPC procedure with various scenarios: valid contact, already active contact, non-existent contact. Test RBAC by attempting to call the procedure with non-admin users. Verify database records are correctly created/updated. Confirm invitation emails are sent with the correct activation link."
+      "testStrategy": "Create unit tests for the tRPC procedure with various scenarios: valid contact, already active contact, non-existent contact. Test RBAC by attempting to call the procedure with non-admin users. Verify database records are correctly created/updated. Confirm invitation emails are sent with the correct activation link.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create tRPC mutation procedure with RBAC and validation",
+          "description": "Implement the basic structure of the tRPC mutation procedure with admin-only access control and contact validation logic",
+          "dependencies": [],
+          "details": "1. Create a new tRPC mutation procedure `user.inviteClientContact` in the appropriate router file\n2. Define the input schema using Zod to validate the contactId parameter\n3. Implement RBAC check using the existing authorization middleware to ensure only users with Admin role can call this procedure\n4. Fetch the contact record from the database using Prisma\n5. Validate that the contact has an email address and is not already an active portal user\n6. Add error handling for cases where contact doesn't exist, lacks email, or is already a portal user\n7. Test the procedure with both valid admin and non-admin users to verify RBAC works correctly\n8. Test with valid and invalid contact IDs to ensure validation logic works\n\n<info added on 2025-04-20T03:52:15.252Z>\n## Implementation Details\n\nFor the tRPC mutation procedure:\n\n```typescript\n// src/server/api/routers/user.ts\nimport { z } from \"zod\";\nimport { TRPCError } from \"@trpc/server\";\nimport { createTRPCRouter, protectedProcedure } from \"~/server/api/trpc\";\nimport { UserRole } from \"@prisma/client\"; // Import the enum for type safety\n\nexport const userRouter = createTRPCRouter({\n  inviteClientContact: protectedProcedure\n    .input(z.object({ \n      contactId: z.string().uuid(), // Ensure it's a valid UUID format\n      message: z.string().optional(), // Optional custom message\n    }))\n    .mutation(async ({ input, ctx }) => {\n      // RBAC check\n      if (ctx.session.user.role !== UserRole.ADMIN) {\n        throw new TRPCError({\n          code: \"FORBIDDEN\",\n          message: \"Only administrators can invite client contacts\",\n        });\n      }\n\n      // Fetch contact with related client for context\n      const contact = await ctx.prisma.contact.findUnique({\n        where: { id: input.contactId },\n        include: { client: true }\n      });\n\n      // Validation checks\n      if (!contact) {\n        throw new TRPCError({\n          code: \"NOT_FOUND\",\n          message: \"Contact not found\",\n        });\n      }\n\n      if (!contact.email) {\n        throw new TRPCError({\n          code: \"BAD_REQUEST\",\n          message: \"Contact must have an email address to be invited\",\n        });\n      }\n\n      if (contact.isPortalUser) {\n        throw new TRPCError({\n          code: \"CONFLICT\",\n          message: \"Contact is already a portal user\",\n        });\n      }\n\n      // Return success for now - actual invitation logic will be implemented in subsequent tasks\n      return {\n        success: true,\n        contact: {\n          id: contact.id,\n          email: contact.email,\n          name: `${contact.firstName} ${contact.lastName}`,\n          clientId: contact.clientId,\n          clientName: contact.client?.name\n        }\n      };\n    }),\n});\n```\n\nDon't forget to update the root.ts file:\n\n```typescript\n// In src/server/api/root.ts\nimport { userRouter } from \"~/server/api/routers/user\";\n\nexport const appRouter = createTRPCRouter({\n  // existing routers...\n  user: userRouter,\n});\n```\n</info added on 2025-04-20T03:52:15.252Z>",
+          "status": "done",
+          "parentTaskId": 5
+        },
+        {
+          "id": 2,
+          "title": "Implement user creation and token generation with transaction handling",
+          "description": "Create the user record, update the contact record, and generate a secure activation token within a database transaction",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Set up a Prisma transaction to ensure all database operations are atomic\n2. Within the transaction, create a new User record with Client role, setting appropriate initial values (active=false)\n3. Update the Contact record to set canLoginToPortal=true and link the portalUserId to the newly created user\n4. Generate a cryptographically secure random token (use crypto library)\n5. Store the token in the VerificationToken table with an appropriate expiry date (e.g., 7 days from now)\n6. Link the token to the newly created user\n7. Handle potential database errors and roll back the transaction if any step fails\n8. Test the transaction with valid inputs to ensure all records are created correctly\n9. Test error scenarios to verify transaction rollback works properly",
+          "status": "done",
+          "parentTaskId": 5
+        },
+        {
+          "id": 3,
+          "title": "Implement email sending and response formatting",
+          "description": "Construct and send the invitation email using Graph API and format the procedure's response",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Construct the activation URL with the generated token (e.g., `/complete-setup?token=xyz`)\n2. Create an email template for the invitation with appropriate subject line and body text\n3. Include the activation link in the email body with clear instructions for the recipient\n4. Call the existing Graph API email utility to send the invitation to the contact's email address\n5. Implement error handling for email sending failures\n6. Format the procedure's response to include appropriate success or error messages\n7. Return relevant data on success (e.g., the invited user's ID, email sent status)\n8. Test the email sending functionality with real email addresses (in development environment)\n9. Verify that the email contains the correct activation link and instructions\n10. Test error handling by simulating email sending failures",
+          "status": "done",
+          "parentTaskId": 5
+        }
+      ]
     },
     {
       "id": 6,
