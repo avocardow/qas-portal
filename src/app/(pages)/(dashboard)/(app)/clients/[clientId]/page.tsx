@@ -5,7 +5,7 @@ import { api } from "@/utils/api";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 
 export default function ClientPage() {
-  const { clientId } = useParams();
+  const { clientId } = useParams() as { clientId: string };
   const {
     data: client,
     isLoading,
