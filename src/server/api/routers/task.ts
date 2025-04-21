@@ -63,10 +63,26 @@ export const taskRouter = createTRPCRouter({
     }),
   getAll: permissionProcedure(TASK_PERMISSIONS.GET_ALL)
     .input(getAllTasksSchema)
-    .query(() => {
-      throw new TRPCError({
-        code: "NOT_IMPLEMENTED",
-        message: "getAll not implemented",
+    .query(async ({ ctx, input }) => {
+      const page = input.page ?? 1;
+      const pageSize = input.pageSize ?? 10;
+      const where: Prisma.TaskWhereInput = {};
+      if (input.auditId) {
+        where.auditId = input.auditId;
+      }
+      if (input.assignedUserId) {
+        where.assignedUserId = input.assignedUserId;
+      }
+      if (input.status) {
+        where.status = input.status;
+      }
+      const sortBy = input.sortBy ?? "createdAt";
+      const sortOrder = input.sortOrder ?? "desc";
+      return ctx.db.task.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: { [sortBy]: sortOrder },
       });
     }),
   create: permissionProcedure(TASK_PERMISSIONS.CREATE)
