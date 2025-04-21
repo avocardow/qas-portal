@@ -26,7 +26,10 @@ const createTaskSchema = z.object({
   priority: z.string().optional(),
   requiresClientAction: z.boolean().optional(),
 });
-const updateTaskSchema = createTaskSchema.extend({ taskId: z.string().uuid() });
+const updateTaskSchema = createTaskSchema.extend({
+  taskId: z.string().uuid(),
+  status: z.string().optional(),
+});
 const deleteTaskSchema = z.object({ taskId: z.string().uuid() });
 
 // Router for Task operations
@@ -87,19 +90,31 @@ export const taskRouter = createTRPCRouter({
     }),
   create: permissionProcedure(TASK_PERMISSIONS.CREATE)
     .input(createTaskSchema)
-    .mutation(() => {
-      throw new TRPCError({
-        code: "NOT_IMPLEMENTED",
-        message: "create not implemented",
+    .mutation(async ({ ctx, input }) => {
+      // Create a new task under specified audit
+      const task = await ctx.db.task.create({
+        data: {
+          auditId: input.auditId,
+          name: input.name,
+          description: input.description,
+          assignedUserId: input.assignedUserId,
+          dueDate: input.dueDate,
+          priority: input.priority,
+          requiresClientAction: input.requiresClientAction,
+        },
       });
+      return task;
     }),
   update: permissionProcedure(TASK_PERMISSIONS.UPDATE)
     .input(updateTaskSchema)
-    .mutation(() => {
-      throw new TRPCError({
-        code: "NOT_IMPLEMENTED",
-        message: "update not implemented",
+    .mutation(async ({ ctx, input }) => {
+      // Update existing task fields
+      const { taskId, ...data } = input;
+      const updated = await ctx.db.task.update({
+        where: { id: taskId },
+        data,
       });
+      return updated;
     }),
   delete: permissionProcedure(TASK_PERMISSIONS.DELETE)
     .input(deleteTaskSchema)
