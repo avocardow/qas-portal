@@ -13,6 +13,7 @@ easily.
 - [📄 Documentation](https://tailadmin.com/docs)
 - [⬇️ Download](https://tailadmin.com/download)
 - [🌐 Live Site](https://nextjs-demo.tailadmin.com)
+- [📘 Project Documentation](docs/project-documentation.md)
 
 ## Installation
 
