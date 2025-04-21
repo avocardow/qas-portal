@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 import Link from "next/link";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -16,6 +17,8 @@ import {
 type SortField = "clientName" | "city" | "status";
 
 export default function ClientsPage() {
+  // Session for RBAC
+  const { data: session } = useSession();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
   const [sortBy, setSortBy] = useState<SortField>("clientName");
@@ -74,15 +77,24 @@ export default function ClientsPage() {
 
   return (
     <div>
-      {/* Filter and pagination controls */}
+      {/* Filter, Add New, and pagination controls */}
       <div className="mb-4 flex items-center justify-between">
-        <input
-          type="text"
-          placeholder="Search clients..."
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="rounded border px-2 py-1"
-        />
+        <div className="flex items-center space-x-2">
+          <input
+            type="text"
+            placeholder="Search clients..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="rounded border px-2 py-1"
+          />
+          {/* Conditional Add New Client button */}
+          {session?.user?.role &&
+            ["Admin", "Manager"].includes(session.user.role) && (
+              <Link href="/clients/new">
+                <button className="btn">Add New Client</button>
+              </Link>
+            )}
+        </div>
         <div className="space-x-2">
           <button
             onClick={handlePrev}
