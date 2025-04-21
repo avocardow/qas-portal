@@ -69,6 +69,15 @@ Copy `.env.example` to `.env.local` in the project root and fill in the followin
 
 For Vercel deployments, configure these variables under Settings > Environment Variables in your Vercel project. Ensure `.env.local` is added to `.gitignore` to prevent committing secrets.
 
+### GitHub Actions Secrets
+
+To enable the GitHub Actions CI workflow, add the following secrets in your repository (Settings > Secrets > Actions):
+
+- NEXT_PUBLIC_SUPABASE_URL: Your Supabase project URL (e.g., `https://<project>.supabase.co`)
+- NEXT_PUBLIC_SUPABASE_ANON_KEY: Your Supabase anonymous public API key
+- DATABASE_URL: Your PostgreSQL connection string (pooled)
+- DIRECT_URL: Your direct DB connection string
+
 ## Changelog
 
 ### Version 2.1.1 - [March 25, 2025]
