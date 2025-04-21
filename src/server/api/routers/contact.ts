@@ -16,7 +16,11 @@ export const contactUpdateSchema = contactCreateSchema.extend({
   contactId: z.string().uuid(),
 });
 
-// CRUD procedures for Contact entity
+// Zod schemas for batch operations
+const contactBatchCreateSchema = z.array(contactCreateSchema);
+const contactBatchUpdateSchema = z.array(contactUpdateSchema);
+
+// CRUD and batch procedures for Contact entity
 export const contactRouter = createTRPCRouter({
   create: adminOrManagerProcedure
     .input(contactCreateSchema)
@@ -28,5 +32,18 @@ export const contactRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       const { contactId, ...data } = input;
       return ctx.db.contact.update({ where: { id: contactId }, data });
+    }),
+  batchCreate: adminOrManagerProcedure
+    .input(contactBatchCreateSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.contact.createMany({ data: input, skipDuplicates: true });
+    }),
+  batchUpdate: adminOrManagerProcedure
+    .input(contactBatchUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const updates = input.map(({ contactId, ...data }) =>
+        ctx.db.contact.update({ where: { id: contactId }, data })
+      );
+      return ctx.db.$transaction(updates);
     }),
 });

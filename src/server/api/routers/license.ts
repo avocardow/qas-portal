@@ -16,6 +16,10 @@ export const licenseUpdateSchema = licenseCreateSchema.extend({
   licenseId: z.string().uuid(),
 });
 
+// Zod schemas for batch operations
+const licenseBatchCreateSchema = z.array(licenseCreateSchema);
+const licenseBatchUpdateSchema = z.array(licenseUpdateSchema);
+
 // Router stub for License (to be implemented in later subtasks)
 export const licenseRouter = createTRPCRouter({
   create: adminOrManagerProcedure
@@ -28,5 +32,18 @@ export const licenseRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       const { licenseId, ...data } = input;
       return ctx.db.license.update({ where: { id: licenseId }, data });
+    }),
+  batchCreate: adminOrManagerProcedure
+    .input(licenseBatchCreateSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.license.createMany({ data: input, skipDuplicates: true });
+    }),
+  batchUpdate: adminOrManagerProcedure
+    .input(licenseBatchUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const updates = input.map(({ licenseId, ...data }) =>
+        ctx.db.license.update({ where: { id: licenseId }, data })
+      );
+      return ctx.db.$transaction(updates);
     }),
 });

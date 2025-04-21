@@ -18,6 +18,10 @@ export const trustAccountUpdateSchema = trustAccountCreateSchema.extend({
   trustAccountId: z.string().uuid(),
 });
 
+// Zod schemas for batch operations
+const trustAccountBatchCreateSchema = z.array(trustAccountCreateSchema);
+const trustAccountBatchUpdateSchema = z.array(trustAccountUpdateSchema);
+
 // Router stub for TrustAccount (to be implemented in later subtasks)
 export const trustAccountRouter = createTRPCRouter({
   create: adminOrManagerProcedure
@@ -33,5 +37,21 @@ export const trustAccountRouter = createTRPCRouter({
         where: { id: trustAccountId },
         data,
       });
+    }),
+  batchCreate: adminOrManagerProcedure
+    .input(trustAccountBatchCreateSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.trustAccount.createMany({
+        data: input,
+        skipDuplicates: true,
+      });
+    }),
+  batchUpdate: adminOrManagerProcedure
+    .input(trustAccountBatchUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const updates = input.map(({ trustAccountId, ...data }) =>
+        ctx.db.trustAccount.update({ where: { id: trustAccountId }, data })
+      );
+      return ctx.db.$transaction(updates);
     }),
 });

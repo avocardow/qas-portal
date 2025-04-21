@@ -29,13 +29,13 @@ Create a tRPC middleware that checks the user's role from the context and restri
 ### Details:
 For each entity, define tRPC mutation procedures (contact.create, contact.update, license.create, license.update, trustAccount.create, trustAccount.update). Each procedure should accept parent clientId and entity data, validate input with Zod, and enforce RBAC via middleware. Use your ORM (e.g., Prisma) to interact with the database.[2][5]
 
-## 4. Implement Batch Operations for Efficiency [in-progress]
+## 4. Implement Batch Operations for Efficiency [done]
 ### Dependencies: 2.3
 ### Description: Add batch create and update procedures for each entity to handle multiple records in a single request.
 ### Details:
 Define tRPC procedures (e.g., contact.batchCreate, license.batchUpdate) that accept arrays of entity data and clientIds. Use Zod array validation and ensure RBAC enforcement. Optimize database interactions for bulk operations to improve performance.
 
-## 5. Write Unit and Integration Tests for Procedures and Middleware [pending]
+## 5. Write Unit and Integration Tests for Procedures and Middleware [in-progress]
 ### Dependencies: 2.4
 ### Description: Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.
 ### Details:

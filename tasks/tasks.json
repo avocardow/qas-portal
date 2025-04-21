@@ -98,7 +98,7 @@
           "id": 4,
           "title": "Implement Batch Operations for Efficiency",
           "description": "Add batch create and update procedures for each entity to handle multiple records in a single request.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [3],
           "details": "Define tRPC procedures (e.g., contact.batchCreate, license.batchUpdate) that accept arrays of entity data and clientIds. Use Zod array validation and ensure RBAC enforcement. Optimize database interactions for bulk operations to improve performance."
         },
@@ -106,7 +106,7 @@
           "id": 5,
           "title": "Write Unit and Integration Tests for Procedures and Middleware",
           "description": "Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [4],
           "details": "Write tests covering valid and invalid inputs, unauthorized access, and successful/failed CRUD and batch operations. Ensure all edge cases are handled and that procedures behave as expected under different user roles and data scenarios."
         }
