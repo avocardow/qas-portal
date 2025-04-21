@@ -194,7 +194,7 @@
           "id": 2,
           "title": "Implement tRPC Procedures for Audit Creation and Stage/Status Updates",
           "description": "Develop tRPC procedures in auditRouter for creating audits and updating their stage/status, enforcing RBAC for each operation.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1],
           "details": "Implement audit.create to accept clientId, auditYear, and initial stageId/statusId, ensuring only authorized roles can create audits. Implement audit.updateStageStatus to update an audit's stage and status, restricting access based on RBAC policy. Validate inputs and handle errors appropriately."
         },
