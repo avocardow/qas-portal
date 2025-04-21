@@ -26,6 +26,7 @@ describe("taskRouter", () => {
       task: {
         create: vi.fn(),
         update: vi.fn(),
+        delete: vi.fn(),
       },
     } as any;
     ctx = {
@@ -81,5 +82,25 @@ describe("taskRouter", () => {
     await expect(
       caller.update({ taskId: validTaskId, ...inputTask })
     ).rejects.toBeInstanceOf(TRPCError);
+  });
+
+  it("should delete a task with proper permissions", async () => {
+    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
+    ctx.db.task.delete.mockResolvedValue({ id: validTaskId, ...inputTask });
+    const caller = callTask(ctx);
+    const result = await caller.delete({ taskId: validTaskId });
+    expect(result).toEqual({ id: validTaskId, ...inputTask });
+    expect(ctx.db.task.delete).toHaveBeenCalledWith({
+      where: { id: validTaskId },
+    });
+  });
+
+  it("should forbid deletion without proper permissions", async () => {
+    ctx.session.user.role = "User";
+    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
+    const caller = callTask(ctx);
+    await expect(caller.delete({ taskId: validTaskId })).rejects.toBeInstanceOf(
+      TRPCError
+    );
   });
 });
