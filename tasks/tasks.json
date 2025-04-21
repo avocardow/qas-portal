@@ -306,7 +306,7 @@
           "id": 3,
           "title": "Implement Basic Task Retrieval Procedures",
           "description": "Create tRPC procedures for task.getByAuditId and task.getAssignedToMe with pagination",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1, 2],
           "details": "Implement the task.getByAuditId procedure that accepts an auditId parameter and returns all tasks associated with that audit. Apply RBAC to ensure only users with access to the audit can view its tasks. Implement task.getAssignedToMe procedure that returns tasks assigned to the current user with pagination support. Add input validation for pagination parameters (page, limit). Implement sorting functionality allowing tasks to be sorted by dueDate, priority, or status. Add filtering options to filter tasks by status or priority. Ensure both procedures use the RBAC middleware to enforce access control."
         },
@@ -314,7 +314,7 @@
           "id": 4,
           "title": "Implement Admin Task View Procedure",
           "description": "Create task.getAll procedure with advanced querying capabilities for administrators",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2, 3],
           "details": "Implement task.getAll procedure that returns all tasks in the system with strict admin-only access control. Add comprehensive pagination support with cursor-based pagination for better performance. Implement advanced filtering options including by assignee, date ranges, multiple statuses, and priorities. Add sorting capabilities on all relevant fields with both ascending and descending options. Include search functionality to search across task names and descriptions. Implement count and aggregation features to show task distribution by status, priority, or assignee. Ensure proper error handling for invalid query parameters."
         },
@@ -322,7 +322,7 @@
           "id": 5,
           "title": "Implement Task Creation and Update Procedures",
           "description": "Create tRPC procedures for task.create and task.update with proper validation",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1, 2],
           "details": "Implement task.create procedure that accepts task details and creates a new task in the database. Add input validation using Zod schemas to ensure all required fields are provided and valid. Implement task.update procedure that allows updating task fields while preserving immutable fields. Add validation to ensure users can only update tasks they're authorized to modify based on RBAC rules. Implement business logic for task assignment, including notifications or events when tasks are created or assigned. Add audit logging to track task creation and modifications. Ensure proper error handling for validation failures and database errors."
         },
