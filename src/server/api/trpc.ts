@@ -134,3 +134,34 @@ export const managerProcedure = protectedProcedure.use(
 export const adminOrManagerProcedure = protectedProcedure.use(
   enforceRole(["Admin", "Manager"])
 );
+
+// Generic permission enforcement middleware for RBAC actions
+export const enforcePermission = (permission: string) =>
+  t.middleware(async ({ ctx, next }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    const userRoleName = ctx.session.user.role;
+    if (!userRoleName) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
+    }
+    const hasPermission = await ctx.db.rolePermission.findFirst({
+      where: {
+        role: { name: userRoleName },
+        permission: { action: permission },
+      },
+    });
+    if (!hasPermission) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Insufficient permissions",
+      });
+    }
+    return next({
+      ctx: { session: ctx.session },
+    });
+  });
+
+// Procedure builder to require a specific permission
+export const permissionProcedure = (permission: string) =>
+  protectedProcedure.use(enforcePermission(permission));

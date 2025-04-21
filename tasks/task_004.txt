@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Audit Tracking Backend
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Create tRPC procedures in auditRouter for Audit management with RBAC
@@ -11,13 +11,126 @@ Implement the following tRPC procedures in auditRouter: 1) audit.create (input: 
 Write unit tests for each procedure verifying correct data manipulation, relationship management, and RBAC enforcement. Test edge cases like duplicate audit years for the same client.
 
 # Subtasks:
-## 1. Design Audit Data Models and RBAC Policy [pending]
+## 1. Design Audit Data Models and RBAC Policy [in-progress]
 ### Dependencies: None
 ### Description: Define and implement the database models for audits, audit stages/statuses, and audit assignments. Establish a clear RBAC (Role-Based Access Control) policy for all audit-related operations.
 ### Details:
 Create or update ORM models for Audit, AuditStage, AuditStatus, and AuditAssignment. Define user roles (Auditor, Manager, Admin) and map permissions for each tRPC procedure. Ensure the models support linking audits to clients, tracking stages/statuses, and managing user assignments. Document the RBAC rules for reference in later subtasks.
 
-## 2. Implement tRPC Procedures for Audit Creation and Stage/Status Updates [pending]
+<info added on 2025-04-21T14:30:38.587Z>
+Based on your exploration, here's additional technical information for the subtask:
+
+```typescript
+// Permission constants to be added in src/constants/permissions.ts
+export const AUDIT_PERMISSIONS = {
+  CREATE: 'audit.create',
+  UPDATE_STAGE_STATUS: 'audit.updateStageStatus',
+  GET_BY_CLIENT_ID: 'audit.getByClientId',
+  GET_BY_ID: 'audit.getById',
+  ASSIGN_USER: 'audit.assignUser',
+  UNASSIGN_USER: 'audit.unassignUser',
+};
+```
+
+For the Prisma seed script, implement:
+
+```typescript
+// In prisma/seed.ts
+async function seedAuditPermissions() {
+  const permissions = Object.values(AUDIT_PERMISSIONS).map(action => ({ action }));
+  await prisma.permission.createMany({
+    data: permissions,
+    skipDuplicates: true,
+  });
+  
+  // Map permissions to roles
+  const admin = await prisma.role.findUnique({ where: { name: 'Admin' } });
+  const manager = await prisma.role.findUnique({ where: { name: 'Manager' } });
+  const auditor = await prisma.role.findUnique({ where: { name: 'Auditor' } });
+  
+  // Admin gets all permissions
+  const adminPermissions = await prisma.permission.findMany({
+    where: { action: { in: Object.values(AUDIT_PERMISSIONS) } },
+  });
+  
+  // Manager permissions
+  const managerPermissions = await prisma.permission.findMany({
+    where: { action: { in: Object.values(AUDIT_PERMISSIONS) } },
+  });
+  
+  // Auditor permissions - limited read access
+  const auditorPermissions = await prisma.permission.findMany({
+    where: { action: { in: [AUDIT_PERMISSIONS.GET_BY_CLIENT_ID, AUDIT_PERMISSIONS.GET_BY_ID] } },
+  });
+  
+  // Create role-permission mappings
+  // [Implementation details for creating RolePermission records]
+}
+```
+
+For tRPC middleware implementation:
+
+```typescript
+// In src/server/api/trpc.ts
+export const enforceAuditPermission = (requiredPermission: string) => 
+  middleware(async ({ ctx, next }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    
+    const hasPermission = await prisma.rolePermission.findFirst({
+      where: {
+        role: {
+          userRoles: {
+            some: {
+              userId: ctx.session.user.id
+            }
+          }
+        },
+        permission: {
+          action: requiredPermission
+        }
+      }
+    });
+    
+    if (!hasPermission) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Insufficient permissions" });
+    }
+    
+    return next();
+  });
+```
+
+Unit test structure for RBAC enforcement:
+
+```typescript
+// In tests/rbac/audit-permissions.test.ts
+describe('Audit RBAC Enforcement', () => {
+  test('Admin can perform all audit operations', async () => {
+    // Setup admin user session
+    // Test each permission
+  });
+  
+  test('Manager can perform all audit operations', async () => {
+    // Setup manager user session
+    // Test each permission
+  });
+  
+  test('Auditor can only view audits', async () => {
+    // Setup auditor user session
+    // Test allowed operations (should succeed)
+    // Test restricted operations (should fail)
+  });
+  
+  test('Other roles cannot access audit operations', async () => {
+    // Setup user with non-audit role
+    // Test operations (all should fail)
+  });
+});
+```
+</info added on 2025-04-21T14:30:38.587Z>
+
+## 2. Implement tRPC Procedures for Audit Creation and Stage/Status Updates [in-progress]
 ### Dependencies: 4.1
 ### Description: Develop tRPC procedures in auditRouter for creating audits and updating their stage/status, enforcing RBAC for each operation.
 ### Details:
