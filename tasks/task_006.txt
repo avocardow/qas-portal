@@ -17,13 +17,13 @@ Follow project-specific Cursor rules for environment configuration.
 Run a CI test job that connects to the Development Supabase instance and performs a simple query. Verify environment variables are correctly loaded and the connection succeeds.
 
 # Subtasks:
-## 1. Identify and Document Required Supabase Environment Variables [pending]
+## 1. Identify and Document Required Supabase Environment Variables [done]
 ### Dependencies: None
 ### Description: List all environment variables needed for the CI environment to connect to the Development Supabase instance. Document their purpose and required values in the project README or documentation.
 ### Details:
 Review Supabase documentation and your project's requirements to determine which variables (e.g., SUPABASE_API_URL, SUPABASE_API_KEY, PROJECT_ID) are necessary. Add a section to the README or a dedicated documentation file explaining each variable, its purpose, and any security considerations.[1][2]
 
-## 2. Update .env.example and CI Configuration Files [pending]
+## 2. Update .env.example and CI Configuration Files [done]
 ### Dependencies: 6.1
 ### Description: Add the identified Supabase environment variables to the .env.example file and ensure the CI configuration (e.g., GitHub Actions, GitLab CI) references these variables appropriately.
 ### Details:

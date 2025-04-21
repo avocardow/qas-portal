@@ -282,7 +282,7 @@
           "id": 1,
           "title": "Identify and Document Required Supabase Environment Variables",
           "description": "List all environment variables needed for the CI environment to connect to the Development Supabase instance. Document their purpose and required values in the project README or documentation.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Review Supabase documentation and your project's requirements to determine which variables (e.g., SUPABASE_API_URL, SUPABASE_API_KEY, PROJECT_ID) are necessary. Add a section to the README or a dedicated documentation file explaining each variable, its purpose, and any security considerations.[1][2]"
         },
@@ -290,7 +290,7 @@
           "id": 2,
           "title": "Update .env.example and CI Configuration Files",
           "description": "Add the identified Supabase environment variables to the .env.example file and ensure the CI configuration (e.g., GitHub Actions, GitLab CI) references these variables appropriately.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Edit the .env.example file to include placeholders for all required Supabase variables. Update the CI workflow configuration to reference these variables, using the CI platform's secret management features (e.g., GitHub Actions secrets). Ensure the variables are not hardcoded and are sourced securely.[1]"
         },
