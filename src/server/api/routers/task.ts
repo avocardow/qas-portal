@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, permissionProcedure } from "@/server/api/trpc";
 import type { Prisma } from "@prisma/client";
 import { TASK_PERMISSIONS } from "@/constants/permissions";
@@ -118,10 +117,11 @@ export const taskRouter = createTRPCRouter({
     }),
   delete: permissionProcedure(TASK_PERMISSIONS.DELETE)
     .input(deleteTaskSchema)
-    .mutation(() => {
-      throw new TRPCError({
-        code: "NOT_IMPLEMENTED",
-        message: "delete not implemented",
+    .mutation(async ({ ctx, input }) => {
+      // Delete the specified task
+      const deleted = await ctx.db.task.delete({
+        where: { id: input.taskId },
       });
+      return deleted;
     }),
 });
