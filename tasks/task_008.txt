@@ -1,50 +1,37 @@
 # Task ID: 8
-# Title: Create documentation and verification guide
-# Status: done
-# Dependencies: 1, 2, 5, 6, 7
+# Title: Implement Document Reference Display Backend
+# Status: pending
+# Dependencies: 1, 4, 6
 # Priority: low
-# Description: Document the implemented features, folder structure, and provide a verification guide for the development team.
+# Description: Create tRPC procedures in documentRouter for retrieving document references
 # Details:
-Create documentation that includes:
-- Overview of the implemented folder structure and routing
-- Guide to running the migration script with example commands
-- Instructions for verifying data in Supabase Table Editor
-- List of placeholder pages and their intended future functionality
-- Next steps for Phase 1 development
-
-Place documentation in the project wiki or README.md file following project conventions.
+Implement the following tRPC procedures in documentRouter: 1) document.getByClientId, 2) document.getByAuditId, 3) document.getByTaskId. Each procedure should return document metadata including fileName and sharepointFileUrl. Enforce appropriate RBAC for document visibility based on user roles and relationship to the parent entity.
 
 # Test Strategy:
-Have a team member follow the documentation to navigate the application and run the migration script. Collect feedback on clarity and completeness. Verify all commands and paths in the documentation are accurate.
+Write unit tests for each procedure verifying correct document retrieval based on parent entity ID and RBAC enforcement. Test with various user roles to confirm proper access control.
 
 # Subtasks:
-## 1. Document Folder Structure and Routing Overview [done]
+## 1. Define Input Schemas and Output Types for Document Reference Procedures [pending]
 ### Dependencies: None
-### Description: Create a section that explains the project's folder structure and routing logic, referencing how files and folders map to application routes.
+### Description: Design and implement input validation schemas (using a library like zod) and output types for each tRPC procedure: getByClientId, getByAuditId, and getByTaskId. Ensure that each input schema strictly validates the required identifier and that the output type includes fileName and sharepointFileUrl.
 ### Details:
-Analyze the current project directory. Describe how the folder and file organization defines the application's routing, referencing conventions such as file-based routing (e.g., Next.js or Expo Router). Include a visual or tabular representation if helpful. Ensure this overview is clear for new developers to understand how navigation is structured.[1][2][5]
+Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId as strings or UUIDs). Define TypeScript types or zod schemas for the output, ensuring fileName and sharepointFileUrl are included. This step ensures type safety and input validation for all subsequent implementation steps.[2][4]
 
-## 2. Write Migration Script Usage Guide [done]
+## 2. Implement RBAC Middleware for Document Visibility [pending]
 ### Dependencies: 8.1
-### Description: Provide step-by-step instructions for running the migration script, including example commands and expected outputs.
+### Description: Develop and integrate reusable middleware to enforce role-based access control (RBAC) for document retrieval procedures. The middleware should check user roles and their relationship to the parent entity (client, audit, or task) before allowing access to document metadata.
 ### Details:
-Identify the migration script(s) used in the project. Document prerequisites, command-line usage, environment variables, and sample commands. Clarify where to find the script, how to execute it, and how to interpret success or error messages. Ensure instructions are platform-agnostic or specify OS-specific steps as needed.
+Create a middleware function that inspects the user's roles and verifies their association with the relevant parent entity. Integrate this middleware into the tRPC procedures using the .use() method, ensuring that only authorized users can access document references.[1][4]
 
-## 3. Create Data Verification Instructions for Supabase Table Editor [done]
-### Dependencies: 8.2
-### Description: Detail the process for verifying migrated data using the Supabase Table Editor, including navigation steps and data validation tips.
+## 3. Implement tRPC Procedures in documentRouter [pending]
+### Dependencies: 8.1, 8.2
+### Description: Develop the three tRPC procedures (getByClientId, getByAuditId, getByTaskId) within documentRouter. Each procedure should retrieve document metadata from the database based on the provided identifier and return fileName and sharepointFileUrl for each document.
 ### Details:
-Outline how to access the Supabase Table Editor, locate relevant tables, and check that data has been correctly migrated. Include screenshots or example queries if appropriate. Highlight common issues and troubleshooting steps for data verification.
+For each procedure, use the validated input to query the database for documents related to the specified client, audit, or task. Ensure that the RBAC middleware is applied to each procedure. Return an array of objects containing fileName and sharepointFileUrl as defined in the output type.[1][2][4]
 
-## 4. List Placeholder Pages and Intended Functionality [done]
-### Dependencies: 8.1
-### Description: Compile a list of all current placeholder pages in the application and describe their planned future functionality.
+## 4. Test and Document Document Reference Procedures [pending]
+### Dependencies: 8.3
+### Description: Write comprehensive tests for each procedure to verify correct input validation, RBAC enforcement, and accurate data retrieval. Add inline documentation and meta descriptions for each procedure to support maintainability and developer understanding.
 ### Details:
-Review the routing and page structure to identify all placeholder or stub pages. For each, provide a brief description of its intended purpose and any relevant notes on future development. Organize this information in a clear, accessible format.
-
-## 5. Summarize Next Steps for Phase 1 Development and Finalize Documentation [done]
-### Dependencies: 8.1, 8.2, 8.3, 8.4
-### Description: Outline the next development steps for Phase 1 and ensure all documentation is compiled and formatted according to project conventions.
-### Details:
-Work with the team to identify and summarize the immediate next steps for Phase 1. Review all documentation sections for clarity and completeness. Place the final documentation in the project wiki or README.md, following established formatting and organizational standards.
+Create unit and integration tests to cover valid and invalid inputs, unauthorized access, and successful data retrieval. Use tRPC's meta functionality and zod's .describe() method to document each procedure and its parameters for future reference and developer tools integration.[2][5]
 

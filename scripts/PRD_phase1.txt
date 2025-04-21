@@ -1,0 +1,105 @@
+<context>
+# QAS Portal - Core Internal Functionality (MVP Phase 1)
+
+## 1. Introduction
+
+1.1. Purpose:
+To define the requirements for implementing the core internal features of the QLD Audit Specialists (QAS) Portal MVP Phase 1. Builds on Phase 0 infrastructure (authentication, API layer, DB connection, seeded data) to deliver tangible Client, Audit, and Task management capabilities for internal team members (Admins, Auditors, Managers, Staff).
+
+1.2. Scope:
+- Client Management (Internal CRM): Full CRUD for Client records and associated Contacts, Licenses, Trust Accounts. Includes list and detail views.
+- Audit Tracking: Create new annual Audits; manually view and update Stage and Status; display audit history per client.
+- Task Management: Full CRUD for Tasks linked to Audits, assignment to team members, status updates. Includes "My Tasks" and "All Tasks" list views and detail views.
+- Basic Role-Based Access Control (RBAC): Permission checks in API (tRPC) procedures based on user roles (Admin, Manager, Auditor, Staff).
+- Document Reference Display: Show links to related documents (SharePoint URLs) on detail pages.
+- UI Implementation: Replace placeholder pages (`/clients`, `/clients/[clientId]`, `/audits/[auditId]`, `/tasks`) with functional interfaces using Next.js App Router, Tailwind, Shadcn UI / TailAdmin components.
+
+1.3. Out of Scope:
+- Client-facing UI/UX beyond backend readiness.
+- Document uploads, advanced dashboards/analytics, Xero/Microsoft Teams/E-Signature integrations.
+- Automated reminders/notifications, secure messaging, full File Manager UI.
+- In-app email sending, advanced settings/configuration UIs, data deletion for core records.
+
+1.4. Context:
+Assumes completion of MVP Phase 0 (a, b, c). Project uses Next.js (App Router), TypeScript, Supabase (PostgreSQL) via Prisma, tRPC, NextAuth.js (M365 & Email). Core infrastructure, database schema, authentication, and initial data seeding are complete. Placeholder pages exist for features.
+
+1.5. Implementation Guidelines:
+All development MUST adhere to the project's Cursor rules (see `.cursor/rules/`) and leverage Context7 for additional context, official documentation, and best practices.
+</context>
+
+<PRD>
+## 2. Goals
+
+- Enable authorized QAS team members to create, view, and update Client, Contact, License, and Trust Account data.
+- Allow creation of annual Audit records and manual tracking of Stage and Status.
+- Provide task creation, assignment, viewing, updating, and tracking linked to Audits.
+- Enforce foundational RBAC in the API layer to secure data and actions based on roles.
+- Surface basic visibility into related documents via SharePoint links.
+- Replace spreadsheet-based workflows with a functional internal tool for core client/audit/task management.
+
+## 3. Specific Requirements
+
+### 3.1. Client Management (Internal CRM)
+
+#### 3.1.1. Backend (tRPC Procedures - `clientRouter`)
+- `client.getAll`: Add server-side sorting (`clientName`, `updatedAt`), filtering (`status`), and cursor-based pagination. Enforce RBAC (limit fields for non-Admin/Manager as needed).
+- `client.getById`: Include relations (`contacts`, `licenses`, `trustAccounts`, `audits`, recent `activityLogs`/`notes`). Enforce RBAC.
+- `client.create`: Accept validated input via Zod schema; RBAC (Admin/Manager).
+- `client.update`: Accept `clientId` and validated update data; RBAC (Admin/Manager).
+- (Optional) Direct procedures for `contact.create/update`, `license.create/update`, `trustAccount.create/update` if nested writes are not feasible.
+
+#### 3.1.2. Frontend
+- **Client List** (`/clients`): Functional data table; fetch with `client.getAll`; pagination, sorting, filtering; columns: Name, City, Status, Next Contact Date; "Add New Client" button conditional on role.
+- **Client Detail** (`/clients/[clientId]`): Structured view with Cards/Tabs (Contacts, Licenses, Trust Accounts, Audit History, Activity Log); edit buttons for Client and related entities (role-based visibility).
+- **Client Create/Edit Forms**: React Hook Form + Zod with template components; handle `client.create` and `client.update`; manage related entities via sections or modals.
+
+### 3.2. Audit Tracking (Manual)
+
+#### 3.2.1. Backend (`auditRouter`)
+- `audit.create`: Input: `clientId`, `auditYear`, initial `stageId`/`statusId`; RBAC.
+- `audit.updateStageStatus`: Input: `auditId`, `stageId`, `statusId`; RBAC (Auditor/Manager/Admin).
+- `audit.getByClientId`: Fetch audit history for client detail.
+- `audit.getById`: Fetch full audit details, tasks, assignments.
+- `audit.assignUser` / `audit.unassignUser`: Manage `AuditAssignment` records; RBAC.
+
+#### 3.2.2. Frontend
+- **Client Detail Audits Tab**: List audits (`audit.getByClientId`); show Year, Stage, Status, Due Date, Assigned Staff; "Add New Audit Year" button; Stage/Status dropdowns (`audit.updateStageStatus`); links to `/audits/[auditId]`.
+- **Audit Detail** (`/audits/[auditId]`): Show audit details; assigned team members with add/remove controls; related tasks.
+
+### 3.3. Task Management (Internal)
+
+#### 3.3.1. Backend (`taskRouter`)
+- `task.getByAuditId`, `task.getAssignedToMe` (pagination, sorting, filtering), `task.getAll` (Admin view), `task.create`, `task.update`, `task.delete`; enforce RBAC.
+
+#### 3.3.2. Frontend
+- **Task List** (`/tasks`): Functional table; default `task.getAssignedToMe`; Admin toggle (`task.getAll`); pagination, sorting, filtering; "Add New Task" button.
+- **Audit Detail Tasks Section**: List tasks (`task.getByAuditId`); quick status updates; add Task for audit.
+- **Task Create/Edit**: Fields: Name, Description, Assignee, Due Date, Status, Priority; handle `task.create`/`task.update`.
+- **Task Detail View** (modal): Display full details.
+
+### 3.4. Document Reference Display
+
+#### 3.4.1. Backend (`documentRouter`)
+- `document.getByClientId`, `document.getByAuditId`, `document.getByTaskId`.
+
+#### 3.4.2. Frontend
+- Documents tab on Client, Audit, Task details; list with `fileName` and "Open" link (`sharepointFileUrl`).
+
+### 3.5. Role-Based Access Control (RBAC)
+
+- **Backend**: Enforce `session.user.role` checks; throw `TRPCError('FORBIDDEN')` on unauthorized.
+- **Frontend**: Render/disable UI elements based on roles from `useSession`.
+
+## 4. Acceptance Criteria
+
+- Admins/Auditors can create, view, update Client records and related entities.
+- Admins/Auditors can create new Audit records linked to clients.
+- Admins/Auditors/Managers can update Audit Stage and Status.
+- Admins/Managers/Auditors can create, assign, view, update Tasks.
+- Team members can view assigned tasks on their page.
+- Admins/Managers can view all tasks and filter by assignee.
+- Authorized users see appropriate UI elements for Create/Edit/Delete/Assign.
+- Document links display on Client/Audit/Task detail pages.
+- API enforces role-based permissions.
+- Core internal workflow functional, replacing spreadsheets.
+</PRD> 

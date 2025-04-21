@@ -3,4 +3,5 @@ node_modules
 out
 build
 src/generated
-src/generated/** 
+src/generated/**
+.github/workflows/ci.yml

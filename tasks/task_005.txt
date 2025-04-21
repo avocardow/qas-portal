@@ -1,56 +1,43 @@
 # Task ID: 5
-# Title: Implement Prisma database seeding
-# Status: done
+# Title: Implement Audit Tracking Frontend
+# Status: pending
 # Dependencies: 3, 4
 # Priority: medium
-# Description: Complete the migration script by adding Prisma Client integration to insert parsed data into Supabase.
+# Description: Create Audit UI components for Client Detail and Audit Detail pages
 # Details:
-Extend `scripts/migrateClients.ts` to:
-- Initialize Prisma Client with proper environment variables for Supabase connection
-- Create transaction-wrapped database operations for inserting clients, contacts, licenses, and trust accounts
-- Handle relationships between entities correctly
-- Implement error handling and rollback for failed transactions
-- Add command-line options for dry run, verbose logging, and environment selection
-
-Ensure the script can be run multiple times without creating duplicates (upsert where appropriate).
+Develop: 1) Client Detail Audits Tab showing audit list (using audit.getByClientId) with Year, Stage, Status, Due Date, Assigned Staff columns, 'Add New Audit Year' button, and Stage/Status dropdowns for audit.updateStageStatus. 2) Audit Detail page (/audits/[auditId]) displaying audit details, assigned team members with add/remove controls, and related tasks. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.
 
 # Test Strategy:
-Run the complete migration script against the development Supabase instance. Verify data appears correctly in Supabase Table Editor. Test error scenarios by introducing invalid data and checking rollback functionality.
+Manually test all UI components and interactions. Verify data fetching, display of audit history, stage/status updates, and team member assignment functionality. Test role-based UI element visibility.
 
 # Subtasks:
-## 1. Initialize Prisma Client with Supabase Environment Variables [done]
+## 1. Design Audit UI Components and Page Layouts [pending]
 ### Dependencies: None
-### Description: Set up Prisma Client in the migration script to connect to the Supabase database using environment variables.
+### Description: Create wireframes and component structures for the Client Detail Audits Tab and the Audit Detail page, ensuring alignment with Tailwind and Shadcn UI / TailAdmin design systems.
 ### Details:
-Update `scripts/migrateClients.ts` to import and initialize Prisma Client. Ensure the script loads environment variables (e.g., using dotenv) for Supabase connection details. Validate that the connection is successful before proceeding with any operations.[3][4]
+Define the layout for the audits tab within the Client Detail page, including table columns (Year, Stage, Status, Due Date, Assigned Staff), 'Add New Audit Year' button, and dropdowns for Stage/Status. For the Audit Detail page, outline sections for audit details, assigned team members with add/remove controls, and related tasks. Use Figma or a similar tool for mockups and document component hierarchies.
 
-## 2. Parse and Structure Input Data for Seeding [done]
+## 2. Implement Client Detail Audits Tab Table and Controls [pending]
 ### Dependencies: 5.1
-### Description: Parse the source data and structure it into objects representing clients, contacts, licenses, and trust accounts, ready for database insertion.
+### Description: Develop the audits table UI for the Client Detail page, integrating data fetching and interactive controls for audit management.
 ### Details:
-Implement or update parsing logic to transform raw input (e.g., JSON, CSV) into structured JavaScript objects. Organize data to reflect entity relationships (e.g., clients with nested contacts and licenses). Ensure data integrity and readiness for transactional insertion.
+Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fetch audit data using audit.getByClientId. Implement columns for Year, Stage, Status, Due Date, and Assigned Staff. Add the 'Add New Audit Year' button with modal or inline form functionality. Integrate Stage/Status dropdowns that trigger audit.updateStageStatus on change.
 
-## 3. Implement Transactional Upsert Operations with Relationship Handling [done]
-### Dependencies: 5.2
-### Description: Create transaction-wrapped upsert operations to insert or update clients, contacts, licenses, and trust accounts, maintaining correct relationships and ensuring idempotency.
+## 3. Develop Audit Detail Page with Team and Task Management [pending]
+### Dependencies: 5.1
+### Description: Create the Audit Detail page at /audits/[auditId], displaying audit information and enabling management of assigned team members and related tasks.
 ### Details:
-Use Prisma's transaction API to group all related inserts/updates in a single transaction. Use upsert operations to avoid duplicates, matching on unique fields. Correctly link related entities (e.g., connect contacts to clients). Roll back the transaction if any operation fails to maintain data consistency.[1][5]
+Use Tailwind and Shadcn UI / TailAdmin components to present audit details. Implement a section for assigned team members with add/remove controls (e.g., multi-select dropdown or list with remove buttons). Display related tasks in a list or table. Ensure all data is fetched and updated via appropriate API endpoints.
 
-## 4. Implement Error Handling and Transaction Rollback [done]
-### Dependencies: 5.3
-### Description: Add robust error handling to catch and log errors during the seeding process, ensuring transactions are rolled back on failure.
+## 4. Integrate API Calls and State Management [pending]
+### Dependencies: 5.2, 5.3
+### Description: Connect UI components to backend APIs for data retrieval and updates, managing local and global state as needed.
 ### Details:
-Wrap the main seeding logic in try/catch blocks. On error, ensure Prisma disconnects and the transaction is rolled back. Log detailed error messages for debugging. Exit the process with a non-zero code on failure.[5]
+Wire up audit.getByClientId for the audits tab and relevant endpoints for audit details, team assignment, and task management. Use React Query, Redux, or context/state hooks for efficient state management and UI updates. Handle optimistic updates for status/stage changes and team modifications.
 
-## 5. Add Command-Line Options for Dry Run, Verbose Logging, and Environment Selection [done]
+## 5. Implement Role-Based Access and Final Styling Consistency [pending]
 ### Dependencies: 5.4
-### Description: Enhance the script to accept command-line arguments for dry run mode, verbose logging, and selecting the environment (e.g., development, staging, production).
+### Description: Apply role-based controls to restrict actions (e.g., editing, assignment) and ensure all UI elements follow consistent styling guidelines.
 ### Details:
-Use a library like yargs or commander to parse CLI arguments. Implement dry run mode to simulate operations without writing to the database. Add verbose logging for detailed output. Allow specifying the environment to load the correct configuration.
-
-## 6. Test Idempotency and Multiple Runs [done]
-### Dependencies: 5.5
-### Description: Verify that the script can be run multiple times without creating duplicate records, ensuring upsert logic and relationships work as intended.
-### Details:
-Run the script repeatedly against a test Supabase database. Confirm that no duplicates are created and relationships remain correct. Adjust upsert logic or unique constraints as needed to guarantee idempotency.[1][5]
+Check user roles/permissions before rendering or enabling controls such as status updates, team assignment, and adding new audits. Refine all components to match Tailwind and Shadcn UI / TailAdmin standards for spacing, typography, and responsiveness. Conduct a UI review to ensure visual and functional consistency across both pages.
 

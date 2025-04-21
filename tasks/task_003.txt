@@ -1,50 +1,49 @@
 # Task ID: 3
-# Title: Define Prisma schema for client data
-# Status: done
-# Dependencies: None
+# Title: Implement Client Management Frontend
+# Status: pending
+# Dependencies: 1, 2
 # Priority: high
-# Description: Create or update the Prisma schema to support client data migration from CSV.
+# Description: Create Client List and Detail pages with CRUD functionality
 # Details:
-Update `schema.prisma` to include models for:
-- Clients (name, address, status, etc.)
-- Contacts (name, email, phone, client relationship)
-- Licenses (type, number, expiration date, client relationship)
-- Trust accounts (account number, balance, client relationship)
-- Audits (initial placeholder for future development)
-
-Ensure proper relationships between models. Use Context7 to fetch official Prisma documentation for schema design best practices.
+Develop: 1) Client List page (/clients) with functional data table using client.getAll, including pagination, sorting, filtering, and conditional 'Add New Client' button based on user role. 2) Client Detail page (/clients/[clientId]) with structured Cards/Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log. 3) Client Create/Edit forms using React Hook Form + Zod with template components, handling client.create and client.update. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.
 
 # Test Strategy:
-Run `npx prisma validate` to verify schema correctness. Generate and apply migrations to the development Supabase instance with `npx prisma migrate dev`. Verify tables are created correctly in Supabase.
+Perform manual testing of all UI components and interactions. Verify data fetching, pagination, sorting, and filtering. Test form validation and submission. Confirm role-based UI element visibility.
 
 # Subtasks:
-## 1. Analyze and Document Client Data Requirements [done]
+## 1. Set Up Routing and Page Structure [pending]
 ### Dependencies: None
-### Description: Review the CSV migration requirements and document all necessary fields and relationships for Clients, Contacts, Licenses, Trust Accounts, and Audits.
+### Description: Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.
 ### Details:
-List all fields for each model (e.g., Clients: name, address, status; Contacts: name, email, phone, clientId, etc.). Identify required data types, constraints, and how each entity relates to others (e.g., one-to-many between Clients and Contacts). Ensure the schema will support all data needed for migration and future extensibility.
+Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]
 
-## 2. Design Prisma Models and Relationships [done]
+## 2. Implement Client List Data Table with Pagination, Sorting, and Filtering [pending]
 ### Dependencies: 3.1
-### Description: Draft the Prisma models for Clients, Contacts, Licenses, Trust Accounts, and Audits, specifying all fields and defining relationships according to best practices.
+### Description: Build the Client List page with a functional data table that supports pagination, sorting, and filtering, fetching data via client.getAll.
 ### Details:
-Use singular, PascalCase model names and camelCase field names for clarity and convention compliance[4]. Define one-to-many and one-to-one relationships as appropriate (e.g., a Client has many Contacts, Licenses, and Trust Accounts). Include placeholder fields for the Audits model for future development. Reference official Prisma documentation for relationship syntax and best practices[2][4].
+Use a data table component (from Shadcn UI or TailAdmin) to display clients. Integrate client.getAll to fetch data. Add pagination controls, sortable columns, and filtering inputs. Ensure the table updates based on user interactions.[4]
 
-## 3. Implement and Annotate schema.prisma File [done]
+## 3. Add Conditional 'Add New Client' Button Based on User Role [pending]
 ### Dependencies: 3.2
-### Description: Update or create the `schema.prisma` file with the defined models, fields, and relationships, including comments for clarity and maintainability.
+### Description: Render the 'Add New Client' button on the Client List page only for users with the appropriate role.
 ### Details:
-Translate the model designs into Prisma Schema Language, ensuring all relationships and field types are correctly specified[2][3]. Add comments to explain model purposes, relationships, and any placeholder fields. Use environment variables for data source configuration if needed[2].
+Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form.
 
-## 4. Validate Schema and Generate Migration [done]
+## 4. Develop Client Create and Edit Forms with Validation [pending]
 ### Dependencies: 3.3
-### Description: Run Prisma validation tools and generate a migration to ensure the schema is syntactically correct and ready for database application.
+### Description: Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.
 ### Details:
-Use `prisma validate` to check for schema errors and `prisma migrate dev` to generate and apply the migration to a development database[2][3]. Address any validation or migration issues, ensuring all relationships and constraints are enforced as intended.
+Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback.
 
-## 5. Review Schema for Best Practices and Future Extensibility [done]
+## 5. Implement Client Detail Page with Structured Cards/Tabs [pending]
 ### Dependencies: 3.4
-### Description: Perform a final review of the schema for naming conventions, indexing, and extensibility, making adjustments as needed for maintainability and performance.
+### Description: Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.
 ### Details:
-Check that model and field names follow Prisma and JavaScript conventions[4]. Ensure indexes are added to frequently queried fields and foreign keys for performance[4][5]. Confirm that placeholder models (e.g., Audits) are clearly marked for future development. Document any design decisions or areas for future improvement.
+Use Shadcn UI or TailAdmin components to create a visually consistent layout. Fetch and display relevant data for each section. Ensure tabs/cards are responsive and accessible.
+
+## 6. Integrate CRUD Operations and Finalize UI Consistency [pending]
+### Dependencies: 3.5
+### Description: Connect all CRUD operations (Create, Read, Update, Delete) across the Client List and Detail pages, and ensure consistent styling and error handling throughout.
+### Details:
+Wire up delete functionality from the Client List and Detail pages. Ensure all forms and tables reflect changes in real time. Apply consistent Tailwind and Shadcn UI/TailAdmin styling. Implement error handling and user feedback for all actions.[3][4]
 

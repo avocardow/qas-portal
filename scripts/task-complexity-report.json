@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2025-04-20T08:31:20.935Z",
-    "tasksAnalyzed": 8,
+    "generatedAt": "2025-04-21T12:30:44.030Z",
+    "tasksAnalyzed": 10,
     "thresholdScore": 5,
     "projectName": "Your Project Name",
     "usedResearch": true
@@ -9,67 +9,83 @@
   "complexityAnalysis": [
     {
       "taskId": 1,
-      "taskTitle": "Set up App Router folder structure",
-      "complexityScore": 6,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "Break down the process of designing and creating the Next.js App Router folder structure, including: analyzing the sitemap, mapping routes to folder groups, creating protected and public route groups, setting up subfolders for each route, and documenting the structure according to Next.js best practices.",
-      "reasoning": "This task involves architectural decisions, mapping the sitemap to Next.js route groups, and ensuring proper separation of protected and public routes. It requires understanding Next.js routing conventions and best practices, but is relatively straightforward once the sitemap is clear.[1][2][3][4][5]"
+      "taskTitle": "Implement Client Management Backend",
+      "complexityScore": 9,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the implementation of tRPC CRUD procedures for Client records with RBAC into subtasks, including server-side sorting/filtering/pagination, relation loading, Zod schema validation, and field-level access control for different roles.",
+      "reasoning": "This task involves multiple CRUD operations, complex RBAC enforcement, server-side data handling (sorting, filtering, pagination), and relation management. The need for field-level access control and robust validation increases both cyclomatic and functional complexity, requiring careful breakdown and thorough testing."
     },
     {
       "taskId": 2,
-      "taskTitle": "Create placeholder page components",
-      "complexityScore": 5,
-      "recommendedSubtasks": 4,
-      "expansionPrompt": "List the steps to generate minimal page.tsx components for each route, including: creating files, adding headings and messages, applying correct layouts, following naming conventions, and ensuring TypeScript typing.",
-      "reasoning": "This is a repetitive but simple task focused on scaffolding. The main complexity is ensuring consistency and adherence to layout and naming conventions, as well as TypeScript typing."
+      "taskTitle": "Implement Related Entity Management Backend",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "List subtasks for implementing tRPC CRUD procedures for Contacts, Licenses, and Trust Accounts, including Zod validation, RBAC enforcement, parent-child relationship handling, and potential batch operations.",
+      "reasoning": "While similar in structure to Task 1, this task focuses on related entities with less complex relationships and fewer operations per entity. However, RBAC, validation, and potential batch operations still add moderate complexity."
     },
     {
       "taskId": 3,
-      "taskTitle": "Define Prisma schema for client data",
-      "complexityScore": 7,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "Detail the steps to design and implement a Prisma schema for client data migration, including: modeling entities, defining relationships, validating schema design against best practices, and preparing for future extensibility.",
-      "reasoning": "Designing a relational schema with proper relationships and future extensibility requires careful planning and understanding of both the data and Prisma conventions. Mistakes here can have downstream effects."
+      "taskTitle": "Implement Client Management Frontend",
+      "complexityScore": 8,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Identify subtasks for building Client List and Detail pages with CRUD forms, role-based UI controls, data table features, and consistent styling using React, Tailwind, and Shadcn UI.",
+      "reasoning": "This frontend task requires integrating advanced data table features, conditional UI rendering based on roles, complex forms with validation, and consistent component styling, all of which contribute to significant implementation and integration complexity."
     },
     {
       "taskId": 4,
-      "taskTitle": "Implement CSV parsing functionality",
-      "complexityScore": 7,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Outline the steps to implement robust CSV parsing, including: configuring the parser, reading files, mapping data to models, cleaning and validating data, handling edge cases, and logging results.",
-      "reasoning": "Parsing and transforming CSV data is error-prone, especially with edge cases like missing fields and data inconsistencies. Proper validation and logging are crucial for reliable migration."
+      "taskTitle": "Implement Audit Tracking Backend",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Detail subtasks for implementing tRPC audit procedures, including audit creation, stage/status updates, assignment management, RBAC enforcement, and relation handling.",
+      "reasoning": "Audit tracking involves multiple interrelated procedures, assignment logic, and strict RBAC. The need to manage audit stages, statuses, and assignments increases both the logical and control flow complexity."
     },
     {
       "taskId": 5,
-      "taskTitle": "Implement Prisma database seeding",
-      "complexityScore": 8,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Enumerate the steps to extend the migration script for database seeding, including: initializing Prisma Client, handling transactions and relationships, implementing error handling and rollback, supporting dry runs, and ensuring idempotency.",
-      "reasoning": "Database seeding with transactional integrity, relationship handling, and idempotency is complex. Error handling and rollback add further challenges, especially when integrating with Supabase."
+      "taskTitle": "Implement Audit Tracking Frontend",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the creation of Audit UI components for Client and Audit Detail pages, including audit lists, assignment controls, status updates, and consistent UI styling.",
+      "reasoning": "This task requires building interactive UI components for audit management, integrating assignment and status update features, and ensuring role-based controls, all while maintaining consistent styling."
     },
     {
       "taskId": 6,
-      "taskTitle": "Configure CI environment for Supabase",
-      "complexityScore": 6,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "Break down the steps to configure the CI environment for Supabase, including: setting environment variables, updating configuration files, documenting requirements, validating connections, and managing secrets.",
-      "reasoning": "CI configuration involves multiple systems (CI, Supabase, environment management), and mistakes can expose secrets or break deployments. Documentation and validation are important for reliability."
+      "taskTitle": "Implement Task Management Backend",
+      "complexityScore": 8,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "List subtasks for implementing tRPC CRUD procedures for Tasks, including RBAC enforcement, audit/task relations, pagination, sorting, filtering, and validation.",
+      "reasoning": "Task management backend involves multiple endpoints, complex RBAC, and support for advanced query features (pagination, filtering, sorting), increasing both cyclomatic and functional complexity."
     },
     {
       "taskId": 7,
-      "taskTitle": "Implement navigation between routes",
-      "complexityScore": 4,
-      "recommendedSubtasks": 4,
-      "expansionPrompt": "List the steps to add basic navigation between placeholder pages, including: creating navigation components, integrating them into layouts, using Next.js Link, and indicating the active route.",
-      "reasoning": "This is a straightforward UI task with minimal complexity, mainly requiring knowledge of Next.js navigation and layout integration."
+      "taskTitle": "Implement Task Management Frontend",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Identify subtasks for building Task List, Detail, and Create/Edit UI components with role-based controls, data integration, and consistent styling.",
+      "reasoning": "This frontend task requires implementing multiple interactive components, integrating backend data, handling role-based UI logic, and ensuring a cohesive user experience."
     },
     {
       "taskId": 8,
-      "taskTitle": "Create documentation and verification guide",
+      "taskTitle": "Implement Document Reference Display Backend",
+      "complexityScore": 6,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the implementation of tRPC procedures for retrieving document references by Client, Audit, and Task, including RBAC enforcement and metadata handling.",
+      "reasoning": "This backend task is relatively straightforward, focusing on read-only procedures with RBAC and metadata handling, resulting in lower overall complexity."
+    },
+    {
+      "taskId": 9,
+      "taskTitle": "Implement Document Reference Display Frontend",
       "complexityScore": 5,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "Describe the steps to create comprehensive documentation and a verification guide, including: documenting folder structure, migration script usage, data verification steps, listing placeholder pages, and outlining next development steps.",
-      "reasoning": "Documentation is essential but not technically complex. The main challenge is ensuring clarity, completeness, and adherence to project conventions."
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "List subtasks for adding Document tabs/sections to Client, Audit, and Task detail pages, including data integration, UI rendering, and consistent styling.",
+      "reasoning": "This frontend task involves integrating document data into existing pages and rendering lists with links, which is less complex than full CRUD or interactive features."
+    },
+    {
+      "taskId": 10,
+      "taskTitle": "Implement Comprehensive RBAC and Final Integration",
+      "complexityScore": 10,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Detail subtasks for reviewing and enforcing RBAC across backend and frontend, integrating all features, conducting end-to-end testing, and optimizing performance and error handling.",
+      "reasoning": "This task requires a comprehensive review and integration of all previous work, ensuring consistent RBAC, seamless navigation, complete workflow testing, and performance optimization, making it the most complex and critical task."
     }
   ]
 }

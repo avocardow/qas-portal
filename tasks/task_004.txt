@@ -1,57 +1,43 @@
 # Task ID: 4
-# Title: Implement CSV parsing functionality
-# Status: done
-# Dependencies: 3
-# Priority: medium
-# Description: Develop the CSV parsing portion of the migration script to read and transform client data.
+# Title: Implement Audit Tracking Backend
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Create tRPC procedures in auditRouter for Audit management with RBAC
 # Details:
-Create `scripts/migrateClients.ts` with:
-- Import and configure `csv-parse` library (use Context7 to resolve library ID)
-- Read the CSV file from `data/clients.csv`
-- Parse CSV headers and rows
-- Transform data into structured objects matching Prisma models
-- Implement data cleaning and validation
-- Log parsing results and any validation issues
-
-Handle edge cases like missing fields, data type conversions, and special characters.
+Implement the following tRPC procedures in auditRouter: 1) audit.create (input: clientId, auditYear, initial stageId/statusId), 2) audit.updateStageStatus (input: auditId, stageId, statusId), 3) audit.getByClientId for client detail audit history, 4) audit.getById for full audit details including tasks and assignments, 5) audit.assignUser and audit.unassignUser to manage AuditAssignment records. Enforce RBAC for all procedures, restricting certain operations to Auditor/Manager/Admin roles.
 
 # Test Strategy:
-Create a test CSV with sample data. Run the script with `--dry-run` flag to verify parsing without database insertion. Check console output for correct data transformation and validation messages.
+Write unit tests for each procedure verifying correct data manipulation, relationship management, and RBAC enforcement. Test edge cases like duplicate audit years for the same client.
 
 # Subtasks:
-## 1. Set Up CSV Parsing Environment [done]
+## 1. Design Audit Data Models and RBAC Policy [pending]
 ### Dependencies: None
-### Description: Initialize the migration script and configure the CSV parsing library.
+### Description: Define and implement the database models for audits, audit stages/statuses, and audit assignments. Establish a clear RBAC (Role-Based Access Control) policy for all audit-related operations.
 ### Details:
-Create the file `scripts/migrateClients.ts`. Import and configure the `csv-parse` library (resolve the correct package using Context7). Ensure all necessary dependencies are installed and the script is ready to handle CSV input streams.[3]
+Create or update ORM models for Audit, AuditStage, AuditStatus, and AuditAssignment. Define user roles (Auditor, Manager, Admin) and map permissions for each tRPC procedure. Ensure the models support linking audits to clients, tracking stages/statuses, and managing user assignments. Document the RBAC rules for reference in later subtasks.
 
-## 2. Implement CSV File Reading [done]
+## 2. Implement tRPC Procedures for Audit Creation and Stage/Status Updates [pending]
 ### Dependencies: 4.1
-### Description: Read the client data CSV file as a stream for efficient processing.
+### Description: Develop tRPC procedures in auditRouter for creating audits and updating their stage/status, enforcing RBAC for each operation.
 ### Details:
-Use Node.js file system APIs to read `data/clients.csv` as a readable stream. Prepare the stream to be piped into the CSV parser for further processing.[3][5]
+Implement audit.create to accept clientId, auditYear, and initial stageId/statusId, ensuring only authorized roles can create audits. Implement audit.updateStageStatus to update an audit's stage and status, restricting access based on RBAC policy. Validate inputs and handle errors appropriately.
 
-## 3. Parse CSV Headers and Rows [done]
-### Dependencies: 4.2
-### Description: Parse the CSV file to extract headers and rows, handling special characters and delimiters.
+## 3. Implement tRPC Procedures for Audit Retrieval [pending]
+### Dependencies: 4.1
+### Description: Develop tRPC procedures to retrieve audit data: audit.getByClientId for client audit history and audit.getById for full audit details, including related tasks and assignments.
 ### Details:
-Configure the parser to correctly interpret headers, delimiters, and escape characters. Ensure that each row is parsed into a JavaScript object with keys matching the CSV headers.[3][5]
+Implement audit.getByClientId to fetch all audits for a given client, returning summary data. Implement audit.getById to fetch comprehensive audit details, including tasks and user assignments. Enforce RBAC so users only access audits they are permitted to view.
 
-## 4. Transform Parsed Data to Prisma Model Structure [done]
-### Dependencies: 4.3
-### Description: Map and convert parsed CSV data into objects that match the Prisma client model schema.
+## 4. Implement tRPC Procedures for Audit Assignment Management [pending]
+### Dependencies: 4.1
+### Description: Develop audit.assignUser and audit.unassignUser procedures to manage AuditAssignment records, with strict RBAC enforcement.
 ### Details:
-For each parsed row, transform the data fields to match the Prisma model structure. Handle data type conversions (e.g., strings to numbers or dates) and prepare objects for later migration steps.
+Implement audit.assignUser to assign users to audits and audit.unassignUser to remove assignments. Validate user roles and permissions for these operations. Ensure assignment changes are logged for auditability.
 
-## 5. Implement Data Cleaning and Validation [done]
-### Dependencies: 4.4
-### Description: Clean and validate the transformed data, addressing missing fields, type mismatches, and inconsistencies.
+## 5. Integrate Monitoring, Logging, and RBAC Enforcement Across Procedures [pending]
+### Dependencies: 4.2, 4.3, 4.4
+### Description: Add comprehensive monitoring and logging to all auditRouter procedures, ensuring RBAC checks are consistently enforced and all sensitive actions are auditable.
 ### Details:
-Check each object for required fields, correct data types, and valid values. Apply cleaning rules (e.g., trimming whitespace, normalizing formats) and flag or correct invalid or missing data. Prepare a mechanism to collect validation issues for logging.
-
-## 6. Log Parsing Results and Validation Issues [done]
-### Dependencies: 4.5
-### Description: Log the results of the parsing and validation process, including any errors or warnings.
-### Details:
-Implement structured logging to record the number of successfully parsed records, details of any validation issues, and summaries of data anomalies. Ensure logs are clear and actionable for further migration steps.
+Integrate logging for all create, update, assignment, and retrieval actions, including user IDs, timestamps, and operation details. Set up monitoring for key metrics (e.g., request rates, errors). Review all procedures to confirm RBAC is enforced at entry points and that unauthorized access is prevented and logged.
 

@@ -2,425 +2,587 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Set up App Router folder structure",
-      "description": "Create the folder structure for the Next.js App Router based on the sitemap, including protected and public route groups.",
-      "status": "done",
+      "title": "Implement Client Management Backend",
+      "description": "Create tRPC procedures in clientRouter for CRUD operations on Client records with proper RBAC",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "Create the following folder structure:\n- `src/app/(pages)/(app)` for protected internal pages\n- `src/app/(pages)/(portal)` for client portal pages\n\nWithin the (app) group, create subfolders for routes like `/clients`, `/audits`, etc. Within the (portal) group, create subfolders for routes like `/dashboard`, `/documents`, etc. Use Context7 to resolve library IDs and fetch official documentation for Next.js App Router using `mcp_context7_resolve_library_id` and `mcp_context7_get_library_docs`.",
-      "testStrategy": "Verify the folder structure matches the sitemap. Ensure route groups are correctly set up for protected and public routes. Run `pnpm build` to confirm no routing errors.",
+      "details": "Implement the following tRPC procedures in clientRouter: 1) client.getAll with server-side sorting, filtering, and cursor-based pagination, 2) client.getById with relations (contacts, licenses, trustAccounts, audits, activityLogs/notes), 3) client.create with Zod schema validation, 4) client.update with clientId and validated update data. Ensure all procedures enforce RBAC based on session.user.role, throwing TRPCError('FORBIDDEN') for unauthorized access. Limit fields for non-Admin/Manager roles as needed.",
+      "testStrategy": "Write unit tests for each procedure verifying: 1) Successful data retrieval/modification with proper permissions, 2) Proper error handling for invalid inputs, 3) RBAC enforcement (rejection of unauthorized requests), 4) Pagination, sorting, and filtering functionality.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Analyze Sitemap and Define Route Groups",
-          "description": "Review the provided sitemap to identify all required routes, categorizing them into protected internal pages and client portal pages. Map each route to its appropriate group: (app) for protected internal pages and (portal) for client portal pages.",
-          "status": "done",
+          "title": "Set Up Zod Schemas and RBAC Middleware",
+          "description": "Define Zod schemas for client creation and update, and implement reusable RBAC middleware to enforce role-based access control for all procedures.",
+          "status": "pending",
           "dependencies": [],
-          "details": "List all routes from the sitemap. Assign each route to either the (app) or (portal) group based on access requirements. Document the mapping for reference in subsequent steps."
+          "details": "Create Zod schemas for validating client input data for both creation and update operations. Develop a middleware function that checks session.user.role and throws TRPCError('FORBIDDEN') if the user lacks required permissions. This middleware should be reusable across all procedures to ensure consistent RBAC enforcement."
         },
         {
           "id": 2,
-          "title": "Create Base App Router Directory Structure",
-          "description": "Set up the foundational folder structure in the Next.js project under src/app, including the (pages), (app), and (portal) route groups as per Next.js App Router conventions.",
-          "status": "done",
+          "title": "Implement client.getAll with Sorting, Filtering, and Pagination",
+          "description": "Create the client.getAll procedure to fetch a list of clients with server-side sorting, filtering, and cursor-based pagination, applying RBAC and field restrictions.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Within src/app, create a (pages) folder. Inside (pages), create (app) and (portal) folders using parentheses to indicate route groups. This establishes the organizational hierarchy without affecting URL paths.[1][3][4][5]"
+          "details": "Use Prisma's findMany with appropriate parameters for sorting, filtering, and cursor-based pagination. Integrate the RBAC middleware to restrict access and limit visible fields for non-Admin/Manager roles. Ensure the procedure accepts query parameters for filters, sort order, and pagination cursors."
         },
         {
           "id": 3,
-          "title": "Implement Route Subfolders for Each Group",
-          "description": "Within the (app) and (portal) route groups, create subfolders for each mapped route (e.g., /clients, /audits in (app); /dashboard, /documents in (portal)), following the structure defined in the sitemap.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "For each route identified in the sitemap, create a corresponding subfolder inside its assigned group. Ensure folder names match the intended URL segments. For dynamic routes, use square brackets (e.g., [id]) as per Next.js conventions.[1][3][4][5]"
+          "title": "Implement client.getById with Related Entities",
+          "description": "Develop the client.getById procedure to fetch a single client by ID, including related entities (contacts, licenses, trustAccounts, audits, activityLogs/notes), with RBAC and field-level access control.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Use Prisma's findUnique with include clauses to fetch the client and its related entities. Apply RBAC middleware and restrict related data fields for non-Admin/Manager roles as needed. Validate input using Zod to ensure a valid client ID."
         },
         {
           "id": 4,
-          "title": "Add Required Next.js Route Files",
-          "description": "Populate each route subfolder with the necessary Next.js files (e.g., page.js, layout.js, error.js, loading.js) to enable routing and provide basic scaffolding for each route.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "In each subfolder, add a page.js file to make the route accessible. Optionally, add layout.js for custom layouts, error.js for error boundaries, and loading.js for loading states as needed. This ensures each route is properly initialized and follows Next.js best practices.[1][3][5]"
+          "title": "Implement client.create with Validation and RBAC",
+          "description": "Create the client.create procedure to add new client records, enforcing Zod schema validation and RBAC restrictions.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Use the previously defined Zod schema to validate input data. Apply RBAC middleware to ensure only authorized roles can create clients. Use Prisma's create method to insert the new client record, and return the created client (with field restrictions for non-privileged roles)."
         },
         {
           "id": 5,
-          "title": "Integrate Context7 for Library ID Resolution and Documentation",
-          "description": "Use Context7 to resolve library IDs and fetch official Next.js App Router documentation, ensuring the folder structure and routing setup align with the latest best practices.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Invoke Context7's mcp_context7_resolve_library_id and mcp_context7_get_library_docs to retrieve up-to-date documentation and confirm that the implemented structure adheres to official Next.js guidelines. Adjust the structure if any discrepancies are found."
+          "title": "Implement client.update with Validation and RBAC",
+          "description": "Develop the client.update procedure to update existing client records by clientId, enforcing Zod schema validation and RBAC.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Validate the input (clientId and update data) using the Zod schema. Apply RBAC middleware to ensure only authorized roles can update clients. Use Prisma's update method to modify the client record, and return the updated client (with field restrictions for non-privileged roles)."
+        },
+        {
+          "id": 6,
+          "title": "Test Procedures and Enforce Field-Level Access Control",
+          "description": "Thoroughly test all clientRouter procedures for correct RBAC enforcement, validation, relation loading, and field-level access control. Refine field restrictions for non-Admin/Manager roles.",
+          "status": "pending",
+          "dependencies": [2, 3, 4, 5],
+          "details": "Write unit and integration tests for each procedure, simulating different user roles and verifying correct access, validation, and field visibility. Ensure that unauthorized users receive TRPCError('FORBIDDEN') and that field-level restrictions are consistently applied across all endpoints."
         }
       ]
     },
     {
       "id": 2,
-      "title": "Create placeholder page components",
-      "description": "Develop minimal page.tsx components for each route with headings and 'coming soon' messages.",
-      "status": "done",
+      "title": "Implement Related Entity Management Backend",
+      "description": "Create tRPC procedures for Contacts, Licenses, and Trust Accounts CRUD operations",
+      "status": "pending",
       "dependencies": [1],
       "priority": "high",
-      "details": "For each route in the sitemap, create a `page.tsx` file with:\n- A heading that matches the route name\n- A 'Coming Soon' message describing the planned feature\n- Apply `ProtectedAppLayout` for routes in the (app) group\n- Use default layout for routes in the (portal) group\n\nFollow Cursor rules in `.cursor/rules` for templates, naming conventions, and best practices. Ensure TypeScript typing is properly implemented.",
-      "testStrategy": "Navigate to each route in the development environment to verify the placeholder content renders correctly. Check that layouts are applied properly for both protected and public routes.",
+      "details": "Implement direct tRPC procedures for contact.create/update, license.create/update, and trustAccount.create/update with proper Zod validation schemas. Each procedure should accept the parent clientId and the entity data. Ensure RBAC enforcement (Admin/Manager only) for all write operations. Consider implementing batch operations if needed for efficiency.",
+      "testStrategy": "Test each procedure with valid and invalid inputs, verify proper relationship creation with parent Client records, and confirm RBAC enforcement prevents unauthorized access.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Analyze Sitemap and Define Route Structure",
-          "description": "Review the sitemap to identify all routes that require a placeholder page component. Categorize each route as belonging to either the (app) or (portal) group to determine the appropriate layout.",
-          "status": "done",
+          "title": "Define Zod Validation Schemas for Entities",
+          "description": "Create Zod schemas for Contacts, Licenses, and Trust Accounts to validate incoming data for create and update operations.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Extract all route paths from the sitemap. For each route, record its group ((app) or (portal)) and intended feature. Prepare a checklist to ensure every route will receive a placeholder component.\n\n<info added on 2025-04-20T10:05:43.249Z>\nBased on the extracted route paths, here's a structured categorization:\n\n**App Group Routes (`/src/app/(app)/`):**\n- `/dashboard` - Main user dashboard\n- `/tasks` - Task management interface\n- `/invoices` - Invoice creation and management\n- `/clients` - Client database and relationship management\n- `/audits` - System audit logs and activity tracking\n- `/settings` - Application configuration\n- `/profile` - User profile management\n- `/phone` - Communication tools\n- `/files` - Document and file storage\n- `/chat` - Messaging interface\n- `/calendar` - Scheduling and calendar view\n\n**Portal Group Routes (`/src/app/(portal)/`):**\n- `/dashboard` - Client-facing dashboard\n- `/billing` - Payment and subscription management\n- `/profile` - Client profile settings\n- `/documents` - Document sharing and access\n\nImplementation note: Each route will need a corresponding page.tsx file with a placeholder component that includes the route name and group for easy identification during development. Consider implementing a consistent naming convention like `[GroupName][RouteName]Page` (e.g., `AppDashboardPage`, `PortalBillingPage`).\n</info added on 2025-04-20T10:05:43.249Z>"
+          "details": "Implement Zod object schemas for each entity, ensuring all required fields are present and correctly typed. Include validation for parent clientId and entity-specific fields. These schemas will be used to validate input in tRPC procedures.[2][5]"
         },
         {
           "id": 2,
-          "title": "Set Up Placeholder Component Templates with TypeScript Typing",
-          "description": "Create reusable TypeScript templates for placeholder page components, ensuring compliance with .cursor/rules for structure, naming, and best practices.",
-          "status": "done",
+          "title": "Implement RBAC Middleware for tRPC Procedures",
+          "description": "Develop a reusable middleware to enforce Admin/Manager role-based access control for all write operations.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Define a minimal functional component template in TypeScript, including a heading (matching the route name) and a 'Coming Soon' message describing the planned feature. Prepare two variants: one using ProtectedAppLayout for (app) group routes, and one using the default layout for (portal) group routes. Ensure all components are properly typed.\n\n<info added on 2025-04-20T10:09:33.365Z>\nHere's additional implementation information for the placeholder component templates:\n\n```typescript\n// Implementation details for AppPlaceholderPageTemplate.tsx\ninterface AppPlaceholderProps {\n  heading: string;\n  message?: string;\n  children?: React.ReactNode;\n}\n\n// Example implementation:\nexport const AppPlaceholderPageTemplate: React.FC<AppPlaceholderProps> = ({\n  heading,\n  message = \"Coming Soon\",\n  children\n}) => (\n  <ProtectedAppLayout>\n    <div className=\"placeholder-container\">\n      <h1 className=\"text-2xl font-semibold mb-4\">{heading}</h1>\n      <p className=\"text-gray-600 mb-6\">{message}</p>\n      {children}\n    </div>\n  </ProtectedAppLayout>\n);\n```\n\n```typescript\n// Implementation details for PortalPlaceholderPageTemplate.tsx\ninterface PortalPlaceholderProps {\n  heading: string;\n  message?: string;\n  children?: React.ReactNode;\n}\n\n// Example implementation:\nexport const PortalPlaceholderPageTemplate: React.FC<PortalPlaceholderProps> = ({\n  heading,\n  message = \"Coming Soon\",\n  children\n}) => (\n  <div className=\"placeholder-container\">\n    <h1 className=\"text-2xl font-semibold mb-4\">{heading}</h1>\n    <p className=\"text-gray-600 mb-6\">{message}</p>\n    {children}\n  </div>\n);\n```\n\nUsage example in route files:\n```typescript\n// For app routes: app/dashboard/page.tsx\nexport default function DashboardPage() {\n  return (\n    <AppPlaceholderPageTemplate \n      heading=\"Dashboard\" \n      message=\"Your personalized dashboard is coming soon\"\n    />\n  );\n}\n\n// For portal routes: portal/login/page.tsx\nexport default function LoginPage() {\n  return (\n    <PortalPlaceholderPageTemplate \n      heading=\"Login\" \n      message=\"Secure authentication portal coming soon\"\n    />\n  );\n}\n```\n\nConsider adding optional props for customization like `className` for styling overrides and `icon` for feature-specific visual indicators. Export both components from an index.ts file for cleaner imports.\n</info added on 2025-04-20T10:09:33.365Z>"
+          "details": "Create a tRPC middleware that checks the user's role from the context and restricts access to create and update procedures unless the user is an Admin or Manager. Integrate this middleware into the relevant procedures to ensure security.[4]"
         },
         {
           "id": 3,
-          "title": "Generate page.tsx Files for Each Route",
-          "description": "For each route identified, create a page.tsx file using the appropriate template. Ensure the heading and 'Coming Soon' message are specific to the route's planned feature.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "In the directory for each route, add a page.tsx file. Use the correct template based on the route group. Set the heading to match the route name and customize the 'Coming Soon' message to briefly describe the planned feature. Follow naming conventions and directory structure as specified in .cursor/rules."
+          "title": "Develop tRPC CRUD Procedures for Contacts, Licenses, and Trust Accounts",
+          "description": "Implement create and update tRPC procedures for each entity, using the defined Zod schemas and RBAC middleware.",
+          "status": "pending",
+          "dependencies": [1, 2],
+          "details": "For each entity, define tRPC mutation procedures (contact.create, contact.update, license.create, license.update, trustAccount.create, trustAccount.update). Each procedure should accept parent clientId and entity data, validate input with Zod, and enforce RBAC via middleware. Use your ORM (e.g., Prisma) to interact with the database.[2][5]"
         },
         {
           "id": 4,
-          "title": "Review, Refactor, and Validate Placeholder Components",
-          "description": "Check all created page.tsx files for consistency, adherence to .cursor/rules, and correct TypeScript usage. Refactor as needed and validate that each component renders with the correct layout and content.",
-          "status": "done",
+          "title": "Implement Batch Operations for Efficiency",
+          "description": "Add batch create and update procedures for each entity to handle multiple records in a single request.",
+          "status": "pending",
           "dependencies": [3],
-          "details": "Perform a code review to ensure all placeholder components follow the established templates, naming conventions, and TypeScript typing. Test rendering for both (app) and (portal) group routes to confirm correct layout usage and content display. Address any inconsistencies or errors."
+          "details": "Define tRPC procedures (e.g., contact.batchCreate, license.batchUpdate) that accept arrays of entity data and clientIds. Use Zod array validation and ensure RBAC enforcement. Optimize database interactions for bulk operations to improve performance."
+        },
+        {
+          "id": 5,
+          "title": "Write Unit and Integration Tests for Procedures and Middleware",
+          "description": "Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.",
+          "status": "pending",
+          "dependencies": [4],
+          "details": "Write tests covering valid and invalid inputs, unauthorized access, and successful/failed CRUD and batch operations. Ensure all edge cases are handled and that procedures behave as expected under different user roles and data scenarios."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Define Prisma schema for client data",
-      "description": "Create or update the Prisma schema to support client data migration from CSV.",
-      "status": "done",
-      "dependencies": [],
+      "title": "Implement Client Management Frontend",
+      "description": "Create Client List and Detail pages with CRUD functionality",
+      "status": "pending",
+      "dependencies": [1, 2],
       "priority": "high",
-      "details": "Update `schema.prisma` to include models for:\n- Clients (name, address, status, etc.)\n- Contacts (name, email, phone, client relationship)\n- Licenses (type, number, expiration date, client relationship)\n- Trust accounts (account number, balance, client relationship)\n- Audits (initial placeholder for future development)\n\nEnsure proper relationships between models. Use Context7 to fetch official Prisma documentation for schema design best practices.",
-      "testStrategy": "Run `npx prisma validate` to verify schema correctness. Generate and apply migrations to the development Supabase instance with `npx prisma migrate dev`. Verify tables are created correctly in Supabase.",
+      "details": "Develop: 1) Client List page (/clients) with functional data table using client.getAll, including pagination, sorting, filtering, and conditional 'Add New Client' button based on user role. 2) Client Detail page (/clients/[clientId]) with structured Cards/Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log. 3) Client Create/Edit forms using React Hook Form + Zod with template components, handling client.create and client.update. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
+      "testStrategy": "Perform manual testing of all UI components and interactions. Verify data fetching, pagination, sorting, and filtering. Test form validation and submission. Confirm role-based UI element visibility.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Analyze and Document Client Data Requirements",
-          "description": "Review the CSV migration requirements and document all necessary fields and relationships for Clients, Contacts, Licenses, Trust Accounts, and Audits.",
-          "status": "done",
+          "title": "Set Up Routing and Page Structure",
+          "description": "Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.",
+          "status": "pending",
           "dependencies": [],
-          "details": "List all fields for each model (e.g., Clients: name, address, status; Contacts: name, email, phone, clientId, etc.). Identify required data types, constraints, and how each entity relates to others (e.g., one-to-many between Clients and Contacts). Ensure the schema will support all data needed for migration and future extensibility."
+          "details": "Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]"
         },
         {
           "id": 2,
-          "title": "Design Prisma Models and Relationships",
-          "description": "Draft the Prisma models for Clients, Contacts, Licenses, Trust Accounts, and Audits, specifying all fields and defining relationships according to best practices.",
-          "status": "done",
+          "title": "Implement Client List Data Table with Pagination, Sorting, and Filtering",
+          "description": "Build the Client List page with a functional data table that supports pagination, sorting, and filtering, fetching data via client.getAll.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Use singular, PascalCase model names and camelCase field names for clarity and convention compliance[4]. Define one-to-many and one-to-one relationships as appropriate (e.g., a Client has many Contacts, Licenses, and Trust Accounts). Include placeholder fields for the Audits model for future development. Reference official Prisma documentation for relationship syntax and best practices[2][4]."
+          "details": "Use a data table component (from Shadcn UI or TailAdmin) to display clients. Integrate client.getAll to fetch data. Add pagination controls, sortable columns, and filtering inputs. Ensure the table updates based on user interactions.[4]"
         },
         {
           "id": 3,
-          "title": "Implement and Annotate schema.prisma File",
-          "description": "Update or create the `schema.prisma` file with the defined models, fields, and relationships, including comments for clarity and maintainability.",
-          "status": "done",
+          "title": "Add Conditional 'Add New Client' Button Based on User Role",
+          "description": "Render the 'Add New Client' button on the Client List page only for users with the appropriate role.",
+          "status": "pending",
           "dependencies": [2],
-          "details": "Translate the model designs into Prisma Schema Language, ensuring all relationships and field types are correctly specified[2][3]. Add comments to explain model purposes, relationships, and any placeholder fields. Use environment variables for data source configuration if needed[2]."
+          "details": "Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form."
         },
         {
           "id": 4,
-          "title": "Validate Schema and Generate Migration",
-          "description": "Run Prisma validation tools and generate a migration to ensure the schema is syntactically correct and ready for database application.",
-          "status": "done",
+          "title": "Develop Client Create and Edit Forms with Validation",
+          "description": "Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.",
+          "status": "pending",
           "dependencies": [3],
-          "details": "Use `prisma validate` to check for schema errors and `prisma migrate dev` to generate and apply the migration to a development database[2][3]. Address any validation or migration issues, ensuring all relationships and constraints are enforced as intended."
+          "details": "Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback."
         },
         {
           "id": 5,
-          "title": "Review Schema for Best Practices and Future Extensibility",
-          "description": "Perform a final review of the schema for naming conventions, indexing, and extensibility, making adjustments as needed for maintainability and performance.",
-          "status": "done",
+          "title": "Implement Client Detail Page with Structured Cards/Tabs",
+          "description": "Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.",
+          "status": "pending",
           "dependencies": [4],
-          "details": "Check that model and field names follow Prisma and JavaScript conventions[4]. Ensure indexes are added to frequently queried fields and foreign keys for performance[4][5]. Confirm that placeholder models (e.g., Audits) are clearly marked for future development. Document any design decisions or areas for future improvement."
+          "details": "Use Shadcn UI or TailAdmin components to create a visually consistent layout. Fetch and display relevant data for each section. Ensure tabs/cards are responsive and accessible."
+        },
+        {
+          "id": 6,
+          "title": "Integrate CRUD Operations and Finalize UI Consistency",
+          "description": "Connect all CRUD operations (Create, Read, Update, Delete) across the Client List and Detail pages, and ensure consistent styling and error handling throughout.",
+          "status": "pending",
+          "dependencies": [5],
+          "details": "Wire up delete functionality from the Client List and Detail pages. Ensure all forms and tables reflect changes in real time. Apply consistent Tailwind and Shadcn UI/TailAdmin styling. Implement error handling and user feedback for all actions.[3][4]"
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement CSV parsing functionality",
-      "description": "Develop the CSV parsing portion of the migration script to read and transform client data.",
-      "status": "done",
-      "dependencies": [3],
-      "priority": "medium",
-      "details": "Create `scripts/migrateClients.ts` with:\n- Import and configure `csv-parse` library (use Context7 to resolve library ID)\n- Read the CSV file from `data/clients.csv`\n- Parse CSV headers and rows\n- Transform data into structured objects matching Prisma models\n- Implement data cleaning and validation\n- Log parsing results and any validation issues\n\nHandle edge cases like missing fields, data type conversions, and special characters.",
-      "testStrategy": "Create a test CSV with sample data. Run the script with `--dry-run` flag to verify parsing without database insertion. Check console output for correct data transformation and validation messages.",
+      "title": "Implement Audit Tracking Backend",
+      "description": "Create tRPC procedures in auditRouter for Audit management with RBAC",
+      "status": "pending",
+      "dependencies": [1],
+      "priority": "high",
+      "details": "Implement the following tRPC procedures in auditRouter: 1) audit.create (input: clientId, auditYear, initial stageId/statusId), 2) audit.updateStageStatus (input: auditId, stageId, statusId), 3) audit.getByClientId for client detail audit history, 4) audit.getById for full audit details including tasks and assignments, 5) audit.assignUser and audit.unassignUser to manage AuditAssignment records. Enforce RBAC for all procedures, restricting certain operations to Auditor/Manager/Admin roles.",
+      "testStrategy": "Write unit tests for each procedure verifying correct data manipulation, relationship management, and RBAC enforcement. Test edge cases like duplicate audit years for the same client.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up CSV Parsing Environment",
-          "description": "Initialize the migration script and configure the CSV parsing library.",
-          "status": "done",
+          "title": "Design Audit Data Models and RBAC Policy",
+          "description": "Define and implement the database models for audits, audit stages/statuses, and audit assignments. Establish a clear RBAC (Role-Based Access Control) policy for all audit-related operations.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create the file `scripts/migrateClients.ts`. Import and configure the `csv-parse` library (resolve the correct package using Context7). Ensure all necessary dependencies are installed and the script is ready to handle CSV input streams.[3]"
+          "details": "Create or update ORM models for Audit, AuditStage, AuditStatus, and AuditAssignment. Define user roles (Auditor, Manager, Admin) and map permissions for each tRPC procedure. Ensure the models support linking audits to clients, tracking stages/statuses, and managing user assignments. Document the RBAC rules for reference in later subtasks."
         },
         {
           "id": 2,
-          "title": "Implement CSV File Reading",
-          "description": "Read the client data CSV file as a stream for efficient processing.",
-          "status": "done",
+          "title": "Implement tRPC Procedures for Audit Creation and Stage/Status Updates",
+          "description": "Develop tRPC procedures in auditRouter for creating audits and updating their stage/status, enforcing RBAC for each operation.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Use Node.js file system APIs to read `data/clients.csv` as a readable stream. Prepare the stream to be piped into the CSV parser for further processing.[3][5]"
+          "details": "Implement audit.create to accept clientId, auditYear, and initial stageId/statusId, ensuring only authorized roles can create audits. Implement audit.updateStageStatus to update an audit's stage and status, restricting access based on RBAC policy. Validate inputs and handle errors appropriately."
         },
         {
           "id": 3,
-          "title": "Parse CSV Headers and Rows",
-          "description": "Parse the CSV file to extract headers and rows, handling special characters and delimiters.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Configure the parser to correctly interpret headers, delimiters, and escape characters. Ensure that each row is parsed into a JavaScript object with keys matching the CSV headers.[3][5]"
+          "title": "Implement tRPC Procedures for Audit Retrieval",
+          "description": "Develop tRPC procedures to retrieve audit data: audit.getByClientId for client audit history and audit.getById for full audit details, including related tasks and assignments.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Implement audit.getByClientId to fetch all audits for a given client, returning summary data. Implement audit.getById to fetch comprehensive audit details, including tasks and user assignments. Enforce RBAC so users only access audits they are permitted to view."
         },
         {
           "id": 4,
-          "title": "Transform Parsed Data to Prisma Model Structure",
-          "description": "Map and convert parsed CSV data into objects that match the Prisma client model schema.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "For each parsed row, transform the data fields to match the Prisma model structure. Handle data type conversions (e.g., strings to numbers or dates) and prepare objects for later migration steps."
+          "title": "Implement tRPC Procedures for Audit Assignment Management",
+          "description": "Develop audit.assignUser and audit.unassignUser procedures to manage AuditAssignment records, with strict RBAC enforcement.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Implement audit.assignUser to assign users to audits and audit.unassignUser to remove assignments. Validate user roles and permissions for these operations. Ensure assignment changes are logged for auditability."
         },
         {
           "id": 5,
-          "title": "Implement Data Cleaning and Validation",
-          "description": "Clean and validate the transformed data, addressing missing fields, type mismatches, and inconsistencies.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Check each object for required fields, correct data types, and valid values. Apply cleaning rules (e.g., trimming whitespace, normalizing formats) and flag or correct invalid or missing data. Prepare a mechanism to collect validation issues for logging."
-        },
-        {
-          "id": 6,
-          "title": "Log Parsing Results and Validation Issues",
-          "description": "Log the results of the parsing and validation process, including any errors or warnings.",
-          "status": "done",
-          "dependencies": [5],
-          "details": "Implement structured logging to record the number of successfully parsed records, details of any validation issues, and summaries of data anomalies. Ensure logs are clear and actionable for further migration steps."
+          "title": "Integrate Monitoring, Logging, and RBAC Enforcement Across Procedures",
+          "description": "Add comprehensive monitoring and logging to all auditRouter procedures, ensuring RBAC checks are consistently enforced and all sensitive actions are auditable.",
+          "status": "pending",
+          "dependencies": [2, 3, 4],
+          "details": "Integrate logging for all create, update, assignment, and retrieval actions, including user IDs, timestamps, and operation details. Set up monitoring for key metrics (e.g., request rates, errors). Review all procedures to confirm RBAC is enforced at entry points and that unauthorized access is prevented and logged."
         }
       ]
     },
     {
       "id": 5,
-      "title": "Implement Prisma database seeding",
-      "description": "Complete the migration script by adding Prisma Client integration to insert parsed data into Supabase.",
-      "status": "done",
+      "title": "Implement Audit Tracking Frontend",
+      "description": "Create Audit UI components for Client Detail and Audit Detail pages",
+      "status": "pending",
       "dependencies": [3, 4],
       "priority": "medium",
-      "details": "Extend `scripts/migrateClients.ts` to:\n- Initialize Prisma Client with proper environment variables for Supabase connection\n- Create transaction-wrapped database operations for inserting clients, contacts, licenses, and trust accounts\n- Handle relationships between entities correctly\n- Implement error handling and rollback for failed transactions\n- Add command-line options for dry run, verbose logging, and environment selection\n\nEnsure the script can be run multiple times without creating duplicates (upsert where appropriate).",
-      "testStrategy": "Run the complete migration script against the development Supabase instance. Verify data appears correctly in Supabase Table Editor. Test error scenarios by introducing invalid data and checking rollback functionality.",
+      "details": "Develop: 1) Client Detail Audits Tab showing audit list (using audit.getByClientId) with Year, Stage, Status, Due Date, Assigned Staff columns, 'Add New Audit Year' button, and Stage/Status dropdowns for audit.updateStageStatus. 2) Audit Detail page (/audits/[auditId]) displaying audit details, assigned team members with add/remove controls, and related tasks. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
+      "testStrategy": "Manually test all UI components and interactions. Verify data fetching, display of audit history, stage/status updates, and team member assignment functionality. Test role-based UI element visibility.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Initialize Prisma Client with Supabase Environment Variables",
-          "description": "Set up Prisma Client in the migration script to connect to the Supabase database using environment variables.",
-          "status": "done",
+          "title": "Design Audit UI Components and Page Layouts",
+          "description": "Create wireframes and component structures for the Client Detail Audits Tab and the Audit Detail page, ensuring alignment with Tailwind and Shadcn UI / TailAdmin design systems.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Update `scripts/migrateClients.ts` to import and initialize Prisma Client. Ensure the script loads environment variables (e.g., using dotenv) for Supabase connection details. Validate that the connection is successful before proceeding with any operations.[3][4]"
+          "details": "Define the layout for the audits tab within the Client Detail page, including table columns (Year, Stage, Status, Due Date, Assigned Staff), 'Add New Audit Year' button, and dropdowns for Stage/Status. For the Audit Detail page, outline sections for audit details, assigned team members with add/remove controls, and related tasks. Use Figma or a similar tool for mockups and document component hierarchies."
         },
         {
           "id": 2,
-          "title": "Parse and Structure Input Data for Seeding",
-          "description": "Parse the source data and structure it into objects representing clients, contacts, licenses, and trust accounts, ready for database insertion.",
-          "status": "done",
+          "title": "Implement Client Detail Audits Tab Table and Controls",
+          "description": "Develop the audits table UI for the Client Detail page, integrating data fetching and interactive controls for audit management.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Implement or update parsing logic to transform raw input (e.g., JSON, CSV) into structured JavaScript objects. Organize data to reflect entity relationships (e.g., clients with nested contacts and licenses). Ensure data integrity and readiness for transactional insertion."
+          "details": "Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fetch audit data using audit.getByClientId. Implement columns for Year, Stage, Status, Due Date, and Assigned Staff. Add the 'Add New Audit Year' button with modal or inline form functionality. Integrate Stage/Status dropdowns that trigger audit.updateStageStatus on change."
         },
         {
           "id": 3,
-          "title": "Implement Transactional Upsert Operations with Relationship Handling",
-          "description": "Create transaction-wrapped upsert operations to insert or update clients, contacts, licenses, and trust accounts, maintaining correct relationships and ensuring idempotency.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Use Prisma's transaction API to group all related inserts/updates in a single transaction. Use upsert operations to avoid duplicates, matching on unique fields. Correctly link related entities (e.g., connect contacts to clients). Roll back the transaction if any operation fails to maintain data consistency.[1][5]"
+          "title": "Develop Audit Detail Page with Team and Task Management",
+          "description": "Create the Audit Detail page at /audits/[auditId], displaying audit information and enabling management of assigned team members and related tasks.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Use Tailwind and Shadcn UI / TailAdmin components to present audit details. Implement a section for assigned team members with add/remove controls (e.g., multi-select dropdown or list with remove buttons). Display related tasks in a list or table. Ensure all data is fetched and updated via appropriate API endpoints."
         },
         {
           "id": 4,
-          "title": "Implement Error Handling and Transaction Rollback",
-          "description": "Add robust error handling to catch and log errors during the seeding process, ensuring transactions are rolled back on failure.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Wrap the main seeding logic in try/catch blocks. On error, ensure Prisma disconnects and the transaction is rolled back. Log detailed error messages for debugging. Exit the process with a non-zero code on failure.[5]"
+          "title": "Integrate API Calls and State Management",
+          "description": "Connect UI components to backend APIs for data retrieval and updates, managing local and global state as needed.",
+          "status": "pending",
+          "dependencies": [2, 3],
+          "details": "Wire up audit.getByClientId for the audits tab and relevant endpoints for audit details, team assignment, and task management. Use React Query, Redux, or context/state hooks for efficient state management and UI updates. Handle optimistic updates for status/stage changes and team modifications."
         },
         {
           "id": 5,
-          "title": "Add Command-Line Options for Dry Run, Verbose Logging, and Environment Selection",
-          "description": "Enhance the script to accept command-line arguments for dry run mode, verbose logging, and selecting the environment (e.g., development, staging, production).",
-          "status": "done",
+          "title": "Implement Role-Based Access and Final Styling Consistency",
+          "description": "Apply role-based controls to restrict actions (e.g., editing, assignment) and ensure all UI elements follow consistent styling guidelines.",
+          "status": "pending",
           "dependencies": [4],
-          "details": "Use a library like yargs or commander to parse CLI arguments. Implement dry run mode to simulate operations without writing to the database. Add verbose logging for detailed output. Allow specifying the environment to load the correct configuration."
-        },
-        {
-          "id": 6,
-          "title": "Test Idempotency and Multiple Runs",
-          "description": "Verify that the script can be run multiple times without creating duplicate records, ensuring upsert logic and relationships work as intended.",
-          "status": "done",
-          "dependencies": [5],
-          "details": "Run the script repeatedly against a test Supabase database. Confirm that no duplicates are created and relationships remain correct. Adjust upsert logic or unique constraints as needed to guarantee idempotency.[1][5]"
+          "details": "Check user roles/permissions before rendering or enabling controls such as status updates, team assignment, and adding new audits. Refine all components to match Tailwind and Shadcn UI / TailAdmin standards for spacing, typography, and responsiveness. Conduct a UI review to ensure visual and functional consistency across both pages."
         }
       ]
     },
     {
       "id": 6,
-      "title": "Configure CI environment for Supabase",
-      "description": "Set up environment variables and configuration for the CI environment to connect to the Development Supabase instance.",
-      "status": "done",
-      "dependencies": [5],
-      "priority": "medium",
-      "details": "Create or update configuration files for CI:\n- Add Supabase connection environment variables to `.env.example` and CI configuration\n- Document the required environment variables in README or documentation\n- Create a CI workflow step to validate database connection\n- Ensure secrets are properly managed and not exposed in logs\n\nFollow project-specific Cursor rules for environment configuration.",
-      "testStrategy": "Run a CI test job that connects to the Development Supabase instance and performs a simple query. Verify environment variables are correctly loaded and the connection succeeds.",
+      "title": "Implement Task Management Backend",
+      "description": "Create tRPC procedures in taskRouter for Task CRUD operations with RBAC",
+      "status": "pending",
+      "dependencies": [4],
+      "priority": "high",
+      "details": "Implement the following tRPC procedures in taskRouter: 1) task.getByAuditId, 2) task.getAssignedToMe with pagination, sorting, filtering, 3) task.getAll (Admin view) with pagination, sorting, filtering, 4) task.create, 5) task.update, 6) task.delete. Each procedure should enforce appropriate RBAC based on user roles. Tasks should support fields like Name, Description, Assignee, Due Date, Status, and Priority.",
+      "testStrategy": "Write unit tests for each procedure verifying correct data manipulation, filtering, pagination, and RBAC enforcement. Test task assignment and reassignment functionality.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Identify and Document Required Supabase Environment Variables",
-          "description": "List all environment variables needed for the CI environment to connect to the Development Supabase instance. Document their purpose and required values in the project README or documentation.",
-          "status": "done",
+          "title": "Define Task Schema and Database Models",
+          "description": "Create TypeScript interfaces and Prisma/database models for the Task entity with all required fields",
+          "status": "pending",
           "dependencies": [],
-          "details": "Review Supabase documentation and your project's requirements to determine which variables (e.g., SUPABASE_API_URL, SUPABASE_API_KEY, PROJECT_ID) are necessary. Add a section to the README or a dedicated documentation file explaining each variable, its purpose, and any security considerations.[1][2]"
+          "details": "Create a Task schema with fields: id, name, description, assigneeId, auditId, dueDate, status, priority, createdAt, and updatedAt. Define TypeScript interfaces for Task entity and related input/output types. Set up Prisma model or equivalent database schema for Task entity with appropriate relations to User and Audit entities. Implement validation schemas using Zod or similar validation library for task creation and updates. Define enums for Status and Priority fields with appropriate values."
         },
         {
           "id": 2,
-          "title": "Update .env.example and CI Configuration Files",
-          "description": "Add the identified Supabase environment variables to the .env.example file and ensure the CI configuration (e.g., GitHub Actions, GitLab CI) references these variables appropriately.",
-          "status": "done",
+          "title": "Implement RBAC Middleware for Task Procedures",
+          "description": "Create middleware to handle role-based access control for all task procedures",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Edit the .env.example file to include placeholders for all required Supabase variables. Update the CI workflow configuration to reference these variables, using the CI platform's secret management features (e.g., GitHub Actions secrets). Ensure the variables are not hardcoded and are sourced securely.[1]"
+          "details": "Create a middleware function using tRPC's middleware pattern that validates user permissions based on their role. Define permission rules for different task operations: admins can perform all operations, managers can create/update/view tasks, regular users can only view assigned tasks and update their status. Implement context-based authorization by extending the tRPC context to include user role information. Create helper functions to check if a user has access to specific tasks based on assignment and role. Ensure the middleware can be reused across all task procedures."
         },
         {
           "id": 3,
-          "title": "Configure Secret Management in CI Platform",
-          "description": "Set up secure storage of Supabase credentials in the CI platform's secret management system to prevent accidental exposure.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Add Supabase credentials (such as API keys and project URLs) to the CI platform's secrets or environment variables section. Reference these secrets in the CI configuration, ensuring they are not printed or logged during workflow execution.[1]"
+          "title": "Implement Basic Task Retrieval Procedures",
+          "description": "Create tRPC procedures for task.getByAuditId and task.getAssignedToMe with pagination",
+          "status": "pending",
+          "dependencies": [1, 2],
+          "details": "Implement the task.getByAuditId procedure that accepts an auditId parameter and returns all tasks associated with that audit. Apply RBAC to ensure only users with access to the audit can view its tasks. Implement task.getAssignedToMe procedure that returns tasks assigned to the current user with pagination support. Add input validation for pagination parameters (page, limit). Implement sorting functionality allowing tasks to be sorted by dueDate, priority, or status. Add filtering options to filter tasks by status or priority. Ensure both procedures use the RBAC middleware to enforce access control."
         },
         {
           "id": 4,
-          "title": "Implement CI Workflow Step to Validate Supabase Database Connection",
-          "description": "Add a step in the CI workflow that attempts to connect to the Development Supabase instance using the configured environment variables, and fails the workflow if the connection is unsuccessful.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Use the Supabase CLI or a custom script in the CI workflow to attempt a database connection. For example, run a simple Supabase CLI command that requires authentication, and check for success or failure. Ensure that any output does not leak secrets.[1][4]"
+          "title": "Implement Admin Task View Procedure",
+          "description": "Create task.getAll procedure with advanced querying capabilities for administrators",
+          "status": "pending",
+          "dependencies": [2, 3],
+          "details": "Implement task.getAll procedure that returns all tasks in the system with strict admin-only access control. Add comprehensive pagination support with cursor-based pagination for better performance. Implement advanced filtering options including by assignee, date ranges, multiple statuses, and priorities. Add sorting capabilities on all relevant fields with both ascending and descending options. Include search functionality to search across task names and descriptions. Implement count and aggregation features to show task distribution by status, priority, or assignee. Ensure proper error handling for invalid query parameters."
         },
         {
           "id": 5,
-          "title": "Review and Enforce Security and Logging Best Practices",
-          "description": "Audit the CI configuration and workflow to ensure that secrets are not exposed in logs and that environment variables are handled according to project-specific Cursor rules.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Review the CI workflow for any steps that might inadvertently print secrets or sensitive information. Use the CI platform's features to mask secrets in logs. Confirm that all environment configuration follows Cursor rules and update documentation as needed to reflect security practices.[1]"
+          "title": "Implement Task Creation and Update Procedures",
+          "description": "Create tRPC procedures for task.create and task.update with proper validation",
+          "status": "pending",
+          "dependencies": [1, 2],
+          "details": "Implement task.create procedure that accepts task details and creates a new task in the database. Add input validation using Zod schemas to ensure all required fields are provided and valid. Implement task.update procedure that allows updating task fields while preserving immutable fields. Add validation to ensure users can only update tasks they're authorized to modify based on RBAC rules. Implement business logic for task assignment, including notifications or events when tasks are created or assigned. Add audit logging to track task creation and modifications. Ensure proper error handling for validation failures and database errors."
+        },
+        {
+          "id": 6,
+          "title": "Implement Task Deletion and Final Integration",
+          "description": "Create task.delete procedure and integrate all procedures into the main router",
+          "status": "pending",
+          "dependencies": [2, 5],
+          "details": "Implement task.delete procedure with strict permission checks (typically admin-only or task creator). Add safeguards against accidental deletion, such as confirmation parameters. Implement soft deletion if needed to preserve task history. Integrate all task procedures into the main taskRouter. Register the taskRouter with the main tRPC router. Add comprehensive error handling across all procedures. Write integration tests for all task procedures to verify functionality and RBAC enforcement. Document the API endpoints, including required permissions, input parameters, and response formats. Perform final testing to ensure all procedures work together correctly."
         }
       ]
     },
     {
       "id": 7,
-      "title": "Implement navigation between routes",
-      "description": "Add basic navigation components to allow developers to move between placeholder pages.",
-      "status": "done",
-      "dependencies": [2],
-      "priority": "low",
-      "details": "Create simple navigation components:\n- Add a sidebar or header navigation in the `ProtectedAppLayout` for internal routes\n- Add a simple navigation bar in the default layout for portal routes\n- Implement Next.js Link components for navigation between routes\n- Ensure active route is visually indicated\n\nKeep the implementation minimal as this is just for development navigation during this phase.",
-      "testStrategy": "Test navigation by clicking through all routes in both the internal and client portal sections. Verify that the active route is correctly indicated and that navigation preserves layout context.",
+      "title": "Implement Task Management Frontend",
+      "description": "Create Task List, Detail, and Create/Edit UI components",
+      "status": "pending",
+      "dependencies": [5, 6],
+      "priority": "medium",
+      "details": "Develop: 1) Task List page (/tasks) with functional table defaulting to task.getAssignedToMe, Admin toggle for task.getAll, pagination, sorting, filtering, and 'Add New Task' button. 2) Audit Detail Tasks Section listing tasks via task.getByAuditId with quick status updates and 'Add Task' functionality. 3) Task Create/Edit forms with fields for Name, Description, Assignee, Due Date, Status, Priority. 4) Task Detail View (modal) displaying full task details. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
+      "testStrategy": "Manually test all UI components and interactions. Verify data fetching, filtering, sorting, and pagination. Test task creation, assignment, and status updates. Confirm role-based UI element visibility.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Add navigation bar to default layout for portal routes",
-          "description": "Implement a simple navigation bar in the default layout to allow navigation between portal routes.",
-          "status": "done",
+          "title": "Set Up Task Data Integration and Role-Based Logic",
+          "description": "Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.",
+          "status": "pending",
           "dependencies": [],
-          "details": "In the default layout component, create a navigation bar using Next.js <Link> components for each portal route. Ensure the navigation bar is minimal and only includes links relevant to portal pages. Import Link from 'next/link' and use the href prop to specify target routes. Style the navigation bar for basic usability."
+          "details": "Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.getByAuditId). Set up state management (React context, Redux, or local state) to store and update task data. Implement logic to determine user role (admin vs. regular user) and toggle between assigned and all tasks accordingly."
         },
         {
           "id": 2,
-          "title": "Add sidebar or header navigation to ProtectedAppLayout for internal routes",
-          "description": "Implement a sidebar or header navigation component within the ProtectedAppLayout to enable navigation between internal (protected) routes.",
-          "status": "done",
+          "title": "Develop Task List Page with Table, Pagination, Sorting, and Filtering",
+          "description": "Create the /tasks page with a functional table displaying tasks, including pagination, sorting, filtering, and an 'Add New Task' button.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Within the ProtectedAppLayout, add a sidebar or header containing <Link> components for each internal route. Import Link from 'next/link' and use the href prop for navigation. Keep the design minimal, focusing on development usability. Ensure the navigation is clearly separated from the main content area."
+          "details": "Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. Implement pagination controls, column sorting, and filtering options. Add an 'Add New Task' button that opens the create task form. Ensure the table defaults to assigned tasks and supports admin toggle for all tasks."
         },
         {
           "id": 3,
-          "title": "Implement active route visual indication",
-          "description": "Ensure the currently active route is visually indicated in both navigation components.",
-          "status": "done",
-          "dependencies": [1, 2],
-          "details": "Use Next.js router hooks (such as useRouter) to determine the current route. Apply a distinct style (e.g., bold text, underline, or background color) to the active link in both the default layout navigation bar and the ProtectedAppLayout navigation. Ensure the indication is clear and updates correctly on navigation."
+          "title": "Implement Task Create/Edit Forms",
+          "description": "Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement validation and controlled inputs for all required fields. Ensure the form can be used both for creating new tasks and editing existing ones, with appropriate data pre-filling and submission handling."
         },
         {
           "id": 4,
-          "title": "Verify navigation functionality and minimalism",
-          "description": "Test all navigation components to confirm correct routing and that the implementation remains minimal for development purposes.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Manually test navigation between all linked routes in both layouts. Confirm that the active route indication works as expected and that navigation is smooth. Review the code to ensure no unnecessary complexity or features have been added beyond basic development navigation."
+          "title": "Build Task Detail View Modal",
+          "description": "Create a modal component to display full task details, accessible from the task list and audit detail sections.",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Use modal components from Shadcn UI / TailAdmin. Display all task fields in a readable layout. Ensure the modal can be triggered from the task list and audit detail sections, and supports closing and navigation back to the list."
+        },
+        {
+          "id": 5,
+          "title": "Develop Audit Detail Tasks Section with Quick Status Updates",
+          "description": "Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.",
+          "status": "pending",
+          "dependencies": [1, 3, 4],
+          "details": "Fetch and display tasks using task.getByAuditId. Allow inline status updates (e.g., dropdown or toggle). Integrate the 'Add Task' button to open the create form. Ensure consistent styling and UX with other components."
         }
       ]
     },
     {
       "id": 8,
-      "title": "Create documentation and verification guide",
-      "description": "Document the implemented features, folder structure, and provide a verification guide for the development team.",
-      "status": "done",
-      "dependencies": [1, 2, 5, 6, 7],
+      "title": "Implement Document Reference Display Backend",
+      "description": "Create tRPC procedures in documentRouter for retrieving document references",
+      "status": "pending",
+      "dependencies": [1, 4, 6],
       "priority": "low",
-      "details": "Create documentation that includes:\n- Overview of the implemented folder structure and routing\n- Guide to running the migration script with example commands\n- Instructions for verifying data in Supabase Table Editor\n- List of placeholder pages and their intended future functionality\n- Next steps for Phase 1 development\n\nPlace documentation in the project wiki or README.md file following project conventions.",
-      "testStrategy": "Have a team member follow the documentation to navigate the application and run the migration script. Collect feedback on clarity and completeness. Verify all commands and paths in the documentation are accurate.",
+      "details": "Implement the following tRPC procedures in documentRouter: 1) document.getByClientId, 2) document.getByAuditId, 3) document.getByTaskId. Each procedure should return document metadata including fileName and sharepointFileUrl. Enforce appropriate RBAC for document visibility based on user roles and relationship to the parent entity.",
+      "testStrategy": "Write unit tests for each procedure verifying correct document retrieval based on parent entity ID and RBAC enforcement. Test with various user roles to confirm proper access control.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Document Folder Structure and Routing Overview",
-          "description": "Create a section that explains the project's folder structure and routing logic, referencing how files and folders map to application routes.",
-          "status": "done",
+          "title": "Define Input Schemas and Output Types for Document Reference Procedures",
+          "description": "Design and implement input validation schemas (using a library like zod) and output types for each tRPC procedure: getByClientId, getByAuditId, and getByTaskId. Ensure that each input schema strictly validates the required identifier and that the output type includes fileName and sharepointFileUrl.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Analyze the current project directory. Describe how the folder and file organization defines the application's routing, referencing conventions such as file-based routing (e.g., Next.js or Expo Router). Include a visual or tabular representation if helpful. Ensure this overview is clear for new developers to understand how navigation is structured.[1][2][5]"
+          "details": "Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId as strings or UUIDs). Define TypeScript types or zod schemas for the output, ensuring fileName and sharepointFileUrl are included. This step ensures type safety and input validation for all subsequent implementation steps.[2][4]"
         },
         {
           "id": 2,
-          "title": "Write Migration Script Usage Guide",
-          "description": "Provide step-by-step instructions for running the migration script, including example commands and expected outputs.",
-          "status": "done",
+          "title": "Implement RBAC Middleware for Document Visibility",
+          "description": "Develop and integrate reusable middleware to enforce role-based access control (RBAC) for document retrieval procedures. The middleware should check user roles and their relationship to the parent entity (client, audit, or task) before allowing access to document metadata.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Identify the migration script(s) used in the project. Document prerequisites, command-line usage, environment variables, and sample commands. Clarify where to find the script, how to execute it, and how to interpret success or error messages. Ensure instructions are platform-agnostic or specify OS-specific steps as needed."
+          "details": "Create a middleware function that inspects the user's roles and verifies their association with the relevant parent entity. Integrate this middleware into the tRPC procedures using the .use() method, ensuring that only authorized users can access document references.[1][4]"
         },
         {
           "id": 3,
-          "title": "Create Data Verification Instructions for Supabase Table Editor",
-          "description": "Detail the process for verifying migrated data using the Supabase Table Editor, including navigation steps and data validation tips.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Outline how to access the Supabase Table Editor, locate relevant tables, and check that data has been correctly migrated. Include screenshots or example queries if appropriate. Highlight common issues and troubleshooting steps for data verification."
+          "title": "Implement tRPC Procedures in documentRouter",
+          "description": "Develop the three tRPC procedures (getByClientId, getByAuditId, getByTaskId) within documentRouter. Each procedure should retrieve document metadata from the database based on the provided identifier and return fileName and sharepointFileUrl for each document.",
+          "status": "pending",
+          "dependencies": [1, 2],
+          "details": "For each procedure, use the validated input to query the database for documents related to the specified client, audit, or task. Ensure that the RBAC middleware is applied to each procedure. Return an array of objects containing fileName and sharepointFileUrl as defined in the output type.[1][2][4]"
         },
         {
           "id": 4,
-          "title": "List Placeholder Pages and Intended Functionality",
-          "description": "Compile a list of all current placeholder pages in the application and describe their planned future functionality.",
-          "status": "done",
+          "title": "Test and Document Document Reference Procedures",
+          "description": "Write comprehensive tests for each procedure to verify correct input validation, RBAC enforcement, and accurate data retrieval. Add inline documentation and meta descriptions for each procedure to support maintainability and developer understanding.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Create unit and integration tests to cover valid and invalid inputs, unauthorized access, and successful data retrieval. Use tRPC's meta functionality and zod's .describe() method to document each procedure and its parameters for future reference and developer tools integration.[2][5]"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Implement Document Reference Display Frontend",
+      "description": "Create Document tabs/sections for Client, Audit, and Task detail pages",
+      "status": "pending",
+      "dependencies": [3, 5, 7, 8],
+      "priority": "low",
+      "details": "Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and Shadcn UI / TailAdmin components.",
+      "testStrategy": "Manually test document list display on each detail page. Verify links open correctly to SharePoint URLs. Test with various user roles to confirm proper visibility based on RBAC.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design Document Reference UI Components",
+          "description": "Design and implement reusable UI components for displaying document references, including fileName and 'Open' link, styled with Tailwind and Shadcn UI / TailAdmin components.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Create a DocumentList component that accepts an array of document objects and renders each with the fileName and an 'Open' button linking to the sharepointFileUrl. Ensure consistent styling using Tailwind and Shadcn UI / TailAdmin. Prepare for integration into multiple pages by making the component context-agnostic."
+        },
+        {
+          "id": 2,
+          "title": "Integrate Document Reference Section into Client Detail Page",
+          "description": "Add the DocumentList component as a new tab or section on the Client detail page, fetching and displaying relevant document references.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Review the routing and page structure to identify all placeholder or stub pages. For each, provide a brief description of its intended purpose and any relevant notes on future development. Organize this information in a clear, accessible format."
+          "details": "On the Client detail page, use the appropriate document.getByClient procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section fits seamlessly with the existing page layout and navigation."
+        },
+        {
+          "id": 3,
+          "title": "Integrate Document Reference Section into Audit Detail Page",
+          "description": "Add the DocumentList component as a new tab or section on the Audit detail page, fetching and displaying relevant document references.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "On the Audit detail page, use the appropriate document.getByAudit procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section matches the page's design and navigation patterns."
+        },
+        {
+          "id": 4,
+          "title": "Integrate Document Reference Section into Task Detail Page",
+          "description": "Add the DocumentList component as a new tab or section on the Task detail page, fetching and displaying relevant document references.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "On the Task detail page, use the appropriate document.getByTask procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section is styled and behaves consistently with the rest of the application."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Implement Comprehensive RBAC and Final Integration",
+      "description": "Ensure consistent RBAC across all components and integrate all features",
+      "status": "pending",
+      "dependencies": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "priority": "high",
+      "details": "1) Review and ensure consistent RBAC implementation across all backend procedures, throwing TRPCError('FORBIDDEN') for unauthorized access. 2) Implement frontend RBAC using useSession to conditionally render/disable UI elements based on user roles. 3) Perform final integration of all components, ensuring seamless navigation and data flow between Client, Audit, and Task management features. 4) Conduct end-to-end testing of complete workflows. 5) Optimize performance with proper loading states and error handling.",
+      "testStrategy": "Perform comprehensive end-to-end testing of all workflows from different user role perspectives. Verify all acceptance criteria are met. Test edge cases and error scenarios. Conduct performance testing with realistic data volumes.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define RBAC Role Structure and Permission Model",
+          "description": "Create a comprehensive RBAC model that defines all roles, permissions, and access control policies for the application. This will serve as the foundation for all RBAC implementations.",
+          "dependencies": [],
+          "details": "1. Define clear user roles (e.g., Admin, Manager, Auditor, Client, Regular User) based on business requirements\n2. Map each role to specific permissions using a matrix approach\n3. Document role inheritance hierarchies if applicable\n4. Create a centralized policy definition file (in YAML or JSON) following the policy-as-code approach\n5. Test the model with example user scenarios to validate completeness\n6. Ensure the model follows the principle of least privilege\n7. Testing approach: Create unit tests that validate role definitions and permission mappings",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 2,
+          "title": "Implement Backend RBAC Middleware and Utilities",
+          "description": "Create reusable middleware and utility functions to enforce RBAC consistently across all backend routes and procedures.",
+          "dependencies": [1],
+          "details": "1. Create a central RBAC enforcement middleware for tRPC procedures\n2. Implement utility functions to check permissions based on the defined role structure\n3. Create helper functions for throwing standardized TRPCError('FORBIDDEN') responses\n4. Implement role-based route protection that can be applied to any procedure\n5. Add logging for all access control decisions for audit purposes\n6. Create test helpers for RBAC unit testing\n7. Testing approach: Write unit tests for middleware with different role scenarios",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 3,
+          "title": "Apply RBAC to All Backend Procedures",
+          "description": "Systematically review and apply RBAC checks to all existing backend procedures to ensure consistent access control.",
+          "dependencies": [2],
+          "details": "1. Create an inventory of all tRPC procedures requiring RBAC\n2. Group procedures by required permission level\n3. Apply the RBAC middleware to each procedure with appropriate permission checks\n4. Ensure proper error handling for unauthorized access attempts\n5. Verify that all data access is properly restricted based on user roles\n6. Document any exceptions or special cases\n7. Testing approach: Create integration tests that verify each procedure enforces proper access control",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 4,
+          "title": "Implement Frontend RBAC Context Provider",
+          "description": "Create a React context provider that makes user role and permission information available throughout the frontend application.",
+          "dependencies": [1],
+          "details": "1. Create a RBACProvider component that wraps the application\n2. Integrate with useSession to extract user role information\n3. Implement helper hooks (useRole, usePermission, canAccess) for checking permissions\n4. Add caching for permission checks to improve performance\n5. Ensure the context updates when session changes\n6. Add development tools for debugging RBAC issues\n7. Testing approach: Write unit tests for the context provider and hooks",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 5,
-          "title": "Summarize Next Steps for Phase 1 Development and Finalize Documentation",
-          "description": "Outline the next development steps for Phase 1 and ensure all documentation is compiled and formatted according to project conventions.",
-          "status": "done",
-          "dependencies": [1, 2, 3, 4],
-          "details": "Work with the team to identify and summarize the immediate next steps for Phase 1. Review all documentation sections for clarity and completeness. Place the final documentation in the project wiki or README.md, following established formatting and organizational standards."
+          "title": "Apply RBAC to Frontend Components and Routes",
+          "description": "Implement conditional rendering and route protection across all frontend components based on user roles.",
+          "dependencies": [4],
+          "details": "1. Create protected route components that redirect unauthorized users\n2. Implement conditional rendering for navigation items based on permissions\n3. Add permission checks to all action buttons and interactive elements\n4. Implement graceful UI handling for unauthorized states\n5. Ensure forms and inputs respect write permissions\n6. Add visual indicators for read-only or restricted content\n7. Testing approach: Create component tests with different user role mocks",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 6,
+          "title": "Integrate Client Management with RBAC",
+          "description": "Ensure Client Management features properly integrate with the RBAC system for both data access and UI permissions.",
+          "dependencies": [3, 5],
+          "details": "1. Review all client data access points and apply appropriate RBAC checks\n2. Update client listing to only show clients the user has permission to view\n3. Modify client detail views to respect read/write permissions\n4. Implement role-specific client management workflows\n5. Ensure client-related actions (create, update, delete) check for proper permissions\n6. Add permission-aware filtering and sorting options\n7. Testing approach: End-to-end tests for client management workflows with different user roles",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 7,
+          "title": "Integrate Audit Features with RBAC",
+          "description": "Apply RBAC to all audit-related features, ensuring proper access control for sensitive audit information.",
+          "dependencies": [3, 5],
+          "details": "1. Review all audit data access points and apply appropriate RBAC checks\n2. Implement role-specific audit log views and filters\n3. Ensure audit trail information is only accessible to authorized roles\n4. Add permission checks for audit report generation\n5. Implement audit configuration settings with role-based access\n6. Create specialized audit views for compliance officers\n7. Testing approach: Integration tests for audit feature access with different user roles",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 8,
+          "title": "Integrate Task Management with RBAC",
+          "description": "Apply RBAC to task management features, ensuring tasks are only visible and editable by authorized users.",
+          "dependencies": [3, 5],
+          "details": "1. Review all task data access points and apply appropriate RBAC checks\n2. Implement task assignment rules based on user roles\n3. Modify task listings to only show tasks the user has permission to view\n4. Add permission checks for task creation, editing, and deletion\n5. Implement role-specific task dashboards and views\n6. Ensure task notifications respect RBAC permissions\n7. Testing approach: End-to-end tests for task workflows with different user roles",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 9,
+          "title": "Implement Cross-Feature Navigation and Data Flow",
+          "description": "Ensure seamless navigation and data flow between Client, Audit, and Task management features with consistent RBAC enforcement.",
+          "dependencies": [6, 7, 8],
+          "details": "1. Create unified navigation that respects user permissions across all features\n2. Implement cross-feature workflows (e.g., creating tasks from client view)\n3. Ensure consistent data access patterns across feature boundaries\n4. Add contextual navigation based on current data and user permissions\n5. Implement deep linking with permission checks\n6. Create a unified dashboard with role-appropriate widgets and actions\n7. Testing approach: User journey tests across multiple features with different roles",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 10,
+          "title": "Optimize Performance and Implement Error Handling",
+          "description": "Finalize the implementation with performance optimizations and comprehensive error handling for RBAC-related operations.",
+          "dependencies": [9],
+          "details": "1. Implement loading states for all permission-checked operations\n2. Add caching for frequently checked permissions to reduce latency\n3. Create user-friendly error messages for permission denials\n4. Implement graceful degradation for partially authorized views\n5. Add telemetry for RBAC performance monitoring\n6. Optimize backend permission checks to minimize database queries\n7. Testing approach: Performance testing with different user loads and permission scenarios",
+          "status": "pending",
+          "parentTaskId": 10
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "QAS Portal Phase 0c Implementation",
-    "totalTasks": 8,
-    "sourceFile": "scripts/PRD_mvp-phase0c.txt",
-    "generatedAt": "2023-11-14"
+    "projectName": "QAS Portal - Core Internal Functionality (MVP Phase 1)",
+    "totalTasks": 10,
+    "sourceFile": "PRD_phase1.txt",
+    "generatedAt": "2023-11-09"
   }
 }

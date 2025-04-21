@@ -64,3 +64,4 @@ node_modules/
 
 # Private client data
 data/clients.csv
+docs/
