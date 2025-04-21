@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Implement Client Management Backend",
       "description": "Create tRPC procedures in clientRouter for CRUD operations on Client records with proper RBAC",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "Implement the following tRPC procedures in clientRouter: 1) client.getAll with server-side sorting, filtering, and cursor-based pagination, 2) client.getById with relations (contacts, licenses, trustAccounts, audits, activityLogs/notes), 3) client.create with Zod schema validation, 4) client.update with clientId and validated update data. Ensure all procedures enforce RBAC based on session.user.role, throwing TRPCError('FORBIDDEN') for unauthorized access. Limit fields for non-Admin/Manager roles as needed.",
@@ -14,7 +14,7 @@
           "id": 1,
           "title": "Set Up Zod Schemas and RBAC Middleware",
           "description": "Define Zod schemas for client creation and update, and implement reusable RBAC middleware to enforce role-based access control for all procedures.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create Zod schemas for validating client input data for both creation and update operations. Develop a middleware function that checks session.user.role and throws TRPCError('FORBIDDEN') if the user lacks required permissions. This middleware should be reusable across all procedures to ensure consistent RBAC enforcement."
         },
@@ -22,7 +22,7 @@
           "id": 2,
           "title": "Implement client.getAll with Sorting, Filtering, and Pagination",
           "description": "Create the client.getAll procedure to fetch a list of clients with server-side sorting, filtering, and cursor-based pagination, applying RBAC and field restrictions.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Use Prisma's findMany with appropriate parameters for sorting, filtering, and cursor-based pagination. Integrate the RBAC middleware to restrict access and limit visible fields for non-Admin/Manager roles. Ensure the procedure accepts query parameters for filters, sort order, and pagination cursors."
         },
@@ -30,7 +30,7 @@
           "id": 3,
           "title": "Implement client.getById with Related Entities",
           "description": "Develop the client.getById procedure to fetch a single client by ID, including related entities (contacts, licenses, trustAccounts, audits, activityLogs/notes), with RBAC and field-level access control.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1],
           "details": "Use Prisma's findUnique with include clauses to fetch the client and its related entities. Apply RBAC middleware and restrict related data fields for non-Admin/Manager roles as needed. Validate input using Zod to ensure a valid client ID."
         },
@@ -38,7 +38,7 @@
           "id": 4,
           "title": "Implement client.create with Validation and RBAC",
           "description": "Create the client.create procedure to add new client records, enforcing Zod schema validation and RBAC restrictions.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Use the previously defined Zod schema to validate input data. Apply RBAC middleware to ensure only authorized roles can create clients. Use Prisma's create method to insert the new client record, and return the created client (with field restrictions for non-privileged roles)."
         },
@@ -46,7 +46,7 @@
           "id": 5,
           "title": "Implement client.update with Validation and RBAC",
           "description": "Develop the client.update procedure to update existing client records by clientId, enforcing Zod schema validation and RBAC.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Validate the input (clientId and update data) using the Zod schema. Apply RBAC middleware to ensure only authorized roles can update clients. Use Prisma's update method to modify the client record, and return the updated client (with field restrictions for non-privileged roles)."
         },
@@ -54,7 +54,7 @@
           "id": 6,
           "title": "Test Procedures and Enforce Field-Level Access Control",
           "description": "Thoroughly test all clientRouter procedures for correct RBAC enforcement, validation, relation loading, and field-level access control. Refine field restrictions for non-Admin/Manager roles.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2, 3, 4, 5],
           "details": "Write unit and integration tests for each procedure, simulating different user roles and verifying correct access, validation, and field visibility. Ensure that unauthorized users receive TRPCError('FORBIDDEN') and that field-level restrictions are consistently applied across all endpoints."
         }

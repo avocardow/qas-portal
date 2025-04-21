@@ -113,3 +113,24 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+// Add RBAC middleware to enforce specific roles
+export const enforceRole = (allowedRoles: string[]) =>
+  t.middleware(({ ctx, next }) => {
+    const userRole = ctx.session?.user?.role;
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
+    }
+    return next({
+      ctx: { session: ctx.session! },
+    });
+  });
+
+// Procedures for common role checks
+export const adminProcedure = protectedProcedure.use(enforceRole(["Admin"]));
+export const managerProcedure = protectedProcedure.use(
+  enforceRole(["Manager"])
+);
+export const adminOrManagerProcedure = protectedProcedure.use(
+  enforceRole(["Admin", "Manager"])
+);

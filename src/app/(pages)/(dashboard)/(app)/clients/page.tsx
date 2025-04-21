@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/table";
 
 export default function ClientsPage() {
-  const clientsQuery = api.client.getAll.useQuery();
-  const clients = clientsQuery.data;
+  const clientsQuery = api.client.getAll.useQuery({});
+  const items = clientsQuery.data?.items;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
 
@@ -25,8 +25,8 @@ export default function ClientsPage() {
         <ComponentCard title="Clients">
           {isLoading && <p>Loading...</p>}
           {error && <p>Error loading clients.</p>}
-          {!clients?.length && !isLoading && !error && <p>No clients found.</p>}
-          {clients && (
+          {!items?.length && !isLoading && !error && <p>No clients found.</p>}
+          {items && (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader className="bg-gray-50">
@@ -58,7 +58,7 @@ export default function ClientsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-gray-200 bg-white">
-                  {clients.map((client) => (
+                  {items.map((client) => (
                     <TableRow key={client.id}>
                       <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
                         {client.id}
