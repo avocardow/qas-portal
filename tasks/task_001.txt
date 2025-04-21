@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Implement Client Management Backend
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Create tRPC procedures in clientRouter for CRUD operations on Client records with proper RBAC
@@ -23,7 +23,7 @@ Create Zod schemas for validating client input data for both creation and update
 ### Details:
 Use Prisma's findMany with appropriate parameters for sorting, filtering, and cursor-based pagination. Integrate the RBAC middleware to restrict access and limit visible fields for non-Admin/Manager roles. Ensure the procedure accepts query parameters for filters, sort order, and pagination cursors.
 
-## 3. Implement client.getById with Related Entities [in-progress]
+## 3. Implement client.getById with Related Entities [done]
 ### Dependencies: 1.1
 ### Description: Develop the client.getById procedure to fetch a single client by ID, including related entities (contacts, licenses, trustAccounts, audits, activityLogs/notes), with RBAC and field-level access control.
 ### Details:

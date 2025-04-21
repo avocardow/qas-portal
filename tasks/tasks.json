@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Implement Client Management Backend",
       "description": "Create tRPC procedures in clientRouter for CRUD operations on Client records with proper RBAC",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "Implement the following tRPC procedures in clientRouter: 1) client.getAll with server-side sorting, filtering, and cursor-based pagination, 2) client.getById with relations (contacts, licenses, trustAccounts, audits, activityLogs/notes), 3) client.create with Zod schema validation, 4) client.update with clientId and validated update data. Ensure all procedures enforce RBAC based on session.user.role, throwing TRPCError('FORBIDDEN') for unauthorized access. Limit fields for non-Admin/Manager roles as needed.",
@@ -30,7 +30,7 @@
           "id": 3,
           "title": "Implement client.getById with Related Entities",
           "description": "Develop the client.getById procedure to fetch a single client by ID, including related entities (contacts, licenses, trustAccounts, audits, activityLogs/notes), with RBAC and field-level access control.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1],
           "details": "Use Prisma's findUnique with include clauses to fetch the client and its related entities. Apply RBAC middleware and restrict related data fields for non-Admin/Manager roles as needed. Validate input using Zod to ensure a valid client ID."
         },
