@@ -108,41 +108,37 @@ export default function ClientsPage() {
                 <TableHeader className="bg-gray-50">
                   <TableRow>
                     <TableCell isHeader>ID</TableCell>
-                    <TableCell
-                      isHeader
-                      onClick={() => toggleSort("clientName")}
-                      className="cursor-pointer"
-                    >
-                      Name{" "}
-                      {sortBy === "clientName"
-                        ? sortOrder === "asc"
-                          ? "↑"
-                          : "↓"
-                        : null}
+                    <TableCell isHeader className="cursor-pointer">
+                      <button
+                        type="button"
+                        onClick={() => toggleSort("clientName")}
+                        className="w-full text-left"
+                      >
+                        Name{" "}
+                        {sortBy === "clientName" &&
+                          (sortOrder === "asc" ? "↑" : "↓")}
+                      </button>
                     </TableCell>
-                    <TableCell
-                      isHeader
-                      onClick={() => toggleSort("city")}
-                      className="cursor-pointer"
-                    >
-                      City{" "}
-                      {sortBy === "city"
-                        ? sortOrder === "asc"
-                          ? "↑"
-                          : "↓"
-                        : null}
+                    <TableCell isHeader className="cursor-pointer">
+                      <button
+                        type="button"
+                        onClick={() => toggleSort("city")}
+                        className="w-full text-left"
+                      >
+                        City{" "}
+                        {sortBy === "city" && (sortOrder === "asc" ? "↑" : "↓")}
+                      </button>
                     </TableCell>
-                    <TableCell
-                      isHeader
-                      onClick={() => toggleSort("status")}
-                      className="cursor-pointer"
-                    >
-                      Status{" "}
-                      {sortBy === "status"
-                        ? sortOrder === "asc"
-                          ? "↑"
-                          : "↓"
-                        : null}
+                    <TableCell isHeader className="cursor-pointer">
+                      <button
+                        type="button"
+                        onClick={() => toggleSort("status")}
+                        className="w-full text-left"
+                      >
+                        Status{" "}
+                        {sortBy === "status" &&
+                          (sortOrder === "asc" ? "↑" : "↓")}
+                      </button>
                     </TableCell>
                   </TableRow>
                 </TableHeader>

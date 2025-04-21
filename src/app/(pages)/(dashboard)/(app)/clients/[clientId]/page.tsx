@@ -1,8 +1,11 @@
-import React from "react";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
-import { useParams } from "next/navigation";
 
-export default function ClientDetailPage() {
-  const { clientId } = useParams();
+// Server component: accept params from Next.js
+interface ClientDetailPageProps {
+  params: { clientId: string };
+}
+
+export default function ClientDetailPage({ params }: ClientDetailPageProps) {
+  const { clientId } = params;
   return <DashboardPlaceholderPageTemplate heading={`Client ${clientId}`} />;
 }
