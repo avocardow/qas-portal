@@ -5,6 +5,7 @@ import {
   enforcePermission,
 } from "@/server/api/trpc";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
+import { ActivityLogType } from "@prisma/client";
 
 // Zod schemas for audit operations
 const auditCreateSchema = z.object({
@@ -38,74 +39,141 @@ export const auditRouter = createTRPCRouter({
   create: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.CREATE))
     .input(auditCreateSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { clientId, auditYear, stageId, statusId } = input;
-      return ctx.db.audit.create({
+      const audit = await ctx.db.audit.create({
         data: { clientId, auditYear, stageId, statusId },
       });
+      if (ctx.db.activityLog) {
+        await ctx.db.activityLog.create({
+          data: {
+            auditId: audit.id,
+            clientId: audit.clientId,
+            userId: ctx.session.user.id,
+            type: ActivityLogType.note,
+            content: `Created audit for year ${audit.auditYear}`,
+          },
+        });
+      }
+      return audit;
     }),
 
   // Update stage and status of an existing audit with logging
   updateStageStatus: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS))
     .input(updateStageStatusSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { auditId, stageId, statusId } = input;
-      return ctx.db.audit.update({
+      const audit = await ctx.db.audit.update({
         where: { id: auditId },
         data: { stageId, statusId },
       });
+      if (ctx.db.activityLog) {
+        await ctx.db.activityLog.create({
+          data: {
+            auditId: audit.id,
+            clientId: audit.clientId,
+            userId: ctx.session.user.id,
+            type: ActivityLogType.stage_change,
+            content: `Changed stage to ${stageId} and status to ${statusId}`,
+          },
+        });
+      }
+      return audit;
     }),
 
   // Get all audits for a specific client with logging
   getByClientId: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID))
     .input(getByClientIdSchema)
-    .query(({ ctx, input }) => {
-      return ctx.db.audit.findMany({
+    .query(async ({ ctx, input }) => {
+      const audits = await ctx.db.audit.findMany({
         where: { clientId: input.clientId },
         include: { stage: true, status: true },
       });
+      if (ctx.db.activityLog) {
+        await ctx.db.activityLog.create({
+          data: {
+            clientId: input.clientId,
+            userId: ctx.session.user.id,
+            type: ActivityLogType.note,
+            content: `Viewed audits for client ${input.clientId}`,
+          },
+        });
+      }
+      return audits;
     }),
 
   // Get full audit details by audit ID with logging
   getById: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_ID))
     .input(getByIdSchema)
-    .query(({ ctx, input }) => {
-      return ctx.db.audit.findUnique({
+    .query(async ({ ctx, input }) => {
+      const audit = await ctx.db.audit.findUnique({
         where: { id: input.auditId },
-        include: {
-          stage: true,
-          status: true,
-          assignments: true,
-          tasks: true,
-        },
+        include: { stage: true, status: true, assignments: true, tasks: true },
       });
+      if (audit && ctx.db.activityLog) {
+        await ctx.db.activityLog.create({
+          data: {
+            auditId: audit.id,
+            clientId: audit.clientId,
+            userId: ctx.session.user.id,
+            type: ActivityLogType.note,
+            content: `Viewed audit details for ${input.auditId}`,
+          },
+        });
+      }
+      return audit;
     }),
 
   // Assign a user to an audit with logging
   assignUser: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.ASSIGN_USER))
     .input(assignUserSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { auditId, userId, role } = input;
-      return ctx.db.auditAssignment.upsert({
+      const assignment = await ctx.db.auditAssignment.upsert({
         where: { auditId_userId: { auditId, userId } },
         update: { role },
         create: { auditId, userId, role },
       });
+      const audit = await ctx.db.audit.findUnique({ where: { id: auditId } });
+      if (audit && ctx.db.activityLog) {
+        await ctx.db.activityLog.create({
+          data: {
+            auditId,
+            clientId: audit.clientId,
+            userId: ctx.session.user.id,
+            type: ActivityLogType.note,
+            content: `Assigned user ${userId} to audit`,
+          },
+        });
+      }
+      return assignment;
     }),
 
   // Unassign a user from an audit with logging
   unassignUser: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.UNASSIGN_USER))
     .input(unassignUserSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.auditAssignment.delete({
-        where: {
-          auditId_userId: { auditId: input.auditId, userId: input.userId },
-        },
+    .mutation(async ({ ctx, input }) => {
+      const { auditId, userId } = input;
+      const removal = await ctx.db.auditAssignment.delete({
+        where: { auditId_userId: { auditId, userId } },
       });
+      const audit = await ctx.db.audit.findUnique({ where: { id: auditId } });
+      if (audit && ctx.db.activityLog) {
+        await ctx.db.activityLog.create({
+          data: {
+            auditId,
+            clientId: audit.clientId,
+            userId: ctx.session.user.id,
+            type: ActivityLogType.note,
+            content: `Unassigned user ${userId} from audit`,
+          },
+        });
+      }
+      return removal;
     }),
 });

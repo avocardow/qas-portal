@@ -29,6 +29,8 @@ describe("Audit RBAC Enforcement", () => {
         upsert: vi.fn(),
         delete: vi.fn(),
       },
+      // Mock activityLog for guard checks
+      activityLog: { create: vi.fn() },
     } as any;
     // Default to Admin role
     ctx = {
