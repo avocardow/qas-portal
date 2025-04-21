@@ -43,5 +43,5 @@ alwaysApply: true
   - Never use `scripts/dev.js`; always use `task-master`.
   - Only use `pnpm` for installing or updating dependencies (`pnpm install` / `pnpm up --latest`).
   - Use Context7 for any new library: resolve the library ID then fetch docs before coding.
-  - Prioritize copying from existing TailAdmin templates in `src/app/(admin)`, `src/app/(app)`, `src/app/(full-width-pages)`, and `src/components` rather than building from scratch.
-  - Follow all project Cursor rules without exception. 
+  - Prioritize copying from existing TailAdmin templates in `src/app/(tailadmin)/(admin)`, `src/app/(tailadmin)/(full-width-pages)`, and `src/components` rather than building from scratch.
+  - Follow all project Cursor rules without exception.

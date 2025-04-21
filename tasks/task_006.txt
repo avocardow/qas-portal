@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Implement Task Management Backend
-# Status: in-progress
+# Status: done
 # Dependencies: 4
 # Priority: high
 # Description: Create tRPC procedures in taskRouter for Task CRUD operations with RBAC
@@ -35,13 +35,13 @@ Implement the task.getByAuditId procedure that accepts an auditId parameter and 
 ### Details:
 Implement task.getAll procedure that returns all tasks in the system with strict admin-only access control. Add comprehensive pagination support with cursor-based pagination for better performance. Implement advanced filtering options including by assignee, date ranges, multiple statuses, and priorities. Add sorting capabilities on all relevant fields with both ascending and descending options. Include search functionality to search across task names and descriptions. Implement count and aggregation features to show task distribution by status, priority, or assignee. Ensure proper error handling for invalid query parameters.
 
-## 5. Implement Task Creation and Update Procedures [in-progress]
+## 5. Implement Task Creation and Update Procedures [done]
 ### Dependencies: 6.1, 6.2
 ### Description: Create tRPC procedures for task.create and task.update with proper validation
 ### Details:
 Implement task.create procedure that accepts task details and creates a new task in the database. Add input validation using Zod schemas to ensure all required fields are provided and valid. Implement task.update procedure that allows updating task fields while preserving immutable fields. Add validation to ensure users can only update tasks they're authorized to modify based on RBAC rules. Implement business logic for task assignment, including notifications or events when tasks are created or assigned. Add audit logging to track task creation and modifications. Ensure proper error handling for validation failures and database errors.
 
-## 6. Implement Task Deletion and Final Integration [pending]
+## 6. Implement Task Deletion and Final Integration [done]
 ### Dependencies: 6.2, 6.5
 ### Description: Create task.delete procedure and integrate all procedures into the main router
 ### Details:

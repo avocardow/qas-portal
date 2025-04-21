@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Implement Client Management Frontend
-# Status: pending
+# Status: in-progress
 # Dependencies: 1, 2
 # Priority: high
 # Description: Create Client List and Detail pages with CRUD functionality
@@ -11,7 +11,7 @@ Develop: 1) Client List page (/clients) with functional data table using client.
 Perform manual testing of all UI components and interactions. Verify data fetching, pagination, sorting, and filtering. Test form validation and submission. Confirm role-based UI element visibility.
 
 # Subtasks:
-## 1. Set Up Routing and Page Structure [pending]
+## 1. Set Up Routing and Page Structure [in-progress]
 ### Dependencies: None
 ### Description: Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.
 ### Details:

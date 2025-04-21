@@ -116,7 +116,7 @@
       "id": 3,
       "title": "Implement Client Management Frontend",
       "description": "Create Client List and Detail pages with CRUD functionality",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [1, 2],
       "priority": "high",
       "details": "Develop: 1) Client List page (/clients) with functional data table using client.getAll, including pagination, sorting, filtering, and conditional 'Add New Client' button based on user role. 2) Client Detail page (/clients/[clientId]) with structured Cards/Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log. 3) Client Create/Edit forms using React Hook Form + Zod with template components, handling client.create and client.update. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
@@ -126,7 +126,7 @@
           "id": 1,
           "title": "Set Up Routing and Page Structure",
           "description": "Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]"
         },
@@ -280,7 +280,7 @@
       "id": 6,
       "title": "Implement Task Management Backend",
       "description": "Create tRPC procedures in taskRouter for Task CRUD operations with RBAC",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [4],
       "priority": "high",
       "details": "Implement the following tRPC procedures in taskRouter: 1) task.getByAuditId, 2) task.getAssignedToMe with pagination, sorting, filtering, 3) task.getAll (Admin view) with pagination, sorting, filtering, 4) task.create, 5) task.update, 6) task.delete. Each procedure should enforce appropriate RBAC based on user roles. Tasks should support fields like Name, Description, Assignee, Due Date, Status, and Priority.",
@@ -322,7 +322,7 @@
           "id": 5,
           "title": "Implement Task Creation and Update Procedures",
           "description": "Create tRPC procedures for task.create and task.update with proper validation",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1, 2],
           "details": "Implement task.create procedure that accepts task details and creates a new task in the database. Add input validation using Zod schemas to ensure all required fields are provided and valid. Implement task.update procedure that allows updating task fields while preserving immutable fields. Add validation to ensure users can only update tasks they're authorized to modify based on RBAC rules. Implement business logic for task assignment, including notifications or events when tasks are created or assigned. Add audit logging to track task creation and modifications. Ensure proper error handling for validation failures and database errors."
         },
@@ -330,7 +330,7 @@
           "id": 6,
           "title": "Implement Task Deletion and Final Integration",
           "description": "Create task.delete procedure and integrate all procedures into the main router",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2, 5],
           "details": "Implement task.delete procedure with strict permission checks (typically admin-only or task creator). Add safeguards against accidental deletion, such as confirmation parameters. Implement soft deletion if needed to preserve task history. Integrate all task procedures into the main taskRouter. Register the taskRouter with the main tRPC router. Add comprehensive error handling across all procedures. Write integration tests for all task procedures to verify functionality and RBAC enforcement. Document the API endpoints, including required permissions, input parameters, and response formats. Perform final testing to ensure all procedures work together correctly."
         }

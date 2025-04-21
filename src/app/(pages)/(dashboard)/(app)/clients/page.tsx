@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { api } from "@/utils/api";
 import Link from "next/link";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -12,14 +12,90 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
+// Add type for sortable fields
+type SortField = "clientName" | "city" | "status";
+
 export default function ClientsPage() {
-  const clientsQuery = api.client.getAll.useQuery({});
+  // Pagination, sorting, filtering state
+  const [filter, setFilter] = useState("");
+  const [sortBy, setSortBy] = useState<SortField>("clientName");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [pageSize] = useState(10);
+  const [cursors, setCursors] = useState<(string | undefined)[]>([]);
+  const [currentCursor, setCurrentCursor] = useState<string | undefined>(
+    undefined
+  );
+  const [pageIndex, setPageIndex] = useState(0);
+
+  // Fetch paginated data with current controls
+  const clientsQuery = api.client.getAll.useQuery({
+    take: pageSize,
+    cursor: currentCursor,
+    filter,
+    sortBy,
+    sortOrder,
+  });
   const items = clientsQuery.data?.items;
+  const nextCursor = clientsQuery.data?.nextCursor;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
 
+  // Handlers for pagination and sorting
+  const handleNext = () => {
+    if (nextCursor) {
+      setCursors((prev) => [...prev, currentCursor]);
+      setCurrentCursor(nextCursor);
+      setPageIndex((idx) => idx + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (pageIndex > 0) {
+      const prevCursors = [...cursors];
+      const prev = prevCursors.pop();
+      setCursors(prevCursors);
+      setCurrentCursor(prev);
+      setPageIndex((idx) => idx - 1);
+    }
+  };
+
+  const toggleSort = (field: SortField) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(field);
+      setSortOrder("asc");
+    }
+    // reset pagination
+    setCursors([]);
+    setCurrentCursor(undefined);
+    setPageIndex(0);
+  };
+
   return (
     <div>
+      {/* Filter and pagination controls */}
+      <div className="mb-4 flex items-center justify-between">
+        <input
+          type="text"
+          placeholder="Search clients..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="rounded border px-2 py-1"
+        />
+        <div className="space-x-2">
+          <button
+            onClick={handlePrev}
+            disabled={pageIndex === 0}
+            className="btn"
+          >
+            Prev
+          </button>
+          <button onClick={handleNext} disabled={!nextCursor} className="btn">
+            Next
+          </button>
+        </div>
+      </div>
       <PageBreadcrumb pageTitle="Clients" />
       <div className="space-y-6">
         <ComponentCard title="Clients">
@@ -31,49 +107,56 @@ export default function ClientsPage() {
               <Table>
                 <TableHeader className="bg-gray-50">
                   <TableRow>
+                    <TableCell isHeader>ID</TableCell>
                     <TableCell
                       isHeader
-                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                      onClick={() => toggleSort("clientName")}
+                      className="cursor-pointer"
                     >
-                      ID
+                      Name{" "}
+                      {sortBy === "clientName"
+                        ? sortOrder === "asc"
+                          ? "↑"
+                          : "↓"
+                        : null}
                     </TableCell>
                     <TableCell
                       isHeader
-                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                      onClick={() => toggleSort("city")}
+                      className="cursor-pointer"
                     >
-                      Name
+                      City{" "}
+                      {sortBy === "city"
+                        ? sortOrder === "asc"
+                          ? "↑"
+                          : "↓"
+                        : null}
                     </TableCell>
                     <TableCell
                       isHeader
-                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                      onClick={() => toggleSort("status")}
+                      className="cursor-pointer"
                     >
-                      City
-                    </TableCell>
-                    <TableCell
-                      isHeader
-                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                    >
-                      Status
+                      Status{" "}
+                      {sortBy === "status"
+                        ? sortOrder === "asc"
+                          ? "↑"
+                          : "↓"
+                        : null}
                     </TableCell>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-gray-200 bg-white">
                   {items.map((client) => (
                     <TableRow key={client.id}>
-                      <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
-                        {client.id}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 text-start text-sm text-blue-600">
+                      <TableCell>{client.id}</TableCell>
+                      <TableCell>
                         <Link href={`/clients/${client.id}`}>
                           {client.clientName}
                         </Link>
                       </TableCell>
-                      <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
-                        {client.city ?? "-"}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
-                        {client.status}
-                      </TableCell>
+                      <TableCell>{client.city ?? "-"}</TableCell>
+                      <TableCell>{client.status}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

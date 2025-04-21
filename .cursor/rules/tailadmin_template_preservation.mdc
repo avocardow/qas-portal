@@ -21,7 +21,7 @@ alwaysApply: true
 
 - **Always Scaffold from Templates**
   - New pages and components must be created by copying from existing TailAdmin templates rather than coding from scratch.
-  - Templates live in `src/app/(admin)`, `src/app/(app)`, `src/app/(full-width-pages)`, and `src/components` directories, whereas our customized page templates live in `src/app/(pages)/`; referencing these ensures adherence to design and code standards.
+  - Templates live in `src/app/(tailadmin)/(admin)`, `src/app/(tailadmin)/(full-width-pages)`, and `src/components` directories, whereas our customized page templates live in `src/app/(pages)/`; referencing these ensures adherence to design and code standards.
 
 **Examples**
 
