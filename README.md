@@ -78,6 +78,13 @@ To enable the GitHub Actions CI workflow, add the following secrets in your repo
 - DATABASE_URL: Your PostgreSQL connection string (pooled)
 - DIRECT_URL: Your direct DB connection string
 
+### Security Best Practices for CI
+
+- Avoid using `echo`, `printenv`, or `env` commands to output secrets in workflow logs.
+- GitHub Actions automatically masks secrets stored in `Settings > Secrets`; do not store secrets in plain text.
+- Do not enable verbose or debug flags (e.g., `set -x`) in run steps, as this may expose commands and environment variables.
+- Always use the `env:` block or `secrets` context to reference credentials rather than embedding them directly in commands.
+
 ## Changelog
 
 ### Version 2.1.1 - [March 25, 2025]
