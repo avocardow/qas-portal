@@ -5,7 +5,10 @@ import Link from "next/link";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 
 export default function ClientsPage() {
-  const { data: clients, isLoading, error } = api.client.getAll.useQuery();
+  const clientsQuery = api.client.getAll.useQuery();
+  const clients = clientsQuery.data;
+  const isLoading = clientsQuery.isLoading;
+  const error = clientsQuery.error;
 
   if (isLoading) {
     return (
@@ -21,6 +24,15 @@ export default function ClientsPage() {
       <DashboardPlaceholderPageTemplate
         heading="Clients"
         message="Error loading clients."
+      />
+    );
+  }
+
+  if (!clients) {
+    return (
+      <DashboardPlaceholderPageTemplate
+        heading="Clients"
+        message="No clients found."
       />
     );
   }
