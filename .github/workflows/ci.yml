@@ -16,6 +16,12 @@ jobs:
       DIRECT_URL: ${{ secrets.DIRECT_URL }}
     steps:
       - uses: actions/checkout@v3
+      - name: Mask CI secrets
+        run: |
+          echo "::add-mask::${NEXT_PUBLIC_SUPABASE_URL}"
+          echo "::add-mask::${NEXT_PUBLIC_SUPABASE_ANON_KEY}"
+          echo "::add-mask::${DATABASE_URL}"
+          echo "::add-mask::${DIRECT_URL}"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Lint
@@ -27,4 +33,4 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
       - name: Validate Supabase DB connection
-        run: psql "$DATABASE_URL" -c "SELECT 1;" 
+        run: psql "$DATABASE_URL" -q -c "SELECT 1;" 
