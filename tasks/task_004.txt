@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Audit Tracking Backend
-# Status: in-progress
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Create tRPC procedures in auditRouter for Audit management with RBAC
@@ -11,7 +11,7 @@ Implement the following tRPC procedures in auditRouter: 1) audit.create (input: 
 Write unit tests for each procedure verifying correct data manipulation, relationship management, and RBAC enforcement. Test edge cases like duplicate audit years for the same client.
 
 # Subtasks:
-## 1. Design Audit Data Models and RBAC Policy [in-progress]
+## 1. Design Audit Data Models and RBAC Policy [done]
 ### Dependencies: None
 ### Description: Define and implement the database models for audits, audit stages/statuses, and audit assignments. Establish a clear RBAC (Role-Based Access Control) policy for all audit-related operations.
 ### Details:
@@ -148,7 +148,7 @@ Implement audit.getByClientId to fetch all audits for a given client, returning 
 ### Details:
 Implement audit.assignUser to assign users to audits and audit.unassignUser to remove assignments. Validate user roles and permissions for these operations. Ensure assignment changes are logged for auditability.
 
-## 5. Integrate Monitoring, Logging, and RBAC Enforcement Across Procedures [pending]
+## 5. Integrate Monitoring, Logging, and RBAC Enforcement Across Procedures [done]
 ### Dependencies: 4.2, 4.3, 4.4
 ### Description: Add comprehensive monitoring and logging to all auditRouter procedures, ensuring RBAC checks are consistently enforced and all sensitive actions are auditable.
 ### Details:
