@@ -6,6 +6,9 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "@/server/api/trpc";
+import { contactRouter } from "@/server/api/routers/contact";
+import { licenseRouter } from "@/server/api/routers/license";
+import { trustAccountRouter } from "@/server/api/routers/trustAccount";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +19,9 @@ export const appRouter = createTRPCRouter({
   example: exampleRouter,
   user: userRouter,
   client: clientRouter,
+  contact: contactRouter,
+  license: licenseRouter,
+  trustAccount: trustAccountRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });

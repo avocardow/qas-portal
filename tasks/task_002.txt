@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Related Entity Management Backend
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Create tRPC procedures for Contacts, Licenses, and Trust Accounts CRUD operations
@@ -11,25 +11,25 @@ Implement direct tRPC procedures for contact.create/update, license.create/updat
 Test each procedure with valid and invalid inputs, verify proper relationship creation with parent Client records, and confirm RBAC enforcement prevents unauthorized access.
 
 # Subtasks:
-## 1. Define Zod Validation Schemas for Entities [pending]
+## 1. Define Zod Validation Schemas for Entities [done]
 ### Dependencies: None
 ### Description: Create Zod schemas for Contacts, Licenses, and Trust Accounts to validate incoming data for create and update operations.
 ### Details:
 Implement Zod object schemas for each entity, ensuring all required fields are present and correctly typed. Include validation for parent clientId and entity-specific fields. These schemas will be used to validate input in tRPC procedures.[2][5]
 
-## 2. Implement RBAC Middleware for tRPC Procedures [pending]
+## 2. Implement RBAC Middleware for tRPC Procedures [done]
 ### Dependencies: 2.1
 ### Description: Develop a reusable middleware to enforce Admin/Manager role-based access control for all write operations.
 ### Details:
 Create a tRPC middleware that checks the user's role from the context and restricts access to create and update procedures unless the user is an Admin or Manager. Integrate this middleware into the relevant procedures to ensure security.[4]
 
-## 3. Develop tRPC CRUD Procedures for Contacts, Licenses, and Trust Accounts [pending]
+## 3. Develop tRPC CRUD Procedures for Contacts, Licenses, and Trust Accounts [done]
 ### Dependencies: 2.1, 2.2
 ### Description: Implement create and update tRPC procedures for each entity, using the defined Zod schemas and RBAC middleware.
 ### Details:
 For each entity, define tRPC mutation procedures (contact.create, contact.update, license.create, license.update, trustAccount.create, trustAccount.update). Each procedure should accept parent clientId and entity data, validate input with Zod, and enforce RBAC via middleware. Use your ORM (e.g., Prisma) to interact with the database.[2][5]
 
-## 4. Implement Batch Operations for Efficiency [pending]
+## 4. Implement Batch Operations for Efficiency [in-progress]
 ### Dependencies: 2.3
 ### Description: Add batch create and update procedures for each entity to handle multiple records in a single request.
 ### Details:
