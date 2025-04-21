@@ -58,7 +58,8 @@ Copy `.env.example` to `.env.local` in the project root and fill in the followin
 - PROJECT_NAME (e.g., qas-portal)
 - DATABASE_URL (Your PostgreSQL connection string)
 - DIRECT_URL (Alternate DB connection string)
-- NEXTAUTH_URL (Base URL for authentication)
+- NEXT_PUBLIC_SUPABASE_URL (Your Supabase project URL, e.g., `https://<project>.supabase.co`)
+- NEXT_PUBLIC_SUPABASE_ANON_KEY (Your Supabase anonymous public API key for client-side usage)
 - NEXTAUTH_SECRET (Secret for NextAuth)
 - AZURE_AD_CLIENT_ID
 - AZURE_AD_CLIENT_SECRET
