@@ -15,7 +15,7 @@ export default function ComingSoon() {
   const targetDate = new Date();
   targetDate.setDate(targetDate.getDate() + 29);
   return (
-    <div className="z-1 relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden p-6">
+    <div className="relative z-1 flex min-h-screen w-full flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
 
       <div>
@@ -62,7 +62,7 @@ export default function ComingSoon() {
                   name="email"
                   id="email"
                   placeholder="Email address"
-                  className="shadow-theme-xs focus:border-brand-300 focus:shadow-focus-ring dark:focus:border-brand-300 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-400"
+                  className="shadow-theme-xs focus:border-brand-300 focus:shadow-focus-ring dark:focus:border-brand-300 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-400"
                 />
               </div>
 
@@ -92,7 +92,7 @@ export default function ComingSoon() {
         </div>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-          <p className="mb-6 mt-20 text-center text-base text-gray-500 dark:text-gray-400">
+          <p className="mt-20 mb-6 text-center text-base text-gray-500 dark:text-gray-400">
             Follow Us On
           </p>
 

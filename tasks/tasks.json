@@ -23,9 +23,7 @@
           "title": "Create Base App Router Directory Structure",
           "description": "Set up the foundational folder structure in the Next.js project under src/app, including the (pages), (app), and (portal) route groups as per Next.js App Router conventions.",
           "status": "done",
-          "dependencies": [
-            1
-          ],
+          "dependencies": [1],
           "details": "Within src/app, create a (pages) folder. Inside (pages), create (app) and (portal) folders using parentheses to indicate route groups. This establishes the organizational hierarchy without affecting URL paths.[1][3][4][5]"
         },
         {
@@ -33,9 +31,7 @@
           "title": "Implement Route Subfolders for Each Group",
           "description": "Within the (app) and (portal) route groups, create subfolders for each mapped route (e.g., /clients, /audits in (app); /dashboard, /documents in (portal)), following the structure defined in the sitemap.",
           "status": "done",
-          "dependencies": [
-            2
-          ],
+          "dependencies": [2],
           "details": "For each route identified in the sitemap, create a corresponding subfolder inside its assigned group. Ensure folder names match the intended URL segments. For dynamic routes, use square brackets (e.g., [id]) as per Next.js conventions.[1][3][4][5]"
         },
         {
@@ -43,9 +39,7 @@
           "title": "Add Required Next.js Route Files",
           "description": "Populate each route subfolder with the necessary Next.js files (e.g., page.js, layout.js, error.js, loading.js) to enable routing and provide basic scaffolding for each route.",
           "status": "done",
-          "dependencies": [
-            3
-          ],
+          "dependencies": [3],
           "details": "In each subfolder, add a page.js file to make the route accessible. Optionally, add layout.js for custom layouts, error.js for error boundaries, and loading.js for loading states as needed. This ensures each route is properly initialized and follows Next.js best practices.[1][3][5]"
         },
         {
@@ -53,9 +47,7 @@
           "title": "Integrate Context7 for Library ID Resolution and Documentation",
           "description": "Use Context7 to resolve library IDs and fetch official Next.js App Router documentation, ensuring the folder structure and routing setup align with the latest best practices.",
           "status": "done",
-          "dependencies": [
-            4
-          ],
+          "dependencies": [4],
           "details": "Invoke Context7's mcp_context7_resolve_library_id and mcp_context7_get_library_docs to retrieve up-to-date documentation and confirm that the implemented structure adheres to official Next.js guidelines. Adjust the structure if any discrepancies are found."
         }
       ]
@@ -64,10 +56,8 @@
       "id": 2,
       "title": "Create placeholder page components",
       "description": "Develop minimal page.tsx components for each route with headings and 'coming soon' messages.",
-      "status": "in-progress",
-      "dependencies": [
-        1
-      ],
+      "status": "done",
+      "dependencies": [1],
       "priority": "high",
       "details": "For each route in the sitemap, create a `page.tsx` file with:\n- A heading that matches the route name\n- A 'Coming Soon' message describing the planned feature\n- Apply `ProtectedAppLayout` for routes in the (app) group\n- Use default layout for routes in the (portal) group\n\nFollow Cursor rules in `.cursor/rules` for templates, naming conventions, and best practices. Ensure TypeScript typing is properly implemented.",
       "testStrategy": "Navigate to each route in the development environment to verify the placeholder content renders correctly. Check that layouts are applied properly for both protected and public routes.",
@@ -85,9 +75,7 @@
           "title": "Set Up Placeholder Component Templates with TypeScript Typing",
           "description": "Create reusable TypeScript templates for placeholder page components, ensuring compliance with .cursor/rules for structure, naming, and best practices.",
           "status": "done",
-          "dependencies": [
-            1
-          ],
+          "dependencies": [1],
           "details": "Define a minimal functional component template in TypeScript, including a heading (matching the route name) and a 'Coming Soon' message describing the planned feature. Prepare two variants: one using ProtectedAppLayout for (app) group routes, and one using the default layout for (portal) group routes. Ensure all components are properly typed.\n\n<info added on 2025-04-20T10:09:33.365Z>\nHere's additional implementation information for the placeholder component templates:\n\n```typescript\n// Implementation details for AppPlaceholderPageTemplate.tsx\ninterface AppPlaceholderProps {\n  heading: string;\n  message?: string;\n  children?: React.ReactNode;\n}\n\n// Example implementation:\nexport const AppPlaceholderPageTemplate: React.FC<AppPlaceholderProps> = ({\n  heading,\n  message = \"Coming Soon\",\n  children\n}) => (\n  <ProtectedAppLayout>\n    <div className=\"placeholder-container\">\n      <h1 className=\"text-2xl font-semibold mb-4\">{heading}</h1>\n      <p className=\"text-gray-600 mb-6\">{message}</p>\n      {children}\n    </div>\n  </ProtectedAppLayout>\n);\n```\n\n```typescript\n// Implementation details for PortalPlaceholderPageTemplate.tsx\ninterface PortalPlaceholderProps {\n  heading: string;\n  message?: string;\n  children?: React.ReactNode;\n}\n\n// Example implementation:\nexport const PortalPlaceholderPageTemplate: React.FC<PortalPlaceholderProps> = ({\n  heading,\n  message = \"Coming Soon\",\n  children\n}) => (\n  <div className=\"placeholder-container\">\n    <h1 className=\"text-2xl font-semibold mb-4\">{heading}</h1>\n    <p className=\"text-gray-600 mb-6\">{message}</p>\n    {children}\n  </div>\n);\n```\n\nUsage example in route files:\n```typescript\n// For app routes: app/dashboard/page.tsx\nexport default function DashboardPage() {\n  return (\n    <AppPlaceholderPageTemplate \n      heading=\"Dashboard\" \n      message=\"Your personalized dashboard is coming soon\"\n    />\n  );\n}\n\n// For portal routes: portal/login/page.tsx\nexport default function LoginPage() {\n  return (\n    <PortalPlaceholderPageTemplate \n      heading=\"Login\" \n      message=\"Secure authentication portal coming soon\"\n    />\n  );\n}\n```\n\nConsider adding optional props for customization like `className` for styling overrides and `icon` for feature-specific visual indicators. Export both components from an index.ts file for cleaner imports.\n</info added on 2025-04-20T10:09:33.365Z>"
         },
         {
@@ -95,19 +83,15 @@
           "title": "Generate page.tsx Files for Each Route",
           "description": "For each route identified, create a page.tsx file using the appropriate template. Ensure the heading and 'Coming Soon' message are specific to the route's planned feature.",
           "status": "done",
-          "dependencies": [
-            2
-          ],
+          "dependencies": [2],
           "details": "In the directory for each route, add a page.tsx file. Use the correct template based on the route group. Set the heading to match the route name and customize the 'Coming Soon' message to briefly describe the planned feature. Follow naming conventions and directory structure as specified in .cursor/rules."
         },
         {
           "id": 4,
           "title": "Review, Refactor, and Validate Placeholder Components",
           "description": "Check all created page.tsx files for consistency, adherence to .cursor/rules, and correct TypeScript usage. Refactor as needed and validate that each component renders with the correct layout and content.",
-          "status": "in-progress",
-          "dependencies": [
-            3
-          ],
+          "status": "done",
+          "dependencies": [3],
           "details": "Perform a code review to ensure all placeholder components follow the established templates, naming conventions, and TypeScript typing. Test rendering for both (app) and (portal) group routes to confirm correct layout usage and content display. Address any inconsistencies or errors."
         }
       ]
@@ -116,7 +100,7 @@
       "id": 3,
       "title": "Define Prisma schema for client data",
       "description": "Create or update the Prisma schema to support client data migration from CSV.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "Update `schema.prisma` to include models for:\n- Clients (name, address, status, etc.)\n- Contacts (name, email, phone, client relationship)\n- Licenses (type, number, expiration date, client relationship)\n- Trust accounts (account number, balance, client relationship)\n- Audits (initial placeholder for future development)\n\nEnsure proper relationships between models. Use Context7 to fetch official Prisma documentation for schema design best practices.",
@@ -126,7 +110,7 @@
           "id": 1,
           "title": "Analyze and Document Client Data Requirements",
           "description": "Review the CSV migration requirements and document all necessary fields and relationships for Clients, Contacts, Licenses, Trust Accounts, and Audits.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "List all fields for each model (e.g., Clients: name, address, status; Contacts: name, email, phone, clientId, etc.). Identify required data types, constraints, and how each entity relates to others (e.g., one-to-many between Clients and Contacts). Ensure the schema will support all data needed for migration and future extensibility."
         },
@@ -134,40 +118,32 @@
           "id": 2,
           "title": "Design Prisma Models and Relationships",
           "description": "Draft the Prisma models for Clients, Contacts, Licenses, Trust Accounts, and Audits, specifying all fields and defining relationships according to best practices.",
-          "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "status": "done",
+          "dependencies": [1],
           "details": "Use singular, PascalCase model names and camelCase field names for clarity and convention compliance[4]. Define one-to-many and one-to-one relationships as appropriate (e.g., a Client has many Contacts, Licenses, and Trust Accounts). Include placeholder fields for the Audits model for future development. Reference official Prisma documentation for relationship syntax and best practices[2][4]."
         },
         {
           "id": 3,
           "title": "Implement and Annotate schema.prisma File",
           "description": "Update or create the `schema.prisma` file with the defined models, fields, and relationships, including comments for clarity and maintainability.",
-          "status": "pending",
-          "dependencies": [
-            2
-          ],
+          "status": "done",
+          "dependencies": [2],
           "details": "Translate the model designs into Prisma Schema Language, ensuring all relationships and field types are correctly specified[2][3]. Add comments to explain model purposes, relationships, and any placeholder fields. Use environment variables for data source configuration if needed[2]."
         },
         {
           "id": 4,
           "title": "Validate Schema and Generate Migration",
           "description": "Run Prisma validation tools and generate a migration to ensure the schema is syntactically correct and ready for database application.",
-          "status": "pending",
-          "dependencies": [
-            3
-          ],
+          "status": "done",
+          "dependencies": [3],
           "details": "Use `prisma validate` to check for schema errors and `prisma migrate dev` to generate and apply the migration to a development database[2][3]. Address any validation or migration issues, ensuring all relationships and constraints are enforced as intended."
         },
         {
           "id": 5,
           "title": "Review Schema for Best Practices and Future Extensibility",
           "description": "Perform a final review of the schema for naming conventions, indexing, and extensibility, making adjustments as needed for maintainability and performance.",
-          "status": "pending",
-          "dependencies": [
-            4
-          ],
+          "status": "done",
+          "dependencies": [4],
           "details": "Check that model and field names follow Prisma and JavaScript conventions[4]. Ensure indexes are added to frequently queried fields and foreign keys for performance[4][5]. Confirm that placeholder models (e.g., Audits) are clearly marked for future development. Document any design decisions or areas for future improvement."
         }
       ]
@@ -176,10 +152,8 @@
       "id": 4,
       "title": "Implement CSV parsing functionality",
       "description": "Develop the CSV parsing portion of the migration script to read and transform client data.",
-      "status": "pending",
-      "dependencies": [
-        3
-      ],
+      "status": "done",
+      "dependencies": [3],
       "priority": "medium",
       "details": "Create `scripts/migrateClients.ts` with:\n- Import and configure `csv-parse` library (use Context7 to resolve library ID)\n- Read the CSV file from `data/clients.csv`\n- Parse CSV headers and rows\n- Transform data into structured objects matching Prisma models\n- Implement data cleaning and validation\n- Log parsing results and any validation issues\n\nHandle edge cases like missing fields, data type conversions, and special characters.",
       "testStrategy": "Create a test CSV with sample data. Run the script with `--dry-run` flag to verify parsing without database insertion. Check console output for correct data transformation and validation messages.",
@@ -188,7 +162,7 @@
           "id": 1,
           "title": "Set Up CSV Parsing Environment",
           "description": "Initialize the migration script and configure the CSV parsing library.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create the file `scripts/migrateClients.ts`. Import and configure the `csv-parse` library (resolve the correct package using Context7). Ensure all necessary dependencies are installed and the script is ready to handle CSV input streams.[3]"
         },
@@ -196,50 +170,40 @@
           "id": 2,
           "title": "Implement CSV File Reading",
           "description": "Read the client data CSV file as a stream for efficient processing.",
-          "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "status": "done",
+          "dependencies": [1],
           "details": "Use Node.js file system APIs to read `data/clients.csv` as a readable stream. Prepare the stream to be piped into the CSV parser for further processing.[3][5]"
         },
         {
           "id": 3,
           "title": "Parse CSV Headers and Rows",
           "description": "Parse the CSV file to extract headers and rows, handling special characters and delimiters.",
-          "status": "pending",
-          "dependencies": [
-            2
-          ],
+          "status": "done",
+          "dependencies": [2],
           "details": "Configure the parser to correctly interpret headers, delimiters, and escape characters. Ensure that each row is parsed into a JavaScript object with keys matching the CSV headers.[3][5]"
         },
         {
           "id": 4,
           "title": "Transform Parsed Data to Prisma Model Structure",
           "description": "Map and convert parsed CSV data into objects that match the Prisma client model schema.",
-          "status": "pending",
-          "dependencies": [
-            3
-          ],
+          "status": "done",
+          "dependencies": [3],
           "details": "For each parsed row, transform the data fields to match the Prisma model structure. Handle data type conversions (e.g., strings to numbers or dates) and prepare objects for later migration steps."
         },
         {
           "id": 5,
           "title": "Implement Data Cleaning and Validation",
           "description": "Clean and validate the transformed data, addressing missing fields, type mismatches, and inconsistencies.",
-          "status": "pending",
-          "dependencies": [
-            4
-          ],
+          "status": "done",
+          "dependencies": [4],
           "details": "Check each object for required fields, correct data types, and valid values. Apply cleaning rules (e.g., trimming whitespace, normalizing formats) and flag or correct invalid or missing data. Prepare a mechanism to collect validation issues for logging."
         },
         {
           "id": 6,
           "title": "Log Parsing Results and Validation Issues",
           "description": "Log the results of the parsing and validation process, including any errors or warnings.",
-          "status": "pending",
-          "dependencies": [
-            5
-          ],
+          "status": "done",
+          "dependencies": [5],
           "details": "Implement structured logging to record the number of successfully parsed records, details of any validation issues, and summaries of data anomalies. Ensure logs are clear and actionable for further migration steps."
         }
       ]
@@ -248,11 +212,8 @@
       "id": 5,
       "title": "Implement Prisma database seeding",
       "description": "Complete the migration script by adding Prisma Client integration to insert parsed data into Supabase.",
-      "status": "pending",
-      "dependencies": [
-        3,
-        4
-      ],
+      "status": "done",
+      "dependencies": [3, 4],
       "priority": "medium",
       "details": "Extend `scripts/migrateClients.ts` to:\n- Initialize Prisma Client with proper environment variables for Supabase connection\n- Create transaction-wrapped database operations for inserting clients, contacts, licenses, and trust accounts\n- Handle relationships between entities correctly\n- Implement error handling and rollback for failed transactions\n- Add command-line options for dry run, verbose logging, and environment selection\n\nEnsure the script can be run multiple times without creating duplicates (upsert where appropriate).",
       "testStrategy": "Run the complete migration script against the development Supabase instance. Verify data appears correctly in Supabase Table Editor. Test error scenarios by introducing invalid data and checking rollback functionality.",
@@ -261,7 +222,7 @@
           "id": 1,
           "title": "Initialize Prisma Client with Supabase Environment Variables",
           "description": "Set up Prisma Client in the migration script to connect to the Supabase database using environment variables.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Update `scripts/migrateClients.ts` to import and initialize Prisma Client. Ensure the script loads environment variables (e.g., using dotenv) for Supabase connection details. Validate that the connection is successful before proceeding with any operations.[3][4]"
         },
@@ -269,50 +230,40 @@
           "id": 2,
           "title": "Parse and Structure Input Data for Seeding",
           "description": "Parse the source data and structure it into objects representing clients, contacts, licenses, and trust accounts, ready for database insertion.",
-          "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "status": "done",
+          "dependencies": [1],
           "details": "Implement or update parsing logic to transform raw input (e.g., JSON, CSV) into structured JavaScript objects. Organize data to reflect entity relationships (e.g., clients with nested contacts and licenses). Ensure data integrity and readiness for transactional insertion."
         },
         {
           "id": 3,
           "title": "Implement Transactional Upsert Operations with Relationship Handling",
           "description": "Create transaction-wrapped upsert operations to insert or update clients, contacts, licenses, and trust accounts, maintaining correct relationships and ensuring idempotency.",
-          "status": "pending",
-          "dependencies": [
-            2
-          ],
+          "status": "done",
+          "dependencies": [2],
           "details": "Use Prisma's transaction API to group all related inserts/updates in a single transaction. Use upsert operations to avoid duplicates, matching on unique fields. Correctly link related entities (e.g., connect contacts to clients). Roll back the transaction if any operation fails to maintain data consistency.[1][5]"
         },
         {
           "id": 4,
           "title": "Implement Error Handling and Transaction Rollback",
           "description": "Add robust error handling to catch and log errors during the seeding process, ensuring transactions are rolled back on failure.",
-          "status": "pending",
-          "dependencies": [
-            3
-          ],
+          "status": "done",
+          "dependencies": [3],
           "details": "Wrap the main seeding logic in try/catch blocks. On error, ensure Prisma disconnects and the transaction is rolled back. Log detailed error messages for debugging. Exit the process with a non-zero code on failure.[5]"
         },
         {
           "id": 5,
           "title": "Add Command-Line Options for Dry Run, Verbose Logging, and Environment Selection",
           "description": "Enhance the script to accept command-line arguments for dry run mode, verbose logging, and selecting the environment (e.g., development, staging, production).",
-          "status": "pending",
-          "dependencies": [
-            4
-          ],
+          "status": "done",
+          "dependencies": [4],
           "details": "Use a library like yargs or commander to parse CLI arguments. Implement dry run mode to simulate operations without writing to the database. Add verbose logging for detailed output. Allow specifying the environment to load the correct configuration."
         },
         {
           "id": 6,
           "title": "Test Idempotency and Multiple Runs",
           "description": "Verify that the script can be run multiple times without creating duplicate records, ensuring upsert logic and relationships work as intended.",
-          "status": "pending",
-          "dependencies": [
-            5
-          ],
+          "status": "done",
+          "dependencies": [5],
           "details": "Run the script repeatedly against a test Supabase database. Confirm that no duplicates are created and relationships remain correct. Adjust upsert logic or unique constraints as needed to guarantee idempotency.[1][5]"
         }
       ]
@@ -322,9 +273,7 @@
       "title": "Configure CI environment for Supabase",
       "description": "Set up environment variables and configuration for the CI environment to connect to the Development Supabase instance.",
       "status": "pending",
-      "dependencies": [
-        5
-      ],
+      "dependencies": [5],
       "priority": "medium",
       "details": "Create or update configuration files for CI:\n- Add Supabase connection environment variables to `.env.example` and CI configuration\n- Document the required environment variables in README or documentation\n- Create a CI workflow step to validate database connection\n- Ensure secrets are properly managed and not exposed in logs\n\nFollow project-specific Cursor rules for environment configuration.",
       "testStrategy": "Run a CI test job that connects to the Development Supabase instance and performs a simple query. Verify environment variables are correctly loaded and the connection succeeds.",
@@ -342,9 +291,7 @@
           "title": "Update .env.example and CI Configuration Files",
           "description": "Add the identified Supabase environment variables to the .env.example file and ensure the CI configuration (e.g., GitHub Actions, GitLab CI) references these variables appropriately.",
           "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "dependencies": [1],
           "details": "Edit the .env.example file to include placeholders for all required Supabase variables. Update the CI workflow configuration to reference these variables, using the CI platform's secret management features (e.g., GitHub Actions secrets). Ensure the variables are not hardcoded and are sourced securely.[1]"
         },
         {
@@ -352,9 +299,7 @@
           "title": "Configure Secret Management in CI Platform",
           "description": "Set up secure storage of Supabase credentials in the CI platform's secret management system to prevent accidental exposure.",
           "status": "pending",
-          "dependencies": [
-            2
-          ],
+          "dependencies": [2],
           "details": "Add Supabase credentials (such as API keys and project URLs) to the CI platform's secrets or environment variables section. Reference these secrets in the CI configuration, ensuring they are not printed or logged during workflow execution.[1]"
         },
         {
@@ -362,9 +307,7 @@
           "title": "Implement CI Workflow Step to Validate Supabase Database Connection",
           "description": "Add a step in the CI workflow that attempts to connect to the Development Supabase instance using the configured environment variables, and fails the workflow if the connection is unsuccessful.",
           "status": "pending",
-          "dependencies": [
-            3
-          ],
+          "dependencies": [3],
           "details": "Use the Supabase CLI or a custom script in the CI workflow to attempt a database connection. For example, run a simple Supabase CLI command that requires authentication, and check for success or failure. Ensure that any output does not leak secrets.[1][4]"
         },
         {
@@ -372,9 +315,7 @@
           "title": "Review and Enforce Security and Logging Best Practices",
           "description": "Audit the CI configuration and workflow to ensure that secrets are not exposed in logs and that environment variables are handled according to project-specific Cursor rules.",
           "status": "pending",
-          "dependencies": [
-            4
-          ],
+          "dependencies": [4],
           "details": "Review the CI workflow for any steps that might inadvertently print secrets or sensitive information. Use the CI platform's features to mask secrets in logs. Confirm that all environment configuration follows Cursor rules and update documentation as needed to reflect security practices.[1]"
         }
       ]
@@ -383,10 +324,8 @@
       "id": 7,
       "title": "Implement navigation between routes",
       "description": "Add basic navigation components to allow developers to move between placeholder pages.",
-      "status": "pending",
-      "dependencies": [
-        2
-      ],
+      "status": "done",
+      "dependencies": [2],
       "priority": "low",
       "details": "Create simple navigation components:\n- Add a sidebar or header navigation in the `ProtectedAppLayout` for internal routes\n- Add a simple navigation bar in the default layout for portal routes\n- Implement Next.js Link components for navigation between routes\n- Ensure active route is visually indicated\n\nKeep the implementation minimal as this is just for development navigation during this phase.",
       "testStrategy": "Test navigation by clicking through all routes in both the internal and client portal sections. Verify that the active route is correctly indicated and that navigation preserves layout context.",
@@ -395,7 +334,7 @@
           "id": 1,
           "title": "Add navigation bar to default layout for portal routes",
           "description": "Implement a simple navigation bar in the default layout to allow navigation between portal routes.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "In the default layout component, create a navigation bar using Next.js <Link> components for each portal route. Ensure the navigation bar is minimal and only includes links relevant to portal pages. Import Link from 'next/link' and use the href prop to specify target routes. Style the navigation bar for basic usability."
         },
@@ -403,31 +342,24 @@
           "id": 2,
           "title": "Add sidebar or header navigation to ProtectedAppLayout for internal routes",
           "description": "Implement a sidebar or header navigation component within the ProtectedAppLayout to enable navigation between internal (protected) routes.",
-          "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "status": "done",
+          "dependencies": [1],
           "details": "Within the ProtectedAppLayout, add a sidebar or header containing <Link> components for each internal route. Import Link from 'next/link' and use the href prop for navigation. Keep the design minimal, focusing on development usability. Ensure the navigation is clearly separated from the main content area."
         },
         {
           "id": 3,
           "title": "Implement active route visual indication",
           "description": "Ensure the currently active route is visually indicated in both navigation components.",
-          "status": "pending",
-          "dependencies": [
-            1,
-            2
-          ],
+          "status": "done",
+          "dependencies": [1, 2],
           "details": "Use Next.js router hooks (such as useRouter) to determine the current route. Apply a distinct style (e.g., bold text, underline, or background color) to the active link in both the default layout navigation bar and the ProtectedAppLayout navigation. Ensure the indication is clear and updates correctly on navigation."
         },
         {
           "id": 4,
           "title": "Verify navigation functionality and minimalism",
           "description": "Test all navigation components to confirm correct routing and that the implementation remains minimal for development purposes.",
-          "status": "pending",
-          "dependencies": [
-            3
-          ],
+          "status": "done",
+          "dependencies": [3],
           "details": "Manually test navigation between all linked routes in both layouts. Confirm that the active route indication works as expected and that navigation is smooth. Review the code to ensure no unnecessary complexity or features have been added beyond basic development navigation."
         }
       ]
@@ -437,13 +369,7 @@
       "title": "Create documentation and verification guide",
       "description": "Document the implemented features, folder structure, and provide a verification guide for the development team.",
       "status": "pending",
-      "dependencies": [
-        1,
-        2,
-        5,
-        6,
-        7
-      ],
+      "dependencies": [1, 2, 5, 6, 7],
       "priority": "low",
       "details": "Create documentation that includes:\n- Overview of the implemented folder structure and routing\n- Guide to running the migration script with example commands\n- Instructions for verifying data in Supabase Table Editor\n- List of placeholder pages and their intended future functionality\n- Next steps for Phase 1 development\n\nPlace documentation in the project wiki or README.md file following project conventions.",
       "testStrategy": "Have a team member follow the documentation to navigate the application and run the migration script. Collect feedback on clarity and completeness. Verify all commands and paths in the documentation are accurate.",
@@ -461,9 +387,7 @@
           "title": "Write Migration Script Usage Guide",
           "description": "Provide step-by-step instructions for running the migration script, including example commands and expected outputs.",
           "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "dependencies": [1],
           "details": "Identify the migration script(s) used in the project. Document prerequisites, command-line usage, environment variables, and sample commands. Clarify where to find the script, how to execute it, and how to interpret success or error messages. Ensure instructions are platform-agnostic or specify OS-specific steps as needed."
         },
         {
@@ -471,9 +395,7 @@
           "title": "Create Data Verification Instructions for Supabase Table Editor",
           "description": "Detail the process for verifying migrated data using the Supabase Table Editor, including navigation steps and data validation tips.",
           "status": "pending",
-          "dependencies": [
-            2
-          ],
+          "dependencies": [2],
           "details": "Outline how to access the Supabase Table Editor, locate relevant tables, and check that data has been correctly migrated. Include screenshots or example queries if appropriate. Highlight common issues and troubleshooting steps for data verification."
         },
         {
@@ -481,9 +403,7 @@
           "title": "List Placeholder Pages and Intended Functionality",
           "description": "Compile a list of all current placeholder pages in the application and describe their planned future functionality.",
           "status": "pending",
-          "dependencies": [
-            1
-          ],
+          "dependencies": [1],
           "details": "Review the routing and page structure to identify all placeholder or stub pages. For each, provide a brief description of its intended purpose and any relevant notes on future development. Organize this information in a clear, accessible format."
         },
         {
@@ -491,12 +411,7 @@
           "title": "Summarize Next Steps for Phase 1 Development and Finalize Documentation",
           "description": "Outline the next development steps for Phase 1 and ensure all documentation is compiled and formatted according to project conventions.",
           "status": "pending",
-          "dependencies": [
-            1,
-            2,
-            3,
-            4
-          ],
+          "dependencies": [1, 2, 3, 4],
           "details": "Work with the team to identify and summarize the immediate next steps for Phase 1. Review all documentation sections for clarity and completeness. Place the final documentation in the project wiki or README.md, following established formatting and organizational standards."
         }
       ]

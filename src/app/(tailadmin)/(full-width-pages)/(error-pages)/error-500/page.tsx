@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Error500() {
   return (
-    <div className="z-1 relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+    <div className="relative z-1 flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
 
       <div className="mx-auto w-full max-w-[242px] text-center sm:max-w-[562px]">
@@ -35,7 +35,7 @@ export default function Error500() {
           height={154}
         />
 
-        <p className="mb-6 mt-10 text-base text-gray-700 sm:text-lg dark:text-gray-400">
+        <p className="mt-10 mb-6 text-base text-gray-700 sm:text-lg dark:text-gray-400">
           We can’t seem to find the page you are looking for!
         </p>
 

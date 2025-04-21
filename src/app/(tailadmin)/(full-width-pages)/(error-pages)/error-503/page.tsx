@@ -5,36 +5,37 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Next.js Error 404 | TailAdmin - Next.js Dashboard Template",
+  title: "Next.js Error 503 | TailAdmin - Next.js Dashboard Template",
   description:
-    "This is Next.js Error 404 page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    "This is Next.js Error 503 page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
 };
 
-export default function Error404() {
+export default function page() {
   return (
-    <div className="z-1 relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+    <div className="relative z-1 flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
-      <div className="mx-auto w-full max-w-[242px] text-center sm:max-w-[472px]">
+
+      <div className="mx-auto w-full max-w-[242px] text-center sm:max-w-[492px]">
         <h1 className="text-title-md xl:text-title-2xl mb-8 font-bold text-gray-800 dark:text-white/90">
           ERROR
         </h1>
 
         <Image
-          src="/images/error/404.svg"
-          alt="404"
+          src="./images/error/503.svg"
+          alt="503"
+          width={500}
+          height={150}
           className="dark:hidden"
-          width={472}
-          height={152}
         />
         <Image
-          src="/images/error/404-dark.svg"
-          alt="404"
+          src="./images/error/503-dark.svg"
+          alt="503"
           className="hidden dark:block"
-          width={472}
-          height={152}
+          width={500}
+          height={150}
         />
 
-        <p className="mb-6 mt-10 text-base text-gray-700 sm:text-lg dark:text-gray-400">
+        <p className="mt-10 mb-6 text-base text-gray-700 sm:text-lg dark:text-gray-400">
           We can’t seem to find the page you are looking for!
         </p>
 
@@ -45,6 +46,7 @@ export default function Error404() {
           Back to Home Page
         </Link>
       </div>
+
       {/* <!-- Footer --> */}
       <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-center text-sm text-gray-500 dark:text-gray-400">
         &copy; {new Date().getFullYear()} - TailAdmin

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Maintenance() {
   return (
-    <div className="z-1 relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+    <div className="relative z-1 flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
 
       <div>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Success() {
   return (
-    <div className="z-1 relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
+    <div className="relative z-1 flex min-h-screen flex-col items-center justify-center overflow-hidden p-6">
       <GridShape />
       <div className="mx-auto w-full max-w-[274px] text-center sm:max-w-[555px]">
         <div className="mx-auto mb-10 w-full max-w-[100px] text-center sm:max-w-[160px]">
