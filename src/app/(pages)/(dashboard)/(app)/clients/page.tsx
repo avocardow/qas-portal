@@ -2,7 +2,15 @@
 import React from "react";
 import { api } from "@/utils/api";
 import Link from "next/link";
-import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "@/components/common/ComponentCard";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
 export default function ClientsPage() {
   const clientsQuery = api.client.getAll.useQuery();
@@ -10,76 +18,70 @@ export default function ClientsPage() {
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
 
-  if (isLoading) {
-    return (
-      <DashboardPlaceholderPageTemplate
-        heading="Clients"
-        message="Loading..."
-      />
-    );
-  }
-
-  if (error) {
-    return (
-      <DashboardPlaceholderPageTemplate
-        heading="Clients"
-        message="Error loading clients."
-      />
-    );
-  }
-
-  if (!clients) {
-    return (
-      <DashboardPlaceholderPageTemplate
-        heading="Clients"
-        message="No clients found."
-      />
-    );
-  }
-
   return (
-    <DashboardPlaceholderPageTemplate heading="Clients" message="">
-      {/* Table of clients */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                City
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {clients.map((client) => (
-              <tr key={client.id}>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                  {client.id}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-blue-600">
-                  <Link href={`/clients/${client.id}`}>
-                    {client.clientName}
-                  </Link>
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                  {client.city ?? "-"}
-                </td>
-                <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                  {client.status}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div>
+      <PageBreadcrumb pageTitle="Clients" />
+      <div className="space-y-6">
+        <ComponentCard title="Clients">
+          {isLoading && <p>Loading...</p>}
+          {error && <p>Error loading clients.</p>}
+          {!clients?.length && !isLoading && !error && <p>No clients found.</p>}
+          {clients && (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader className="bg-gray-50">
+                  <TableRow>
+                    <TableCell
+                      isHeader
+                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                    >
+                      ID
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                    >
+                      Name
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                    >
+                      City
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
+                    >
+                      Status
+                    </TableCell>
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="divide-y divide-gray-200 bg-white">
+                  {clients.map((client) => (
+                    <TableRow key={client.id}>
+                      <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
+                        {client.id}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 text-start text-sm text-blue-600">
+                        <Link href={`/clients/${client.id}`}>
+                          {client.clientName}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
+                        {client.city ?? "-"}
+                      </TableCell>
+                      <TableCell className="px-6 py-4 text-start text-sm text-gray-500">
+                        {client.status}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </ComponentCard>
       </div>
-    </DashboardPlaceholderPageTemplate>
+    </div>
   );
 }

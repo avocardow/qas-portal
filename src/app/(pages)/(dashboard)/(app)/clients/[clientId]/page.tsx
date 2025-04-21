@@ -2,7 +2,8 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { api } from "@/utils/api";
-import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "@/components/common/ComponentCard";
 
 export default function ClientPage() {
   const { clientId } = useParams() as { clientId: string };
@@ -11,81 +12,51 @@ export default function ClientPage() {
   const isLoading = clientQuery.isLoading;
   const error = clientQuery.error;
 
-  if (isLoading) {
-    return (
-      <DashboardPlaceholderPageTemplate
-        heading="Client Details"
-        message="Loading..."
-      />
-    );
-  }
-
-  if (error) {
-    return (
-      <DashboardPlaceholderPageTemplate
-        heading="Client Details"
-        message="Error loading client."
-      />
-    );
-  }
-
-  if (!client) {
-    return (
-      <DashboardPlaceholderPageTemplate
-        heading="Client Details"
-        message="Client not found."
-      />
-    );
-  }
-
-  const {
-    id,
-    clientName,
-    abn,
-    address,
-    city,
-    postcode,
-    status,
-    auditMonthEnd,
-    nextContactDate,
-    estAnnFees,
-  } = client;
-
   return (
-    <DashboardPlaceholderPageTemplate heading={clientName}>
-      <div className="mt-6 space-y-4 text-left">
-        <div>
-          <strong>ID:</strong> {id}
-        </div>
-        <div>
-          <strong>ABN:</strong> {abn ?? "-"}
-        </div>
-        <div>
-          <strong>Address:</strong> {address ?? "-"}
-        </div>
-        <div>
-          <strong>City:</strong> {city ?? "-"}
-        </div>
-        <div>
-          <strong>Postcode:</strong> {postcode ?? "-"}
-        </div>
-        <div>
-          <strong>Status:</strong> {status}
-        </div>
-        <div>
-          <strong>Audit Month End:</strong> {auditMonthEnd ?? "-"}
-        </div>
-        <div>
-          <strong>Next Contact Date:</strong>{" "}
-          {nextContactDate
-            ? new Date(nextContactDate).toLocaleDateString()
-            : "-"}
-        </div>
-        <div>
-          <strong>Estimated Annual Fees:</strong>{" "}
-          {estAnnFees?.toString() ?? "-"}
-        </div>
+    <div>
+      <PageBreadcrumb pageTitle="Client Details" />
+      <div className="space-y-6">
+        <ComponentCard title={client?.clientName || "Client Details"}>
+          {isLoading && <p>Loading...</p>}
+          {error && <p>Error loading client.</p>}
+          {!client && !isLoading && !error && <p>Client not found.</p>}
+          {client && (
+            <div className="space-y-4">
+              <div>
+                <strong>ID:</strong> {client.id}
+              </div>
+              <div>
+                <strong>ABN:</strong> {client.abn ?? "-"}
+              </div>
+              <div>
+                <strong>Address:</strong> {client.address ?? "-"}
+              </div>
+              <div>
+                <strong>City:</strong> {client.city ?? "-"}
+              </div>
+              <div>
+                <strong>Postcode:</strong> {client.postcode ?? "-"}
+              </div>
+              <div>
+                <strong>Status:</strong> {client.status}
+              </div>
+              <div>
+                <strong>Audit Month End:</strong> {client.auditMonthEnd ?? "-"}
+              </div>
+              <div>
+                <strong>Next Contact Date:</strong>{" "}
+                {client.nextContactDate
+                  ? new Date(client.nextContactDate).toLocaleDateString()
+                  : "-"}
+              </div>
+              <div>
+                <strong>Estimated Annual Fees:</strong>{" "}
+                {client.estAnnFees?.toString() ?? "-"}
+              </div>
+            </div>
+          )}
+        </ComponentCard>
       </div>
-    </DashboardPlaceholderPageTemplate>
+    </div>
   );
 }
