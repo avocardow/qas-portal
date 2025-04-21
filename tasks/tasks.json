@@ -202,7 +202,7 @@
           "id": 3,
           "title": "Implement tRPC Procedures for Audit Retrieval",
           "description": "Develop tRPC procedures to retrieve audit data: audit.getByClientId for client audit history and audit.getById for full audit details, including related tasks and assignments.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Implement audit.getByClientId to fetch all audits for a given client, returning summary data. Implement audit.getById to fetch comprehensive audit details, including tasks and user assignments. Enforce RBAC so users only access audits they are permitted to view."
         },
@@ -210,7 +210,7 @@
           "id": 4,
           "title": "Implement tRPC Procedures for Audit Assignment Management",
           "description": "Develop audit.assignUser and audit.unassignUser procedures to manage AuditAssignment records, with strict RBAC enforcement.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Implement audit.assignUser to assign users to audits and audit.unassignUser to remove assignments. Validate user roles and permissions for these operations. Ensure assignment changes are logged for auditability."
         },

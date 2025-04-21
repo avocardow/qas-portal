@@ -165,3 +165,15 @@ export const enforcePermission = (permission: string) =>
 // Procedure builder to require a specific permission
 export const permissionProcedure = (permission: string) =>
   protectedProcedure.use(enforcePermission(permission));
+
+// Generic logging middleware for tRPC procedures
+export const logMiddleware = t.middleware(async ({ ctx, path, type, next }) => {
+  // Replace this with your monitoring/logging integration
+  console.log(
+    `[tRPC] ${type.toUpperCase()} ${path} called by user ${ctx.session?.user?.id ?? "anonymous"}`
+  );
+  return next();
+});
+
+// Helper to create procedures that include logging
+export const loggedProcedure = () => t.procedure.use(logMiddleware);

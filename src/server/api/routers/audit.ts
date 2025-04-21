@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, permissionProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  loggedProcedure,
+  enforcePermission,
+} from "@/server/api/trpc";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 
 // Zod schemas for audit operations
@@ -30,8 +34,9 @@ const unassignUserSchema = z.object({
 
 // Router for audit management
 export const auditRouter = createTRPCRouter({
-  // Create a new audit
-  create: permissionProcedure(AUDIT_PERMISSIONS.CREATE)
+  // Create a new audit with logging and permission enforcement
+  create: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.CREATE))
     .input(auditCreateSchema)
     .mutation(({ ctx, input }) => {
       const { clientId, auditYear, stageId, statusId } = input;
@@ -40,8 +45,9 @@ export const auditRouter = createTRPCRouter({
       });
     }),
 
-  // Update stage and status of an existing audit
-  updateStageStatus: permissionProcedure(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS)
+  // Update stage and status of an existing audit with logging
+  updateStageStatus: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS))
     .input(updateStageStatusSchema)
     .mutation(({ ctx, input }) => {
       const { auditId, stageId, statusId } = input;
@@ -51,8 +57,9 @@ export const auditRouter = createTRPCRouter({
       });
     }),
 
-  // Get all audits for a specific client
-  getByClientId: permissionProcedure(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID)
+  // Get all audits for a specific client with logging
+  getByClientId: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID))
     .input(getByClientIdSchema)
     .query(({ ctx, input }) => {
       return ctx.db.audit.findMany({
@@ -61,8 +68,9 @@ export const auditRouter = createTRPCRouter({
       });
     }),
 
-  // Get full audit details by audit ID
-  getById: permissionProcedure(AUDIT_PERMISSIONS.GET_BY_ID)
+  // Get full audit details by audit ID with logging
+  getById: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_ID))
     .input(getByIdSchema)
     .query(({ ctx, input }) => {
       return ctx.db.audit.findUnique({
@@ -76,8 +84,9 @@ export const auditRouter = createTRPCRouter({
       });
     }),
 
-  // Assign a user to an audit
-  assignUser: permissionProcedure(AUDIT_PERMISSIONS.ASSIGN_USER)
+  // Assign a user to an audit with logging
+  assignUser: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.ASSIGN_USER))
     .input(assignUserSchema)
     .mutation(({ ctx, input }) => {
       const { auditId, userId, role } = input;
@@ -88,8 +97,9 @@ export const auditRouter = createTRPCRouter({
       });
     }),
 
-  // Unassign a user from an audit
-  unassignUser: permissionProcedure(AUDIT_PERMISSIONS.UNASSIGN_USER)
+  // Unassign a user from an audit with logging
+  unassignUser: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.UNASSIGN_USER))
     .input(unassignUserSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.auditAssignment.delete({

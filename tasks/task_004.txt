@@ -136,13 +136,13 @@ describe('Audit RBAC Enforcement', () => {
 ### Details:
 Implement audit.create to accept clientId, auditYear, and initial stageId/statusId, ensuring only authorized roles can create audits. Implement audit.updateStageStatus to update an audit's stage and status, restricting access based on RBAC policy. Validate inputs and handle errors appropriately.
 
-## 3. Implement tRPC Procedures for Audit Retrieval [pending]
+## 3. Implement tRPC Procedures for Audit Retrieval [done]
 ### Dependencies: 4.1
 ### Description: Develop tRPC procedures to retrieve audit data: audit.getByClientId for client audit history and audit.getById for full audit details, including related tasks and assignments.
 ### Details:
 Implement audit.getByClientId to fetch all audits for a given client, returning summary data. Implement audit.getById to fetch comprehensive audit details, including tasks and user assignments. Enforce RBAC so users only access audits they are permitted to view.
 
-## 4. Implement tRPC Procedures for Audit Assignment Management [pending]
+## 4. Implement tRPC Procedures for Audit Assignment Management [done]
 ### Dependencies: 4.1
 ### Description: Develop audit.assignUser and audit.unassignUser procedures to manage AuditAssignment records, with strict RBAC enforcement.
 ### Details:
