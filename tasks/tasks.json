@@ -280,7 +280,7 @@
       "id": 6,
       "title": "Implement Task Management Backend",
       "description": "Create tRPC procedures in taskRouter for Task CRUD operations with RBAC",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [4],
       "priority": "high",
       "details": "Implement the following tRPC procedures in taskRouter: 1) task.getByAuditId, 2) task.getAssignedToMe with pagination, sorting, filtering, 3) task.getAll (Admin view) with pagination, sorting, filtering, 4) task.create, 5) task.update, 6) task.delete. Each procedure should enforce appropriate RBAC based on user roles. Tasks should support fields like Name, Description, Assignee, Due Date, Status, and Priority.",
@@ -290,7 +290,7 @@
           "id": 1,
           "title": "Define Task Schema and Database Models",
           "description": "Create TypeScript interfaces and Prisma/database models for the Task entity with all required fields",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create a Task schema with fields: id, name, description, assigneeId, auditId, dueDate, status, priority, createdAt, and updatedAt. Define TypeScript interfaces for Task entity and related input/output types. Set up Prisma model or equivalent database schema for Task entity with appropriate relations to User and Audit entities. Implement validation schemas using Zod or similar validation library for task creation and updates. Define enums for Status and Priority fields with appropriate values."
         },
@@ -298,7 +298,7 @@
           "id": 2,
           "title": "Implement RBAC Middleware for Task Procedures",
           "description": "Create middleware to handle role-based access control for all task procedures",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Create a middleware function using tRPC's middleware pattern that validates user permissions based on their role. Define permission rules for different task operations: admins can perform all operations, managers can create/update/view tasks, regular users can only view assigned tasks and update their status. Implement context-based authorization by extending the tRPC context to include user role information. Create helper functions to check if a user has access to specific tasks based on assignment and role. Ensure the middleware can be reused across all task procedures."
         },
@@ -306,7 +306,7 @@
           "id": 3,
           "title": "Implement Basic Task Retrieval Procedures",
           "description": "Create tRPC procedures for task.getByAuditId and task.getAssignedToMe with pagination",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1, 2],
           "details": "Implement the task.getByAuditId procedure that accepts an auditId parameter and returns all tasks associated with that audit. Apply RBAC to ensure only users with access to the audit can view its tasks. Implement task.getAssignedToMe procedure that returns tasks assigned to the current user with pagination support. Add input validation for pagination parameters (page, limit). Implement sorting functionality allowing tasks to be sorted by dueDate, priority, or status. Add filtering options to filter tasks by status or priority. Ensure both procedures use the RBAC middleware to enforce access control."
         },

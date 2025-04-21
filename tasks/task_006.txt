@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Implement Task Management Backend
-# Status: pending
+# Status: in-progress
 # Dependencies: 4
 # Priority: high
 # Description: Create tRPC procedures in taskRouter for Task CRUD operations with RBAC
@@ -11,19 +11,19 @@ Implement the following tRPC procedures in taskRouter: 1) task.getByAuditId, 2) 
 Write unit tests for each procedure verifying correct data manipulation, filtering, pagination, and RBAC enforcement. Test task assignment and reassignment functionality.
 
 # Subtasks:
-## 1. Define Task Schema and Database Models [pending]
+## 1. Define Task Schema and Database Models [done]
 ### Dependencies: None
 ### Description: Create TypeScript interfaces and Prisma/database models for the Task entity with all required fields
 ### Details:
 Create a Task schema with fields: id, name, description, assigneeId, auditId, dueDate, status, priority, createdAt, and updatedAt. Define TypeScript interfaces for Task entity and related input/output types. Set up Prisma model or equivalent database schema for Task entity with appropriate relations to User and Audit entities. Implement validation schemas using Zod or similar validation library for task creation and updates. Define enums for Status and Priority fields with appropriate values.
 
-## 2. Implement RBAC Middleware for Task Procedures [pending]
+## 2. Implement RBAC Middleware for Task Procedures [done]
 ### Dependencies: 6.1
 ### Description: Create middleware to handle role-based access control for all task procedures
 ### Details:
 Create a middleware function using tRPC's middleware pattern that validates user permissions based on their role. Define permission rules for different task operations: admins can perform all operations, managers can create/update/view tasks, regular users can only view assigned tasks and update their status. Implement context-based authorization by extending the tRPC context to include user role information. Create helper functions to check if a user has access to specific tasks based on assignment and role. Ensure the middleware can be reused across all task procedures.
 
-## 3. Implement Basic Task Retrieval Procedures [pending]
+## 3. Implement Basic Task Retrieval Procedures [in-progress]
 ### Dependencies: 6.1, 6.2
 ### Description: Create tRPC procedures for task.getByAuditId and task.getAssignedToMe with pagination
 ### Details:

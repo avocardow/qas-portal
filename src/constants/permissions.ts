@@ -10,3 +10,15 @@ export const AUDIT_PERMISSIONS = {
 
 export type AuditPermission =
   (typeof AUDIT_PERMISSIONS)[keyof typeof AUDIT_PERMISSIONS];
+
+export const TASK_PERMISSIONS = {
+  GET_BY_AUDIT_ID: "task.getByAuditId",
+  GET_ASSIGNED_TO_ME: "task.getAssignedToMe",
+  GET_ALL: "task.getAll",
+  CREATE: "task.create",
+  UPDATE: "task.update",
+  DELETE: "task.delete",
+} as const;
+
+export type TaskPermission =
+  (typeof TASK_PERMISSIONS)[keyof typeof TASK_PERMISSIONS];

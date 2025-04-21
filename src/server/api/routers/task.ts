@@ -1,0 +1,96 @@
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, permissionProcedure } from "@/server/api/trpc";
+import type { Prisma } from "@prisma/client";
+import { TASK_PERMISSIONS } from "@/constants/permissions";
+
+// Input schemas for task procedures
+const getByAuditIdSchema = z.object({ auditId: z.string().uuid() });
+const getAssignedToMeSchema = z.object({
+  page: z.number().int().min(1).optional(),
+  pageSize: z.number().int().min(1).max(100).optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(["asc", "desc"]).optional(),
+  status: z.string().optional(),
+});
+const getAllTasksSchema = getAssignedToMeSchema.extend({
+  auditId: z.string().uuid().optional(),
+  assignedUserId: z.string().uuid().optional(),
+});
+const createTaskSchema = z.object({
+  auditId: z.string().uuid(),
+  name: z.string(),
+  description: z.string().optional(),
+  assignedUserId: z.string().uuid().optional(),
+  dueDate: z.date().optional(),
+  priority: z.string().optional(),
+  requiresClientAction: z.boolean().optional(),
+});
+const updateTaskSchema = createTaskSchema.extend({ taskId: z.string().uuid() });
+const deleteTaskSchema = z.object({ taskId: z.string().uuid() });
+
+// Router for Task operations
+export const taskRouter = createTRPCRouter({
+  getByAuditId: permissionProcedure(TASK_PERMISSIONS.GET_BY_AUDIT_ID)
+    .input(getByAuditIdSchema)
+    .query(async ({ ctx, input }) => {
+      // Retrieve tasks for a specific audit, sorted by creation date descending
+      return ctx.db.task.findMany({
+        where: { auditId: input.auditId },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
+  getAssignedToMe: permissionProcedure(TASK_PERMISSIONS.GET_ASSIGNED_TO_ME)
+    .input(getAssignedToMeSchema)
+    .query(async ({ ctx, input }) => {
+      const page = input.page ?? 1;
+      const pageSize = input.pageSize ?? 10;
+      const where: Prisma.TaskWhereInput = {
+        assignedUserId: ctx.session.user.id,
+      };
+      if (input.status) {
+        where.status = input.status;
+      }
+      // Fetch tasks assigned to the current user with pagination, sorting
+      return ctx.db.task.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: {
+          [input.sortBy ?? "createdAt"]: input.sortOrder ?? "desc",
+        },
+      });
+    }),
+  getAll: permissionProcedure(TASK_PERMISSIONS.GET_ALL)
+    .input(getAllTasksSchema)
+    .query(() => {
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+        message: "getAll not implemented",
+      });
+    }),
+  create: permissionProcedure(TASK_PERMISSIONS.CREATE)
+    .input(createTaskSchema)
+    .mutation(() => {
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+        message: "create not implemented",
+      });
+    }),
+  update: permissionProcedure(TASK_PERMISSIONS.UPDATE)
+    .input(updateTaskSchema)
+    .mutation(() => {
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+        message: "update not implemented",
+      });
+    }),
+  delete: permissionProcedure(TASK_PERMISSIONS.DELETE)
+    .input(deleteTaskSchema)
+    .mutation(() => {
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+        message: "delete not implemented",
+      });
+    }),
+});
