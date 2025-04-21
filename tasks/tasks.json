@@ -64,7 +64,7 @@
       "id": 2,
       "title": "Implement Related Entity Management Backend",
       "description": "Create tRPC procedures for Contacts, Licenses, and Trust Accounts CRUD operations",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [1],
       "priority": "high",
       "details": "Implement direct tRPC procedures for contact.create/update, license.create/update, and trustAccount.create/update with proper Zod validation schemas. Each procedure should accept the parent clientId and the entity data. Ensure RBAC enforcement (Admin/Manager only) for all write operations. Consider implementing batch operations if needed for efficiency.",
@@ -106,7 +106,7 @@
           "id": 5,
           "title": "Write Unit and Integration Tests for Procedures and Middleware",
           "description": "Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [4],
           "details": "Write tests covering valid and invalid inputs, unauthorized access, and successful/failed CRUD and batch operations. Ensure all edge cases are handled and that procedures behave as expected under different user roles and data scenarios."
         }

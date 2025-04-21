@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Related Entity Management Backend
-# Status: in-progress
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Create tRPC procedures for Contacts, Licenses, and Trust Accounts CRUD operations
@@ -35,7 +35,7 @@ For each entity, define tRPC mutation procedures (contact.create, contact.update
 ### Details:
 Define tRPC procedures (e.g., contact.batchCreate, license.batchUpdate) that accept arrays of entity data and clientIds. Use Zod array validation and ensure RBAC enforcement. Optimize database interactions for bulk operations to improve performance.
 
-## 5. Write Unit and Integration Tests for Procedures and Middleware [in-progress]
+## 5. Write Unit and Integration Tests for Procedures and Middleware [done]
 ### Dependencies: 2.4
 ### Description: Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.
 ### Details:
