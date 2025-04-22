@@ -85,7 +85,7 @@ export default function ClientsPage() {
             placeholder="Search clients..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="rounded border px-2 py-1"
+            className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
           {/* Conditional Add New Client button */}
           {session?.user?.role &&
@@ -117,7 +117,7 @@ export default function ClientsPage() {
           {items && (
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader className="bg-gray-50">
+                <TableHeader className="bg-gray-50 dark:bg-gray-800">
                   <TableRow>
                     <TableCell isHeader>ID</TableCell>
                     <TableCell isHeader className="cursor-pointer">
@@ -154,7 +154,7 @@ export default function ClientsPage() {
                     </TableCell>
                   </TableRow>
                 </TableHeader>
-                <TableBody className="divide-y divide-gray-200 bg-white">
+                <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                   {items.map((client) => (
                     <TableRow key={client.id}>
                       <TableCell>{client.id}</TableCell>

@@ -97,10 +97,10 @@ export default function EditClientPage() {
             </label>
             <input
               {...register("clientName")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
             {errors.clientName && (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-red-600 dark:text-red-400">
                 {errors.clientName.message}
               </p>
             )}
@@ -111,7 +111,7 @@ export default function EditClientPage() {
             </label>
             <input
               {...register("abn")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <div>
@@ -120,7 +120,7 @@ export default function EditClientPage() {
             </label>
             <input
               {...register("address")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <div>
@@ -129,7 +129,7 @@ export default function EditClientPage() {
             </label>
             <input
               {...register("city")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <div>
@@ -138,7 +138,7 @@ export default function EditClientPage() {
             </label>
             <input
               {...register("postcode")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <div>
@@ -147,7 +147,7 @@ export default function EditClientPage() {
             </label>
             <select
               {...register("status")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             >
               <option value="prospect">Prospect</option>
               <option value="active">Active</option>
@@ -161,7 +161,7 @@ export default function EditClientPage() {
             <input
               type="number"
               {...register("auditMonthEnd", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <div>
@@ -171,7 +171,7 @@ export default function EditClientPage() {
             <input
               type="date"
               {...register("nextContactDate")}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <div>
@@ -182,7 +182,7 @@ export default function EditClientPage() {
               type="number"
               step="0.01"
               {...register("estAnnFees", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border px-3 py-2"
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
           <button type="submit" disabled={isSubmitting} className="btn">

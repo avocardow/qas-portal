@@ -125,7 +125,7 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Contacts" && (
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
                   <TableCell isHeader>Name</TableCell>
                   <TableCell isHeader>Email</TableCell>
@@ -134,7 +134,7 @@ export default function ClientDetailPage() {
                   <TableCell isHeader>Primary</TableCell>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.contacts.length ? (
                   detailClient.contacts.map((c: any) => (
                     <TableRow key={c.id}>
@@ -155,7 +155,7 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Licenses" && (
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
                   <TableCell isHeader>License Number</TableCell>
                   <TableCell isHeader>Type</TableCell>
@@ -163,7 +163,7 @@ export default function ClientDetailPage() {
                   <TableCell isHeader>Primary</TableCell>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.licenses.length ? (
                   detailClient.licenses.map((l: any) => (
                     <TableRow key={l.id}>
@@ -183,7 +183,7 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Trust Accounts" && (
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
                   <TableCell isHeader>Account Name</TableCell>
                   <TableCell isHeader>Bank Name</TableCell>
@@ -192,7 +192,7 @@ export default function ClientDetailPage() {
                   <TableCell isHeader>Software Access</TableCell>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.trustAccounts.length ? (
                   detailClient.trustAccounts.map((t: any) => (
                     <TableRow key={t.id}>
@@ -215,7 +215,7 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Audits" && (
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
                   <TableCell isHeader>Year</TableCell>
                   <TableCell isHeader>Status</TableCell>
@@ -224,7 +224,7 @@ export default function ClientDetailPage() {
                   <TableCell isHeader>Lodged Date</TableCell>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.audits.length ? (
                   detailClient.audits.map((a: any) => (
                     <TableRow key={a.id}>
@@ -253,14 +253,14 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Activity Log" && (
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
                   <TableCell isHeader>Type</TableCell>
                   <TableCell isHeader>Content</TableCell>
                   <TableCell isHeader>Date</TableCell>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.activityLogs.length ? (
                   detailClient.activityLogs.map((log: any) => (
                     <TableRow key={log.id}>
