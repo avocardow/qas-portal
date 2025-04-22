@@ -3,6 +3,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
   adminProcedure,
+  enforceRole,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 
@@ -32,6 +33,7 @@ const clientUpdateSchema = clientCreateSchema.extend({
 
 export const clientRouter = createTRPCRouter({
   getAll: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Client"]))
     .input(clientGetAllSchema)
     .query(async ({ ctx, input }) => {
       const role = ctx.session.user.role ?? "";
@@ -76,6 +78,7 @@ export const clientRouter = createTRPCRouter({
       return { items, nextCursor };
     }),
   getById: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Client"]))
     .input(clientByIdSchema)
     .query(async ({ ctx, input }) => {
       const role = ctx.session.user.role ?? "";
