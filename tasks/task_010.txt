@@ -71,7 +71,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Add visual indicators for read-only or restricted content
 7. Testing approach: Create component tests with different user role mocks
 
-## 6. Integrate Client Management with RBAC [pending]
+## 6. Integrate Client Management with RBAC [in-progress]
 ### Dependencies: 10.3, 10.5
 ### Description: Ensure Client Management features properly integrate with the RBAC system for both data access and UI permissions.
 ### Details:

@@ -33,7 +33,7 @@ export default function ClientsPage() {
   );
   const [pageIndex, setPageIndex] = useState(0);
   // Protect view based on role
-  if (role === null) {
+  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
     return <p>You are not authorized to view clients.</p>;
   }
 

@@ -62,7 +62,7 @@ export default function ClientDetailPage() {
     }
   };
 
-  if (role === null) {
+  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
     return <p>You are not authorized to view client details.</p>;
   }
 

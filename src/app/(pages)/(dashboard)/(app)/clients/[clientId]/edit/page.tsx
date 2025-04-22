@@ -8,6 +8,7 @@ import { useRouter, useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
+import { useRbac } from "@/context/RbacContext";
 
 // Zod schema for validation
 const formSchema = z.object({
@@ -25,6 +26,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function EditClientPage() {
+  const { role } = useRbac();
   const router = useRouter();
   const { clientId } = useParams() as { clientId: string };
 
@@ -79,6 +81,10 @@ export default function EditClientPage() {
     }
   };
 
+  // Guard after hooks
+  if (role !== "Admin") {
+    return <p>You are not authorized to edit clients.</p>;
+  }
   if (clientQuery.isLoading) {
     return <p>Loading client...</p>;
   }

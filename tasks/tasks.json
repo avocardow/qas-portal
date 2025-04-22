@@ -537,7 +537,7 @@
           "description": "Ensure Client Management features properly integrate with the RBAC system for both data access and UI permissions.",
           "dependencies": [3, 5],
           "details": "1. Review all client data access points and apply appropriate RBAC checks\n2. Update client listing to only show clients the user has permission to view\n3. Modify client detail views to respect read/write permissions\n4. Implement role-specific client management workflows\n5. Ensure client-related actions (create, update, delete) check for proper permissions\n6. Add permission-aware filtering and sorting options\n7. Testing approach: End-to-end tests for client management workflows with different user roles",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 10
         },
         {
