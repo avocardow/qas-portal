@@ -98,8 +98,9 @@ export default function AuditDetailPage() {
                     <TableCell>{assignment.role || "-"}</TableCell>
                     <TableCell>
                       <Button
-                        variant="destructive"
+                        variant="outline"
                         size="sm"
+                        className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
                         onClick={() => {
                           /* TODO: unassign user */
                         }}

@@ -254,7 +254,7 @@
           "id": 3,
           "title": "Develop Audit Detail Page with Team and Task Management",
           "description": "Create the Audit Detail page at /audits/[auditId], displaying audit information and enabling management of assigned team members and related tasks.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1],
           "details": "Use Tailwind and Shadcn UI / TailAdmin components to present audit details. Implement a section for assigned team members with add/remove controls (e.g., multi-select dropdown or list with remove buttons). Display related tasks in a list or table. Ensure all data is fetched and updated via appropriate API endpoints."
         },

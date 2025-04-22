@@ -33,7 +33,7 @@ Define the layout for the audits tab within the Client Detail page, including ta
 ### Details:
 Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fetch audit data using audit.getByClientId. Implement columns for Year, Stage, Status, Due Date, and Assigned Staff. Add the 'Add New Audit Year' button with modal or inline form functionality. Integrate Stage/Status dropdowns that trigger audit.updateStageStatus on change.
 
-## 3. Develop Audit Detail Page with Team and Task Management [in-progress]
+## 3. Develop Audit Detail Page with Team and Task Management [done]
 ### Dependencies: 5.1
 ### Description: Create the Audit Detail page at /audits/[auditId], displaying audit information and enabling management of assigned team members and related tasks.
 ### Details:
