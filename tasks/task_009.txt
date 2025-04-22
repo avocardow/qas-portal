@@ -5,7 +5,7 @@
 # Priority: low
 # Description: Create Document tabs/sections for Client, Audit, and Task detail pages
 # Details:
-Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and Shadcn UI / TailAdmin components.
+Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and TailAdmin components.
 
 # Test Strategy:
 Manually test document list display on each detail page. Verify links open correctly to SharePoint URLs. Test with various user roles to confirm proper visibility based on RBAC.

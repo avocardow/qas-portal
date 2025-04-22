@@ -17,13 +17,13 @@ Manually test all UI components and interactions. Verify data fetching, filterin
 ### Details:
 Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.getByAuditId). Set up state management (React context, Redux, or local state) to store and update task data. Implement logic to determine user role (admin vs. regular user) and toggle between assigned and all tasks accordingly.
 
-## 2. Develop Task List Page with Table, Pagination, Sorting, and Filtering [pending]
+## 2. Develop Task List Page with Table, Pagination, Sorting, and Filtering [done]
 ### Dependencies: 7.1
 ### Description: Create the /tasks page with a functional table displaying tasks, including pagination, sorting, filtering, and an 'Add New Task' button.
 ### Details:
 Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. Implement pagination controls, column sorting, and filtering options. Add an 'Add New Task' button that opens the create task form. Ensure the table defaults to assigned tasks and supports admin toggle for all tasks.
 
-## 3. Implement Task Create/Edit Forms [pending]
+## 3. Implement Task Create/Edit Forms [in-progress]
 ### Dependencies: 7.1
 ### Description: Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.
 ### Details:

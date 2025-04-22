@@ -358,7 +358,7 @@
           "id": 2,
           "title": "Develop Task List Page with Table, Pagination, Sorting, and Filtering",
           "description": "Create the /tasks page with a functional table displaying tasks, including pagination, sorting, filtering, and an 'Add New Task' button.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. Implement pagination controls, column sorting, and filtering options. Add an 'Add New Task' button that opens the create task form. Ensure the table defaults to assigned tasks and supports admin toggle for all tasks."
         },
@@ -366,7 +366,7 @@
           "id": 3,
           "title": "Implement Task Create/Edit Forms",
           "description": "Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1],
           "details": "Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement validation and controlled inputs for all required fields. Ensure the form can be used both for creating new tasks and editing existing ones, with appropriate data pre-filling and submission handling."
         },
@@ -439,7 +439,7 @@
       "status": "pending",
       "dependencies": [3, 5, 7, 8],
       "priority": "low",
-      "details": "Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and Shadcn UI / TailAdmin components.",
+      "details": "Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and TailAdmin components.",
       "testStrategy": "Manually test document list display on each detail page. Verify links open correctly to SharePoint URLs. Test with various user roles to confirm proper visibility based on RBAC.",
       "subtasks": [
         {
