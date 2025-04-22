@@ -1,6 +1,6 @@
 # Task ID: 9
 # Title: Implement Document Reference Display Frontend
-# Status: pending
+# Status: in-progress
 # Dependencies: 3, 5, 7, 8
 # Priority: low
 # Description: Create Document tabs/sections for Client, Audit, and Task detail pages
@@ -11,7 +11,7 @@ Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should
 Manually test document list display on each detail page. Verify links open correctly to SharePoint URLs. Test with various user roles to confirm proper visibility based on RBAC.
 
 # Subtasks:
-## 1. Design Document Reference UI Components [pending]
+## 1. Design Document Reference UI Components [in-progress]
 ### Dependencies: None
 ### Description: Design and implement reusable UI components for displaying document references, including fileName and 'Open' link, styled with Tailwind and Shadcn UI / TailAdmin components.
 ### Details:
@@ -23,13 +23,13 @@ Create a DocumentList component that accepts an array of document objects and re
 ### Details:
 On the Client detail page, use the appropriate document.getByClient procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section fits seamlessly with the existing page layout and navigation.
 
-## 3. Integrate Document Reference Section into Audit Detail Page [pending]
+## 3. Integrate Document Reference Section into Audit Detail Page [in-progress]
 ### Dependencies: 9.1
 ### Description: Add the DocumentList component as a new tab or section on the Audit detail page, fetching and displaying relevant document references.
 ### Details:
 On the Audit detail page, use the appropriate document.getByAudit procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section matches the page's design and navigation patterns.
 
-## 4. Integrate Document Reference Section into Task Detail Page [pending]
+## 4. Integrate Document Reference Section into Task Detail Page [done]
 ### Dependencies: 9.1
 ### Description: Add the DocumentList component as a new tab or section on the Task detail page, fetching and displaying relevant document references.
 ### Details:

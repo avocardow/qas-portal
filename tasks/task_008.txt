@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Implement Document Reference Display Backend
-# Status: in-progress
+# Status: done
 # Dependencies: 1, 4, 6
 # Priority: low
 # Description: Create tRPC procedures in documentRouter for retrieving document references
@@ -29,7 +29,7 @@ Create a middleware function that inspects the user's roles and verifies their a
 ### Details:
 For each procedure, use the validated input to query the database for documents related to the specified client, audit, or task. Ensure that the RBAC middleware is applied to each procedure. Return an array of objects containing fileName and sharepointFileUrl as defined in the output type.[1][2][4]
 
-## 4. Test and Document Document Reference Procedures [pending]
+## 4. Test and Document Document Reference Procedures [done]
 ### Dependencies: 8.3
 ### Description: Write comprehensive tests for each procedure to verify correct input validation, RBAC enforcement, and accurate data retrieval. Add inline documentation and meta descriptions for each procedure to support maintainability and developer understanding.
 ### Details:

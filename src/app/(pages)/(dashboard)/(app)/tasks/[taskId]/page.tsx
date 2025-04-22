@@ -1,6 +1,48 @@
+"use client";
+
 import React from "react";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import { useParams } from "next/navigation";
+import { api } from "@/utils/api";
+import ComponentCard from "@/components/common/ComponentCard";
+import DocumentReferences from "@/components/common/DocumentReferences";
 
 export default function TaskPage() {
-  return <DashboardPlaceholderPageTemplate heading="Task" />;
+  const { taskId } = useParams() as { taskId: string };
+  const {
+    data: task,
+    isLoading,
+    isError,
+  } = api.task.getById.useQuery({ taskId });
+  const {
+    data: docResources,
+    isLoading: isDocsLoading,
+    isError: isDocsError,
+  } = api.document.getByTaskId.useQuery({ taskId });
+
+  if (isLoading) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Loading...">
+        <p>Loading task...</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
+  if (isError || !task) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Error">
+        <p>Error loading task.</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
+  return (
+    <DashboardPlaceholderPageTemplate heading={task.name}>
+      <ComponentCard title="Documents">
+        {isDocsLoading && <p>Loading documents...</p>}
+        {isDocsError && <p>Error loading documents.</p>}
+        {docResources && <DocumentReferences documents={docResources} />}
+      </ComponentCard>
+    </DashboardPlaceholderPageTemplate>
+  );
 }

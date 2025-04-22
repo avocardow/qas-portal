@@ -392,7 +392,7 @@
       "id": 8,
       "title": "Implement Document Reference Display Backend",
       "description": "Create tRPC procedures in documentRouter for retrieving document references",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [1, 4, 6],
       "priority": "low",
       "details": "Implement the following tRPC procedures in documentRouter: 1) document.getByClientId, 2) document.getByAuditId, 3) document.getByTaskId. Each procedure should return document metadata including fileName and sharepointFileUrl. Enforce appropriate RBAC for document visibility based on user roles and relationship to the parent entity.",
@@ -426,7 +426,7 @@
           "id": 4,
           "title": "Test and Document Document Reference Procedures",
           "description": "Write comprehensive tests for each procedure to verify correct input validation, RBAC enforcement, and accurate data retrieval. Add inline documentation and meta descriptions for each procedure to support maintainability and developer understanding.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Create unit and integration tests to cover valid and invalid inputs, unauthorized access, and successful data retrieval. Use tRPC's meta functionality and zod's .describe() method to document each procedure and its parameters for future reference and developer tools integration.[2][5]"
         }
@@ -436,7 +436,7 @@
       "id": 9,
       "title": "Implement Document Reference Display Frontend",
       "description": "Create Document tabs/sections for Client, Audit, and Task detail pages",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [3, 5, 7, 8],
       "priority": "low",
       "details": "Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and TailAdmin components.",
@@ -446,7 +446,7 @@
           "id": 1,
           "title": "Design Document Reference UI Components",
           "description": "Design and implement reusable UI components for displaying document references, including fileName and 'Open' link, styled with Tailwind and Shadcn UI / TailAdmin components.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Create a DocumentList component that accepts an array of document objects and renders each with the fileName and an 'Open' button linking to the sharepointFileUrl. Ensure consistent styling using Tailwind and Shadcn UI / TailAdmin. Prepare for integration into multiple pages by making the component context-agnostic."
         },
@@ -462,7 +462,7 @@
           "id": 3,
           "title": "Integrate Document Reference Section into Audit Detail Page",
           "description": "Add the DocumentList component as a new tab or section on the Audit detail page, fetching and displaying relevant document references.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1],
           "details": "On the Audit detail page, use the appropriate document.getByAudit procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section matches the page's design and navigation patterns."
         },
@@ -470,7 +470,7 @@
           "id": 4,
           "title": "Integrate Document Reference Section into Task Detail Page",
           "description": "Add the DocumentList component as a new tab or section on the Task detail page, fetching and displaying relevant document references.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "On the Task detail page, use the appropriate document.getByTask procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section is styled and behaves consistently with the rest of the application."
         }
