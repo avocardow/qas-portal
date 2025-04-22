@@ -555,7 +555,7 @@
           "description": "Apply RBAC to task management features, ensuring tasks are only visible and editable by authorized users.",
           "dependencies": [3, 5],
           "details": "1. Review all task data access points and apply appropriate RBAC checks\n2. Implement task assignment rules based on user roles\n3. Modify task listings to only show tasks the user has permission to view\n4. Add permission checks for task creation, editing, and deletion\n5. Implement role-specific task dashboards and views\n6. Ensure task notifications respect RBAC permissions\n7. Testing approach: End-to-end tests for task workflows with different user roles",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 10
         },
         {

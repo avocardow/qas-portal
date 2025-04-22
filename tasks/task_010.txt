@@ -95,7 +95,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Create specialized audit views for compliance officers
 7. Testing approach: Integration tests for audit feature access with different user roles
 
-## 8. Integrate Task Management with RBAC [pending]
+## 8. Integrate Task Management with RBAC [done]
 ### Dependencies: 10.3, 10.5
 ### Description: Apply RBAC to task management features, ensuring tasks are only visible and editable by authorized users.
 ### Details:
