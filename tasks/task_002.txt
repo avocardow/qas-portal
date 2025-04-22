@@ -27,9 +27,9 @@ Define procedures for accessing and managing the shared mailbox using Microsoft 
 
 ## 2. Configure Microsoft Graph API Permissions for Shared Mailbox [pending]
 ### Dependencies: 2.1
-### Description: Update the application's Microsoft Graph API permissions to include Mail.ReadWrite.Shared and Mail.Send.Shared, enabling programmatic access to shared mailboxes.
+### Description: Verify and add Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions for the shared mailbox
 ### Details:
-Register or update the Azure AD app to request the necessary delegated permissions. Ensure admin consent is granted for these permissions, and verify that the app can access shared mailbox endpoints as intended.
+Confirm the existing Azure AD app registration includes Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions with admin consent. Update the registration if needed and validate API access to shared mailbox endpoints.
 
 ## 3. Implement Role-Based Access Control (RBAC) for Shared Mailbox [pending]
 ### Dependencies: 2.1, 2.2

@@ -1,0 +1,28 @@
+"use client";
+import React, { useState } from "react";
+import EmailSidebar from "@/components/email/EmailSidebar/EmailSidebar";
+import EmailList from "@/components/email/EmailList/EmailList";
+
+export default function EmailPage() {
+  const [selectedFolder, setSelectedFolder] = useState<string>("");
+  const [selectedMessage, setSelectedMessage] = useState<string>("");
+
+  return (
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <EmailSidebar onSelect={setSelectedFolder} />
+      <EmailList
+        folderId={selectedFolder}
+        onSelectMessage={setSelectedMessage}
+      />
+      <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+        {selectedMessage ? (
+          <p className="text-sm text-gray-500">Message ID: {selectedMessage}</p>
+        ) : (
+          <p className="text-sm text-gray-500">
+            Select a message to view details.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

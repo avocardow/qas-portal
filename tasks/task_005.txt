@@ -24,9 +24,9 @@
 # Subtasks:
 ## 1. Set Up Teams Phone System Integration and Permissions [pending]
 ### Dependencies: None
-### Description: Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions.
+### Description: Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions and external provisioning by QAS IT.
 ### Details:
-Provision Teams Phone System for your organization, ensuring users have the required licenses and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls.[1][2][3]
+Coordinate with QAS IT to provision Teams Phone System licenses, phone numbers, and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls.
 
 ## 2. Design and Implement Call Logging Database Schema [pending]
 ### Dependencies: 5.1

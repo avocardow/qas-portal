@@ -21,19 +21,19 @@
 5. Test error handling for network issues and permission problems
 
 # Subtasks:
-## 1. Configure Microsoft Graph API Authentication [pending]
+## 1. Configure Microsoft Graph API Authentication [done]
 ### Dependencies: None
-### Description: Set up authentication with Microsoft Graph API to access M365 email accounts and request necessary permissions
+### Description: Verify Mail.ReadWrite and Mail.Send delegated permissions and implement a reusable GraphClient utility class
 ### Details:
-Create an application registration in Azure AD with the required Mail.ReadWrite and Mail.Send permissions. Implement the OAuth 2.0 authorization flow to obtain access tokens for Graph API. Store tokens securely using an appropriate token cache mechanism. Implement token refresh logic to handle expired tokens. Create a GraphClient utility class that will be used by the email service to make authenticated requests to the Graph API endpoints.
+Confirm the Azure AD app registration includes Mail.ReadWrite and Mail.Send delegated permissions. Implement a GraphClient class to perform authenticated Graph API calls using the existing Phase 0 OAuth flow, handling token acquisition and refresh. Ensure the utility is strongly typed and reusable across email service methods.
 
-## 2. Implement Email Service and tRPC Router [pending]
+## 2. Implement Email Service and tRPC Router [done]
 ### Dependencies: 1.1
 ### Description: Create the backend service layer and tRPC router with all required email procedures
 ### Details:
 Create an EmailService class that interfaces with Microsoft Graph API to perform email operations. Implement methods for listing folders, fetching messages, getting message details, sending messages, and creating replies/forwards. Create the tRPC emailRouter with the following procedures: listFolders, listMessages, getMessage, sendMessage, createReply, and createForward. Implement server-side pagination for message lists. Add input validation using Zod schemas for all procedures. Implement proper error handling with meaningful error messages. Add HTML sanitization for email body content using a library like DOMPurify.
 
-## 3. Create Email Folder and Message List Components [pending]
+## 3. Create Email Folder and Message List Components [done]
 ### Dependencies: 1.2
 ### Description: Implement the first two columns of the 3-column layout: folder navigation and message list
 ### Details:

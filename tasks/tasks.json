@@ -57,7 +57,7 @@
           "id": 1,
           "title": "Configure Microsoft Graph API Authentication",
           "description": "Verify Mail.ReadWrite and Mail.Send delegated permissions and implement a reusable GraphClient utility class",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Confirm the Azure AD app registration includes Mail.ReadWrite and Mail.Send delegated permissions. Implement a GraphClient class to perform authenticated Graph API calls using the existing Phase 0 OAuth flow, handling token acquisition and refresh. Ensure the utility is strongly typed and reusable across email service methods."
         },
@@ -65,7 +65,7 @@
           "id": 2,
           "title": "Implement Email Service and tRPC Router",
           "description": "Create the backend service layer and tRPC router with all required email procedures",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Create an EmailService class that interfaces with Microsoft Graph API to perform email operations. Implement methods for listing folders, fetching messages, getting message details, sending messages, and creating replies/forwards. Create the tRPC emailRouter with the following procedures: listFolders, listMessages, getMessage, sendMessage, createReply, and createForward. Implement server-side pagination for message lists. Add input validation using Zod schemas for all procedures. Implement proper error handling with meaningful error messages. Add HTML sanitization for email body content using a library like DOMPurify."
         },
@@ -73,7 +73,7 @@
           "id": 3,
           "title": "Create Email Folder and Message List Components",
           "description": "Implement the first two columns of the 3-column layout: folder navigation and message list",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2],
           "details": "Create a responsive layout for the /email route with a sidebar for folders and a main content area for messages. Implement the FolderList component that fetches and displays email folders from the tRPC listFolders procedure. Add folder selection functionality that triggers message list updates. Create the MessageList component that displays messages from the selected folder using the tRPC listMessages procedure. Implement pagination controls with options for page size and navigation. Add sorting functionality for messages by date, sender, or subject. Implement loading states and error handling for both components. Add a search/filter functionality for the message list."
         },

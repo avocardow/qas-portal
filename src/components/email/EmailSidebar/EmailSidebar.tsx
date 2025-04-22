@@ -4,7 +4,13 @@ import MailBox from "./MailBox";
 import FilterList from "./FilterList";
 import SimpleBar from "simplebar-react";
 
-export default function EmailSidebar() {
+interface EmailSidebarProps {
+  onSelect?: (folderId: string) => void;
+}
+
+export default function EmailSidebar({
+  onSelect = () => {},
+}: EmailSidebarProps) {
   return (
     <div className="flex flex-col rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="pb-5">
@@ -32,16 +38,16 @@ export default function EmailSidebar() {
         <nav className="space-y-5">
           {/* <!--== Mailbox Group Start ==--> */}
           <div>
-            <h3 className="mb-3 text-xs font-medium uppercase leading-[18px] text-gray-700 dark:text-gray-400">
+            <h3 className="mb-3 text-xs leading-[18px] font-medium text-gray-700 uppercase dark:text-gray-400">
               MAILBOX
             </h3>
-            <MailBox />
+            <MailBox onSelect={onSelect} />
           </div>
           {/* <!--== Mailbox Group End ==--> */}
 
           {/* <!--== Filter Group Start ==--> */}
           <div>
-            <h3 className="mb-3 text-xs font-medium uppercase leading-[18px] text-gray-700 dark:text-gray-400">
+            <h3 className="mb-3 text-xs leading-[18px] font-medium text-gray-700 uppercase dark:text-gray-400">
               FILTER
             </h3>
             <FilterList />
@@ -50,7 +56,7 @@ export default function EmailSidebar() {
 
           {/* <!--== Label Group Start ==--> */}
           <div>
-            <h3 className="mb-3 text-xs font-medium uppercase leading-[18px] text-gray-700 dark:text-gray-400">
+            <h3 className="mb-3 text-xs leading-[18px] font-medium text-gray-700 uppercase dark:text-gray-400">
               LABEL
             </h3>
             <LabelList />
