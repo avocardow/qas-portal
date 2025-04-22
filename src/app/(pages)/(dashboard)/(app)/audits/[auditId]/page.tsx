@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { api } from "@/utils/api";
 import Button from "@/components/ui/button/Button";
+import DocumentReferences from "@/components/common/DocumentReferences";
 
 export default function AuditDetailPage() {
   const { auditId } = useParams() as { auditId: string };
@@ -32,6 +33,11 @@ export default function AuditDetailPage() {
   const updateTaskMutation = api.task.update.useMutation({
     onSuccess: () => refetch(),
   });
+  const {
+    data: docResources,
+    isLoading: isDocsLoading,
+    isError: isDocsError,
+  } = api.document.getByAuditId.useQuery({ auditId });
 
   if (isLoading) {
     return (
@@ -207,6 +213,12 @@ export default function AuditDetailPage() {
               )}
             </TableBody>
           </Table>
+        </ComponentCard>
+
+        <ComponentCard title="Documents">
+          {isDocsLoading && <p>Loading documents...</p>}
+          {isDocsError && <p>Error loading documents.</p>}
+          {docResources && <DocumentReferences documents={docResources} />}
         </ComponentCard>
       </div>
     </DashboardPlaceholderPageTemplate>
