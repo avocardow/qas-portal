@@ -14,7 +14,12 @@ const RbacContext = createContext<RbacContextType | undefined>(undefined);
 export const useRbac = (): RbacContextType => {
   const context = useContext(RbacContext);
   if (!context) {
-    throw new Error("useRbac must be used within a RbacProvider");
+    // If no RbacProvider is found in the React tree, return a default no-access context
+    return {
+      role: null,
+      permissions: [],
+      canAccess: () => false,
+    };
   }
   return context;
 };

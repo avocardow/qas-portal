@@ -59,7 +59,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Add development tools for debugging RBAC issues
 7. Testing approach: Write unit tests for the context provider and hooks
 
-## 5. Apply RBAC to Frontend Components and Routes [pending]
+## 5. Apply RBAC to Frontend Components and Routes [in-progress]
 ### Dependencies: 10.4
 ### Description: Implement conditional rendering and route protection across all frontend components based on user roles.
 ### Details:

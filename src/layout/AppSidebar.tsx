@@ -5,6 +5,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { HorizontaLDots } from "../icons/index";
+import { usePermission } from "@/context/RbacContext";
+import { TASK_PERMISSIONS } from "@/constants/permissions";
 
 // import SidebarWidget from "./SidebarWidget";
 
@@ -33,6 +35,7 @@ const clientPages: { name: string; path: string }[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
+  const canViewTasks = usePermission(TASK_PERMISSIONS.GET_ALL);
 
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
@@ -100,29 +103,34 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               <ul className="flex flex-col gap-4">
-                {teamPages.map((page) => (
-                  <li key={page.name}>
-                    <Link
-                      href={page.path}
-                      className={`menu-item group ${
-                        isActive(page.path)
-                          ? "menu-item-active"
-                          : "menu-item-inactive"
-                      } cursor-pointer ${
-                        !isExpanded && !isHovered
-                          ? "lg:justify-center"
-                          : "justify-start"
-                      }`}
-                    >
-                      <span className="menu-item-icon-inactive">
-                        <span className="inline-block h-3 w-3 rounded-full bg-gray-400"></span>
-                      </span>
-                      {(isExpanded || isHovered || isMobileOpen) && (
-                        <span className="menu-item-text">{page.name}</span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {teamPages.map((page) => {
+                  if (page.path === "/tasks" && !canViewTasks) {
+                    return null;
+                  }
+                  return (
+                    <li key={page.name}>
+                      <Link
+                        href={page.path}
+                        className={`menu-item group ${
+                          isActive(page.path)
+                            ? "menu-item-active"
+                            : "menu-item-inactive"
+                        } cursor-pointer ${
+                          !isExpanded && !isHovered
+                            ? "lg:justify-center"
+                            : "justify-start"
+                        }`}
+                      >
+                        <span className="menu-item-icon-inactive">
+                          <span className="inline-block h-3 w-3 rounded-full bg-gray-400"></span>
+                        </span>
+                        {(isExpanded || isHovered || isMobileOpen) && (
+                          <span className="menu-item-text">{page.name}</span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
             {/* Client Pages Group */}

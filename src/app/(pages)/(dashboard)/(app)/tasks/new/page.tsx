@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePermission } from "@/context/RbacContext";
+import { TASK_PERMISSIONS } from "@/constants/permissions";
 
 // Schema for creating a Task
 const createTaskSchema = z.object({
@@ -23,6 +25,8 @@ const createTaskSchema = z.object({
 type CreateTaskForm = z.infer<typeof createTaskSchema>;
 
 export default function NewTaskPage() {
+  // RBAC: guard create task permission
+  const canCreateTask = usePermission(TASK_PERMISSIONS.CREATE);
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultAuditId = searchParams.get("auditId") ?? "";
@@ -37,6 +41,11 @@ export default function NewTaskPage() {
   });
 
   const createTask = api.task.create.useMutation();
+
+  // RBAC: return early if no create permission
+  if (!canCreateTask) {
+    return <p>You are not authorized to create tasks.</p>;
+  }
 
   const onSubmit = (data: CreateTaskForm) => {
     createTask.mutate(data, {

@@ -13,8 +13,13 @@ import Button from "@/components/ui/button/Button";
 import PaginationWithText from "@/components/ui/pagination/PaginationWithText";
 import { useTasks } from "@/hooks/use-tasks";
 import TaskDetailModal from "@/components/task/TaskDetailModal";
+import { usePermission } from "@/context/RbacContext";
+import { TASK_PERMISSIONS } from "@/constants/permissions";
 
 export default function TasksPage() {
+  // RBAC: check view and create permissions
+  const canViewTasks = usePermission(TASK_PERMISSIONS.GET_ALL);
+  const canCreateTask = usePermission(TASK_PERMISSIONS.CREATE);
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<string | undefined>(undefined);
@@ -33,6 +38,11 @@ export default function TasksPage() {
     status,
   });
 
+  // RBAC: return early if no view permission
+  if (!canViewTasks) {
+    return <p>You are not authorized to view tasks.</p>;
+  }
+
   if (isLoading) return <p>Loading tasks...</p>;
   if (isError || !tasks) return <p>Error loading tasks.</p>;
 
@@ -49,7 +59,11 @@ export default function TasksPage() {
     <div className="p-4">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-medium">Tasks</h2>
-        <Button onClick={() => router.push("/tasks/new")}>Add New Task</Button>
+        {canCreateTask && (
+          <Button onClick={() => router.push("/tasks/new")}>
+            Add New Task
+          </Button>
+        )}
       </div>
       <div className="mb-4 flex items-center gap-4">
         <label>
