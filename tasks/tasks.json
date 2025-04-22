@@ -564,7 +564,7 @@
           "description": "Ensure seamless navigation and data flow between Client, Audit, and Task management features with consistent RBAC enforcement.",
           "dependencies": [6, 7, 8],
           "details": "1. Create unified navigation that respects user permissions across all features\n2. Implement cross-feature workflows (e.g., creating tasks from client view)\n3. Ensure consistent data access patterns across feature boundaries\n4. Add contextual navigation based on current data and user permissions\n5. Implement deep linking with permission checks\n6. Create a unified dashboard with role-appropriate widgets and actions\n7. Testing approach: User journey tests across multiple features with different roles",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 10
         },
         {
