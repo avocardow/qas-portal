@@ -26,7 +26,7 @@ type TabKey =
 export default function ClientDetailPage() {
   const { clientId } = useParams() as { clientId: string };
   const router = useRouter();
-  const deleteClientMutation = api.client.delete.useMutation();
+  const deleteClientMutation = api.client.deleteClient.useMutation();
   const {
     data: client,
     isLoading,
@@ -91,10 +91,12 @@ export default function ClientDetailPage() {
         </Link>
         <button
           onClick={handleDelete}
-          disabled={deleteClientMutation.isLoading}
+          disabled={deleteClientMutation.status === "pending"}
           className="btn bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:text-white dark:hover:bg-red-800"
         >
-          {deleteClientMutation.isLoading ? "Deleting..." : "Delete Client"}
+          {deleteClientMutation.status === "pending"
+            ? "Deleting..."
+            : "Delete Client"}
         </button>
       </div>
       <ComponentCard title="Client Details">

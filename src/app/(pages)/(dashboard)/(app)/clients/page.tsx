@@ -21,7 +21,7 @@ export default function ClientsPage() {
   // Session for RBAC
   const { data: session } = useSession();
   const router = useRouter();
-  const deleteClientMutation = api.client.delete.useMutation();
+  const deleteClientMutation = api.client.deleteClient.useMutation();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
   const [sortBy, setSortBy] = useState<SortField>("clientName");
@@ -224,10 +224,12 @@ export default function ClientsPage() {
                                   );
                                 }
                               }}
-                              disabled={deleteClientMutation.isLoading}
+                              disabled={
+                                deleteClientMutation.status === "pending"
+                              }
                               className="btn bg-red-500 text-white hover:bg-red-600"
                             >
-                              {deleteClientMutation.isLoading
+                              {deleteClientMutation.status === "pending"
                                 ? "Deleting..."
                                 : "Delete"}
                             </button>

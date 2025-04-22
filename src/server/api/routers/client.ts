@@ -126,4 +126,10 @@ export const clientRouter = createTRPCRouter({
       const { clientId, ...data } = input;
       return ctx.db.client.update({ where: { id: clientId }, data });
     }),
+  deleteClient: adminProcedure
+    .input(clientByIdSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { clientId } = input;
+      return ctx.db.client.delete({ where: { id: clientId } });
+    }),
 });
