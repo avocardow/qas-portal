@@ -1,22 +1,18 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  adminProcedure,
+} from "@/server/api/trpc";
 import { randomBytes } from "crypto";
 import { sendEmail } from "@/server/utils/msGraphEmail";
 import { env } from "@/env.mjs";
 
 export const userRouter = createTRPCRouter({
-  inviteClientContact: protectedProcedure
+  inviteClientContact: adminProcedure
     .input(z.object({ contactId: z.string().uuid() }))
     .mutation(async ({ input, ctx }) => {
-      // RBAC: only Admins can invite clients
-      if (ctx.session.user.role !== "Admin") {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Only admins can invite clients.",
-        });
-      }
-
       // Fetch and validate contact
       const contact = await ctx.db.contact.findUnique({
         where: { id: input.contactId },
@@ -70,7 +66,7 @@ export const userRouter = createTRPCRouter({
       });
       return { success: true };
     }),
-  activateClientAccount: protectedProcedure
+  activateClientAccount: publicProcedure
     .input(z.object({ token: z.string() }))
     .mutation(async ({ input, ctx }) => {
       console.info(`activateClientAccount called with token: ${input.token}`);
@@ -125,7 +121,7 @@ export const userRouter = createTRPCRouter({
       );
       return { success: true, email: user.email };
     }),
-  resendActivationLink: protectedProcedure
+  resendActivationLink: publicProcedure
     .input(z.object({ token: z.string() }))
     .mutation(async ({ input, ctx }) => {
       // Find existing token entry (including expired)
