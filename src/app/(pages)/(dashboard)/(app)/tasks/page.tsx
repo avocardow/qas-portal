@@ -12,6 +12,7 @@ import {
 import Button from "@/components/ui/button/Button";
 import PaginationWithText from "@/components/ui/pagination/PaginationWithText";
 import { useTasks } from "@/hooks/use-tasks";
+import TaskDetailModal from "@/components/task/TaskDetailModal";
 
 export default function TasksPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function TasksPage() {
   const [status, setStatus] = useState<string | undefined>(undefined);
   const [sortBy, setSortBy] = useState<string | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   const {
     data: tasks,
@@ -88,11 +90,18 @@ export default function TasksPage() {
         <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
           {tasks.length ? (
             tasks.map((task) => (
-              <TableRow key={task.id}>
+              <TableRow
+                key={task.id}
+                className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => setSelectedTaskId(task.id)}
+              >
                 <TableCell>
                   <button
                     className="text-blue-600 hover:underline"
-                    onClick={() => router.push(`/tasks/${task.id}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/tasks/${task.id}`);
+                    }}
                   >
                     {task.name}
                   </button>
@@ -114,6 +123,14 @@ export default function TasksPage() {
           )}
         </TableBody>
       </Table>
+      {/* Task Details Modal */}
+      {selectedTaskId && (
+        <TaskDetailModal
+          taskId={selectedTaskId}
+          isOpen={true}
+          onClose={() => setSelectedTaskId(null)}
+        />
+      )}
       <PaginationWithText
         totalPages={tasks.length < 10 ? page : page + 1}
         initialPage={page}

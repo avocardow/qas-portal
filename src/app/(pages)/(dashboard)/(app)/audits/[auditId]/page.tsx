@@ -29,6 +29,9 @@ export default function AuditDetailPage() {
   const unassignUserMutation = api.audit.unassignUser.useMutation({
     onSuccess: () => refetch(),
   });
+  const updateTaskMutation = api.task.update.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   if (isLoading) {
     return (
@@ -138,6 +141,14 @@ export default function AuditDetailPage() {
         </ComponentCard>
 
         <ComponentCard title="Tasks">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-medium">Tasks</h2>
+            <Button
+              onClick={() => router.push(`/tasks/new?auditId=${auditId}`)}
+            >
+              Add Task
+            </Button>
+          </div>
           <Table>
             <TableHeader>
               <TableRow>
@@ -152,7 +163,26 @@ export default function AuditDetailPage() {
                 audit.tasks.map((task) => (
                   <TableRow key={task.id}>
                     <TableCell>{task.name}</TableCell>
-                    <TableCell>{task.status}</TableCell>
+                    <TableCell>
+                      <select
+                        value={task.status}
+                        onChange={(e) =>
+                          updateTaskMutation.mutate({
+                            taskId: task.id,
+                            status: e.target.value,
+                          })
+                        }
+                        className="rounded border px-2 py-1"
+                      >
+                        {["To Do", "In Progress", "Done"].map(
+                          (statusOption) => (
+                            <option key={statusOption} value={statusOption}>
+                              {statusOption}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </TableCell>
                     <TableCell>
                       {task.dueDate
                         ? new Date(task.dueDate).toLocaleDateString()

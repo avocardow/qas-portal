@@ -29,13 +29,13 @@ Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. I
 ### Details:
 Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement validation and controlled inputs for all required fields. Ensure the form can be used both for creating new tasks and editing existing ones, with appropriate data pre-filling and submission handling.
 
-## 4. Build Task Detail View Modal [pending]
+## 4. Build Task Detail View Modal [done]
 ### Dependencies: 7.2
 ### Description: Create a modal component to display full task details, accessible from the task list and audit detail sections.
 ### Details:
 Use modal components from Shadcn UI / TailAdmin. Display all task fields in a readable layout. Ensure the modal can be triggered from the task list and audit detail sections, and supports closing and navigation back to the list.
 
-## 5. Develop Audit Detail Tasks Section with Quick Status Updates [pending]
+## 5. Develop Audit Detail Tasks Section with Quick Status Updates [in-progress]
 ### Dependencies: 7.1, 7.3, 7.4
 ### Description: Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.
 ### Details:

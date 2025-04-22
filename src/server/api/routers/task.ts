@@ -124,4 +124,9 @@ export const taskRouter = createTRPCRouter({
       });
       return deleted;
     }),
+  getById: permissionProcedure(TASK_PERMISSIONS.GET_ALL)
+    .input(z.object({ taskId: z.string().uuid() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.task.findUnique({ where: { id: input.taskId } });
+    }),
 });

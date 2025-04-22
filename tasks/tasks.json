@@ -374,7 +374,7 @@
           "id": 4,
           "title": "Build Task Detail View Modal",
           "description": "Create a modal component to display full task details, accessible from the task list and audit detail sections.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2],
           "details": "Use modal components from Shadcn UI / TailAdmin. Display all task fields in a readable layout. Ensure the modal can be triggered from the task list and audit detail sections, and supports closing and navigation back to the list."
         },
@@ -382,7 +382,7 @@
           "id": 5,
           "title": "Develop Audit Detail Tasks Section with Quick Status Updates",
           "description": "Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1, 3, 4],
           "details": "Fetch and display tasks using task.getByAuditId. Allow inline status updates (e.g., dropdown or toggle). Integrate the 'Add Task' button to open the create form. Ensure consistent styling and UX with other components."
         }
