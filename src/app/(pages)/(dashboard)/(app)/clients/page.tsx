@@ -13,6 +13,7 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
+import useDebounce from "@/hooks/useDebounce";
 
 // Add type for sortable fields
 type SortField = "clientName" | "city" | "status";
@@ -20,10 +21,12 @@ type SortField = "clientName" | "city" | "status";
 export default function ClientsPage() {
   // RBAC context
   const { role } = useRbac();
-  const router = useRouter();
-  const deleteClientMutation = api.client.deleteClient.useMutation();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
+  // Debounce filter input to optimize queries
+  const debouncedFilter = useDebounce(filter, 500);
+  const router = useRouter();
+  const deleteClientMutation = api.client.deleteClient.useMutation();
   const [sortBy, setSortBy] = useState<SortField>("clientName");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [pageSize] = useState(10);
@@ -41,7 +44,7 @@ export default function ClientsPage() {
   const clientsQuery = api.client.getAll.useQuery({
     take: pageSize,
     cursor: currentCursor,
-    filter,
+    filter: debouncedFilter,
     sortBy,
     sortOrder,
   });
@@ -124,8 +127,12 @@ export default function ClientsPage() {
       <PageBreadcrumb pageTitle="Clients" />
       <div className="space-y-6">
         <ComponentCard title="Clients">
-          {isLoading && <p>Loading...</p>}
-          {error && <p>Error loading clients.</p>}
+          {isLoading && <p>Loading clients...</p>}
+          {error && (
+            <p className="text-red-500">
+              Error loading clients: {error.message}
+            </p>
+          )}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
             <div className="overflow-x-auto">
