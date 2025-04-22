@@ -15,6 +15,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import AuditList from "@/components/audit/AuditList";
+import DocumentReferences from "@/components/common/DocumentReferences";
 
 type TabKey =
   | "Summary"
@@ -22,7 +23,8 @@ type TabKey =
   | "Licenses"
   | "Trust Accounts"
   | "Audits"
-  | "Activity Log";
+  | "Activity Log"
+  | "Documents";
 
 export default function ClientDetailPage() {
   const { clientId } = useParams() as { clientId: string };
@@ -36,6 +38,11 @@ export default function ClientDetailPage() {
 
   const detailClient = client as any;
   const [activeTab, setActiveTab] = useState<TabKey>("Summary");
+  const {
+    data: docResources,
+    isLoading: isDocsLoading,
+    isError: isDocsError,
+  } = api.document.getByClientId.useQuery({ clientId });
 
   const handleDelete = () => {
     if (confirm("Are you sure you want to delete this client?")) {
@@ -76,6 +83,7 @@ export default function ClientDetailPage() {
     "Trust Accounts",
     "Audits",
     "Activity Log",
+    "Documents",
   ];
 
   return (
@@ -406,6 +414,13 @@ export default function ClientDetailPage() {
                 )}
               </TableBody>
             </Table>
+          )}
+          {activeTab === "Documents" && (
+            <>
+              {isDocsLoading && <p>Loading documents...</p>}
+              {isDocsError && <p>Error loading documents.</p>}
+              {docResources && <DocumentReferences documents={docResources} />}
+            </>
           )}
         </div>
       </ComponentCard>
