@@ -119,8 +119,16 @@ export default function ClientsPage() {
               <Table>
                 <TableHeader className="bg-gray-50 dark:bg-gray-800">
                   <TableRow>
-                    <TableCell isHeader>ID</TableCell>
-                    <TableCell isHeader className="cursor-pointer">
+                    <TableCell
+                      isHeader
+                      className="text-gray-800 dark:text-gray-100"
+                    >
+                      ID
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="cursor-pointer text-gray-800 dark:text-gray-100"
+                    >
                       <button
                         type="button"
                         onClick={() => toggleSort("clientName")}
@@ -131,7 +139,10 @@ export default function ClientsPage() {
                           (sortOrder === "asc" ? "↑" : "↓")}
                       </button>
                     </TableCell>
-                    <TableCell isHeader className="cursor-pointer">
+                    <TableCell
+                      isHeader
+                      className="cursor-pointer text-gray-800 dark:text-gray-100"
+                    >
                       <button
                         type="button"
                         onClick={() => toggleSort("city")}
@@ -141,7 +152,10 @@ export default function ClientsPage() {
                         {sortBy === "city" && (sortOrder === "asc" ? "↑" : "↓")}
                       </button>
                     </TableCell>
-                    <TableCell isHeader className="cursor-pointer">
+                    <TableCell
+                      isHeader
+                      className="cursor-pointer text-gray-800 dark:text-gray-100"
+                    >
                       <button
                         type="button"
                         onClick={() => toggleSort("status")}
@@ -157,14 +171,20 @@ export default function ClientsPage() {
                 <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                   {items.map((client) => (
                     <TableRow key={client.id}>
-                      <TableCell>{client.id}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {client.id}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
                         <Link href={`/clients/${client.id}`}>
                           {client.clientName}
                         </Link>
                       </TableCell>
-                      <TableCell>{client.city ?? "-"}</TableCell>
-                      <TableCell>{client.status}</TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {client.city ?? "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {client.status}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

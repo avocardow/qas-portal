@@ -79,8 +79,8 @@ export default function ClientDetailPage() {
               onClick={() => setActiveTab(tab)}
               className={`px-3 py-1 text-sm font-medium ${
                 activeTab === tab
-                  ? "border-b-2 border-blue-500 text-blue-600"
-                  : "text-gray-600 hover:text-gray-800"
+                  ? "border-b-2 border-blue-500 text-blue-600 dark:text-blue-400"
+                  : "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
               }`}
             >
               {tab}
@@ -89,7 +89,7 @@ export default function ClientDetailPage() {
         </nav>
         <div className="mt-4">
           {activeTab === "Summary" && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 text-gray-900 dark:text-gray-100">
               <div>
                 <strong>Name:</strong> {client.clientName}
               </div>
@@ -127,27 +127,67 @@ export default function ClientDetailPage() {
             <Table>
               <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
-                  <TableCell isHeader>Name</TableCell>
-                  <TableCell isHeader>Email</TableCell>
-                  <TableCell isHeader>Phone</TableCell>
-                  <TableCell isHeader>Title</TableCell>
-                  <TableCell isHeader>Primary</TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Name
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Email
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Phone
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Title
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Primary
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.contacts.length ? (
                   detailClient.contacts.map((c: any) => (
                     <TableRow key={c.id}>
-                      <TableCell>{c.name || "-"}</TableCell>
-                      <TableCell>{c.email || "-"}</TableCell>
-                      <TableCell>{c.phone || "-"}</TableCell>
-                      <TableCell>{c.title || "-"}</TableCell>
-                      <TableCell>{c.isPrimary ? "Yes" : "No"}</TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {c.name || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {c.email || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {c.phone || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {c.title || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {c.isPrimary ? "Yes" : "No"}
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5}>No contacts found.</TableCell>
+                    <TableCell
+                      colSpan={5}
+                      className="text-gray-700 dark:text-gray-200"
+                    >
+                      No contacts found.
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -157,25 +197,58 @@ export default function ClientDetailPage() {
             <Table>
               <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
-                  <TableCell isHeader>License Number</TableCell>
-                  <TableCell isHeader>Type</TableCell>
-                  <TableCell isHeader>Renewal Month</TableCell>
-                  <TableCell isHeader>Primary</TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    License Number
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Type
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Renewal Month
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Primary
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.licenses.length ? (
                   detailClient.licenses.map((l: any) => (
                     <TableRow key={l.id}>
-                      <TableCell>{l.licenseNumber}</TableCell>
-                      <TableCell>{l.licenseType || "-"}</TableCell>
-                      <TableCell>{l.renewalMonth ?? "-"}</TableCell>
-                      <TableCell>{l.isPrimary ? "Yes" : "No"}</TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {l.licenseNumber}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {l.licenseType || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {l.renewalMonth ?? "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {l.isPrimary ? "Yes" : "No"}
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={4}>No licenses found.</TableCell>
+                    <TableCell
+                      colSpan={4}
+                      className="text-gray-700 dark:text-gray-200"
+                    >
+                      No licenses found.
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -185,29 +258,67 @@ export default function ClientDetailPage() {
             <Table>
               <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
-                  <TableCell isHeader>Account Name</TableCell>
-                  <TableCell isHeader>Bank Name</TableCell>
-                  <TableCell isHeader>BSB</TableCell>
-                  <TableCell isHeader>Account Number</TableCell>
-                  <TableCell isHeader>Software Access</TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Account Name
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Bank Name
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    BSB
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Account Number
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Software Access
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.trustAccounts.length ? (
                   detailClient.trustAccounts.map((t: any) => (
                     <TableRow key={t.id}>
-                      <TableCell>{t.accountName || "-"}</TableCell>
-                      <TableCell>{t.bankName}</TableCell>
-                      <TableCell>{t.bsb || "-"}</TableCell>
-                      <TableCell>{t.accountNumber || "-"}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {t.accountName || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {t.bankName}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {t.bsb || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {t.accountNumber || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
                         {t.hasSoftwareAccess ? "Yes" : "No"}
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5}>No trust accounts found.</TableCell>
+                    <TableCell
+                      colSpan={5}
+                      className="text-gray-700 dark:text-gray-200"
+                    >
+                      No trust accounts found.
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -217,26 +328,57 @@ export default function ClientDetailPage() {
             <Table>
               <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
-                  <TableCell isHeader>Year</TableCell>
-                  <TableCell isHeader>Status</TableCell>
-                  <TableCell isHeader>Stage</TableCell>
-                  <TableCell isHeader>Report Due</TableCell>
-                  <TableCell isHeader>Lodged Date</TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Year
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Status
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Stage
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Report Due
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Lodged Date
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.audits.length ? (
                   detailClient.audits.map((a: any) => (
                     <TableRow key={a.id}>
-                      <TableCell>{a.auditYear}</TableCell>
-                      <TableCell>{a.status?.name || "-"}</TableCell>
-                      <TableCell>{a.stage?.name || "-"}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {a.auditYear}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {a.status?.name || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {a.stage?.name || "-"}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
                         {a.reportDueDate
                           ? new Date(a.reportDueDate).toLocaleDateString()
                           : "-"}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
                         {a.lodgedWithOFTDate
                           ? new Date(a.lodgedWithOFTDate).toLocaleDateString()
                           : "-"}
@@ -245,7 +387,12 @@ export default function ClientDetailPage() {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5}>No audits found.</TableCell>
+                    <TableCell
+                      colSpan={5}
+                      className="text-gray-700 dark:text-gray-200"
+                    >
+                      No audits found.
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -255,25 +402,49 @@ export default function ClientDetailPage() {
             <Table>
               <TableHeader className="bg-gray-50 dark:bg-gray-800">
                 <TableRow>
-                  <TableCell isHeader>Type</TableCell>
-                  <TableCell isHeader>Content</TableCell>
-                  <TableCell isHeader>Date</TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Type
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Content
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="text-gray-800 dark:text-gray-100"
+                  >
+                    Date
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                 {detailClient.activityLogs.length ? (
                   detailClient.activityLogs.map((log: any) => (
                     <TableRow key={log.id}>
-                      <TableCell>{log.type}</TableCell>
-                      <TableCell>{log.content}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {log.type}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
+                        {log.content}
+                      </TableCell>
+                      <TableCell className="text-gray-700 dark:text-gray-200">
                         {new Date(log.createdAt).toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={3}>No activity logs found.</TableCell>
+                    <TableCell
+                      colSpan={3}
+                      className="text-gray-700 dark:text-gray-200"
+                    >
+                      No activity logs found.
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
