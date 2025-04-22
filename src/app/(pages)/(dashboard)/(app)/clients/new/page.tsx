@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
+import { useRbac } from "@/context/RbacContext";
 
 // Define form schema
 const formSchema = z.object({
@@ -25,6 +26,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function NewClientPage() {
+  // Hooks must run unconditionally
+  const { role } = useRbac();
   const router = useRouter();
   const {
     register,
@@ -34,11 +37,8 @@ export default function NewClientPage() {
     resolver: zodResolver(formSchema),
     defaultValues: { status: "prospect" },
   });
-
-  // tRPC mutation for client creation
   const createClientMutation = api.client.create.useMutation();
   const onSubmit = (data: FormData) => {
-    // Convert nextContactDate to Date
     const input = {
       ...data,
       nextContactDate: data.nextContactDate
@@ -46,15 +46,14 @@ export default function NewClientPage() {
         : undefined,
     };
     createClientMutation.mutate(input, {
-      onSuccess: (created) => {
-        router.push(`/clients/${created.id}`);
-      },
-      onError: (err) => {
-        console.error(err);
-      },
+      onSuccess: (created) => router.push(`/clients/${created.id}`),
+      onError: (err) => console.error(err),
     });
   };
-
+  // Guard after hooks
+  if (role !== "Admin") {
+    return <p>You are not authorized to create clients.</p>;
+  }
   return (
     <DashboardPlaceholderPageTemplate heading="New Client">
       <PageBreadcrumb pageTitle="New Client" />

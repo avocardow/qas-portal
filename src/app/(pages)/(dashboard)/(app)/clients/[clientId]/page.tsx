@@ -6,6 +6,7 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useRbac } from "@/context/RbacContext";
 import ComponentCard from "@/components/common/ComponentCard";
 import {
   Table,
@@ -35,6 +36,7 @@ export default function ClientDetailPage() {
     isLoading,
     isError,
   } = api.client.getById.useQuery({ clientId });
+  const { role } = useRbac();
 
   const detailClient = client as any;
   const [activeTab, setActiveTab] = useState<TabKey>("Summary");
@@ -59,6 +61,10 @@ export default function ClientDetailPage() {
       );
     }
   };
+
+  if (role === null) {
+    return <p>You are not authorized to view client details.</p>;
+  }
 
   if (isLoading) {
     return (
@@ -93,20 +99,24 @@ export default function ClientDetailPage() {
     >
       <PageBreadcrumb pageTitle={client.clientName} />
       <div className="mb-4 flex justify-end space-x-2">
-        <Link href={`/clients/${clientId}/edit`}>
-          <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-800">
-            Edit Client
-          </button>
-        </Link>
-        <button
-          onClick={handleDelete}
-          disabled={deleteClientMutation.status === "pending"}
-          className="btn bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:text-white dark:hover:bg-red-800"
-        >
-          {deleteClientMutation.status === "pending"
-            ? "Deleting..."
-            : "Delete Client"}
-        </button>
+        {role === "Admin" && (
+          <>
+            <Link href={`/clients/${clientId}/edit`}>
+              <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-800">
+                Edit Client
+              </button>
+            </Link>
+            <button
+              onClick={handleDelete}
+              disabled={deleteClientMutation.status === "pending"}
+              className="btn bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:text-white dark:hover:bg-red-800"
+            >
+              {deleteClientMutation.status === "pending"
+                ? "Deleting..."
+                : "Delete Client"}
+            </button>
+          </>
+        )}
       </div>
       <ComponentCard title="Client Details">
         {/* Tabs Navigation */}

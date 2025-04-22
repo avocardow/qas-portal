@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useRbac } from "@/context/RbacContext";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Link from "next/link";
@@ -18,8 +18,8 @@ import {
 type SortField = "clientName" | "city" | "status";
 
 export default function ClientsPage() {
-  // Session for RBAC
-  const { data: session } = useSession();
+  // RBAC context
+  const { role } = useRbac();
   const router = useRouter();
   const deleteClientMutation = api.client.deleteClient.useMutation();
   // Pagination, sorting, filtering state
@@ -32,6 +32,10 @@ export default function ClientsPage() {
     undefined
   );
   const [pageIndex, setPageIndex] = useState(0);
+  // Protect view based on role
+  if (role === null) {
+    return <p>You are not authorized to view clients.</p>;
+  }
 
   // Fetch paginated data with current controls
   const clientsQuery = api.client.getAll.useQuery({
@@ -91,14 +95,14 @@ export default function ClientsPage() {
             className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
           {/* Conditional Add New Client button */}
-          {session?.user?.role &&
-            ["Admin", "Manager"].includes(session.user.role) && (
-              <Link href="/clients/new">
-                <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
-                  Add New Client
-                </button>
-              </Link>
-            )}
+          {/* Only Admin can create clients */}
+          {role === "Admin" && (
+            <Link href="/clients/new">
+              <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
+                Add New Client
+              </button>
+            </Link>
+          )}
         </div>
         <div className="space-x-2">
           <button
@@ -200,41 +204,39 @@ export default function ClientsPage() {
                       <TableCell className="text-gray-700 dark:text-gray-200">
                         {client.status}
                       </TableCell>
-                      {session?.user?.role &&
-                        ["Admin", "Manager"].includes(session.user.role) && (
-                          <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
-                            <Link href={`/clients/${client.id}/edit`}>
-                              <button className="btn bg-blue-500 text-white hover:bg-blue-600">
-                                Edit
-                              </button>
-                            </Link>
-                            <button
-                              onClick={() => {
-                                if (
-                                  confirm(
-                                    "Are you sure you want to delete this client?"
-                                  )
-                                ) {
-                                  deleteClientMutation.mutate(
-                                    { clientId: client.id },
-                                    {
-                                      onSuccess: () => router.refresh(),
-                                      onError: console.error,
-                                    }
-                                  );
-                                }
-                              }}
-                              disabled={
-                                deleteClientMutation.status === "pending"
-                              }
-                              className="btn bg-red-500 text-white hover:bg-red-600"
-                            >
-                              {deleteClientMutation.status === "pending"
-                                ? "Deleting..."
-                                : "Delete"}
+                      {/* Only Admin can edit or delete clients */}
+                      {role === "Admin" && (
+                        <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
+                          <Link href={`/clients/${client.id}/edit`}>
+                            <button className="btn bg-blue-500 text-white hover:bg-blue-600">
+                              Edit
                             </button>
-                          </TableCell>
-                        )}
+                          </Link>
+                          <button
+                            onClick={() => {
+                              if (
+                                confirm(
+                                  "Are you sure you want to delete this client?"
+                                )
+                              ) {
+                                deleteClientMutation.mutate(
+                                  { clientId: client.id },
+                                  {
+                                    onSuccess: () => router.refresh(),
+                                    onError: console.error,
+                                  }
+                                );
+                              }
+                            }}
+                            disabled={deleteClientMutation.status === "pending"}
+                            className="btn bg-red-500 text-white hover:bg-red-600"
+                          >
+                            {deleteClientMutation.status === "pending"
+                              ? "Deleting..."
+                              : "Delete"}
+                          </button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

@@ -14,10 +14,18 @@ import {
 import { api } from "@/utils/api";
 import Button from "@/components/ui/button/Button";
 import DocumentReferences from "@/components/common/DocumentReferences";
+import { usePermission } from "@/context/RbacContext";
+import { AUDIT_PERMISSIONS, TASK_PERMISSIONS } from "@/constants/permissions";
 
 export default function AuditDetailPage() {
   const { auditId } = useParams() as { auditId: string };
   const router = useRouter();
+  const canViewAudit = usePermission(AUDIT_PERMISSIONS.GET_BY_ID);
+  const canAssignUser = usePermission(AUDIT_PERMISSIONS.ASSIGN_USER);
+  const canUnassignUser = usePermission(AUDIT_PERMISSIONS.UNASSIGN_USER);
+  const canCreateTask = usePermission(TASK_PERMISSIONS.CREATE);
+  const canViewTasks = usePermission(TASK_PERMISSIONS.GET_BY_AUDIT_ID);
+  const canUpdateTask = usePermission(TASK_PERMISSIONS.UPDATE);
   const {
     data: audit,
     isLoading,
@@ -38,6 +46,10 @@ export default function AuditDetailPage() {
     isLoading: isDocsLoading,
     isError: isDocsError,
   } = api.document.getByAuditId.useQuery({ auditId });
+
+  if (!canViewAudit) {
+    return <p>You are not authorized to view audit details.</p>;
+  }
 
   if (isLoading) {
     return (
@@ -91,20 +103,22 @@ export default function AuditDetailPage() {
         <ComponentCard title="Assigned Team">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-medium">Team Members</h2>
-            <Button
-              onClick={() => {
-                const userId = prompt("Enter User ID to assign");
-                const role = prompt("Enter role (optional)");
-                if (userId)
-                  assignUserMutation.mutate({
-                    auditId,
-                    userId,
-                    role: role || undefined,
-                  });
-              }}
-            >
-              Add Team Member
-            </Button>
+            {canAssignUser && (
+              <Button
+                onClick={() => {
+                  const userId = prompt("Enter User ID to assign");
+                  const role = prompt("Enter role (optional)");
+                  if (userId)
+                    assignUserMutation.mutate({
+                      auditId,
+                      userId,
+                      role: role || undefined,
+                    });
+                }}
+              >
+                Add Team Member
+              </Button>
+            )}
           </div>
           <Table>
             <TableHeader>
@@ -121,19 +135,21 @@ export default function AuditDetailPage() {
                     <TableCell>{assignment.userId}</TableCell>
                     <TableCell>{assignment.role || "-"}</TableCell>
                     <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
-                        onClick={() =>
-                          unassignUserMutation.mutate({
-                            auditId,
-                            userId: assignment.userId,
-                          })
-                        }
-                      >
-                        Remove
-                      </Button>
+                      {canUnassignUser && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
+                          onClick={() =>
+                            unassignUserMutation.mutate({
+                              auditId,
+                              userId: assignment.userId,
+                            })
+                          }
+                        >
+                          Remove
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
@@ -149,70 +165,80 @@ export default function AuditDetailPage() {
         <ComponentCard title="Tasks">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-medium">Tasks</h2>
-            <Button
-              onClick={() => router.push(`/tasks/new?auditId=${auditId}`)}
-            >
-              Add Task
-            </Button>
+            {canCreateTask && (
+              <Button
+                onClick={() => router.push(`/tasks/new?auditId=${auditId}`)}
+              >
+                Add Task
+              </Button>
+            )}
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell isHeader>Task</TableCell>
-                <TableCell isHeader>Status</TableCell>
-                <TableCell isHeader>Due Date</TableCell>
-                <TableCell isHeader>Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {audit.tasks.length ? (
-                audit.tasks.map((task) => (
-                  <TableRow key={task.id}>
-                    <TableCell>{task.name}</TableCell>
-                    <TableCell>
-                      <select
-                        value={task.status}
-                        onChange={(e) =>
-                          updateTaskMutation.mutate({
-                            taskId: task.id,
-                            status: e.target.value,
-                          })
-                        }
-                        className="rounded border px-2 py-1"
-                      >
-                        {["To Do", "In Progress", "Done"].map(
-                          (statusOption) => (
-                            <option key={statusOption} value={statusOption}>
-                              {statusOption}
-                            </option>
-                          )
+          {canViewTasks ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Task</TableCell>
+                  <TableCell isHeader>Status</TableCell>
+                  <TableCell isHeader>Due Date</TableCell>
+                  <TableCell isHeader>Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {audit.tasks.length ? (
+                  audit.tasks.map((task) => (
+                    <TableRow key={task.id}>
+                      <TableCell>{task.name}</TableCell>
+                      <TableCell>
+                        {canUpdateTask ? (
+                          <select
+                            value={task.status}
+                            onChange={(e) =>
+                              updateTaskMutation.mutate({
+                                taskId: task.id,
+                                status: e.target.value,
+                              })
+                            }
+                            className="rounded border px-2 py-1"
+                          >
+                            {["To Do", "In Progress", "Done"].map(
+                              (statusOption) => (
+                                <option key={statusOption} value={statusOption}>
+                                  {statusOption}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        ) : (
+                          <span>{task.status}</span>
                         )}
-                      </select>
-                    </TableCell>
-                    <TableCell>
-                      {task.dueDate
-                        ? new Date(task.dueDate).toLocaleDateString()
-                        : "-"}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        onClick={() => router.push(`/tasks/${task.id}`)}
-                      >
-                        View
-                      </Button>
+                      </TableCell>
+                      <TableCell>
+                        {task.dueDate
+                          ? new Date(task.dueDate).toLocaleDateString()
+                          : "-"}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          onClick={() => router.push(`/tasks/${task.id}`)}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4}>
+                      No tasks found for this audit.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4}>
-                    No tasks found for this audit.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                )}
+              </TableBody>
+            </Table>
+          ) : (
+            <p>You are not authorized to view tasks.</p>
+          )}
         </ComponentCard>
 
         <ComponentCard title="Documents">
