@@ -1,0 +1,152 @@
+<context>
+# QAS Portal - Internal Collaboration & Data Usability (MVP Phase 2)
+
+## 1. Introduction
+
+1.1. Purpose:
+To define the requirements for enhancing the internal QAS Team Member experience within the portal. This phase focuses on integrating core Microsoft 365 communication tools (Email, Chat, Phone), implementing robust SharePoint document linking and access, and significantly improving the presentation and usability of relational data managed in Phase 1.
+
+1.2. Goal:
+Transform the portal into the primary, efficient hub for internal QAS workflows by integrating essential communication channels, providing seamless access to client documents, and making core operational data highly accessible and intuitive for Admins, Managers, Auditors, and Staff.
+
+1.3. Scope:
+- M365 Email Integration: Viewing, sending, and replying capabilities for personal (`first.last@...`) mailboxes; Admin access to the shared `admin@...` mailbox.
+- Enhanced Relational Data Display: Refined UI on Client, Audit, and potentially Task detail pages to clearly visualize linked Contacts, Licenses, Trust Accounts, Audits, Tasks, Assignments, etc.
+- M365 Teams Chat Integration: Basic internal 1:1 and group chat functionality (fetching history, sending messages) via Teams.
+- M365 Teams Phone Integration: Outbound PSTN calling to clients (via client/contact selection, role-based dial pad for Admins) and call logging.
+- SharePoint Document Integration: Automated script and manual UI for linking Client records to SharePoint folders; display of folder contents with "Open in Web" links within the portal.
+- Internal UI Polish & Usability: General improvements to navigation, data presentation, and component usage based on Phase 1 feedback.
+
+1.4. Out of Scope:
+- All Client Portal UI features (Dashboard, Document Upload UI, Billing View, Client Profile View, Client Messaging Interface).
+- Client login functionality beyond the backend setup in Phase 0b.
+- E-Signature integration (DocuSign, etc.).
+- External email sending using templates via `admin@...`.
+- Xero integration (Read or Write).
+- Automated task generation, automated reminders/notifications system.
+- Client Action Center UI.
+- Advanced reporting, dashboards, analytics.
+- Advanced Teams features (real-time updates via webhooks, transcription).
+- Advanced Admin configuration UIs (template editors, etc.).
+
+1.5. Context:
+Assumes completion of MVP Phase 0 (Infrastructure, Auth, Scaffolding, Data Seed) and MVP Phase 1 (Core Internal CRUD). Project uses Next.js (App Router), TypeScript, Supabase/Postgres, Prisma, tRPC, NextAuth.js (M365 provider functional), Tailwind CSS, Shadcn UI / TailAdmin components. Core data models and basic internal pages exist. **All development MUST adhere to the project's Cursor rules in `.cursor/rules/` and leverage Context7 for additional context, official documentation, and best practices.**
+
+</context>
+
+<PRD>
+## 2. Goals
+
+- Integrate personal and shared M365 email access directly within the portal UI for seamless internal and administrative communication.
+- Significantly improve the clarity and usability of Client and Audit detail pages by effectively displaying related information (contacts, licenses, trust accounts, audits, tasks, assignments, etc.).
+- Enable basic internal communication between team members via an integrated Microsoft Teams chat interface.
+- Allow authorized team members to initiate outbound client calls using Teams Phone System directly from the portal, with calls being logged.
+- Implement a reliable system (automated script + manual UI) for linking Client records to their corresponding SharePoint folders.
+- Provide functional access to view documents within linked SharePoint folders via "Open in Web" links.
+- Refine the overall internal user interface and experience based on feedback from Phase 1 usage.
+- Solidify the portal as the central, indispensable tool for daily QAS team operations.
+
+## 3. Specific Requirements
+
+### 3.1. Internal Email (M365 Integration - Personal Mailbox)
+#### 3.1.1. Backend (tRPC `emailRouter` - Delegated Permissions):
+- Requires Graph API Permissions: `Mail.ReadWrite`, `Mail.Send`.
+- Procedure `email.listFolders`: Fetch user's primary mail folders (`/me/mailFolders`).
+- Procedure `email.listMessages`: Fetch messages within a specific folder (`/me/mailFolders/{folder-id}/messages`), support pagination, basic sorting by date.
+- Procedure `email.getMessage`: Fetch full details of a single message (`/me/messages/{message-id}`).
+- Procedure `email.sendMessage`: Send a new email from the user's account (`/me/sendMail`), with input validation (recipient, subject, body).
+- Procedures `email.createReply`, `email.createForward`: Create draft replies/forwards (`/me/messages/{id}/createReply`, `/me/messages/{id}/createForward`) or handle sending directly.
+
+#### 3.1.2. Frontend (UI - Adapt Email Templates):
+- Create main Email page structure (e.g., `/email`).
+- Use a 3-column layout for Folder List, Message List, and Message Detail.
+- Implement Folder List component calling `email.listFolders`.
+- Implement Message List component calling `email.listMessages` based on selected folder, with pagination controls.
+- Implement Message Detail view calling `email.getMessage`, rendering HTML body safely.
+- Implement Compose/Reply/Forward UI (e.g., modals) triggering backend mutations.
+
+### 3.2. Admin Email (M365 Integration - Shared Mailbox)
+#### 3.2.1. Backend (tRPC `emailRouter` - Shared Permissions):
+- Requires Graph API Permissions: `Mail.ReadWrite.Shared`, `Mail.Send.Shared` (Delegated for Admin user) or Application Permissions (`Mail.ReadWrite`, `Mail.Send`).
+- Mirror procedures from 3.1.1 targeting the shared mailbox UPN (`/users/{admin-email}/mailFolders`, `/users/{admin-email}/sendMail`).
+- Enforce RBAC: only 'Admin' role can invoke shared mailbox procedures.
+
+#### 3.2.2. Frontend (UI - Enhance Email Page):
+- Add a mailbox switcher (tabs or dropdown) visible only to Admins.
+- When switched to shared mailbox, folder, message, and compose components call the shared tRPC procedures.
+- Ensure send actions originate from the shared mailbox account.
+
+### 3.3. Enhanced Relational Data Display
+#### 3.3.1. Backend (tRPC Enhancements):
+- Review/Optimize `client.getById`: Include `contacts`, `licenses`, `trustAccounts`, `audits` (ordered by year).
+- Review/Optimize `audit.getById`: Include `tasks` (ordered by due date/priority) and `assignments` (with `user.name`).
+
+#### 3.3.2. Frontend (UI Refinement - Detail Pages):
+- **Client Detail** (`/clients/[clientId]`): Implement tabs (Overview, Contacts, Licenses, Trust Accounts, Audits, Activity).
+  - Contacts Tab: Table or list of contacts.
+  - Licenses Tab: Table indicating holder and type/primary status.
+  - Trust Accounts Tab: List showing bank, software.
+  - Audits Tab: History table with Year, Stage, Status, Due Date, Assigned Staff.
+- **Audit Detail** (`/audits/[auditId]`): Display core info (Client link, Year, Stage, Status, Due Date), Assigned Team (avatar group), Tasks table (sortable), Activity Log.
+- Use Cards, Badges, and consistent Shadcn/TailAdmin components for visual hierarchy.
+
+### 3.4. Internal Chat (Teams Integration)
+#### 3.4.1. Backend (tRPC `chatRouter` - Delegated Permissions):
+- Requires Graph API Permissions: `Chat.ReadWrite`, `User.Read.All`.
+- Procedure `chat.listRecent`: Fetch `/me/chats`, optionally pin role-based group chats.
+- Procedure `chat.getMessages`: Fetch `/me/chats/{chat-id}/messages`, support pagination.
+- Procedure `chat.sendMessage`: Post to `/me/chats/{chat-id}/messages`.
+- Procedure `chat.findUsers`: Search via `/users?$filter=...`.
+- Procedures `chat.createOneToOne`, `chat.createGroup`: Initiate new chats.
+
+#### 3.4.2. Frontend (UI - `/chat` Page):
+- Chat List pane using `chat.listRecent`.
+- Message pane using `chat.getMessages` with scroll/pagination.
+- Message Input using `chat.sendMessage`.
+- User Search to start new chats via `chat.findUsers` and create calls.
+
+### 3.5. Internal Phone (Teams Integration)
+#### 3.5.1. Backend (tRPC `phoneRouter` - Delegated Permissions):
+- Requires Graph API Permissions: `Calls.Initiate.All`.
+- Procedure `phone.makePstnCall`: Initiate `/communications/calls` with target number, log call context.
+- Procedure `phone.logCall`: Create record in `callLogs` (callerId, clientId, contactId, numberDialed, startTime, endTime, duration).
+
+#### 3.5.2. Frontend (UI - `/phone` Page):
+- Client/Contact search list (`client.getAll`) with conditional phone visibility by role.
+- "Call" button next to contacts triggers `phone.makePstnCall`.
+- Admin Dial Pad UI for direct number entry.
+- Invoke `phone.logCall` after call initiation.
+
+### 3.6. SharePoint Integration (Linking & Access)
+#### 3.6.1. Backend (Script):
+- `scripts/linkSharepointFolders.ts` using Graph API to find folder IDs by `clientName`, update `clients.sharepointFolderId`, and log errors.
+
+#### 3.6.2. Backend (tRPC `sharepointRouter` & `clientRouter`):
+- `sharepoint.listClientFolders`: List via `/drives/{drive-id}/root:/Clients Folders:/children`.
+- `client.updateSharepointFolderId`: Update record (Admin/Manager RBAC).
+- `sharepoint.getFolderContents`: List `/drives/{drive-id}/items/{sharepointFolderId}/children`, return name, `webUrl`, type, modified date.
+
+#### 3.6.3. Frontend (UI Integration):
+- On Client Detail: "Link/Change SharePoint Folder" button for Admin/Managers.
+- Linking modal using `sharepoint.listClientFolders`, selection calls `client.updateSharepointFolderId`.
+- Document display: If `sharepointFolderId` exists, call `sharepoint.getFolderContents` and render file list with "Open in Web" links.
+
+### 3.7. UI Polish & Usability (Internal)
+- Address Phase 1 feedback: refine table layouts, form flows, navigation.
+- Ensure consistent use of Shadcn UI and TailAdmin components.
+- Improve responsiveness.
+- Implement Theme Switcher (Light/Dark mode) with persistence.
+
+## 4. Acceptance Criteria
+
+- Team Members can view their personal M365 inbox/sent items and send/reply to emails within the portal.
+- Admins can switch to and manage the shared `admin@...` mailbox.
+- Client and Audit detail pages clearly display related Contacts, Licenses, Trust Accounts, Audits, Tasks, and Assignments in an organized manner.
+- Team Members can initiate and participate in basic 1:1 and group chats via the integrated Teams interface.
+- Authorized Team Members can initiate outbound PSTN calls to clients via contact selection or dial pad; calls are logged.
+- Automated script successfully links clients to SharePoint folders by name matching.
+- Admins/Managers can manually search for and link/re-link SharePoint folders via the Client Detail page.
+- Linked SharePoint folder contents are viewable within the portal with functional "Open in Web" links.
+- Overall UI navigation, data density, and component usage are improved; Theme switcher functions correctly.
+- Portal serves as an integrated, efficient hub for internal team communication and data access.
+</PRD> 

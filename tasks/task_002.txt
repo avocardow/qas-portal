@@ -1,43 +1,51 @@
 # Task ID: 2
-# Title: Implement Related Entity Management Backend
-# Status: done
+# Title: Implement Admin Shared Mailbox Access
+# Status: pending
 # Dependencies: 1
-# Priority: high
-# Description: Create tRPC procedures for Contacts, Licenses, and Trust Accounts CRUD operations
+# Priority: medium
+# Description: Extend the email integration to allow Admin users to access and manage the shared admin mailbox, with proper role-based access control.
 # Details:
-Implement direct tRPC procedures for contact.create/update, license.create/update, and trustAccount.create/update with proper Zod validation schemas. Each procedure should accept the parent clientId and the entity data. Ensure RBAC enforcement (Admin/Manager only) for all write operations. Consider implementing batch operations if needed for efficiency.
+1. Extend tRPC `emailRouter` with shared mailbox procedures targeting `/users/{admin-email}/...` endpoints
+2. Configure additional Graph API permissions: `Mail.ReadWrite.Shared`, `Mail.Send.Shared`
+3. Implement RBAC to restrict shared mailbox access to Admin role only
+4. Add mailbox switcher UI component (tabs or dropdown) visible only to Admins
+5. Modify email components to use appropriate procedures based on selected mailbox
+6. Ensure emails sent from shared mailbox are properly attributed
 
 # Test Strategy:
-Test each procedure with valid and invalid inputs, verify proper relationship creation with parent Client records, and confirm RBAC enforcement prevents unauthorized access.
+1. Verify only Admin users can access shared mailbox functions
+2. Test mailbox switching functionality preserves state appropriately
+3. Confirm emails sent from shared mailbox show correct sender
+4. Validate RBAC prevents unauthorized access attempts
 
 # Subtasks:
-## 1. Define Zod Validation Schemas for Entities [done]
+## 1. Extend tRPC emailRouter with Shared Mailbox Procedures [pending]
 ### Dependencies: None
-### Description: Create Zod schemas for Contacts, Licenses, and Trust Accounts to validate incoming data for create and update operations.
+### Description: Add new procedures to the tRPC emailRouter to support operations (read, send, manage) on the shared admin mailbox, targeting endpoints like /users/{admin-email}/....
 ### Details:
-Implement Zod object schemas for each entity, ensuring all required fields are present and correctly typed. Include validation for parent clientId and entity-specific fields. These schemas will be used to validate input in tRPC procedures.[2][5]
+Define procedures for accessing and managing the shared mailbox using Microsoft Graph API endpoints. Ensure these procedures can differentiate between personal and shared mailbox contexts, and structure them to support future extensibility.
 
-## 2. Implement RBAC Middleware for tRPC Procedures [done]
+## 2. Configure Microsoft Graph API Permissions for Shared Mailbox [pending]
 ### Dependencies: 2.1
-### Description: Develop a reusable middleware to enforce Admin/Manager role-based access control for all write operations.
+### Description: Update the application's Microsoft Graph API permissions to include Mail.ReadWrite.Shared and Mail.Send.Shared, enabling programmatic access to shared mailboxes.
 ### Details:
-Create a tRPC middleware that checks the user's role from the context and restricts access to create and update procedures unless the user is an Admin or Manager. Integrate this middleware into the relevant procedures to ensure security.[4]
+Register or update the Azure AD app to request the necessary delegated permissions. Ensure admin consent is granted for these permissions, and verify that the app can access shared mailbox endpoints as intended.
 
-## 3. Develop tRPC CRUD Procedures for Contacts, Licenses, and Trust Accounts [done]
+## 3. Implement Role-Based Access Control (RBAC) for Shared Mailbox [pending]
 ### Dependencies: 2.1, 2.2
-### Description: Implement create and update tRPC procedures for each entity, using the defined Zod schemas and RBAC middleware.
+### Description: Restrict access to the shared admin mailbox procedures so only users with the Admin role can invoke them.
 ### Details:
-For each entity, define tRPC mutation procedures (contact.create, contact.update, license.create, license.update, trustAccount.create, trustAccount.update). Each procedure should accept parent clientId and entity data, validate input with Zod, and enforce RBAC via middleware. Use your ORM (e.g., Prisma) to interact with the database.[2][5]
+Update the backend authorization logic to check user roles before allowing access to shared mailbox procedures. Ensure that only Admin users can see or interact with shared mailbox functionality, and add tests to validate RBAC enforcement.
 
-## 4. Implement Batch Operations for Efficiency [done]
+## 4. Develop Mailbox Switcher UI Component for Admins [pending]
 ### Dependencies: 2.3
-### Description: Add batch create and update procedures for each entity to handle multiple records in a single request.
+### Description: Create a UI component (tabs or dropdown) that allows Admin users to switch between their personal mailbox and the shared admin mailbox.
 ### Details:
-Define tRPC procedures (e.g., contact.batchCreate, license.batchUpdate) that accept arrays of entity data and clientIds. Use Zod array validation and ensure RBAC enforcement. Optimize database interactions for bulk operations to improve performance.
+Design and implement a mailbox switcher that is only visible to Admin users. Integrate it with the application's state management so that selecting a mailbox updates the context for all email operations.
 
-## 5. Write Unit and Integration Tests for Procedures and Middleware [done]
+## 5. Update Email Components for Shared Mailbox Context and Attribution [pending]
 ### Dependencies: 2.4
-### Description: Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.
+### Description: Modify email-related components to use the correct mailbox procedures based on the selected mailbox, and ensure emails sent from the shared mailbox are properly attributed.
 ### Details:
-Write tests covering valid and invalid inputs, unauthorized access, and successful/failed CRUD and batch operations. Ensure all edge cases are handled and that procedures behave as expected under different user roles and data scenarios.
+Refactor components to dynamically call the appropriate tRPC procedures depending on the active mailbox. Ensure that outgoing emails from the shared mailbox use the correct sender identity and are tracked as sent by the shared mailbox, not the individual Admin.
 

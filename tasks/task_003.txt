@@ -1,49 +1,59 @@
 # Task ID: 3
-# Title: Implement Client Management Frontend
-# Status: done
-# Dependencies: 1, 2
+# Title: Enhance Client and Audit Detail Pages
+# Status: pending
+# Dependencies: None
 # Priority: high
-# Description: Create Client List and Detail pages with CRUD functionality
+# Description: Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.
 # Details:
-Develop: 1) Client List page (/clients) with functional data table using client.getAll, including pagination, sorting, filtering, and conditional 'Add New Client' button based on user role. 2) Client Detail page (/clients/[clientId]) with structured Cards/Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log. 3) Client Create/Edit forms using React Hook Form + Zod with template components, handling client.create and client.update. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.
+1. Optimize tRPC `client.getById` to include related entities: contacts, licenses, trustAccounts, audits
+2. Optimize tRPC `audit.getById` to include tasks and assignments with user information
+3. Implement tabbed interface for Client Detail page at `/clients/[clientId]` with Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs
+4. Create tables/lists for each tab with appropriate sorting and filtering
+5. Enhance Audit Detail page at `/audits/[auditId]` with core info, assigned team display, tasks table, and activity log
+6. Use Shadcn/TailAdmin components consistently for cards, badges, and tables
+7. Ensure responsive design works on various screen sizes
 
 # Test Strategy:
-Perform manual testing of all UI components and interactions. Verify data fetching, pagination, sorting, and filtering. Test form validation and submission. Confirm role-based UI element visibility.
+1. Verify all relational data is correctly fetched and displayed
+2. Test tab navigation preserves state
+3. Confirm sorting and filtering functions work as expected
+4. Validate responsive design on mobile, tablet, and desktop viewports
+5. Check performance with large datasets
 
 # Subtasks:
-## 1. Set Up Routing and Page Structure [done]
+## 1. Extend tRPC Procedures to Fetch Related Entities [pending]
 ### Dependencies: None
-### Description: Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.
+### Description: Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.
 ### Details:
-Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]
+Modify the tRPC router definitions so that `client.getById` returns contacts, licenses, trustAccounts, and audits, and `audit.getById` returns tasks and assignments with user information. Ensure the returned data is fully typed and optimized for frontend consumption.
 
-## 2. Implement Client List Data Table with Pagination, Sorting, and Filtering [done]
+## 2. Implement Tabbed Interface on Client Detail Page [pending]
 ### Dependencies: 3.1
-### Description: Build the Client List page with a functional data table that supports pagination, sorting, and filtering, fetching data via client.getAll.
+### Description: Create a tabbed navigation UI for the Client Detail page at `/clients/[clientId]` to organize related data into Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs.
 ### Details:
-Use a data table component (from Shadcn UI or TailAdmin) to display clients. Integrate client.getAll to fetch data. Add pagination controls, sortable columns, and filtering inputs. Ensure the table updates based on user interactions.[4]
+Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each tab should be a separate component and fetch its data using the enhanced tRPC procedures.
 
-## 3. Add Conditional 'Add New Client' Button Based on User Role [done]
+## 3. Build Data Tables and Lists for Each Client Tab [pending]
 ### Dependencies: 3.2
-### Description: Render the 'Add New Client' button on the Client List page only for users with the appropriate role.
+### Description: Develop tables or lists for each tab on the Client Detail page, supporting sorting and filtering where appropriate.
 ### Details:
-Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form.
+For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables using Shadcn/TailAdmin components. Add sorting and filtering controls as needed. Ensure data is fetched efficiently and displayed clearly.
 
-## 4. Develop Client Create and Edit Forms with Validation [done]
-### Dependencies: 3.3
-### Description: Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.
+## 4. Enhance Audit Detail Page with Relational Data [pending]
+### Dependencies: 3.1
+### Description: Redesign the Audit Detail page at `/audits/[auditId]` to display core audit info, assigned team members, a tasks table, and an activity log.
 ### Details:
-Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback.
+Use Shadcn/TailAdmin cards, badges, and tables to present audit details, team assignments (with user info), tasks, and activity logs. Ensure the layout is clear and information is grouped logically.
 
-## 5. Implement Client Detail Page with Structured Cards/Tabs [done]
-### Dependencies: 3.4
-### Description: Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.
+## 5. Apply Consistent UI Components and Styling [pending]
+### Dependencies: 3.3, 3.4
+### Description: Standardize the use of Shadcn/TailAdmin components for cards, badges, and tables across both Client and Audit detail pages.
 ### Details:
-Use Shadcn UI or TailAdmin components to create a visually consistent layout. Fetch and display relevant data for each section. Ensure tabs/cards are responsive and accessible.
+Audit all UI elements on the detail pages to ensure consistent use of Shadcn/TailAdmin components. Refactor any legacy or inconsistent UI elements to match the new design system.
 
-## 6. Integrate CRUD Operations and Finalize UI Consistency [done]
+## 6. Ensure Responsive Design and Cross-Device Usability [pending]
 ### Dependencies: 3.5
-### Description: Connect all CRUD operations (Create, Read, Update, Delete) across the Client List and Detail pages, and ensure consistent styling and error handling throughout.
+### Description: Test and refine the Client and Audit detail pages to ensure they are fully responsive and usable on all common screen sizes.
 ### Details:
-Wire up delete functionality from the Client List and Detail pages. Ensure all forms and tables reflect changes in real time. Apply consistent Tailwind and Shadcn UI/TailAdmin styling. Implement error handling and user feedback for all actions.[3][4]
+Use responsive utilities from Shadcn/TailAdmin and test layouts on various devices. Adjust breakpoints, table layouts, and navigation as needed to guarantee a seamless user experience on desktop, tablet, and mobile.
 

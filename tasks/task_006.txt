@@ -1,49 +1,59 @@
 # Task ID: 6
-# Title: Implement Task Management Backend
-# Status: done
-# Dependencies: 4
+# Title: Implement SharePoint Folder Linking
+# Status: pending
+# Dependencies: 3
 # Priority: high
-# Description: Create tRPC procedures in taskRouter for Task CRUD operations with RBAC
+# Description: Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.
 # Details:
-Implement the following tRPC procedures in taskRouter: 1) task.getByAuditId, 2) task.getAssignedToMe with pagination, sorting, filtering, 3) task.getAll (Admin view) with pagination, sorting, filtering, 4) task.create, 5) task.update, 6) task.delete. Each procedure should enforce appropriate RBAC based on user roles. Tasks should support fields like Name, Description, Assignee, Due Date, Status, and Priority.
+1. Create `scripts/linkSharepointFolders.ts` to automatically match clients with SharePoint folders by name
+2. Create tRPC `sharepointRouter` with procedures: `listClientFolders`, `getFolderContents`
+3. Add `client.updateSharepointFolderId` procedure with Admin/Manager RBAC
+4. Implement "Link/Change SharePoint Folder" button on Client Detail page for Admin/Managers
+5. Create folder selection modal using `sharepoint.listClientFolders`
+6. Add document display component on Client Detail page that shows contents of linked folder
+7. Implement "Open in Web" links for documents using SharePoint webUrl
 
 # Test Strategy:
-Write unit tests for each procedure verifying correct data manipulation, filtering, pagination, and RBAC enforcement. Test task assignment and reassignment functionality.
+1. Verify automated script correctly links clients to SharePoint folders
+2. Test manual linking UI for Admin/Manager users
+3. Confirm document list displays correctly for linked folders
+4. Validate "Open in Web" links open documents in SharePoint
+5. Test RBAC for folder linking functionality
 
 # Subtasks:
-## 1. Define Task Schema and Database Models [done]
+## 1. Develop Automated Script for Client–SharePoint Folder Matching [pending]
 ### Dependencies: None
-### Description: Create TypeScript interfaces and Prisma/database models for the Task entity with all required fields
+### Description: Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.
 ### Details:
-Create a Task schema with fields: id, name, description, assigneeId, auditId, dueDate, status, priority, createdAt, and updatedAt. Define TypeScript interfaces for Task entity and related input/output types. Set up Prisma model or equivalent database schema for Task entity with appropriate relations to User and Audit entities. Implement validation schemas using Zod or similar validation library for task creation and updates. Define enums for Status and Priority fields with appropriate values.
+Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders.
 
-## 2. Implement RBAC Middleware for Task Procedures [done]
+## 2. Implement tRPC SharePoint Router for Folder Listing and Contents [pending]
 ### Dependencies: 6.1
-### Description: Create middleware to handle role-based access control for all task procedures
+### Description: Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).
 ### Details:
-Create a middleware function using tRPC's middleware pattern that validates user permissions based on their role. Define permission rules for different task operations: admins can perform all operations, managers can create/update/view tasks, regular users can only view assigned tasks and update their status. Implement context-based authorization by extending the tRPC context to include user role information. Create helper functions to check if a user has access to specific tasks based on assignment and role. Ensure the middleware can be reused across all task procedures.
+Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption.
 
-## 3. Implement Basic Task Retrieval Procedures [done]
-### Dependencies: 6.1, 6.2
-### Description: Create tRPC procedures for task.getByAuditId and task.getAssignedToMe with pagination
+## 3. Add Client Folder Linking Procedure with RBAC Controls [pending]
+### Dependencies: 6.2
+### Description: Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.
 ### Details:
-Implement the task.getByAuditId procedure that accepts an auditId parameter and returns all tasks associated with that audit. Apply RBAC to ensure only users with access to the audit can view its tasks. Implement task.getAssignedToMe procedure that returns tasks assigned to the current user with pagination support. Add input validation for pagination parameters (page, limit). Implement sorting functionality allowing tasks to be sorted by dueDate, priority, or status. Add filtering options to filter tasks by status or priority. Ensure both procedures use the RBAC middleware to enforce access control.
+Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record.
 
-## 4. Implement Admin Task View Procedure [done]
-### Dependencies: 6.2, 6.3
-### Description: Create task.getAll procedure with advanced querying capabilities for administrators
+## 4. Create UI for Linking/Changing SharePoint Folder on Client Detail Page [pending]
+### Dependencies: 6.3
+### Description: Add a 'Link/Change SharePoint Folder' button to the Client Detail page, visible to Admins/Managers, which opens a modal for folder selection.
 ### Details:
-Implement task.getAll procedure that returns all tasks in the system with strict admin-only access control. Add comprehensive pagination support with cursor-based pagination for better performance. Implement advanced filtering options including by assignee, date ranges, multiple statuses, and priorities. Add sorting capabilities on all relevant fields with both ascending and descending options. Include search functionality to search across task names and descriptions. Implement count and aggregation features to show task distribution by status, priority, or assignee. Ensure proper error handling for invalid query parameters.
+Conditionally render the button based on user role. Trigger a modal that uses the `sharepoint.listClientFolders` procedure to display available folders for selection.
 
-## 5. Implement Task Creation and Update Procedures [done]
-### Dependencies: 6.1, 6.2
-### Description: Create tRPC procedures for task.create and task.update with proper validation
+## 5. Build Folder Selection Modal and Document Display Component [pending]
+### Dependencies: 6.4
+### Description: Develop a modal for selecting a SharePoint folder and a component to display the contents of the linked folder on the Client Detail page.
 ### Details:
-Implement task.create procedure that accepts task details and creates a new task in the database. Add input validation using Zod schemas to ensure all required fields are provided and valid. Implement task.update procedure that allows updating task fields while preserving immutable fields. Add validation to ensure users can only update tasks they're authorized to modify based on RBAC rules. Implement business logic for task assignment, including notifications or events when tasks are created or assigned. Add audit logging to track task creation and modifications. Ensure proper error handling for validation failures and database errors.
+The modal should allow searching and selecting from available folders. The document display component should use `sharepoint.getFolderContents` to show files and folders, including 'Open in Web' links using SharePoint's webUrl.
 
-## 6. Implement Task Deletion and Final Integration [done]
-### Dependencies: 6.2, 6.5
-### Description: Create task.delete procedure and integrate all procedures into the main router
+## 6. Integrate and Test End-to-End SharePoint Folder Linking Workflow [pending]
+### Dependencies: 6.5
+### Description: Test the full workflow: automated and manual linking, folder selection, document display, and access controls. Fix integration issues and ensure a seamless user experience.
 ### Details:
-Implement task.delete procedure with strict permission checks (typically admin-only or task creator). Add safeguards against accidental deletion, such as confirmation parameters. Implement soft deletion if needed to preserve task history. Integrate all task procedures into the main taskRouter. Register the taskRouter with the main tRPC router. Add comprehensive error handling across all procedures. Write integration tests for all task procedures to verify functionality and RBAC enforcement. Document the API endpoints, including required permissions, input parameters, and response formats. Perform final testing to ensure all procedures work together correctly.
+Perform end-to-end testing with different user roles. Validate that folder links, document listings, and web URLs function correctly. Address any UI/UX or backend issues discovered during testing.
 

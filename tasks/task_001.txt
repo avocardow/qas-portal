@@ -1,49 +1,59 @@
 # Task ID: 1
-# Title: Implement Client Management Backend
-# Status: done
+# Title: Implement Personal Email Integration
+# Status: pending
 # Dependencies: None
 # Priority: high
-# Description: Create tRPC procedures in clientRouter for CRUD operations on Client records with proper RBAC
+# Description: Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.
 # Details:
-Implement the following tRPC procedures in clientRouter: 1) client.getAll with server-side sorting, filtering, and cursor-based pagination, 2) client.getById with relations (contacts, licenses, trustAccounts, audits, activityLogs/notes), 3) client.create with Zod schema validation, 4) client.update with clientId and validated update data. Ensure all procedures enforce RBAC based on session.user.role, throwing TRPCError('FORBIDDEN') for unauthorized access. Limit fields for non-Admin/Manager roles as needed.
+1. Create tRPC `emailRouter` with procedures: `listFolders`, `listMessages`, `getMessage`, `sendMessage`, `createReply`, `createForward`
+2. Configure Graph API permissions: `Mail.ReadWrite`, `Mail.Send`
+3. Implement 3-column layout UI at `/email` route with folder list, message list, and message detail components
+4. Add pagination controls for message list
+5. Create compose/reply/forward modals with form validation
+6. Ensure HTML email body is sanitized before rendering
+7. Add loading states and error handling
 
 # Test Strategy:
-Write unit tests for each procedure verifying: 1) Successful data retrieval/modification with proper permissions, 2) Proper error handling for invalid inputs, 3) RBAC enforcement (rejection of unauthorized requests), 4) Pagination, sorting, and filtering functionality.
+1. Verify all email procedures return expected data
+2. Test pagination functionality with large mailboxes
+3. Confirm emails can be composed, sent, replied to, and forwarded
+4. Validate HTML sanitization prevents XSS
+5. Test error handling for network issues and permission problems
 
 # Subtasks:
-## 1. Set Up Zod Schemas and RBAC Middleware [done]
+## 1. Configure Microsoft Graph API Authentication [pending]
 ### Dependencies: None
-### Description: Define Zod schemas for client creation and update, and implement reusable RBAC middleware to enforce role-based access control for all procedures.
+### Description: Set up authentication with Microsoft Graph API to access M365 email accounts and request necessary permissions
 ### Details:
-Create Zod schemas for validating client input data for both creation and update operations. Develop a middleware function that checks session.user.role and throws TRPCError('FORBIDDEN') if the user lacks required permissions. This middleware should be reusable across all procedures to ensure consistent RBAC enforcement.
+Create an application registration in Azure AD with the required Mail.ReadWrite and Mail.Send permissions. Implement the OAuth 2.0 authorization flow to obtain access tokens for Graph API. Store tokens securely using an appropriate token cache mechanism. Implement token refresh logic to handle expired tokens. Create a GraphClient utility class that will be used by the email service to make authenticated requests to the Graph API endpoints.
 
-## 2. Implement client.getAll with Sorting, Filtering, and Pagination [done]
+## 2. Implement Email Service and tRPC Router [pending]
 ### Dependencies: 1.1
-### Description: Create the client.getAll procedure to fetch a list of clients with server-side sorting, filtering, and cursor-based pagination, applying RBAC and field restrictions.
+### Description: Create the backend service layer and tRPC router with all required email procedures
 ### Details:
-Use Prisma's findMany with appropriate parameters for sorting, filtering, and cursor-based pagination. Integrate the RBAC middleware to restrict access and limit visible fields for non-Admin/Manager roles. Ensure the procedure accepts query parameters for filters, sort order, and pagination cursors.
+Create an EmailService class that interfaces with Microsoft Graph API to perform email operations. Implement methods for listing folders, fetching messages, getting message details, sending messages, and creating replies/forwards. Create the tRPC emailRouter with the following procedures: listFolders, listMessages, getMessage, sendMessage, createReply, and createForward. Implement server-side pagination for message lists. Add input validation using Zod schemas for all procedures. Implement proper error handling with meaningful error messages. Add HTML sanitization for email body content using a library like DOMPurify.
 
-## 3. Implement client.getById with Related Entities [done]
-### Dependencies: 1.1
-### Description: Develop the client.getById procedure to fetch a single client by ID, including related entities (contacts, licenses, trustAccounts, audits, activityLogs/notes), with RBAC and field-level access control.
+## 3. Create Email Folder and Message List Components [pending]
+### Dependencies: 1.2
+### Description: Implement the first two columns of the 3-column layout: folder navigation and message list
 ### Details:
-Use Prisma's findUnique with include clauses to fetch the client and its related entities. Apply RBAC middleware and restrict related data fields for non-Admin/Manager roles as needed. Validate input using Zod to ensure a valid client ID.
+Create a responsive layout for the /email route with a sidebar for folders and a main content area for messages. Implement the FolderList component that fetches and displays email folders from the tRPC listFolders procedure. Add folder selection functionality that triggers message list updates. Create the MessageList component that displays messages from the selected folder using the tRPC listMessages procedure. Implement pagination controls with options for page size and navigation. Add sorting functionality for messages by date, sender, or subject. Implement loading states and error handling for both components. Add a search/filter functionality for the message list.
 
-## 4. Implement client.create with Validation and RBAC [done]
-### Dependencies: 1.1
-### Description: Create the client.create procedure to add new client records, enforcing Zod schema validation and RBAC restrictions.
+## 4. Implement Message Detail Component [pending]
+### Dependencies: 1.3
+### Description: Create the third column component for displaying the full content of selected emails
 ### Details:
-Use the previously defined Zod schema to validate input data. Apply RBAC middleware to ensure only authorized roles can create clients. Use Prisma's create method to insert the new client record, and return the created client (with field restrictions for non-privileged roles).
+Create the MessageDetail component that fetches and displays the full content of a selected email using the tRPC getMessage procedure. Implement HTML sanitization on the client side before rendering email content. Display email headers (From, To, CC, Subject, Date) in a structured format. Show email attachments with download options. Add buttons for reply, reply all, and forward actions. Implement loading states and error handling. Create a mechanism to handle and display inline images securely. Add functionality to mark messages as read when opened.
 
-## 5. Implement client.update with Validation and RBAC [done]
-### Dependencies: 1.1
-### Description: Develop the client.update procedure to update existing client records by clientId, enforcing Zod schema validation and RBAC.
+## 5. Develop Email Composition Components [pending]
+### Dependencies: 1.4
+### Description: Create modals for composing new emails, replying to emails, and forwarding emails
 ### Details:
-Validate the input (clientId and update data) using the Zod schema. Apply RBAC middleware to ensure only authorized roles can update clients. Use Prisma's update method to modify the client record, and return the updated client (with field restrictions for non-privileged roles).
+Create a ComposeMail modal component with form fields for recipient, cc, bcc, subject, and body. Implement a rich text editor for the email body using a library like TinyMCE or Quill. Add file attachment functionality with size limits and type validation. Create ReplyMail and ForwardMail components that pre-populate fields based on the original email. Implement form validation for all required fields and email format validation. Add draft saving functionality to prevent data loss. Implement the send functionality using the tRPC sendMessage procedure. Add loading states during sending and success/error notifications.
 
-## 6. Test Procedures and Enforce Field-Level Access Control [done]
+## 6. Implement Testing and Finalize Integration [pending]
 ### Dependencies: 1.2, 1.3, 1.4, 1.5
-### Description: Thoroughly test all clientRouter procedures for correct RBAC enforcement, validation, relation loading, and field-level access control. Refine field restrictions for non-Admin/Manager roles.
+### Description: Create comprehensive tests and finalize the email integration with proper error handling and performance optimizations
 ### Details:
-Write unit and integration tests for each procedure, simulating different user roles and verifying correct access, validation, and field visibility. Ensure that unauthorized users receive TRPCError('FORBIDDEN') and that field-level restrictions are consistently applied across all endpoints.
+Write unit tests for the EmailService class and all tRPC procedures. Create integration tests for the complete email flow from authentication to sending. Implement end-to-end tests for the UI components. Add error boundary components to gracefully handle runtime errors. Implement proper loading states throughout the application. Optimize performance by implementing virtualized lists for large mailboxes. Add telemetry and logging for monitoring email operations. Create documentation for the email integration features. Perform security review to ensure proper handling of sensitive email data. Implement feature flags to control rollout of the email functionality.
 

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2025-04-21T12:30:44.030Z",
-    "tasksAnalyzed": 10,
+    "generatedAt": "2025-04-22T14:00:40.869Z",
+    "tasksAnalyzed": 8,
     "thresholdScore": 5,
     "projectName": "Your Project Name",
     "usedResearch": true
@@ -9,83 +9,67 @@
   "complexityAnalysis": [
     {
       "taskId": 1,
-      "taskTitle": "Implement Client Management Backend",
+      "taskTitle": "Implement Personal Email Integration",
       "complexityScore": 9,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Break down the implementation of tRPC CRUD procedures for Client records with RBAC into subtasks, including server-side sorting/filtering/pagination, relation loading, Zod schema validation, and field-level access control for different roles.",
-      "reasoning": "This task involves multiple CRUD operations, complex RBAC enforcement, server-side data handling (sorting, filtering, pagination), and relation management. The need for field-level access control and robust validation increases both cyclomatic and functional complexity, requiring careful breakdown and thorough testing."
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Break down the implementation of personal M365 email integration into backend API development, Graph API permissions setup, frontend UI layout, pagination, compose/reply/forward modals, HTML sanitization, and robust loading/error handling.",
+      "reasoning": "This task requires full-stack development, secure integration with Microsoft Graph API, complex UI/UX (3-column layout, modals), and careful handling of email content (HTML sanitization, error/loading states). Each component is interdependent and must be robust, making the overall complexity high."
     },
     {
       "taskId": 2,
-      "taskTitle": "Implement Related Entity Management Backend",
+      "taskTitle": "Implement Admin Shared Mailbox Access",
       "complexityScore": 7,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "List subtasks for implementing tRPC CRUD procedures for Contacts, Licenses, and Trust Accounts, including Zod validation, RBAC enforcement, parent-child relationship handling, and potential batch operations.",
-      "reasoning": "While similar in structure to Task 1, this task focuses on related entities with less complex relationships and fewer operations per entity. However, RBAC, validation, and potential batch operations still add moderate complexity."
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Detail the steps to extend email integration for shared mailbox access, including backend procedure updates, additional API permissions, RBAC enforcement, UI mailbox switcher, component adaptation, and correct email attribution.",
+      "reasoning": "This builds on the personal email integration, adding role-based access control, new API endpoints, and UI logic for mailbox switching. While leveraging existing infrastructure, it introduces new security and attribution challenges, raising complexity moderately."
     },
     {
       "taskId": 3,
-      "taskTitle": "Implement Client Management Frontend",
+      "taskTitle": "Enhance Client and Audit Detail Pages",
       "complexityScore": 8,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Identify subtasks for building Client List and Detail pages with CRUD forms, role-based UI controls, data table features, and consistent styling using React, Tailwind, and Shadcn UI.",
-      "reasoning": "This frontend task requires integrating advanced data table features, conditional UI rendering based on roles, complex forms with validation, and consistent component styling, all of which contribute to significant implementation and integration complexity."
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Expand the enhancement of Client and Audit detail pages into API optimization for relational data, tabbed interface design, table/list creation with sorting/filtering, audit page improvements, consistent component usage, and responsive design.",
+      "reasoning": "This task involves significant backend optimization for relational data, advanced frontend UI/UX (tabs, tables, responsive design), and consistent use of design systems. The breadth of entities and data relationships increases the implementation complexity."
     },
     {
       "taskId": 4,
-      "taskTitle": "Implement Audit Tracking Backend",
+      "taskTitle": "Implement Teams Chat Integration",
       "complexityScore": 8,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "Detail subtasks for implementing tRPC audit procedures, including audit creation, stage/status updates, assignment management, RBAC enforcement, and relation handling.",
-      "reasoning": "Audit tracking involves multiple interrelated procedures, assignment logic, and strict RBAC. The need to manage audit stages, statuses, and assignments increases both the logical and control flow complexity."
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Divide Teams chat integration into backend chat API creation, Graph API permission setup, chat UI layout, message pagination/infinite scroll, user search, chat creation flows, and error/loading state management.",
+      "reasoning": "Integrating real-time chat requires backend and frontend coordination, handling of chat history, user search, and new chat flows. The need for reliable state management and responsive UI increases complexity, especially with Microsoft Graph API integration."
     },
     {
       "taskId": 5,
-      "taskTitle": "Implement Audit Tracking Frontend",
-      "complexityScore": 7,
-      "recommendedSubtasks": 5,
-      "expansionPrompt": "Break down the creation of Audit UI components for Client and Audit Detail pages, including audit lists, assignment controls, status updates, and consistent UI styling.",
-      "reasoning": "This task requires building interactive UI components for audit management, integrating assignment and status update features, and ensuring role-based controls, all while maintaining consistent styling."
+      "taskTitle": "Implement Teams Phone Integration",
+      "complexityScore": 8,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Break down Teams Phone integration into backend call procedures, Graph API permissions, call log schema design, phone UI with search, call buttons, admin dial pad, call logging, and RBAC for phone features.",
+      "reasoning": "This task involves telephony integration, secure API usage, database design for call logs, and nuanced UI/UX for different roles. Handling real-time events and ensuring accurate logging add to the technical and operational complexity."
     },
     {
       "taskId": 6,
-      "taskTitle": "Implement Task Management Backend",
-      "complexityScore": 8,
+      "taskTitle": "Implement SharePoint Folder Linking",
+      "complexityScore": 7,
       "recommendedSubtasks": 6,
-      "expansionPrompt": "List subtasks for implementing tRPC CRUD procedures for Tasks, including RBAC enforcement, audit/task relations, pagination, sorting, filtering, and validation.",
-      "reasoning": "Task management backend involves multiple endpoints, complex RBAC, and support for advanced query features (pagination, filtering, sorting), increasing both cyclomatic and functional complexity."
+      "expansionPrompt": "Detail the SharePoint folder linking process into automated script development, backend API for folder access, RBAC for linking, UI for folder selection, document display, and web link integration.",
+      "reasoning": "This task combines backend scripting, API integration, RBAC, and UI for folder management. While leveraging SharePoint APIs, it requires careful mapping and user interaction design, making it moderately complex."
     },
     {
       "taskId": 7,
-      "taskTitle": "Implement Task Management Frontend",
-      "complexityScore": 7,
+      "taskTitle": "Implement UI Polish and Theme Switcher",
+      "complexityScore": 6,
       "recommendedSubtasks": 5,
-      "expansionPrompt": "Identify subtasks for building Task List, Detail, and Create/Edit UI components with role-based controls, data integration, and consistent styling.",
-      "reasoning": "This frontend task requires implementing multiple interactive components, integrating backend data, handling role-based UI logic, and ensuring a cohesive user experience."
+      "expansionPrompt": "Expand UI polish and theme switcher into feedback review, UI refinement, design system consistency, responsive improvements, theme switcher implementation, and theme persistence.",
+      "reasoning": "This is primarily a frontend/UI task involving design consistency and theme management. While important for user experience, it is less technically complex than deep integrations or backend-heavy tasks."
     },
     {
       "taskId": 8,
-      "taskTitle": "Implement Document Reference Display Backend",
-      "complexityScore": 6,
-      "recommendedSubtasks": 4,
-      "expansionPrompt": "Break down the implementation of tRPC procedures for retrieving document references by Client, Audit, and Task, including RBAC enforcement and metadata handling.",
-      "reasoning": "This backend task is relatively straightforward, focusing on read-only procedures with RBAC and metadata handling, resulting in lower overall complexity."
-    },
-    {
-      "taskId": 9,
-      "taskTitle": "Implement Document Reference Display Frontend",
-      "complexityScore": 5,
-      "recommendedSubtasks": 4,
-      "expansionPrompt": "List subtasks for adding Document tabs/sections to Client, Audit, and Task detail pages, including data integration, UI rendering, and consistent styling.",
-      "reasoning": "This frontend task involves integrating document data into existing pages and rendering lists with links, which is less complex than full CRUD or interactive features."
-    },
-    {
-      "taskId": 10,
-      "taskTitle": "Implement Comprehensive RBAC and Final Integration",
+      "taskTitle": "Integration Testing and Final Polishing",
       "complexityScore": 10,
       "recommendedSubtasks": 7,
-      "expansionPrompt": "Detail subtasks for reviewing and enforcing RBAC across backend and frontend, integrating all features, conducting end-to-end testing, and optimizing performance and error handling.",
-      "reasoning": "This task requires a comprehensive review and integration of all previous work, ensuring consistent RBAC, seamless navigation, complete workflow testing, and performance optimization, making it the most complex and critical task."
+      "expansionPrompt": "Break down integration testing and final polish into end-to-end test creation, cross-component interaction testing, PRD acceptance verification, performance optimization, error/feedback consistency, UI/UX fixes, documentation updates, and cross-browser/device testing.",
+      "reasoning": "This task is the culmination of all previous work, requiring comprehensive testing, bug fixing, performance tuning, and documentation. It demands coordination across all features and systems, making it the most complex and critical phase."
     }
   ]
 }

@@ -1,156 +1,53 @@
 # Task ID: 4
-# Title: Implement Audit Tracking Backend
-# Status: done
-# Dependencies: 1
-# Priority: high
-# Description: Create tRPC procedures in auditRouter for Audit management with RBAC
+# Title: Implement Teams Chat Integration
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.
 # Details:
-Implement the following tRPC procedures in auditRouter: 1) audit.create (input: clientId, auditYear, initial stageId/statusId), 2) audit.updateStageStatus (input: auditId, stageId, statusId), 3) audit.getByClientId for client detail audit history, 4) audit.getById for full audit details including tasks and assignments, 5) audit.assignUser and audit.unassignUser to manage AuditAssignment records. Enforce RBAC for all procedures, restricting certain operations to Auditor/Manager/Admin roles.
+1. Create tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, `createGroup`
+2. Configure Graph API permissions: `Chat.ReadWrite`, `User.Read.All`
+3. Implement `/chat` page with chat list pane, message pane, and message input components
+4. Add pagination/infinite scroll for message history
+5. Create user search functionality for starting new chats
+6. Implement new chat creation flows (1:1 and group)
+7. Add loading states and error handling
 
 # Test Strategy:
-Write unit tests for each procedure verifying correct data manipulation, relationship management, and RBAC enforcement. Test edge cases like duplicate audit years for the same client.
+1. Verify chat list and messages load correctly
+2. Test message sending functionality
+3. Confirm user search and new chat creation work as expected
+4. Validate pagination/infinite scroll with large chat histories
+5. Test error handling for network issues and permission problems
 
 # Subtasks:
-## 1. Design Audit Data Models and RBAC Policy [done]
+## 1. Set Up Microsoft Teams API Integration and Permissions [pending]
 ### Dependencies: None
-### Description: Define and implement the database models for audits, audit stages/statuses, and audit assignments. Establish a clear RBAC (Role-Based Access Control) policy for all audit-related operations.
+### Description: Configure Microsoft Graph API access and ensure the application has the necessary permissions to read and send Teams chat messages.
 ### Details:
-Create or update ORM models for Audit, AuditStage, AuditStatus, and AuditAssignment. Define user roles (Auditor, Manager, Admin) and map permissions for each tRPC procedure. Ensure the models support linking audits to clients, tracking stages/statuses, and managing user assignments. Document the RBAC rules for reference in later subtasks.
+Register the application in Azure AD, configure required API permissions (`Chat.ReadWrite`, `User.Read.All`), and set up authentication flows. Ensure admin consent is granted for these permissions so the backend can interact with Teams chat endpoints.
 
-<info added on 2025-04-21T14:30:38.587Z>
-Based on your exploration, here's additional technical information for the subtask:
-
-```typescript
-// Permission constants to be added in src/constants/permissions.ts
-export const AUDIT_PERMISSIONS = {
-  CREATE: 'audit.create',
-  UPDATE_STAGE_STATUS: 'audit.updateStageStatus',
-  GET_BY_CLIENT_ID: 'audit.getByClientId',
-  GET_BY_ID: 'audit.getById',
-  ASSIGN_USER: 'audit.assignUser',
-  UNASSIGN_USER: 'audit.unassignUser',
-};
-```
-
-For the Prisma seed script, implement:
-
-```typescript
-// In prisma/seed.ts
-async function seedAuditPermissions() {
-  const permissions = Object.values(AUDIT_PERMISSIONS).map(action => ({ action }));
-  await prisma.permission.createMany({
-    data: permissions,
-    skipDuplicates: true,
-  });
-  
-  // Map permissions to roles
-  const admin = await prisma.role.findUnique({ where: { name: 'Admin' } });
-  const manager = await prisma.role.findUnique({ where: { name: 'Manager' } });
-  const auditor = await prisma.role.findUnique({ where: { name: 'Auditor' } });
-  
-  // Admin gets all permissions
-  const adminPermissions = await prisma.permission.findMany({
-    where: { action: { in: Object.values(AUDIT_PERMISSIONS) } },
-  });
-  
-  // Manager permissions
-  const managerPermissions = await prisma.permission.findMany({
-    where: { action: { in: Object.values(AUDIT_PERMISSIONS) } },
-  });
-  
-  // Auditor permissions - limited read access
-  const auditorPermissions = await prisma.permission.findMany({
-    where: { action: { in: [AUDIT_PERMISSIONS.GET_BY_CLIENT_ID, AUDIT_PERMISSIONS.GET_BY_ID] } },
-  });
-  
-  // Create role-permission mappings
-  // [Implementation details for creating RolePermission records]
-}
-```
-
-For tRPC middleware implementation:
-
-```typescript
-// In src/server/api/trpc.ts
-export const enforceAuditPermission = (requiredPermission: string) => 
-  middleware(async ({ ctx, next }) => {
-    if (!ctx.session?.user) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
-    }
-    
-    const hasPermission = await prisma.rolePermission.findFirst({
-      where: {
-        role: {
-          userRoles: {
-            some: {
-              userId: ctx.session.user.id
-            }
-          }
-        },
-        permission: {
-          action: requiredPermission
-        }
-      }
-    });
-    
-    if (!hasPermission) {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Insufficient permissions" });
-    }
-    
-    return next();
-  });
-```
-
-Unit test structure for RBAC enforcement:
-
-```typescript
-// In tests/rbac/audit-permissions.test.ts
-describe('Audit RBAC Enforcement', () => {
-  test('Admin can perform all audit operations', async () => {
-    // Setup admin user session
-    // Test each permission
-  });
-  
-  test('Manager can perform all audit operations', async () => {
-    // Setup manager user session
-    // Test each permission
-  });
-  
-  test('Auditor can only view audits', async () => {
-    // Setup auditor user session
-    // Test allowed operations (should succeed)
-    // Test restricted operations (should fail)
-  });
-  
-  test('Other roles cannot access audit operations', async () => {
-    // Setup user with non-audit role
-    // Test operations (all should fail)
-  });
-});
-```
-</info added on 2025-04-21T14:30:38.587Z>
-
-## 2. Implement tRPC Procedures for Audit Creation and Stage/Status Updates [done]
+## 2. Implement tRPC Chat Router and Backend Procedures [pending]
 ### Dependencies: 4.1
-### Description: Develop tRPC procedures in auditRouter for creating audits and updating their stage/status, enforcing RBAC for each operation.
+### Description: Develop the backend chat router with all necessary procedures for chat operations.
 ### Details:
-Implement audit.create to accept clientId, auditYear, and initial stageId/statusId, ensuring only authorized roles can create audits. Implement audit.updateStageStatus to update an audit's stage and status, restricting access based on RBAC policy. Validate inputs and handle errors appropriately.
+Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases.
 
-## 3. Implement tRPC Procedures for Audit Retrieval [done]
-### Dependencies: 4.1
-### Description: Develop tRPC procedures to retrieve audit data: audit.getByClientId for client audit history and audit.getById for full audit details, including related tasks and assignments.
+## 3. Develop Frontend Chat Page and Core UI Components [pending]
+### Dependencies: 4.2
+### Description: Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.
 ### Details:
-Implement audit.getByClientId to fetch all audits for a given client, returning summary data. Implement audit.getById to fetch comprehensive audit details, including tasks and user assignments. Enforce RBAC so users only access audits they are permitted to view.
+Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible.
 
-## 4. Implement tRPC Procedures for Audit Assignment Management [done]
-### Dependencies: 4.1
-### Description: Develop audit.assignUser and audit.unassignUser procedures to manage AuditAssignment records, with strict RBAC enforcement.
+## 4. Add Pagination, Infinite Scroll, and User Search Functionality [pending]
+### Dependencies: 4.3
+### Description: Enhance the chat UI with message history pagination/infinite scroll and implement user search for starting new chats.
 ### Details:
-Implement audit.assignUser to assign users to audits and audit.unassignUser to remove assignments. Validate user roles and permissions for these operations. Ensure assignment changes are logged for auditability.
+Implement pagination or infinite scroll in the message pane to load older messages as the user scrolls. Add a user search component that leverages the `findUsers` backend procedure, enabling users to search and select contacts for new chats.
 
-## 5. Integrate Monitoring, Logging, and RBAC Enforcement Across Procedures [done]
-### Dependencies: 4.2, 4.3, 4.4
-### Description: Add comprehensive monitoring and logging to all auditRouter procedures, ensuring RBAC checks are consistently enforced and all sensitive actions are auditable.
+## 5. Implement New Chat Creation Flows and Robust UX States [pending]
+### Dependencies: 4.4
+### Description: Enable creation of new one-to-one and group chats, and add comprehensive loading and error handling throughout the chat experience.
 ### Details:
-Integrate logging for all create, update, assignment, and retrieval actions, including user IDs, timestamps, and operation details. Set up monitoring for key metrics (e.g., request rates, errors). Review all procedures to confirm RBAC is enforced at entry points and that unauthorized access is prevented and logged.
+Integrate flows for creating new chats (both 1:1 and group) using the respective backend procedures. Ensure all UI components display appropriate loading indicators and error messages, providing a smooth and resilient user experience.
 

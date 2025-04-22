@@ -1,43 +1,53 @@
 # Task ID: 7
-# Title: Implement Task Management Frontend
-# Status: done
-# Dependencies: 5, 6
-# Priority: medium
-# Description: Create Task List, Detail, and Create/Edit UI components
+# Title: Implement UI Polish and Theme Switcher
+# Status: pending
+# Dependencies: None
+# Priority: low
+# Description: Refine the overall user interface based on Phase 1 feedback and implement a theme switcher for light/dark mode with persistence.
 # Details:
-Develop: 1) Task List page (/tasks) with functional table defaulting to task.getAssignedToMe, Admin toggle for task.getAll, pagination, sorting, filtering, and 'Add New Task' button. 2) Audit Detail Tasks Section listing tasks via task.getByAuditId with quick status updates and 'Add Task' functionality. 3) Task Create/Edit forms with fields for Name, Description, Assignee, Due Date, Status, Priority. 4) Task Detail View (modal) displaying full task details. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.
+1. Review Phase 1 feedback and identify UI improvement areas
+2. Refine table layouts, form flows, and navigation components
+3. Ensure consistent use of Shadcn UI and TailAdmin components throughout the application
+4. Improve responsive design for all pages
+5. Implement Theme Switcher component with Light/Dark mode options
+6. Add theme persistence using localStorage or cookies
+7. Create consistent dark mode styles for all components
 
 # Test Strategy:
-Manually test all UI components and interactions. Verify data fetching, filtering, sorting, and pagination. Test task creation, assignment, and status updates. Confirm role-based UI element visibility.
+1. Verify UI improvements address Phase 1 feedback
+2. Test responsive design across different devices and screen sizes
+3. Confirm theme switcher correctly toggles between light and dark modes
+4. Validate theme persistence across page refreshes and sessions
+5. Check for any styling inconsistencies or accessibility issues
 
 # Subtasks:
-## 1. Set Up Task Data Integration and Role-Based Logic [done]
+## 1. Analyze Phase 1 Feedback and Define UI Improvements [pending]
 ### Dependencies: None
-### Description: Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.
+### Description: Review all feedback collected from Phase 1 to identify specific areas of the UI that require refinement, such as usability issues, visual inconsistencies, or missing features.
 ### Details:
-Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.getByAuditId). Set up state management (React context, Redux, or local state) to store and update task data. Implement logic to determine user role (admin vs. regular user) and toggle between assigned and all tasks accordingly.
+Gather feedback documents, user reports, and design notes. Create a prioritized list of actionable UI improvements, focusing on table layouts, form flows, and navigation components. Document these requirements for implementation in subsequent subtasks.
 
-## 2. Develop Task List Page with Table, Pagination, Sorting, and Filtering [done]
+## 2. Refactor and Standardize UI Components [pending]
 ### Dependencies: 7.1
-### Description: Create the /tasks page with a functional table displaying tasks, including pagination, sorting, filtering, and an 'Add New Task' button.
+### Description: Update and refine table layouts, form flows, and navigation components based on the prioritized feedback, ensuring consistent use of Shadcn UI and TailAdmin components throughout the application.
 ### Details:
-Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. Implement pagination controls, column sorting, and filtering options. Add an 'Add New Task' button that opens the create task form. Ensure the table defaults to assigned tasks and supports admin toggle for all tasks.
+Audit existing UI components for consistency. Refactor or replace components as needed to align with design guidelines and ensure a cohesive look and feel. Leverage reusable components and maintain modular code structure for scalability and maintainability[3].
 
-## 3. Implement Task Create/Edit Forms [done]
-### Dependencies: 7.1
-### Description: Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.
-### Details:
-Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement validation and controlled inputs for all required fields. Ensure the form can be used both for creating new tasks and editing existing ones, with appropriate data pre-filling and submission handling.
-
-## 4. Build Task Detail View Modal [done]
+## 3. Enhance Responsive Design and Cross-Browser Compatibility [pending]
 ### Dependencies: 7.2
-### Description: Create a modal component to display full task details, accessible from the task list and audit detail sections.
+### Description: Improve the responsive design of all pages and ensure cross-browser compatibility to provide a seamless experience across devices and browsers.
 ### Details:
-Use modal components from Shadcn UI / TailAdmin. Display all task fields in a readable layout. Ensure the modal can be triggered from the task list and audit detail sections, and supports closing and navigation back to the list.
+Test UI on various screen sizes and browsers. Adjust CSS and layout logic to resolve any issues. Use feature detection tools and polyfills where necessary to address browser-specific quirks[2][3]. Validate that all components adapt gracefully to different environments.
 
-## 5. Develop Audit Detail Tasks Section with Quick Status Updates [done]
-### Dependencies: 7.1, 7.3, 7.4
-### Description: Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.
+## 4. Implement Theme Switcher Component with Persistence [pending]
+### Dependencies: 7.3
+### Description: Develop a theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.
 ### Details:
-Fetch and display tasks using task.getByAuditId. Allow inline status updates (e.g., dropdown or toggle). Integrate the 'Add Task' button to open the create form. Ensure consistent styling and UX with other components.
+Create a UI control for theme switching. Integrate logic to apply the selected theme across the application. Store the user's preference in localStorage or cookies and ensure the theme is restored on subsequent visits.
+
+## 5. Apply and Test Consistent Dark Mode Styles [pending]
+### Dependencies: 7.4
+### Description: Ensure all UI components have consistent and visually appealing dark mode styles, and thoroughly test the theme switcher functionality across the application.
+### Details:
+Audit all components for dark mode compatibility. Update styles as needed to maintain readability and aesthetic quality. Test the theme switcher across different pages, devices, and browsers to ensure reliable persistence and visual consistency.
 

@@ -1,53 +1,54 @@
 # Task ID: 5
-# Title: Implement Audit Tracking Frontend
-# Status: done
-# Dependencies: 3, 4
+# Title: Implement Teams Phone Integration
+# Status: pending
+# Dependencies: 3
 # Priority: medium
-# Description: Create Audit UI components for Client Detail and Audit Detail pages
+# Description: Enable outbound PSTN calling to clients directly from the portal using Teams Phone System, with call logging functionality.
 # Details:
-Develop: 1) Client Detail Audits Tab showing audit list (using audit.getByClientId) with Year, Stage, Status, Due Date, Assigned Staff columns, 'Add New Audit Year' button, and Stage/Status dropdowns for audit.updateStageStatus. 2) Audit Detail page (/audits/[auditId]) displaying audit details, assigned team members with add/remove controls, and related tasks. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.
+1. Create tRPC `phoneRouter` with procedures: `makePstnCall`, `logCall`
+2. Configure Graph API permissions: `Calls.Initiate.All`
+3. Create database schema for call logs (callerId, clientId, contactId, numberDialed, startTime, endTime, duration)
+4. Implement `/phone` page with client/contact search functionality
+5. Add call buttons next to contacts with phone numbers
+6. Create Admin-only dial pad UI for direct number entry
+7. Implement call logging after call initiation
+8. Add role-based visibility controls for phone features
 
 # Test Strategy:
-Manually test all UI components and interactions. Verify data fetching, display of audit history, stage/status updates, and team member assignment functionality. Test role-based UI element visibility.
+1. Verify PSTN calls can be initiated from contact list
+2. Test Admin dial pad functionality
+3. Confirm call logs are correctly created and stored
+4. Validate RBAC for phone features
+5. Test error handling for failed calls
 
 # Subtasks:
-## 1. Design Audit UI Components and Page Layouts [done]
+## 1. Set Up Teams Phone System Integration and Permissions [pending]
 ### Dependencies: None
-### Description: Create wireframes and component structures for the Client Detail Audits Tab and the Audit Detail page, ensuring alignment with Tailwind and Shadcn UI / TailAdmin design systems.
+### Description: Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions.
 ### Details:
-Define the layout for the audits tab within the Client Detail page, including table columns (Year, Stage, Status, Due Date, Assigned Staff), 'Add New Audit Year' button, and dropdowns for Stage/Status. For the Audit Detail page, outline sections for audit details, assigned team members with add/remove controls, and related tasks. Use Figma or a similar tool for mockups and document component hierarchies.
+Provision Teams Phone System for your organization, ensuring users have the required licenses and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls.[1][2][3]
 
-<info added on 2025-04-22T03:22:25.298Z>
-- Ensure Tailwind CSS v4 is installed and configured to leverage its new features, such as the @theme directive and CSS-native theming, which enhances maintainability and performance for Shadcn UI components[2][5].
-- When integrating Shadcn UI components, utilize Tailwind v4’s CSS variable-based theming to align with TailAdmin’s design tokens and support dynamic theming across the audit UI[5].
-- For dropdowns (Stage/Status), use Shadcn UI’s <Select> component styled with Tailwind classes, ensuring accessibility and consistent appearance with the rest of the dashboard[1][2].
-- Document the component hierarchy in Figma, mapping each UI element (e.g., AuditList table, Add New Audit Year button, inline dropdowns) to its corresponding React component and Tailwind utility classes for developer reference.
-- In the Audit Detail page, use Shadcn UI’s <Card>, <Tabs>, and <Avatar> components for sections like audit metadata, team member management, and related tasks, ensuring modularity and reusability.
-- For team member add/remove controls, implement Shadcn UI’s <Button> and <Popover> components, styled with Tailwind, to provide intuitive user interactions.
-- Reference TailAdmin’s layout patterns for responsive grid and spacing utilities, ensuring the audit pages are mobile-friendly and visually consistent with the rest of the admin dashboard[4].
-</info added on 2025-04-22T03:22:25.298Z>
-
-## 2. Implement Client Detail Audits Tab Table and Controls [done]
+## 2. Design and Implement Call Logging Database Schema [pending]
 ### Dependencies: 5.1
-### Description: Develop the audits table UI for the Client Detail page, integrating data fetching and interactive controls for audit management.
+### Description: Create a robust database schema to store call logs, capturing all relevant call metadata.
 ### Details:
-Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fetch audit data using audit.getByClientId. Implement columns for Year, Stage, Status, Due Date, and Assigned Staff. Add the 'Add New Audit Year' button with modal or inline form functionality. Integrate Stage/Status dropdowns that trigger audit.updateStageStatus on change.
+Define and migrate a database schema for call logs with fields: callerId, clientId, contactId, numberDialed, startTime, endTime, and duration. Ensure indexing for efficient querying and consider audit/compliance requirements for call records.
 
-## 3. Develop Audit Detail Page with Team and Task Management [done]
-### Dependencies: 5.1
-### Description: Create the Audit Detail page at /audits/[auditId], displaying audit information and enabling management of assigned team members and related tasks.
+## 3. Develop tRPC phoneRouter with Call and Logging Procedures [pending]
+### Dependencies: 5.2
+### Description: Implement a tRPC router exposing procedures for initiating PSTN calls and logging call details.
 ### Details:
-Use Tailwind and Shadcn UI / TailAdmin components to present audit details. Implement a section for assigned team members with add/remove controls (e.g., multi-select dropdown or list with remove buttons). Display related tasks in a list or table. Ensure all data is fetched and updated via appropriate API endpoints.
+Create a tRPC router named 'phoneRouter' with procedures: 'makePstnCall' (to initiate outbound calls via Teams Phone System using the Graph API) and 'logCall' (to record call details in the database). Ensure error handling, input validation, and secure access controls for these endpoints.
 
-## 4. Integrate API Calls and State Management [done]
-### Dependencies: 5.2, 5.3
-### Description: Connect UI components to backend APIs for data retrieval and updates, managing local and global state as needed.
+## 4. Build Portal UI for Calling and Call Management [pending]
+### Dependencies: 5.3
+### Description: Implement the /phone page with client/contact search, call buttons, and an admin-only dial pad for direct number entry.
 ### Details:
-Wire up audit.getByClientId for the audits tab and relevant endpoints for audit details, team assignment, and task management. Use React Query, Redux, or context/state hooks for efficient state management and UI updates. Handle optimistic updates for status/stage changes and team modifications.
+Develop the /phone page UI to allow users to search for clients/contacts, display contacts with phone numbers, and show call buttons next to each. Add an admin-only dial pad component for direct number entry. Integrate UI actions with the tRPC procedures for call initiation and logging.
 
-## 5. Implement Role-Based Access and Final Styling Consistency [done]
+## 5. Implement Call Logging and Role-Based Feature Controls [pending]
 ### Dependencies: 5.4
-### Description: Apply role-based controls to restrict actions (e.g., editing, assignment) and ensure all UI elements follow consistent styling guidelines.
+### Description: Ensure all calls are logged after initiation and restrict phone features based on user roles.
 ### Details:
-Check user roles/permissions before rendering or enabling controls such as status updates, team assignment, and adding new audits. Refine all components to match Tailwind and Shadcn UI / TailAdmin standards for spacing, typography, and responsiveness. Conduct a UI review to ensure visual and functional consistency across both pages.
+After each call is initiated, automatically invoke the 'logCall' procedure to record the call. Implement role-based visibility and access controls for phone features (e.g., dial pad, call buttons) so only authorized users can access specific functionalities. Test to ensure compliance with security and audit requirements.
 

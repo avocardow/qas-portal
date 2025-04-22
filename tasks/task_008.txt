@@ -1,37 +1,50 @@
 # Task ID: 8
-# Title: Implement Document Reference Display Backend
-# Status: done
-# Dependencies: 1, 4, 6
-# Priority: low
-# Description: Create tRPC procedures in documentRouter for retrieving document references
+# Title: Integration Testing and Final Polishing
+# Status: pending
+# Dependencies: 1, 2, 3, 4, 5, 6, 7
+# Priority: high
+# Description: Perform comprehensive integration testing of all implemented features, fix any issues, and make final adjustments to ensure the portal functions as a cohesive hub for internal team operations.
 # Details:
-Implement the following tRPC procedures in documentRouter: 1) document.getByClientId, 2) document.getByAuditId, 3) document.getByTaskId. Each procedure should return document metadata including fileName and sharepointFileUrl. Enforce appropriate RBAC for document visibility based on user roles and relationship to the parent entity.
+1. Create end-to-end test scenarios covering all implemented features
+2. Test interactions between different components (e.g., initiating calls from client detail page)
+3. Verify all acceptance criteria from the PRD are met
+4. Optimize performance for data-heavy pages
+5. Ensure consistent error handling and user feedback throughout the application
+6. Address any remaining UI/UX issues
+7. Update documentation for new features
+8. Perform final cross-browser and device testing
 
 # Test Strategy:
-Write unit tests for each procedure verifying correct document retrieval based on parent entity ID and RBAC enforcement. Test with various user roles to confirm proper access control.
+1. Execute end-to-end test scenarios for all user roles
+2. Verify all acceptance criteria are met
+3. Test cross-feature interactions
+4. Perform load testing with realistic data volumes
+5. Conduct usability testing with representative users
+6. Validate cross-browser compatibility
+7. Check accessibility compliance
 
 # Subtasks:
-## 1. Define Input Schemas and Output Types for Document Reference Procedures [done]
+## 1. Develop and Execute Comprehensive Integration Test Scenarios [pending]
 ### Dependencies: None
-### Description: Design and implement input validation schemas (using a library like zod) and output types for each tRPC procedure: getByClientId, getByAuditId, and getByTaskId. Ensure that each input schema strictly validates the required identifier and that the output type includes fileName and sharepointFileUrl.
+### Description: Design and implement integration test cases that cover all interactions between modules and features, ensuring that combined components function as intended.
 ### Details:
-Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId as strings or UUIDs). Define TypeScript types or zod schemas for the output, ensuring fileName and sharepointFileUrl are included. This step ensures type safety and input validation for all subsequent implementation steps.[2][4]
+Identify all major workflows and user journeys across the portal. Create integration test scripts that simulate real-world usage, focusing on interactions between modules (e.g., initiating calls from client detail pages). Use automated testing tools where possible to execute these scenarios and document any failures or unexpected behaviors.
 
-## 2. Implement RBAC Middleware for Document Visibility [done]
+## 2. Verify Acceptance Criteria and Address Functional Issues [pending]
 ### Dependencies: 8.1
-### Description: Develop and integrate reusable middleware to enforce role-based access control (RBAC) for document retrieval procedures. The middleware should check user roles and their relationship to the parent entity (client, audit, or task) before allowing access to document metadata.
+### Description: Systematically check that all acceptance criteria from the Product Requirements Document (PRD) are met, and resolve any functional defects uncovered during integration testing.
 ### Details:
-Create a middleware function that inspects the user's roles and verifies their association with the relevant parent entity. Integrate this middleware into the tRPC procedures using the .use() method, ensuring that only authorized users can access document references.[1][4]
+Cross-reference test results with the PRD to ensure every feature and requirement is validated. Log and prioritize any issues found, then implement fixes and retest affected areas to confirm resolution. Collaborate with stakeholders to clarify ambiguous criteria if needed.
 
-## 3. Implement tRPC Procedures in documentRouter [done]
-### Dependencies: 8.1, 8.2
-### Description: Develop the three tRPC procedures (getByClientId, getByAuditId, getByTaskId) within documentRouter. Each procedure should retrieve document metadata from the database based on the provided identifier and return fileName and sharepointFileUrl for each document.
+## 3. Optimize Performance and Ensure Consistent Error Handling [pending]
+### Dependencies: 8.2
+### Description: Improve the performance of data-heavy pages and standardize error handling and user feedback mechanisms throughout the application.
 ### Details:
-For each procedure, use the validated input to query the database for documents related to the specified client, audit, or task. Ensure that the RBAC middleware is applied to each procedure. Return an array of objects containing fileName and sharepointFileUrl as defined in the output type.[1][2][4]
+Profile the application to identify slow-loading or resource-intensive pages. Apply optimizations such as query improvements, caching, or UI enhancements. Review error handling across all modules to ensure consistent messaging and user experience, updating code and UI as necessary.
 
-## 4. Test and Document Document Reference Procedures [done]
+## 4. Finalize UI/UX, Documentation, and Cross-Platform Testing [pending]
 ### Dependencies: 8.3
-### Description: Write comprehensive tests for each procedure to verify correct input validation, RBAC enforcement, and accurate data retrieval. Add inline documentation and meta descriptions for each procedure to support maintainability and developer understanding.
+### Description: Polish the user interface and experience, update documentation for new features, and conduct final cross-browser and device compatibility testing.
 ### Details:
-Create unit and integration tests to cover valid and invalid inputs, unauthorized access, and successful data retrieval. Use tRPC's meta functionality and zod's .describe() method to document each procedure and its parameters for future reference and developer tools integration.[2][5]
+Address any remaining UI/UX issues for visual consistency and usability. Update user and technical documentation to reflect the latest features and changes. Perform thorough testing across supported browsers and devices, resolving any compatibility issues before release.
 

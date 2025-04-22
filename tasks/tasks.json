@@ -1,588 +1,493 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "title": "Implement Client Management Backend",
-      "description": "Create tRPC procedures in clientRouter for CRUD operations on Client records with proper RBAC",
-      "status": "done",
+      "id": 9,
+      "title": "Implement RBAC Middleware and Procedure Helpers",
+      "description": "Establish authentication and permission-checking middleware and reusable helper functions for all tRPC routers.",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "Implement the following tRPC procedures in clientRouter: 1) client.getAll with server-side sorting, filtering, and cursor-based pagination, 2) client.getById with relations (contacts, licenses, trustAccounts, audits, activityLogs/notes), 3) client.create with Zod schema validation, 4) client.update with clientId and validated update data. Ensure all procedures enforce RBAC based on session.user.role, throwing TRPCError('FORBIDDEN') for unauthorized access. Limit fields for non-Admin/Manager roles as needed.",
-      "testStrategy": "Write unit tests for each procedure verifying: 1) Successful data retrieval/modification with proper permissions, 2) Proper error handling for invalid inputs, 3) RBAC enforcement (rejection of unauthorized requests), 4) Pagination, sorting, and filtering functionality.",
+      "details": "Implement server-side middleware (e.g., isAuthed, hasPermission) for tRPC, and create helper functions to enforce role-based access across Phase 1 and Phase 2 routers.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Zod Schemas and RBAC Middleware",
-          "description": "Define Zod schemas for client creation and update, and implement reusable RBAC middleware to enforce role-based access control for all procedures.",
-          "status": "done",
+          "title": "Create tRPC authentication middleware",
+          "description": "Implement isAuthed middleware to enforce authenticated sessions.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create Zod schemas for validating client input data for both creation and update operations. Develop a middleware function that checks session.user.role and throws TRPCError('FORBIDDEN') if the user lacks required permissions. This middleware should be reusable across all procedures to ensure consistent RBAC enforcement."
+          "details": "Add an isAuthed middleware in the tRPC context to verify session.user is defined before proceeding."
         },
         {
           "id": 2,
-          "title": "Implement client.getAll with Sorting, Filtering, and Pagination",
-          "description": "Create the client.getAll procedure to fetch a list of clients with server-side sorting, filtering, and cursor-based pagination, applying RBAC and field restrictions.",
-          "status": "done",
+          "title": "Develop role and permission helpers",
+          "description": "Create helper functions hasRole and hasPermission for session.user.role checks.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Use Prisma's findMany with appropriate parameters for sorting, filtering, and cursor-based pagination. Integrate the RBAC middleware to restrict access and limit visible fields for non-Admin/Manager roles. Ensure the procedure accepts query parameters for filters, sort order, and pagination cursors."
+          "details": "Implement functions to validate user roles and specific permissions using the session object."
         },
         {
           "id": 3,
-          "title": "Implement client.getById with Related Entities",
-          "description": "Develop the client.getById procedure to fetch a single client by ID, including related entities (contacts, licenses, trustAccounts, audits, activityLogs/notes), with RBAC and field-level access control.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Use Prisma's findUnique with include clauses to fetch the client and its related entities. Apply RBAC middleware and restrict related data fields for non-Admin/Manager roles as needed. Validate input using Zod to ensure a valid client ID."
+          "title": "Integrate RBAC into existing routers",
+          "description": "Apply isAuthed and permission helpers to sensitive Phase 1 and Phase 2 tRPC procedures.",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Update each router (clientRouter, emailRouter, chatRouter, etc.) to include authentication and role checks on create/update/delete/mutation endpoints."
         },
         {
           "id": 4,
-          "title": "Implement client.create with Validation and RBAC",
-          "description": "Create the client.create procedure to add new client records, enforcing Zod schema validation and RBAC restrictions.",
-          "status": "done",
+          "title": "Write unit tests for RBAC logic",
+          "description": "Create tests for authentication middleware and permission helpers.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Cover both allowed and forbidden scenarios for isAuthed, hasRole, and hasPermission."
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "title": "Implement Personal Email Integration",
+      "description": "Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "high",
+      "details": "1. Create tRPC `emailRouter` with procedures: `listFolders`, `listMessages`, `getMessage`, `sendMessage`, `createReply`, `createForward`\n2. Configure Graph API permissions: `Mail.ReadWrite`, `Mail.Send`\n3. Implement 3-column layout UI at `/email` route with folder list, message list, and message detail components\n4. Add pagination controls for message list\n5. Create compose/reply/forward modals with form validation\n6. Ensure HTML email body is sanitized before rendering\n7. Add loading states and error handling",
+      "testStrategy": "1. Verify all email procedures return expected data\n2. Test pagination functionality with large mailboxes\n3. Confirm emails can be composed, sent, replied to, and forwarded\n4. Validate HTML sanitization prevents XSS\n5. Test error handling for network issues and permission problems",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Configure Microsoft Graph API Authentication",
+          "description": "Verify Mail.ReadWrite and Mail.Send delegated permissions and implement a reusable GraphClient utility class",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Confirm the Azure AD app registration includes Mail.ReadWrite and Mail.Send delegated permissions. Implement a GraphClient class to perform authenticated Graph API calls using the existing Phase 0 OAuth flow, handling token acquisition and refresh. Ensure the utility is strongly typed and reusable across email service methods."
+        },
+        {
+          "id": 2,
+          "title": "Implement Email Service and tRPC Router",
+          "description": "Create the backend service layer and tRPC router with all required email procedures",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Use the previously defined Zod schema to validate input data. Apply RBAC middleware to ensure only authorized roles can create clients. Use Prisma's create method to insert the new client record, and return the created client (with field restrictions for non-privileged roles)."
+          "details": "Create an EmailService class that interfaces with Microsoft Graph API to perform email operations. Implement methods for listing folders, fetching messages, getting message details, sending messages, and creating replies/forwards. Create the tRPC emailRouter with the following procedures: listFolders, listMessages, getMessage, sendMessage, createReply, and createForward. Implement server-side pagination for message lists. Add input validation using Zod schemas for all procedures. Implement proper error handling with meaningful error messages. Add HTML sanitization for email body content using a library like DOMPurify."
+        },
+        {
+          "id": 3,
+          "title": "Create Email Folder and Message List Components",
+          "description": "Implement the first two columns of the 3-column layout: folder navigation and message list",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Create a responsive layout for the /email route with a sidebar for folders and a main content area for messages. Implement the FolderList component that fetches and displays email folders from the tRPC listFolders procedure. Add folder selection functionality that triggers message list updates. Create the MessageList component that displays messages from the selected folder using the tRPC listMessages procedure. Implement pagination controls with options for page size and navigation. Add sorting functionality for messages by date, sender, or subject. Implement loading states and error handling for both components. Add a search/filter functionality for the message list."
+        },
+        {
+          "id": 4,
+          "title": "Implement Message Detail Component",
+          "description": "Create the third column component for displaying the full content of selected emails",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Create the MessageDetail component that fetches and displays the full content of a selected email using the tRPC getMessage procedure. Implement HTML sanitization on the client side before rendering email content. Display email headers (From, To, CC, Subject, Date) in a structured format. Show email attachments with download options. Add buttons for reply, reply all, and forward actions. Implement loading states and error handling. Create a mechanism to handle and display inline images securely. Add functionality to mark messages as read when opened."
         },
         {
           "id": 5,
-          "title": "Implement client.update with Validation and RBAC",
-          "description": "Develop the client.update procedure to update existing client records by clientId, enforcing Zod schema validation and RBAC.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Validate the input (clientId and update data) using the Zod schema. Apply RBAC middleware to ensure only authorized roles can update clients. Use Prisma's update method to modify the client record, and return the updated client (with field restrictions for non-privileged roles)."
+          "title": "Develop Email Composition Components",
+          "description": "Create modals for composing new emails, replying to emails, and forwarding emails",
+          "status": "pending",
+          "dependencies": [4],
+          "details": "Create a ComposeMail modal component with form fields for recipient, cc, bcc, subject, and body. Implement a rich text editor for the email body using a library like TinyMCE or Quill. Add file attachment functionality with size limits and type validation. Create ReplyMail and ForwardMail components that pre-populate fields based on the original email. Implement form validation for all required fields and email format validation. Add draft saving functionality to prevent data loss. Implement the send functionality using the tRPC sendMessage procedure. Add loading states during sending and success/error notifications."
         },
         {
           "id": 6,
-          "title": "Test Procedures and Enforce Field-Level Access Control",
-          "description": "Thoroughly test all clientRouter procedures for correct RBAC enforcement, validation, relation loading, and field-level access control. Refine field restrictions for non-Admin/Manager roles.",
-          "status": "done",
+          "title": "Implement Testing and Finalize Integration",
+          "description": "Create comprehensive tests and finalize the email integration with proper error handling and performance optimizations",
+          "status": "pending",
           "dependencies": [2, 3, 4, 5],
-          "details": "Write unit and integration tests for each procedure, simulating different user roles and verifying correct access, validation, and field visibility. Ensure that unauthorized users receive TRPCError('FORBIDDEN') and that field-level restrictions are consistently applied across all endpoints."
+          "details": "Write unit tests for the EmailService class and all tRPC procedures. Create integration tests for the complete email flow from authentication to sending. Implement end-to-end tests for the UI components. Add error boundary components to gracefully handle runtime errors. Implement proper loading states throughout the application. Optimize performance by implementing virtualized lists for large mailboxes. Add telemetry and logging for monitoring email operations. Create documentation for the email integration features. Perform security review to ensure proper handling of sensitive email data. Implement feature flags to control rollout of the email functionality."
         }
       ]
     },
     {
       "id": 2,
-      "title": "Implement Related Entity Management Backend",
-      "description": "Create tRPC procedures for Contacts, Licenses, and Trust Accounts CRUD operations",
-      "status": "done",
+      "title": "Implement Admin Shared Mailbox Access",
+      "description": "Extend the email integration to allow Admin users to access and manage the shared admin mailbox, with proper role-based access control.",
+      "status": "pending",
       "dependencies": [1],
-      "priority": "high",
-      "details": "Implement direct tRPC procedures for contact.create/update, license.create/update, and trustAccount.create/update with proper Zod validation schemas. Each procedure should accept the parent clientId and the entity data. Ensure RBAC enforcement (Admin/Manager only) for all write operations. Consider implementing batch operations if needed for efficiency.",
-      "testStrategy": "Test each procedure with valid and invalid inputs, verify proper relationship creation with parent Client records, and confirm RBAC enforcement prevents unauthorized access.",
+      "priority": "medium",
+      "details": "1. Extend tRPC `emailRouter` with shared mailbox procedures targeting `/users/{admin-email}/...` endpoints\n2. Configure additional Graph API permissions: `Mail.ReadWrite.Shared`, `Mail.Send.Shared`\n3. Implement RBAC to restrict shared mailbox access to Admin role only\n4. Add mailbox switcher UI component (tabs or dropdown) visible only to Admins\n5. Modify email components to use appropriate procedures based on selected mailbox\n6. Ensure emails sent from shared mailbox are properly attributed",
+      "testStrategy": "1. Verify only Admin users can access shared mailbox functions\n2. Test mailbox switching functionality preserves state appropriately\n3. Confirm emails sent from shared mailbox show correct sender\n4. Validate RBAC prevents unauthorized access attempts",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define Zod Validation Schemas for Entities",
-          "description": "Create Zod schemas for Contacts, Licenses, and Trust Accounts to validate incoming data for create and update operations.",
-          "status": "done",
+          "title": "Extend tRPC emailRouter with Shared Mailbox Procedures",
+          "description": "Add new procedures to the tRPC emailRouter to support operations (read, send, manage) on the shared admin mailbox, targeting endpoints like /users/{admin-email}/....",
+          "status": "pending",
           "dependencies": [],
-          "details": "Implement Zod object schemas for each entity, ensuring all required fields are present and correctly typed. Include validation for parent clientId and entity-specific fields. These schemas will be used to validate input in tRPC procedures.[2][5]"
+          "details": "Define procedures for accessing and managing the shared mailbox using Microsoft Graph API endpoints. Ensure these procedures can differentiate between personal and shared mailbox contexts, and structure them to support future extensibility."
         },
         {
           "id": 2,
-          "title": "Implement RBAC Middleware for tRPC Procedures",
-          "description": "Develop a reusable middleware to enforce Admin/Manager role-based access control for all write operations.",
-          "status": "done",
+          "title": "Configure Microsoft Graph API Permissions for Shared Mailbox",
+          "description": "Verify and add Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions for the shared mailbox",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Create a tRPC middleware that checks the user's role from the context and restricts access to create and update procedures unless the user is an Admin or Manager. Integrate this middleware into the relevant procedures to ensure security.[4]"
+          "details": "Confirm the existing Azure AD app registration includes Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions with admin consent. Update the registration if needed and validate API access to shared mailbox endpoints."
         },
         {
           "id": 3,
-          "title": "Develop tRPC CRUD Procedures for Contacts, Licenses, and Trust Accounts",
-          "description": "Implement create and update tRPC procedures for each entity, using the defined Zod schemas and RBAC middleware.",
-          "status": "done",
+          "title": "Implement Role-Based Access Control (RBAC) for Shared Mailbox",
+          "description": "Restrict access to the shared admin mailbox procedures so only users with the Admin role can invoke them.",
+          "status": "pending",
           "dependencies": [1, 2],
-          "details": "For each entity, define tRPC mutation procedures (contact.create, contact.update, license.create, license.update, trustAccount.create, trustAccount.update). Each procedure should accept parent clientId and entity data, validate input with Zod, and enforce RBAC via middleware. Use your ORM (e.g., Prisma) to interact with the database.[2][5]"
+          "details": "Update the backend authorization logic to check user roles before allowing access to shared mailbox procedures. Ensure that only Admin users can see or interact with shared mailbox functionality, and add tests to validate RBAC enforcement."
         },
         {
           "id": 4,
-          "title": "Implement Batch Operations for Efficiency",
-          "description": "Add batch create and update procedures for each entity to handle multiple records in a single request.",
-          "status": "done",
+          "title": "Develop Mailbox Switcher UI Component for Admins",
+          "description": "Create a UI component (tabs or dropdown) that allows Admin users to switch between their personal mailbox and the shared admin mailbox.",
+          "status": "pending",
           "dependencies": [3],
-          "details": "Define tRPC procedures (e.g., contact.batchCreate, license.batchUpdate) that accept arrays of entity data and clientIds. Use Zod array validation and ensure RBAC enforcement. Optimize database interactions for bulk operations to improve performance."
+          "details": "Design and implement a mailbox switcher that is only visible to Admin users. Integrate it with the application's state management so that selecting a mailbox updates the context for all email operations."
         },
         {
           "id": 5,
-          "title": "Write Unit and Integration Tests for Procedures and Middleware",
-          "description": "Create comprehensive tests to verify validation, RBAC enforcement, and correct CRUD/batch operations for all entities.",
-          "status": "done",
+          "title": "Update Email Components for Shared Mailbox Context and Attribution",
+          "description": "Modify email-related components to use the correct mailbox procedures based on the selected mailbox, and ensure emails sent from the shared mailbox are properly attributed.",
+          "status": "pending",
           "dependencies": [4],
-          "details": "Write tests covering valid and invalid inputs, unauthorized access, and successful/failed CRUD and batch operations. Ensure all edge cases are handled and that procedures behave as expected under different user roles and data scenarios."
+          "details": "Refactor components to dynamically call the appropriate tRPC procedures depending on the active mailbox. Ensure that outgoing emails from the shared mailbox use the correct sender identity and are tracked as sent by the shared mailbox, not the individual Admin."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Implement Client Management Frontend",
-      "description": "Create Client List and Detail pages with CRUD functionality",
-      "status": "done",
-      "dependencies": [1, 2],
+      "title": "Enhance Client and Audit Detail Pages",
+      "description": "Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.",
+      "status": "pending",
+      "dependencies": [],
       "priority": "high",
-      "details": "Develop: 1) Client List page (/clients) with functional data table using client.getAll, including pagination, sorting, filtering, and conditional 'Add New Client' button based on user role. 2) Client Detail page (/clients/[clientId]) with structured Cards/Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log. 3) Client Create/Edit forms using React Hook Form + Zod with template components, handling client.create and client.update. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
-      "testStrategy": "Perform manual testing of all UI components and interactions. Verify data fetching, pagination, sorting, and filtering. Test form validation and submission. Confirm role-based UI element visibility.",
+      "details": "1. Optimize tRPC `client.getById` to include related entities: contacts, licenses, trustAccounts, audits\n2. Optimize tRPC `audit.getById` to include tasks and assignments with user information\n3. Implement tabbed interface for Client Detail page at `/clients/[clientId]` with Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs\n4. Create tables/lists for each tab with appropriate sorting and filtering\n5. Enhance Audit Detail page at `/audits/[auditId]` with core info, assigned team display, tasks table, and activity log\n6. Use Shadcn/TailAdmin components consistently for cards, badges, and tables\n7. Ensure responsive design works on various screen sizes",
+      "testStrategy": "1. Verify all relational data is correctly fetched and displayed\n2. Test tab navigation preserves state\n3. Confirm sorting and filtering functions work as expected\n4. Validate responsive design on mobile, tablet, and desktop viewports\n5. Check performance with large datasets",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Routing and Page Structure",
-          "description": "Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.",
-          "status": "done",
+          "title": "Extend tRPC Procedures to Fetch Related Entities",
+          "description": "Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]"
+          "details": "Modify the tRPC router definitions so that `client.getById` returns contacts, licenses, trustAccounts, and audits, and `audit.getById` returns tasks and assignments with user information. Ensure the returned data is fully typed and optimized for frontend consumption."
         },
         {
           "id": 2,
-          "title": "Implement Client List Data Table with Pagination, Sorting, and Filtering",
-          "description": "Build the Client List page with a functional data table that supports pagination, sorting, and filtering, fetching data via client.getAll.",
-          "status": "done",
+          "title": "Implement Tabbed Interface on Client Detail Page",
+          "description": "Create a tabbed navigation UI for the Client Detail page at `/clients/[clientId]` to organize related data into Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Use a data table component (from Shadcn UI or TailAdmin) to display clients. Integrate client.getAll to fetch data. Add pagination controls, sortable columns, and filtering inputs. Ensure the table updates based on user interactions.[4]"
+          "details": "Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each tab should be a separate component and fetch its data using the enhanced tRPC procedures."
         },
         {
           "id": 3,
-          "title": "Add Conditional 'Add New Client' Button Based on User Role",
-          "description": "Render the 'Add New Client' button on the Client List page only for users with the appropriate role.",
-          "status": "done",
+          "title": "Build Data Tables and Lists for Each Client Tab",
+          "description": "Develop tables or lists for each tab on the Client Detail page, supporting sorting and filtering where appropriate.",
+          "status": "pending",
           "dependencies": [2],
-          "details": "Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form."
+          "details": "For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables using Shadcn/TailAdmin components. Add sorting and filtering controls as needed. Ensure data is fetched efficiently and displayed clearly."
         },
         {
           "id": 4,
-          "title": "Develop Client Create and Edit Forms with Validation",
-          "description": "Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback."
+          "title": "Enhance Audit Detail Page with Relational Data",
+          "description": "Redesign the Audit Detail page at `/audits/[auditId]` to display core audit info, assigned team members, a tasks table, and an activity log.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Use Shadcn/TailAdmin cards, badges, and tables to present audit details, team assignments (with user info), tasks, and activity logs. Ensure the layout is clear and information is grouped logically."
         },
         {
           "id": 5,
-          "title": "Implement Client Detail Page with Structured Cards/Tabs",
-          "description": "Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Use Shadcn UI or TailAdmin components to create a visually consistent layout. Fetch and display relevant data for each section. Ensure tabs/cards are responsive and accessible."
+          "title": "Apply Consistent UI Components and Styling",
+          "description": "Standardize the use of Shadcn/TailAdmin components for cards, badges, and tables across both Client and Audit detail pages.",
+          "status": "pending",
+          "dependencies": [3, 4],
+          "details": "Audit all UI elements on the detail pages to ensure consistent use of Shadcn/TailAdmin components. Refactor any legacy or inconsistent UI elements to match the new design system."
         },
         {
           "id": 6,
-          "title": "Integrate CRUD Operations and Finalize UI Consistency",
-          "description": "Connect all CRUD operations (Create, Read, Update, Delete) across the Client List and Detail pages, and ensure consistent styling and error handling throughout.",
-          "status": "done",
+          "title": "Ensure Responsive Design and Cross-Device Usability",
+          "description": "Test and refine the Client and Audit detail pages to ensure they are fully responsive and usable on all common screen sizes.",
+          "status": "pending",
           "dependencies": [5],
-          "details": "Wire up delete functionality from the Client List and Detail pages. Ensure all forms and tables reflect changes in real time. Apply consistent Tailwind and Shadcn UI/TailAdmin styling. Implement error handling and user feedback for all actions.[3][4]"
+          "details": "Use responsive utilities from Shadcn/TailAdmin and test layouts on various devices. Adjust breakpoints, table layouts, and navigation as needed to guarantee a seamless user experience on desktop, tablet, and mobile."
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement Audit Tracking Backend",
-      "description": "Create tRPC procedures in auditRouter for Audit management with RBAC",
-      "status": "done",
-      "dependencies": [1],
-      "priority": "high",
-      "details": "Implement the following tRPC procedures in auditRouter: 1) audit.create (input: clientId, auditYear, initial stageId/statusId), 2) audit.updateStageStatus (input: auditId, stageId, statusId), 3) audit.getByClientId for client detail audit history, 4) audit.getById for full audit details including tasks and assignments, 5) audit.assignUser and audit.unassignUser to manage AuditAssignment records. Enforce RBAC for all procedures, restricting certain operations to Auditor/Manager/Admin roles.",
-      "testStrategy": "Write unit tests for each procedure verifying correct data manipulation, relationship management, and RBAC enforcement. Test edge cases like duplicate audit years for the same client.",
+      "title": "Implement Teams Chat Integration",
+      "description": "Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "medium",
+      "details": "1. Create tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, `createGroup`\n2. Configure Graph API permissions: `Chat.ReadWrite`, `User.Read.All`\n3. Implement `/chat` page with chat list pane, message pane, and message input components\n4. Add pagination/infinite scroll for message history\n5. Create user search functionality for starting new chats\n6. Implement new chat creation flows (1:1 and group)\n7. Add loading states and error handling",
+      "testStrategy": "1. Verify chat list and messages load correctly\n2. Test message sending functionality\n3. Confirm user search and new chat creation work as expected\n4. Validate pagination/infinite scroll with large chat histories\n5. Test error handling for network issues and permission problems",
       "subtasks": [
         {
           "id": 1,
-          "title": "Design Audit Data Models and RBAC Policy",
-          "description": "Define and implement the database models for audits, audit stages/statuses, and audit assignments. Establish a clear RBAC (Role-Based Access Control) policy for all audit-related operations.",
-          "status": "done",
+          "title": "Set Up Microsoft Teams API Integration and Permissions",
+          "description": "Configure Microsoft Graph API access and ensure the application has the necessary permissions to read and send Teams chat messages.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create or update ORM models for Audit, AuditStage, AuditStatus, and AuditAssignment. Define user roles (Auditor, Manager, Admin) and map permissions for each tRPC procedure. Ensure the models support linking audits to clients, tracking stages/statuses, and managing user assignments. Document the RBAC rules for reference in later subtasks.\n\n<info added on 2025-04-21T14:30:38.587Z>\nBased on your exploration, here's additional technical information for the subtask:\n\n```typescript\n// Permission constants to be added in src/constants/permissions.ts\nexport const AUDIT_PERMISSIONS = {\n  CREATE: 'audit.create',\n  UPDATE_STAGE_STATUS: 'audit.updateStageStatus',\n  GET_BY_CLIENT_ID: 'audit.getByClientId',\n  GET_BY_ID: 'audit.getById',\n  ASSIGN_USER: 'audit.assignUser',\n  UNASSIGN_USER: 'audit.unassignUser',\n};\n```\n\nFor the Prisma seed script, implement:\n\n```typescript\n// In prisma/seed.ts\nasync function seedAuditPermissions() {\n  const permissions = Object.values(AUDIT_PERMISSIONS).map(action => ({ action }));\n  await prisma.permission.createMany({\n    data: permissions,\n    skipDuplicates: true,\n  });\n  \n  // Map permissions to roles\n  const admin = await prisma.role.findUnique({ where: { name: 'Admin' } });\n  const manager = await prisma.role.findUnique({ where: { name: 'Manager' } });\n  const auditor = await prisma.role.findUnique({ where: { name: 'Auditor' } });\n  \n  // Admin gets all permissions\n  const adminPermissions = await prisma.permission.findMany({\n    where: { action: { in: Object.values(AUDIT_PERMISSIONS) } },\n  });\n  \n  // Manager permissions\n  const managerPermissions = await prisma.permission.findMany({\n    where: { action: { in: Object.values(AUDIT_PERMISSIONS) } },\n  });\n  \n  // Auditor permissions - limited read access\n  const auditorPermissions = await prisma.permission.findMany({\n    where: { action: { in: [AUDIT_PERMISSIONS.GET_BY_CLIENT_ID, AUDIT_PERMISSIONS.GET_BY_ID] } },\n  });\n  \n  // Create role-permission mappings\n  // [Implementation details for creating RolePermission records]\n}\n```\n\nFor tRPC middleware implementation:\n\n```typescript\n// In src/server/api/trpc.ts\nexport const enforceAuditPermission = (requiredPermission: string) => \n  middleware(async ({ ctx, next }) => {\n    if (!ctx.session?.user) {\n      throw new TRPCError({ code: \"UNAUTHORIZED\" });\n    }\n    \n    const hasPermission = await prisma.rolePermission.findFirst({\n      where: {\n        role: {\n          userRoles: {\n            some: {\n              userId: ctx.session.user.id\n            }\n          }\n        },\n        permission: {\n          action: requiredPermission\n        }\n      }\n    });\n    \n    if (!hasPermission) {\n      throw new TRPCError({ code: \"FORBIDDEN\", message: \"Insufficient permissions\" });\n    }\n    \n    return next();\n  });\n```\n\nUnit test structure for RBAC enforcement:\n\n```typescript\n// In tests/rbac/audit-permissions.test.ts\ndescribe('Audit RBAC Enforcement', () => {\n  test('Admin can perform all audit operations', async () => {\n    // Setup admin user session\n    // Test each permission\n  });\n  \n  test('Manager can perform all audit operations', async () => {\n    // Setup manager user session\n    // Test each permission\n  });\n  \n  test('Auditor can only view audits', async () => {\n    // Setup auditor user session\n    // Test allowed operations (should succeed)\n    // Test restricted operations (should fail)\n  });\n  \n  test('Other roles cannot access audit operations', async () => {\n    // Setup user with non-audit role\n    // Test operations (all should fail)\n  });\n});\n```\n</info added on 2025-04-21T14:30:38.587Z>"
+          "details": "Register the application in Azure AD, configure required API permissions (`Chat.ReadWrite`, `User.Read.All`), and set up authentication flows. Ensure admin consent is granted for these permissions so the backend can interact with Teams chat endpoints."
         },
         {
           "id": 2,
-          "title": "Implement tRPC Procedures for Audit Creation and Stage/Status Updates",
-          "description": "Develop tRPC procedures in auditRouter for creating audits and updating their stage/status, enforcing RBAC for each operation.",
-          "status": "done",
+          "title": "Implement tRPC Chat Router and Backend Procedures",
+          "description": "Develop the backend chat router with all necessary procedures for chat operations.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Implement audit.create to accept clientId, auditYear, and initial stageId/statusId, ensuring only authorized roles can create audits. Implement audit.updateStageStatus to update an audit's stage and status, restricting access based on RBAC policy. Validate inputs and handle errors appropriately."
+          "details": "Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases."
         },
         {
           "id": 3,
-          "title": "Implement tRPC Procedures for Audit Retrieval",
-          "description": "Develop tRPC procedures to retrieve audit data: audit.getByClientId for client audit history and audit.getById for full audit details, including related tasks and assignments.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Implement audit.getByClientId to fetch all audits for a given client, returning summary data. Implement audit.getById to fetch comprehensive audit details, including tasks and user assignments. Enforce RBAC so users only access audits they are permitted to view."
+          "title": "Develop Frontend Chat Page and Core UI Components",
+          "description": "Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible."
         },
         {
           "id": 4,
-          "title": "Implement tRPC Procedures for Audit Assignment Management",
-          "description": "Develop audit.assignUser and audit.unassignUser procedures to manage AuditAssignment records, with strict RBAC enforcement.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Implement audit.assignUser to assign users to audits and audit.unassignUser to remove assignments. Validate user roles and permissions for these operations. Ensure assignment changes are logged for auditability."
+          "title": "Add Pagination, Infinite Scroll, and User Search Functionality",
+          "description": "Enhance the chat UI with message history pagination/infinite scroll and implement user search for starting new chats.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Implement pagination or infinite scroll in the message pane to load older messages as the user scrolls. Add a user search component that leverages the `findUsers` backend procedure, enabling users to search and select contacts for new chats."
         },
         {
           "id": 5,
-          "title": "Integrate Monitoring, Logging, and RBAC Enforcement Across Procedures",
-          "description": "Add comprehensive monitoring and logging to all auditRouter procedures, ensuring RBAC checks are consistently enforced and all sensitive actions are auditable.",
-          "status": "done",
-          "dependencies": [2, 3, 4],
-          "details": "Integrate logging for all create, update, assignment, and retrieval actions, including user IDs, timestamps, and operation details. Set up monitoring for key metrics (e.g., request rates, errors). Review all procedures to confirm RBAC is enforced at entry points and that unauthorized access is prevented and logged."
+          "title": "Implement New Chat Creation Flows and Robust UX States",
+          "description": "Enable creation of new one-to-one and group chats, and add comprehensive loading and error handling throughout the chat experience.",
+          "status": "pending",
+          "dependencies": [4],
+          "details": "Integrate flows for creating new chats (both 1:1 and group) using the respective backend procedures. Ensure all UI components display appropriate loading indicators and error messages, providing a smooth and resilient user experience."
         }
       ]
     },
     {
       "id": 5,
-      "title": "Implement Audit Tracking Frontend",
-      "description": "Create Audit UI components for Client Detail and Audit Detail pages",
-      "status": "done",
-      "dependencies": [3, 4],
+      "title": "Implement Teams Phone Integration",
+      "description": "Enable outbound PSTN calling to clients directly from the portal using Teams Phone System, with call logging functionality.",
+      "status": "pending",
+      "dependencies": [3],
       "priority": "medium",
-      "details": "Develop: 1) Client Detail Audits Tab showing audit list (using audit.getByClientId) with Year, Stage, Status, Due Date, Assigned Staff columns, 'Add New Audit Year' button, and Stage/Status dropdowns for audit.updateStageStatus. 2) Audit Detail page (/audits/[auditId]) displaying audit details, assigned team members with add/remove controls, and related tasks. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
-      "testStrategy": "Manually test all UI components and interactions. Verify data fetching, display of audit history, stage/status updates, and team member assignment functionality. Test role-based UI element visibility.",
+      "details": "1. Create tRPC `phoneRouter` with procedures: `makePstnCall`, `logCall`\n2. Configure Graph API permissions: `Calls.Initiate.All`\n3. Create database schema for call logs (callerId, clientId, contactId, numberDialed, startTime, endTime, duration)\n4. Implement `/phone` page with client/contact search functionality\n5. Add call buttons next to contacts with phone numbers\n6. Create Admin-only dial pad UI for direct number entry\n7. Implement call logging after call initiation\n8. Add role-based visibility controls for phone features",
+      "testStrategy": "1. Verify PSTN calls can be initiated from contact list\n2. Test Admin dial pad functionality\n3. Confirm call logs are correctly created and stored\n4. Validate RBAC for phone features\n5. Test error handling for failed calls",
       "subtasks": [
         {
           "id": 1,
-          "title": "Design Audit UI Components and Page Layouts",
-          "description": "Create wireframes and component structures for the Client Detail Audits Tab and the Audit Detail page, ensuring alignment with Tailwind and Shadcn UI / TailAdmin design systems.",
-          "status": "done",
+          "title": "Set Up Teams Phone System Integration and Permissions",
+          "description": "Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions and external provisioning by QAS IT.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Define the layout for the audits tab within the Client Detail page, including table columns (Year, Stage, Status, Due Date, Assigned Staff), 'Add New Audit Year' button, and dropdowns for Stage/Status. For the Audit Detail page, outline sections for audit details, assigned team members with add/remove controls, and related tasks. Use Figma or a similar tool for mockups and document component hierarchies.\n\n<info added on 2025-04-22T03:22:25.298Z>\n- Ensure Tailwind CSS v4 is installed and configured to leverage its new features, such as the @theme directive and CSS-native theming, which enhances maintainability and performance for Shadcn UI components[2][5].\n- When integrating Shadcn UI components, utilize Tailwind v4’s CSS variable-based theming to align with TailAdmin’s design tokens and support dynamic theming across the audit UI[5].\n- For dropdowns (Stage/Status), use Shadcn UI’s <Select> component styled with Tailwind classes, ensuring accessibility and consistent appearance with the rest of the dashboard[1][2].\n- Document the component hierarchy in Figma, mapping each UI element (e.g., AuditList table, Add New Audit Year button, inline dropdowns) to its corresponding React component and Tailwind utility classes for developer reference.\n- In the Audit Detail page, use Shadcn UI’s <Card>, <Tabs>, and <Avatar> components for sections like audit metadata, team member management, and related tasks, ensuring modularity and reusability.\n- For team member add/remove controls, implement Shadcn UI’s <Button> and <Popover> components, styled with Tailwind, to provide intuitive user interactions.\n- Reference TailAdmin’s layout patterns for responsive grid and spacing utilities, ensuring the audit pages are mobile-friendly and visually consistent with the rest of the admin dashboard[4].\n</info added on 2025-04-22T03:22:25.298Z>"
+          "details": "Coordinate with QAS IT to provision Teams Phone System licenses, phone numbers, and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls."
         },
         {
           "id": 2,
-          "title": "Implement Client Detail Audits Tab Table and Controls",
-          "description": "Develop the audits table UI for the Client Detail page, integrating data fetching and interactive controls for audit management.",
-          "status": "done",
+          "title": "Design and Implement Call Logging Database Schema",
+          "description": "Create a robust database schema to store call logs, capturing all relevant call metadata.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fetch audit data using audit.getByClientId. Implement columns for Year, Stage, Status, Due Date, and Assigned Staff. Add the 'Add New Audit Year' button with modal or inline form functionality. Integrate Stage/Status dropdowns that trigger audit.updateStageStatus on change."
+          "details": "Define and migrate a database schema for call logs with fields: callerId, clientId, contactId, numberDialed, startTime, endTime, and duration. Ensure indexing for efficient querying and consider audit/compliance requirements for call records."
         },
         {
           "id": 3,
-          "title": "Develop Audit Detail Page with Team and Task Management",
-          "description": "Create the Audit Detail page at /audits/[auditId], displaying audit information and enabling management of assigned team members and related tasks.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Use Tailwind and Shadcn UI / TailAdmin components to present audit details. Implement a section for assigned team members with add/remove controls (e.g., multi-select dropdown or list with remove buttons). Display related tasks in a list or table. Ensure all data is fetched and updated via appropriate API endpoints."
+          "title": "Develop tRPC phoneRouter with Call and Logging Procedures",
+          "description": "Implement a tRPC router exposing procedures for initiating PSTN calls and logging call details.",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Create a tRPC router named 'phoneRouter' with procedures: 'makePstnCall' (to initiate outbound calls via Teams Phone System using the Graph API) and 'logCall' (to record call details in the database). Ensure error handling, input validation, and secure access controls for these endpoints."
         },
         {
           "id": 4,
-          "title": "Integrate API Calls and State Management",
-          "description": "Connect UI components to backend APIs for data retrieval and updates, managing local and global state as needed.",
-          "status": "done",
-          "dependencies": [2, 3],
-          "details": "Wire up audit.getByClientId for the audits tab and relevant endpoints for audit details, team assignment, and task management. Use React Query, Redux, or context/state hooks for efficient state management and UI updates. Handle optimistic updates for status/stage changes and team modifications."
+          "title": "Build Portal UI for Calling and Call Management",
+          "description": "Implement the /phone page with client/contact search, call buttons, and an admin-only dial pad for direct number entry.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Develop the /phone page UI to allow users to search for clients/contacts, display contacts with phone numbers, and show call buttons next to each. Add an admin-only dial pad component for direct number entry. Integrate UI actions with the tRPC procedures for call initiation and logging."
         },
         {
           "id": 5,
-          "title": "Implement Role-Based Access and Final Styling Consistency",
-          "description": "Apply role-based controls to restrict actions (e.g., editing, assignment) and ensure all UI elements follow consistent styling guidelines.",
-          "status": "done",
+          "title": "Implement Call Logging and Role-Based Feature Controls",
+          "description": "Ensure all calls are logged after initiation and restrict phone features based on user roles.",
+          "status": "pending",
           "dependencies": [4],
-          "details": "Check user roles/permissions before rendering or enabling controls such as status updates, team assignment, and adding new audits. Refine all components to match Tailwind and Shadcn UI / TailAdmin standards for spacing, typography, and responsiveness. Conduct a UI review to ensure visual and functional consistency across both pages."
+          "details": "After each call is initiated, automatically invoke the 'logCall' procedure to record the call. Implement role-based visibility and access controls for phone features (e.g., dial pad, call buttons) so only authorized users can access specific functionalities. Test to ensure compliance with security and audit requirements."
         }
       ]
     },
     {
       "id": 6,
-      "title": "Implement Task Management Backend",
-      "description": "Create tRPC procedures in taskRouter for Task CRUD operations with RBAC",
-      "status": "done",
-      "dependencies": [4],
+      "title": "Implement SharePoint Folder Linking",
+      "description": "Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.",
+      "status": "pending",
+      "dependencies": [3],
       "priority": "high",
-      "details": "Implement the following tRPC procedures in taskRouter: 1) task.getByAuditId, 2) task.getAssignedToMe with pagination, sorting, filtering, 3) task.getAll (Admin view) with pagination, sorting, filtering, 4) task.create, 5) task.update, 6) task.delete. Each procedure should enforce appropriate RBAC based on user roles. Tasks should support fields like Name, Description, Assignee, Due Date, Status, and Priority.",
-      "testStrategy": "Write unit tests for each procedure verifying correct data manipulation, filtering, pagination, and RBAC enforcement. Test task assignment and reassignment functionality.",
+      "details": "1. Create `scripts/linkSharepointFolders.ts` to automatically match clients with SharePoint folders by name\n2. Create tRPC `sharepointRouter` with procedures: `listClientFolders`, `getFolderContents`\n3. Add `client.updateSharepointFolderId` procedure with Admin/Manager RBAC\n4. Implement \"Link/Change SharePoint Folder\" button on Client Detail page for Admin/Managers\n5. Create folder selection modal using `sharepoint.listClientFolders`\n6. Add document display component on Client Detail page that shows contents of linked folder\n7. Implement \"Open in Web\" links for documents using SharePoint webUrl",
+      "testStrategy": "1. Verify automated script correctly links clients to SharePoint folders\n2. Test manual linking UI for Admin/Manager users\n3. Confirm document list displays correctly for linked folders\n4. Validate \"Open in Web\" links open documents in SharePoint\n5. Test RBAC for folder linking functionality",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define Task Schema and Database Models",
-          "description": "Create TypeScript interfaces and Prisma/database models for the Task entity with all required fields",
-          "status": "done",
+          "title": "Develop Automated Script for Client–SharePoint Folder Matching",
+          "description": "Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create a Task schema with fields: id, name, description, assigneeId, auditId, dueDate, status, priority, createdAt, and updatedAt. Define TypeScript interfaces for Task entity and related input/output types. Set up Prisma model or equivalent database schema for Task entity with appropriate relations to User and Audit entities. Implement validation schemas using Zod or similar validation library for task creation and updates. Define enums for Status and Priority fields with appropriate values."
+          "details": "Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders."
         },
         {
           "id": 2,
-          "title": "Implement RBAC Middleware for Task Procedures",
-          "description": "Create middleware to handle role-based access control for all task procedures",
-          "status": "done",
+          "title": "Implement tRPC SharePoint Router for Folder Listing and Contents",
+          "description": "Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Create a middleware function using tRPC's middleware pattern that validates user permissions based on their role. Define permission rules for different task operations: admins can perform all operations, managers can create/update/view tasks, regular users can only view assigned tasks and update their status. Implement context-based authorization by extending the tRPC context to include user role information. Create helper functions to check if a user has access to specific tasks based on assignment and role. Ensure the middleware can be reused across all task procedures."
+          "details": "Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption."
         },
         {
           "id": 3,
-          "title": "Implement Basic Task Retrieval Procedures",
-          "description": "Create tRPC procedures for task.getByAuditId and task.getAssignedToMe with pagination",
-          "status": "done",
-          "dependencies": [1, 2],
-          "details": "Implement the task.getByAuditId procedure that accepts an auditId parameter and returns all tasks associated with that audit. Apply RBAC to ensure only users with access to the audit can view its tasks. Implement task.getAssignedToMe procedure that returns tasks assigned to the current user with pagination support. Add input validation for pagination parameters (page, limit). Implement sorting functionality allowing tasks to be sorted by dueDate, priority, or status. Add filtering options to filter tasks by status or priority. Ensure both procedures use the RBAC middleware to enforce access control."
+          "title": "Add Client Folder Linking Procedure with RBAC Controls",
+          "description": "Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record."
         },
         {
           "id": 4,
-          "title": "Implement Admin Task View Procedure",
-          "description": "Create task.getAll procedure with advanced querying capabilities for administrators",
-          "status": "done",
-          "dependencies": [2, 3],
-          "details": "Implement task.getAll procedure that returns all tasks in the system with strict admin-only access control. Add comprehensive pagination support with cursor-based pagination for better performance. Implement advanced filtering options including by assignee, date ranges, multiple statuses, and priorities. Add sorting capabilities on all relevant fields with both ascending and descending options. Include search functionality to search across task names and descriptions. Implement count and aggregation features to show task distribution by status, priority, or assignee. Ensure proper error handling for invalid query parameters."
+          "title": "Create UI for Linking/Changing SharePoint Folder on Client Detail Page",
+          "description": "Add a 'Link/Change SharePoint Folder' button to the Client Detail page, visible to Admins/Managers, which opens a modal for folder selection.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Conditionally render the button based on user role. Trigger a modal that uses the `sharepoint.listClientFolders` procedure to display available folders for selection."
         },
         {
           "id": 5,
-          "title": "Implement Task Creation and Update Procedures",
-          "description": "Create tRPC procedures for task.create and task.update with proper validation",
-          "status": "done",
-          "dependencies": [1, 2],
-          "details": "Implement task.create procedure that accepts task details and creates a new task in the database. Add input validation using Zod schemas to ensure all required fields are provided and valid. Implement task.update procedure that allows updating task fields while preserving immutable fields. Add validation to ensure users can only update tasks they're authorized to modify based on RBAC rules. Implement business logic for task assignment, including notifications or events when tasks are created or assigned. Add audit logging to track task creation and modifications. Ensure proper error handling for validation failures and database errors."
+          "title": "Build Folder Selection Modal and Document Display Component",
+          "description": "Develop a modal for selecting a SharePoint folder and a component to display the contents of the linked folder on the Client Detail page.",
+          "status": "pending",
+          "dependencies": [4],
+          "details": "The modal should allow searching and selecting from available folders. The document display component should use `sharepoint.getFolderContents` to show files and folders, including 'Open in Web' links using SharePoint's webUrl."
         },
         {
           "id": 6,
-          "title": "Implement Task Deletion and Final Integration",
-          "description": "Create task.delete procedure and integrate all procedures into the main router",
-          "status": "done",
-          "dependencies": [2, 5],
-          "details": "Implement task.delete procedure with strict permission checks (typically admin-only or task creator). Add safeguards against accidental deletion, such as confirmation parameters. Implement soft deletion if needed to preserve task history. Integrate all task procedures into the main taskRouter. Register the taskRouter with the main tRPC router. Add comprehensive error handling across all procedures. Write integration tests for all task procedures to verify functionality and RBAC enforcement. Document the API endpoints, including required permissions, input parameters, and response formats. Perform final testing to ensure all procedures work together correctly."
+          "title": "Integrate and Test End-to-End SharePoint Folder Linking Workflow",
+          "description": "Test the full workflow: automated and manual linking, folder selection, document display, and access controls. Fix integration issues and ensure a seamless user experience.",
+          "status": "pending",
+          "dependencies": [5],
+          "details": "Perform end-to-end testing with different user roles. Validate that folder links, document listings, and web URLs function correctly. Address any UI/UX or backend issues discovered during testing."
         }
       ]
     },
     {
       "id": 7,
-      "title": "Implement Task Management Frontend",
-      "description": "Create Task List, Detail, and Create/Edit UI components",
-      "status": "done",
-      "dependencies": [5, 6],
-      "priority": "medium",
-      "details": "Develop: 1) Task List page (/tasks) with functional table defaulting to task.getAssignedToMe, Admin toggle for task.getAll, pagination, sorting, filtering, and 'Add New Task' button. 2) Audit Detail Tasks Section listing tasks via task.getByAuditId with quick status updates and 'Add Task' functionality. 3) Task Create/Edit forms with fields for Name, Description, Assignee, Due Date, Status, Priority. 4) Task Detail View (modal) displaying full task details. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
-      "testStrategy": "Manually test all UI components and interactions. Verify data fetching, filtering, sorting, and pagination. Test task creation, assignment, and status updates. Confirm role-based UI element visibility.",
+      "title": "Implement UI Polish and Theme Switcher",
+      "description": "Refine the overall user interface based on Phase 1 feedback and implement a theme switcher for light/dark mode with persistence.",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "low",
+      "details": "1. Review Phase 1 feedback and identify UI improvement areas\n2. Refine table layouts, form flows, and navigation components\n3. Ensure consistent use of Shadcn UI and TailAdmin components throughout the application\n4. Improve responsive design for all pages\n5. Implement Theme Switcher component with Light/Dark mode options\n6. Add theme persistence using localStorage or cookies\n7. Create consistent dark mode styles for all components",
+      "testStrategy": "1. Verify UI improvements address Phase 1 feedback\n2. Test responsive design across different devices and screen sizes\n3. Confirm theme switcher correctly toggles between light and dark modes\n4. Validate theme persistence across page refreshes and sessions\n5. Check for any styling inconsistencies or accessibility issues",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Task Data Integration and Role-Based Logic",
-          "description": "Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.",
-          "status": "done",
+          "title": "Analyze Phase 1 Feedback and Define UI Improvements",
+          "description": "Review all feedback collected from Phase 1 to identify specific areas of the UI that require refinement, such as usability issues, visual inconsistencies, or missing features.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.getByAuditId). Set up state management (React context, Redux, or local state) to store and update task data. Implement logic to determine user role (admin vs. regular user) and toggle between assigned and all tasks accordingly."
+          "details": "Gather feedback documents, user reports, and design notes. Create a prioritized list of actionable UI improvements, focusing on table layouts, form flows, and navigation components. Document these requirements for implementation in subsequent subtasks."
         },
         {
           "id": 2,
-          "title": "Develop Task List Page with Table, Pagination, Sorting, and Filtering",
-          "description": "Create the /tasks page with a functional table displaying tasks, including pagination, sorting, filtering, and an 'Add New Task' button.",
-          "status": "done",
+          "title": "Refactor and Standardize UI Components",
+          "description": "Update and refine table layouts, form flows, and navigation components based on the prioritized feedback, ensuring consistent use of Shadcn UI and TailAdmin components throughout the application.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. Implement pagination controls, column sorting, and filtering options. Add an 'Add New Task' button that opens the create task form. Ensure the table defaults to assigned tasks and supports admin toggle for all tasks."
+          "details": "Audit existing UI components for consistency. Refactor or replace components as needed to align with design guidelines and ensure a cohesive look and feel. Leverage reusable components and maintain modular code structure for scalability and maintainability[3]."
         },
         {
           "id": 3,
-          "title": "Implement Task Create/Edit Forms",
-          "description": "Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement validation and controlled inputs for all required fields. Ensure the form can be used both for creating new tasks and editing existing ones, with appropriate data pre-filling and submission handling."
+          "title": "Enhance Responsive Design and Cross-Browser Compatibility",
+          "description": "Improve the responsive design of all pages and ensure cross-browser compatibility to provide a seamless experience across devices and browsers.",
+          "status": "pending",
+          "dependencies": [2],
+          "details": "Test UI on various screen sizes and browsers. Adjust CSS and layout logic to resolve any issues. Use feature detection tools and polyfills where necessary to address browser-specific quirks[2][3]. Validate that all components adapt gracefully to different environments."
         },
         {
           "id": 4,
-          "title": "Build Task Detail View Modal",
-          "description": "Create a modal component to display full task details, accessible from the task list and audit detail sections.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Use modal components from Shadcn UI / TailAdmin. Display all task fields in a readable layout. Ensure the modal can be triggered from the task list and audit detail sections, and supports closing and navigation back to the list."
+          "title": "Implement Theme Switcher Component with Persistence",
+          "description": "Develop a theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Create a UI control for theme switching. Integrate logic to apply the selected theme across the application. Store the user's preference in localStorage or cookies and ensure the theme is restored on subsequent visits."
         },
         {
           "id": 5,
-          "title": "Develop Audit Detail Tasks Section with Quick Status Updates",
-          "description": "Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.",
-          "status": "done",
-          "dependencies": [1, 3, 4],
-          "details": "Fetch and display tasks using task.getByAuditId. Allow inline status updates (e.g., dropdown or toggle). Integrate the 'Add Task' button to open the create form. Ensure consistent styling and UX with other components."
+          "title": "Apply and Test Consistent Dark Mode Styles",
+          "description": "Ensure all UI components have consistent and visually appealing dark mode styles, and thoroughly test the theme switcher functionality across the application.",
+          "status": "pending",
+          "dependencies": [4],
+          "details": "Audit all components for dark mode compatibility. Update styles as needed to maintain readability and aesthetic quality. Test the theme switcher across different pages, devices, and browsers to ensure reliable persistence and visual consistency."
         }
       ]
     },
     {
       "id": 8,
-      "title": "Implement Document Reference Display Backend",
-      "description": "Create tRPC procedures in documentRouter for retrieving document references",
-      "status": "done",
-      "dependencies": [1, 4, 6],
-      "priority": "low",
-      "details": "Implement the following tRPC procedures in documentRouter: 1) document.getByClientId, 2) document.getByAuditId, 3) document.getByTaskId. Each procedure should return document metadata including fileName and sharepointFileUrl. Enforce appropriate RBAC for document visibility based on user roles and relationship to the parent entity.",
-      "testStrategy": "Write unit tests for each procedure verifying correct document retrieval based on parent entity ID and RBAC enforcement. Test with various user roles to confirm proper access control.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Define Input Schemas and Output Types for Document Reference Procedures",
-          "description": "Design and implement input validation schemas (using a library like zod) and output types for each tRPC procedure: getByClientId, getByAuditId, and getByTaskId. Ensure that each input schema strictly validates the required identifier and that the output type includes fileName and sharepointFileUrl.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId as strings or UUIDs). Define TypeScript types or zod schemas for the output, ensuring fileName and sharepointFileUrl are included. This step ensures type safety and input validation for all subsequent implementation steps.[2][4]"
-        },
-        {
-          "id": 2,
-          "title": "Implement RBAC Middleware for Document Visibility",
-          "description": "Develop and integrate reusable middleware to enforce role-based access control (RBAC) for document retrieval procedures. The middleware should check user roles and their relationship to the parent entity (client, audit, or task) before allowing access to document metadata.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Create a middleware function that inspects the user's roles and verifies their association with the relevant parent entity. Integrate this middleware into the tRPC procedures using the .use() method, ensuring that only authorized users can access document references.[1][4]"
-        },
-        {
-          "id": 3,
-          "title": "Implement tRPC Procedures in documentRouter",
-          "description": "Develop the three tRPC procedures (getByClientId, getByAuditId, getByTaskId) within documentRouter. Each procedure should retrieve document metadata from the database based on the provided identifier and return fileName and sharepointFileUrl for each document.",
-          "status": "done",
-          "dependencies": [1, 2],
-          "details": "For each procedure, use the validated input to query the database for documents related to the specified client, audit, or task. Ensure that the RBAC middleware is applied to each procedure. Return an array of objects containing fileName and sharepointFileUrl as defined in the output type.[1][2][4]"
-        },
-        {
-          "id": 4,
-          "title": "Test and Document Document Reference Procedures",
-          "description": "Write comprehensive tests for each procedure to verify correct input validation, RBAC enforcement, and accurate data retrieval. Add inline documentation and meta descriptions for each procedure to support maintainability and developer understanding.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Create unit and integration tests to cover valid and invalid inputs, unauthorized access, and successful data retrieval. Use tRPC's meta functionality and zod's .describe() method to document each procedure and its parameters for future reference and developer tools integration.[2][5]"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "title": "Implement Document Reference Display Frontend",
-      "description": "Create Document tabs/sections for Client, Audit, and Task detail pages",
-      "status": "done",
-      "dependencies": [3, 5, 7, 8],
-      "priority": "low",
-      "details": "Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and TailAdmin components.",
-      "testStrategy": "Manually test document list display on each detail page. Verify links open correctly to SharePoint URLs. Test with various user roles to confirm proper visibility based on RBAC.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Design Document Reference UI Components",
-          "description": "Design and implement reusable UI components for displaying document references, including fileName and 'Open' link, styled with Tailwind and Shadcn UI / TailAdmin components.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Create a DocumentList component that accepts an array of document objects and renders each with the fileName and an 'Open' button linking to the sharepointFileUrl. Ensure consistent styling using Tailwind and Shadcn UI / TailAdmin. Prepare for integration into multiple pages by making the component context-agnostic."
-        },
-        {
-          "id": 2,
-          "title": "Integrate Document Reference Section into Client Detail Page",
-          "description": "Add the DocumentList component as a new tab or section on the Client detail page, fetching and displaying relevant document references.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "On the Client detail page, use the appropriate document.getByClient procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section fits seamlessly with the existing page layout and navigation."
-        },
-        {
-          "id": 3,
-          "title": "Integrate Document Reference Section into Audit Detail Page",
-          "description": "Add the DocumentList component as a new tab or section on the Audit detail page, fetching and displaying relevant document references.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "On the Audit detail page, use the appropriate document.getByAudit procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section matches the page's design and navigation patterns."
-        },
-        {
-          "id": 4,
-          "title": "Integrate Document Reference Section into Task Detail Page",
-          "description": "Add the DocumentList component as a new tab or section on the Task detail page, fetching and displaying relevant document references.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "On the Task detail page, use the appropriate document.getByTask procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section is styled and behaves consistently with the rest of the application."
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "title": "Implement Comprehensive RBAC and Final Integration",
-      "description": "Ensure consistent RBAC across all components and integrate all features",
-      "status": "in-progress",
-      "dependencies": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "title": "Integration Testing and Final Polishing",
+      "description": "Perform comprehensive integration testing of all implemented features, fix any issues, and make final adjustments to ensure the portal functions as a cohesive hub for internal team operations.",
+      "status": "pending",
+      "dependencies": [1, 2, 3, 4, 5, 6, 7],
       "priority": "high",
-      "details": "1) Review and ensure consistent RBAC implementation across all backend procedures, throwing TRPCError('FORBIDDEN') for unauthorized access. 2) Implement frontend RBAC using useSession to conditionally render/disable UI elements based on user roles. 3) Perform final integration of all components, ensuring seamless navigation and data flow between Client, Audit, and Task management features. 4) Conduct end-to-end testing of complete workflows. 5) Optimize performance with proper loading states and error handling.",
-      "testStrategy": "Perform comprehensive end-to-end testing of all workflows from different user role perspectives. Verify all acceptance criteria are met. Test edge cases and error scenarios. Conduct performance testing with realistic data volumes.",
+      "details": "1. Create end-to-end test scenarios covering all implemented features\n2. Test interactions between different components (e.g., initiating calls from client detail page)\n3. Verify all acceptance criteria from the PRD are met\n4. Optimize performance for data-heavy pages\n5. Ensure consistent error handling and user feedback throughout the application\n6. Address any remaining UI/UX issues\n7. Update documentation for new features\n8. Perform final cross-browser and device testing",
+      "testStrategy": "1. Execute end-to-end test scenarios for all user roles\n2. Verify all acceptance criteria are met\n3. Test cross-feature interactions\n4. Perform load testing with realistic data volumes\n5. Conduct usability testing with representative users\n6. Validate cross-browser compatibility\n7. Check accessibility compliance",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define RBAC Role Structure and Permission Model",
-          "description": "Create a comprehensive RBAC model that defines all roles, permissions, and access control policies for the application. This will serve as the foundation for all RBAC implementations.",
+          "title": "Develop and Execute Comprehensive Integration Test Scenarios",
+          "description": "Design and implement integration test cases that cover all interactions between modules and features, ensuring that combined components function as intended.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Define clear user roles (e.g., Admin, Manager, Auditor, Client, Regular User) based on business requirements\n2. Map each role to specific permissions using a matrix approach\n3. Document role inheritance hierarchies if applicable\n4. Create a centralized policy definition file (in YAML or JSON) following the policy-as-code approach\n5. Test the model with example user scenarios to validate completeness\n6. Ensure the model follows the principle of least privilege\n7. Testing approach: Create unit tests that validate role definitions and permission mappings",
-          "status": "done",
-          "parentTaskId": 10
+          "details": "Identify all major workflows and user journeys across the portal. Create integration test scripts that simulate real-world usage, focusing on interactions between modules (e.g., initiating calls from client detail pages). Use automated testing tools where possible to execute these scenarios and document any failures or unexpected behaviors."
         },
         {
           "id": 2,
-          "title": "Implement Backend RBAC Middleware and Utilities",
-          "description": "Create reusable middleware and utility functions to enforce RBAC consistently across all backend routes and procedures.",
+          "title": "Verify Acceptance Criteria and Address Functional Issues",
+          "description": "Systematically check that all acceptance criteria from the Product Requirements Document (PRD) are met, and resolve any functional defects uncovered during integration testing.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "1. Create a central RBAC enforcement middleware for tRPC procedures\n2. Implement utility functions to check permissions based on the defined role structure\n3. Create helper functions for throwing standardized TRPCError('FORBIDDEN') responses\n4. Implement role-based route protection that can be applied to any procedure\n5. Add logging for all access control decisions for audit purposes\n6. Create test helpers for RBAC unit testing\n7. Testing approach: Write unit tests for middleware with different role scenarios",
-          "status": "done",
-          "parentTaskId": 10
+          "details": "Cross-reference test results with the PRD to ensure every feature and requirement is validated. Log and prioritize any issues found, then implement fixes and retest affected areas to confirm resolution. Collaborate with stakeholders to clarify ambiguous criteria if needed."
         },
         {
           "id": 3,
-          "title": "Apply RBAC to All Backend Procedures",
-          "description": "Systematically review and apply RBAC checks to all existing backend procedures to ensure consistent access control.",
+          "title": "Optimize Performance and Ensure Consistent Error Handling",
+          "description": "Improve the performance of data-heavy pages and standardize error handling and user feedback mechanisms throughout the application.",
+          "status": "pending",
           "dependencies": [2],
-          "details": "1. Create an inventory of all tRPC procedures requiring RBAC\n2. Group procedures by required permission level\n3. Apply the RBAC middleware to each procedure with appropriate permission checks\n4. Ensure proper error handling for unauthorized access attempts\n5. Verify that all data access is properly restricted based on user roles\n6. Document any exceptions or special cases\n7. Testing approach: Create integration tests that verify each procedure enforces proper access control",
-          "status": "done",
-          "parentTaskId": 10
+          "details": "Profile the application to identify slow-loading or resource-intensive pages. Apply optimizations such as query improvements, caching, or UI enhancements. Review error handling across all modules to ensure consistent messaging and user experience, updating code and UI as necessary."
         },
         {
           "id": 4,
-          "title": "Implement Frontend RBAC Context Provider",
-          "description": "Create a React context provider that makes user role and permission information available throughout the frontend application.",
-          "dependencies": [1],
-          "details": "1. Create a RBACProvider component that wraps the application\n2. Integrate with useSession to extract user role information\n3. Implement helper hooks (useRole, usePermission, canAccess) for checking permissions\n4. Add caching for permission checks to improve performance\n5. Ensure the context updates when session changes\n6. Add development tools for debugging RBAC issues\n7. Testing approach: Write unit tests for the context provider and hooks",
-          "status": "done",
-          "parentTaskId": 10
+          "title": "Finalize UI/UX, Documentation, and Cross-Platform Testing",
+          "description": "Polish the user interface and experience, update documentation for new features, and conduct final cross-browser and device compatibility testing.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Address any remaining UI/UX issues for visual consistency and usability. Update user and technical documentation to reflect the latest features and changes. Perform thorough testing across supported browsers and devices, resolving any compatibility issues before release."
         },
         {
           "id": 5,
-          "title": "Apply RBAC to Frontend Components and Routes",
-          "description": "Implement conditional rendering and route protection across all frontend components based on user roles.",
+          "title": "Review Cursor Rules Compliance & Context7 References",
+          "description": "Ensure all code changes adhere to project Cursor rules (.cursor/rules/) and leverage Context7 documentation.",
+          "status": "pending",
           "dependencies": [4],
-          "details": "1. Create protected route components that redirect unauthorized users\n2. Implement conditional rendering for navigation items based on permissions\n3. Add permission checks to all action buttons and interactive elements\n4. Implement graceful UI handling for unauthorized states\n5. Ensure forms and inputs respect write permissions\n6. Add visual indicators for read-only or restricted content\n7. Testing approach: Create component tests with different user role mocks",
-          "status": "done",
-          "parentTaskId": 10
-        },
-        {
-          "id": 6,
-          "title": "Integrate Client Management with RBAC",
-          "description": "Ensure Client Management features properly integrate with the RBAC system for both data access and UI permissions.",
-          "dependencies": [3, 5],
-          "details": "1. Review all client data access points and apply appropriate RBAC checks\n2. Update client listing to only show clients the user has permission to view\n3. Modify client detail views to respect read/write permissions\n4. Implement role-specific client management workflows\n5. Ensure client-related actions (create, update, delete) check for proper permissions\n6. Add permission-aware filtering and sorting options\n7. Testing approach: End-to-end tests for client management workflows with different user roles",
-          "status": "done",
-          "parentTaskId": 10
-        },
-        {
-          "id": 7,
-          "title": "Integrate Audit Features with RBAC",
-          "description": "Apply RBAC to all audit-related features, ensuring proper access control for sensitive audit information.",
-          "dependencies": [3, 5],
-          "details": "1. Review all audit data access points and apply appropriate RBAC checks\n2. Implement role-specific audit log views and filters\n3. Ensure audit trail information is only accessible to authorized roles\n4. Add permission checks for audit report generation\n5. Implement audit configuration settings with role-based access\n6. Create specialized audit views for compliance officers\n7. Testing approach: Integration tests for audit feature access with different user roles",
-          "status": "done",
-          "parentTaskId": 10
-        },
-        {
-          "id": 8,
-          "title": "Integrate Task Management with RBAC",
-          "description": "Apply RBAC to task management features, ensuring tasks are only visible and editable by authorized users.",
-          "dependencies": [3, 5],
-          "details": "1. Review all task data access points and apply appropriate RBAC checks\n2. Implement task assignment rules based on user roles\n3. Modify task listings to only show tasks the user has permission to view\n4. Add permission checks for task creation, editing, and deletion\n5. Implement role-specific task dashboards and views\n6. Ensure task notifications respect RBAC permissions\n7. Testing approach: End-to-end tests for task workflows with different user roles",
-          "status": "done",
-          "parentTaskId": 10
-        },
-        {
-          "id": 9,
-          "title": "Implement Cross-Feature Navigation and Data Flow",
-          "description": "Ensure seamless navigation and data flow between Client, Audit, and Task management features with consistent RBAC enforcement.",
-          "dependencies": [6, 7, 8],
-          "details": "1. Create unified navigation that respects user permissions across all features\n2. Implement cross-feature workflows (e.g., creating tasks from client view)\n3. Ensure consistent data access patterns across feature boundaries\n4. Add contextual navigation based on current data and user permissions\n5. Implement deep linking with permission checks\n6. Create a unified dashboard with role-appropriate widgets and actions\n7. Testing approach: User journey tests across multiple features with different roles",
-          "status": "done",
-          "parentTaskId": 10
-        },
-        {
-          "id": 10,
-          "title": "Optimize Performance and Implement Error Handling",
-          "description": "Finalize the implementation with performance optimizations and comprehensive error handling for RBAC-related operations.",
-          "dependencies": [9],
-          "details": "1. Implement loading states for all permission-checked operations\n2. Add caching for frequently checked permissions to reduce latency\n3. Create user-friendly error messages for permission denials\n4. Implement graceful degradation for partially authorized views\n5. Add telemetry for RBAC performance monitoring\n6. Optimize backend permission checks to minimize database queries\n7. Testing approach: Performance testing with different user loads and permission scenarios",
-          "status": "done",
-          "parentTaskId": 10
+          "details": "Audit code for compliance with established Cursor rules. Add Context7 documentation links or patterns where necessary. Update or create rule files to capture new patterns introduced in Phase 2."
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "QAS Portal - Core Internal Functionality (MVP Phase 1)",
-    "totalTasks": 10,
-    "sourceFile": "PRD_phase1.txt",
-    "generatedAt": "2023-11-09"
+    "projectName": "QAS Portal - Internal Collaboration & Data Usability (MVP Phase 2)",
+    "totalTasks": 9,
+    "sourceFile": "scripts/PRD_phase2.txt",
+    "generatedAt": "2023-11-14"
   }
 }
