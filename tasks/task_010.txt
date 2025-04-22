@@ -23,7 +23,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Ensure the model follows the principle of least privilege
 7. Testing approach: Create unit tests that validate role definitions and permission mappings
 
-## 2. Implement Backend RBAC Middleware and Utilities [in-progress]
+## 2. Implement Backend RBAC Middleware and Utilities [done]
 ### Dependencies: 10.1
 ### Description: Create reusable middleware and utility functions to enforce RBAC consistently across all backend routes and procedures.
 ### Details:
@@ -35,7 +35,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Create test helpers for RBAC unit testing
 7. Testing approach: Write unit tests for middleware with different role scenarios
 
-## 3. Apply RBAC to All Backend Procedures [pending]
+## 3. Apply RBAC to All Backend Procedures [done]
 ### Dependencies: 10.2
 ### Description: Systematically review and apply RBAC checks to all existing backend procedures to ensure consistent access control.
 ### Details:
@@ -47,7 +47,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Document any exceptions or special cases
 7. Testing approach: Create integration tests that verify each procedure enforces proper access control
 
-## 4. Implement Frontend RBAC Context Provider [pending]
+## 4. Implement Frontend RBAC Context Provider [done]
 ### Dependencies: 10.1
 ### Description: Create a React context provider that makes user role and permission information available throughout the frontend application.
 ### Details:

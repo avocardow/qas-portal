@@ -501,7 +501,7 @@
           "description": "Create reusable middleware and utility functions to enforce RBAC consistently across all backend routes and procedures.",
           "dependencies": [1],
           "details": "1. Create a central RBAC enforcement middleware for tRPC procedures\n2. Implement utility functions to check permissions based on the defined role structure\n3. Create helper functions for throwing standardized TRPCError('FORBIDDEN') responses\n4. Implement role-based route protection that can be applied to any procedure\n5. Add logging for all access control decisions for audit purposes\n6. Create test helpers for RBAC unit testing\n7. Testing approach: Write unit tests for middleware with different role scenarios",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 10
         },
         {
@@ -510,7 +510,7 @@
           "description": "Systematically review and apply RBAC checks to all existing backend procedures to ensure consistent access control.",
           "dependencies": [2],
           "details": "1. Create an inventory of all tRPC procedures requiring RBAC\n2. Group procedures by required permission level\n3. Apply the RBAC middleware to each procedure with appropriate permission checks\n4. Ensure proper error handling for unauthorized access attempts\n5. Verify that all data access is properly restricted based on user roles\n6. Document any exceptions or special cases\n7. Testing approach: Create integration tests that verify each procedure enforces proper access control",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 10
         },
         {
@@ -519,7 +519,7 @@
           "description": "Create a React context provider that makes user role and permission information available throughout the frontend application.",
           "dependencies": [1],
           "details": "1. Create a RBACProvider component that wraps the application\n2. Integrate with useSession to extract user role information\n3. Implement helper hooks (useRole, usePermission, canAccess) for checking permissions\n4. Add caching for permission checks to improve performance\n5. Ensure the context updates when session changes\n6. Add development tools for debugging RBAC issues\n7. Testing approach: Write unit tests for the context provider and hooks",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 10
         },
         {

@@ -6,6 +6,8 @@ import { SessionProvider } from "next-auth/react";
 import TRPCProvider from "@/app/_trpc/Provider"; // Assuming this is your tRPC Provider setup
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
+// Add RbacProvider import
+import { RbacProvider } from "@/context/RbacContext";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +15,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <SessionProvider>
       <TRPCProvider>
         <ThemeProvider>
-          <SidebarProvider>{children}</SidebarProvider>
+          <SidebarProvider>
+            {/* Wrap children with RbacProvider */}
+            <RbacProvider>{children}</RbacProvider>
+          </SidebarProvider>
         </ThemeProvider>
       </TRPCProvider>
     </SessionProvider>
