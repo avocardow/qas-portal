@@ -340,7 +340,7 @@
       "id": 7,
       "title": "Implement Task Management Frontend",
       "description": "Create Task List, Detail, and Create/Edit UI components",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [5, 6],
       "priority": "medium",
       "details": "Develop: 1) Task List page (/tasks) with functional table defaulting to task.getAssignedToMe, Admin toggle for task.getAll, pagination, sorting, filtering, and 'Add New Task' button. 2) Audit Detail Tasks Section listing tasks via task.getByAuditId with quick status updates and 'Add Task' functionality. 3) Task Create/Edit forms with fields for Name, Description, Assignee, Due Date, Status, Priority. 4) Task Detail View (modal) displaying full task details. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
@@ -350,7 +350,7 @@
           "id": 1,
           "title": "Set Up Task Data Integration and Role-Based Logic",
           "description": "Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.getByAuditId). Set up state management (React context, Redux, or local state) to store and update task data. Implement logic to determine user role (admin vs. regular user) and toggle between assigned and all tasks accordingly."
         },

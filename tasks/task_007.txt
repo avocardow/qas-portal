@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Implement Task Management Frontend
-# Status: pending
+# Status: in-progress
 # Dependencies: 5, 6
 # Priority: medium
 # Description: Create Task List, Detail, and Create/Edit UI components
@@ -11,7 +11,7 @@ Develop: 1) Task List page (/tasks) with functional table defaulting to task.get
 Manually test all UI components and interactions. Verify data fetching, filtering, sorting, and pagination. Test task creation, assignment, and status updates. Confirm role-based UI element visibility.
 
 # Subtasks:
-## 1. Set Up Task Data Integration and Role-Based Logic [pending]
+## 1. Set Up Task Data Integration and Role-Based Logic [in-progress]
 ### Dependencies: None
 ### Description: Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.
 ### Details:
