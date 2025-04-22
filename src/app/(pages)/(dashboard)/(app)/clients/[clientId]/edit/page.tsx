@@ -105,7 +105,86 @@ export default function EditClientPage() {
               </p>
             )}
           </div>
-          {/* Repeat fields (abn, address, city, etc.) similar to NewClientPage */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              ABN
+            </label>
+            <input
+              {...register("abn")}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Address
+            </label>
+            <input
+              {...register("address")}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              City
+            </label>
+            <input
+              {...register("city")}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Postcode
+            </label>
+            <input
+              {...register("postcode")}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Status
+            </label>
+            <select
+              {...register("status")}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            >
+              <option value="prospect">Prospect</option>
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Audit Month End
+            </label>
+            <input
+              type="number"
+              {...register("auditMonthEnd", { valueAsNumber: true })}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Next Contact Date
+            </label>
+            <input
+              type="date"
+              {...register("nextContactDate")}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Estimated Annual Fees
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              {...register("estAnnFees", { valueAsNumber: true })}
+              className="mt-1 block w-full rounded border px-3 py-2"
+            />
+          </div>
           <button type="submit" disabled={isSubmitting} className="btn">
             {isSubmitting ? "Updating..." : "Update Client"}
           </button>

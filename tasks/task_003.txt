@@ -17,7 +17,7 @@ Perform manual testing of all UI components and interactions. Verify data fetchi
 ### Details:
 Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]
 
-## 2. Implement Client List Data Table with Pagination, Sorting, and Filtering [pending]
+## 2. Implement Client List Data Table with Pagination, Sorting, and Filtering [done]
 ### Dependencies: 3.1
 ### Description: Build the Client List page with a functional data table that supports pagination, sorting, and filtering, fetching data via client.getAll.
 ### Details:
@@ -29,13 +29,13 @@ Use a data table component (from Shadcn UI or TailAdmin) to display clients. Int
 ### Details:
 Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form.
 
-## 4. Develop Client Create and Edit Forms with Validation [in-progress]
+## 4. Develop Client Create and Edit Forms with Validation [done]
 ### Dependencies: 3.3
 ### Description: Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.
 ### Details:
 Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback.
 
-## 5. Implement Client Detail Page with Structured Cards/Tabs [in-progress]
+## 5. Implement Client Detail Page with Structured Cards/Tabs [done]
 ### Dependencies: 3.4
 ### Description: Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.
 ### Details:

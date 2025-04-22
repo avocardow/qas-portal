@@ -134,7 +134,7 @@
           "id": 2,
           "title": "Implement Client List Data Table with Pagination, Sorting, and Filtering",
           "description": "Build the Client List page with a functional data table that supports pagination, sorting, and filtering, fetching data via client.getAll.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Use a data table component (from Shadcn UI or TailAdmin) to display clients. Integrate client.getAll to fetch data. Add pagination controls, sortable columns, and filtering inputs. Ensure the table updates based on user interactions.[4]"
         },
@@ -150,7 +150,7 @@
           "id": 4,
           "title": "Develop Client Create and Edit Forms with Validation",
           "description": "Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [3],
           "details": "Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback."
         },
@@ -158,7 +158,7 @@
           "id": 5,
           "title": "Implement Client Detail Page with Structured Cards/Tabs",
           "description": "Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [4],
           "details": "Use Shadcn UI or TailAdmin components to create a visually consistent layout. Fetch and display relevant data for each section. Ensure tabs/cards are responsive and accessible."
         },

@@ -89,17 +89,13 @@ export const clientRouter = createTRPCRouter({
         }
         return ctx.db.client.findUniqueOrThrow({
           where: { id: input.clientId },
-          select: {
-            id: true,
-            clientName: true,
-            abn: true,
-            address: true,
-            city: true,
-            postcode: true,
-            status: true,
-            auditMonthEnd: true,
-            nextContactDate: true,
-            estAnnFees: true,
+          include: {
+            contacts: true,
+            licenses: true,
+            trustAccounts: true,
+            audits: true,
+            activityLogs: true,
+            notes: true,
           },
         });
       }
