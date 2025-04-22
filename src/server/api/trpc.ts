@@ -12,8 +12,11 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-// import { type Session } from "next-auth";
 import { getServerAuthSession } from "@/server/auth"; // We'll create this file next
+import {
+  throwForbiddenError,
+  logAccessDecision,
+} from "@/server/api/utils/rbac";
 
 /**
  * 1. CONTEXT
@@ -118,8 +121,14 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 export const enforceRole = (allowedRoles: string[]) =>
   t.middleware(({ ctx, next }) => {
     const userRole = ctx.session?.user?.role;
-    if (!userRole || !allowedRoles.includes(userRole)) {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
+    const allowed = Boolean(userRole && allowedRoles.includes(userRole));
+    logAccessDecision(
+      userRole ?? "",
+      `ROLE:${allowedRoles.join(",")}`,
+      allowed
+    );
+    if (!allowed) {
+      throwForbiddenError("Access denied");
     }
     return next({
       ctx: { session: ctx.session! },
@@ -143,19 +152,19 @@ export const enforcePermission = (permission: string) =>
     }
     const userRoleName = ctx.session.user.role;
     if (!userRoleName) {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
+      logAccessDecision("", permission, false);
+      throwForbiddenError("Access denied");
     }
-    const hasPermission = await ctx.db.rolePermission.findFirst({
+    const permissionRecord = await ctx.db.rolePermission.findFirst({
       where: {
         role: { name: userRoleName },
         permission: { action: permission },
       },
     });
-    if (!hasPermission) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Insufficient permissions",
-      });
+    const allowed = Boolean(permissionRecord);
+    logAccessDecision(userRoleName, permission, allowed);
+    if (!allowed) {
+      throwForbiddenError("Insufficient permissions");
     }
     return next({
       ctx: { session: ctx.session },
