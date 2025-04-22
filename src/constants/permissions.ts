@@ -22,3 +22,13 @@ export const TASK_PERMISSIONS = {
 
 export type TaskPermission =
   (typeof TASK_PERMISSIONS)[keyof typeof TASK_PERMISSIONS];
+
+// Add document permissions for RBAC enforcement
+export const DOCUMENT_PERMISSIONS = {
+  GET_BY_CLIENT_ID: "document.getByClientId",
+  GET_BY_AUDIT_ID: "document.getByAuditId",
+  GET_BY_TASK_ID: "document.getByTaskId",
+} as const;
+
+export type DocumentPermission =
+  (typeof DOCUMENT_PERMISSIONS)[keyof typeof DOCUMENT_PERMISSIONS];

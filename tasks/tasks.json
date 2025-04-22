@@ -392,7 +392,7 @@
       "id": 8,
       "title": "Implement Document Reference Display Backend",
       "description": "Create tRPC procedures in documentRouter for retrieving document references",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [1, 4, 6],
       "priority": "low",
       "details": "Implement the following tRPC procedures in documentRouter: 1) document.getByClientId, 2) document.getByAuditId, 3) document.getByTaskId. Each procedure should return document metadata including fileName and sharepointFileUrl. Enforce appropriate RBAC for document visibility based on user roles and relationship to the parent entity.",
@@ -402,7 +402,7 @@
           "id": 1,
           "title": "Define Input Schemas and Output Types for Document Reference Procedures",
           "description": "Design and implement input validation schemas (using a library like zod) and output types for each tRPC procedure: getByClientId, getByAuditId, and getByTaskId. Ensure that each input schema strictly validates the required identifier and that the output type includes fileName and sharepointFileUrl.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId as strings or UUIDs). Define TypeScript types or zod schemas for the output, ensuring fileName and sharepointFileUrl are included. This step ensures type safety and input validation for all subsequent implementation steps.[2][4]"
         },
@@ -418,7 +418,7 @@
           "id": 3,
           "title": "Implement tRPC Procedures in documentRouter",
           "description": "Develop the three tRPC procedures (getByClientId, getByAuditId, getByTaskId) within documentRouter. Each procedure should retrieve document metadata from the database based on the provided identifier and return fileName and sharepointFileUrl for each document.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1, 2],
           "details": "For each procedure, use the validated input to query the database for documents related to the specified client, audit, or task. Ensure that the RBAC middleware is applied to each procedure. Return an array of objects containing fileName and sharepointFileUrl as defined in the output type.[1][2][4]"
         },

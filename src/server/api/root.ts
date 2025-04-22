@@ -11,6 +11,7 @@ import { licenseRouter } from "@/server/api/routers/license";
 import { trustAccountRouter } from "@/server/api/routers/trustAccount";
 import { auditRouter } from "@/server/api/routers/audit";
 import { taskRouter } from "@/server/api/routers/task";
+import { documentRouter } from "@/server/api/routers/document";
 
 /**
  * This is the primary router for your server.
@@ -26,6 +27,7 @@ export const appRouter = createTRPCRouter({
   trustAccount: trustAccountRouter,
   audit: auditRouter,
   task: taskRouter,
+  document: documentRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });

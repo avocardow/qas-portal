@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Implement Document Reference Display Backend
-# Status: pending
+# Status: in-progress
 # Dependencies: 1, 4, 6
 # Priority: low
 # Description: Create tRPC procedures in documentRouter for retrieving document references
@@ -11,7 +11,7 @@ Implement the following tRPC procedures in documentRouter: 1) document.getByClie
 Write unit tests for each procedure verifying correct document retrieval based on parent entity ID and RBAC enforcement. Test with various user roles to confirm proper access control.
 
 # Subtasks:
-## 1. Define Input Schemas and Output Types for Document Reference Procedures [pending]
+## 1. Define Input Schemas and Output Types for Document Reference Procedures [done]
 ### Dependencies: None
 ### Description: Design and implement input validation schemas (using a library like zod) and output types for each tRPC procedure: getByClientId, getByAuditId, and getByTaskId. Ensure that each input schema strictly validates the required identifier and that the output type includes fileName and sharepointFileUrl.
 ### Details:
@@ -23,7 +23,7 @@ Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId a
 ### Details:
 Create a middleware function that inspects the user's roles and verifies their association with the relevant parent entity. Integrate this middleware into the tRPC procedures using the .use() method, ensuring that only authorized users can access document references.[1][4]
 
-## 3. Implement tRPC Procedures in documentRouter [pending]
+## 3. Implement tRPC Procedures in documentRouter [done]
 ### Dependencies: 8.1, 8.2
 ### Description: Develop the three tRPC procedures (getByClientId, getByAuditId, getByTaskId) within documentRouter. Each procedure should retrieve document metadata from the database based on the provided identifier and return fileName and sharepointFileUrl for each document.
 ### Details:
