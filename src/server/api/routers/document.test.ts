@@ -135,4 +135,119 @@ describe("documentRouter", () => {
     });
     expect(result).toEqual(docs);
   });
+
+  it("should retrieve shared documents by audit id for Client role", async () => {
+    ctx.session.user.role = "Client";
+    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
+    ctx.db.audit.findUnique.mockResolvedValue({
+      id: validAuditId,
+      clientId: validClientId,
+    });
+    ctx.db.contact.findUnique.mockResolvedValue({
+      portalUserId: validUserId,
+      clientId: validClientId,
+    });
+    const docs = [
+      {
+        id: validTaskId,
+        fileName: "auditClientDoc.pdf",
+        sharepointFileUrl: "url5",
+      },
+    ];
+    ctx.db.documentReference.findMany.mockResolvedValue(docs);
+    const caller = callDoc(ctx);
+    const result = await caller.getByAuditId({ auditId: validAuditId });
+    expect(ctx.db.audit.findUnique).toHaveBeenCalledWith({
+      where: { id: validAuditId },
+    });
+    expect(ctx.db.contact.findUnique).toHaveBeenCalledWith({
+      where: { portalUserId: validUserId },
+    });
+    expect(ctx.db.documentReference.findMany).toHaveBeenCalledWith({
+      where: { auditId: validAuditId, isSharedWithClient: true },
+      select: { id: true, fileName: true, sharepointFileUrl: true },
+      orderBy: { createdAt: "desc" },
+    });
+    expect(result).toEqual(docs);
+  });
+
+  it("should forbid retrieval by audit id for Client role when not owner", async () => {
+    ctx.session.user.role = "Client";
+    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
+    ctx.db.audit.findUnique.mockResolvedValue({
+      id: validAuditId,
+      clientId: validClientId,
+    });
+    ctx.db.contact.findUnique.mockResolvedValue({
+      portalUserId: validUserId,
+      clientId: "other-client-id",
+    });
+    const caller = callDoc(ctx);
+    await expect(
+      caller.getByAuditId({ auditId: validAuditId })
+    ).rejects.toBeInstanceOf(TRPCError);
+  });
+
+  it("should retrieve shared documents by task id for Client role", async () => {
+    ctx.session.user.role = "Client";
+    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
+    ctx.db.task.findUnique.mockResolvedValue({
+      id: validTaskId,
+      auditId: validAuditId,
+    });
+    ctx.db.audit.findUnique.mockResolvedValue({
+      id: validAuditId,
+      clientId: validClientId,
+    });
+    ctx.db.contact.findUnique.mockResolvedValue({
+      portalUserId: validUserId,
+      clientId: validClientId,
+    });
+    const docs = [
+      {
+        id: validTaskId,
+        fileName: "taskClientDoc.pdf",
+        sharepointFileUrl: "url6",
+      },
+    ];
+    ctx.db.documentReference.findMany.mockResolvedValue(docs);
+    const caller = callDoc(ctx);
+    const result = await caller.getByTaskId({ taskId: validTaskId });
+    expect(ctx.db.task.findUnique).toHaveBeenCalledWith({
+      where: { id: validTaskId },
+    });
+    expect(ctx.db.audit.findUnique).toHaveBeenCalledWith({
+      where: { id: validAuditId },
+    });
+    expect(ctx.db.contact.findUnique).toHaveBeenCalledWith({
+      where: { portalUserId: validUserId },
+    });
+    expect(ctx.db.documentReference.findMany).toHaveBeenCalledWith({
+      where: { taskId: validTaskId, isSharedWithClient: true },
+      select: { id: true, fileName: true, sharepointFileUrl: true },
+      orderBy: { createdAt: "desc" },
+    });
+    expect(result).toEqual(docs);
+  });
+
+  it("should forbid retrieval by task id for Client role when not owner", async () => {
+    ctx.session.user.role = "Client";
+    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
+    ctx.db.task.findUnique.mockResolvedValue({
+      id: validTaskId,
+      auditId: validAuditId,
+    });
+    ctx.db.audit.findUnique.mockResolvedValue({
+      id: validAuditId,
+      clientId: validClientId,
+    });
+    ctx.db.contact.findUnique.mockResolvedValue({
+      portalUserId: validUserId,
+      clientId: "other-client-id",
+    });
+    const caller = callDoc(ctx);
+    await expect(
+      caller.getByTaskId({ taskId: validTaskId })
+    ).rejects.toBeInstanceOf(TRPCError);
+  });
 });
