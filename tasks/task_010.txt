@@ -83,7 +83,7 @@ Perform comprehensive end-to-end testing of all workflows from different user ro
 6. Add permission-aware filtering and sorting options
 7. Testing approach: End-to-end tests for client management workflows with different user roles
 
-## 7. Integrate Audit Features with RBAC [pending]
+## 7. Integrate Audit Features with RBAC [in-progress]
 ### Dependencies: 10.3, 10.5
 ### Description: Apply RBAC to all audit-related features, ensuring proper access control for sensitive audit information.
 ### Details:

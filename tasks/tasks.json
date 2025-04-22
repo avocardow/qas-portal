@@ -546,7 +546,7 @@
           "description": "Apply RBAC to all audit-related features, ensuring proper access control for sensitive audit information.",
           "dependencies": [3, 5],
           "details": "1. Review all audit data access points and apply appropriate RBAC checks\n2. Implement role-specific audit log views and filters\n3. Ensure audit trail information is only accessible to authorized roles\n4. Add permission checks for audit report generation\n5. Implement audit configuration settings with role-based access\n6. Create specialized audit views for compliance officers\n7. Testing approach: Integration tests for audit feature access with different user roles",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 10
         },
         {

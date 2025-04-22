@@ -15,7 +15,11 @@ import { api } from "@/utils/api";
 import Button from "@/components/ui/button/Button";
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { usePermission } from "@/context/RbacContext";
-import { AUDIT_PERMISSIONS, TASK_PERMISSIONS } from "@/constants/permissions";
+import {
+  AUDIT_PERMISSIONS,
+  TASK_PERMISSIONS,
+  DOCUMENT_PERMISSIONS,
+} from "@/constants/permissions";
 
 export default function AuditDetailPage() {
   const { auditId } = useParams() as { auditId: string };
@@ -26,6 +30,7 @@ export default function AuditDetailPage() {
   const canCreateTask = usePermission(TASK_PERMISSIONS.CREATE);
   const canViewTasks = usePermission(TASK_PERMISSIONS.GET_BY_AUDIT_ID);
   const canUpdateTask = usePermission(TASK_PERMISSIONS.UPDATE);
+  const canViewDocuments = usePermission(DOCUMENT_PERMISSIONS.GET_BY_AUDIT_ID);
   const {
     data: audit,
     isLoading,
@@ -244,7 +249,11 @@ export default function AuditDetailPage() {
         <ComponentCard title="Documents">
           {isDocsLoading && <p>Loading documents...</p>}
           {isDocsError && <p>Error loading documents.</p>}
-          {docResources && <DocumentReferences documents={docResources} />}
+          {canViewDocuments ? (
+            docResources && <DocumentReferences documents={docResources} />
+          ) : (
+            <p>You are not authorized to view documents.</p>
+          )}
         </ComponentCard>
       </div>
     </DashboardPlaceholderPageTemplate>
