@@ -35,7 +35,9 @@ export default function NewClientPage() {
     defaultValues: { status: "prospect" },
   });
 
-  const onSubmit = async (data: FormData) => {
+  // tRPC mutation for client creation
+  const createClientMutation = api.client.create.useMutation();
+  const onSubmit = (data: FormData) => {
     // Convert nextContactDate to Date
     const input = {
       ...data,
@@ -43,12 +45,14 @@ export default function NewClientPage() {
         ? new Date(data.nextContactDate)
         : undefined,
     };
-    try {
-      const created = await api.client.create.mutateAsync(input);
-      router.push(`/clients/${created.id}`);
-    } catch (err) {
-      console.error(err);
-    }
+    createClientMutation.mutate(input, {
+      onSuccess: (created) => {
+        router.push(`/clients/${created.id}`);
+      },
+      onError: (err) => {
+        console.error(err);
+      },
+    });
   };
 
   return (

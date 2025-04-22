@@ -126,7 +126,7 @@
           "id": 1,
           "title": "Set Up Routing and Page Structure",
           "description": "Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Implement /clients and /clients/[clientId] routes in your main App component. Create placeholder components for Client List and Client Detail pages to ensure navigation works as expected before adding functionality.[2]"
         },
@@ -142,7 +142,7 @@
           "id": 3,
           "title": "Add Conditional 'Add New Client' Button Based on User Role",
           "description": "Render the 'Add New Client' button on the Client List page only for users with the appropriate role.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2],
           "details": "Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form."
         },
@@ -150,7 +150,7 @@
           "id": 4,
           "title": "Develop Client Create and Edit Forms with Validation",
           "description": "Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [3],
           "details": "Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback."
         },
@@ -158,7 +158,7 @@
           "id": 5,
           "title": "Implement Client Detail Page with Structured Cards/Tabs",
           "description": "Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [4],
           "details": "Use Shadcn UI or TailAdmin components to create a visually consistent layout. Fetch and display relevant data for each section. Ensure tabs/cards are responsive and accessible."
         },

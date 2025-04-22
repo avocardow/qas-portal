@@ -11,7 +11,7 @@ Develop: 1) Client List page (/clients) with functional data table using client.
 Perform manual testing of all UI components and interactions. Verify data fetching, pagination, sorting, and filtering. Test form validation and submission. Confirm role-based UI element visibility.
 
 # Subtasks:
-## 1. Set Up Routing and Page Structure [in-progress]
+## 1. Set Up Routing and Page Structure [done]
 ### Dependencies: None
 ### Description: Establish the main routes for the Client List and Client Detail pages using React Router, and scaffold the basic page components.
 ### Details:
@@ -23,19 +23,19 @@ Implement /clients and /clients/[clientId] routes in your main App component. Cr
 ### Details:
 Use a data table component (from Shadcn UI or TailAdmin) to display clients. Integrate client.getAll to fetch data. Add pagination controls, sortable columns, and filtering inputs. Ensure the table updates based on user interactions.[4]
 
-## 3. Add Conditional 'Add New Client' Button Based on User Role [pending]
+## 3. Add Conditional 'Add New Client' Button Based on User Role [done]
 ### Dependencies: 3.2
 ### Description: Render the 'Add New Client' button on the Client List page only for users with the appropriate role.
 ### Details:
 Determine user role from context or props. Conditionally render the button using role-based logic. Ensure clicking the button navigates to the client creation form.
 
-## 4. Develop Client Create and Edit Forms with Validation [pending]
+## 4. Develop Client Create and Edit Forms with Validation [in-progress]
 ### Dependencies: 3.3
 ### Description: Create reusable forms for adding and editing clients using React Hook Form and Zod for schema validation.
 ### Details:
 Build form components using template components and consistent styling (Tailwind, Shadcn UI/TailAdmin). Integrate React Hook Form for state management and Zod for validation. Connect forms to client.create and client.update methods. Handle form submission, error states, and success feedback.
 
-## 5. Implement Client Detail Page with Structured Cards/Tabs [pending]
+## 5. Implement Client Detail Page with Structured Cards/Tabs [in-progress]
 ### Dependencies: 3.4
 ### Description: Design the Client Detail page to display client information in organized Cards or Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log.
 ### Details:
