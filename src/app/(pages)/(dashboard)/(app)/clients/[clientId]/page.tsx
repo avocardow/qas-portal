@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import ComponentCard from "@/components/common/ComponentCard";
 import {
@@ -25,6 +25,8 @@ type TabKey =
 
 export default function ClientDetailPage() {
   const { clientId } = useParams() as { clientId: string };
+  const router = useRouter();
+  const deleteClientMutation = api.client.delete.useMutation();
   const {
     data: client,
     isLoading,
@@ -33,6 +35,22 @@ export default function ClientDetailPage() {
 
   const detailClient = client as any;
   const [activeTab, setActiveTab] = useState<TabKey>("Summary");
+
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this client?")) {
+      deleteClientMutation.mutate(
+        { clientId },
+        {
+          onSuccess: () => {
+            router.push("/clients");
+          },
+          onError: (error) => {
+            console.error(error);
+          },
+        }
+      );
+    }
+  };
 
   if (isLoading) {
     return (
@@ -65,12 +83,19 @@ export default function ClientDetailPage() {
       className="max-w-4xl"
     >
       <PageBreadcrumb pageTitle={client.clientName} />
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex justify-end space-x-2">
         <Link href={`/clients/${clientId}/edit`}>
-          <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700">
+          <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-800">
             Edit Client
           </button>
         </Link>
+        <button
+          onClick={handleDelete}
+          disabled={deleteClientMutation.isLoading}
+          className="btn bg-red-500 text-white hover:bg-red-600 dark:bg-red-700 dark:text-white dark:hover:bg-red-800"
+        >
+          {deleteClientMutation.isLoading ? "Deleting..." : "Delete Client"}
+        </button>
       </div>
       <ComponentCard title="Client Details">
         {/* Tabs Navigation */}

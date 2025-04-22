@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Link from "next/link";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -19,6 +20,8 @@ type SortField = "clientName" | "city" | "status";
 export default function ClientsPage() {
   // Session for RBAC
   const { data: session } = useSession();
+  const router = useRouter();
+  const deleteClientMutation = api.client.delete.useMutation();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
   const [sortBy, setSortBy] = useState<SortField>("clientName");
@@ -91,7 +94,7 @@ export default function ClientsPage() {
           {session?.user?.role &&
             ["Admin", "Manager"].includes(session.user.role) && (
               <Link href="/clients/new">
-                <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700">
+                <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
                   Add New Client
                 </button>
               </Link>
@@ -101,14 +104,14 @@ export default function ClientsPage() {
           <button
             onClick={handlePrev}
             disabled={pageIndex === 0}
-            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           >
             Prev
           </button>
           <button
             onClick={handleNext}
             disabled={!nextCursor}
-            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           >
             Next
           </button>
@@ -172,6 +175,12 @@ export default function ClientsPage() {
                           (sortOrder === "asc" ? "↑" : "↓")}
                       </button>
                     </TableCell>
+                    <TableCell
+                      isHeader
+                      className="text-gray-800 dark:text-gray-100"
+                    >
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
@@ -191,6 +200,39 @@ export default function ClientsPage() {
                       <TableCell className="text-gray-700 dark:text-gray-200">
                         {client.status}
                       </TableCell>
+                      {session?.user?.role &&
+                        ["Admin", "Manager"].includes(session.user.role) && (
+                          <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
+                            <Link href={`/clients/${client.id}/edit`}>
+                              <button className="btn bg-blue-500 text-white hover:bg-blue-600">
+                                Edit
+                              </button>
+                            </Link>
+                            <button
+                              onClick={() => {
+                                if (
+                                  confirm(
+                                    "Are you sure you want to delete this client?"
+                                  )
+                                ) {
+                                  deleteClientMutation.mutate(
+                                    { clientId: client.id },
+                                    {
+                                      onSuccess: () => router.refresh(),
+                                      onError: console.error,
+                                    }
+                                  );
+                                }
+                              }}
+                              disabled={deleteClientMutation.isLoading}
+                              className="btn bg-red-500 text-white hover:bg-red-600"
+                            >
+                              {deleteClientMutation.isLoading
+                                ? "Deleting..."
+                                : "Delete"}
+                            </button>
+                          </TableCell>
+                        )}
                     </TableRow>
                   ))}
                 </TableBody>

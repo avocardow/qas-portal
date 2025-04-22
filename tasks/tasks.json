@@ -116,7 +116,7 @@
       "id": 3,
       "title": "Implement Client Management Frontend",
       "description": "Create Client List and Detail pages with CRUD functionality",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [1, 2],
       "priority": "high",
       "details": "Develop: 1) Client List page (/clients) with functional data table using client.getAll, including pagination, sorting, filtering, and conditional 'Add New Client' button based on user role. 2) Client Detail page (/clients/[clientId]) with structured Cards/Tabs for Contacts, Licenses, Trust Accounts, Audit History, and Activity Log. 3) Client Create/Edit forms using React Hook Form + Zod with template components, handling client.create and client.update. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
@@ -166,7 +166,7 @@
           "id": 6,
           "title": "Integrate CRUD Operations and Finalize UI Consistency",
           "description": "Connect all CRUD operations (Create, Read, Update, Delete) across the Client List and Detail pages, and ensure consistent styling and error handling throughout.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [5],
           "details": "Wire up delete functionality from the Client List and Detail pages. Ensure all forms and tables reflect changes in real time. Apply consistent Tailwind and Shadcn UI/TailAdmin styling. Implement error handling and user feedback for all actions.[3][4]"
         }
