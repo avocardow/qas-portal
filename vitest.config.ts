@@ -6,6 +6,6 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
-    include: ["src/server/api/routers/**/*.test.ts"],
+    include: ["src/server/api/routers/**/*.test.ts", "src/utils/**/*.test.ts"],
   },
 });

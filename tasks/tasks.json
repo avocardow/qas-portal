@@ -436,7 +436,7 @@
       "id": 9,
       "title": "Implement Document Reference Display Frontend",
       "description": "Create Document tabs/sections for Client, Audit, and Task detail pages",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [3, 5, 7, 8],
       "priority": "low",
       "details": "Add Documents tabs/sections to Client, Audit, and Task detail pages. Each should display a list of document references with fileName and 'Open' links to sharepointFileUrl. Use the appropriate document.getBy* procedure based on the context. Style consistently with Tailwind and TailAdmin components.",
@@ -446,7 +446,7 @@
           "id": 1,
           "title": "Design Document Reference UI Components",
           "description": "Design and implement reusable UI components for displaying document references, including fileName and 'Open' link, styled with Tailwind and Shadcn UI / TailAdmin components.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Create a DocumentList component that accepts an array of document objects and renders each with the fileName and an 'Open' button linking to the sharepointFileUrl. Ensure consistent styling using Tailwind and Shadcn UI / TailAdmin. Prepare for integration into multiple pages by making the component context-agnostic."
         },
@@ -454,7 +454,7 @@
           "id": 2,
           "title": "Integrate Document Reference Section into Client Detail Page",
           "description": "Add the DocumentList component as a new tab or section on the Client detail page, fetching and displaying relevant document references.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "On the Client detail page, use the appropriate document.getByClient procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section fits seamlessly with the existing page layout and navigation."
         },
@@ -462,7 +462,7 @@
           "id": 3,
           "title": "Integrate Document Reference Section into Audit Detail Page",
           "description": "Add the DocumentList component as a new tab or section on the Audit detail page, fetching and displaying relevant document references.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1],
           "details": "On the Audit detail page, use the appropriate document.getByAudit procedure to fetch document references. Pass the data to the DocumentList component. Ensure the new tab/section matches the page's design and navigation patterns."
         },
@@ -480,7 +480,7 @@
       "id": 10,
       "title": "Implement Comprehensive RBAC and Final Integration",
       "description": "Ensure consistent RBAC across all components and integrate all features",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [1, 2, 3, 4, 5, 6, 7, 8, 9],
       "priority": "high",
       "details": "1) Review and ensure consistent RBAC implementation across all backend procedures, throwing TRPCError('FORBIDDEN') for unauthorized access. 2) Implement frontend RBAC using useSession to conditionally render/disable UI elements based on user roles. 3) Perform final integration of all components, ensuring seamless navigation and data flow between Client, Audit, and Task management features. 4) Conduct end-to-end testing of complete workflows. 5) Optimize performance with proper loading states and error handling.",
@@ -492,7 +492,7 @@
           "description": "Create a comprehensive RBAC model that defines all roles, permissions, and access control policies for the application. This will serve as the foundation for all RBAC implementations.",
           "dependencies": [],
           "details": "1. Define clear user roles (e.g., Admin, Manager, Auditor, Client, Regular User) based on business requirements\n2. Map each role to specific permissions using a matrix approach\n3. Document role inheritance hierarchies if applicable\n4. Create a centralized policy definition file (in YAML or JSON) following the policy-as-code approach\n5. Test the model with example user scenarios to validate completeness\n6. Ensure the model follows the principle of least privilege\n7. Testing approach: Create unit tests that validate role definitions and permission mappings",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 10
         },
         {
@@ -501,7 +501,7 @@
           "description": "Create reusable middleware and utility functions to enforce RBAC consistently across all backend routes and procedures.",
           "dependencies": [1],
           "details": "1. Create a central RBAC enforcement middleware for tRPC procedures\n2. Implement utility functions to check permissions based on the defined role structure\n3. Create helper functions for throwing standardized TRPCError('FORBIDDEN') responses\n4. Implement role-based route protection that can be applied to any procedure\n5. Add logging for all access control decisions for audit purposes\n6. Create test helpers for RBAC unit testing\n7. Testing approach: Write unit tests for middleware with different role scenarios",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 10
         },
         {

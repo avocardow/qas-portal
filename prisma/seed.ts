@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import "dotenv/config";
-import { AUDIT_PERMISSIONS } from "../src/constants/permissions";
+import {
+  AUDIT_PERMISSIONS,
+  TASK_PERMISSIONS,
+  DOCUMENT_PERMISSIONS,
+} from "../src/constants/permissions";
 
 const prisma = new PrismaClient();
 
@@ -25,6 +29,26 @@ async function main() {
     skipDuplicates: true,
   });
   console.log("Seeded audit permissions successfully");
+
+  // Seed task permissions
+  const taskPermissions = Object.values(TASK_PERMISSIONS).map((action) => ({
+    action,
+  }));
+  await prisma.permission.createMany({
+    data: taskPermissions,
+    skipDuplicates: true,
+  });
+  console.log("Seeded task permissions successfully");
+
+  // Seed document permissions
+  const documentPermissions = Object.values(DOCUMENT_PERMISSIONS).map(
+    (action) => ({ action })
+  );
+  await prisma.permission.createMany({
+    data: documentPermissions,
+    skipDuplicates: true,
+  });
+  console.log("Seeded document permissions successfully");
 
   // Assign permissions to roles
   const [adminRole, managerRole, auditorRole] = await Promise.all([
