@@ -127,6 +127,25 @@ export const auditRouter = createTRPCRouter({
       return audit;
     }),
 
+  // Add endpoints to fetch audit stages and statuses
+  getStages: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID))
+    .input(z.void())
+    .query(async ({ ctx }) => {
+      const stages = await ctx.db.auditStage.findMany({
+        orderBy: { displayOrder: "asc" },
+      });
+      return stages;
+    }),
+
+  getStatuses: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID))
+    .input(z.void())
+    .query(async ({ ctx }) => {
+      const statuses = await ctx.db.auditStatus.findMany();
+      return statuses;
+    }),
+
   // Assign a user to an audit with logging
   assignUser: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.ASSIGN_USER))

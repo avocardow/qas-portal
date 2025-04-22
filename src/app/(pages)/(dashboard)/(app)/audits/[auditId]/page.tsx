@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -16,11 +16,19 @@ import Button from "@/components/ui/button/Button";
 
 export default function AuditDetailPage() {
   const { auditId } = useParams() as { auditId: string };
+  const router = useRouter();
   const {
     data: audit,
     isLoading,
     isError,
+    refetch,
   } = api.audit.getById.useQuery({ auditId });
+  const assignUserMutation = api.audit.assignUser.useMutation({
+    onSuccess: () => refetch(),
+  });
+  const unassignUserMutation = api.audit.unassignUser.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   if (isLoading) {
     return (
@@ -76,7 +84,14 @@ export default function AuditDetailPage() {
             <h2 className="text-lg font-medium">Team Members</h2>
             <Button
               onClick={() => {
-                /* TODO: open assign member modal */
+                const userId = prompt("Enter User ID to assign");
+                const role = prompt("Enter role (optional)");
+                if (userId)
+                  assignUserMutation.mutate({
+                    auditId,
+                    userId,
+                    role: role || undefined,
+                  });
               }}
             >
               Add Team Member
@@ -101,9 +116,12 @@ export default function AuditDetailPage() {
                         variant="outline"
                         size="sm"
                         className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
-                        onClick={() => {
-                          /* TODO: unassign user */
-                        }}
+                        onClick={() =>
+                          unassignUserMutation.mutate({
+                            auditId,
+                            userId: assignment.userId,
+                          })
+                        }
                       >
                         Remove
                       </Button>
@@ -143,9 +161,7 @@ export default function AuditDetailPage() {
                     <TableCell>
                       <Button
                         size="sm"
-                        onClick={() => {
-                          /* TODO: view/edit task */
-                        }}
+                        onClick={() => router.push(`/tasks/${task.id}`)}
                       >
                         View
                       </Button>

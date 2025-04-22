@@ -228,7 +228,7 @@
       "id": 5,
       "title": "Implement Audit Tracking Frontend",
       "description": "Create Audit UI components for Client Detail and Audit Detail pages",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [3, 4],
       "priority": "medium",
       "details": "Develop: 1) Client Detail Audits Tab showing audit list (using audit.getByClientId) with Year, Stage, Status, Due Date, Assigned Staff columns, 'Add New Audit Year' button, and Stage/Status dropdowns for audit.updateStageStatus. 2) Audit Detail page (/audits/[auditId]) displaying audit details, assigned team members with add/remove controls, and related tasks. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
@@ -262,7 +262,7 @@
           "id": 4,
           "title": "Integrate API Calls and State Management",
           "description": "Connect UI components to backend APIs for data retrieval and updates, managing local and global state as needed.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2, 3],
           "details": "Wire up audit.getByClientId for the audits tab and relevant endpoints for audit details, team assignment, and task management. Use React Query, Redux, or context/state hooks for efficient state management and UI updates. Handle optimistic updates for status/stage changes and team modifications."
         },
@@ -270,7 +270,7 @@
           "id": 5,
           "title": "Implement Role-Based Access and Final Styling Consistency",
           "description": "Apply role-based controls to restrict actions (e.g., editing, assignment) and ensure all UI elements follow consistent styling guidelines.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [4],
           "details": "Check user roles/permissions before rendering or enabling controls such as status updates, team assignment, and adding new audits. Refine all components to match Tailwind and Shadcn UI / TailAdmin standards for spacing, typography, and responsiveness. Conduct a UI review to ensure visual and functional consistency across both pages."
         }

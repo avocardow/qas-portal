@@ -18,11 +18,24 @@ const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
   const router = useRouter();
   const {
     data: audits,
-    isLoading,
+    isLoading: isLoadingAudits,
     isError,
+    refetch: refetchAudits,
   } = api.audit.getByClientId.useQuery({ clientId });
 
-  if (isLoading) return <p>Loading audits...</p>;
+  const { data: stages, isLoading: isLoadingStages } =
+    api.audit.getStages.useQuery();
+  const { data: statuses, isLoading: isLoadingStatuses } =
+    api.audit.getStatuses.useQuery();
+
+  const updateStageStatusMutation = api.audit.updateStageStatus.useMutation({
+    onSuccess: () => {
+      refetchAudits();
+    },
+  });
+
+  if (isLoadingAudits || isLoadingStages || isLoadingStatuses)
+    return <p>Loading audits...</p>;
   if (isError || !audits) return <p>Error loading audits.</p>;
 
   return (
@@ -57,24 +70,42 @@ const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
                 </TableCell>
                 <TableCell>
                   <select
-                    defaultValue={audit.stage?.id ?? ""}
+                    value={audit.stage?.id ?? ""}
                     className="rounded border px-2 py-1"
                     onChange={(e) =>
-                      console.log("Change stage to", e.target.value)
+                      updateStageStatusMutation.mutate({
+                        auditId: audit.id,
+                        stageId: parseInt(e.target.value),
+                        statusId: audit.status?.id ?? statuses?.[0]?.id ?? 0,
+                      })
                     }
                   >
                     <option value="">--</option>
+                    {stages?.map((stage) => (
+                      <option key={stage.id} value={stage.id}>
+                        {stage.name}
+                      </option>
+                    ))}
                   </select>
                 </TableCell>
                 <TableCell>
                   <select
-                    defaultValue={audit.status?.id ?? ""}
+                    value={audit.status?.id ?? ""}
                     className="rounded border px-2 py-1"
                     onChange={(e) =>
-                      console.log("Change status to", e.target.value)
+                      updateStageStatusMutation.mutate({
+                        auditId: audit.id,
+                        stageId: audit.stage?.id ?? stages?.[0]?.id ?? 0,
+                        statusId: parseInt(e.target.value),
+                      })
                     }
                   >
                     <option value="">--</option>
+                    {statuses?.map((status) => (
+                      <option key={status.id} value={status.id}>
+                        {status.name}
+                      </option>
+                    ))}
                   </select>
                 </TableCell>
                 <TableCell>

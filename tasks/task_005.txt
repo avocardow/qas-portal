@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Implement Audit Tracking Frontend
-# Status: in-progress
+# Status: done
 # Dependencies: 3, 4
 # Priority: medium
 # Description: Create Audit UI components for Client Detail and Audit Detail pages
@@ -39,13 +39,13 @@ Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fe
 ### Details:
 Use Tailwind and Shadcn UI / TailAdmin components to present audit details. Implement a section for assigned team members with add/remove controls (e.g., multi-select dropdown or list with remove buttons). Display related tasks in a list or table. Ensure all data is fetched and updated via appropriate API endpoints.
 
-## 4. Integrate API Calls and State Management [pending]
+## 4. Integrate API Calls and State Management [done]
 ### Dependencies: 5.2, 5.3
 ### Description: Connect UI components to backend APIs for data retrieval and updates, managing local and global state as needed.
 ### Details:
 Wire up audit.getByClientId for the audits tab and relevant endpoints for audit details, team assignment, and task management. Use React Query, Redux, or context/state hooks for efficient state management and UI updates. Handle optimistic updates for status/stage changes and team modifications.
 
-## 5. Implement Role-Based Access and Final Styling Consistency [pending]
+## 5. Implement Role-Based Access and Final Styling Consistency [done]
 ### Dependencies: 5.4
 ### Description: Apply role-based controls to restrict actions (e.g., editing, assignment) and ensure all UI elements follow consistent styling guidelines.
 ### Details:
