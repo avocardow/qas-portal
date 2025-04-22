@@ -7,6 +7,7 @@ import { useSidebar } from "../context/SidebarContext";
 import { HorizontaLDots } from "../icons/index";
 import { usePermission } from "@/context/RbacContext";
 import { TASK_PERMISSIONS } from "@/constants/permissions";
+import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 
 // import SidebarWidget from "./SidebarWidget";
 
@@ -36,6 +37,7 @@ const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
   const canViewTasks = usePermission(TASK_PERMISSIONS.GET_ALL);
+  const canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
 
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
@@ -105,6 +107,9 @@ const AppSidebar: React.FC = () => {
               <ul className="flex flex-col gap-4">
                 {teamPages.map((page) => {
                   if (page.path === "/tasks" && !canViewTasks) {
+                    return null;
+                  }
+                  if (page.path === "/audits" && !canViewAudits) {
                     return null;
                   }
                   return (
