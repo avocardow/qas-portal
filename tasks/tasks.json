@@ -340,7 +340,7 @@
       "id": 7,
       "title": "Implement Task Management Frontend",
       "description": "Create Task List, Detail, and Create/Edit UI components",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [5, 6],
       "priority": "medium",
       "details": "Develop: 1) Task List page (/tasks) with functional table defaulting to task.getAssignedToMe, Admin toggle for task.getAll, pagination, sorting, filtering, and 'Add New Task' button. 2) Audit Detail Tasks Section listing tasks via task.getByAuditId with quick status updates and 'Add Task' functionality. 3) Task Create/Edit forms with fields for Name, Description, Assignee, Due Date, Status, Priority. 4) Task Detail View (modal) displaying full task details. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
@@ -350,7 +350,7 @@
           "id": 1,
           "title": "Set Up Task Data Integration and Role-Based Logic",
           "description": "Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.getByAuditId). Set up state management (React context, Redux, or local state) to store and update task data. Implement logic to determine user role (admin vs. regular user) and toggle between assigned and all tasks accordingly."
         },
@@ -366,7 +366,7 @@
           "id": 3,
           "title": "Implement Task Create/Edit Forms",
           "description": "Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1],
           "details": "Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement validation and controlled inputs for all required fields. Ensure the form can be used both for creating new tasks and editing existing ones, with appropriate data pre-filling and submission handling."
         },
@@ -382,7 +382,7 @@
           "id": 5,
           "title": "Develop Audit Detail Tasks Section with Quick Status Updates",
           "description": "Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1, 3, 4],
           "details": "Fetch and display tasks using task.getByAuditId. Allow inline status updates (e.g., dropdown or toggle). Integrate the 'Add Task' button to open the create form. Ensure consistent styling and UX with other components."
         }

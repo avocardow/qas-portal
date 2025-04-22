@@ -25,9 +25,16 @@ const createTaskSchema = z.object({
   priority: z.string().optional(),
   requiresClientAction: z.boolean().optional(),
 });
-const updateTaskSchema = createTaskSchema.extend({
+const updateTaskSchema = z.object({
   taskId: z.string().uuid(),
   status: z.string().optional(),
+  auditId: z.string().uuid().optional(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  assignedUserId: z.string().uuid().optional(),
+  dueDate: z.date().optional(),
+  priority: z.string().optional(),
+  requiresClientAction: z.boolean().optional(),
 });
 const deleteTaskSchema = z.object({ taskId: z.string().uuid() });
 

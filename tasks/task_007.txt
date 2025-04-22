@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Implement Task Management Frontend
-# Status: in-progress
+# Status: done
 # Dependencies: 5, 6
 # Priority: medium
 # Description: Create Task List, Detail, and Create/Edit UI components
@@ -11,7 +11,7 @@ Develop: 1) Task List page (/tasks) with functional table defaulting to task.get
 Manually test all UI components and interactions. Verify data fetching, filtering, sorting, and pagination. Test task creation, assignment, and status updates. Confirm role-based UI element visibility.
 
 # Subtasks:
-## 1. Set Up Task Data Integration and Role-Based Logic [in-progress]
+## 1. Set Up Task Data Integration and Role-Based Logic [done]
 ### Dependencies: None
 ### Description: Implement data fetching and state management for tasks, including role-based logic for displaying assigned vs. all tasks.
 ### Details:
@@ -23,7 +23,7 @@ Integrate with backend endpoints (e.g., task.getAssignedToMe, task.getAll, task.
 ### Details:
 Use Tailwind and Shadcn UI / TailAdmin components to build a responsive table. Implement pagination controls, column sorting, and filtering options. Add an 'Add New Task' button that opens the create task form. Ensure the table defaults to assigned tasks and supports admin toggle for all tasks.
 
-## 3. Implement Task Create/Edit Forms [in-progress]
+## 3. Implement Task Create/Edit Forms [done]
 ### Dependencies: 7.1
 ### Description: Build reusable forms for creating and editing tasks, supporting fields for Name, Description, Assignee, Due Date, Status, and Priority.
 ### Details:
@@ -35,7 +35,7 @@ Design forms using Tailwind and Shadcn UI / TailAdmin form components. Implement
 ### Details:
 Use modal components from Shadcn UI / TailAdmin. Display all task fields in a readable layout. Ensure the modal can be triggered from the task list and audit detail sections, and supports closing and navigation back to the list.
 
-## 5. Develop Audit Detail Tasks Section with Quick Status Updates [in-progress]
+## 5. Develop Audit Detail Tasks Section with Quick Status Updates [done]
 ### Dependencies: 7.1, 7.3, 7.4
 ### Description: Implement the audit detail section listing tasks by audit ID, supporting quick status updates and 'Add Task' functionality.
 ### Details:
