@@ -228,7 +228,7 @@
       "id": 5,
       "title": "Implement Audit Tracking Frontend",
       "description": "Create Audit UI components for Client Detail and Audit Detail pages",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [3, 4],
       "priority": "medium",
       "details": "Develop: 1) Client Detail Audits Tab showing audit list (using audit.getByClientId) with Year, Stage, Status, Due Date, Assigned Staff columns, 'Add New Audit Year' button, and Stage/Status dropdowns for audit.updateStageStatus. 2) Audit Detail page (/audits/[auditId]) displaying audit details, assigned team members with add/remove controls, and related tasks. Use Tailwind and Shadcn UI / TailAdmin components for consistent styling.",
@@ -238,15 +238,15 @@
           "id": 1,
           "title": "Design Audit UI Components and Page Layouts",
           "description": "Create wireframes and component structures for the Client Detail Audits Tab and the Audit Detail page, ensuring alignment with Tailwind and Shadcn UI / TailAdmin design systems.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
-          "details": "Define the layout for the audits tab within the Client Detail page, including table columns (Year, Stage, Status, Due Date, Assigned Staff), 'Add New Audit Year' button, and dropdowns for Stage/Status. For the Audit Detail page, outline sections for audit details, assigned team members with add/remove controls, and related tasks. Use Figma or a similar tool for mockups and document component hierarchies."
+          "details": "Define the layout for the audits tab within the Client Detail page, including table columns (Year, Stage, Status, Due Date, Assigned Staff), 'Add New Audit Year' button, and dropdowns for Stage/Status. For the Audit Detail page, outline sections for audit details, assigned team members with add/remove controls, and related tasks. Use Figma or a similar tool for mockups and document component hierarchies.\n\n<info added on 2025-04-22T03:22:25.298Z>\n- Ensure Tailwind CSS v4 is installed and configured to leverage its new features, such as the @theme directive and CSS-native theming, which enhances maintainability and performance for Shadcn UI components[2][5].\n- When integrating Shadcn UI components, utilize Tailwind v4’s CSS variable-based theming to align with TailAdmin’s design tokens and support dynamic theming across the audit UI[5].\n- For dropdowns (Stage/Status), use Shadcn UI’s <Select> component styled with Tailwind classes, ensuring accessibility and consistent appearance with the rest of the dashboard[1][2].\n- Document the component hierarchy in Figma, mapping each UI element (e.g., AuditList table, Add New Audit Year button, inline dropdowns) to its corresponding React component and Tailwind utility classes for developer reference.\n- In the Audit Detail page, use Shadcn UI’s <Card>, <Tabs>, and <Avatar> components for sections like audit metadata, team member management, and related tasks, ensuring modularity and reusability.\n- For team member add/remove controls, implement Shadcn UI’s <Button> and <Popover> components, styled with Tailwind, to provide intuitive user interactions.\n- Reference TailAdmin’s layout patterns for responsive grid and spacing utilities, ensuring the audit pages are mobile-friendly and visually consistent with the rest of the admin dashboard[4].\n</info added on 2025-04-22T03:22:25.298Z>"
         },
         {
           "id": 2,
           "title": "Implement Client Detail Audits Tab Table and Controls",
           "description": "Develop the audits table UI for the Client Detail page, integrating data fetching and interactive controls for audit management.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Build a responsive table using Tailwind and Shadcn UI / TailAdmin components. Fetch audit data using audit.getByClientId. Implement columns for Year, Stage, Status, Due Date, and Assigned Staff. Add the 'Add New Audit Year' button with modal or inline form functionality. Integrate Stage/Status dropdowns that trigger audit.updateStageStatus on change."
         },

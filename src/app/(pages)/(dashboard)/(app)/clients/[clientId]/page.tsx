@@ -14,6 +14,7 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
+import AuditList from "@/components/audit/AuditList";
 
 type TabKey =
   | "Summary"
@@ -353,80 +354,7 @@ export default function ClientDetailPage() {
               </TableBody>
             </Table>
           )}
-          {activeTab === "Audits" && (
-            <Table>
-              <TableHeader className="bg-gray-50 dark:bg-gray-800">
-                <TableRow>
-                  <TableCell
-                    isHeader
-                    className="text-gray-800 dark:text-gray-100"
-                  >
-                    Year
-                  </TableCell>
-                  <TableCell
-                    isHeader
-                    className="text-gray-800 dark:text-gray-100"
-                  >
-                    Status
-                  </TableCell>
-                  <TableCell
-                    isHeader
-                    className="text-gray-800 dark:text-gray-100"
-                  >
-                    Stage
-                  </TableCell>
-                  <TableCell
-                    isHeader
-                    className="text-gray-800 dark:text-gray-100"
-                  >
-                    Report Due
-                  </TableCell>
-                  <TableCell
-                    isHeader
-                    className="text-gray-800 dark:text-gray-100"
-                  >
-                    Lodged Date
-                  </TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                {detailClient.audits.length ? (
-                  detailClient.audits.map((a: any) => (
-                    <TableRow key={a.id}>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {a.auditYear}
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {a.status?.name || "-"}
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {a.stage?.name || "-"}
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {a.reportDueDate
-                          ? new Date(a.reportDueDate).toLocaleDateString()
-                          : "-"}
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {a.lodgedWithOFTDate
-                          ? new Date(a.lodgedWithOFTDate).toLocaleDateString()
-                          : "-"}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={5}
-                      className="text-gray-700 dark:text-gray-200"
-                    >
-                      No audits found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
+          {activeTab === "Audits" && <AuditList clientId={clientId} />}
           {activeTab === "Activity Log" && (
             <Table>
               <TableHeader className="bg-gray-50 dark:bg-gray-800">
