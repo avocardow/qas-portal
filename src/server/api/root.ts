@@ -12,6 +12,7 @@ import { trustAccountRouter } from "@/server/api/routers/trustAccount";
 import { auditRouter } from "@/server/api/routers/audit";
 import { taskRouter } from "@/server/api/routers/task";
 import { documentRouter } from "@/server/api/routers/document";
+import { emailRouter } from "@/server/api/routers/email";
 
 /**
  * This is the primary router for your server.
@@ -28,6 +29,7 @@ export const appRouter = createTRPCRouter({
   audit: auditRouter,
   task: taskRouter,
   document: documentRouter,
+  email: emailRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });
