@@ -410,7 +410,7 @@
           "id": 2,
           "title": "Implement RBAC Middleware for Document Visibility",
           "description": "Develop and integrate reusable middleware to enforce role-based access control (RBAC) for document retrieval procedures. The middleware should check user roles and their relationship to the parent entity (client, audit, or task) before allowing access to document metadata.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Create a middleware function that inspects the user's roles and verifies their association with the relevant parent entity. Integrate this middleware into the tRPC procedures using the .use() method, ensuring that only authorized users can access document references.[1][4]"
         },

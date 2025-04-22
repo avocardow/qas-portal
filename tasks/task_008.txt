@@ -17,7 +17,7 @@ Write unit tests for each procedure verifying correct document retrieval based o
 ### Details:
 Create zod schemas for each procedure's input (e.g., clientId, auditId, taskId as strings or UUIDs). Define TypeScript types or zod schemas for the output, ensuring fileName and sharepointFileUrl are included. This step ensures type safety and input validation for all subsequent implementation steps.[2][4]
 
-## 2. Implement RBAC Middleware for Document Visibility [pending]
+## 2. Implement RBAC Middleware for Document Visibility [done]
 ### Dependencies: 8.1
 ### Description: Develop and integrate reusable middleware to enforce role-based access control (RBAC) for document retrieval procedures. The middleware should check user roles and their relationship to the parent entity (client, audit, or task) before allowing access to document metadata.
 ### Details:
