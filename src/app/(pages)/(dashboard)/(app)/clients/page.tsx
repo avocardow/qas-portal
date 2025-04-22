@@ -91,7 +91,9 @@ export default function ClientsPage() {
           {session?.user?.role &&
             ["Admin", "Manager"].includes(session.user.role) && (
               <Link href="/clients/new">
-                <button className="btn">Add New Client</button>
+                <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700">
+                  Add New Client
+                </button>
               </Link>
             )}
         </div>
@@ -99,11 +101,15 @@ export default function ClientsPage() {
           <button
             onClick={handlePrev}
             disabled={pageIndex === 0}
-            className="btn"
+            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             Prev
           </button>
-          <button onClick={handleNext} disabled={!nextCursor} className="btn">
+          <button
+            onClick={handleNext}
+            disabled={!nextCursor}
+            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+          >
             Next
           </button>
         </div>

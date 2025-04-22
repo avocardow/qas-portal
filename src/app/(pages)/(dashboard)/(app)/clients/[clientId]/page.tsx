@@ -67,7 +67,9 @@ export default function ClientDetailPage() {
       <PageBreadcrumb pageTitle={client.clientName} />
       <div className="mb-4 flex justify-end">
         <Link href={`/clients/${clientId}/edit`}>
-          <button className="btn">Edit Client</button>
+          <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700">
+            Edit Client
+          </button>
         </Link>
       </div>
       <ComponentCard title="Client Details">
