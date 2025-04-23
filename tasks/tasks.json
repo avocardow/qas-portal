@@ -47,7 +47,7 @@
       "id": 1,
       "title": "Implement Personal Email Integration",
       "description": "Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "1. Create tRPC `emailRouter` with procedures: `listFolders`, `listMessages`, `getMessage`, `sendMessage`, `createReply`, `createForward`\n2. Configure Graph API permissions: `Mail.ReadWrite`, `Mail.Send`\n3. Implement 3-column layout UI at `/email` route with folder list, message list, and message detail components\n4. Add pagination controls for message list\n5. Create compose/reply/forward modals with form validation\n6. Ensure HTML email body is sanitized before rendering\n7. Add loading states and error handling",

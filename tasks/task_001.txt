@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Implement Personal Email Integration
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.

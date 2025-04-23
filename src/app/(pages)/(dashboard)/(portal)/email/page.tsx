@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import EmailSidebar from "@/components/email/EmailSidebar/EmailSidebar";
 import EmailList from "@/components/email/EmailList/EmailList";
+import MessageDetail from "@/components/email/EmailDetails/MessageDetail";
 
 export default function EmailPage() {
   const [selectedFolder, setSelectedFolder] = useState<string>("");
@@ -14,15 +15,15 @@ export default function EmailPage() {
         folderId={selectedFolder}
         onSelectMessage={setSelectedMessage}
       />
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
-        {selectedMessage ? (
-          <p className="text-sm text-gray-500">Message ID: {selectedMessage}</p>
-        ) : (
+      {selectedMessage ? (
+        <MessageDetail messageId={selectedMessage} />
+      ) : (
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
           <p className="text-sm text-gray-500">
             Select a message to view details.
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
