@@ -1,6 +1,18 @@
 import React from "react";
-import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import ChatList from "@/components/chats/ChatList";
+import ChatWindow from "@/components/chats/ChatWindow";
+import MessageInput from "@/components/chats/MessageInput";
 
 export default function ChatPage() {
-  return <DashboardPlaceholderPageTemplate heading="Chat" />;
+  return (
+    <div className="flex h-full">
+      <aside className="w-1/3 border-r">
+        <ChatList />
+      </aside>
+      <main className="flex flex-1 flex-col">
+        <ChatWindow />
+        <MessageInput />
+      </main>
+    </div>
+  );
 }
