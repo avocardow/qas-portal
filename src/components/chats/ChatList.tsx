@@ -48,6 +48,16 @@ export default function ChatList({
     },
   });
   const { data, isLoading, isError } = api.chat.listRecent.useQuery();
+  // Normalize union return type from listRecent: data can be Chat[] or { chats: Chat[]; nextSkip: number | null }
+  type ChatItem = { id: string; topic: string; lastUpdatedDateTime: string };
+  let chatsArray: ChatItem[] = [];
+  if (data) {
+    if (Array.isArray(data)) {
+      chatsArray = data;
+    } else {
+      chatsArray = data.chats;
+    }
+  }
 
   return (
     <div className={`p-4 ${isOpen ? "block" : "hidden"} xl:block`}>
@@ -65,7 +75,7 @@ export default function ChatList({
           {isLoading && <p>Loading chats...</p>}
           {isError && <p>Error loading chats.</p>}
           <ul className="space-y-2 overflow-auto">
-            {data?.chats.map((chat) => (
+            {chatsArray.map((chat) => (
               <li
                 key={chat.id}
                 className={`cursor-pointer p-2 hover:bg-gray-100 ${
