@@ -30,7 +30,7 @@
 ### Details:
 Identify all major workflows and user journeys across the portal. Create integration test scripts that simulate real-world usage, focusing on interactions between modules (e.g., initiating calls from client detail pages). Use automated testing tools where possible to execute these scenarios and document any failures or unexpected behaviors.
 
-## 2. Verify Acceptance Criteria and Address Functional Issues [pending]
+## 2. Verify Acceptance Criteria and Address Functional Issues [done]
 ### Dependencies: 8.1
 ### Description: Systematically check that all acceptance criteria from the Product Requirements Document (PRD) are met, and resolve any functional defects uncovered during integration testing.
 ### Details:
