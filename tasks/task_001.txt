@@ -45,7 +45,7 @@ Create a responsive layout for the /email route with a sidebar for folders and a
 ### Details:
 Create the MessageDetail component that fetches and displays the full content of a selected email using the tRPC getMessage procedure. Implement HTML sanitization on the client side before rendering email content. Display email headers (From, To, CC, Subject, Date) in a structured format. Show email attachments with download options. Add buttons for reply, reply all, and forward actions. Implement loading states and error handling. Create a mechanism to handle and display inline images securely. Add functionality to mark messages as read when opened.
 
-## 5. Develop Email Composition Components [pending]
+## 5. Develop Email Composition Components [in-progress]
 ### Dependencies: 1.4
 ### Description: Create modals for composing new emails, replying to emails, and forwarding emails
 ### Details:

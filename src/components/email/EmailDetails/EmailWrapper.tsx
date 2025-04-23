@@ -96,7 +96,7 @@ export default function EmailWrapper() {
             </div>
 
             <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <div className="relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 hover:border-gray-300 sm:w-auto dark:border-gray-800 dark:bg-white/5 dark:hover:border-white/[0.05]">
+              <div className="relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pr-5 pl-3 hover:border-gray-300 sm:w-auto dark:border-gray-800 dark:bg-white/5 dark:hover:border-white/[0.05]">
                 <div className="h-10 w-full max-w-10">
                   <Image
                     src="./images/task/pdf.svg"
@@ -122,7 +122,7 @@ export default function EmailWrapper() {
                 </div>
               </div>
 
-              <div className="relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pl-3 pr-5 hover:border-gray-300 sm:w-auto dark:border-gray-800 dark:bg-white/5 dark:hover:border-white/[0.05]">
+              <div className="relative flex w-full cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white py-2.5 pr-5 pl-3 hover:border-gray-300 sm:w-auto dark:border-gray-800 dark:bg-white/5 dark:hover:border-white/[0.05]">
                 <div className="h-10 w-full max-w-10">
                   <Image
                     width={40}
@@ -150,7 +150,7 @@ export default function EmailWrapper() {
           </div>
         </div>
       </SimpleBar>
-      <EmailDetailsBottom />
+      <EmailDetailsBottom messageId="" />
     </div>
   );
 }

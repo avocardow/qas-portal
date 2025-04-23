@@ -89,7 +89,7 @@
           "id": 5,
           "title": "Develop Email Composition Components",
           "description": "Create modals for composing new emails, replying to emails, and forwarding emails",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [4],
           "details": "Create a ComposeMail modal component with form fields for recipient, cc, bcc, subject, and body. Implement a rich text editor for the email body using a library like TinyMCE or Quill. Add file attachment functionality with size limits and type validation. Create ReplyMail and ForwardMail components that pre-populate fields based on the original email. Implement form validation for all required fields and email format validation. Add draft saving functionality to prevent data loss. Implement the send functionality using the tRPC sendMessage procedure. Add loading states during sending and success/error notifications."
         },

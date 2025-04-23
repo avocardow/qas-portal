@@ -3,6 +3,8 @@ import LabelList from "./LabelList";
 import MailBox from "./MailBox";
 import FilterList from "./FilterList";
 import SimpleBar from "simplebar-react";
+import { useModal } from "@/hooks/useModal";
+import ComposeMail from "@/components/email/EmailCompose/ComposeMail";
 
 interface EmailSidebarProps {
   onSelect?: (folderId: string) => void;
@@ -11,10 +13,18 @@ interface EmailSidebarProps {
 export default function EmailSidebar({
   onSelect = () => {},
 }: EmailSidebarProps) {
+  const {
+    isOpen: isComposeOpen,
+    openModal: openComposeModal,
+    closeModal: closeComposeModal,
+  } = useModal();
   return (
     <div className="flex flex-col rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="pb-5">
-        <button className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium text-white">
+        <button
+          onClick={openComposeModal}
+          className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium text-white"
+        >
           <svg
             className="fill-current"
             width="21"
@@ -65,6 +75,7 @@ export default function EmailSidebar({
         </nav>
         {/* // <!--== Inbox Menu End ==--> */}
       </SimpleBar>
+      <ComposeMail isOpen={isComposeOpen} onClose={closeComposeModal} />
     </div>
   );
 }

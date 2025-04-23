@@ -83,9 +83,7 @@ export default function MessageDetail({ messageId }: MessageDetailProps) {
         </div>
       ) : null}
 
-      <div className="sticky bottom-0 border-t border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-[#171f2f]">
-        <EmailDetailsBottom />
-      </div>
+      <EmailDetailsBottom messageId={messageId} />
     </div>
   );
 }
