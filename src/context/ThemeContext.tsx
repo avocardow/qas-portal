@@ -18,10 +18,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    // On mount, read the saved theme and update state
+    // On mount, read the saved theme, apply class, and update state
     const savedTheme = localStorage.getItem("theme") as Theme | null;
-    setTheme(savedTheme || "light");
+    const initial: Theme = savedTheme || "light";
+    document.documentElement.classList.toggle("dark", initial === "dark");
+    setTheme(initial);
   }, []);
+
+  // Sync theme state changes with document class
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme((prev) => {

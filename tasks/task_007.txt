@@ -21,25 +21,25 @@
 5. Check for any styling inconsistencies or accessibility issues
 
 # Subtasks:
-## 1. Analyze Phase 1 Feedback and Define UI Improvements [in-progress]
+## 1. Analyze Phase 1 Feedback and Define UI Improvements [done]
 ### Dependencies: None
 ### Description: Review all feedback collected from Phase 1 to identify specific areas of the UI that require refinement, such as usability issues, visual inconsistencies, or missing features.
 ### Details:
 Gather feedback documents, user reports, and design notes. Create a prioritized list of actionable UI improvements, focusing on table layouts, form flows, and navigation components. Document these requirements for implementation in subsequent subtasks.
 
-## 2. Refactor and Standardize UI Components [pending]
+## 2. Refactor and Standardize UI Components [done]
 ### Dependencies: 7.1
 ### Description: Update and refine table layouts, form flows, and navigation components based on the prioritized feedback, ensuring consistent use of Shadcn UI and TailAdmin components throughout the application.
 ### Details:
 Audit existing UI components for consistency. Refactor or replace components as needed to align with design guidelines and ensure a cohesive look and feel. Leverage reusable components and maintain modular code structure for scalability and maintainability[3].
 
-## 3. Enhance Responsive Design and Cross-Browser Compatibility [pending]
+## 3. Enhance Responsive Design and Cross-Browser Compatibility [in-progress]
 ### Dependencies: 7.2
 ### Description: Improve the responsive design of all pages and ensure cross-browser compatibility to provide a seamless experience across devices and browsers.
 ### Details:
 Test UI on various screen sizes and browsers. Adjust CSS and layout logic to resolve any issues. Use feature detection tools and polyfills where necessary to address browser-specific quirks[2][3]. Validate that all components adapt gracefully to different environments.
 
-## 4. Implement Theme Switcher Component with Persistence [pending]
+## 4. Implement Theme Switcher Component with Persistence [in-progress]
 ### Dependencies: 7.3
 ### Description: Develop a theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.
 ### Details:
