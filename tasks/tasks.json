@@ -117,7 +117,7 @@
           "id": 1,
           "title": "Extend tRPC emailRouter with Shared Mailbox Procedures",
           "description": "Add new procedures to the tRPC emailRouter to support operations (read, send, manage) on the shared admin mailbox, targeting endpoints like /users/{admin-email}/....",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Define procedures for accessing and managing the shared mailbox using Microsoft Graph API endpoints. Ensure these procedures can differentiate between personal and shared mailbox contexts, and structure them to support future extensibility."
         },
@@ -125,7 +125,7 @@
           "id": 2,
           "title": "Configure Microsoft Graph API Permissions for Shared Mailbox",
           "description": "Verify and add Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions for the shared mailbox",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1],
           "details": "Confirm the existing Azure AD app registration includes Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions with admin consent. Update the registration if needed and validate API access to shared mailbox endpoints."
         },
@@ -133,7 +133,7 @@
           "id": 3,
           "title": "Implement Role-Based Access Control (RBAC) for Shared Mailbox",
           "description": "Restrict access to the shared admin mailbox procedures so only users with the Admin role can invoke them.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1, 2],
           "details": "Update the backend authorization logic to check user roles before allowing access to shared mailbox procedures. Ensure that only Admin users can see or interact with shared mailbox functionality, and add tests to validate RBAC enforcement."
         },

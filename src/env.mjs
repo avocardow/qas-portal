@@ -27,6 +27,7 @@ export const env = createEnv({
     AZURE_AD_CLIENT_SECRET: z.string().min(1),
     AZURE_AD_TENANT_ID: z.string().min(1),
     EMAIL_FROM: z.string().email(),
+    SHARED_MAILBOX_EMAIL: z.string().email().default(process.env.EMAIL_FROM),
     // Add `.env` variables here (e.g. Dis):
     // DISCORD_CLIENT_ID: z.string().min(1),
     // DISCORD_CLIENT_SECRET: z.string().min(1),
@@ -54,6 +55,7 @@ export const env = createEnv({
     AZURE_AD_CLIENT_SECRET: process.env.AZURE_AD_CLIENT_SECRET,
     AZURE_AD_TENANT_ID: process.env.AZURE_AD_TENANT_ID,
     EMAIL_FROM: process.env.EMAIL_FROM,
+    SHARED_MAILBOX_EMAIL: process.env.SHARED_MAILBOX_EMAIL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

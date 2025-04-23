@@ -143,4 +143,98 @@ export class EmailService {
     );
     return { draftMessageId: draft.id };
   }
+
+  /** List mail folders for a specific mailbox */
+  async listFoldersForMailbox(userEmail: string): Promise<MailFolder[]> {
+    const result = await this.graph.get<{ value: MailFolder[] }>(
+      `/users/${userEmail}/mailFolders`
+    );
+    return result.value;
+  }
+
+  /** List messages in a specific mailbox and folder with pagination */
+  async listMessagesForMailbox(
+    userEmail: string,
+    folderId: string,
+    page: number = 1,
+    pageSize: number = 20
+  ): Promise<{ messages: EmailMessage[]; nextLink?: string }> {
+    const skip = (page - 1) * pageSize;
+    const result = await this.graph.get<{
+      value: EmailMessage[];
+      "@odata.nextLink"?: string;
+    }>(
+      `/users/${userEmail}/mailFolders/${folderId}/messages?$top=${pageSize}&$skip=${skip}&$orderby=receivedDateTime desc`
+    );
+    return {
+      messages: result.value,
+      nextLink: result["@odata.nextLink"],
+    };
+  }
+
+  /** Get full message details for a specific mailbox */
+  async getMessageForMailbox(
+    userEmail: string,
+    messageId: string
+  ): Promise<unknown> {
+    const result = await this.graph.get<unknown>(
+      `/users/${userEmail}/messages/${messageId}?$expand=attachments`
+    );
+    return result;
+  }
+
+  /** Send a message from a specific mailbox */
+  async sendMessageFromMailbox(
+    userEmail: string,
+    to: string[],
+    cc: string[] = [],
+    bcc: string[] = [],
+    subject: string,
+    htmlBody: string
+  ): Promise<void> {
+    const message = {
+      subject,
+      body: {
+        contentType: "HTML",
+        content: htmlBody,
+      },
+      toRecipients: to.map((address) => ({ emailAddress: { address } })),
+      ccRecipients: cc.map((address) => ({ emailAddress: { address } })),
+      bccRecipients: bcc.map((address) => ({ emailAddress: { address } })),
+    };
+    await this.graph.post<void>(`/users/${userEmail}/sendMail`, {
+      message,
+      saveToSentItems: true,
+    });
+  }
+
+  /** Create a reply draft in a specific mailbox */
+  async createReplyFromMailbox(
+    userEmail: string,
+    messageId: string,
+    comment: string = ""
+  ): Promise<{ draftMessageId: string }> {
+    const draft = await this.graph.post<{ id: string }>(
+      `/users/${userEmail}/messages/${messageId}/createReply`,
+      { comment }
+    );
+    return { draftMessageId: draft.id };
+  }
+
+  /** Create a forward draft in a specific mailbox */
+  async createForwardFromMailbox(
+    userEmail: string,
+    messageId: string,
+    comment: string,
+    to: string[]
+  ): Promise<{ draftMessageId: string }> {
+    const draft = await this.graph.post<{ id: string }>(
+      `/users/${userEmail}/messages/${messageId}/createForward`,
+      {
+        comment,
+        toRecipients: to.map((address) => ({ emailAddress: { address } })),
+      }
+    );
+    return { draftMessageId: draft.id };
+  }
 }

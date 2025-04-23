@@ -1,10 +1,15 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  adminProcedure,
+} from "@/server/api/trpc";
 import {
   EmailService,
   MailFolder,
   EmailMessage,
 } from "@/server/services/emailService";
+import { env } from "@/env.mjs";
 
 const emailService = new EmailService();
 
@@ -81,6 +86,90 @@ export const emailRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       return await emailService.createForward(
+        input.messageId,
+        input.comment,
+        input.to
+      );
+    }),
+
+  // Shared mailbox procedures
+  listSharedFolders: adminProcedure.query(async (): Promise<MailFolder[]> => {
+    return await emailService.listFoldersForMailbox(env.SHARED_MAILBOX_EMAIL);
+  }),
+
+  listSharedMessages: adminProcedure
+    .input(
+      z.object({
+        folderId: z.string(),
+        page: z.number().int().min(1).default(1),
+        pageSize: z.number().int().min(1).max(100).default(20),
+      })
+    )
+    .query(
+      async ({
+        input,
+      }): Promise<{ messages: EmailMessage[]; nextLink?: string }> => {
+        return await emailService.listMessagesForMailbox(
+          env.SHARED_MAILBOX_EMAIL,
+          input.folderId,
+          input.page,
+          input.pageSize
+        );
+      }
+    ),
+
+  getSharedMessage: adminProcedure
+    .input(z.object({ messageId: z.string() }))
+    .query(async ({ input }) => {
+      return await emailService.getMessageForMailbox(
+        env.SHARED_MAILBOX_EMAIL,
+        input.messageId
+      );
+    }),
+
+  sendSharedMessage: adminProcedure
+    .input(
+      z.object({
+        to: z.array(z.string().email()),
+        cc: z.array(z.string().email()).default([]),
+        bcc: z.array(z.string().email()).default([]),
+        subject: z.string().min(1),
+        htmlBody: z.string().min(1),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await emailService.sendMessageFromMailbox(
+        env.SHARED_MAILBOX_EMAIL,
+        input.to,
+        input.cc,
+        input.bcc,
+        input.subject,
+        input.htmlBody
+      );
+      return { success: true };
+    }),
+
+  createSharedReply: adminProcedure
+    .input(z.object({ messageId: z.string(), comment: z.string().default("") }))
+    .mutation(async ({ input }) => {
+      return await emailService.createReplyFromMailbox(
+        env.SHARED_MAILBOX_EMAIL,
+        input.messageId,
+        input.comment
+      );
+    }),
+
+  createSharedForward: adminProcedure
+    .input(
+      z.object({
+        messageId: z.string(),
+        comment: z.string().default(""),
+        to: z.array(z.string().email()),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return await emailService.createForwardFromMailbox(
+        env.SHARED_MAILBOX_EMAIL,
         input.messageId,
         input.comment,
         input.to
