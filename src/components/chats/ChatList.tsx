@@ -51,7 +51,16 @@ export default function ChatList({
       {isError && <p>Error loading chats.</p>}
       <ul className="space-y-2 overflow-auto">
         {data?.pages
-          .flatMap((page) => page.chats)
+          .flatMap(
+            (page: {
+              chats: {
+                id: string;
+                topic: string;
+                lastUpdatedDateTime: string;
+              }[];
+              nextSkip: number | null;
+            }) => page.chats
+          )
           .map((chat) => (
             <li key={chat.id} className="cursor-pointer p-2 hover:bg-gray-100">
               {chat.topic}
