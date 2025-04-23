@@ -219,7 +219,7 @@
       "id": 4,
       "title": "Implement Teams Chat Integration",
       "description": "Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "medium",
       "details": "1. Create tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, `createGroup`\n2. Configure Graph API permissions: `Chat.ReadWrite`, `User.Read.All`\n3. Implement `/chat` page with chat list pane, message pane, and message input components\n4. Add pagination/infinite scroll for message history\n5. Create user search functionality for starting new chats\n6. Implement new chat creation flows (1:1 and group)\n7. Add loading states and error handling",
@@ -245,7 +245,7 @@
           "id": 3,
           "title": "Develop Frontend Chat Page and Core UI Components",
           "description": "Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [2],
           "details": "Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible."
         },

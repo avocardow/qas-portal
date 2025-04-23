@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Teams Chat Integration
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: medium
 # Description: Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.
@@ -33,7 +33,7 @@ Register the application in Azure AD, configure required API permissions (`Chat.
 ### Details:
 Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases.
 
-## 3. Develop Frontend Chat Page and Core UI Components [pending]
+## 3. Develop Frontend Chat Page and Core UI Components [in-progress]
 ### Dependencies: 4.2
 ### Description: Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.
 ### Details:
