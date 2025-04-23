@@ -5,11 +5,15 @@ import { api } from "@/utils/api";
 interface ChatListProps {
   isOpen?: boolean;
   onToggle?: () => void;
+  selectedChatId?: string | null;
+  onSelectChat?: (id: string) => void;
 }
 
 export default function ChatList({
   isOpen = true,
   onToggle = () => {},
+  selectedChatId = null,
+  onSelectChat = () => {},
 }: ChatListProps) {
   const { data, isLoading, isError } = api.chat.listRecent.useQuery();
 
@@ -22,7 +26,11 @@ export default function ChatList({
       {isError && <p>Error loading chats.</p>}
       <ul className="space-y-2 overflow-auto">
         {data?.chats.map((chat) => (
-          <li key={chat.id} className="cursor-pointer p-2 hover:bg-gray-100">
+          <li
+            key={chat.id}
+            className={`cursor-pointer p-2 hover:bg-gray-100 ${selectedChatId === chat.id ? "bg-gray-200" : ""}`}
+            onClick={() => onSelectChat(chat.id)}
+          >
             {chat.topic}
           </li>
         ))}

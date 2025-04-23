@@ -33,11 +33,104 @@ Register the application in Azure AD, configure required API permissions (`Chat.
 ### Details:
 Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases.
 
-## 3. Develop Frontend Chat Page and Core UI Components [in-progress]
+## 3. Develop Frontend Chat Page and Core UI Components [done]
 ### Dependencies: 4.2
 ### Description: Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.
 ### Details:
 Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible.
+
+<info added on 2025-04-23T09:07:45.221Z>
+For subtask 4.3, implement the chat page with the following structure:
+
+```tsx
+// src/app/(pages)/chat/page.tsx
+'use client';
+
+import { useState } from 'react';
+import { api } from '@/trpc/react';
+import ChatList from '@/components/chats/ChatList';
+import ChatWindow from '@/components/chats/ChatWindow';
+import MessageInput from '@/components/chats/MessageInput';
+
+export default function ChatPage() {
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  
+  // Fetch recent chats
+  const { data: chats, isLoading: chatsLoading, error: chatsError } = 
+    api.chat.listRecent.useQuery();
+  
+  // Fetch messages for selected chat
+  const { data: messages, isLoading: messagesLoading, error: messagesError } = 
+    api.chat.getMessages.useQuery(
+      { chatId: selectedChatId! },
+      { enabled: !!selectedChatId }
+    );
+  
+  // Send message mutation
+  const sendMessageMutation = api.chat.sendMessage.useMutation({
+    onSuccess: () => {
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries(['chat.getMessages']);
+    }
+  });
+  
+  const handleSendMessage = (content: string) => {
+    if (!selectedChatId) return;
+    
+    sendMessageMutation.mutate({
+      chatId: selectedChatId,
+      content
+    });
+  };
+
+  return (
+    <div className="flex h-screen">
+      <div className="w-1/4 border-r">
+        {chatsLoading ? (
+          <p>Loading chats...</p>
+        ) : chatsError ? (
+          <p>Error loading chats</p>
+        ) : (
+          <ChatList 
+            chats={chats || []} 
+            selectedChatId={selectedChatId}
+            onSelectChat={setSelectedChatId}
+          />
+        )}
+      </div>
+      
+      <div className="flex flex-col w-3/4">
+        {!selectedChatId ? (
+          <div className="flex-1 flex items-center justify-center">
+            <p>Select a chat to start messaging</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex-1 overflow-y-auto p-4">
+              {messagesLoading ? (
+                <p>Loading messages...</p>
+              ) : messagesError ? (
+                <p>Error loading messages</p>
+              ) : (
+                <ChatWindow messages={messages || []} />
+              )}
+            </div>
+            <div className="p-4 border-t">
+              <MessageInput 
+                onSendMessage={handleSendMessage}
+                isLoading={sendMessageMutation.isLoading}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+Include proper error handling, loading states, and query invalidation for real-time updates. Style with Tailwind CSS classes for responsive layout.
+</info added on 2025-04-23T09:07:45.221Z>
 
 ## 4. Add Pagination, Infinite Scroll, and User Search Functionality [done]
 ### Dependencies: 4.3
