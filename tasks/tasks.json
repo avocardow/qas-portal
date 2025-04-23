@@ -297,7 +297,7 @@
           "id": 3,
           "title": "Develop tRPC phoneRouter with Call and Logging Procedures",
           "description": "Implement a tRPC router exposing procedures for initiating PSTN calls and logging call details.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2],
           "details": "Create a tRPC router named 'phoneRouter' with procedures: 'makePstnCall' (to initiate outbound calls via Teams Phone System using the Graph API) and 'logCall' (to record call details in the database). Ensure error handling, input validation, and secure access controls for these endpoints."
         },

@@ -34,7 +34,7 @@ Coordinate with QAS IT to provision Teams Phone System licenses, phone numbers, 
 ### Details:
 Define and migrate a database schema for call logs with fields: callerId, clientId, contactId, numberDialed, startTime, endTime, and duration. Ensure indexing for efficient querying and consider audit/compliance requirements for call records.
 
-## 3. Develop tRPC phoneRouter with Call and Logging Procedures [pending]
+## 3. Develop tRPC phoneRouter with Call and Logging Procedures [done]
 ### Dependencies: 5.2
 ### Description: Implement a tRPC router exposing procedures for initiating PSTN calls and logging call details.
 ### Details:
