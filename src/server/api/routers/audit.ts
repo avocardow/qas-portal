@@ -111,7 +111,12 @@ export const auditRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const audit = await ctx.db.audit.findUnique({
         where: { id: input.auditId },
-        include: { stage: true, status: true, assignments: true, tasks: true },
+        include: {
+          stage: true,
+          status: true,
+          assignments: { include: { user: true } },
+          tasks: { include: { assignedUser: true } },
+        },
       });
       if (audit && ctx.db.activityLog) {
         await ctx.db.activityLog.create({
