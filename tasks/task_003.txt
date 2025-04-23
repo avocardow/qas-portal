@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Enhance Client and Audit Detail Pages
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.
@@ -21,13 +21,13 @@
 5. Check performance with large datasets
 
 # Subtasks:
-## 1. Extend tRPC Procedures to Fetch Related Entities [pending]
+## 1. Extend tRPC Procedures to Fetch Related Entities [in-progress]
 ### Dependencies: None
 ### Description: Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.
 ### Details:
 Modify the tRPC router definitions so that `client.getById` returns contacts, licenses, trustAccounts, and audits, and `audit.getById` returns tasks and assignments with user information. Ensure the returned data is fully typed and optimized for frontend consumption.
 
-## 2. Implement Tabbed Interface on Client Detail Page [pending]
+## 2. Implement Tabbed Interface on Client Detail Page [done]
 ### Dependencies: 3.1
 ### Description: Create a tabbed navigation UI for the Client Detail page at `/clients/[clientId]` to organize related data into Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs.
 ### Details:
