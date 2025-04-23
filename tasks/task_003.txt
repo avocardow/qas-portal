@@ -33,7 +33,7 @@ Modify the tRPC router definitions so that `client.getById` returns contacts, li
 ### Details:
 Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each tab should be a separate component and fetch its data using the enhanced tRPC procedures.
 
-## 3. Build Data Tables and Lists for Each Client Tab [pending]
+## 3. Build Data Tables and Lists for Each Client Tab [done]
 ### Dependencies: 3.2
 ### Description: Develop tables or lists for each tab on the Client Detail page, supporting sorting and filtering where appropriate.
 ### Details:
