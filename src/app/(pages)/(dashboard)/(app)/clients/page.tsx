@@ -14,11 +14,17 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import useDebounce from "@/hooks/useDebounce";
+import Notification from "@/components/ui/notification/Notification";
 
 // Add type for sortable fields
 type SortField = "clientName" | "city" | "status";
 
 export default function ClientsPage() {
+  const [notification, setNotification] = useState<{
+    variant: "success" | "error" | "warning" | "info";
+    title: string;
+    description?: string;
+  } | null>(null);
   // RBAC context
   const { role } = useRbac();
   // Pagination, sorting, filtering state
@@ -26,7 +32,23 @@ export default function ClientsPage() {
   // Debounce filter input to optimize queries
   const debouncedFilter = useDebounce(filter, 500);
   const router = useRouter();
-  const deleteClientMutation = api.clients.deleteClient.useMutation();
+  const deleteClientMutation = api.clients.deleteClient.useMutation({
+    onSuccess: () => {
+      setNotification({
+        variant: "success",
+        title: "Client deleted successfully",
+      });
+      router.refresh();
+    },
+    onError: (error: unknown) => {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      setNotification({
+        variant: "error",
+        title: "Error deleting client",
+        description: errMsg,
+      });
+    },
+  });
   const [sortBy, setSortBy] = useState<SortField>("clientName");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [pageSize] = useState(10);
@@ -41,13 +63,27 @@ export default function ClientsPage() {
   }
 
   // Fetch paginated data with current controls
-  const clientsQuery = api.clients.getAll.useQuery({
-    take: pageSize,
-    cursor: currentCursor,
-    filter: debouncedFilter,
-    sortBy,
-    sortOrder,
-  });
+  const clientsQuery = api.clients.getAll.useQuery(
+    {
+      take: pageSize,
+      cursor: currentCursor,
+      filter: debouncedFilter,
+      sortBy,
+      sortOrder,
+    },
+    {
+      keepPreviousData: true,
+      staleTime: 600000,
+      onError: (error: unknown) => {
+        const errMsg = error instanceof Error ? error.message : String(error);
+        setNotification({
+          variant: "error",
+          title: "Error loading clients",
+          description: errMsg,
+        });
+      },
+    }
+  );
   const items = clientsQuery.data?.items;
   const nextCursor = clientsQuery.data?.nextCursor;
   const isLoading = clientsQuery.isLoading;
@@ -127,6 +163,13 @@ export default function ClientsPage() {
       <PageBreadcrumb pageTitle="Clients" />
       <div className="space-y-6">
         <ComponentCard title="Clients">
+          {notification && (
+            <Notification
+              variant={notification.variant}
+              title={notification.title}
+              description={notification.description}
+            />
+          )}
           {isLoading && <p>Loading clients...</p>}
           {error && (
             <p className="text-red-500">

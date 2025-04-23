@@ -36,7 +36,7 @@ Identify all major workflows and user journeys across the portal. Create integra
 ### Details:
 Cross-reference test results with the PRD to ensure every feature and requirement is validated. Log and prioritize any issues found, then implement fixes and retest affected areas to confirm resolution. Collaborate with stakeholders to clarify ambiguous criteria if needed.
 
-## 3. Optimize Performance and Ensure Consistent Error Handling [pending]
+## 3. Optimize Performance and Ensure Consistent Error Handling [in-progress]
 ### Dependencies: 8.2
 ### Description: Improve the performance of data-heavy pages and standardize error handling and user feedback mechanisms throughout the application.
 ### Details:
