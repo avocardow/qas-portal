@@ -5,17 +5,26 @@ import { api } from "@/utils/api";
 
 interface EmailListProps {
   folderId: string;
+  mailboxType?: "personal" | "shared";
   onSelectMessage?: (messageId: string) => void;
 }
 
 export default function EmailList({
   folderId,
+  mailboxType = "personal",
   onSelectMessage,
 }: EmailListProps) {
-  const { data, isLoading, error } = api.email.listMessages.useQuery(
-    { folderId, page: 1, pageSize: 20 },
-    { enabled: !!folderId }
-  );
+  const query =
+    mailboxType === "shared"
+      ? api.email.listSharedMessages.useQuery(
+          { folderId, page: 1, pageSize: 20 },
+          { enabled: !!folderId }
+        )
+      : api.email.listMessages.useQuery(
+          { folderId, page: 1, pageSize: 20 },
+          { enabled: !!folderId }
+        );
+  const { data, isLoading, error } = query;
 
   if (!folderId) {
     return (

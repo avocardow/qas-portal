@@ -149,7 +149,7 @@
           "id": 5,
           "title": "Update Email Components for Shared Mailbox Context and Attribution",
           "description": "Modify email-related components to use the correct mailbox procedures based on the selected mailbox, and ensure emails sent from the shared mailbox are properly attributed.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [4],
           "details": "Refactor components to dynamically call the appropriate tRPC procedures depending on the active mailbox. Ensure that outgoing emails from the shared mailbox use the correct sender identity and are tracked as sent by the shared mailbox, not the individual Admin."
         }

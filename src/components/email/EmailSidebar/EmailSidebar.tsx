@@ -6,14 +6,16 @@ import SimpleBar from "simplebar-react";
 import { useModal } from "@/hooks/useModal";
 import ComposeMail from "@/components/email/EmailCompose/ComposeMail";
 import { useRole } from "@/context/RbacContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface EmailSidebarProps {
   onSelect?: (folderId: string) => void;
+  onMailboxTypeChange?: (type: "personal" | "shared") => void;
 }
 
 export default function EmailSidebar({
   onSelect = () => {},
+  onMailboxTypeChange = () => {},
 }: EmailSidebarProps) {
   const {
     isOpen: isComposeOpen,
@@ -24,6 +26,10 @@ export default function EmailSidebar({
   const [mailboxType, setMailboxType] = useState<"personal" | "shared">(
     "personal"
   );
+
+  useEffect(() => {
+    onMailboxTypeChange(mailboxType);
+  }, [mailboxType, onMailboxTypeChange]);
 
   return (
     <div className="flex flex-col rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
@@ -98,7 +104,11 @@ export default function EmailSidebar({
         </nav>
         {/* // <!--== Inbox Menu End ==--> */}
       </SimpleBar>
-      <ComposeMail isOpen={isComposeOpen} onClose={closeComposeModal} />
+      <ComposeMail
+        isOpen={isComposeOpen}
+        onClose={closeComposeModal}
+        mailboxType={mailboxType}
+      />
     </div>
   );
 }

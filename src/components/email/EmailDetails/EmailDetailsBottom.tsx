@@ -5,9 +5,11 @@ import ForwardMail from "@/components/email/EmailCompose/ForwardMail";
 
 interface EmailDetailsBottomProps {
   messageId: string;
+  mailboxType?: "personal" | "shared";
 }
 export default function EmailDetailsBottom({
   messageId,
+  mailboxType = "personal",
 }: EmailDetailsBottomProps) {
   const {
     isOpen: isReplyOpen,
@@ -94,11 +96,13 @@ export default function EmailDetailsBottom({
         isOpen={isReplyOpen}
         onClose={closeReplyModal}
         messageId={messageId}
+        mailboxType={mailboxType}
       />
       <ForwardMail
         isOpen={isForwardOpen}
         onClose={closeForwardModal}
         messageId={messageId}
+        mailboxType={mailboxType}
       />
     </>
   );

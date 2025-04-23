@@ -7,6 +7,7 @@ import EmailDetailsBottom from "./EmailDetailsBottom";
 // Props for MessageDetail component
 export interface MessageDetailProps {
   messageId: string;
+  mailboxType?: "personal" | "shared";
 }
 
 // Data shape for detailed message
@@ -19,11 +20,21 @@ interface MessageDetailData {
 }
 
 // Create a component that fetches and displays the full email content and attachments
-export default function MessageDetail({ messageId }: MessageDetailProps) {
-  const { data, isLoading, error } = api.email.getMessage.useQuery(
+export default function MessageDetail({
+  messageId,
+  mailboxType = "personal",
+}: MessageDetailProps) {
+  // Fetch both personal and shared message queries, then select based on mailboxType
+  const personalQuery = api.email.getMessage.useQuery(
     { messageId },
-    { enabled: Boolean(messageId) }
+    { enabled: Boolean(messageId) && mailboxType === "personal" }
   );
+  const sharedQuery = api.email.getSharedMessage.useQuery(
+    { messageId },
+    { enabled: Boolean(messageId) && mailboxType === "shared" }
+  );
+  const { data, isLoading, error } =
+    mailboxType === "shared" ? sharedQuery : personalQuery;
 
   if (!messageId) {
     return (
@@ -83,7 +94,7 @@ export default function MessageDetail({ messageId }: MessageDetailProps) {
         </div>
       ) : null}
 
-      <EmailDetailsBottom messageId={messageId} />
+      <EmailDetailsBottom messageId={messageId} mailboxType={mailboxType} />
     </div>
   );
 }

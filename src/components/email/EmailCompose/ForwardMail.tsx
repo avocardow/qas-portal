@@ -7,6 +7,7 @@ interface ForwardMailProps {
   isOpen: boolean;
   onClose: () => void;
   messageId: string;
+  mailboxType?: "personal" | "shared";
 }
 
 interface ForwardFormValues {
@@ -18,6 +19,7 @@ export default function ForwardMail({
   isOpen,
   onClose,
   messageId,
+  mailboxType = "personal",
 }: ForwardMailProps) {
   const {
     register,
@@ -26,12 +28,21 @@ export default function ForwardMail({
     formState: { isSubmitting, errors },
   } = useForm<ForwardFormValues>({ defaultValues: { to: "", comment: "" } });
 
-  const forwardMutation = api.email.createForward.useMutation({
+  // Set up personal and shared forward mutations
+  const personalForward = api.email.createForward.useMutation({
     onSuccess: () => {
       reset();
       onClose();
     },
   });
+  const sharedForward = api.email.createSharedForward.useMutation({
+    onSuccess: () => {
+      reset();
+      onClose();
+    },
+  });
+  const forwardMutation =
+    mailboxType === "shared" ? sharedForward : personalForward;
 
   const onSubmit: SubmitHandler<ForwardFormValues> = async (data) => {
     try {

@@ -6,6 +6,7 @@ import { api } from "@/utils/api";
 interface ComposeMailProps {
   isOpen: boolean;
   onClose: () => void;
+  mailboxType?: "personal" | "shared";
 }
 
 interface ComposeFormValues {
@@ -16,7 +17,11 @@ interface ComposeFormValues {
   body: string;
 }
 
-export default function ComposeMail({ isOpen, onClose }: ComposeMailProps) {
+export default function ComposeMail({
+  isOpen,
+  onClose,
+  mailboxType = "personal",
+}: ComposeMailProps) {
   const {
     register,
     handleSubmit,
@@ -26,12 +31,21 @@ export default function ComposeMail({ isOpen, onClose }: ComposeMailProps) {
     defaultValues: { to: "", cc: "", bcc: "", subject: "", body: "" },
   });
 
-  const sendMutation = api.email.sendMessage.useMutation({
+  // Set up both personal and shared mailbox send mutations
+  const personalMutation = api.email.sendMessage.useMutation({
     onSuccess: () => {
       reset();
       onClose();
     },
   });
+  const sharedMutation = api.email.sendSharedMessage.useMutation({
+    onSuccess: () => {
+      reset();
+      onClose();
+    },
+  });
+  const sendMutation =
+    mailboxType === "shared" ? sharedMutation : personalMutation;
 
   const onSubmit: SubmitHandler<ComposeFormValues> = async (data) => {
     try {

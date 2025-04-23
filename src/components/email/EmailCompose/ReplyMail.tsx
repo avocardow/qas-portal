@@ -7,6 +7,7 @@ interface ReplyMailProps {
   isOpen: boolean;
   onClose: () => void;
   messageId: string;
+  mailboxType?: "personal" | "shared";
 }
 
 interface ReplyFormValues {
@@ -17,6 +18,7 @@ export default function ReplyMail({
   isOpen,
   onClose,
   messageId,
+  mailboxType = "personal",
 }: ReplyMailProps) {
   const {
     register,
@@ -25,12 +27,20 @@ export default function ReplyMail({
     formState: { isSubmitting, errors },
   } = useForm<ReplyFormValues>({ defaultValues: { comment: "" } });
 
-  const replyMutation = api.email.createReply.useMutation({
+  // Set up personal and shared reply mutations
+  const personalReply = api.email.createReply.useMutation({
     onSuccess: () => {
       reset();
       onClose();
     },
   });
+  const sharedReply = api.email.createSharedReply.useMutation({
+    onSuccess: () => {
+      reset();
+      onClose();
+    },
+  });
+  const replyMutation = mailboxType === "shared" ? sharedReply : personalReply;
 
   const onSubmit: SubmitHandler<ReplyFormValues> = async (data) => {
     try {
