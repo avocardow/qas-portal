@@ -289,7 +289,7 @@
           "id": 2,
           "title": "Design and Implement Call Logging Database Schema",
           "description": "Create a robust database schema to store call logs, capturing all relevant call metadata.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Define and migrate a database schema for call logs with fields: callerId, clientId, contactId, numberDialed, startTime, endTime, and duration. Ensure indexing for efficient querying and consider audit/compliance requirements for call records."
         },
