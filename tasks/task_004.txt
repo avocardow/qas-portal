@@ -138,7 +138,7 @@ Include proper error handling, loading states, and query invalidation for real-t
 ### Details:
 Implement pagination or infinite scroll in the message pane to load older messages as the user scrolls. Add a user search component that leverages the `findUsers` backend procedure, enabling users to search and select contacts for new chats.
 
-## 5. Implement New Chat Creation Flows and Robust UX States [in-progress]
+## 5. Implement New Chat Creation Flows and Robust UX States [done]
 ### Dependencies: 4.4
 ### Description: Enable creation of new one-to-one and group chats, and add comprehensive loading and error handling throughout the chat experience.
 ### Details:

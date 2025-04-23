@@ -25,7 +25,7 @@
 ### Details:
 Define procedures for accessing and managing the shared mailbox using Microsoft Graph API endpoints. Ensure these procedures can differentiate between personal and shared mailbox contexts, and structure them to support future extensibility.
 
-## 2. Configure Microsoft Graph API Permissions for Shared Mailbox [in-progress]
+## 2. Configure Microsoft Graph API Permissions for Shared Mailbox [done]
 ### Dependencies: 2.1
 ### Description: Verify and add Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions for the shared mailbox
 ### Details:

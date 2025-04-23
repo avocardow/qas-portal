@@ -261,7 +261,7 @@
           "id": 5,
           "title": "Implement New Chat Creation Flows and Robust UX States",
           "description": "Enable creation of new one-to-one and group chats, and add comprehensive loading and error handling throughout the chat experience.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [4],
           "details": "Integrate flows for creating new chats (both 1:1 and group) using the respective backend procedures. Ensure all UI components display appropriate loading indicators and error messages, providing a smooth and resilient user experience."
         }
