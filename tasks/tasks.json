@@ -237,7 +237,7 @@
           "id": 2,
           "title": "Implement tRPC Chat Router and Backend Procedures",
           "description": "Develop the backend chat router with all necessary procedures for chat operations.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases."
         },

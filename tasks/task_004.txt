@@ -27,7 +27,7 @@
 ### Details:
 Register the application in Azure AD, configure required API permissions (`Chat.ReadWrite`, `User.Read.All`), and set up authentication flows. Ensure admin consent is granted for these permissions so the backend can interact with Teams chat endpoints.
 
-## 2. Implement tRPC Chat Router and Backend Procedures [pending]
+## 2. Implement tRPC Chat Router and Backend Procedures [done]
 ### Dependencies: 4.1
 ### Description: Develop the backend chat router with all necessary procedures for chat operations.
 ### Details:
