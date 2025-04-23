@@ -383,7 +383,7 @@
       "id": 7,
       "title": "Implement UI Polish and Theme Switcher",
       "description": "Refine the overall user interface based on Phase 1 feedback and implement a theme switcher for light/dark mode with persistence.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "low",
       "details": "1. Review Phase 1 feedback and identify UI improvement areas\n2. Refine table layouts, form flows, and navigation components\n3. Ensure consistent use of Shadcn UI and TailAdmin components throughout the application\n4. Improve responsive design for all pages\n5. Implement Theme Switcher component with Light/Dark mode options\n6. Add theme persistence using localStorage or cookies\n7. Create consistent dark mode styles for all components",
@@ -393,7 +393,7 @@
           "id": 1,
           "title": "Analyze Phase 1 Feedback and Define UI Improvements",
           "description": "Review all feedback collected from Phase 1 to identify specific areas of the UI that require refinement, such as usability issues, visual inconsistencies, or missing features.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Gather feedback documents, user reports, and design notes. Create a prioritized list of actionable UI improvements, focusing on table layouts, form flows, and navigation components. Document these requirements for implementation in subsequent subtasks."
         },

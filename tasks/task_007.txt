@@ -1,16 +1,16 @@
 # Task ID: 7
 # Title: Implement UI Polish and Theme Switcher
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: low
-# Description: Refine the overall user interface based on Phase 1 feedback and review the theme switcher for light/dark mode with persistence.
+# Description: Refine the overall user interface based on Phase 1 feedback and implement a theme switcher for light/dark mode with persistence.
 # Details:
 1. Review Phase 1 feedback and identify UI improvement areas
 2. Refine table layouts, form flows, and navigation components
-3. Ensure consistent use of TailAdmin components throughout the application
+3. Ensure consistent use of Shadcn UI and TailAdmin components throughout the application
 4. Improve responsive design for all pages
-5. Audit Theme Switcher component with Light/Dark mode options
-6. Test theme persistence using localStorage or cookies
+5. Implement Theme Switcher component with Light/Dark mode options
+6. Add theme persistence using localStorage or cookies
 7. Create consistent dark mode styles for all components
 
 # Test Strategy:
@@ -21,7 +21,7 @@
 5. Check for any styling inconsistencies or accessibility issues
 
 # Subtasks:
-## 1. Analyze Phase 1 Feedback and Define UI Improvements [pending]
+## 1. Analyze Phase 1 Feedback and Define UI Improvements [in-progress]
 ### Dependencies: None
 ### Description: Review all feedback collected from Phase 1 to identify specific areas of the UI that require refinement, such as usability issues, visual inconsistencies, or missing features.
 ### Details:
@@ -29,7 +29,7 @@ Gather feedback documents, user reports, and design notes. Create a prioritized 
 
 ## 2. Refactor and Standardize UI Components [pending]
 ### Dependencies: 7.1
-### Description: Update and refine table layouts, form flows, and navigation components based on the prioritized feedback, ensuring consistent use of TailAdmin components throughout the application.
+### Description: Update and refine table layouts, form flows, and navigation components based on the prioritized feedback, ensuring consistent use of Shadcn UI and TailAdmin components throughout the application.
 ### Details:
 Audit existing UI components for consistency. Refactor or replace components as needed to align with design guidelines and ensure a cohesive look and feel. Leverage reusable components and maintain modular code structure for scalability and maintainability[3].
 
@@ -39,14 +39,15 @@ Audit existing UI components for consistency. Refactor or replace components as 
 ### Details:
 Test UI on various screen sizes and browsers. Adjust CSS and layout logic to resolve any issues. Use feature detection tools and polyfills where necessary to address browser-specific quirks[2][3]. Validate that all components adapt gracefully to different environments.
 
-## 4. Audit Theme Switcher Component with Persistence [pending]
+## 4. Implement Theme Switcher Component with Persistence [pending]
 ### Dependencies: 7.3
-### Description: Test the theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.
+### Description: Develop a theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.
 ### Details:
-Test UI control for theme switching. Integrate logic to apply the selected theme across the application. Store the user's preference in localStorage or cookies and ensure the theme is restored on subsequent visits.
+Create a UI control for theme switching. Integrate logic to apply the selected theme across the application. Store the user's preference in localStorage or cookies and ensure the theme is restored on subsequent visits.
 
 ## 5. Apply and Test Consistent Dark Mode Styles [pending]
 ### Dependencies: 7.4
 ### Description: Ensure all UI components have consistent and visually appealing dark mode styles, and thoroughly test the theme switcher functionality across the application.
 ### Details:
 Audit all components for dark mode compatibility. Update styles as needed to maintain readability and aesthetic quality. Test the theme switcher across different pages, devices, and browsers to ensure reliable persistence and visual consistency.
+
