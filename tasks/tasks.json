@@ -159,7 +159,7 @@
       "id": 3,
       "title": "Enhance Client and Audit Detail Pages",
       "description": "Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "1. Optimize tRPC `client.getById` to include related entities: contacts, licenses, trustAccounts, audits\n2. Optimize tRPC `audit.getById` to include tasks and assignments with user information\n3. Implement tabbed interface for Client Detail page at `/clients/[clientId]` with Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs\n4. Create tables/lists for each tab with appropriate sorting and filtering\n5. Enhance Audit Detail page at `/audits/[auditId]` with core info, assigned team display, tasks table, and activity log\n6. Use Shadcn/TailAdmin components consistently for cards, badges, and tables\n7. Ensure responsive design works on various screen sizes",
@@ -169,7 +169,7 @@
           "id": 1,
           "title": "Extend tRPC Procedures to Fetch Related Entities",
           "description": "Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Modify the tRPC router definitions so that `client.getById` returns contacts, licenses, trustAccounts, and audits, and `audit.getById` returns tasks and assignments with user information. Ensure the returned data is fully typed and optimized for frontend consumption."
         },
@@ -177,7 +177,7 @@
           "id": 2,
           "title": "Implement Tabbed Interface on Client Detail Page",
           "description": "Create a tabbed navigation UI for the Client Detail page at `/clients/[clientId]` to organize related data into Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each tab should be a separate component and fetch its data using the enhanced tRPC procedures."
         },
@@ -185,7 +185,7 @@
           "id": 3,
           "title": "Build Data Tables and Lists for Each Client Tab",
           "description": "Develop tables or lists for each tab on the Client Detail page, supporting sorting and filtering where appropriate.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2],
           "details": "For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables using Shadcn/TailAdmin components. Add sorting and filtering controls as needed. Ensure data is fetched efficiently and displayed clearly."
         },
@@ -193,7 +193,7 @@
           "id": 4,
           "title": "Enhance Audit Detail Page with Relational Data",
           "description": "Redesign the Audit Detail page at `/audits/[auditId]` to display core audit info, assigned team members, a tasks table, and an activity log.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Use Shadcn/TailAdmin cards, badges, and tables to present audit details, team assignments (with user info), tasks, and activity logs. Ensure the layout is clear and information is grouped logically."
         },

@@ -116,6 +116,10 @@ export const auditRouter = createTRPCRouter({
           status: true,
           assignments: { include: { user: true } },
           tasks: { include: { assignedUser: true } },
+          activityLogs: {
+            include: { user: true },
+            orderBy: { createdAt: "desc" },
+          },
         },
       });
       if (audit && ctx.db.activityLog) {

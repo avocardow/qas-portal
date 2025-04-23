@@ -255,6 +255,39 @@ export default function AuditDetailPage() {
             <p>You are not authorized to view documents.</p>
           )}
         </ComponentCard>
+
+        <ComponentCard title="Activity Log">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell isHeader>Time</TableCell>
+                <TableCell isHeader>User</TableCell>
+                <TableCell isHeader>Type</TableCell>
+                <TableCell isHeader>Content</TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {audit.activityLogs.length ? (
+                audit.activityLogs.map((log) => (
+                  <TableRow key={log.id}>
+                    <TableCell>
+                      {new Date(log.createdAt).toLocaleString()}
+                    </TableCell>
+                    <TableCell>{log.user.name || log.user.id}</TableCell>
+                    <TableCell>{log.type}</TableCell>
+                    <TableCell>{log.content}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    No activity logs found for this audit.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </ComponentCard>
       </div>
     </DashboardPlaceholderPageTemplate>
   );

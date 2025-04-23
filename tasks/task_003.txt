@@ -21,7 +21,7 @@
 5. Check performance with large datasets
 
 # Subtasks:
-## 1. Extend tRPC Procedures to Fetch Related Entities [in-progress]
+## 1. Extend tRPC Procedures to Fetch Related Entities [done]
 ### Dependencies: None
 ### Description: Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.
 ### Details:
@@ -39,7 +39,7 @@ Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each
 ### Details:
 For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables using Shadcn/TailAdmin components. Add sorting and filtering controls as needed. Ensure data is fetched efficiently and displayed clearly.
 
-## 4. Enhance Audit Detail Page with Relational Data [pending]
+## 4. Enhance Audit Detail Page with Relational Data [done]
 ### Dependencies: 3.1
 ### Description: Redesign the Audit Detail page at `/audits/[auditId]` to display core audit info, assigned team members, a tasks table, and an activity log.
 ### Details:
