@@ -1,0 +1,24 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+- **Use Semantic Theme Tokens**
+  - Define CSS variables for theme colors in [globals.css](mdc:src/app/(pages)/globals.css)
+  - Map custom Tailwind color utilities to CSS variables in [`tailwind.config.js`](mdc:tailwind.config.js)
+
+- **Implement Theme Switcher Correctly**
+  - Use `ThemeContext.tsx` ([ThemeContext](mdc:src/context/ThemeContext.tsx)) to manage and persist theme state
+  - Apply persisted theme on initial render in [`layout.tsx`](mdc:src/app/(pages)/layout.tsx) using `localStorage` or cookies
+  - Ensure theme toggle control is available in the header UI ([UserDropdown](mdc:src/components/header/UserDropdown.tsx))
+
+- **Use Theme Tokens in Components**
+  - Replace hardcoded color values with semantic classes (e.g., `bg-surface`, `text-primary`)
+  - Verify dark mode styles (`.dark` class) are applied consistently across components
+
+- **Leverage Context7 Theming Documentation**
+  - Reference Context7 theming guidelines: [Context7 Theming Docs](https://context7.com/docs/theming)
+
+- **Testing Requirements**
+  - Add tests to cover theme toggling and persistence
+  - Verify UI components render correctly in both light and dark modes
