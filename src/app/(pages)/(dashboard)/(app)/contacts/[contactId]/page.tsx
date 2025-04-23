@@ -19,8 +19,6 @@ import AuditList from "@/components/audit/AuditList";
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { TabButton } from "@/components/ui/tabs/TabWithUnderline";
 import Badge from "@/components/ui/badge/Badge";
-import { useModal } from "@/hooks/useModal";
-import { Modal } from "@/components/ui/modal";
 
 type TabKey =
   | "Summary"
@@ -41,32 +39,8 @@ export default function ContactDetailPage() {
     isError,
   } = api.contact.getById.useQuery({ contactId });
   const { role } = useRbac();
-  const { isOpen, openModal, closeModal } = useModal();
-  // Folder selection state and queries
-  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
-  const {
-    data: folders,
-    isLoading: loadingFolders,
-    error: foldersError,
-  } = api.sharepoint.listClientFolders.useQuery(undefined, {
-    enabled: isOpen,
-  });
-  const linkFolderMutation = api.contact.updateSharepointFolderId.useMutation();
-  const handleLinkFolder = () => {
-    if (selectedFolderId) {
-      linkFolderMutation.mutate(
-        { contactId, sharepointFolderId: selectedFolderId },
-        {
-          onSuccess: () => {
-            closeModal();
-            router.refresh();
-          },
-          onError: (error) => console.error(error),
-        }
-      );
-    }
-  };
 
+  // Tab state
   const detailContact = contact as any;
   const [activeTab, setActiveTab] = useState<TabKey>("Summary");
   const {
@@ -76,18 +50,6 @@ export default function ContactDetailPage() {
   } = api.document.getByClientId.useQuery(
     { clientId: contact?.clientId ?? "" },
     { enabled: Boolean(contact?.clientId) }
-  );
-  // SharePoint folder contents for Documents tab
-  const {
-    data: spItems,
-    isLoading: spLoading,
-    isError: spIsError,
-  } = api.sharepoint.getFolderContents.useQuery(
-    { folderId: contact?.sharepointFolderId ?? "" },
-    {
-      enabled:
-        activeTab === "Documents" && Boolean(contact?.sharepointFolderId),
-    }
   );
 
   const handleDelete = () => {
@@ -160,16 +122,6 @@ export default function ContactDetailPage() {
                 : "Delete Contact"}
             </button>
           </>
-        )}
-        {(role === "Admin" || role === "Manager") && (
-          <button
-            onClick={openModal}
-            className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:text-white dark:hover:bg-green-800"
-          >
-            {contact?.sharepointFolderId
-              ? "Change SharePoint Folder"
-              : "Link SharePoint Folder"}
-          </button>
         )}
       </div>
       <ComponentCard title="Contact Details">
@@ -501,108 +453,16 @@ export default function ContactDetailPage() {
               </Table>
             </div>
           )}
+          {/* Documents Tab: Show only tRPC documents */}
           {activeTab === "Documents" && (
             <>
-              {contact?.sharepointFolderId ? (
-                <>
-                  {spLoading && <p>Loading folder contents...</p>}
-                  {spIsError && <p>Error loading folder contents.</p>}
-                  {spItems && (
-                    <Table>
-                      <TableHeader className="bg-gray-50 dark:bg-gray-800">
-                        <TableRow>
-                          <TableCell isHeader>Name</TableCell>
-                          <TableCell isHeader>Type</TableCell>
-                          <TableCell isHeader>Last Modified</TableCell>
-                          <TableCell isHeader>Open in Web</TableCell>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                        {spItems.map((item) => (
-                          <TableRow key={item.id}>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>
-                              {item.isFolder ? "Folder" : "File"}
-                            </TableCell>
-                            <TableCell>
-                              {new Date(
-                                item.lastModifiedDateTime
-                              ).toLocaleString()}
-                            </TableCell>
-                            <TableCell>
-                              <a
-                                href={item.webUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-500 hover:underline"
-                              >
-                                Open
-                              </a>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  )}
-                </>
-              ) : (
-                <>
-                  {isDocsLoading && <p>Loading documents...</p>}
-                  {isDocsError && <p>Error loading documents.</p>}
-                  {docResources && (
-                    <DocumentReferences documents={docResources} />
-                  )}
-                </>
-              )}
+              {isDocsLoading && <p>Loading documents...</p>}
+              {isDocsError && <p>Error loading documents.</p>}
+              {docResources && <DocumentReferences documents={docResources} />}
             </>
           )}
         </div>
       </ComponentCard>
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-lg">
-        <div className="p-4">
-          <h2 className="text-lg font-semibold">
-            {contact?.sharepointFolderId
-              ? "Change SharePoint Folder"
-              : "Link SharePoint Folder"}
-          </h2>
-          {loadingFolders && <p>Loading folders...</p>}
-          {foldersError && <p>Error loading folders: {foldersError.message}</p>}
-          {folders && (
-            <ul className="mt-2 max-h-64 space-y-2 overflow-y-auto">
-              {folders.map((folder) => (
-                <li key={folder.id}>
-                  <button
-                    onClick={() => setSelectedFolderId(folder.id)}
-                    className={`w-full rounded px-2 py-1 text-left ${
-                      selectedFolderId === folder.id
-                        ? "bg-blue-500 text-white"
-                        : "hover:bg-gray-200 dark:hover:bg-gray-700"
-                    }`}
-                  >
-                    {folder.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="mt-4 flex justify-end space-x-2">
-            <button onClick={closeModal} className="btn btn-secondary">
-              Cancel
-            </button>
-            <button
-              onClick={handleLinkFolder}
-              disabled={
-                !selectedFolderId || linkFolderMutation.status === "pending"
-              }
-              className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800"
-            >
-              {linkFolderMutation.status === "pending"
-                ? "Linking..."
-                : "Confirm"}
-            </button>
-          </div>
-        </div>
-      </Modal>
     </DashboardPlaceholderPageTemplate>
   );
 }
