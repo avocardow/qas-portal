@@ -22,7 +22,7 @@
 5. Test error handling for failed calls
 
 # Subtasks:
-## 1. Set Up Teams Phone System Integration and Permissions [pending]
+## 1. Set Up Teams Phone System Integration and Permissions [done]
 ### Dependencies: None
 ### Description: Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions and external provisioning by QAS IT.
 ### Details:

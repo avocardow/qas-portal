@@ -281,7 +281,7 @@
           "id": 1,
           "title": "Set Up Teams Phone System Integration and Permissions",
           "description": "Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions and external provisioning by QAS IT.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Coordinate with QAS IT to provision Teams Phone System licenses, phone numbers, and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls."
         },
