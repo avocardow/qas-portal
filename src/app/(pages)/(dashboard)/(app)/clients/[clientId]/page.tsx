@@ -19,6 +19,8 @@ import AuditList from "@/components/audit/AuditList";
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { TabButton } from "@/components/ui/tabs/TabWithUnderline";
 import Badge from "@/components/ui/badge/Badge";
+import { useModal } from "@/hooks/useModal";
+import { Modal } from "@/components/ui/modal";
 
 type TabKey =
   | "Summary"
@@ -39,6 +41,7 @@ export default function ClientDetailPage() {
     isError,
   } = api.client.getById.useQuery({ clientId });
   const { role } = useRbac();
+  const { isOpen, openModal, closeModal } = useModal();
 
   const detailClient = client as any;
   const [activeTab, setActiveTab] = useState<TabKey>("Summary");
@@ -118,6 +121,16 @@ export default function ClientDetailPage() {
                 : "Delete Client"}
             </button>
           </>
+        )}
+        {(role === "Admin" || role === "Manager") && (
+          <button
+            onClick={openModal}
+            className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:text-white dark:hover:bg-green-800"
+          >
+            {client?.sharepointFolderId
+              ? "Change SharePoint Folder"
+              : "Link SharePoint Folder"}
+          </button>
         )}
       </div>
       <ComponentCard title="Client Details">
@@ -458,6 +471,16 @@ export default function ClientDetailPage() {
           )}
         </div>
       </ComponentCard>
+      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-lg">
+        <div className="p-4">
+          <h2 className="text-lg font-semibold">
+            {client?.sharepointFolderId
+              ? "Change SharePoint Folder"
+              : "Link SharePoint Folder"}
+          </h2>
+          <p>Folder selection coming soon.</p>
+        </div>
+      </Modal>
     </DashboardPlaceholderPageTemplate>
   );
 }
