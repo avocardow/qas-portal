@@ -33,7 +33,7 @@ Implement logic to fetch client records and available SharePoint folders, perfor
 ### Details:
 Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption.
 
-## 3. Add Client Folder Linking Procedure with RBAC Controls [in-progress]
+## 3. Add Client Folder Linking Procedure with RBAC Controls [done]
 ### Dependencies: 6.2
 ### Description: Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.
 ### Details:

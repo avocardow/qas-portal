@@ -349,7 +349,7 @@
           "id": 3,
           "title": "Add Client Folder Linking Procedure with RBAC Controls",
           "description": "Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [2],
           "details": "Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record."
         },
