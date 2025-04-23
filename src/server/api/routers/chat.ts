@@ -5,10 +5,14 @@ import { TRPCError } from "@trpc/server";
 
 export const chatRouter = createTRPCRouter({
   listRecent: protectedProcedure
-    .input(z.object({ take: z.number().optional() }).optional())
-    .infiniteQuery(async ({ input, cursor }) => {
+    .input(
+      z
+        .object({ skip: z.number().optional(), take: z.number().optional() })
+        .optional()
+    )
+    .query(async ({ input }) => {
+      const skip = input?.skip ?? 0;
       const take = input?.take ?? 20;
-      const skip = cursor ?? 0;
       try {
         const graphClient = new GraphClient();
         const response = await graphClient.get<{
