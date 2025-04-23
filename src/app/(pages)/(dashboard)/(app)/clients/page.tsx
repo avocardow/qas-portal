@@ -63,27 +63,14 @@ export default function ClientsPage() {
   }
 
   // Fetch paginated data with current controls
-  const clientsQuery = api.clients.getAll.useQuery(
-    {
-      take: pageSize,
-      cursor: currentCursor,
-      filter: debouncedFilter,
-      sortBy,
-      sortOrder,
-    },
-    {
-      keepPreviousData: true,
-      staleTime: 600000,
-      onError: (error: unknown) => {
-        const errMsg = error instanceof Error ? error.message : String(error);
-        setNotification({
-          variant: "error",
-          title: "Error loading clients",
-          description: errMsg,
-        });
-      },
-    }
-  );
+  const clientsQuery = api.clients.getAll.useQuery({
+    take: pageSize,
+    cursor: currentCursor,
+    filter: debouncedFilter,
+    sortBy,
+    sortOrder,
+  });
+
   const items = clientsQuery.data?.items;
   const nextCursor = clientsQuery.data?.nextCursor;
   const isLoading = clientsQuery.isLoading;
