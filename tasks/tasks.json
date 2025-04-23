@@ -323,7 +323,7 @@
       "id": 6,
       "title": "Implement SharePoint Folder Linking",
       "description": "Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [3],
       "priority": "high",
       "details": "1. Create `scripts/linkSharepointFolders.ts` to automatically match clients with SharePoint folders by name\n2. Create tRPC `sharepointRouter` with procedures: `listClientFolders`, `getFolderContents`\n3. Add `client.updateSharepointFolderId` procedure with Admin/Manager RBAC\n4. Implement \"Link/Change SharePoint Folder\" button on Client Detail page for Admin/Managers\n5. Create folder selection modal using `sharepoint.listClientFolders`\n6. Add document display component on Client Detail page that shows contents of linked folder\n7. Implement \"Open in Web\" links for documents using SharePoint webUrl",
@@ -357,7 +357,7 @@
           "id": 4,
           "title": "Create UI for Linking/Changing SharePoint Folder on Client Detail Page",
           "description": "Add a 'Link/Change SharePoint Folder' button to the Client Detail page, visible to Admins/Managers, which opens a modal for folder selection.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Conditionally render the button based on user role. Trigger a modal that uses the `sharepoint.listClientFolders` procedure to display available folders for selection."
         },
@@ -365,7 +365,7 @@
           "id": 5,
           "title": "Build Folder Selection Modal and Document Display Component",
           "description": "Develop a modal for selecting a SharePoint folder and a component to display the contents of the linked folder on the Client Detail page.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [4],
           "details": "The modal should allow searching and selecting from available folders. The document display component should use `sharepoint.getFolderContents` to show files and folders, including 'Open in Web' links using SharePoint's webUrl."
         },
@@ -373,7 +373,7 @@
           "id": 6,
           "title": "Integrate and Test End-to-End SharePoint Folder Linking Workflow",
           "description": "Test the full workflow: automated and manual linking, folder selection, document display, and access controls. Fix integration issues and ensure a seamless user experience.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [5],
           "details": "Perform end-to-end testing with different user roles. Validate that folder links, document listings, and web URLs function correctly. Address any UI/UX or backend issues discovered during testing."
         }

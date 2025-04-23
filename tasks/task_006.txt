@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Implement SharePoint Folder Linking
-# Status: in-progress
+# Status: done
 # Dependencies: 3
 # Priority: high
 # Description: Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.
@@ -39,19 +39,19 @@ Integrate with SharePoint API to fetch folder lists and their contents. Support 
 ### Details:
 Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record.
 
-## 4. Create UI for Linking/Changing SharePoint Folder on Client Detail Page [pending]
+## 4. Create UI for Linking/Changing SharePoint Folder on Client Detail Page [done]
 ### Dependencies: 6.3
 ### Description: Add a 'Link/Change SharePoint Folder' button to the Client Detail page, visible to Admins/Managers, which opens a modal for folder selection.
 ### Details:
 Conditionally render the button based on user role. Trigger a modal that uses the `sharepoint.listClientFolders` procedure to display available folders for selection.
 
-## 5. Build Folder Selection Modal and Document Display Component [pending]
+## 5. Build Folder Selection Modal and Document Display Component [done]
 ### Dependencies: 6.4
 ### Description: Develop a modal for selecting a SharePoint folder and a component to display the contents of the linked folder on the Client Detail page.
 ### Details:
 The modal should allow searching and selecting from available folders. The document display component should use `sharepoint.getFolderContents` to show files and folders, including 'Open in Web' links using SharePoint's webUrl.
 
-## 6. Integrate and Test End-to-End SharePoint Folder Linking Workflow [pending]
+## 6. Integrate and Test End-to-End SharePoint Folder Linking Workflow [done]
 ### Dependencies: 6.5
 ### Description: Test the full workflow: automated and manual linking, folder selection, document display, and access controls. Fix integration issues and ensure a seamless user experience.
 ### Details:

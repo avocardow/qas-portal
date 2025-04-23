@@ -42,6 +42,28 @@ export default function ClientDetailPage() {
   } = api.client.getById.useQuery({ clientId });
   const { role } = useRbac();
   const { isOpen, openModal, closeModal } = useModal();
+  // Folder selection state and queries
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  const {
+    data: folders,
+    isLoading: loadingFolders,
+    error: foldersError,
+  } = api.sharepoint.listClientFolders.useQuery(undefined, { enabled: isOpen });
+  const linkFolderMutation = api.client.updateSharepointFolderId.useMutation();
+  const handleLinkFolder = () => {
+    if (selectedFolderId) {
+      linkFolderMutation.mutate(
+        { clientId, sharepointFolderId: selectedFolderId },
+        {
+          onSuccess: () => {
+            closeModal();
+            router.refresh();
+          },
+          onError: (error) => console.error(error),
+        }
+      );
+    }
+  };
 
   const detailClient = client as any;
   const [activeTab, setActiveTab] = useState<TabKey>("Summary");
@@ -50,6 +72,17 @@ export default function ClientDetailPage() {
     isLoading: isDocsLoading,
     isError: isDocsError,
   } = api.document.getByClientId.useQuery({ clientId });
+  // SharePoint folder contents for Documents tab
+  const {
+    data: spItems,
+    isLoading: spLoading,
+    isError: spError,
+  } = api.sharepoint.getFolderContents.useQuery(
+    { folderId: client?.sharepointFolderId ?? "" },
+    {
+      enabled: activeTab === "Documents" && Boolean(client?.sharepointFolderId),
+    }
+  );
 
   const handleDelete = () => {
     if (confirm("Are you sure you want to delete this client?")) {
@@ -464,9 +497,59 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Documents" && (
             <>
-              {isDocsLoading && <p>Loading documents...</p>}
-              {isDocsError && <p>Error loading documents.</p>}
-              {docResources && <DocumentReferences documents={docResources} />}
+              {client?.sharepointFolderId ? (
+                <>
+                  {spLoading && <p>Loading folder contents...</p>}
+                  {spError && (
+                    <p>Error loading folder contents: {spError.message}</p>
+                  )}
+                  {spItems && (
+                    <Table>
+                      <TableHeader className="bg-gray-50 dark:bg-gray-800">
+                        <TableRow>
+                          <TableCell isHeader>Name</TableCell>
+                          <TableCell isHeader>Type</TableCell>
+                          <TableCell isHeader>Last Modified</TableCell>
+                          <TableCell isHeader>Open in Web</TableCell>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+                        {spItems.map((item) => (
+                          <TableRow key={item.id}>
+                            <TableCell>{item.name}</TableCell>
+                            <TableCell>
+                              {item.isFolder ? "Folder" : "File"}
+                            </TableCell>
+                            <TableCell>
+                              {new Date(
+                                item.lastModifiedDateTime
+                              ).toLocaleString()}
+                            </TableCell>
+                            <TableCell>
+                              <a
+                                href={item.webUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-500 hover:underline"
+                              >
+                                Open
+                              </a>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </>
+              ) : (
+                <>
+                  {isDocsLoading && <p>Loading documents...</p>}
+                  {isDocsError && <p>Error loading documents.</p>}
+                  {docResources && (
+                    <DocumentReferences documents={docResources} />
+                  )}
+                </>
+              )}
             </>
           )}
         </div>
@@ -478,7 +561,38 @@ export default function ClientDetailPage() {
               ? "Change SharePoint Folder"
               : "Link SharePoint Folder"}
           </h2>
-          <p>Folder selection coming soon.</p>
+          {loadingFolders && <p>Loading folders...</p>}
+          {foldersError && <p>Error loading folders: {foldersError.message}</p>}
+          {folders && (
+            <ul className="mt-2 max-h-64 space-y-2 overflow-y-auto">
+              {folders.map((folder) => (
+                <li key={folder.id}>
+                  <button
+                    onClick={() => setSelectedFolderId(folder.id)}
+                    className={`w-full rounded px-2 py-1 text-left ${
+                      selectedFolderId === folder.id
+                        ? "bg-blue-500 text-white"
+                        : "hover:bg-gray-200 dark:hover:bg-gray-700"
+                    }`}
+                  >
+                    {folder.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="mt-4 flex justify-end space-x-2">
+            <button onClick={closeModal} className="btn btn-secondary">
+              Cancel
+            </button>
+            <button
+              onClick={handleLinkFolder}
+              disabled={!selectedFolderId || linkFolderMutation.isLoading}
+              className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800"
+            >
+              {linkFolderMutation.isLoading ? "Linking..." : "Confirm"}
+            </button>
+          </div>
         </div>
       </Modal>
     </DashboardPlaceholderPageTemplate>
