@@ -43,7 +43,7 @@ Update the backend authorization logic to check user roles before allowing acces
 ### Details:
 Design and implement a mailbox switcher that is only visible to Admin users. Integrate it with the application's state management so that selecting a mailbox updates the context for all email operations.
 
-## 5. Update Email Components for Shared Mailbox Context and Attribution [in-progress]
+## 5. Update Email Components for Shared Mailbox Context and Attribution [done]
 ### Dependencies: 2.4
 ### Description: Modify email-related components to use the correct mailbox procedures based on the selected mailbox, and ensure emails sent from the shared mailbox are properly attributed.
 ### Details:
