@@ -86,6 +86,10 @@ To enable the GitHub Actions CI workflow, add the following secrets in your repo
 - Do not enable verbose or debug flags (e.g., `set -x`) in run steps, as this may expose commands and environment variables.
 - Always use the `env:` block or `secrets` context to reference credentials rather than embedding them directly in commands.
 
+## Theming
+
+The application supports both Light and Dark themes. Use the Theme Switcher control in the header (next to your profile icon) to toggle between themes. Your preference is persisted in localStorage and automatically applied on subsequent visits.
+
 ## Changelog
 
 ### Version 2.1.1 - [March 25, 2025]

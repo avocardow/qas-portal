@@ -469,7 +469,7 @@
           "id": 4,
           "title": "Finalize UI/UX, Documentation, and Cross-Platform Testing",
           "description": "Polish the user interface and experience, update documentation for new features, and conduct final cross-browser and device compatibility testing.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [3],
           "details": "Address any remaining UI/UX issues for visual consistency and usability. Update user and technical documentation to reflect the latest features and changes. Perform thorough testing across supported browsers and devices, resolving any compatibility issues before release."
         },
