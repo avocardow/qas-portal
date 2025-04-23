@@ -141,7 +141,7 @@
           "id": 4,
           "title": "Develop Mailbox Switcher UI Component for Admins",
           "description": "Create a UI component (tabs or dropdown) that allows Admin users to switch between their personal mailbox and the shared admin mailbox.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [3],
           "details": "Design and implement a mailbox switcher that is only visible to Admin users. Integrate it with the application's state management so that selecting a mailbox updates the context for all email operations."
         },

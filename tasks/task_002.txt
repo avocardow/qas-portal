@@ -37,7 +37,7 @@ Confirm the existing Azure AD app registration includes Mail.ReadWrite.Shared an
 ### Details:
 Update the backend authorization logic to check user roles before allowing access to shared mailbox procedures. Ensure that only Admin users can see or interact with shared mailbox functionality, and add tests to validate RBAC enforcement.
 
-## 4. Develop Mailbox Switcher UI Component for Admins [in-progress]
+## 4. Develop Mailbox Switcher UI Component for Admins [done]
 ### Dependencies: 2.3
 ### Description: Create a UI component (tabs or dropdown) that allows Admin users to switch between their personal mailbox and the shared admin mailbox.
 ### Details:

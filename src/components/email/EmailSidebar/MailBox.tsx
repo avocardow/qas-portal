@@ -18,11 +18,11 @@ export default function MailBox({
   const { data: folders, isLoading, error } = query;
 
   useEffect(() => {
-    if (folders && folders.length > 0 && !activeItem) {
+    if (folders && folders.length > 0) {
       setActiveItem(folders[0].id);
       onSelect(folders[0].id);
     }
-  }, [folders, activeItem, onSelect]);
+  }, [folders, mailboxType, onSelect]);
 
   if (isLoading) {
     return <div>Loading folders...</div>;
