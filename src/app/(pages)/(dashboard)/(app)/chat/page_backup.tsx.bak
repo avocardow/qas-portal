@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import ChatList from "@/components/chats/ChatList";
 import ChatWindow from "@/components/chats/ChatWindow";
