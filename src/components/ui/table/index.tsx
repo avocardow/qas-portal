@@ -34,7 +34,13 @@ interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {
 
 // Table Component
 const Table: React.FC<TableProps> = ({ children, className }) => {
-  return <table className={`min-w-full ${className}`}>{children}</table>;
+  return (
+    <table
+      className={`min-w-full divide-y divide-gray-200 dark:divide-gray-700 ${className ?? ""}`}
+    >
+      {children}
+    </table>
+  );
 };
 
 // TableHeader Component
@@ -49,7 +55,13 @@ const TableBody: React.FC<TableBodyProps> = ({ children, className }) => {
 
 // TableRow Component
 const TableRow: React.FC<TableRowProps> = ({ children, className }) => {
-  return <tr className={className}>{children}</tr>;
+  return (
+    <tr
+      className={`border-b border-gray-200 dark:border-gray-700 ${className ?? ""}`}
+    >
+      {children}
+    </tr>
+  );
 };
 
 // TableCell Component
@@ -61,7 +73,7 @@ const TableCell: React.FC<TableCellProps> = ({
 }) => {
   const CellTag = isHeader ? "th" : "td";
   return (
-    <CellTag className={`${className ?? ""}`} {...rest}>
+    <CellTag className={`px-4 py-2 ${className ?? ""}`} {...rest}>
       {children}
     </CellTag>
   );
