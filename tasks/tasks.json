@@ -253,7 +253,7 @@
           "id": 4,
           "title": "Add Pagination, Infinite Scroll, and User Search Functionality",
           "description": "Enhance the chat UI with message history pagination/infinite scroll and implement user search for starting new chats.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [3],
           "details": "Implement pagination or infinite scroll in the message pane to load older messages as the user scrolls. Add a user search component that leverages the `findUsers` backend procedure, enabling users to search and select contacts for new chats."
         },

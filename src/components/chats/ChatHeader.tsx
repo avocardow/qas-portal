@@ -1,11 +1,18 @@
 "use client";
 import ChatHeaderTitle from "./ChatHeaderTitle";
+import { useState } from "react";
+import { api } from "@/utils/api";
 
 interface ChatHeaderProps {
   onToggle: () => void;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ onToggle }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data: users, isLoading } = api.chat.findUsers.useQuery(
+    { query: searchTerm },
+    { enabled: searchTerm.length > 0 }
+  );
   return (
     <div className="sticky p-4 sm:px-5 sm:pt-5 xl:pb-0">
       <ChatHeaderTitle />
@@ -31,8 +38,11 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ onToggle }) => {
           </svg>
         </button>
         <div className="relative my-2 w-full">
-          <form>
-            <button className="absolute left-4 top-1/2 -translate-y-1/2">
+          <form onSubmit={(e) => e.preventDefault()}>
+            <button
+              className="absolute top-1/2 left-4 -translate-y-1/2"
+              type="button"
+            >
               <svg
                 className="fill-gray-500 dark:fill-gray-400"
                 width="20"
@@ -51,10 +61,28 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ onToggle }) => {
             </button>
             <input
               type="text"
-              placeholder="Search..."
-              className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-3.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search users..."
+              className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-3.5 pl-[42px] text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
             />
           </form>
+          {searchTerm.length > 0 && (
+            <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow-lg">
+              {isLoading && <li className="p-2">Loading...</li>}
+              {users?.length === 0 && !isLoading && (
+                <li className="p-2">No users found</li>
+              )}
+              {users?.map((user) => (
+                <li
+                  key={user.id}
+                  className="cursor-pointer p-2 hover:bg-gray-100"
+                >
+                  {user.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>

@@ -4,28 +4,38 @@ import { GraphClient } from "@/server/utils/graphClient";
 import { TRPCError } from "@trpc/server";
 
 export const chatRouter = createTRPCRouter({
-  listRecent: protectedProcedure.query(async () => {
-    try {
-      const graphClient = new GraphClient();
-      const response = await graphClient.get<{
-        value: Array<{
-          id: string;
-          topic?: string;
-          lastUpdatedDateTime?: string;
-        }>;
-      }>(`/chats`);
-      return response.value.map((chat) => ({
-        id: chat.id,
-        topic: chat.topic ?? "Chat",
-        lastUpdatedDateTime: chat.lastUpdatedDateTime ?? "",
-      }));
-    } catch {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Failed to list recent chats",
-      });
-    }
-  }),
+  listRecent: protectedProcedure
+    .input(
+      z
+        .object({ skip: z.number().optional(), take: z.number().optional() })
+        .optional()
+    )
+    .query(async ({ input }) => {
+      const skip = input?.skip ?? 0;
+      const take = input?.take ?? 20;
+      try {
+        const graphClient = new GraphClient();
+        const response = await graphClient.get<{
+          value: Array<{
+            id: string;
+            topic?: string;
+            lastUpdatedDateTime?: string;
+          }>;
+        }>(`/chats?$top=${take}&$skip=${skip}`);
+        const chats = response.value.map((chat) => ({
+          id: chat.id,
+          topic: chat.topic ?? "Chat",
+          lastUpdatedDateTime: chat.lastUpdatedDateTime ?? "",
+        }));
+        const nextSkip = response.value.length === take ? skip + take : null;
+        return { chats, nextSkip };
+      } catch {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to list recent chats",
+        });
+      }
+    }),
 
   getMessages: protectedProcedure
     .input(z.object({ chatId: z.string() }))

@@ -39,7 +39,7 @@ Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMe
 ### Details:
 Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible.
 
-## 4. Add Pagination, Infinite Scroll, and User Search Functionality [pending]
+## 4. Add Pagination, Infinite Scroll, and User Search Functionality [in-progress]
 ### Dependencies: 4.3
 ### Description: Enhance the chat UI with message history pagination/infinite scroll and implement user search for starting new chats.
 ### Details:
