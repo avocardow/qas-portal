@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRbac } from "@/context/RbacContext";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
@@ -57,10 +57,6 @@ export default function ClientsPage() {
     undefined
   );
   const [pageIndex, setPageIndex] = useState(0);
-  // Protect view based on role
-  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
-    return <p>You are not authorized to view clients.</p>;
-  }
 
   // Fetch paginated data with current controls
   const clientsQuery = api.clients.getAll.useQuery(
@@ -72,17 +68,8 @@ export default function ClientsPage() {
       sortOrder,
     },
     {
-      keepPreviousData: true,
       refetchOnWindowFocus: false,
       staleTime: 600000,
-      onError: (error: unknown) => {
-        const errMsg = error instanceof Error ? error.message : String(error);
-        setNotification({
-          variant: "error",
-          title: "Error loading clients",
-          description: errMsg,
-        });
-      },
     }
   );
 
@@ -90,6 +77,22 @@ export default function ClientsPage() {
   const nextCursor = clientsQuery.data?.nextCursor;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
+
+  useEffect(() => {
+    if (error) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      setNotification({
+        variant: "error",
+        title: "Error loading clients",
+        description: errMsg,
+      });
+    }
+  }, [error]);
+
+  // Protect view based on role after hooks to keep hook order consistent
+  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
+    return <p>You are not authorized to view clients.</p>;
+  }
 
   // Handlers for pagination and sorting
   const handleNext = () => {
