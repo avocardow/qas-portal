@@ -61,11 +61,20 @@ export default function ChatList({
               nextSkip: number | null;
             }) => page.chats
           )
-          .map((chat) => (
-            <li key={chat.id} className="cursor-pointer p-2 hover:bg-gray-100">
-              {chat.topic}
-            </li>
-          ))}
+          .map(
+            (chat: {
+              id: string;
+              topic: string;
+              lastUpdatedDateTime: string;
+            }) => (
+              <li
+                key={chat.id}
+                className="cursor-pointer p-2 hover:bg-gray-100"
+              >
+                {chat.topic}
+              </li>
+            )
+          )}
       </ul>
       <div ref={loadMoreRef} className="h-2">
         {isFetchingNextPage && <p>Loading more...</p>}
