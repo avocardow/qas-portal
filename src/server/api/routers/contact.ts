@@ -69,19 +69,6 @@ export const contactRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.contact.delete({ where: { id: input.contactId } });
     }),
-  // Update SharePoint folder ID for a contact (Admins and Managers)
-  updateSharepointFolderId: protectedProcedure
-    .use(enforceRole(["Admin", "Manager"]))
-    .input(
-      z.object({ contactId: z.string().uuid(), sharepointFolderId: z.string() })
-    )
-    .mutation(({ ctx, input }) => {
-      const { contactId, sharepointFolderId } = input;
-      return ctx.db.contact.update({
-        where: { id: contactId },
-        data: { sharepointFolderId },
-      });
-    }),
   create: adminOrManagerProcedure
     .input(contactCreateSchema)
     .mutation(({ ctx, input }) => {

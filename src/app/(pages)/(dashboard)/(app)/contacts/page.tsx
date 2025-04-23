@@ -18,7 +18,7 @@ import {
 import useDebounce from "@/hooks/useDebounce";
 
 // Add type for sortable fields
-type SortField = "contactName" | "city" | "status";
+type SortField = "name" | "city" | "status";
 
 export default function ContactsPage() {
   // RBAC context
@@ -29,7 +29,7 @@ export default function ContactsPage() {
   const debouncedFilter = useDebounce(filter, 500);
   const router = useRouter();
   const deleteContactMutation = api.contact.deleteContact.useMutation();
-  const [sortBy, setSortBy] = useState<SortField>("contactName");
+  const [sortBy, setSortBy] = useState<SortField>("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [pageSize] = useState(10);
   const [cursors, setCursors] = useState<(string | undefined)[]>([]);
@@ -153,12 +153,11 @@ export default function ContactsPage() {
                     >
                       <button
                         type="button"
-                        onClick={() => toggleSort("contactName")}
+                        onClick={() => toggleSort("name")}
                         className="w-full text-left"
                       >
                         Name{" "}
-                        {sortBy === "contactName" &&
-                          (sortOrder === "asc" ? "↑" : "↓")}
+                        {sortBy === "name" && (sortOrder === "asc" ? "↑" : "↓")}
                       </button>
                     </TableCell>
                     <TableCell
@@ -204,7 +203,7 @@ export default function ContactsPage() {
                       </TableCell>
                       <TableCell className="text-gray-700 dark:text-gray-200">
                         <Link href={`/contacts/${contact.id}`}>
-                          {contact.contactName}
+                          {contact.name || "-"}
                         </Link>
                       </TableCell>
                       <TableCell className="text-gray-700 dark:text-gray-200">

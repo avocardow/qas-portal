@@ -50,7 +50,7 @@ export default function EditContactPage() {
     if (contactQuery.data) {
       const c = contactQuery.data;
       reset({
-        contactName: c.contactName,
+        contactName: c.name || "",
         abn: c.abn || "",
         address: c.address || "",
         city: c.city || "",
@@ -72,6 +72,7 @@ export default function EditContactPage() {
     try {
       await updateMutation.mutateAsync({
         contactId,
+        name: data.contactName,
         ...data,
         nextContactDate: data.nextContactDate
           ? new Date(data.nextContactDate)

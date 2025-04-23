@@ -100,10 +100,10 @@ export default function ContactDetailPage() {
 
   return (
     <DashboardPlaceholderPageTemplate
-      heading={contact.contactName}
+      heading={contact.name ?? ""}
       className="max-w-4xl"
     >
-      <PageBreadcrumb pageTitle={contact.contactName} />
+      <PageBreadcrumb pageTitle={contact.name ?? ""} />
       <div className="mb-4 flex justify-end space-x-2">
         {role === "Admin" && (
           <>
@@ -143,36 +143,26 @@ export default function ContactDetailPage() {
           {activeTab === "Summary" && (
             <div className="grid grid-cols-1 gap-4 text-gray-900 md:grid-cols-2 dark:text-gray-100">
               <div>
-                <strong>Name:</strong> {contact.contactName}
+                <strong>Name:</strong> {contact.name || "-"}
               </div>
               <div>
-                <strong>ABN:</strong> {contact.abn || "-"}
+                <strong>Email:</strong> {contact.email || "-"}
               </div>
               <div>
-                <strong>Address:</strong> {contact.address || "-"}
+                <strong>Phone:</strong> {contact.phone || "-"}
               </div>
               <div>
-                <strong>City:</strong> {contact.city || "-"}
+                <strong>Title:</strong> {contact.title || "-"}
               </div>
               <div>
-                <strong>Postcode:</strong> {contact.postcode || "-"}
+                <strong>Primary:</strong>{" "}
+                <Badge size="sm">{contact.isPrimary ? "Yes" : "No"}</Badge>
               </div>
               <div>
-                <strong>Status:</strong>{" "}
-                <Badge size="sm">{contact.status}</Badge>
-              </div>
-              <div>
-                <strong>Audit Month End:</strong> {contact.auditMonthEnd ?? "-"}
-              </div>
-              <div>
-                <strong>Next Contact Date:</strong>{" "}
-                {contact.nextContactDate
-                  ? new Date(contact.nextContactDate).toLocaleDateString()
-                  : "-"}
-              </div>
-              <div>
-                <strong>Estimated Annual Fees:</strong>{" "}
-                {contact.estAnnFees ? contact.estAnnFees.toString() : "-"}
+                <strong>Can Login To Portal:</strong>{" "}
+                <Badge size="sm">
+                  {contact.canLoginToPortal ? "Yes" : "No"}
+                </Badge>
               </div>
             </div>
           )}
@@ -398,7 +388,7 @@ export default function ContactDetailPage() {
               </Table>
             </div>
           )}
-          {activeTab === "Audits" && <AuditList contactId={contactId} />}
+          {activeTab === "Audits" && <AuditList clientId={contact.clientId} />}
           {activeTab === "Activity Log" && (
             <div className="overflow-x-auto">
               <Table>

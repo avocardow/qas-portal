@@ -10,17 +10,15 @@ import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useRbac } from "@/context/RbacContext";
 
-// Define form schema
+// Define form schema matching contact fields
 const formSchema = z.object({
-  contactName: z.string().min(1, "Contact name is required"),
-  abn: z.string().optional(),
-  address: z.string().optional(),
-  city: z.string().optional(),
-  postcode: z.string().optional(),
-  status: z.enum(["prospect", "active", "archived"]),
-  auditMonthEnd: z.number().int().optional(),
-  nextContactDate: z.string().optional(), // date input returns string
-  estAnnFees: z.number().optional(),
+  clientId: z.string().uuid("Client is required"),
+  name: z.string().min(1, "Contact name is required"),
+  email: z.string().email("Invalid email").optional(),
+  phone: z.string().optional(),
+  title: z.string().optional(),
+  isPrimary: z.boolean().optional(),
+  canLoginToPortal: z.boolean().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -28,6 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function NewContactPage() {
   // Hooks must run unconditionally
   const { role } = useRbac();
+  const { data: clientsList } = api.clients.getAll.useQuery({ take: 100 });
   const router = useRouter();
   const {
     register,
@@ -35,17 +34,11 @@ export default function NewContactPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { status: "prospect" },
   });
   const createContactMutation = api.contact.create.useMutation();
   const onSubmit = (data: FormData) => {
-    const input = {
-      ...data,
-      nextContactDate: data.nextContactDate
-        ? new Date(data.nextContactDate)
-        : undefined,
-    };
-    createContactMutation.mutate(input, {
+    // Submit contact create mutation
+    createContactMutation.mutate(data, {
       onSuccess: (created) => router.push(`/contacts/${created.id}`),
       onError: (err) => console.error(err),
     });
@@ -61,97 +54,75 @@ export default function NewContactPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Contact Name
+              Client
+            </label>
+            <select
+              {...register("clientId")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900"
+            >
+              <option value="">Select a client</option>
+              {clientsList?.items.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.clientName}
+                </option>
+              ))}
+            </select>
+            {errors.clientId && (
+              <p className="text-sm text-red-600">{errors.clientId.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Name
             </label>
             <input
-              {...register("contactName")}
+              {...register("name")}
               className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
-            {errors.contactName && (
+            {errors.name && (
               <p className="text-sm text-red-600 dark:text-red-400">
-                {errors.contactName.message}
+                {errors.name.message}
               </p>
             )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              ABN
+              Email
             </label>
             <input
-              {...register("abn")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+              type="email"
+              {...register("email")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2"
+            />
+            {errors.email && (
+              <p className="text-sm text-red-600">{errors.email.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone
+            </label>
+            <input
+              {...register("phone")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Address
+              Title
             </label>
             <input
-              {...register("address")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+              {...register("title")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              City
-            </label>
-            <input
-              {...register("city")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
+          <div className="flex items-center space-x-2">
+            <input type="checkbox" {...register("isPrimary")} />
+            <label>Primary Contact</label>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Postcode
-            </label>
-            <input
-              {...register("postcode")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Status
-            </label>
-            <select
-              {...register("status")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            >
-              <option value="prospect">Prospect</option>
-              <option value="active">Active</option>
-              <option value="archived">Archived</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Audit Month End
-            </label>
-            <input
-              type="number"
-              {...register("auditMonthEnd", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Next Contact Date
-            </label>
-            <input
-              type="date"
-              {...register("nextContactDate")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Estimated Annual Fees
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              {...register("estAnnFees", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
+          <div className="flex items-center space-x-2">
+            <input type="checkbox" {...register("canLoginToPortal")} />
+            <label>Can Login To Portal</label>
           </div>
           <button type="submit" disabled={isSubmitting} className="btn">
             {isSubmitting ? "Creating..." : "Create Contact"}
