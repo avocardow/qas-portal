@@ -333,7 +333,7 @@
           "id": 1,
           "title": "Develop Automated Script for Client–SharePoint Folder Matching",
           "description": "Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders."
         },
@@ -341,7 +341,7 @@
           "id": 2,
           "title": "Implement tRPC SharePoint Router for Folder Listing and Contents",
           "description": "Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [1],
           "details": "Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption."
         },
@@ -349,7 +349,7 @@
           "id": 3,
           "title": "Add Client Folder Linking Procedure with RBAC Controls",
           "description": "Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [2],
           "details": "Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record."
         },

@@ -21,19 +21,19 @@
 5. Test RBAC for folder linking functionality
 
 # Subtasks:
-## 1. Develop Automated Script for Client–SharePoint Folder Matching [in-progress]
+## 1. Develop Automated Script for Client–SharePoint Folder Matching [done]
 ### Dependencies: None
 ### Description: Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.
 ### Details:
 Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders.
 
-## 2. Implement tRPC SharePoint Router for Folder Listing and Contents [in-progress]
+## 2. Implement tRPC SharePoint Router for Folder Listing and Contents [done]
 ### Dependencies: 6.1
 ### Description: Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).
 ### Details:
 Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption.
 
-## 3. Add Client Folder Linking Procedure with RBAC Controls [pending]
+## 3. Add Client Folder Linking Procedure with RBAC Controls [in-progress]
 ### Dependencies: 6.2
 ### Description: Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.
 ### Details:
