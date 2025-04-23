@@ -63,13 +63,28 @@ export default function ClientsPage() {
   }
 
   // Fetch paginated data with current controls
-  const clientsQuery = api.clients.getAll.useQuery({
-    take: pageSize,
-    cursor: currentCursor,
-    filter: debouncedFilter,
-    sortBy,
-    sortOrder,
-  });
+  const clientsQuery = api.clients.getAll.useQuery(
+    {
+      take: pageSize,
+      cursor: currentCursor,
+      filter: debouncedFilter,
+      sortBy,
+      sortOrder,
+    },
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      staleTime: 600000,
+      onError: (error: unknown) => {
+        const errMsg = error instanceof Error ? error.message : String(error);
+        setNotification({
+          variant: "error",
+          title: "Error loading clients",
+          description: errMsg,
+        });
+      },
+    }
+  );
 
   const items = clientsQuery.data?.items;
   const nextCursor = clientsQuery.data?.nextCursor;
@@ -158,11 +173,6 @@ export default function ClientsPage() {
             />
           )}
           {isLoading && <p>Loading clients...</p>}
-          {error && (
-            <p className="text-red-500">
-              Error loading clients: {error.message}
-            </p>
-          )}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
             <div className="overflow-x-auto">
