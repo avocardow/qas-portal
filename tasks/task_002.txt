@@ -19,7 +19,7 @@
 4. Validate RBAC prevents unauthorized access attempts
 
 # Subtasks:
-## 1. Extend tRPC emailRouter with Shared Mailbox Procedures [in-progress]
+## 1. Extend tRPC emailRouter with Shared Mailbox Procedures [done]
 ### Dependencies: None
 ### Description: Add new procedures to the tRPC emailRouter to support operations (read, send, manage) on the shared admin mailbox, targeting endpoints like /users/{admin-email}/....
 ### Details:

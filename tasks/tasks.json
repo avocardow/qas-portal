@@ -47,7 +47,7 @@
       "id": 1,
       "title": "Implement Personal Email Integration",
       "description": "Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "1. Create tRPC `emailRouter` with procedures: `listFolders`, `listMessages`, `getMessage`, `sendMessage`, `createReply`, `createForward`\n2. Configure Graph API permissions: `Mail.ReadWrite`, `Mail.Send`\n3. Implement 3-column layout UI at `/email` route with folder list, message list, and message detail components\n4. Add pagination controls for message list\n5. Create compose/reply/forward modals with form validation\n6. Ensure HTML email body is sanitized before rendering\n7. Add loading states and error handling",
@@ -81,7 +81,7 @@
           "id": 4,
           "title": "Implement Message Detail Component",
           "description": "Create the third column component for displaying the full content of selected emails",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Create the MessageDetail component that fetches and displays the full content of a selected email using the tRPC getMessage procedure. Implement HTML sanitization on the client side before rendering email content. Display email headers (From, To, CC, Subject, Date) in a structured format. Show email attachments with download options. Add buttons for reply, reply all, and forward actions. Implement loading states and error handling. Create a mechanism to handle and display inline images securely. Add functionality to mark messages as read when opened."
         },
@@ -117,7 +117,7 @@
           "id": 1,
           "title": "Extend tRPC emailRouter with Shared Mailbox Procedures",
           "description": "Add new procedures to the tRPC emailRouter to support operations (read, send, manage) on the shared admin mailbox, targeting endpoints like /users/{admin-email}/....",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Define procedures for accessing and managing the shared mailbox using Microsoft Graph API endpoints. Ensure these procedures can differentiate between personal and shared mailbox contexts, and structure them to support future extensibility."
         },

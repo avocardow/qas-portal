@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Implement Personal Email Integration
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.
@@ -39,7 +39,7 @@ Create an EmailService class that interfaces with Microsoft Graph API to perform
 ### Details:
 Create a responsive layout for the /email route with a sidebar for folders and a main content area for messages. Implement the FolderList component that fetches and displays email folders from the tRPC listFolders procedure. Add folder selection functionality that triggers message list updates. Create the MessageList component that displays messages from the selected folder using the tRPC listMessages procedure. Implement pagination controls with options for page size and navigation. Add sorting functionality for messages by date, sender, or subject. Implement loading states and error handling for both components. Add a search/filter functionality for the message list.
 
-## 4. Implement Message Detail Component [pending]
+## 4. Implement Message Detail Component [done]
 ### Dependencies: 1.3
 ### Description: Create the third column component for displaying the full content of selected emails
 ### Details:
