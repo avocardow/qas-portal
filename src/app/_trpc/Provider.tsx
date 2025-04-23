@@ -24,7 +24,6 @@ export default function TRPCProvider({
         defaultOptions: {
           queries: {
             staleTime: 300000,
-            cacheTime: 300000,
             retry: 1,
             refetchOnWindowFocus: false,
           },
