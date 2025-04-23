@@ -42,7 +42,11 @@ export default function RootLayout({
       <body
         className={`${inter.className} overscroll-none bg-slate-50 transition-colors duration-300 ease-in-out dark:bg-slate-900`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <div className="mx-auto min-h-screen max-w-7xl px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
+        </Providers>
         <SpeedInsights />
         <Analytics />
       </body>
