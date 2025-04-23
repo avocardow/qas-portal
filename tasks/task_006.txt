@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Implement SharePoint Folder Linking
-# Status: pending
+# Status: in-progress
 # Dependencies: 3
 # Priority: high
 # Description: Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.
@@ -21,13 +21,13 @@
 5. Test RBAC for folder linking functionality
 
 # Subtasks:
-## 1. Develop Automated Script for Client–SharePoint Folder Matching [pending]
+## 1. Develop Automated Script for Client–SharePoint Folder Matching [in-progress]
 ### Dependencies: None
 ### Description: Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.
 ### Details:
 Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders.
 
-## 2. Implement tRPC SharePoint Router for Folder Listing and Contents [pending]
+## 2. Implement tRPC SharePoint Router for Folder Listing and Contents [in-progress]
 ### Dependencies: 6.1
 ### Description: Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).
 ### Details:

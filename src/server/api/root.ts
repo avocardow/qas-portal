@@ -13,6 +13,7 @@ import { auditRouter } from "@/server/api/routers/audit";
 import { taskRouter } from "@/server/api/routers/task";
 import { documentRouter } from "@/server/api/routers/document";
 import { emailRouter } from "@/server/api/routers/email";
+import { sharepointRouter } from "@/server/api/routers/sharepoint";
 
 /**
  * This is the primary router for your server.
@@ -30,6 +31,7 @@ export const appRouter = createTRPCRouter({
   task: taskRouter,
   document: documentRouter,
   email: emailRouter,
+  sharepoint: sharepointRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });
