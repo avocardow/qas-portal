@@ -21,7 +21,7 @@
           "id": 2,
           "title": "Develop role and permission helpers",
           "description": "Create helper functions hasRole and hasPermission for session.user.role checks.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Implement functions to validate user roles and specific permissions using the session object."
         },

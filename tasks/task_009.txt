@@ -17,7 +17,7 @@ Implement server-side middleware (e.g., isAuthed, hasPermission) for tRPC, and c
 ### Details:
 Add an isAuthed middleware in the tRPC context to verify session.user is defined before proceeding.
 
-## 2. Develop role and permission helpers [pending]
+## 2. Develop role and permission helpers [done]
 ### Dependencies: 9.1
 ### Description: Create helper functions hasRole and hasPermission for session.user.role checks.
 ### Details:

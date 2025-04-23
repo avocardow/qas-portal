@@ -13,6 +13,8 @@ import {
   checkRolePermission,
   throwForbiddenError,
   logAccessDecision,
+  hasRole,
+  hasPermission,
 } from "./rbac";
 import { createRBACTestContext } from "./rbacTestHelpers";
 
@@ -91,5 +93,27 @@ describe("enforceRole middleware", () => {
     const ctx = createRBACTestContext({ role: "Staff", hasPermission: true });
     const caller = call(ctx);
     await expect(caller.test()).rejects.toBeInstanceOf(TRPCError);
+  });
+});
+
+// Unit tests for helper functions
+describe("hasRole and hasPermission helpers", () => {
+  const ctxAdmin = createRBACTestContext({ role: "Admin" });
+  const ctxClient = createRBACTestContext({ role: "Client" });
+
+  test("hasRole returns true when role is allowed", () => {
+    expect(hasRole(ctxAdmin, ["Admin", "Manager"])).toBe(true);
+  });
+
+  test("hasRole returns false when role is not allowed", () => {
+    expect(hasRole(ctxClient, ["Admin"])).toBe(false);
+  });
+
+  test("hasPermission returns true when permission is allowed", () => {
+    expect(hasPermission(ctxAdmin, TASK_PERMISSIONS.GET_ALL)).toBe(true);
+  });
+
+  test("hasPermission returns false when permission is not allowed", () => {
+    expect(hasPermission(ctxClient, TASK_PERMISSIONS.GET_ALL)).toBe(false);
   });
 });

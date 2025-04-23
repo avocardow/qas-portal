@@ -29,3 +29,20 @@ export function logAccessDecision(
   const status = allowed ? "ALLOW" : "DENY";
   console.log(`[RBAC] ${status} ${role} -> ${action}`);
 }
+
+// Add helper functions for session user role and permission checks
+export function hasRole(
+  ctx: { session?: { user?: { role?: string } } },
+  allowedRoles: string[]
+): boolean {
+  const role = ctx.session?.user?.role;
+  return !!role && allowedRoles.includes(role);
+}
+
+export function hasPermission(
+  ctx: { session?: { user?: { role?: string } } },
+  permission: string
+): boolean {
+  const role = ctx.session?.user?.role;
+  return !!role && checkRolePermission(role, permission);
+}
