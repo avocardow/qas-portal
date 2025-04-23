@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { api } from "@/utils/api";
 
 interface ChatListProps {
@@ -11,36 +11,7 @@ export default function ChatList({
   isOpen = true,
   onToggle = () => {},
 }: ChatListProps) {
-  const {
-    data,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = api.chat.listRecent.useInfiniteQuery(
-    {},
-    {
-      getNextPageParam: (lastPage: { nextSkip: number | null }) =>
-        lastPage.nextSkip,
-    }
-  );
-
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasNextPage) {
-        fetchNextPage();
-      }
-    });
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-    return () => {
-      observer.disconnect();
-    };
-  }, [fetchNextPage, hasNextPage]);
+  const { data, isLoading, isError } = api.chat.listRecent.useQuery();
 
   return (
     <div className={`p-4 ${isOpen ? "block" : "hidden"} xl:block`}>
@@ -50,36 +21,12 @@ export default function ChatList({
       {isLoading && <p>Loading chats...</p>}
       {isError && <p>Error loading chats.</p>}
       <ul className="space-y-2 overflow-auto">
-        {data?.pages
-          .flatMap(
-            (page: {
-              chats: {
-                id: string;
-                topic: string;
-                lastUpdatedDateTime: string;
-              }[];
-              nextSkip: number | null;
-            }) => page.chats
-          )
-          .map(
-            (chat: {
-              id: string;
-              topic: string;
-              lastUpdatedDateTime: string;
-            }) => (
-              <li
-                key={chat.id}
-                className="cursor-pointer p-2 hover:bg-gray-100"
-              >
-                {chat.topic}
-              </li>
-            )
-          )}
+        {data?.chats.map((chat) => (
+          <li key={chat.id} className="cursor-pointer p-2 hover:bg-gray-100">
+            {chat.topic}
+          </li>
+        ))}
       </ul>
-      <div ref={loadMoreRef} className="h-2">
-        {isFetchingNextPage && <p>Loading more...</p>}
-        {!hasNextPage && <p>No more chats.</p>}
-      </div>
     </div>
   );
 }
