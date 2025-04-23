@@ -84,7 +84,7 @@ const AppHeader: React.FC = () => {
             {/* Cross Icon */}
           </button>
 
-          <Link href="/" className="lg:hidden">
+          <Link href="/" className="md:hidden">
             <Image
               width={154}
               height={32}
@@ -103,7 +103,7 @@ const AppHeader: React.FC = () => {
 
           <button
             onClick={toggleApplicationMenu}
-            className="z-99999 flex size-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
+            className="z-99999 flex size-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800"
           >
             <svg
               width="24"
@@ -158,7 +158,7 @@ const AppHeader: React.FC = () => {
         <div
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
-          } shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 lg:flex lg:justify-end lg:px-0 lg:shadow-none`}
+          } shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 md:flex md:justify-end md:px-0 md:shadow-none`}
         >
           <div className="2xsm:gap-3 flex items-center gap-2">
             {/* <!-- Dark Mode Toggler --> */}

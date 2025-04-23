@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Prevent flash by applying stored theme before React mounts */}
         <script
           dangerouslySetInnerHTML={{
@@ -43,9 +44,7 @@ export default function RootLayout({
         className={`${inter.className} overscroll-none bg-slate-50 transition-colors duration-300 ease-in-out dark:bg-slate-900`}
       >
         <Providers>
-          <div className="mx-auto min-h-screen max-w-7xl px-4 sm:px-6 lg:px-8">
-            {children}
-          </div>
+          <div className="container mx-auto min-h-screen px-4">{children}</div>
         </Providers>
         <SpeedInsights />
         <Analytics />
