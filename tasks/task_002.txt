@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Admin Shared Mailbox Access
-# Status: in-progress
+# Status: done
 # Dependencies: 1
 # Priority: medium
 # Description: Extend the email integration to allow Admin users to access and manage the shared admin mailbox, with proper role-based access control.

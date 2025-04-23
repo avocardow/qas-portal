@@ -107,7 +107,7 @@
       "id": 2,
       "title": "Implement Admin Shared Mailbox Access",
       "description": "Extend the email integration to allow Admin users to access and manage the shared admin mailbox, with proper role-based access control.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [1],
       "priority": "medium",
       "details": "1. Extend tRPC `emailRouter` with shared mailbox procedures targeting `/users/{admin-email}/...` endpoints\n2. Configure additional Graph API permissions: `Mail.ReadWrite.Shared`, `Mail.Send.Shared`\n3. Implement RBAC to restrict shared mailbox access to Admin role only\n4. Add mailbox switcher UI component (tabs or dropdown) visible only to Admins\n5. Modify email components to use appropriate procedures based on selected mailbox\n6. Ensure emails sent from shared mailbox are properly attributed",

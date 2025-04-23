@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import ComponentCard from "@/components/common/ComponentCard";
