@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Teams Chat Integration
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: medium
 # Description: Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.

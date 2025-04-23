@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Admin Shared Mailbox Access
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: medium
 # Description: Extend the email integration to allow Admin users to access and manage the shared admin mailbox, with proper role-based access control.
@@ -31,13 +31,13 @@ Define procedures for accessing and managing the shared mailbox using Microsoft 
 ### Details:
 Confirm the existing Azure AD app registration includes Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions with admin consent. Update the registration if needed and validate API access to shared mailbox endpoints.
 
-## 3. Implement Role-Based Access Control (RBAC) for Shared Mailbox [in-progress]
+## 3. Implement Role-Based Access Control (RBAC) for Shared Mailbox [done]
 ### Dependencies: 2.1, 2.2
 ### Description: Restrict access to the shared admin mailbox procedures so only users with the Admin role can invoke them.
 ### Details:
 Update the backend authorization logic to check user roles before allowing access to shared mailbox procedures. Ensure that only Admin users can see or interact with shared mailbox functionality, and add tests to validate RBAC enforcement.
 
-## 4. Develop Mailbox Switcher UI Component for Admins [pending]
+## 4. Develop Mailbox Switcher UI Component for Admins [in-progress]
 ### Dependencies: 2.3
 ### Description: Create a UI component (tabs or dropdown) that allows Admin users to switch between their personal mailbox and the shared admin mailbox.
 ### Details:

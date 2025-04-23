@@ -5,11 +5,17 @@ import { api } from "@/utils/api";
 
 export default function MailBox({
   onSelect,
+  mailboxType = "personal",
 }: {
   onSelect: (folderId: string) => void;
+  mailboxType?: "personal" | "shared";
 }) {
   const [activeItem, setActiveItem] = useState<string>("");
-  const { data: folders, isLoading, error } = api.email.listFolders.useQuery();
+  const query =
+    mailboxType === "shared"
+      ? api.email.listSharedFolders.useQuery()
+      : api.email.listFolders.useQuery();
+  const { data: folders, isLoading, error } = query;
 
   useEffect(() => {
     if (folders && folders.length > 0 && !activeItem) {
