@@ -159,7 +159,7 @@
       "id": 3,
       "title": "Enhance Client and Audit Detail Pages",
       "description": "Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "1. Optimize tRPC `client.getById` to include related entities: contacts, licenses, trustAccounts, audits\n2. Optimize tRPC `audit.getById` to include tasks and assignments with user information\n3. Implement tabbed interface for Client Detail page at `/clients/[clientId]` with Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs\n4. Create tables/lists for each tab with appropriate sorting and filtering\n5. Enhance Audit Detail page at `/audits/[auditId]` with core info, assigned team display, tasks table, and activity log\n6. Use Shadcn/TailAdmin components consistently for cards, badges, and tables\n7. Ensure responsive design works on various screen sizes",
@@ -201,7 +201,7 @@
           "id": 5,
           "title": "Apply Consistent UI Components and Styling",
           "description": "Standardize the use of Shadcn/TailAdmin components for cards, badges, and tables across both Client and Audit detail pages.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3, 4],
           "details": "Audit all UI elements on the detail pages to ensure consistent use of Shadcn/TailAdmin components. Refactor any legacy or inconsistent UI elements to match the new design system."
         },
@@ -209,7 +209,7 @@
           "id": 6,
           "title": "Ensure Responsive Design and Cross-Device Usability",
           "description": "Test and refine the Client and Audit detail pages to ensure they are fully responsive and usable on all common screen sizes.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [5],
           "details": "Use responsive utilities from Shadcn/TailAdmin and test layouts on various devices. Adjust breakpoints, table layouts, and navigation as needed to guarantee a seamless user experience on desktop, tablet, and mobile."
         }

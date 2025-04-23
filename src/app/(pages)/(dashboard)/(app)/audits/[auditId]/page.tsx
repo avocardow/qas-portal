@@ -20,6 +20,7 @@ import {
   TASK_PERMISSIONS,
   DOCUMENT_PERMISSIONS,
 } from "@/constants/permissions";
+import Badge from "@/components/ui/badge/Badge";
 
 export default function AuditDetailPage() {
   const { auditId } = useParams() as { auditId: string };
@@ -80,15 +81,17 @@ export default function AuditDetailPage() {
       <PageBreadcrumb pageTitle={`Audit ${audit.auditYear}`} />
       <div className="space-y-6">
         <ComponentCard title="Audit Details">
-          <div className="grid grid-cols-2 gap-4 text-gray-900 dark:text-gray-100">
+          <div className="grid grid-cols-1 gap-4 text-gray-900 md:grid-cols-2 dark:text-gray-100">
             <div>
               <strong>Year:</strong> {audit.auditYear}
             </div>
             <div>
-              <strong>Stage:</strong> {audit.stage?.name || "-"}
+              <strong>Stage:</strong>{" "}
+              <Badge size="sm">{audit.stage?.name || "-"}</Badge>
             </div>
             <div>
-              <strong>Status:</strong> {audit.status?.name || "-"}
+              <strong>Status:</strong>{" "}
+              <Badge size="sm">{audit.status?.name || "-"}</Badge>
             </div>
             <div>
               <strong>Due Date:</strong>{" "}
@@ -125,46 +128,48 @@ export default function AuditDetailPage() {
               </Button>
             )}
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell isHeader>Name</TableCell>
-                <TableCell isHeader>Role</TableCell>
-                <TableCell isHeader>Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {audit.assignments.length ? (
-                audit.assignments.map((assignment) => (
-                  <TableRow key={assignment.id}>
-                    <TableCell>{assignment.userId}</TableCell>
-                    <TableCell>{assignment.role || "-"}</TableCell>
-                    <TableCell>
-                      {canUnassignUser && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
-                          onClick={() =>
-                            unassignUserMutation.mutate({
-                              auditId,
-                              userId: assignment.userId,
-                            })
-                          }
-                        >
-                          Remove
-                        </Button>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={3}>No team members assigned.</TableCell>
+                  <TableCell isHeader>Name</TableCell>
+                  <TableCell isHeader>Role</TableCell>
+                  <TableCell isHeader>Actions</TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {audit.assignments.length ? (
+                  audit.assignments.map((assignment) => (
+                    <TableRow key={assignment.id}>
+                      <TableCell>{assignment.userId}</TableCell>
+                      <TableCell>{assignment.role || "-"}</TableCell>
+                      <TableCell>
+                        {canUnassignUser && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
+                            onClick={() =>
+                              unassignUserMutation.mutate({
+                                auditId,
+                                userId: assignment.userId,
+                              })
+                            }
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3}>No team members assigned.</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </ComponentCard>
 
         <ComponentCard title="Tasks">
@@ -179,68 +184,73 @@ export default function AuditDetailPage() {
             )}
           </div>
           {canViewTasks ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell isHeader>Task</TableCell>
-                  <TableCell isHeader>Status</TableCell>
-                  <TableCell isHeader>Due Date</TableCell>
-                  <TableCell isHeader>Actions</TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {audit.tasks.length ? (
-                  audit.tasks.map((task) => (
-                    <TableRow key={task.id}>
-                      <TableCell>{task.name}</TableCell>
-                      <TableCell>
-                        {canUpdateTask ? (
-                          <select
-                            value={task.status}
-                            onChange={(e) =>
-                              updateTaskMutation.mutate({
-                                taskId: task.id,
-                                status: e.target.value,
-                              })
-                            }
-                            className="rounded border px-2 py-1"
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableCell isHeader>Task</TableCell>
+                    <TableCell isHeader>Status</TableCell>
+                    <TableCell isHeader>Due Date</TableCell>
+                    <TableCell isHeader>Actions</TableCell>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {audit.tasks.length ? (
+                    audit.tasks.map((task) => (
+                      <TableRow key={task.id}>
+                        <TableCell>{task.name}</TableCell>
+                        <TableCell>
+                          {canUpdateTask ? (
+                            <select
+                              value={task.status}
+                              onChange={(e) =>
+                                updateTaskMutation.mutate({
+                                  taskId: task.id,
+                                  status: e.target.value,
+                                })
+                              }
+                              className="rounded border px-2 py-1"
+                            >
+                              {["To Do", "In Progress", "Done"].map(
+                                (statusOption) => (
+                                  <option
+                                    key={statusOption}
+                                    value={statusOption}
+                                  >
+                                    {statusOption}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                          ) : (
+                            <span>{task.status}</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {task.dueDate
+                            ? new Date(task.dueDate).toLocaleDateString()
+                            : "-"}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            size="sm"
+                            onClick={() => router.push(`/tasks/${task.id}`)}
                           >
-                            {["To Do", "In Progress", "Done"].map(
-                              (statusOption) => (
-                                <option key={statusOption} value={statusOption}>
-                                  {statusOption}
-                                </option>
-                              )
-                            )}
-                          </select>
-                        ) : (
-                          <span>{task.status}</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {task.dueDate
-                          ? new Date(task.dueDate).toLocaleDateString()
-                          : "-"}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          size="sm"
-                          onClick={() => router.push(`/tasks/${task.id}`)}
-                        >
-                          View
-                        </Button>
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4}>
+                        No tasks found for this audit.
                       </TableCell>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={4}>
-                      No tasks found for this audit.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           ) : (
             <p>You are not authorized to view tasks.</p>
           )}

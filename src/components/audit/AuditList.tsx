@@ -9,6 +9,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import Button from "@/components/ui/button/Button";
+import Badge from "@/components/ui/badge/Badge";
 import { usePermission } from "@/context/RbacContext";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 
@@ -104,7 +105,7 @@ const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
                       ))}
                     </select>
                   ) : (
-                    <span>{audit.stage?.name || "-"}</span>
+                    <Badge size="sm">{audit.stage?.name || "-"}</Badge>
                   )}
                 </TableCell>
                 <TableCell>
@@ -128,7 +129,7 @@ const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
                       ))}
                     </select>
                   ) : (
-                    <span>{audit.status?.name || "-"}</span>
+                    <Badge size="sm">{audit.status?.name || "-"}</Badge>
                   )}
                 </TableCell>
                 <TableCell>

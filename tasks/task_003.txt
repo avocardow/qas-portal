@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Enhance Client and Audit Detail Pages
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.
@@ -45,13 +45,13 @@ For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables u
 ### Details:
 Use Shadcn/TailAdmin cards, badges, and tables to present audit details, team assignments (with user info), tasks, and activity logs. Ensure the layout is clear and information is grouped logically.
 
-## 5. Apply Consistent UI Components and Styling [pending]
+## 5. Apply Consistent UI Components and Styling [done]
 ### Dependencies: 3.3, 3.4
 ### Description: Standardize the use of Shadcn/TailAdmin components for cards, badges, and tables across both Client and Audit detail pages.
 ### Details:
 Audit all UI elements on the detail pages to ensure consistent use of Shadcn/TailAdmin components. Refactor any legacy or inconsistent UI elements to match the new design system.
 
-## 6. Ensure Responsive Design and Cross-Device Usability [pending]
+## 6. Ensure Responsive Design and Cross-Device Usability [done]
 ### Dependencies: 3.5
 ### Description: Test and refine the Client and Audit detail pages to ensure they are fully responsive and usable on all common screen sizes.
 ### Details:
