@@ -1,0 +1,201 @@
+"use client";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { api } from "@/utils/api";
+import { useRouter, useParams } from "next/navigation";
+import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "@/components/common/ComponentCard";
+import { useRbac } from "@/context/RbacContext";
+
+// Zod schema for validation
+const formSchema = z.object({
+  contactName: z.string().min(1, "Contact name is required"),
+  abn: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  postcode: z.string().optional(),
+  status: z.enum(["prospect", "active", "archived"]),
+  auditMonthEnd: z.number().int().optional(),
+  nextContactDate: z.string().optional(),
+  estAnnFees: z.number().optional(),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+export default function EditContactPage() {
+  const { role } = useRbac();
+  const router = useRouter();
+  const { contactId } = useParams() as { contactId: string };
+
+  // Fetch existing contact data
+  const contactQuery = api.contacts.getById.useQuery({ contactId });
+
+  // Setup form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+  });
+
+  // Pre-fill form when data loads
+  useEffect(() => {
+    if (contactQuery.data) {
+      const c = contactQuery.data;
+      reset({
+        contactName: c.contactName,
+        abn: c.abn || "",
+        address: c.address || "",
+        city: c.city || "",
+        postcode: c.postcode || "",
+        status: c.status as "prospect" | "active" | "archived",
+        auditMonthEnd: c.auditMonthEnd || undefined,
+        nextContactDate: c.nextContactDate
+          ? new Date(c.nextContactDate).toISOString().slice(0, 10)
+          : "",
+        estAnnFees: c.estAnnFees ? Number(c.estAnnFees) : undefined,
+      });
+    }
+  }, [contactQuery.data, reset]);
+
+  // tRPC mutation for update
+  const updateMutation = api.contacts.update.useMutation();
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      await updateMutation.mutateAsync({
+        contactId,
+        ...data,
+        nextContactDate: data.nextContactDate
+          ? new Date(data.nextContactDate)
+          : undefined,
+      });
+      router.push(`/contacts/${contactId}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Guard after hooks
+  if (role !== "Admin") {
+    return <p>You are not authorized to edit contacts.</p>;
+  }
+  if (contactQuery.isLoading) {
+    return <p>Loading contact...</p>;
+  }
+  if (contactQuery.isError) {
+    return <p>Error loading contact.</p>;
+  }
+
+  return (
+    <DashboardPlaceholderPageTemplate heading="Edit Contact">
+      <PageBreadcrumb pageTitle="Edit Contact" />
+      <ComponentCard title="Edit Contact">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Contact Name
+            </label>
+            <input
+              {...register("contactName")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+            {errors.contactName && (
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {errors.contactName.message}
+              </p>
+            )}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              ABN
+            </label>
+            <input
+              {...register("abn")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Address
+            </label>
+            <input
+              {...register("address")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              City
+            </label>
+            <input
+              {...register("city")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Postcode
+            </label>
+            <input
+              {...register("postcode")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Status
+            </label>
+            <select
+              {...register("status")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            >
+              <option value="prospect">Prospect</option>
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Audit Month End
+            </label>
+            <input
+              type="number"
+              {...register("auditMonthEnd", { valueAsNumber: true })}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Next Contact Date
+            </label>
+            <input
+              type="date"
+              {...register("nextContactDate")}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Estimated Annual Fees
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              {...register("estAnnFees", { valueAsNumber: true })}
+              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            />
+          </div>
+          <button type="submit" disabled={isSubmitting} className="btn">
+            {isSubmitting ? "Updating..." : "Update Contact"}
+          </button>
+        </form>
+      </ComponentCard>
+    </DashboardPlaceholderPageTemplate>
+  );
+}
