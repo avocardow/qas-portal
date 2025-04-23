@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { usePermission } from "@/context/RbacContext";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
