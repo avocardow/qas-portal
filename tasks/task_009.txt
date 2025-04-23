@@ -1,6 +1,6 @@
 # Task ID: 9
 # Title: Implement RBAC Middleware and Procedure Helpers
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Establish authentication and permission-checking middleware and reusable helper functions for all tRPC routers.
@@ -23,13 +23,13 @@ Add an isAuthed middleware in the tRPC context to verify session.user is defined
 ### Details:
 Implement functions to validate user roles and specific permissions using the session object.
 
-## 3. Integrate RBAC into existing routers [pending]
+## 3. Integrate RBAC into existing routers [done]
 ### Dependencies: 9.2
 ### Description: Apply isAuthed and permission helpers to sensitive Phase 1 and Phase 2 tRPC procedures.
 ### Details:
 Update each router (clientRouter, emailRouter, chatRouter, etc.) to include authentication and role checks on create/update/delete/mutation endpoints.
 
-## 4. Write unit tests for RBAC logic [pending]
+## 4. Write unit tests for RBAC logic [done]
 ### Dependencies: 9.3
 ### Description: Create tests for authentication middleware and permission helpers.
 ### Details:

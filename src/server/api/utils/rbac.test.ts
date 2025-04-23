@@ -28,6 +28,12 @@ describe("RBAC Utilities", () => {
     expect(checkRolePermission("Client", TASK_PERMISSIONS.GET_ALL)).toBe(false);
   });
 
+  test("checkRolePermission returns false for unknown roles", () => {
+    expect(checkRolePermission("UnknownRole", TASK_PERMISSIONS.GET_ALL)).toBe(
+      false
+    );
+  });
+
   test("throwForbiddenError throws a TRPCError with FORBIDDEN code", () => {
     expect.assertions(3);
     try {
@@ -36,6 +42,16 @@ describe("RBAC Utilities", () => {
       expect(error).toBeInstanceOf(TRPCError);
       expect(error.code).toBe("FORBIDDEN");
       expect(error.message).toBe("Access denied");
+    }
+  });
+
+  test("throwForbiddenError uses default message when none provided", () => {
+    expect.assertions(2);
+    try {
+      throwForbiddenError();
+    } catch (error: any) {
+      expect(error.code).toBe("FORBIDDEN");
+      expect(error.message).toBe("Insufficient permissions");
     }
   });
 
@@ -109,11 +125,25 @@ describe("hasRole and hasPermission helpers", () => {
     expect(hasRole(ctxClient, ["Admin"])).toBe(false);
   });
 
+  test("hasRole returns false when session or role is missing", () => {
+    expect(hasRole({}, ["Admin"])).toBe(false);
+    expect(hasRole({ session: {} }, ["Admin"])).toBe(false);
+    expect(hasRole({ session: { user: {} } }, ["Admin"])).toBe(false);
+  });
+
   test("hasPermission returns true when permission is allowed", () => {
     expect(hasPermission(ctxAdmin, TASK_PERMISSIONS.GET_ALL)).toBe(true);
   });
 
   test("hasPermission returns false when permission is not allowed", () => {
     expect(hasPermission(ctxClient, TASK_PERMISSIONS.GET_ALL)).toBe(false);
+  });
+
+  test("hasPermission returns false when session or role is missing", () => {
+    expect(hasPermission({}, TASK_PERMISSIONS.CREATE)).toBe(false);
+    expect(hasPermission({ session: {} }, TASK_PERMISSIONS.CREATE)).toBe(false);
+    expect(
+      hasPermission({ session: { user: {} } }, TASK_PERMISSIONS.CREATE)
+    ).toBe(false);
   });
 });
