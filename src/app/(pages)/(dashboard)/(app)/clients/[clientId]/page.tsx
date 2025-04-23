@@ -76,7 +76,7 @@ export default function ClientDetailPage() {
   const {
     data: spItems,
     isLoading: spLoading,
-    isError: spError,
+    isError: spIsError,
   } = api.sharepoint.getFolderContents.useQuery(
     { folderId: client?.sharepointFolderId ?? "" },
     {
@@ -500,9 +500,7 @@ export default function ClientDetailPage() {
               {client?.sharepointFolderId ? (
                 <>
                   {spLoading && <p>Loading folder contents...</p>}
-                  {spError && (
-                    <p>Error loading folder contents: {spError.message}</p>
-                  )}
+                  {spIsError && <p>Error loading folder contents.</p>}
                   {spItems && (
                     <Table>
                       <TableHeader className="bg-gray-50 dark:bg-gray-800">
@@ -587,10 +585,14 @@ export default function ClientDetailPage() {
             </button>
             <button
               onClick={handleLinkFolder}
-              disabled={!selectedFolderId || linkFolderMutation.isLoading}
+              disabled={
+                !selectedFolderId || linkFolderMutation.status === "pending"
+              }
               className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-800"
             >
-              {linkFolderMutation.isLoading ? "Linking..." : "Confirm"}
+              {linkFolderMutation.status === "pending"
+                ? "Linking..."
+                : "Confirm"}
             </button>
           </div>
         </div>
