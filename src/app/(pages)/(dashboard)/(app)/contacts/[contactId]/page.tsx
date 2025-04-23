@@ -73,7 +73,10 @@ export default function ContactDetailPage() {
     data: docResources,
     isLoading: isDocsLoading,
     isError: isDocsError,
-  } = api.document.getByContactId.useQuery({ contactId });
+  } = api.document.getByClientId.useQuery(
+    { clientId: contact?.clientId ?? "" },
+    { enabled: Boolean(contact?.clientId) }
+  );
   // SharePoint folder contents for Documents tab
   const {
     data: spItems,
