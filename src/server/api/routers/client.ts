@@ -135,4 +135,20 @@ export const clientRouter = createTRPCRouter({
       const { clientId } = input;
       return ctx.db.client.delete({ where: { id: clientId } });
     }),
+  // Procedure to update SharePoint folder ID for a client (Admins and Managers)
+  updateSharepointFolderId: protectedProcedure
+    .use(enforceRole(["Admin", "Manager"]))
+    .input(
+      z.object({
+        clientId: z.string().uuid(),
+        sharepointFolderId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { clientId, sharepointFolderId } = input;
+      return ctx.db.client.update({
+        where: { id: clientId },
+        data: { sharepointFolderId },
+      });
+    }),
 });
