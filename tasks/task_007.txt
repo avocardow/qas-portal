@@ -39,15 +39,79 @@ Audit existing UI components for consistency. Refactor or replace components as 
 ### Details:
 Test UI on various screen sizes and browsers. Adjust CSS and layout logic to resolve any issues. Use feature detection tools and polyfills where necessary to address browser-specific quirks[2][3]. Validate that all components adapt gracefully to different environments.
 
-## 4. Implement Theme Switcher Component with Persistence [in-progress]
+## 4. Implement Theme Switcher Component with Persistence [done]
 ### Dependencies: 7.3
 ### Description: Develop a theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.
 ### Details:
 Create a UI control for theme switching. Integrate logic to apply the selected theme across the application. Store the user's preference in localStorage or cookies and ensure the theme is restored on subsequent visits.
 
-## 5. Apply and Test Consistent Dark Mode Styles [pending]
+## 5. Apply and Test Consistent Dark Mode Styles [in-progress]
 ### Dependencies: 7.4
 ### Description: Ensure all UI components have consistent and visually appealing dark mode styles, and thoroughly test the theme switcher functionality across the application.
 ### Details:
 Audit all components for dark mode compatibility. Update styles as needed to maintain readability and aesthetic quality. Test the theme switcher across different pages, devices, and browsers to ensure reliable persistence and visual consistency.
+
+<info added on 2025-04-23T15:04:22.296Z>
+# Implementation Plan
+
+1. **Define CSS Variables & Utility Classes**
+   - In `src/app/(pages)/globals.css`, create semantic color variables:
+   ```css
+   :root {
+     --color-primary: #1a1a1a;
+     --color-surface: #ffffff;
+     --color-surface-accent: #f3f4f6;
+     --color-border: #e5e7eb;
+     --color-text-primary: #111827;
+     --color-text-secondary: #4b5563;
+   }
+   
+   .dark {
+     --color-primary: #f3f4f6;
+     --color-surface: #121212;
+     --color-surface-accent: #1e1e1e;
+     --color-border: #2e2e2e;
+     --color-text-primary: #f9fafb;
+     --color-text-secondary: #9ca3af;
+   }
+   ```
+
+2. **Component Refactoring Strategy**
+   - Replace hardcoded color values with CSS variables or Tailwind classes
+   - Example conversion:
+   ```jsx
+   // Before
+   <div className="bg-white border border-gray-200 text-gray-900">
+   
+   // After
+   <div className="bg-surface border border-border text-primary">
+   ```
+   - Create custom Tailwind utility classes in `tailwind.config.js`:
+   ```js
+   theme: {
+     extend: {
+       colors: {
+         surface: 'var(--color-surface)',
+         border: 'var(--color-border)',
+         primary: 'var(--color-text-primary)',
+         // etc.
+       }
+     }
+   }
+   ```
+
+3. **Testing Methodology**
+   - Create a test matrix covering all major components in both themes
+   - Test focus states, hover effects, and transitions between themes
+   - Verify contrast ratios meet WCAG AA standards using browser dev tools
+   - Test theme persistence across page navigation and browser refresh
+
+4. **Theme Toggle Implementation**
+   - Use localStorage to persist theme preference
+   - Add immediate visual feedback during theme switch with subtle transition
+
+5. **Documentation**
+   - Document theming architecture and extension patterns
+   - Include screenshots of key components in both themes
+</info added on 2025-04-23T15:04:22.296Z>
 

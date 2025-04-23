@@ -63,7 +63,7 @@ const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
         )}
       </div>
       <Table>
-        <TableHeader className="bg-gray-50 dark:bg-gray-800">
+        <TableHeader className="bg-surface-accent dark:bg-surface-accent">
           <TableRow>
             <TableCell isHeader>Year</TableCell>
             <TableCell isHeader>Stage</TableCell>
@@ -72,7 +72,7 @@ const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
             <TableCell isHeader>Assigned Staff</TableCell>
           </TableRow>
         </TableHeader>
-        <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+        <TableBody className="divide-border bg-surface dark:divide-border dark:bg-surface divide-y">
           {audits.length ? (
             audits.map((audit) => (
               <TableRow key={audit.id}>
