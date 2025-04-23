@@ -15,18 +15,23 @@ export const chatRouter = createTRPCRouter({
       const take = input?.take ?? 20;
       try {
         const graphClient = new GraphClient();
+        const path =
+          input === undefined ? `/chats` : `/chats?$top=${take}&$skip=${skip}`;
         const response = await graphClient.get<{
           value: Array<{
             id: string;
             topic?: string;
             lastUpdatedDateTime?: string;
           }>;
-        }>(`/chats?$top=${take}&$skip=${skip}`);
+        }>(path);
         const chats = response.value.map((chat) => ({
           id: chat.id,
           topic: chat.topic ?? "Chat",
           lastUpdatedDateTime: chat.lastUpdatedDateTime ?? "",
         }));
+        if (input === undefined) {
+          return chats;
+        }
         const nextSkip = response.value.length === take ? skip + take : null;
         return { chats, nextSkip };
       } catch {

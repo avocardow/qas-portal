@@ -62,6 +62,5 @@ node_modules/
 *.sw?
 # OS specific
 
-# Private client data
-data/clients.csv
-docs/
+# Removed docs/ ignore to allow committing documentation updates
+#docs/
