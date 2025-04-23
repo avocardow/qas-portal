@@ -38,7 +38,7 @@ export default function ContactsPage() {
   );
   const [pageIndex, setPageIndex] = useState(0);
   // Protect view based on role
-  if (role !== "Admin" && role !== "Manager" && role !== "Contact") {
+  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
     return <p>You are not authorized to view contacts.</p>;
   }
 

@@ -68,7 +68,7 @@ export default function ContactDetailPage() {
     }
   };
 
-  if (role !== "Admin" && role !== "Manager" && role !== "Contact") {
+  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
     return <p>You are not authorized to view contact details.</p>;
   }
 
