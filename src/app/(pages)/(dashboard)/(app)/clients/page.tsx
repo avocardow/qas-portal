@@ -26,7 +26,7 @@ export default function ClientsPage() {
   // Debounce filter input to optimize queries
   const debouncedFilter = useDebounce(filter, 500);
   const router = useRouter();
-  const deleteClientMutation = api.client.deleteClient.useMutation();
+  const deleteClientMutation = api.clients.deleteClient.useMutation();
   const [sortBy, setSortBy] = useState<SortField>("clientName");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [pageSize] = useState(10);
@@ -41,7 +41,7 @@ export default function ClientsPage() {
   }
 
   // Fetch paginated data with current controls
-  const clientsQuery = api.client.getAll.useQuery({
+  const clientsQuery = api.clients.getAll.useQuery({
     take: pageSize,
     cursor: currentCursor,
     filter: debouncedFilter,

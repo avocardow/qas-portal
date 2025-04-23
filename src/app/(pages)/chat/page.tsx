@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import ChatList from "@/components/chats/ChatList";
 import ChatWindow from "@/components/chats/ChatWindow";
@@ -9,7 +8,7 @@ import MessageInput from "@/components/chats/MessageInput";
 
 export default function ChatPage() {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
+  const utils = api.useContext();
 
   const {
     data: messages,
@@ -22,9 +21,9 @@ export default function ChatPage() {
 
   const sendMessageMutation = api.chat.sendMessage.useMutation({
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        api.chat.getMessages.getQueryKey({ chatId: selectedChatId! })
-      );
+      if (selectedChatId) {
+        utils.chat.getMessages.invalidate({ chatId: selectedChatId });
+      }
     },
   });
 
@@ -60,7 +59,7 @@ export default function ChatPage() {
             <div className="border-t p-4">
               <MessageInput
                 onSendMessage={handleSendMessage}
-                isLoading={sendMessageMutation.isLoading}
+                isLoading={sendMessageMutation.status === "pending"}
               />
             </div>
           </>

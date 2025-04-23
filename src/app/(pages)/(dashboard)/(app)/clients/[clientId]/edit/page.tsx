@@ -31,7 +31,7 @@ export default function EditClientPage() {
   const { clientId } = useParams() as { clientId: string };
 
   // Fetch existing client data
-  const clientQuery = api.client.getById.useQuery({ clientId });
+  const clientQuery = api.clients.getById.useQuery({ clientId });
 
   // Setup form
   const {
@@ -64,7 +64,7 @@ export default function EditClientPage() {
   }, [clientQuery.data, reset]);
 
   // tRPC mutation for update
-  const updateMutation = api.client.update.useMutation();
+  const updateMutation = api.clients.update.useMutation();
 
   const onSubmit = async (data: FormData) => {
     try {

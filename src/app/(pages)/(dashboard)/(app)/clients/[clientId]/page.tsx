@@ -34,12 +34,12 @@ type TabKey =
 export default function ClientDetailPage() {
   const { clientId } = useParams() as { clientId: string };
   const router = useRouter();
-  const deleteClientMutation = api.client.deleteClient.useMutation();
+  const deleteClientMutation = api.clients.deleteClient.useMutation();
   const {
     data: client,
     isLoading,
     isError,
-  } = api.client.getById.useQuery({ clientId });
+  } = api.clients.getById.useQuery({ clientId });
   const { role } = useRbac();
   const { isOpen, openModal, closeModal } = useModal();
   // Folder selection state and queries
@@ -49,7 +49,7 @@ export default function ClientDetailPage() {
     isLoading: loadingFolders,
     error: foldersError,
   } = api.sharepoint.listClientFolders.useQuery(undefined, { enabled: isOpen });
-  const linkFolderMutation = api.client.updateSharepointFolderId.useMutation();
+  const linkFolderMutation = api.clients.updateSharepointFolderId.useMutation();
   const handleLinkFolder = () => {
     if (selectedFolderId) {
       linkFolderMutation.mutate(

@@ -37,7 +37,7 @@ export default function NewClientPage() {
     resolver: zodResolver(formSchema),
     defaultValues: { status: "prospect" },
   });
-  const createClientMutation = api.client.create.useMutation();
+  const createClientMutation = api.clients.create.useMutation();
   const onSubmit = (data: FormData) => {
     const input = {
       ...data,
