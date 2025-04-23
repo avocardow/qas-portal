@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { createTRPCRouter, adminOrManagerProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  adminOrManagerProcedure,
+  protectedProcedure,
+  enforceRole,
+} from "@/server/api/trpc";
 
 // Zod schemas for Contact operations
 export const contactCreateSchema = z.object({
@@ -16,12 +21,67 @@ export const contactUpdateSchema = contactCreateSchema.extend({
   contactId: z.string().uuid(),
 });
 
+// Additional schemas for listing and querying
+export const contactGetAllSchema = z.object({
+  take: z.number().min(1).max(100).optional(),
+  cursor: z.string().uuid().optional(),
+  filter: z.string().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(["asc", "desc"]).optional(),
+});
+
+export const contactByIdSchema = z.object({ contactId: z.string().uuid() });
+
 // Zod schemas for batch operations
 const contactBatchCreateSchema = z.array(contactCreateSchema);
 const contactBatchUpdateSchema = z.array(contactUpdateSchema);
 
 // CRUD and batch procedures for Contact entity
 export const contactRouter = createTRPCRouter({
+  // List contacts with pagination and optional filtering
+  getAll: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Client"]))
+    .input(contactGetAllSchema)
+    .query(async ({ ctx, input }) => {
+      const { take = 10, cursor, filter } = input;
+      const items = await ctx.db.contact.findMany({
+        take,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+        where: { name: { contains: filter || "" } },
+      });
+      const nextCursor =
+        items.length === take ? items[take - 1]?.id : undefined;
+      return { items, nextCursor };
+    }),
+  // Get a single contact by ID
+  getById: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Client"]))
+    .input(contactByIdSchema)
+    .query(({ ctx, input }) => {
+      return ctx.db.contact.findUniqueOrThrow({
+        where: { id: input.contactId },
+      });
+    }),
+  // Delete a contact
+  deleteContact: adminOrManagerProcedure
+    .input(contactByIdSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.contact.delete({ where: { id: input.contactId } });
+    }),
+  // Update SharePoint folder ID for a contact (Admins and Managers)
+  updateSharepointFolderId: protectedProcedure
+    .use(enforceRole(["Admin", "Manager"]))
+    .input(
+      z.object({ contactId: z.string().uuid(), sharepointFolderId: z.string() })
+    )
+    .mutation(({ ctx, input }) => {
+      const { contactId, sharepointFolderId } = input;
+      return ctx.db.contact.update({
+        where: { id: contactId },
+        data: { sharepointFolderId },
+      });
+    }),
   create: adminOrManagerProcedure
     .input(contactCreateSchema)
     .mutation(({ ctx, input }) => {

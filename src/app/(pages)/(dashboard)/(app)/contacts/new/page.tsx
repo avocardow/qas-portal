@@ -37,7 +37,7 @@ export default function NewContactPage() {
     resolver: zodResolver(formSchema),
     defaultValues: { status: "prospect" },
   });
-  const createContactMutation = api.contacts.create.useMutation();
+  const createContactMutation = api.contact.create.useMutation();
   const onSubmit = (data: FormData) => {
     const input = {
       ...data,

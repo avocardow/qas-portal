@@ -34,12 +34,12 @@ type TabKey =
 export default function ContactDetailPage() {
   const { contactId } = useParams() as { contactId: string };
   const router = useRouter();
-  const deleteContactMutation = api.contacts.deleteContact.useMutation();
+  const deleteContactMutation = api.contact.deleteContact.useMutation();
   const {
     data: contact,
     isLoading,
     isError,
-  } = api.contacts.getById.useQuery({ contactId });
+  } = api.contact.getById.useQuery({ contactId });
   const { role } = useRbac();
   const { isOpen, openModal, closeModal } = useModal();
   // Folder selection state and queries
@@ -48,11 +48,10 @@ export default function ContactDetailPage() {
     data: folders,
     isLoading: loadingFolders,
     error: foldersError,
-  } = api.sharepoint.listContactFolders.useQuery(undefined, {
+  } = api.sharepoint.listClientFolders.useQuery(undefined, {
     enabled: isOpen,
   });
-  const linkFolderMutation =
-    api.contacts.updateSharepointFolderId.useMutation();
+  const linkFolderMutation = api.contact.updateSharepointFolderId.useMutation();
   const handleLinkFolder = () => {
     if (selectedFolderId) {
       linkFolderMutation.mutate(
