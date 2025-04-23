@@ -107,6 +107,9 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
+// Alias for authentication middleware
+export const isAuthed = enforceUserIsAuthed;
+
 /**
  * Protected (authenticated) procedure
  *
@@ -115,7 +118,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = t.procedure.use(isAuthed);
 
 // Add RBAC middleware to enforce specific roles
 export const enforceRole = (allowedRoles: string[]) =>

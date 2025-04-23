@@ -1,6 +1,6 @@
 # Task ID: 9
 # Title: Implement RBAC Middleware and Procedure Helpers
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Establish authentication and permission-checking middleware and reusable helper functions for all tRPC routers.
@@ -11,7 +11,7 @@ Implement server-side middleware (e.g., isAuthed, hasPermission) for tRPC, and c
 
 
 # Subtasks:
-## 1. Create tRPC authentication middleware [pending]
+## 1. Create tRPC authentication middleware [done]
 ### Dependencies: None
 ### Description: Implement isAuthed middleware to enforce authenticated sessions.
 ### Details:

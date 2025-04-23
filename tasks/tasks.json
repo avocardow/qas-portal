@@ -4,7 +4,7 @@
       "id": 9,
       "title": "Implement RBAC Middleware and Procedure Helpers",
       "description": "Establish authentication and permission-checking middleware and reusable helper functions for all tRPC routers.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "Implement server-side middleware (e.g., isAuthed, hasPermission) for tRPC, and create helper functions to enforce role-based access across Phase 1 and Phase 2 routers.",
@@ -13,7 +13,7 @@
           "id": 1,
           "title": "Create tRPC authentication middleware",
           "description": "Implement isAuthed middleware to enforce authenticated sessions.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Add an isAuthed middleware in the tRPC context to verify session.user is defined before proceeding."
         },
