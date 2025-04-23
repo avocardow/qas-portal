@@ -32,3 +32,11 @@ export const DOCUMENT_PERMISSIONS = {
 
 export type DocumentPermission =
   (typeof DOCUMENT_PERMISSIONS)[keyof typeof DOCUMENT_PERMISSIONS];
+
+export const PHONE_PERMISSIONS = {
+  MAKE_CALL: "phone.makeCall",
+  LOG_CALL: "phone.logCall",
+} as const;
+
+export type PhonePermission =
+  (typeof PHONE_PERMISSIONS)[keyof typeof PHONE_PERMISSIONS];

@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Implement Teams Phone Integration
-# Status: pending
+# Status: done
 # Dependencies: 3
 # Priority: medium
 # Description: Enable outbound PSTN calling to clients directly from the portal using Teams Phone System, with call logging functionality.
@@ -40,13 +40,13 @@ Define and migrate a database schema for call logs with fields: callerId, client
 ### Details:
 Create a tRPC router named 'phoneRouter' with procedures: 'makePstnCall' (to initiate outbound calls via Teams Phone System using the Graph API) and 'logCall' (to record call details in the database). Ensure error handling, input validation, and secure access controls for these endpoints.
 
-## 4. Build Portal UI for Calling and Call Management [pending]
+## 4. Build Portal UI for Calling and Call Management [done]
 ### Dependencies: 5.3
 ### Description: Implement the /phone page with client/contact search, call buttons, and an admin-only dial pad for direct number entry.
 ### Details:
 Develop the /phone page UI to allow users to search for clients/contacts, display contacts with phone numbers, and show call buttons next to each. Add an admin-only dial pad component for direct number entry. Integrate UI actions with the tRPC procedures for call initiation and logging.
 
-## 5. Implement Call Logging and Role-Based Feature Controls [pending]
+## 5. Implement Call Logging and Role-Based Feature Controls [done]
 ### Dependencies: 5.4
 ### Description: Ensure all calls are logged after initiation and restrict phone features based on user roles.
 ### Details:

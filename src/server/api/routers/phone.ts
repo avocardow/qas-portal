@@ -1,11 +1,12 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, permissionProcedure } from "@/server/api/trpc";
+import { PHONE_PERMISSIONS } from "@/constants/permissions";
 import { GraphClient } from "@/server/utils/graphClient";
 import { env } from "@/env.mjs";
 import { z } from "zod";
 import { db } from "@/server/db";
 
 export const phoneRouter = createTRPCRouter({
-  makePstnCall: protectedProcedure
+  makePstnCall: permissionProcedure(PHONE_PERMISSIONS.MAKE_CALL)
     .input(
       z.object({
         clientId: z.string().uuid().optional(),
@@ -39,7 +40,7 @@ export const phoneRouter = createTRPCRouter({
       });
       return { ...result, callLogId: callLog.id };
     }),
-  logCall: protectedProcedure
+  logCall: permissionProcedure(PHONE_PERMISSIONS.LOG_CALL)
     .input(
       z.object({
         callLogId: z.string().uuid(),

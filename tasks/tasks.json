@@ -271,7 +271,7 @@
       "id": 5,
       "title": "Implement Teams Phone Integration",
       "description": "Enable outbound PSTN calling to clients directly from the portal using Teams Phone System, with call logging functionality.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [3],
       "priority": "medium",
       "details": "1. Create tRPC `phoneRouter` with procedures: `makePstnCall`, `logCall`\n2. Configure Graph API permissions: `Calls.Initiate.All`\n3. Create database schema for call logs (callerId, clientId, contactId, numberDialed, startTime, endTime, duration)\n4. Implement `/phone` page with client/contact search functionality\n5. Add call buttons next to contacts with phone numbers\n6. Create Admin-only dial pad UI for direct number entry\n7. Implement call logging after call initiation\n8. Add role-based visibility controls for phone features",
@@ -305,7 +305,7 @@
           "id": 4,
           "title": "Build Portal UI for Calling and Call Management",
           "description": "Implement the /phone page with client/contact search, call buttons, and an admin-only dial pad for direct number entry.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Develop the /phone page UI to allow users to search for clients/contacts, display contacts with phone numbers, and show call buttons next to each. Add an admin-only dial pad component for direct number entry. Integrate UI actions with the tRPC procedures for call initiation and logging."
         },
@@ -313,7 +313,7 @@
           "id": 5,
           "title": "Implement Call Logging and Role-Based Feature Controls",
           "description": "Ensure all calls are logged after initiation and restrict phone features based on user roles.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [4],
           "details": "After each call is initiated, automatically invoke the 'logCall' procedure to record the call. Implement role-based visibility and access controls for phone features (e.g., dial pad, call buttons) so only authorized users can access specific functionalities. Test to ensure compliance with security and audit requirements."
         }

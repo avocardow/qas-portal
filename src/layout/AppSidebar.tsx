@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { HorizontaLDots } from "../icons/index";
 import { usePermission } from "@/context/RbacContext";
-import { TASK_PERMISSIONS } from "@/constants/permissions";
+import { TASK_PERMISSIONS, PHONE_PERMISSIONS } from "@/constants/permissions";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 
 // import SidebarWidget from "./SidebarWidget";
@@ -38,6 +38,7 @@ const AppSidebar: React.FC = () => {
   const pathname = usePathname();
   const canViewTasks = usePermission(TASK_PERMISSIONS.GET_ALL);
   const canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
+  const canUsePhone = usePermission(PHONE_PERMISSIONS.MAKE_CALL);
 
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
@@ -110,6 +111,9 @@ const AppSidebar: React.FC = () => {
                     return null;
                   }
                   if (page.path === "/audits" && !canViewAudits) {
+                    return null;
+                  }
+                  if (page.path === "/phone" && !canUsePhone) {
                     return null;
                   }
                   return (
