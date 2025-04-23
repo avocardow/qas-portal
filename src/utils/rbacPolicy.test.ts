@@ -3,6 +3,7 @@ import {
   AUDIT_PERMISSIONS,
   TASK_PERMISSIONS,
   DOCUMENT_PERMISSIONS,
+  PHONE_PERMISSIONS,
 } from "@/constants/permissions";
 
 describe("RBAC Policy", () => {
@@ -11,6 +12,7 @@ describe("RBAC Policy", () => {
       ...Object.values(AUDIT_PERMISSIONS),
       ...Object.values(TASK_PERMISSIONS),
       ...Object.values(DOCUMENT_PERMISSIONS),
+      ...Object.values(PHONE_PERMISSIONS),
     ];
     expect(rbacPolicy.Admin.sort()).toEqual(allPermissions.sort());
   });
