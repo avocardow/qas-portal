@@ -21,7 +21,7 @@
 5. Test error handling for network issues and permission problems
 
 # Subtasks:
-## 1. Set Up Microsoft Teams API Integration and Permissions [pending]
+## 1. Set Up Microsoft Teams API Integration and Permissions [done]
 ### Dependencies: None
 ### Description: Configure Microsoft Graph API access and ensure the application has the necessary permissions to read and send Teams chat messages.
 ### Details:

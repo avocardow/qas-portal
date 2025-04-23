@@ -229,7 +229,7 @@
           "id": 1,
           "title": "Set Up Microsoft Teams API Integration and Permissions",
           "description": "Configure Microsoft Graph API access and ensure the application has the necessary permissions to read and send Teams chat messages.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Register the application in Azure AD, configure required API permissions (`Chat.ReadWrite`, `User.Read.All`), and set up authentication flows. Ensure admin consent is granted for these permissions so the backend can interact with Teams chat endpoints."
         },
