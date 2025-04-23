@@ -2,6 +2,7 @@ import {
   AUDIT_PERMISSIONS,
   TASK_PERMISSIONS,
   DOCUMENT_PERMISSIONS,
+  PHONE_PERMISSIONS,
 } from "@/constants/permissions";
 
 export type Role = "Admin" | "Manager" | "Auditor" | "Staff" | "Client";
@@ -24,6 +25,7 @@ export const rbacPolicy: Record<Role, string[]> = {
     ...Object.values(AUDIT_PERMISSIONS),
     ...Object.values(TASK_PERMISSIONS),
     ...Object.values(DOCUMENT_PERMISSIONS),
+    ...Object.values(PHONE_PERMISSIONS),
   ],
   Manager: [
     ...Object.values(AUDIT_PERMISSIONS),
