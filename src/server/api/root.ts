@@ -24,7 +24,7 @@ import { chatRouter } from "@/server/api/routers/chat";
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
   user: userRouter,
-  client: clientRouter,
+  clients: clientRouter,
   contact: contactRouter,
   license: licenseRouter,
   trustAccount: trustAccountRouter,
