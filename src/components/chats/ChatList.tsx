@@ -21,7 +21,8 @@ export default function ChatList({
   } = api.chat.listRecent.useInfiniteQuery(
     {},
     {
-      getNextPageParam: (lastPage) => lastPage.nextSkip,
+      getNextPageParam: (lastPage: { nextSkip: number | null }) =>
+        lastPage.nextSkip,
     }
   );
 
