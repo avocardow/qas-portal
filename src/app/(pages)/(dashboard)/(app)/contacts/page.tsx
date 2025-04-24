@@ -37,12 +37,8 @@ export default function ContactsPage() {
     undefined
   );
   const [pageIndex, setPageIndex] = useState(0);
-  // Protect view based on role
-  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
-    return <p>You are not authorized to view contacts.</p>;
-  }
 
-  // Fetch paginated data with current controls
+  // Fetch paginated data with current controls (always call the hook before any conditional returns)
   const contactsQuery = api.contact.getAll.useQuery({
     take: pageSize,
     cursor: currentCursor,
@@ -54,6 +50,11 @@ export default function ContactsPage() {
   const nextCursor = contactsQuery.data?.nextCursor;
   const isLoading = contactsQuery.isLoading;
   const error = contactsQuery.error;
+
+  // Protect view based on role
+  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
+    return <p>You are not authorized to view contacts.</p>;
+  }
 
   // Handlers for pagination and sorting
   const handleNext = () => {
