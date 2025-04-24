@@ -172,8 +172,9 @@ export const chatRouter = createTRPCRouter({
   listTeamMembers: protectedProcedure.query(async () => {
     try {
       const graphClient = new GraphClient();
+      // Advanced query requires $count=true and ConsistencyLevel header
       const path =
-        "/users?$filter=endswith(mail,'@qaspecialists.com.au')&$top=999";
+        "/users?$count=true&$filter=endswith(mail,'@qaspecialists.com.au')&$top=999";
       const response = await graphClient.get<{
         value: Array<{ id: string; displayName: string; mail: string }>;
       }>(path);

@@ -157,7 +157,7 @@ describe("chatRouter", () => {
       { id: "u2", name: "User Two", email: "two@qaspecialists.com.au" },
     ]);
     expect(GraphClient.prototype.get).toHaveBeenCalledWith(
-      "/users?$filter=endswith(mail,'@qaspecialists.com.au')&$top=999"
+      "/users?$count=true&$filter=endswith(mail,'@qaspecialists.com.au')&$top=999"
     );
   });
 });
