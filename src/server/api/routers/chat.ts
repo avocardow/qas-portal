@@ -122,9 +122,9 @@ export const chatRouter = createTRPCRouter({
   createOneToOne: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .mutation(async ({ input, ctx }) => {
+      const graphClient = new GraphClient();
+      const initiatorId = ctx.session.user.id;
       try {
-        const graphClient = new GraphClient();
-        const initiatorId = ctx.session.user.id;
         const chat = await graphClient.post<{ id: string }>(`/chats`, {
           chatType: "oneOnOne",
           members: [
@@ -145,9 +145,40 @@ export const chatRouter = createTRPCRouter({
         return { id: chat.id };
       } catch (error) {
         console.error("[chatRouter.createOneToOne] GraphClient error:", error);
+        // Disable explicit any for error object cast
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const err = error as any;
+        const errorMessage = String(err.message || "");
+        const errorBody = String(err.body || "");
+        if (
+          errorMessage === "AclCheckFailed" ||
+          errorBody.includes("RosterCreationNotAllowed")
+        ) {
+          try {
+            // List existing one-on-one chats for initiator
+            const listPath = `/users/${initiatorId}/chats?$filter=chatType eq 'oneOnOne'&$expand=members&$count=true&$top=999`;
+            const list = await graphClient.get<{
+              value: Array<{
+                id: string;
+                members: Array<{ user: { id: string } }>;
+              }>;
+            }>(listPath);
+            const existing = list.value.find((c) =>
+              c.members.some((m) => m.user.id === input.userId)
+            );
+            if (existing) {
+              return { id: existing.id };
+            }
+          } catch (fallbackError) {
+            console.error(
+              "[chatRouter.createOneToOne] fallback error:",
+              fallbackError
+            );
+          }
+        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create one-to-one chat",
+          message: "Failed to create or retrieve one-to-one chat",
         });
       }
     }),
