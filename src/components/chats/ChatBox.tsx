@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import ChatBoxHeader from "./ChatBoxHeader";
 import { api } from "@/utils/api";
@@ -68,7 +69,7 @@ export default function ChatBox({ selectedChatId }: ChatBoxProps) {
         />
         <button
           type="submit"
-          disabled={!messageContent || sendMessage.isLoading}
+          disabled={!messageContent || sendMessage.status === "pending"}
           className="ml-2 rounded bg-blue-500 p-2 text-white"
         >
           Send

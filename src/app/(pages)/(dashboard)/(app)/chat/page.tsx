@@ -1,14 +1,8 @@
+"use client";
 import React, { useState } from "react";
 import ChatSidebar from "@/components/chats/ChatSidebar";
 import ChatBox from "@/components/chats/ChatBox";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Dashboard Chats | TailAdmin - Next.js Dashboard Template",
-  description:
-    "Chats page within the Dashboard section modeled after TailAdmin template",
-};
 
 export default function ChatPage() {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);

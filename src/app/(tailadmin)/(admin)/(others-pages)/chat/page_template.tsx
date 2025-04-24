@@ -18,7 +18,7 @@ export default function Chat() {
       <div className="h-[calc(100vh-150px)] overflow-hidden sm:h-[calc(100vh-174px)]">
         <div className="flex h-full flex-col gap-6 xl:flex-row xl:gap-5">
           {/* <!-- Chat Sidebar Start --> */}
-          <ChatSidebar />
+          <ChatSidebar onSelectChat={() => {}} />
           {/* <!-- Chat Sidebar End --> */}
           {/* <!-- Chat Box Start --> */}
           <ChatBox />

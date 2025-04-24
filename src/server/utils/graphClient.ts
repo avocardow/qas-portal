@@ -52,11 +52,14 @@ export class GraphClient {
    */
   public async get<T>(path: string): Promise<T> {
     const request = await this.api(path);
-    // If using advanced queries (e.g., endswith, startswith), Graph requires ConsistencyLevel header
+    // If using advanced queries (e.g., $count, $expand, endswith, startswith, members/any), Graph requires ConsistencyLevel header
     if (
+      path.includes("$count") ||
+      path.includes("$expand") ||
       path.includes("endswith(") ||
       path.includes("startswith(") ||
-      path.includes("substringof(")
+      path.includes("substringof(") ||
+      path.includes("members/any")
     ) {
       request.header("ConsistencyLevel", "eventual");
     }
