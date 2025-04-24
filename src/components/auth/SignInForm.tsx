@@ -155,17 +155,6 @@ export default function SignInForm() {
                 </button>
               </div>
             </div>
-            {/* Separator on Mobile */}
-            <div className="relative py-3 sm:hidden">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-slate-50 p-2 text-gray-400 dark:bg-slate-900">
-                  Or
-                </span>
-              </div>
-            </div>
           </div>{" "}
           {/* Parent Div 2 End */}
         </div>{" "}

@@ -10,13 +10,18 @@ export const chatRouter = createTRPCRouter({
         .object({ skip: z.number().optional(), take: z.number().optional() })
         .optional()
     )
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const skip = input?.skip ?? 0;
       const take = input?.take ?? 20;
+      // Use authenticated user's chats
+      const userId = ctx.session.user.id;
+      const basePath = `/users/${userId}/chats`;
       try {
         const graphClient = new GraphClient();
         const path =
-          input === undefined ? `/chats` : `/chats?$top=${take}&$skip=${skip}`;
+          input === undefined
+            ? basePath
+            : `${basePath}?$top=${take}&$skip=${skip}`;
         const response = await graphClient.get<{
           value: Array<{
             id: string;
@@ -34,7 +39,9 @@ export const chatRouter = createTRPCRouter({
         }
         const nextSkip = response.value.length === take ? skip + take : null;
         return { chats, nextSkip };
-      } catch {
+      } catch (error) {
+        // Log full error for debugging
+        console.error("[chatRouter.listRecent] GraphClient error:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to list recent chats",

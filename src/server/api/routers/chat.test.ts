@@ -37,7 +37,9 @@ describe("chatRouter", () => {
         lastUpdatedDateTime: "2024-01-01T00:00:00Z",
       },
     ]);
-    expect(GraphClient.prototype.get).toHaveBeenCalledWith(`/chats`);
+    expect(GraphClient.prototype.get).toHaveBeenCalledWith(
+      `/users/${ctx.session.user.id}/chats`
+    );
   });
 
   it("should handle listRecent error", async () => {
