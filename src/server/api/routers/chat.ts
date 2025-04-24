@@ -172,7 +172,7 @@ export const chatRouter = createTRPCRouter({
         ) {
           try {
             // List existing one-on-one chats for initiator
-            const listPath = `/users/${initiatorId}/chats?$filter=chatType eq 'oneOnOne'&$expand=members&$count=true&$top=50`;
+            const listPath = `/users/${initiatorId}/chats?$filter=chatType eq 'oneOnOne'&$expand=members&$top=50`;
             const list = await graphClient.get<{
               value: Array<{
                 id: string;
