@@ -77,14 +77,15 @@ export const chatRouter = createTRPCRouter({
             body: { content: string };
             createdDateTime: string;
           }>;
-        }>(`/chats/${input.chatId}/messages`);
+        }>(`/chats/${input.chatId}/messages?$count=true`);
         return response.value.map((msg) => ({
           id: msg.id,
           content: msg.body.content,
           from: { id: msg.from.user.id, name: msg.from.user.displayName },
           createdDateTime: msg.createdDateTime,
         }));
-      } catch {
+      } catch (error) {
+        console.error("[chatRouter.getMessages] GraphClient error:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to get messages",

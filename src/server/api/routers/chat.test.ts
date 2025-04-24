@@ -70,7 +70,7 @@ describe("chatRouter", () => {
       },
     ]);
     expect(GraphClient.prototype.get).toHaveBeenCalledWith(
-      `/chats/c1/messages`
+      `/chats/c1/messages?$count=true`
     );
   });
 
