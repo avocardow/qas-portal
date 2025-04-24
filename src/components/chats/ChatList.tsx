@@ -50,7 +50,12 @@ export default function ChatList({
   const { data, isLoading, isError } = api.chat.listRecent.useQuery();
   const { data: teamMembers } = api.chat.listTeamMembers.useQuery();
   // Normalize union return type from listRecent: data can be Chat[] or { chats: Chat[]; nextSkip: number | null }
-  type ChatItem = { id: string; topic: string; lastUpdatedDateTime: string };
+  type ChatItem = {
+    id: string;
+    topic: string;
+    lastUpdatedDateTime: string;
+    participantId?: string;
+  };
   let chatsArray: ChatItem[] = [];
   if (data) {
     if (Array.isArray(data)) {
@@ -63,9 +68,11 @@ export default function ChatList({
   let membersToShow: Array<ChatItem & { isNew: boolean }> = [];
   if (teamMembers) {
     // map team members to ChatItem structure
-    const existingIds = new Set(chatsArray.map((c) => c.id));
+    const existingParticipantIds = new Set(
+      chatsArray.map((c) => c.participantId).filter((id): id is string => !!id)
+    );
     const newMembers = teamMembers
-      .filter((m) => !existingIds.has(m.id))
+      .filter((m) => !existingParticipantIds.has(m.id))
       .map((m) => ({
         id: m.id,
         topic: m.name,

@@ -35,10 +35,11 @@ describe("chatRouter", () => {
         id: "c1",
         topic: "Topic1",
         lastUpdatedDateTime: "2024-01-01T00:00:00Z",
+        participantId: undefined,
       },
     ]);
     expect(GraphClient.prototype.get).toHaveBeenCalledWith(
-      `/users/${ctx.session.user.id}/chats`
+      `/users/${ctx.session.user.id}/chats?$expand=members`
     );
   });
 

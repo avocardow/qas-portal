@@ -18,22 +18,38 @@ export const chatRouter = createTRPCRouter({
       const basePath = `/users/${userId}/chats`;
       try {
         const graphClient = new GraphClient();
+        // Include members in the chat list to determine participant names
         const path =
           input === undefined
-            ? basePath
-            : `${basePath}?$top=${take}&$skip=${skip}`;
+            ? `${basePath}?$expand=members`
+            : `${basePath}?$expand=members&$top=${take}&$skip=${skip}`;
         const response = await graphClient.get<{
           value: Array<{
             id: string;
+            chatType: string;
             topic?: string;
             lastUpdatedDateTime?: string;
+            members?: Array<{ user: { id: string; displayName: string } }>;
           }>;
         }>(path);
-        const chats = response.value.map((chat) => ({
-          id: chat.id,
-          topic: chat.topic ?? "Chat",
-          lastUpdatedDateTime: chat.lastUpdatedDateTime ?? "",
-        }));
+        const chats = response.value.map((chat) => {
+          let topic: string;
+          let participantId: string | undefined;
+          if (chat.chatType === "oneOnOne") {
+            // For one-on-one chats, use the other participant's name
+            const other = chat.members?.find((m) => m.user.id !== userId);
+            topic = other?.user.displayName ?? "Chat";
+            participantId = other?.user.id;
+          } else {
+            topic = chat.topic ?? "Chat";
+          }
+          return {
+            id: chat.id,
+            topic,
+            lastUpdatedDateTime: chat.lastUpdatedDateTime ?? "",
+            participantId,
+          };
+        });
         if (input === undefined) {
           return chats;
         }
@@ -156,7 +172,7 @@ export const chatRouter = createTRPCRouter({
         ) {
           try {
             // List existing one-on-one chats for initiator
-            const listPath = `/users/${initiatorId}/chats?$filter=chatType eq 'oneOnOne'&$expand=members&$count=true&$top=999`;
+            const listPath = `/users/${initiatorId}/chats?$filter=chatType eq 'oneOnOne'&$expand=members&$count=true&$top=50`;
             const list = await graphClient.get<{
               value: Array<{
                 id: string;
