@@ -121,12 +121,20 @@ export const chatRouter = createTRPCRouter({
 
   createOneToOne: protectedProcedure
     .input(z.object({ userId: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       try {
         const graphClient = new GraphClient();
+        const initiatorId = ctx.session.user.id;
         const chat = await graphClient.post<{ id: string }>(`/chats`, {
           chatType: "oneOnOne",
           members: [
+            // Initiator
+            {
+              "@odata.type": "#microsoft.graph.aadUserConversationMember",
+              roles: ["owner"],
+              "user@odata.bind": `https://graph.microsoft.com/v1.0/users/${initiatorId}`,
+            },
+            // Other participant
             {
               "@odata.type": "#microsoft.graph.aadUserConversationMember",
               roles: ["owner"],

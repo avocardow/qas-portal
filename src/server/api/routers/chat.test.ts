@@ -100,7 +100,7 @@ describe("chatRouter", () => {
     );
   });
 
-  it("should create one-to-one chat", async () => {
+  it("should create one-to-one chat with two members (initiator + target)", async () => {
     vi.spyOn(GraphClient.prototype, "post").mockResolvedValue({ id: "chat1" });
     const caller = callChat(ctx);
     const result = await caller.createOneToOne({ userId: "u1" });
@@ -108,6 +108,11 @@ describe("chatRouter", () => {
     expect(GraphClient.prototype.post).toHaveBeenCalledWith(`/chats`, {
       chatType: "oneOnOne",
       members: [
+        {
+          "@odata.type": "#microsoft.graph.aadUserConversationMember",
+          roles: ["owner"],
+          "user@odata.bind": `https://graph.microsoft.com/v1.0/users/${ctx.session.user.id}`,
+        },
         {
           "@odata.type": "#microsoft.graph.aadUserConversationMember",
           roles: ["owner"],
