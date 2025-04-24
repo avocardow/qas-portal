@@ -48,6 +48,7 @@ export default function ChatList({
     },
   });
   const { data, isLoading, isError } = api.chat.listRecent.useQuery();
+  const { data: teamMembers } = api.chat.listTeamMembers.useQuery();
   // Normalize union return type from listRecent: data can be Chat[] or { chats: Chat[]; nextSkip: number | null }
   type ChatItem = { id: string; topic: string; lastUpdatedDateTime: string };
   let chatsArray: ChatItem[] = [];
@@ -57,6 +58,24 @@ export default function ChatList({
     } else {
       chatsArray = data.chats;
     }
+  }
+  // Combine recent chats with team members not yet chatted
+  let membersToShow: Array<ChatItem & { isNew: boolean }> = [];
+  if (teamMembers) {
+    // map team members to ChatItem structure
+    const existingIds = new Set(chatsArray.map((c) => c.id));
+    const newMembers = teamMembers
+      .filter((m) => !existingIds.has(m.id))
+      .map((m) => ({
+        id: m.id,
+        topic: m.name,
+        lastUpdatedDateTime: "",
+        isNew: true,
+      }));
+    const existingChats = chatsArray.map((c) => ({ ...c, isNew: false }));
+    membersToShow = [...existingChats, ...newMembers];
+  } else {
+    membersToShow = chatsArray.map((c) => ({ ...c, isNew: false }));
   }
 
   return (
@@ -75,15 +94,18 @@ export default function ChatList({
           {isLoading && <p>Loading chats...</p>}
           {isError && <p>Error loading chats.</p>}
           <ul className="space-y-2 overflow-auto">
-            {chatsArray.map((chat) => (
+            {membersToShow.map((chat) => (
               <li
                 key={chat.id}
-                className={`cursor-pointer p-2 hover:bg-gray-100 ${
+                className={`flex cursor-pointer items-center justify-between p-2 hover:bg-gray-100 ${
                   selectedChatId === chat.id ? "bg-gray-200" : ""
-                }`}
+                } ${chat.isNew ? "italic opacity-50" : ""}`}
                 onClick={() => onSelectChat(chat.id)}
               >
-                {chat.topic}
+                <span>{chat.topic}</span>
+                {chat.isNew && (
+                  <span className="text-xs text-gray-500">New</span>
+                )}
               </li>
             ))}
           </ul>
