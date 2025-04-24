@@ -52,6 +52,14 @@ export class GraphClient {
    */
   public async get<T>(path: string): Promise<T> {
     const request = await this.api(path);
+    // If using advanced queries (e.g., endswith, startswith), Graph requires ConsistencyLevel header
+    if (
+      path.includes("endswith(") ||
+      path.includes("startswith(") ||
+      path.includes("substringof(")
+    ) {
+      request.header("ConsistencyLevel", "eventual");
+    }
     const result = await request.get();
     return result as T;
   }
