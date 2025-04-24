@@ -135,7 +135,8 @@ export const chatRouter = createTRPCRouter({
           ],
         });
         return { id: chat.id };
-      } catch {
+      } catch (error) {
+        console.error("[chatRouter.createOneToOne] GraphClient error:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create one-to-one chat",
@@ -166,4 +167,27 @@ export const chatRouter = createTRPCRouter({
         });
       }
     }),
+
+  // Fetch all team members in the @qaspecialists.com.au domain
+  listTeamMembers: protectedProcedure.query(async () => {
+    try {
+      const graphClient = new GraphClient();
+      const path =
+        "/users?$filter=endswith(mail,'@qaspecialists.com.au')&$top=999";
+      const response = await graphClient.get<{
+        value: Array<{ id: string; displayName: string; mail: string }>;
+      }>(path);
+      return response.value.map((user) => ({
+        id: user.id,
+        name: user.displayName,
+        email: user.mail,
+      }));
+    } catch (error) {
+      console.error("[chatRouter.listTeamMembers] GraphClient error:", error);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to list team members",
+      });
+    }
+  }),
 });

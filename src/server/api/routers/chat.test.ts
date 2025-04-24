@@ -143,4 +143,21 @@ describe("chatRouter", () => {
       members,
     });
   });
+
+  it("should list team members", async () => {
+    const users = [
+      { id: "u1", displayName: "User One", mail: "one@qaspecialists.com.au" },
+      { id: "u2", displayName: "User Two", mail: "two@qaspecialists.com.au" },
+    ];
+    vi.spyOn(GraphClient.prototype, "get").mockResolvedValue({ value: users });
+    const caller = callChat(ctx);
+    const result = await caller.listTeamMembers();
+    expect(result).toEqual([
+      { id: "u1", name: "User One", email: "one@qaspecialists.com.au" },
+      { id: "u2", name: "User Two", email: "two@qaspecialists.com.au" },
+    ]);
+    expect(GraphClient.prototype.get).toHaveBeenCalledWith(
+      "/users?$filter=endswith(mail,'@qaspecialists.com.au')&$top=999"
+    );
+  });
 });
