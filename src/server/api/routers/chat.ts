@@ -110,7 +110,8 @@ export const chatRouter = createTRPCRouter({
           name: user.displayName,
           email: user.mail,
         }));
-      } catch {
+      } catch (error) {
+        console.error("[chatRouter.findUsers] GraphClient error:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to find users",
