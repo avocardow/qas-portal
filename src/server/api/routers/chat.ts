@@ -77,7 +77,7 @@ export const chatRouter = createTRPCRouter({
             body: { content: string };
             createdDateTime: string;
           }>;
-        }>(`/chats/${input.chatId}/messages?$count=true`);
+        }>(`/chats/${input.chatId}/messages`);
         return response.value.map((msg) => ({
           id: msg.id,
           content: msg.body.content,
