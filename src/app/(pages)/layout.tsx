@@ -43,9 +43,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} overscroll-none bg-slate-50 transition-colors duration-300 ease-in-out dark:bg-slate-900`}
       >
-        <Providers>
-          <div className="container mx-auto min-h-screen px-4">{children}</div>
-        </Providers>
+        <Providers>{children}</Providers>
         <SpeedInsights />
         <Analytics />
       </body>

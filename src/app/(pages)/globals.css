@@ -167,24 +167,6 @@
   --z-index-999999: 999999;
 }
 
-// Theme color variables
-:root {
-  --color-primary: #1a1a1a;
-  --color-surface: #ffffff;
-  --color-surface-accent: #f3f4f6;
-  --color-border: #e5e7eb;
-  --color-text-primary: #111827;
-  --color-text-secondary: #4b5563;
-}
-.dark {
-  --color-primary: #f3f4f6;
-  --color-surface: #121212;
-  --color-surface-accent: #1e1e1e;
-  --color-border: #2e2e2e;
-  --color-text-primary: #f9fafb;
-  --color-text-secondary: #9ca3af;
-}
-
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

@@ -42,7 +42,7 @@ const AppHeader: React.FC = () => {
   }, []);
 
   return (
-    <header className="border-surface bg-surface sticky top-0 z-99999 flex w-full transition-colors duration-300 ease-in-out lg:border-b">
+    <header className="sticky top-0 z-99999 flex w-full border-gray-200 bg-white transition-colors duration-300 ease-in-out lg:border-b dark:border-gray-800 dark:bg-gray-900">
       <div className="flex grow flex-col items-center justify-between lg:flex-row lg:px-6">
         <div className="flex w-full items-center justify-between gap-2 border-b border-gray-200 p-3 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4 dark:border-gray-800">
           <button
@@ -84,7 +84,7 @@ const AppHeader: React.FC = () => {
             {/* Cross Icon */}
           </button>
 
-          <Link href="/" className="md:hidden">
+          <Link href="/" className="lg:hidden">
             <Image
               width={154}
               height={32}
@@ -103,7 +103,7 @@ const AppHeader: React.FC = () => {
 
           <button
             onClick={toggleApplicationMenu}
-            className="z-99999 flex size-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800"
+            className="z-99999 flex size-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
           >
             <svg
               width="24"
@@ -158,7 +158,7 @@ const AppHeader: React.FC = () => {
         <div
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
-          } shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 md:flex md:justify-end md:px-0 md:shadow-none`}
+          } shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 lg:flex lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="2xsm:gap-3 flex items-center gap-2">
             {/* <!-- Dark Mode Toggler --> */}
