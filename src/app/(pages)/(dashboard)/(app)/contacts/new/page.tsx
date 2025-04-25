@@ -26,7 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function NewContactPage() {
   // Hooks must run unconditionally
   const { role } = useRbac();
-  const { data: clientsList } = api.clients.getAll.useQuery({ take: 100 });
+  const { data: clientsList } = api.clients.getAll.useQuery({ pageSize: 1000 });
   const router = useRouter();
   const {
     register,
