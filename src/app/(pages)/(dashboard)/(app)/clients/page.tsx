@@ -31,7 +31,9 @@ export default function ClientsPage() {
   const utils = api.useUtils(); // Get tRPC utils for pre-fetching
 
   // Fetch paginated data with current controls
-  const statusFilter = showAll ? undefined : "active";
+  const statusFilter: "active" | "prospect" | "archived" | undefined = showAll
+    ? undefined
+    : "active";
   const clientsQuery = api.clients.getAll.useQuery(
     {
       page: currentPage,
