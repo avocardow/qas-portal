@@ -14,6 +14,7 @@ const clientGetAllSchema = z.object({
   filter: z.string().optional(),
   sortBy: z.enum(["clientName", "city", "status"]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
+  statusFilter: z.enum(["prospect", "active", "archived"]).optional(),
 });
 const clientByIdSchema = z.object({ clientId: z.string().uuid() });
 const clientCreateSchema = z.object({
@@ -64,12 +65,16 @@ export const clientRouter = createTRPCRouter({
         filter,
         sortBy = "clientName",
         sortOrder = "asc",
+        statusFilter,
       } = input;
       const items = await ctx.db.client.findMany({
         take,
         skip: cursor ? 1 : 0,
         cursor: cursor ? { id: cursor } : undefined,
-        where: { clientName: { contains: filter || "" } },
+        where: {
+          clientName: { contains: filter || "" },
+          ...(statusFilter ? { status: statusFilter } : {}),
+        },
         orderBy: { [sortBy]: sortOrder },
         select: {
           id: true,
