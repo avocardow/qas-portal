@@ -110,13 +110,39 @@ export default function ClientsPage() {
         key: "estAnnFees",
         header: "Fees",
         sortable: true,
-        cell: (row: any) => row.estAnnFees?.toString() ?? "-",
+        cell: (row: any) =>
+          row.estAnnFees != null
+            ? new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+              }).format(row.estAnnFees)
+            : "-",
       });
       cols.push({
         key: "status",
         header: "Status",
         sortable: true,
-        cell: (row: any) => <Badge size="sm">{row.status}</Badge>,
+        cell: (row: any) => {
+          let color: "success" | "warning" | "error" | "info" = "info";
+          switch (row.status) {
+            case "Active":
+              color = "success";
+              break;
+            case "Pending":
+              color = "warning";
+              break;
+            case "Inactive":
+              color = "error";
+              break;
+            default:
+              color = "info";
+          }
+          return (
+            <Badge size="sm" variant="solid" color={color}>
+              {row.status}
+            </Badge>
+          );
+        },
       });
     }
     return cols;

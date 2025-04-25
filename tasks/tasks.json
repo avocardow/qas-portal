@@ -114,7 +114,7 @@
           "id": 5,
           "title": "Add Conditional Rendering for Fees and Status Columns Based on User Role",
           "description": "Implement logic to show or hide the Fees and Status columns depending on whether the user has the Admin role.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Integrate useRbac() or equivalent RBAC logic to determine the user's role. Conditionally include the Fees and Status columns in the columns array only if the user is an Admin."
         },

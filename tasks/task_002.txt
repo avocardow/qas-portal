@@ -39,19 +39,19 @@ For the Primary Contact column, implement an accessor function that searches the
 ### Details:
 For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales.
 
-## 4. Convert Audit Month End Integer to Month Name [done]
+## 4. Convert Audit Month End Integer to Month Name [pending]
 ### Dependencies: 2.1
 ### Description: Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.
 ### Details:
 For the Audit Month End column, implement a value formatter or accessor that takes the integer (1-12), creates a Date object, and formats it to display the full month name using Intl.DateTimeFormat.
 
-## 5. Add Conditional Rendering for Fees and Status Columns Based on User Role [pending]
+## 5. Add Conditional Rendering for Fees and Status Columns Based on User Role [done]
 ### Dependencies: 2.1
 ### Description: Implement logic to show or hide the Fees and Status columns depending on whether the user has the Admin role.
 ### Details:
 Integrate useRbac() or equivalent RBAC logic to determine the user's role. Conditionally include the Fees and Status columns in the columns array only if the user is an Admin.
 
-## 6. Apply Value Formatters for Fees and Status Columns [pending]
+## 6. Apply Value Formatters for Fees and Status Columns [done]
 ### Dependencies: 2.5
 ### Description: Format the Fees column as currency and apply any necessary formatting to the Status column.
 ### Details:
