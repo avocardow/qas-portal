@@ -185,34 +185,33 @@ export default function ClientsPage() {
           {isLoading && <p>Loading clients...</p>}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
-            <>
-              {/* Show All toggle and status badge next to table search */}
-              <div className="mb-4 flex items-center space-x-2">
-                {role === "Admin" && (
-                  <label className="inline-flex items-center space-x-1">
-                    <input
-                      type="checkbox"
-                      checked={showAll}
-                      onChange={() => setShowAll((prev) => !prev)}
-                      className="form-checkbox h-4 w-4 text-blue-600"
-                    />
-                    <span>Show All</span>
-                  </label>
-                )}
-                {role === "Admin" && (
-                  <Badge size="sm" color={showAll ? "info" : "success"}>
-                    {showAll ? "All Clients" : "Active Clients"}
-                  </Badge>
-                )}
-              </div>
-              <div className="custom-scrollbar max-w-full overflow-x-auto">
-                <DataTableTwo
-                  data={items}
-                  columns={columns}
-                  onView={(row: any) => router.push(`/clients/${row.id}`)}
-                />
-              </div>
-            </>
+            <div className="custom-scrollbar max-w-full overflow-x-auto">
+              <DataTableTwo
+                data={items}
+                columns={columns}
+                onView={(row: any) => router.push(`/clients/${row.id}`)}
+                extraControls={
+                  <>
+                    {role === "Admin" && (
+                      <label className="inline-flex items-center space-x-1">
+                        <input
+                          type="checkbox"
+                          checked={showAll}
+                          onChange={() => setShowAll((prev) => !prev)}
+                          className="form-checkbox h-4 w-4 text-blue-600"
+                        />
+                        <span>Show All</span>
+                      </label>
+                    )}
+                    {role === "Admin" && (
+                      <Badge size="sm" color={showAll ? "info" : "success"}>
+                        {showAll ? "All Clients" : "Active Clients"}
+                      </Badge>
+                    )}
+                  </>
+                }
+              />
+            </div>
           )}
         </ComponentCard>
       </div>

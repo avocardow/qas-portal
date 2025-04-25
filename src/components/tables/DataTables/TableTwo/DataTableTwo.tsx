@@ -29,6 +29,7 @@ export interface DataTableTwoProps {
   onView?: (row: any) => void;
   searchFn?: (term: string, signal: AbortSignal) => Promise<any[]>;
   searchDelay?: number;
+  extraControls?: React.ReactNode;
 }
 
 // Original static data fallback
@@ -131,6 +132,7 @@ export default function DataTableTwo({
   onView,
   searchFn,
   searchDelay = 300,
+  extraControls,
 }: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -214,80 +216,96 @@ export default function DataTableTwo({
 
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
-      <div className="flex flex-col gap-2 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
-        <div className="flex items-center gap-3">
-          <span className="text-gray-500 dark:text-gray-400"> Show </span>
-          <div className="relative z-20 bg-transparent">
-            <select
-              className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none py-2 pr-8 pl-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-              value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}
-            >
-              {[5, 8, 10].map((value) => (
-                <option
-                  key={value}
-                  value={value}
-                  className="text-gray-500 dark:bg-gray-900 dark:text-gray-400"
-                >
-                  {value}
-                </option>
-              ))}
-            </select>
-            <span className="absolute top-1/2 right-2 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              <svg
-                className="stroke-current"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+      <div className="flex flex-col gap-4 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {" "}
+              Show{" "}
+            </span>
+            <div className="relative z-20 bg-transparent">
+              <select
+                className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none py-2 pr-8 pl-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                value={itemsPerPage}
+                onChange={(e) => setItemsPerPage(Number(e.target.value))}
               >
-                <path
-                  d="M3.8335 5.9165L8.00016 10.0832L12.1668 5.9165"
-                  stroke=""
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+                {[5, 8, 10].map((value) => (
+                  <option
+                    key={value}
+                    value={value}
+                    className="text-gray-500 dark:bg-gray-900 dark:text-gray-400"
+                  >
+                    {value}
+                  </option>
+                ))}
+              </select>
+              <span className="absolute top-1/2 right-2 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                <svg
+                  className="stroke-current"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.8335 5.9165L8.00016 10.0832L12.1668 5.9165"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              </span>
+            </div>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {" "}
+              entries{" "}
             </span>
           </div>
-          <span className="text-gray-500 dark:text-gray-400"> entries </span>
+
+          {extraControls && (
+            <div className="flex items-center space-x-2">{extraControls}</div>
+          )}
         </div>
 
-        <div className="relative">
-          <button className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search here..."
+            className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2 pr-9 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+          />
+          <span className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
             <svg
               className="fill-current"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 fillRule="evenodd"
                 clipRule="evenodd"
-                d="M3.04199 9.37363C3.04199 5.87693 5.87735 3.04199 9.37533 3.04199C12.8733 3.04199 15.7087 5.87693 15.7087 9.37363C15.7087 12.8703 12.8733 15.7053 9.37533 15.7053C5.87735 15.7053 3.04199 12.8703 3.04199 9.37363ZM9.37533 1.54199C5.04926 1.54199 1.54199 5.04817 1.54199 9.37363C1.54199 13.6991 5.04926 17.2053 9.37533 17.2053C11.2676 17.2053 13.0032 16.5344 14.3572 15.4176L17.1773 18.238C17.4702 18.5309 17.945 18.5309 18.2379 18.238C18.5308 17.9451 18.5309 17.4703 18.238 17.1773L15.4182 14.3573C16.5367 13.0033 17.2087 11.2669 17.2087 9.37363C17.2087 5.04817 13.7014 1.54199 9.37533 1.54199Z"
-                fill=""
-              />
+                d="M7.33358 1.3335C4.01358 1.3335 1.33358 4.0135 1.33358 7.3335C1.33358 10.6535 4.01358 13.3335 7.33358 13.3335C10.6536 13.3335 13.3336 10.6535 13.3336 7.3335C13.3336 4.0135 10.6536 1.3335 7.33358 1.3335ZM0.000244141 7.3335C0.000244141 3.2835 3.28758 0.000164843 7.33358 0.000164843C11.3796 0.000164843 14.6669 3.2835 14.6669 7.3335C14.6669 11.3835 11.3796 14.6668 7.33358 14.6668C3.28758 14.6668 0.000244141 11.3835 0.000244141 7.3335Z"
+              ></path>
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M11.6667 11.6665C11.9596 11.3736 12.4344 11.3736 12.7273 11.6665L15.7879 14.7271C16.0808 15.02 16.0808 15.4948 15.7879 15.7877C15.4949 16.0806 15.0201 16.0806 14.7272 15.7877L11.6667 12.7271C11.3737 12.4342 11.3737 11.9594 11.6667 11.6665Z"
+              ></path>
             </svg>
-          </button>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search..."
-            className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-          />
+          </span>
+          {searchLoading && (
+            <span className="ml-2 text-xs text-gray-500">Loading...</span>
+          )}
+          {searchError && (
+            <span className="ml-2 text-xs text-red-500">Error</span>
+          )}
         </div>
       </div>
-      {searchLoading && <div className="p-4 text-center">Loading...</div>}
-      {searchError && (
-        <div className="p-4 text-center text-red-500">
-          Error: {searchError.message}
-        </div>
-      )}
+
       <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div>
           <Table>
@@ -372,8 +390,6 @@ export default function DataTableTwo({
 
       <div className="rounded-b-xl border border-t-0 border-gray-100 py-4 pr-4 pl-[18px] dark:border-white/[0.05]">
         <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between">
-          {/* Left side: Showing entries */}
-
           <PaginationWithButton
             totalPages={totalPages}
             initialPage={currentPage}
