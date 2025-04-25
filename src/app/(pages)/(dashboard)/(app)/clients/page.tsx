@@ -32,7 +32,7 @@ export default function ClientsPage() {
 
   // Fetch paginated data with current controls
   const clientsQuery = api.clients.getAll.useQuery(
-    { take: pageSize, filter: debouncedFilter },
+    { take: pageSize, filter: debouncedFilter, showAll },
     {
       refetchOnWindowFocus: false,
       staleTime: 600000,
