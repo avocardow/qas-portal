@@ -164,12 +164,13 @@ export default function DataTableTwo({
       <div className="flex flex-col gap-4 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {" "}
-              Show{" "}
-            </span>
+            <label htmlFor="datatable-pagesize-select" className="sr-only">
+              Entries per page
+            </label>
+            <span className="text-sm text-gray-500 dark:text-gray-400"> Show </span>
             <div className="relative z-20 bg-transparent">
               <select
+                id="datatable-pagesize-select"
                 className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none py-2 pr-8 pl-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 value={itemsPerPage}
                 onChange={(e) =>
@@ -264,6 +265,7 @@ export default function DataTableTwo({
       <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div>
           <Table>
+            <caption className="sr-only">Clients table</caption>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 {cols.map(({ key, header, sortable }) => (

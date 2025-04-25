@@ -165,4 +165,25 @@ describe("DataTableTwo accessibility", () => {
       expect(headerName).toHaveAttribute("aria-sort", "descending");
     });
   });
+
+  it("renders a caption for screen readers for accessibility", () => {
+    // Render with caption in DataTableTwo
+    const columns = [{ key: "name", header: "Name", sortable: true }];
+    const data = [{ id: 1, name: "Alice" }];
+    render(
+      <DataTableTwo
+        data={data}
+        columns={columns}
+        onView={() => {}}
+        totalDbEntries={1}
+        currentPage={1}
+        pageSize={10}
+        searchTerm=""
+        setSearchTerm={() => {}}
+      />
+    );
+    // The caption should be present but only visible to screen readers
+    const caption = screen.getByText("Clients table");
+    expect(caption.tagName).toBe("CAPTION");
+  });
 });
