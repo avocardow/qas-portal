@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Integrate DataTableTwo UI Component",
       "description": "Replace the current Table markup with DataTableTwo component in the Clients List page",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "1. Import DataTableTwo from src/components/tables/DataTables/TableTwo/DataTableTwo.tsx\n2. Remove existing Table component and markup\n3. Configure DataTableTwo with basic props (data, columns)\n4. Ensure responsive layout is maintained\n5. Remove row-level delete icon from current implementation\n6. Setup pagination using DataTableTwo's built-in functionality\n7. Implement sorting indicators as per DataTableTwo documentation",
@@ -38,7 +38,7 @@
           "id": 4,
           "title": "Ensure Responsive Layout",
           "description": "Verify and adjust the layout to maintain responsiveness after integrating DataTableTwo.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Test the page on various screen sizes. Adjust container classes, DataTableTwo props, or parent layout as needed to ensure the table remains responsive and visually consistent with the rest of the UI."
         },
@@ -46,7 +46,7 @@
           "id": 5,
           "title": "Remove Row-Level Delete Icon",
           "description": "Remove the row-level delete icon from the new DataTableTwo implementation.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Ensure that the columns configuration for DataTableTwo does not include a delete icon or delete action. If present, remove the relevant column or cell renderer."
         },
@@ -54,7 +54,7 @@
           "id": 6,
           "title": "Set Up Pagination Using DataTableTwo",
           "description": "Enable and configure pagination using DataTableTwo's built-in pagination functionality.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Consult DataTableTwo documentation to enable pagination. Pass the necessary pagination props (such as page size, current page, and handlers) to the component. Test to confirm pagination works as expected."
         },
@@ -62,7 +62,7 @@
           "id": 7,
           "title": "Implement Sorting Indicators",
           "description": "Add sorting indicators to columns as specified in the DataTableTwo documentation.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [3],
           "details": "Update the columns configuration to enable sorting. Ensure sorting indicators are visible and functional, following DataTableTwo's recommended approach for sortable columns."
         }

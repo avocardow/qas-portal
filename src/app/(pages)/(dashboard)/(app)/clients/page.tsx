@@ -26,19 +26,10 @@ export default function ClientsPage() {
   // Debounce filter input to optimize queries
   const debouncedFilter = useDebounce(filter, 500);
   const [pageSize] = useState(10);
-  const [cursors, setCursors] = useState<(string | undefined)[]>([]);
-  const [currentCursor, setCurrentCursor] = useState<string | undefined>(
-    undefined
-  );
-  const [pageIndex, setPageIndex] = useState(0);
 
   // Fetch paginated data with current controls
   const clientsQuery = api.clients.getAll.useQuery(
-    {
-      take: pageSize,
-      cursor: currentCursor,
-      filter: debouncedFilter,
-    },
+    { take: pageSize, filter: debouncedFilter },
     {
       refetchOnWindowFocus: false,
       staleTime: 600000,
@@ -46,7 +37,6 @@ export default function ClientsPage() {
   );
 
   const items = clientsQuery.data?.items;
-  const nextCursor = clientsQuery.data?.nextCursor;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
 
@@ -131,25 +121,6 @@ export default function ClientsPage() {
     return <p>You are not authorized to view clients.</p>;
   }
 
-  // Handlers for pagination
-  const handleNext = () => {
-    if (nextCursor) {
-      setCursors((prev) => [...prev, currentCursor]);
-      setCurrentCursor(nextCursor);
-      setPageIndex((idx) => idx + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (pageIndex > 0) {
-      const prevCursors = [...cursors];
-      const prev = prevCursors.pop();
-      setCursors(prevCursors);
-      setCurrentCursor(prev);
-      setPageIndex((idx) => idx - 1);
-    }
-  };
-
   return (
     <div>
       {/* Filter, Add New, and pagination controls */}
@@ -172,22 +143,6 @@ export default function ClientsPage() {
             </Link>
           )}
         </div>
-        <div className="space-x-2">
-          <button
-            onClick={handlePrev}
-            disabled={pageIndex === 0}
-            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-          >
-            Prev
-          </button>
-          <button
-            onClick={handleNext}
-            disabled={!nextCursor}
-            className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-          >
-            Next
-          </button>
-        </div>
       </div>
       <PageBreadcrumb pageTitle="Clients" />
       <div className="space-y-6">
@@ -203,7 +158,7 @@ export default function ClientsPage() {
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
             <div className="custom-scrollbar max-w-full overflow-x-auto">
-              <DataTableTwo data={items} columns={columns} />
+              <DataTableTwo data={items} columns={columns} hideDeleteIcon />
             </div>
           )}
         </ComponentCard>

@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Integrate DataTableTwo UI Component
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Replace the current Table markup with DataTableTwo component in the Clients List page
@@ -91,25 +91,25 @@ To remove the existing Table markup, follow these steps:
 ### Details:
 Prepare the data and columns objects according to DataTableTwo's API. Pass them as props to DataTableTwo. Ensure column definitions match the previous table's structure and requirements.
 
-## 4. Ensure Responsive Layout [pending]
+## 4. Ensure Responsive Layout [done]
 ### Dependencies: 1.3
 ### Description: Verify and adjust the layout to maintain responsiveness after integrating DataTableTwo.
 ### Details:
 Test the page on various screen sizes. Adjust container classes, DataTableTwo props, or parent layout as needed to ensure the table remains responsive and visually consistent with the rest of the UI.
 
-## 5. Remove Row-Level Delete Icon [pending]
+## 5. Remove Row-Level Delete Icon [done]
 ### Dependencies: 1.3
 ### Description: Remove the row-level delete icon from the new DataTableTwo implementation.
 ### Details:
 Ensure that the columns configuration for DataTableTwo does not include a delete icon or delete action. If present, remove the relevant column or cell renderer.
 
-## 6. Set Up Pagination Using DataTableTwo [pending]
+## 6. Set Up Pagination Using DataTableTwo [done]
 ### Dependencies: 1.3
 ### Description: Enable and configure pagination using DataTableTwo's built-in pagination functionality.
 ### Details:
 Consult DataTableTwo documentation to enable pagination. Pass the necessary pagination props (such as page size, current page, and handlers) to the component. Test to confirm pagination works as expected.
 
-## 7. Implement Sorting Indicators [pending]
+## 7. Implement Sorting Indicators [done]
 ### Dependencies: 1.3
 ### Description: Add sorting indicators to columns as specified in the DataTableTwo documentation.
 ### Details:

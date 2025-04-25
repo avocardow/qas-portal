@@ -28,6 +28,7 @@ export interface ColumnDef {
 export interface DataTableTwoProps {
   data?: any[];
   columns?: ColumnDef[];
+  hideDeleteIcon?: boolean;
 }
 
 // Original static data fallback
@@ -124,7 +125,11 @@ const staticTableData = [
   },
 ];
 
-export default function DataTableTwo({ data, columns }: DataTableTwoProps) {
+export default function DataTableTwo({
+  data,
+  columns,
+  hideDeleteIcon = false,
+}: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortKey, setSortKey] = useState<string>(
@@ -321,9 +326,11 @@ export default function DataTableTwo({ data, columns }: DataTableTwoProps) {
                   ))}
                   <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
                     <div className="flex w-full items-center gap-2">
-                      <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">
-                        <TrashBinIcon />
-                      </button>
+                      {!hideDeleteIcon && (
+                        <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">
+                          <TrashBinIcon />
+                        </button>
+                      )}
                       <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
                         <PencilIcon />
                       </button>
