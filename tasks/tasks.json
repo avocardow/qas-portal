@@ -106,7 +106,7 @@
           "id": 4,
           "title": "Convert Audit Month End Integer to Month Name",
           "description": "Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "For the Audit Month End column, implement a value formatter or accessor that takes the integer (1-12), creates a Date object, and formats it to display the full month name using Intl.DateTimeFormat."
         },

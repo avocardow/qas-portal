@@ -39,7 +39,7 @@ For the Primary Contact column, implement an accessor function that searches the
 ### Details:
 For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales.
 
-## 4. Convert Audit Month End Integer to Month Name [pending]
+## 4. Convert Audit Month End Integer to Month Name [done]
 ### Dependencies: 2.1
 ### Description: Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.
 ### Details:

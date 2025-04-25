@@ -97,9 +97,9 @@ export default function ClientsPage() {
         sortable: true,
         cell: (row: any) =>
           row.auditMonthEnd
-            ? new Date(2000, row.auditMonthEnd - 1).toLocaleString("default", {
-                month: "short",
-              })
+            ? new Intl.DateTimeFormat("default", { month: "short" }).format(
+                new Date(2000, row.auditMonthEnd - 1)
+              )
             : "-",
       },
     ],
