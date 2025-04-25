@@ -84,7 +84,11 @@ export default function ClientsPage() {
         sortable: true,
         cell: (row: any) =>
           row.nextContactDate
-            ? new Date(row.nextContactDate).toLocaleDateString()
+            ? new Date(row.nextContactDate).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+              })
             : "-",
       },
       {
@@ -94,7 +98,7 @@ export default function ClientsPage() {
         cell: (row: any) =>
           row.auditMonthEnd
             ? new Date(2000, row.auditMonthEnd - 1).toLocaleString("default", {
-                month: "long",
+                month: "short",
               })
             : "-",
       },
@@ -115,6 +119,8 @@ export default function ClientsPage() {
             ? new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
               }).format(row.estAnnFees)
             : "-",
       });
