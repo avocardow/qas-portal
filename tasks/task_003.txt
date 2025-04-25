@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Implement View Action Button
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Add a View button/icon to each row that navigates to the client detail page
@@ -40,7 +40,7 @@ Locate the DataTableTwo component and identify the row actions slot implementati
 ### Details:
 Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.
 
-## 5. Implement responsive design for ViewActionButton [pending]
+## 5. Implement responsive design for ViewActionButton [done]
 ### Dependencies: 3.1, 3.2, 3.3
 ### Description: Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.
 ### Details:

@@ -12,6 +12,7 @@ import {
 import { AngleDownIcon, AngleUpIcon, PencilIcon } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
 import ViewActionButton from "@/components/common/ViewActionButton";
+import { useRole } from "@/context/RbacContext";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -133,6 +134,7 @@ export default function DataTableTwo({
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [searchTerm, setSearchTerm] = useState("");
+  const currentRole = useRole();
 
   // Use provided data or fallback
   const tableData = data ?? staticTableData;
@@ -322,12 +324,16 @@ export default function DataTableTwo({
                   ))}
                   <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
                     <div className="flex w-full items-center gap-2">
-                      {onView && (
-                        <ViewActionButton onClick={() => onView(item)} />
+                      {onView &&
+                        currentRole &&
+                        ["Admin", "Manager", "Client"].includes(
+                          currentRole
+                        ) && <ViewActionButton onClick={() => onView(item)} />}
+                      {currentRole === "Admin" && (
+                        <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
+                          <PencilIcon />
+                        </button>
                       )}
-                      <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
-                        <PencilIcon />
-                      </button>
                     </div>
                   </TableCell>
                 </TableRow>

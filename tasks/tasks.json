@@ -132,7 +132,7 @@
       "id": 3,
       "title": "Implement View Action Button",
       "description": "Add a View button/icon to each row that navigates to the client detail page",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [1],
       "priority": "high",
       "details": "1. Create a row action component with a View button/icon\n2. Configure the button to navigate to /clients/[clientId] on click\n3. Integrate the action component into DataTableTwo's row actions slot\n4. Apply appropriate styling according to Cursor rules\n5. Ensure the action is visible to all roles (Admin, Manager, Client)\n6. Remove any existing row-level delete functionality",
@@ -180,7 +180,7 @@
           "description": "Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.",
           "dependencies": [1, 2, 3],
           "details": "Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
