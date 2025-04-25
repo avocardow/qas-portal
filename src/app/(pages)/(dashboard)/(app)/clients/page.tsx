@@ -51,9 +51,9 @@ export default function ClientsPage() {
     }
   }, [error]);
 
-  // Configure columns for DataTableTwo (hook must run unconditionally)
-  const columns: ColumnDef[] = React.useMemo(() => {
-    const cols: ColumnDef[] = [
+  // Base column definitions for Clients table (memoized)
+  const baseColumns = React.useMemo<ColumnDef[]>(
+    () => [
       {
         key: "clientName",
         header: "Client Name",
@@ -98,7 +98,13 @@ export default function ClientsPage() {
               })
             : "-",
       },
-    ];
+    ],
+    []
+  );
+
+  // Configure columns for DataTableTwo using baseColumns
+  const columns: ColumnDef[] = React.useMemo(() => {
+    const cols = [...baseColumns];
     if (role === "Admin") {
       cols.push({
         key: "estAnnFees",
@@ -114,7 +120,7 @@ export default function ClientsPage() {
       });
     }
     return cols;
-  }, [role]);
+  }, [role, baseColumns]);
 
   // Protect view based on role after hooks to keep hook order consistent
   if (role !== "Admin" && role !== "Manager" && role !== "Client") {
