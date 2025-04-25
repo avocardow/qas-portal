@@ -207,7 +207,7 @@
       "id": 4,
       "title": "Implement Status Filtering",
       "description": "Add default Active filter and Show All toggle for Admin users",
-      "status": "pending",
+      "status": "done",
       "dependencies": [2, 3],
       "priority": "medium",
       "details": "1. Modify api.clients.getAll.useQuery to accept statusFilter parameter\n2. Set default filter to status === 'active'\n3. Create a UI toggle for 'Show All' that's only visible to Admin users\n4. When toggled, include 'prospect' and 'archived' statuses in the query\n5. Use useRbac() to determine if user has Admin privileges\n6. Ensure filter state persists during pagination\n7. Add visual indicator when 'Show All' is active",
@@ -219,7 +219,7 @@
           "description": "Update the existing api.clients.getAll.useQuery hook to accept a statusFilter parameter that will filter clients by their status.",
           "dependencies": [],
           "details": "1. Locate the api.clients.getAll.useQuery implementation\n2. Add a statusFilter parameter to the query function\n3. Modify the API endpoint URL construction to include the status filter parameter when present\n4. Update the query key to include the statusFilter value to ensure proper cache invalidation\n5. Add TypeScript types for the new parameter if applicable\n6. Test the modified query with different status values\n7. Ensure backward compatibility for existing usages of the hook",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -228,7 +228,7 @@
           "description": "Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.",
           "dependencies": [1],
           "details": "1. Create a useState hook to manage the filter state with 'active' as the default value\n2. Update the query call to pass the current filter state\n3. Implement the filter logic in the API call to filter by 'active' status by default\n4. Add unit tests to verify the default filter behavior\n5. Ensure the filter is applied consistently across component re-renders\n6. Verify that the initial data load correctly applies the 'active' filter\n7. Add appropriate loading states during filter transitions",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -237,7 +237,7 @@
           "description": "Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.",
           "dependencies": [2],
           "details": "1. Import and implement the useRbac() hook to check for admin privileges\n2. Create a function to determine if the current user has admin access\n3. Set up a React context if needed to make the admin status available throughout the component tree\n4. Add unit tests to verify the RBAC logic works correctly\n5. Implement conditional rendering based on admin status\n6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders\n7. Add appropriate error handling for RBAC failures",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -246,7 +246,7 @@
           "description": "Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.",
           "dependencies": [3],
           "details": "1. Design a toggle switch component using appropriate UI library (e.g., Material-UI Switch)\n2. Implement the toggle with clear labeling ('Show All')\n3. Style the toggle to be visually distinct and accessible\n4. Add appropriate ARIA attributes for accessibility\n5. Implement conditional rendering to only show the toggle to admin users\n6. Add hover tooltips to explain the toggle functionality\n7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -255,7 +255,7 @@
           "description": "Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.",
           "dependencies": [2, 4],
           "details": "1. Modify the filter state to handle multiple status values\n2. Update the API query to accept an array of statuses when 'Show All' is active\n3. Implement the logic to include 'prospect' and 'archived' statuses when the toggle is on\n4. Add appropriate type checking for the status array\n5. Optimize the query to handle multiple statuses efficiently\n6. Test the filter with various combinations of statuses\n7. Ensure the UI updates correctly when switching between filtered and unfiltered views",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -264,7 +264,7 @@
           "description": "Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.",
           "dependencies": [4, 5],
           "details": "1. Design a visual indicator component (e.g., badge, highlight, or text label)\n2. Implement the indicator to appear when 'Show All' is active\n3. Style the indicator to be noticeable but not distracting\n4. Add animations for state transitions (e.g., fade in/out when filter changes)\n5. Ensure the indicator is accessible (proper contrast, screen reader support)\n6. Add a count of total items being displayed with the current filter\n7. Test the indicator across different screen sizes and ensure it's responsive",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -273,7 +273,7 @@
           "description": "Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.",
           "dependencies": [5, 6],
           "details": "1. Modify the pagination logic to include the current filter state\n2. Update the query key structure to incorporate both pagination and filter parameters\n3. Implement state management to preserve filter settings during navigation\n4. Add URL query parameters to maintain filter state on page refresh\n5. Test pagination with different filter combinations\n6. Optimize data fetching to minimize redundant requests when only changing pages\n7. Ensure the visual indicator remains consistent during pagination",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         }
       ]
@@ -294,7 +294,7 @@
           "description": "Modify the existing tRPC endpoint to support searching across both client.clientName and contacts.name fields with proper indexing and query optimization.",
           "dependencies": [],
           "details": "1. Add database indexes on client.clientName and contacts.name fields to improve search performance\n2. Implement a query that uses case-insensitive pattern matching (ILIKE in PostgreSQL or equivalent)\n3. Support partial matching to find results with incomplete terms\n4. Ensure the endpoint accepts pagination parameters (page, limit) to handle large result sets\n5. Add sorting options to order results by relevance or other criteria\n6. Implement proper error handling for malformed queries\n7. Test with various search terms to verify both fields are being searched correctly\n8. Document the API changes for frontend developers",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 5
         },
         {
@@ -303,7 +303,7 @@
           "description": "Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.",
           "dependencies": [1],
           "details": "1. Create a search service module that will manage all search-related functionality\n2. Implement debounce logic using setTimeout/clearTimeout or a library like lodash.debounce\n3. Set an appropriate debounce delay (300-500ms is typical for search)\n4. Add state management for tracking the current search term\n5. Implement loading state indicators that activate immediately when typing begins\n6. Create a mechanism to cancel in-flight requests if a new search is initiated\n7. Add error handling for failed requests\n8. Test the debounce functionality with rapid typing scenarios",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 5
         },
         {

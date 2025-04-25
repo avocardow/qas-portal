@@ -17,7 +17,7 @@
 Test search functionality with various inputs. Verify it finds matches in both client names and contact names. Check debounce behavior prevents excessive API calls. Confirm search works with status filters applied.
 
 # Subtasks:
-## 1. Extend tRPC Endpoint for Cross-Field Search [pending]
+## 1. Extend tRPC Endpoint for Cross-Field Search [done]
 ### Dependencies: None
 ### Description: Modify the existing tRPC endpoint to support searching across both client.clientName and contacts.name fields with proper indexing and query optimization.
 ### Details:
@@ -30,7 +30,7 @@ Test search functionality with various inputs. Verify it finds matches in both c
 7. Test with various search terms to verify both fields are being searched correctly
 8. Document the API changes for frontend developers
 
-## 2. Create Search Service with Debounce Implementation [pending]
+## 2. Create Search Service with Debounce Implementation [done]
 ### Dependencies: 5.1
 ### Description: Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.
 ### Details:
