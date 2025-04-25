@@ -31,6 +31,10 @@ export interface DataTableTwoProps {
   searchDelay?: number;
   extraControls?: React.ReactNode;
   totalDbEntries?: number;
+  currentPage?: number;
+  pageSize?: number;
+  onPageChange?: (page: number) => void;
+  onItemsPerPageChange?: (size: number) => void;
 }
 
 // Original static data fallback
@@ -135,9 +139,11 @@ export default function DataTableTwo({
   searchDelay = 300,
   extraControls,
   totalDbEntries,
+  currentPage = 1,
+  pageSize = 10,
+  onPageChange,
+  onItemsPerPageChange,
 }: DataTableTwoProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [sortKey, setSortKey] = useState<string>(
     columns && columns.length ? columns[0].key : "name"
   );
@@ -165,7 +171,6 @@ export default function DataTableTwo({
   const {
     searchTerm,
     setSearchTerm,
-    results: searchResults,
     loading: searchLoading,
     error: searchError,
   } = useSearchService<any[]>(searchFn ?? fallbackSearchFn, searchDelay);
@@ -180,9 +185,13 @@ export default function DataTableTwo({
   ];
   const cols = columns ?? defaultColumns;
 
-  const filteredAndSortedData = useMemo(() => {
-    const dataToSort = searchResults != null ? searchResults : tableData;
-    return dataToSort.sort((a, b) => {
+  // Use pageSize prop for items per page
+  const itemsPerPage = pageSize;
+
+  // Data is now passed directly from parent, already filtered/paginated
+  const currentData = useMemo(() => {
+    // Apply local sorting to the data received for the current page
+    return (data ?? []).sort((a, b) => {
       if (sortKey === "salary") {
         const rawA = (a as any)[sortKey];
         const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
@@ -194,13 +203,21 @@ export default function DataTableTwo({
         ? String(a[sortKey]).localeCompare(String(b[sortKey]))
         : String(b[sortKey]).localeCompare(String(a[sortKey]));
     });
-  }, [sortKey, sortOrder, searchResults, tableData]);
+  }, [data, sortKey, sortOrder]);
 
-  const totalItems = filteredAndSortedData.length;
+  // Calculate totalItems based on prop or fallback
+  const totalItems = totalDbEntries ?? (data ?? []).length;
+  // Calculate totalPages based on totalItems and pageSize prop
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handleItemsPerPageChange = (value: number) => {
+    // Call the handler passed from the parent, if provided
+    if (onItemsPerPageChange) {
+      onItemsPerPageChange(value);
+    } else {
+      // Fallback or warning if needed, though ideally parent controls this
+      console.warn("DataTableTwo: onItemsPerPageChange handler not provided.");
+    }
   };
 
   const handleSort = (key: string) => {
@@ -212,9 +229,9 @@ export default function DataTableTwo({
     }
   };
 
+  // Calculate startIndex and endIndex based on props for display message
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const currentData = filteredAndSortedData.slice(startIndex, endIndex);
 
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
@@ -229,7 +246,9 @@ export default function DataTableTwo({
               <select
                 className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none py-2 pr-8 pl-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 value={itemsPerPage}
-                onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                onChange={(e) =>
+                  handleItemsPerPageChange(Number(e.target.value))
+                }
               >
                 {[5, 8, 10].map((value) => (
                   <option
@@ -394,13 +413,13 @@ export default function DataTableTwo({
         <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between">
           <PaginationWithButton
             totalPages={totalPages}
-            initialPage={currentPage}
-            onPageChange={handlePageChange}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
           />
           <div className="pt-3 xl:pt-0">
             <p className="border-t border-gray-100 pt-3 text-center text-sm font-medium text-gray-500 xl:border-t-0 xl:pt-0 xl:text-left dark:border-gray-800 dark:text-gray-400">
-              Showing {startIndex + 1} to {endIndex} of{" "}
-              {totalDbEntries ?? totalItems} entries
+              Showing {totalItems > 0 ? startIndex + 1 : 0} to {endIndex} of{" "}
+              {totalItems} entries
             </p>
           </div>
         </div>

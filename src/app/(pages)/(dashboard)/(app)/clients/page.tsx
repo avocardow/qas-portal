@@ -22,14 +22,21 @@ export default function ClientsPage() {
   // RBAC context
   const { role } = useRbac();
   const router = useRouter();
-  // Pagination and toggle state
+  // --- Pagination and Filter State ---
   const [showAll, setShowAll] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
+  // --- End Pagination and Filter State ---
 
   // Fetch paginated data with current controls
   const statusFilter = showAll ? undefined : "active";
   const clientsQuery = api.clients.getAll.useQuery(
-    { take: pageSize, showAll, statusFilter },
+    {
+      page: currentPage,
+      pageSize: pageSize,
+      showAll,
+      statusFilter,
+    },
     {
       refetchOnWindowFocus: false,
       staleTime: 600000,
@@ -41,6 +48,11 @@ export default function ClientsPage() {
   const totalDbEntries = clientsQuery.data?.totalCount;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
+
+  // Handler for page changes from DataTableTwo
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     if (error) {
@@ -192,6 +204,9 @@ export default function ClientsPage() {
                 data={items}
                 columns={columns}
                 totalDbEntries={totalDbEntries}
+                currentPage={currentPage}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
                 onView={(row: any) => router.push(`/clients/${row.id}`)}
                 extraControls={
                   <>

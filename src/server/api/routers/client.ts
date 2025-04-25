@@ -9,8 +9,8 @@ import { TRPCError } from "@trpc/server";
 
 // Zod schemas for client operations
 const clientGetAllSchema = z.object({
-  take: z.number().min(1).max(100).optional(),
-  cursor: z.string().uuid().optional(),
+  page: z.number().min(1).optional().default(1),
+  pageSize: z.number().min(1).max(100).optional().default(10),
   filter: z.string().optional(),
   sortBy: z.enum(["clientName", "city", "status"]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
@@ -61,8 +61,8 @@ export const clientRouter = createTRPCRouter({
       }
       // Admin/Manager: full list with pagination
       const {
-        take = 10,
-        cursor,
+        page,
+        pageSize,
         filter,
         sortBy = "clientName",
         sortOrder = "asc",
@@ -93,14 +93,16 @@ export const clientRouter = createTRPCRouter({
         ],
       };
 
+      // Calculate skip value for pagination
+      const skip = (page - 1) * pageSize;
+
       // Use a transaction to get both count and paginated items
       const [totalCount, items] = await ctx.db.$transaction([
         ctx.db.client.count({ where: whereClause }),
         ctx.db.client.findMany({
-          take,
-          skip: cursor ? 1 : 0,
-          cursor: cursor ? { id: cursor } : undefined,
-          where: whereClause, // Use the same where clause
+          take: pageSize,
+          skip: skip,
+          where: whereClause,
           orderBy: { [sortBy]: sortOrder },
           select: {
             id: true,
@@ -117,11 +119,8 @@ export const clientRouter = createTRPCRouter({
         }),
       ]);
 
-      const nextCursor =
-        items.length === take ? items[take - 1]?.id : undefined;
-
-      // Return items, cursor, and the total count
-      return { items, nextCursor, totalCount };
+      // Return items and the total count (no cursor needed)
+      return { items, totalCount };
     }),
   getById: protectedProcedure
     .use(enforceRole(["Admin", "Manager", "Client"]))
