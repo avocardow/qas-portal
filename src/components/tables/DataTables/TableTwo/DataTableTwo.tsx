@@ -35,7 +35,24 @@ export interface DataTableTwoProps {
   pageSize?: number;
   onPageChange?: (page: number) => void;
   onItemsPerPageChange?: (size: number) => void;
+  isLoading?: boolean;
 }
+
+// Skeleton Row Component (Basic Example)
+const SkeletonRow = ({ columnCount }: { columnCount: number }) => (
+  <TableRow className="animate-pulse">
+    {Array.from({ length: columnCount + 1 }).map(
+      (
+        _,
+        i // +1 for action column
+      ) => (
+        <TableCell key={i} className="h-12 px-4 py-3">
+          <div className="h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
+        </TableCell>
+      )
+    )}
+  </TableRow>
+);
 
 // Original static data fallback
 const staticTableData = [
@@ -143,6 +160,7 @@ export default function DataTableTwo({
   pageSize = 10,
   onPageChange,
   onItemsPerPageChange,
+  isLoading,
 }: DataTableTwoProps) {
   const [sortKey, setSortKey] = useState<string>(
     columns && columns.length ? columns[0].key : "name"
@@ -375,35 +393,46 @@ export default function DataTableTwo({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentData.map((item, i) => (
-                <TableRow key={i}>
-                  {cols.map(({ key, cell }) => (
-                    <TableCell
-                      key={key}
-                      className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400"
-                    >
-                      {cell ? cell(item) : (item[key] ?? "-")}
-                    </TableCell>
-                  ))}
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
-                    <div className="flex w-full items-center gap-2">
-                      {onView &&
-                        currentRole &&
-                        ["Admin", "Manager", "Client"].includes(
-                          currentRole
-                        ) && <ViewActionButton onClick={() => onView(item)} />}
-                      {currentRole === "Admin" && (
-                        <button
-                          aria-label="Edit"
-                          className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90"
+              {isLoading
+                ? // Render skeleton rows when loading
+                  Array.from({ length: pageSize }).map((_, index) => (
+                    <SkeletonRow
+                      key={`skeleton-${index}`}
+                      columnCount={cols.length}
+                    />
+                  ))
+                : // Render actual data rows when not loading
+                  currentData.map((item, i) => (
+                    <TableRow key={item.id ?? i}>
+                      {cols.map(({ key, cell }) => (
+                        <TableCell
+                          key={key}
+                          className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400"
                         >
-                          <PencilIcon />
-                        </button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+                          {cell ? cell(item) : (item[key] ?? "-")}
+                        </TableCell>
+                      ))}
+                      <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
+                        <div className="flex w-full items-center gap-2">
+                          {onView &&
+                            currentRole &&
+                            ["Admin", "Manager", "Client"].includes(
+                              currentRole
+                            ) && (
+                              <ViewActionButton onClick={() => onView(item)} />
+                            )}
+                          {currentRole === "Admin" && (
+                            <button
+                              aria-label="Edit"
+                              className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90"
+                            >
+                              <PencilIcon />
+                            </button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
           </Table>
         </div>

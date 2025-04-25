@@ -28,6 +28,8 @@ export default function ClientsPage() {
   const [pageSize] = useState(10);
   // --- End Pagination and Filter State ---
 
+  const utils = api.useUtils(); // Get tRPC utils for pre-fetching
+
   // Fetch paginated data with current controls
   const statusFilter = showAll ? undefined : "active";
   const clientsQuery = api.clients.getAll.useQuery(
@@ -48,6 +50,32 @@ export default function ClientsPage() {
   const totalDbEntries = clientsQuery.data?.totalCount;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
+
+  // --- Pre-fetching Logic ---
+  useEffect(() => {
+    if (clientsQuery.data && totalDbEntries) {
+      const totalPages = Math.ceil(totalDbEntries / pageSize);
+      const queryInput = { pageSize, showAll, statusFilter };
+
+      // Prefetch next page
+      if (currentPage < totalPages) {
+        utils.clients.getAll.prefetch({ ...queryInput, page: currentPage + 1 });
+      }
+      // Prefetch previous page
+      if (currentPage > 1) {
+        utils.clients.getAll.prefetch({ ...queryInput, page: currentPage - 1 });
+      }
+    }
+  }, [
+    currentPage,
+    pageSize,
+    showAll,
+    statusFilter,
+    totalDbEntries,
+    clientsQuery.data,
+    utils,
+  ]);
+  // --- End Pre-fetching Logic ---
 
   // Handler for page changes from DataTableTwo
   const handlePageChange = (page: number) => {
@@ -196,12 +224,12 @@ export default function ClientsPage() {
               description={notification.description}
             />
           )}
-          {isLoading && <p>Loading clients...</p>}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
-          {items && (
+          {(items || isLoading) && (
             <div className="custom-scrollbar max-w-full overflow-x-auto">
               <DataTableTwo
                 data={items}
+                isLoading={isLoading}
                 columns={columns}
                 totalDbEntries={totalDbEntries}
                 currentPage={currentPage}
