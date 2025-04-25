@@ -76,8 +76,11 @@ export const clientRouter = createTRPCRouter({
         skip: cursor ? 1 : 0,
         cursor: cursor ? { id: cursor } : undefined,
         where: {
-          clientName: { contains: filter || "" },
           ...(statuses ? { status: { in: statuses } } : {}),
+          OR: [
+            { clientName: { contains: filter || "" } },
+            { contacts: { some: { name: { contains: filter || "" } } } },
+          ],
         },
         orderBy: { [sortBy]: sortOrder },
         select: {
