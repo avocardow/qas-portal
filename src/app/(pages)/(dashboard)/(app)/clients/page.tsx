@@ -1,23 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRbac } from "@/context/RbacContext";
-import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Link from "next/link";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import useDebounce from "@/hooks/useDebounce";
 import Notification from "@/components/ui/notification/Notification";
-
-// Add type for sortable fields
-type SortField = "clientName" | "city" | "status";
+import useDebounce from "@/hooks/useDebounce";
+import DataTableTwo from "@/components/tables/DataTables/TableTwo/DataTableTwo";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -27,30 +17,10 @@ export default function ClientsPage() {
   } | null>(null);
   // RBAC context
   const { role } = useRbac();
-  // Pagination, sorting, filtering state
+  // Pagination, filtering state
   const [filter, setFilter] = useState("");
   // Debounce filter input to optimize queries
   const debouncedFilter = useDebounce(filter, 500);
-  const router = useRouter();
-  const deleteClientMutation = api.clients.deleteClient.useMutation({
-    onSuccess: () => {
-      setNotification({
-        variant: "success",
-        title: "Client deleted successfully",
-      });
-      router.refresh();
-    },
-    onError: (error: unknown) => {
-      const errMsg = error instanceof Error ? error.message : String(error);
-      setNotification({
-        variant: "error",
-        title: "Error deleting client",
-        description: errMsg,
-      });
-    },
-  });
-  const [sortBy, setSortBy] = useState<SortField>("clientName");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [pageSize] = useState(10);
   const [cursors, setCursors] = useState<(string | undefined)[]>([]);
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
@@ -64,8 +34,6 @@ export default function ClientsPage() {
       take: pageSize,
       cursor: currentCursor,
       filter: debouncedFilter,
-      sortBy,
-      sortOrder,
     },
     {
       refetchOnWindowFocus: false,
@@ -94,7 +62,7 @@ export default function ClientsPage() {
     return <p>You are not authorized to view clients.</p>;
   }
 
-  // Handlers for pagination and sorting
+  // Handlers for pagination
   const handleNext = () => {
     if (nextCursor) {
       setCursors((prev) => [...prev, currentCursor]);
@@ -111,19 +79,6 @@ export default function ClientsPage() {
       setCurrentCursor(prev);
       setPageIndex((idx) => idx - 1);
     }
-  };
-
-  const toggleSort = (field: SortField) => {
-    if (sortBy === field) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(field);
-      setSortOrder("asc");
-    }
-    // reset pagination
-    setCursors([]);
-    setCurrentCursor(undefined);
-    setPageIndex(0);
   };
 
   return (
@@ -179,118 +134,7 @@ export default function ClientsPage() {
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
             <div className="overflow-x-auto">
-              <Table>
-                <TableHeader className="bg-gray-50 dark:bg-gray-800">
-                  <TableRow>
-                    <TableCell
-                      isHeader
-                      className="text-gray-800 dark:text-gray-100"
-                    >
-                      ID
-                    </TableCell>
-                    <TableCell
-                      isHeader
-                      className="cursor-pointer text-gray-800 dark:text-gray-100"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleSort("clientName")}
-                        className="w-full text-left"
-                      >
-                        Name{" "}
-                        {sortBy === "clientName" &&
-                          (sortOrder === "asc" ? "↑" : "↓")}
-                      </button>
-                    </TableCell>
-                    <TableCell
-                      isHeader
-                      className="cursor-pointer text-gray-800 dark:text-gray-100"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleSort("city")}
-                        className="w-full text-left"
-                      >
-                        City{" "}
-                        {sortBy === "city" && (sortOrder === "asc" ? "↑" : "↓")}
-                      </button>
-                    </TableCell>
-                    <TableCell
-                      isHeader
-                      className="cursor-pointer text-gray-800 dark:text-gray-100"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => toggleSort("status")}
-                        className="w-full text-left"
-                      >
-                        Status{" "}
-                        {sortBy === "status" &&
-                          (sortOrder === "asc" ? "↑" : "↓")}
-                      </button>
-                    </TableCell>
-                    <TableCell
-                      isHeader
-                      className="text-gray-800 dark:text-gray-100"
-                    >
-                      Actions
-                    </TableCell>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
-                  {items.map((client) => (
-                    <TableRow key={client.id}>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {client.id}
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        <Link href={`/clients/${client.id}`}>
-                          {client.clientName}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {client.city ?? "-"}
-                      </TableCell>
-                      <TableCell className="text-gray-700 dark:text-gray-200">
-                        {client.status}
-                      </TableCell>
-                      {/* Only Admin can edit or delete clients */}
-                      {role === "Admin" && (
-                        <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
-                          <Link href={`/clients/${client.id}/edit`}>
-                            <button className="btn bg-blue-500 text-white hover:bg-blue-600">
-                              Edit
-                            </button>
-                          </Link>
-                          <button
-                            onClick={() => {
-                              if (
-                                confirm(
-                                  "Are you sure you want to delete this client?"
-                                )
-                              ) {
-                                deleteClientMutation.mutate(
-                                  { clientId: client.id },
-                                  {
-                                    onSuccess: () => router.refresh(),
-                                    onError: console.error,
-                                  }
-                                );
-                              }
-                            }}
-                            disabled={deleteClientMutation.status === "pending"}
-                            className="btn bg-red-500 text-white hover:bg-red-600"
-                          >
-                            {deleteClientMutation.status === "pending"
-                              ? "Deleting..."
-                              : "Delete"}
-                          </button>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <DataTableTwo />
             </div>
           )}
         </ComponentCard>
