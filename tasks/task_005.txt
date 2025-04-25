@@ -82,7 +82,7 @@ Test search functionality with various inputs. Verify it finds matches in both c
 7. Test loading states with various network conditions
 8. Ensure loading states don't cause layout shifts
 
-## 6. Preserve Active Filters During Search [pending]
+## 6. Preserve Active Filters During Search [done]
 ### Dependencies: 5.4
 ### Description: Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.
 ### Details:

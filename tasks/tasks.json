@@ -339,7 +339,7 @@
           "description": "Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.",
           "dependencies": [4],
           "details": "1. Refactor filter state management to separate search from other filters\n2. Modify the tRPC endpoint to accept both search terms and filter criteria\n3. Update the UI to show active filters alongside search terms\n4. Implement logic to combine search and filter criteria in queries\n5. Add visual indicators for active combined filters\n6. Create clear all/reset functionality for filters and search\n7. Test various combinations of filters and search terms\n8. Ensure filter state is preserved during navigation or page refresh",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 5
         },
         {

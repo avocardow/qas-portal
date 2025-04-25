@@ -222,7 +222,7 @@ export default function DataTableTwo({
             <button
               onClick={() => setSearchTerm("")}
               aria-label="Clear search"
-              className="absolute top-1/2 right-10 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+              className="absolute top-1/2 right-10 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               <XMarkIcon className="h-4 w-4" />
             </button>
