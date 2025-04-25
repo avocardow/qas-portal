@@ -9,12 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../../ui/table";
-import {
-  AngleDownIcon,
-  AngleUpIcon,
-  PencilIcon,
-  TrashBinIcon,
-} from "../../../../icons";
+import { AngleDownIcon, AngleUpIcon, PencilIcon } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
 import ViewActionButton from "@/components/common/ViewActionButton";
 
@@ -29,7 +24,6 @@ export interface ColumnDef {
 export interface DataTableTwoProps {
   data?: any[];
   columns?: ColumnDef[];
-  hideDeleteIcon?: boolean;
   onView?: (row: any) => void;
 }
 
@@ -130,7 +124,6 @@ const staticTableData = [
 export default function DataTableTwo({
   data,
   columns,
-  hideDeleteIcon = false,
   onView,
 }: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -331,11 +324,6 @@ export default function DataTableTwo({
                     <div className="flex w-full items-center gap-2">
                       {onView && (
                         <ViewActionButton onClick={() => onView(item)} />
-                      )}
-                      {!hideDeleteIcon && (
-                        <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">
-                          <TrashBinIcon />
-                        </button>
                       )}
                       <button className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
                         <PencilIcon />

@@ -201,7 +201,6 @@ export default function ClientsPage() {
               <DataTableTwo
                 data={items}
                 columns={columns}
-                hideDeleteIcon
                 onView={(row: any) => router.push(`/clients/${row.id}`)}
               />
             </div>

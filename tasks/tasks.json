@@ -171,7 +171,7 @@
           "description": "Remove any existing delete buttons or functionality from the table rows as specified in the requirements.",
           "dependencies": [3],
           "details": "Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {

@@ -34,7 +34,7 @@ Import and use the application's routing mechanism (likely React Router's useNav
 ### Details:
 Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.
 
-## 4. Remove existing row-level delete functionality [pending]
+## 4. Remove existing row-level delete functionality [done]
 ### Dependencies: 3.3
 ### Description: Remove any existing delete buttons or functionality from the table rows as specified in the requirements.
 ### Details:
