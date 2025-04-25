@@ -375,7 +375,7 @@
           "id": 2,
           "title": "Test Role-Based Access Control (RBAC) for All User Types",
           "description": "Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [1],
           "details": "Simulate each user role and test all relevant UI elements and API endpoints. Attempt to access restricted features as lower-privilege users to confirm proper enforcement of RBAC policies. Document any discrepancies and update access rules as needed."
         },
