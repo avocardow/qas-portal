@@ -116,9 +116,9 @@ export default function ClientsPage() {
         sortable: true,
         cell: (row: any) =>
           row.estAnnFees != null
-            ? new Intl.NumberFormat("en-US", {
+            ? new Intl.NumberFormat("en-AU", {
                 style: "currency",
-                currency: "USD",
+                currency: "AUD",
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
               }).format(row.estAnnFees)
