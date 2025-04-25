@@ -19,7 +19,7 @@ export default function PhonePage() {
   const [filter, setFilter] = useState("");
   const debouncedFilter = useDebounce(filter, 500);
   const clientsQuery = api.clients.getAll.useQuery(
-    { take: 10, filter: debouncedFilter },
+    { pageSize: 10, filter: debouncedFilter },
     { enabled: true }
   );
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
