@@ -4,12 +4,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
-    environment: "node",
+    environment: "jsdom",
     globals: true,
-    include: [
-      "src/server/api/routers/**/*.test.ts",
-      "src/utils/**/*.test.ts",
-      "src/server/services/**/*.test.ts",
-    ],
+    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    setupFiles: "vitest.setup.ts",
   },
 });

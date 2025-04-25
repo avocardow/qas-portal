@@ -46,13 +46,13 @@ Identify and remove any delete buttons or icons from the row actions area. Remov
 ### Details:
 Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.
 
-## 6. Configure role-based visibility [pending]
+## 6. Configure role-based visibility [done]
 ### Dependencies: 3.3
 ### Description: Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.
 ### Details:
 Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.
 
-## 7. Write comprehensive tests for ViewActionButton functionality [pending]
+## 7. Write comprehensive tests for ViewActionButton functionality [done]
 ### Dependencies: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
 ### Description: Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.
 ### Details:

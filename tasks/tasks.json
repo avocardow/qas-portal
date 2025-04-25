@@ -189,7 +189,7 @@
           "description": "Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.",
           "dependencies": [3],
           "details": "Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -198,7 +198,7 @@
           "description": "Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.",
           "dependencies": [1, 2, 3, 4, 5, 6],
           "details": "Write unit tests for the ViewActionButton component to verify rendering and click behavior. Create integration tests to verify the button appears correctly in the DataTableTwo component. Test navigation to ensure clicking the button correctly routes to the client detail page. Verify accessibility by testing keyboard navigation and screen reader compatibility. Test with different screen sizes to confirm responsive behavior. Verify role-based visibility by testing with different user roles. Include edge cases such as handling clients with missing IDs or other required data. Document test coverage and any assumptions made during testing.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         }
       ]
