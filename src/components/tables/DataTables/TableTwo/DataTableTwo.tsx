@@ -81,15 +81,14 @@ export default function DataTableTwo({
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Default columns if not provided
-  const defaultColumns: ColumnDef[] = [
+  const baseColumns = useMemo<ColumnDef[]>(() => [
     { key: "name", header: "User", sortable: true },
     { key: "position", header: "Position", sortable: true },
     { key: "location", header: "Office", sortable: true },
     { key: "age", header: "Age", sortable: true },
     { key: "date", header: "Start Date", sortable: true },
     { key: "salary", header: "Salary", sortable: true },
-  ];
-  const baseColumns = useMemo<ColumnDef[]>(() => defaultColumns, []);
+  ], []);
   const cols = columns ?? baseColumns;
 
   // Use pageSize prop for items per page

@@ -88,7 +88,7 @@ describe("DataTableTwo action buttons", () => {
       cleanup(); // Clean up after each render
       (useRole as jest.Mock).mockReturnValue(role);
       const handleView = vi.fn();
-      const { container } = render(
+      render(
         <DataTableTwo
           data={mockData}
           columns={baseColumns}
