@@ -21,7 +21,7 @@
 Unit test the column definitions and formatters. Verify date formatting works correctly across locales. Test conditional visibility logic with different user roles.
 
 # Subtasks:
-## 1. Define Base Columns Array Structure [pending]
+## 1. Define Base Columns Array Structure [done]
 ### Dependencies: None
 ### Description: Set up the initial columns array for the Clients table, specifying each column's field, header, and accessor logic.
 ### Details:

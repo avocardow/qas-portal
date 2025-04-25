@@ -82,7 +82,7 @@
           "id": 1,
           "title": "Define Base Columns Array Structure",
           "description": "Set up the initial columns array for the Clients table, specifying each column's field, header, and accessor logic.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create a columns array with objects for each required field: Client Name, Primary Contact, City, Next Contact Date, Audit Month End, Fees, and Status. For each column, specify the field or accessor function as appropriate. Use accessor functions for derived or formatted fields (e.g., Primary Contact)."
         },
