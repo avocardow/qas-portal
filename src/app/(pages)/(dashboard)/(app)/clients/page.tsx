@@ -12,6 +12,7 @@ import DataTableTwo, {
 } from "@/components/tables/DataTables/TableTwo/DataTableTwo";
 import Badge from "@/components/ui/badge/Badge";
 import { useRouter } from "next/navigation";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -26,6 +27,8 @@ export default function ClientsPage() {
   const [showAll, setShowAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
   // --- End Pagination and Filter State ---
 
   const utils = api.useUtils(); // Get tRPC utils for pre-fetching
@@ -40,6 +43,7 @@ export default function ClientsPage() {
       pageSize: pageSize,
       showAll,
       statusFilter,
+      filter: debouncedSearchTerm,
     },
     {
       refetchOnWindowFocus: false,
@@ -57,7 +61,12 @@ export default function ClientsPage() {
   useEffect(() => {
     if (clientsQuery.data && totalDbEntries) {
       const totalPages = Math.ceil(totalDbEntries / pageSize);
-      const queryInput = { pageSize, showAll, statusFilter };
+      const queryInput = {
+        pageSize,
+        showAll,
+        statusFilter,
+        filter: debouncedSearchTerm,
+      };
 
       // Prefetch next page
       if (currentPage < totalPages) {
@@ -76,6 +85,7 @@ export default function ClientsPage() {
     totalDbEntries,
     clientsQuery.data,
     utils,
+    debouncedSearchTerm,
   ]);
   // --- End Pre-fetching Logic ---
 
@@ -83,6 +93,14 @@ export default function ClientsPage() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  // --- Search Result Handling ---
+  useEffect(() => {
+    if (debouncedSearchTerm !== undefined) {
+      setCurrentPage(1);
+    }
+  }, [debouncedSearchTerm]);
+  // --- End Search Result Handling ---
 
   useEffect(() => {
     if (error) {
@@ -238,6 +256,8 @@ export default function ClientsPage() {
                 pageSize={pageSize}
                 onPageChange={handlePageChange}
                 onView={(row: any) => router.push(`/clients/${row.id}`)}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
                 extraControls={
                   <>
                     {role === "Admin" && (
@@ -260,6 +280,11 @@ export default function ClientsPage() {
                 }
               />
             </div>
+          )}
+          {debouncedSearchTerm && (
+            <p className="mb-2 text-sm text-gray-600 dark:text-gray-400">
+              Showing results for: &quot;{debouncedSearchTerm}&quot;
+            </p>
           )}
         </ComponentCard>
       </div>

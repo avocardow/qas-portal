@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -18,7 +18,6 @@ import {
 import PaginationWithButton from "./PaginationWithButton";
 import ViewActionButton from "@/components/common/ViewActionButton";
 import { useRole } from "@/context/RbacContext";
-import useSearchService from "@/hooks/useSearchService";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -32,8 +31,6 @@ export interface DataTableTwoProps {
   data?: any[];
   columns?: ColumnDef[];
   onView?: (row: any) => void;
-  searchFn?: (term: string, signal: AbortSignal) => Promise<any[]>;
-  searchDelay?: number;
   extraControls?: React.ReactNode;
   totalDbEntries?: number;
   currentPage?: number;
@@ -41,6 +38,8 @@ export interface DataTableTwoProps {
   onPageChange?: (page: number) => void;
   onItemsPerPageChange?: (size: number) => void;
   isLoading?: boolean;
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
 }
 
 // Skeleton Row Component (Basic Example)
@@ -59,106 +58,10 @@ const SkeletonRow = ({ columnCount }: { columnCount: number }) => (
   </TableRow>
 );
 
-// Original static data fallback
-const staticTableData = [
-  {
-    id: 1,
-    name: "Abram Schleifer",
-    position: "Sales Assistant",
-    location: "Edinburgh",
-    age: 57,
-    date: "25 Apr, 2027",
-    salary: "$89,500",
-  },
-  {
-    id: 2,
-    name: "Charlotte Anderson",
-    position: "Marketing Manager",
-    location: "London",
-    age: 42,
-    date: "12 Mar, 2025",
-    salary: "$105,000",
-  },
-  {
-    id: 3,
-    name: "Ethan Brown",
-    position: "Software Engineer",
-    location: "San Francisco",
-    age: 30,
-    date: "01 Jan, 2024",
-    salary: "$120,000",
-  },
-  {
-    id: 4,
-    name: "Sophia Martinez",
-    position: "Product Manager",
-    location: "New York",
-    age: 35,
-    date: "15 Jun, 2026",
-    salary: "$95,000",
-  },
-  {
-    id: 5,
-    name: "James Wilson",
-    position: "Data Analyst",
-    location: "Chicago",
-    age: 28,
-    date: "20 Sep, 2025",
-    salary: "$80,000",
-  },
-  {
-    id: 6,
-    name: "Olivia Johnson",
-    position: "HR Specialist",
-    location: "Los Angeles",
-    age: 40,
-    date: "08 Nov, 2026",
-    salary: "$75,000",
-  },
-  {
-    id: 7,
-    name: "William Smith",
-    position: "Financial Analyst",
-    location: "Seattle",
-    age: 38,
-    date: "03 Feb, 2026",
-    salary: "$88,000",
-  },
-  {
-    id: 8,
-    name: "Isabella Davis",
-    position: "UI/UX Designer",
-    location: "Austin",
-    age: 29,
-    date: "18 Jul, 2025",
-    salary: "$92,000",
-  },
-  {
-    id: 9,
-    name: "Liam Moore",
-    position: "DevOps Engineer",
-    location: "Boston",
-    age: 33,
-    date: "30 Oct, 2024",
-    salary: "$115,000",
-  },
-  {
-    id: 10,
-    name: "Mia Garcia",
-    position: "Content Strategist",
-    location: "Denver",
-    age: 27,
-    date: "12 Dec, 2027",
-    salary: "$70,000",
-  },
-];
-
 export default function DataTableTwo({
   data,
   columns,
   onView,
-  searchFn,
-  searchDelay = 300,
   extraControls,
   totalDbEntries,
   currentPage = 1,
@@ -166,6 +69,8 @@ export default function DataTableTwo({
   onPageChange,
   onItemsPerPageChange,
   isLoading,
+  searchTerm,
+  setSearchTerm,
 }: DataTableTwoProps) {
   const [sortKey, setSortKey] = useState<string>(
     columns && columns.length ? columns[0].key : "name"
@@ -174,30 +79,6 @@ export default function DataTableTwo({
   const currentRole = useRole();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Use provided data or fallback
-  const tableData = data ?? staticTableData;
-  // Fallback local search if no searchFn provided
-  const fallbackSearchFn = useCallback(
-    (term: string, _signal: AbortSignal) => {
-      void _signal;
-      const lower = term.toLowerCase();
-      return Promise.resolve(
-        tableData.filter((item) =>
-          Object.values(item).some(
-            (value) =>
-              typeof value === "string" && value.toLowerCase().includes(lower)
-          )
-        )
-      );
-    },
-    [tableData]
-  );
-  const {
-    searchTerm,
-    setSearchTerm,
-    loading: searchLoading,
-    error: searchError,
-  } = useSearchService<any[]>(searchFn ?? fallbackSearchFn, searchDelay);
   // Default columns if not provided
   const defaultColumns: ColumnDef[] = [
     { key: "name", header: "User", sortable: true },
@@ -367,11 +248,8 @@ export default function DataTableTwo({
               ></path>
             </svg>
           </span>
-          {searchLoading && (
+          {isLoading && (
             <span className="ml-2 text-xs text-gray-500">Loading...</span>
-          )}
-          {searchError && (
-            <span className="ml-2 text-xs text-red-500">Error</span>
           )}
         </div>
       </div>

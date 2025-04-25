@@ -1,19 +1,13 @@
-import ComponentCard from "@/components/common/ComponentCard";
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import DataTableTwo from "@/components/tables/DataTables/TableTwo/DataTableTwo";
-import DataTableOne from "@/components/tables/DataTables/TableOne/DataTableOne";
-import DataTableThree from "@/components/tables/DataTables/TableThree/DataTableThree";
+"use client"; // Mark template page as client component
 
-import { Metadata } from "next";
 import React from "react";
+import DataTableOne from "@/components/tables/DataTables/TableOne/DataTableOne";
+import DataTableTwo from "@/components/tables/DataTables/TableTwo/DataTableTwo";
+import DataTableThree from "@/components/tables/DataTables/TableThree/DataTableThree";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "@/components/common/ComponentCard";
 
-export const metadata: Metadata = {
-  title: "Next.js Advanced Data Table | TailAdmin - Next.js Dashboard Template",
-  description:
-    "This is Next.js Advanced Data Table page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-};
-
-export default function DataTables() {
+const Tables = () => {
   return (
     <div>
       <PageBreadcrumb pageTitle="Data Tables" />
@@ -22,7 +16,7 @@ export default function DataTables() {
           <DataTableOne />
         </ComponentCard>
         <ComponentCard title="Data Table 2">
-          <DataTableTwo />
+          <DataTableTwo searchTerm="" setSearchTerm={() => {}} />
         </ComponentCard>
         <ComponentCard title="Data Table 3">
           <DataTableThree />
@@ -30,4 +24,6 @@ export default function DataTables() {
       </div>
     </div>
   );
-}
+};
+
+export default Tables;
