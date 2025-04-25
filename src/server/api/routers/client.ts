@@ -69,36 +69,59 @@ export const clientRouter = createTRPCRouter({
         statusFilter,
         showAll = false,
       } = input;
+
       // Determine which statuses to include
       const statuses = showAll ? undefined : [statusFilter ?? "active"];
-      const items = await ctx.db.client.findMany({
-        take,
-        skip: cursor ? 1 : 0,
-        cursor: cursor ? { id: cursor } : undefined,
-        where: {
-          ...(statuses ? { status: { in: statuses } } : {}),
-          OR: [
-            { clientName: { contains: filter || "" } },
-            { contacts: { some: { name: { contains: filter || "" } } } },
-          ],
-        },
-        orderBy: { [sortBy]: sortOrder },
-        select: {
-          id: true,
-          clientName: true,
-          city: true,
-          status: true,
-          auditMonthEnd: true,
-          nextContactDate: true,
-          estAnnFees: true,
-          contacts: {
-            select: { name: true, isPrimary: true },
+
+      // Define the base where clause for filtering
+      const whereClause = {
+        ...(statuses ? { status: { in: statuses } } : {}),
+        OR: [
+          {
+            clientName: {
+              contains: filter || "",
+              mode: "insensitive" as const,
+            },
           },
-        },
-      });
+          {
+            contacts: {
+              some: {
+                name: { contains: filter || "", mode: "insensitive" as const },
+              },
+            },
+          },
+        ],
+      };
+
+      // Use a transaction to get both count and paginated items
+      const [totalCount, items] = await ctx.db.$transaction([
+        ctx.db.client.count({ where: whereClause }),
+        ctx.db.client.findMany({
+          take,
+          skip: cursor ? 1 : 0,
+          cursor: cursor ? { id: cursor } : undefined,
+          where: whereClause, // Use the same where clause
+          orderBy: { [sortBy]: sortOrder },
+          select: {
+            id: true,
+            clientName: true,
+            city: true,
+            status: true,
+            auditMonthEnd: true,
+            nextContactDate: true,
+            estAnnFees: true,
+            contacts: {
+              select: { name: true, isPrimary: true },
+            },
+          },
+        }),
+      ]);
+
       const nextCursor =
         items.length === take ? items[take - 1]?.id : undefined;
-      return { items, nextCursor };
+
+      // Return items, cursor, and the total count
+      return { items, nextCursor, totalCount };
     }),
   getById: protectedProcedure
     .use(enforceRole(["Admin", "Manager", "Client"]))

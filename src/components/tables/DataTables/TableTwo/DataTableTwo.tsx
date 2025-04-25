@@ -30,6 +30,7 @@ export interface DataTableTwoProps {
   searchFn?: (term: string, signal: AbortSignal) => Promise<any[]>;
   searchDelay?: number;
   extraControls?: React.ReactNode;
+  totalDbEntries?: number;
 }
 
 // Original static data fallback
@@ -133,6 +134,7 @@ export default function DataTableTwo({
   searchFn,
   searchDelay = 300,
   extraControls,
+  totalDbEntries,
 }: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -397,7 +399,8 @@ export default function DataTableTwo({
           />
           <div className="pt-3 xl:pt-0">
             <p className="border-t border-gray-100 pt-3 text-center text-sm font-medium text-gray-500 xl:border-t-0 xl:pt-0 xl:text-left dark:border-gray-800 dark:text-gray-400">
-              Showing {startIndex + 1} to {endIndex} of {totalItems} entries
+              Showing {startIndex + 1} to {endIndex} of{" "}
+              {totalDbEntries ?? totalItems} entries
             </p>
           </div>
         </div>

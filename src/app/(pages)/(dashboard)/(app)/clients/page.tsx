@@ -36,7 +36,9 @@ export default function ClientsPage() {
     }
   );
 
+  // Extract items, totalCount, and loading state
   const items = clientsQuery.data?.items;
+  const totalDbEntries = clientsQuery.data?.totalCount;
   const isLoading = clientsQuery.isLoading;
   const error = clientsQuery.error;
 
@@ -189,6 +191,7 @@ export default function ClientsPage() {
               <DataTableTwo
                 data={items}
                 columns={columns}
+                totalDbEntries={totalDbEntries}
                 onView={(row: any) => router.push(`/clients/${row.id}`)}
                 extraControls={
                   <>
