@@ -59,3 +59,136 @@ describe("clientRouter updateSharepointFolderId", () => {
     ).rejects.toBeInstanceOf(TRPCError);
   });
 });
+
+describe("clientRouter getAll", () => {
+  let ctx: any;
+  let callClient: any;
+  const dummyClients = [
+    {
+      id: "id1",
+      clientName: "A Company",
+      city: "CityA",
+      status: "active",
+      auditMonthEnd: 1,
+      nextContactDate: new Date("2023-01-01"),
+      estAnnFees: 100,
+      contacts: [{ name: "John", isPrimary: true }],
+    },
+    {
+      id: "id2",
+      clientName: "B Company",
+      city: "CityB",
+      status: "active",
+      auditMonthEnd: 2,
+      nextContactDate: new Date("2023-02-01"),
+      estAnnFees: 200,
+      contacts: [{ name: "Jane", isPrimary: false }],
+    },
+  ];
+
+  beforeEach(() => {
+    callClient = createCallerFactory(clientRouter);
+    ctx = {
+      db: {
+        client: {
+          count: vi.fn(),
+          findMany: vi.fn(),
+          findUniqueOrThrow: vi.fn(),
+        },
+        contact: {
+          findUnique: vi.fn(),
+        },
+      },
+      session: { user: { role: "Admin", id: "userId" } },
+    } as any;
+  });
+
+  it("should return paginated clients for Admin with default parameters", async () => {
+    ctx.db.client.count.mockResolvedValue(2);
+    ctx.db.client.findMany.mockResolvedValue(dummyClients);
+    const caller = callClient(ctx);
+    const result = await caller.getAll({});
+    expect(ctx.db.client.count).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.any(Object) })
+    );
+    expect(ctx.db.client.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ take: 10, skip: 0 })
+    );
+    expect(result).toEqual({ items: dummyClients, totalCount: 2 });
+  });
+
+  it("should filter and sort clients based on input", async () => {
+    ctx.db.client.count.mockResolvedValue(1);
+    const filteredClients = [dummyClients[1]];
+    ctx.db.client.findMany.mockResolvedValue(filteredClients);
+    const caller = callClient(ctx);
+    const input = {
+      page: 2,
+      pageSize: 1,
+      filter: "B",
+      sortBy: "city",
+      sortOrder: "desc",
+      statusFilter: "active",
+      showAll: false,
+    };
+    const result = await caller.getAll(input);
+    expect(ctx.db.client.count).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ status: { in: ["active"] } }),
+      })
+    );
+    expect(ctx.db.client.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ take: 1, skip: 1, orderBy: { city: "desc" } })
+    );
+    expect(result).toEqual({ items: filteredClients, totalCount: 1 });
+  });
+
+  it("should show all statuses when showAll is true", async () => {
+    ctx.db.client.count.mockResolvedValue(3);
+    ctx.db.client.findMany.mockResolvedValue([
+      ...dummyClients,
+      {
+        id: "id3",
+        clientName: "C",
+        city: "CityC",
+        status: "archived",
+        auditMonthEnd: 3,
+        nextContactDate: new Date("2023-03-01"),
+        estAnnFees: 300,
+        contacts: [],
+      },
+    ]);
+    const caller = callClient(ctx);
+    await caller.getAll({ showAll: true });
+    expect(ctx.db.client.count).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.not.objectContaining({ status: expect.anything() }),
+      })
+    );
+  });
+
+  it("should return only associated client for Client role", async () => {
+    const clientRecord = {
+      id: "clientId",
+      clientName: "MyClient",
+      city: "MyCity",
+      status: "active",
+    };
+    ctx.session.user.role = "Client";
+    ctx.db.contact.findUnique.mockResolvedValue({ clientId: "clientId" });
+    ctx.db.client.findUniqueOrThrow.mockResolvedValue(clientRecord);
+    const caller = callClient(ctx);
+    const result = await caller.getAll({});
+    expect(ctx.db.contact.findUnique).toHaveBeenCalledWith({
+      where: { portalUserId: ctx.session.user.id },
+    });
+    expect(result).toEqual({ items: [clientRecord], nextCursor: undefined });
+  });
+
+  it("should forbid Client role with no associated client", async () => {
+    ctx.session.user.role = "Client";
+    ctx.db.contact.findUnique.mockResolvedValue(null);
+    const caller = callClient(ctx);
+    await expect(caller.getAll({})).rejects.toBeInstanceOf(TRPCError);
+  });
+});
