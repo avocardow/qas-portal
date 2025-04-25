@@ -413,7 +413,7 @@ export default function DataTableTwo({
         <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between">
           <PaginationWithButton
             totalPages={totalPages}
-            currentPage={currentPage}
+            initialPage={currentPage}
             onPageChange={onPageChange}
           />
           <div className="pt-3 xl:pt-0">
