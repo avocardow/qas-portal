@@ -18,7 +18,7 @@
 Run automated tests for query logic. Manually test with different user roles. Use accessibility tools to verify ARIA compliance. Load test with large datasets to ensure performance.
 
 # Subtasks:
-## 1. Develop and Execute Unit Tests for Query Logic and Data Transformations [in-progress]
+## 1. Develop and Execute Unit Tests for Query Logic and Data Transformations [done]
 ### Dependencies: None
 ### Description: Write and run unit tests to validate the correctness of all query logic and data transformation functions used in the Clients List page.
 ### Details:

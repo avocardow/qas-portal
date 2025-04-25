@@ -22,8 +22,10 @@ export const db = globalForPrisma.prisma ?? createPrismaClient();
 
 if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 
-// Test database connection and handle errors
-db.$connect().catch((error) => {
-  console.error("[Prisma] Database connection error:", error);
-  process.exit(1);
-});
+// Test database connection and handle errors outside of test environment
+if (env.NODE_ENV !== "test") {
+  db.$connect().catch((error) => {
+    console.error("[Prisma] Database connection error:", error);
+    process.exit(1);
+  });
+}

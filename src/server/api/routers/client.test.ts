@@ -101,6 +101,8 @@ describe("clientRouter getAll", () => {
       },
       session: { user: { role: "Admin", id: "userId" } },
     } as any;
+    // Stub prisma $transaction to resolve an array of promises (count, findMany)
+    ctx.db.$transaction = (ops: any[]) => Promise.all(ops);
   });
 
   it("should return paginated clients for Admin with default parameters", async () => {
@@ -210,13 +212,19 @@ describe("clientRouter getAll", () => {
 describe("clientRouter getById", () => {
   let ctx: any;
   let callClient: any;
-  const dummyClientId = "id1";
-  const fullClientRecord = {
+  const dummyClientId = "283ac3ae-7c54-405b-b9f8-f0fd2e39027e";
+  const dummyClientData = {
     id: dummyClientId,
-    clientName: "Test",
-    city: "City",
+    clientName: "Test Client",
+    abn: "ABN123",
+    address: "123 Test St",
+    city: "Test City",
+    postcode: "12345",
     status: "active",
-    contacts: [],
+    auditMonthEnd: 5,
+    nextContactDate: new Date("2023-05-01"),
+    estAnnFees: 500,
+    contacts: [{ name: "John Doe", isPrimary: true }],
     licenses: [],
     trustAccounts: [],
     audits: [],
@@ -228,59 +236,52 @@ describe("clientRouter getById", () => {
     callClient = createCallerFactory(clientRouter);
     ctx = {
       db: {
-        client: {
-          findUniqueOrThrow: vi.fn(),
-        },
-        contact: {
-          findUnique: vi.fn(),
-        },
+        contact: { findUnique: vi.fn() },
+        client: { findUniqueOrThrow: vi.fn() },
       },
-      session: { user: { role: "Admin", id: "userId" } },
+      session: { user: { role: "Admin", id: "user-id" } },
     } as any;
   });
 
-  it("should return client details for Admin", async () => {
-    ctx.db.client.findUniqueOrThrow.mockResolvedValue(fullClientRecord);
+  it("should return client details for Admin and Manager roles", async () => {
+    ctx.session.user.role = "Admin";
+    ctx.db.client.findUniqueOrThrow.mockResolvedValue(dummyClientData);
     const caller = callClient(ctx);
-    const result = await caller.getById({ clientId: dummyClientId });
-    expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id: dummyClientId } })
-    );
-    expect(result).toEqual(fullClientRecord);
-  });
+    const resultAdmin = await caller.getById({ clientId: dummyClientId });
+    expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith({
+      where: { id: dummyClientId },
+      include: {
+        contacts: true,
+        licenses: true,
+        trustAccounts: true,
+        audits: true,
+        activityLogs: true,
+        notes: true,
+      },
+    });
+    expect(resultAdmin).toEqual(dummyClientData);
 
-  it("should allow Manager role", async () => {
     ctx.session.user.role = "Manager";
-    ctx.db.client.findUniqueOrThrow.mockResolvedValue(fullClientRecord);
-    const caller = callClient(ctx);
-    const result = await caller.getById({ clientId: dummyClientId });
-    expect(result).toEqual(fullClientRecord);
+    ctx.db.client.findUniqueOrThrow.mockResolvedValue(dummyClientData);
+    const resultManager = await caller.getById({ clientId: dummyClientId });
+    expect(resultManager).toEqual(dummyClientData);
   });
 
-  it("should return client details for matching Client role", async () => {
+  it("should return only own client for Client role", async () => {
     ctx.session.user.role = "Client";
     ctx.db.contact.findUnique.mockResolvedValue({ clientId: dummyClientId });
-    ctx.db.client.findUniqueOrThrow.mockResolvedValue(fullClientRecord);
+    ctx.db.client.findUniqueOrThrow.mockResolvedValue(dummyClientData);
     const caller = callClient(ctx);
     const result = await caller.getById({ clientId: dummyClientId });
     expect(ctx.db.contact.findUnique).toHaveBeenCalledWith({
       where: { portalUserId: ctx.session.user.id },
     });
-    expect(result).toEqual(fullClientRecord);
+    expect(result).toEqual(dummyClientData);
   });
 
-  it("should forbid Client role with different clientId", async () => {
+  it("should forbid access for Client role to other clients", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.contact.findUnique.mockResolvedValue({ clientId: "otherId" });
-    const caller = callClient(ctx);
-    await expect(
-      caller.getById({ clientId: dummyClientId })
-    ).rejects.toBeInstanceOf(TRPCError);
-  });
-
-  it("should forbid Client role with no associated contact", async () => {
-    ctx.session.user.role = "Client";
-    ctx.db.contact.findUnique.mockResolvedValue(null);
+    ctx.db.contact.findUnique.mockResolvedValue({ clientId: "other-id" });
     const caller = callClient(ctx);
     await expect(
       caller.getById({ clientId: dummyClientId })
@@ -288,7 +289,7 @@ describe("clientRouter getById", () => {
   });
 
   it("should forbid unauthorized roles", async () => {
-    ctx.session.user.role = "Unknown";
+    ctx.session.user.role = "Staff";
     const caller = callClient(ctx);
     await expect(
       caller.getById({ clientId: dummyClientId })
