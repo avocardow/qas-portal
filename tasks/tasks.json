@@ -23,7 +23,9 @@
           "title": "Remove Existing Table Markup",
           "description": "Eliminate the current Table component and all related markup from the Clients List page.",
           "status": "done",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "Identify and delete the existing Table component, including its JSX, props, and any related logic or helper functions that are no longer needed.\n\n<info added on 2025-04-25T05:14:11.276Z>\nTo remove the existing Table markup, follow these steps:\n\n1. Locate the Clients List page component (likely in `src/pages/clients` or similar directory)\n\n2. Remove these specific elements:\n   - The `<Table>` component import statement\n   - All related imports like `TableHeader`, `TableBody`, `TableRow`, and `TableCell`\n   - Any table-specific props or configurations\n\n3. Delete the following code sections:\n   - The entire table rendering block (typically wrapped in a `<Table>` component)\n   - Any column definition arrays or objects\n   - Table-specific event handlers (sort, filter, pagination related to the old table)\n   - Helper functions that format or transform data specifically for the old table\n\n4. Add a temporary placeholder:\n   ```jsx\n   {/* DataTableTwo component will be implemented here */}\n   <div className=\"placeholder-for-datatable\">\n     <p>New DataTable coming soon</p>\n   </div>\n   ```\n\n5. Check for and remove any table-specific CSS classes or styles in related stylesheets\n\n6. Ensure any data fetching or state management remains intact for later use with the new DataTableTwo component\n</info added on 2025-04-25T05:14:11.276Z>"
         },
         {
@@ -31,7 +33,9 @@
           "title": "Configure DataTableTwo with Data and Columns",
           "description": "Set up DataTableTwo with the required data and columns configuration to display the clients list.",
           "status": "done",
-          "dependencies": [2],
+          "dependencies": [
+            2
+          ],
           "details": "Prepare the data and columns objects according to DataTableTwo's API. Pass them as props to DataTableTwo. Ensure column definitions match the previous table's structure and requirements."
         },
         {
@@ -39,7 +43,9 @@
           "title": "Ensure Responsive Layout",
           "description": "Verify and adjust the layout to maintain responsiveness after integrating DataTableTwo.",
           "status": "done",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Test the page on various screen sizes. Adjust container classes, DataTableTwo props, or parent layout as needed to ensure the table remains responsive and visually consistent with the rest of the UI."
         },
         {
@@ -47,7 +53,9 @@
           "title": "Remove Row-Level Delete Icon",
           "description": "Remove the row-level delete icon from the new DataTableTwo implementation.",
           "status": "done",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Ensure that the columns configuration for DataTableTwo does not include a delete icon or delete action. If present, remove the relevant column or cell renderer."
         },
         {
@@ -55,7 +63,9 @@
           "title": "Set Up Pagination Using DataTableTwo",
           "description": "Enable and configure pagination using DataTableTwo's built-in pagination functionality.",
           "status": "done",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Consult DataTableTwo documentation to enable pagination. Pass the necessary pagination props (such as page size, current page, and handlers) to the component. Test to confirm pagination works as expected."
         },
         {
@@ -63,7 +73,9 @@
           "title": "Implement Sorting Indicators",
           "description": "Add sorting indicators to columns as specified in the DataTableTwo documentation.",
           "status": "done",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Update the columns configuration to enable sorting. Ensure sorting indicators are visible and functional, following DataTableTwo's recommended approach for sortable columns."
         }
       ]
@@ -73,7 +85,9 @@
       "title": "Define Column Configuration and Data Formatting",
       "description": "Create column definitions for the Clients table with proper data formatting",
       "status": "done",
-      "dependencies": [1],
+      "dependencies": [
+        1
+      ],
       "priority": "high",
       "details": "1. Define columns array with the following fields:\n   - Client Name (client.clientName)\n   - Primary Contact (derived from contacts where isPrimary === true)\n   - City (client.city)\n   - Next Contact Date (client.nextContactDate) formatted as locale date\n   - Audit Month End (convert client.auditMonthEnd integer to month name using Intl.DateTimeFormat)\n   - Fees (client.estAnnFees) - conditionally visible for Admin role\n   - Status (client.status) - conditionally visible for Admin role\n2. Use date-fns or Intl.DateTimeFormat for date formatting\n3. Implement logic to derive primary contact name from contacts array\n4. Add conditional rendering based on user role using useRbac()",
       "testStrategy": "Unit test the column definitions and formatters. Verify date formatting works correctly across locales. Test conditional visibility logic with different user roles.",
@@ -91,7 +105,9 @@
           "title": "Implement Primary Contact Derivation Logic",
           "description": "Add logic to extract the primary contact's name from the contacts array for each client.",
           "status": "done",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "For the Primary Contact column, implement an accessor function that searches the contacts array for the object where isPrimary is true and returns the contact's name. Ensure this logic is robust to missing or malformed data."
         },
         {
@@ -99,7 +115,9 @@
           "title": "Format Date Fields Using date-fns or Intl.DateTimeFormat",
           "description": "Apply locale-aware formatting to the Next Contact Date column using date-fns or Intl.DateTimeFormat.",
           "status": "done",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales."
         },
         {
@@ -107,7 +125,9 @@
           "title": "Convert Audit Month End Integer to Month Name",
           "description": "Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.",
           "status": "done",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "For the Audit Month End column, implement a value formatter or accessor that takes the integer (1-12), creates a Date object, and formats it to display the full month name using Intl.DateTimeFormat."
         },
         {
@@ -115,7 +135,9 @@
           "title": "Add Conditional Rendering for Fees and Status Columns Based on User Role",
           "description": "Implement logic to show or hide the Fees and Status columns depending on whether the user has the Admin role.",
           "status": "done",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "Integrate useRbac() or equivalent RBAC logic to determine the user's role. Conditionally include the Fees and Status columns in the columns array only if the user is an Admin."
         },
         {
@@ -123,7 +145,9 @@
           "title": "Apply Value Formatters for Fees and Status Columns",
           "description": "Format the Fees column as currency and apply any necessary formatting to the Status column.",
           "status": "done",
-          "dependencies": [5],
+          "dependencies": [
+            5
+          ],
           "details": "For the Fees column, use a value formatter to display the value as currency (e.g., using Intl.NumberFormat or a custom formatter). For the Status column, apply any required formatting or mapping to display user-friendly status labels."
         }
       ]
@@ -133,7 +157,9 @@
       "title": "Implement View Action Button",
       "description": "Add a View button/icon to each row that navigates to the client detail page",
       "status": "done",
-      "dependencies": [1],
+      "dependencies": [
+        1
+      ],
       "priority": "high",
       "details": "1. Create a row action component with a View button/icon\n2. Configure the button to navigate to /clients/[clientId] on click\n3. Integrate the action component into DataTableTwo's row actions slot\n4. Apply appropriate styling according to Cursor rules\n5. Ensure the action is visible to all roles (Admin, Manager, Client)\n6. Remove any existing row-level delete functionality",
       "testStrategy": "Test navigation to client detail page works correctly. Verify the button appears for all user roles. Check that styling matches design system requirements.",
@@ -151,7 +177,9 @@
           "id": 2,
           "title": "Implement navigation functionality",
           "description": "Add navigation logic to the ViewActionButton component to direct users to the client detail page when clicked.",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "Import and use the application's routing mechanism (likely React Router's useNavigate hook). Implement an onClick handler that navigates to the '/clients/[clientId]' route, passing the clientId as a parameter. Add error handling to prevent navigation issues. Test the navigation functionality to ensure it correctly routes to the appropriate client detail page. Verify that the browser history is properly updated. Ensure that the button is not triggering form submissions if placed within a form context.",
           "status": "done",
           "parentTaskId": 3
@@ -160,7 +188,10 @@
           "id": 3,
           "title": "Integrate ViewActionButton with DataTableTwo",
           "description": "Modify the DataTableTwo component to include the ViewActionButton in its row actions slot.",
-          "dependencies": [1, 2],
+          "dependencies": [
+            1,
+            2
+          ],
           "details": "Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.",
           "status": "done",
           "parentTaskId": 3
@@ -169,7 +200,9 @@
           "id": 4,
           "title": "Remove existing row-level delete functionality",
           "description": "Remove any existing delete buttons or functionality from the table rows as specified in the requirements.",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.",
           "status": "done",
           "parentTaskId": 3
@@ -178,7 +211,11 @@
           "id": 5,
           "title": "Implement responsive design for ViewActionButton",
           "description": "Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.",
-          "dependencies": [1, 2, 3],
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
           "details": "Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.",
           "status": "done",
           "parentTaskId": 3
@@ -187,7 +224,9 @@
           "id": 6,
           "title": "Configure role-based visibility",
           "description": "Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.",
           "status": "done",
           "parentTaskId": 3
@@ -196,7 +235,14 @@
           "id": 7,
           "title": "Write comprehensive tests for ViewActionButton functionality",
           "description": "Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.",
-          "dependencies": [1, 2, 3, 4, 5, 6],
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
           "details": "Write unit tests for the ViewActionButton component to verify rendering and click behavior. Create integration tests to verify the button appears correctly in the DataTableTwo component. Test navigation to ensure clicking the button correctly routes to the client detail page. Verify accessibility by testing keyboard navigation and screen reader compatibility. Test with different screen sizes to confirm responsive behavior. Verify role-based visibility by testing with different user roles. Include edge cases such as handling clients with missing IDs or other required data. Document test coverage and any assumptions made during testing.",
           "status": "done",
           "parentTaskId": 3
@@ -208,7 +254,10 @@
       "title": "Implement Status Filtering",
       "description": "Add default Active filter and Show All toggle for Admin users",
       "status": "done",
-      "dependencies": [2, 3],
+      "dependencies": [
+        2,
+        3
+      ],
       "priority": "medium",
       "details": "1. Modify api.clients.getAll.useQuery to accept statusFilter parameter\n2. Set default filter to status === 'active'\n3. Create a UI toggle for 'Show All' that's only visible to Admin users\n4. When toggled, include 'prospect' and 'archived' statuses in the query\n5. Use useRbac() to determine if user has Admin privileges\n6. Ensure filter state persists during pagination\n7. Add visual indicator when 'Show All' is active",
       "testStrategy": "Test default filter shows only active clients. Verify Admin users can see and toggle 'Show All'. Confirm non-Admin users don't see the toggle. Check that filter state persists during pagination.",
@@ -226,7 +275,9 @@
           "id": 2,
           "title": "Implement Default Active Status Filter Logic",
           "description": "Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "1. Create a useState hook to manage the filter state with 'active' as the default value\n2. Update the query call to pass the current filter state\n3. Implement the filter logic in the API call to filter by 'active' status by default\n4. Add unit tests to verify the default filter behavior\n5. Ensure the filter is applied consistently across component re-renders\n6. Verify that the initial data load correctly applies the 'active' filter\n7. Add appropriate loading states during filter transitions",
           "status": "done",
           "parentTaskId": 4
@@ -235,7 +286,9 @@
           "id": 3,
           "title": "Create Role-Based Access Control for Filter Visibility",
           "description": "Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.",
-          "dependencies": [2],
+          "dependencies": [
+            2
+          ],
           "details": "1. Import and implement the useRbac() hook to check for admin privileges\n2. Create a function to determine if the current user has admin access\n3. Set up a React context if needed to make the admin status available throughout the component tree\n4. Add unit tests to verify the RBAC logic works correctly\n5. Implement conditional rendering based on admin status\n6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders\n7. Add appropriate error handling for RBAC failures",
           "status": "done",
           "parentTaskId": 4
@@ -244,7 +297,9 @@
           "id": 4,
           "title": "Develop Show All Toggle UI Component",
           "description": "Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "1. Design a toggle switch component using appropriate UI library (e.g., Material-UI Switch)\n2. Implement the toggle with clear labeling ('Show All')\n3. Style the toggle to be visually distinct and accessible\n4. Add appropriate ARIA attributes for accessibility\n5. Implement conditional rendering to only show the toggle to admin users\n6. Add hover tooltips to explain the toggle functionality\n7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)",
           "status": "done",
           "parentTaskId": 4
@@ -253,7 +308,10 @@
           "id": 5,
           "title": "Implement Multi-Status Filter Logic",
           "description": "Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.",
-          "dependencies": [2, 4],
+          "dependencies": [
+            2,
+            4
+          ],
           "details": "1. Modify the filter state to handle multiple status values\n2. Update the API query to accept an array of statuses when 'Show All' is active\n3. Implement the logic to include 'prospect' and 'archived' statuses when the toggle is on\n4. Add appropriate type checking for the status array\n5. Optimize the query to handle multiple statuses efficiently\n6. Test the filter with various combinations of statuses\n7. Ensure the UI updates correctly when switching between filtered and unfiltered views",
           "status": "done",
           "parentTaskId": 4
@@ -262,7 +320,10 @@
           "id": 6,
           "title": "Add Visual Indicator for Active Filters",
           "description": "Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.",
-          "dependencies": [4, 5],
+          "dependencies": [
+            4,
+            5
+          ],
           "details": "1. Design a visual indicator component (e.g., badge, highlight, or text label)\n2. Implement the indicator to appear when 'Show All' is active\n3. Style the indicator to be noticeable but not distracting\n4. Add animations for state transitions (e.g., fade in/out when filter changes)\n5. Ensure the indicator is accessible (proper contrast, screen reader support)\n6. Add a count of total items being displayed with the current filter\n7. Test the indicator across different screen sizes and ensure it's responsive",
           "status": "done",
           "parentTaskId": 4
@@ -271,7 +332,10 @@
           "id": 7,
           "title": "Implement Filter State Persistence During Pagination",
           "description": "Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.",
-          "dependencies": [5, 6],
+          "dependencies": [
+            5,
+            6
+          ],
           "details": "1. Modify the pagination logic to include the current filter state\n2. Update the query key structure to incorporate both pagination and filter parameters\n3. Implement state management to preserve filter settings during navigation\n4. Add URL query parameters to maintain filter state on page refresh\n5. Test pagination with different filter combinations\n6. Optimize data fetching to minimize redundant requests when only changing pages\n7. Ensure the visual indicator remains consistent during pagination",
           "status": "done",
           "parentTaskId": 4
@@ -283,7 +347,9 @@
       "title": "Enhance Search Functionality",
       "description": "Implement global search across Client Name and Contact Name fields",
       "status": "done",
-      "dependencies": [4],
+      "dependencies": [
+        4
+      ],
       "priority": "medium",
       "details": "1. Extend the tRPC endpoint to search across client.clientName OR contacts.name\n2. Wire up DataTableTwo's search input to trigger the search\n3. Implement debounced search to prevent excessive API calls\n4. Ensure search works across all pages of data, not just the current page\n5. Add loading state during search operations\n6. Preserve other active filters (like status) when searching\n7. Reset pagination to first page when search term changes",
       "testStrategy": "Test search functionality with various inputs. Verify it finds matches in both client names and contact names. Check debounce behavior prevents excessive API calls. Confirm search works with status filters applied.",
@@ -301,7 +367,9 @@
           "id": 2,
           "title": "Create Search Service with Debounce Implementation",
           "description": "Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "1. Create a search service module that will manage all search-related functionality\n2. Implement debounce logic using setTimeout/clearTimeout or a library like lodash.debounce\n3. Set an appropriate debounce delay (300-500ms is typical for search)\n4. Add state management for tracking the current search term\n5. Implement loading state indicators that activate immediately when typing begins\n6. Create a mechanism to cancel in-flight requests if a new search is initiated\n7. Add error handling for failed requests\n8. Test the debounce functionality with rapid typing scenarios",
           "status": "done",
           "parentTaskId": 5
@@ -310,7 +378,9 @@
           "id": 3,
           "title": "Connect DataTableTwo Search Input to Search Service",
           "description": "Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.",
-          "dependencies": [2],
+          "dependencies": [
+            2
+          ],
           "details": "1. Modify DataTableTwo component to use the search service\n2. Connect the existing search input to the debounced search function\n3. Implement onChange handler to capture user input\n4. Add clear button functionality to reset search\n5. Ensure the input is accessible with proper ARIA attributes\n6. Add placeholder text that indicates users can search by client or contact name\n7. Implement keyboard shortcuts for focusing the search input (e.g., Ctrl+F or /)\n8. Test the integration to ensure search triggers correctly",
           "status": "done",
           "parentTaskId": 5
@@ -319,7 +389,10 @@
           "id": 4,
           "title": "Implement Cross-Page Search Results Handling",
           "description": "Ensure search functionality works across all pages of data, not just the current page, by modifying the data fetching logic.",
-          "dependencies": [1, 3],
+          "dependencies": [
+            1,
+            3
+          ],
           "details": "1. Modify the data fetching logic to search across all records, not just the current page\n2. Update the pagination component to reset when search is performed\n3. Implement server-side filtering based on search terms\n4. Ensure total count of results is correctly calculated and displayed\n5. Maintain proper state for empty results\n6. Add visual indication that results are filtered\n7. Test with large datasets to verify all matching records are found\n8. Optimize query performance for large datasets",
           "status": "done",
           "parentTaskId": 5
@@ -328,7 +401,10 @@
           "id": 5,
           "title": "Add Loading States During Search Operations",
           "description": "Implement visual feedback for users during search operations to improve perceived performance and user experience.",
-          "dependencies": [3, 4],
+          "dependencies": [
+            3,
+            4
+          ],
           "details": "1. Create loading indicators for the search input (e.g., spinning icon)\n2. Implement skeleton loaders for the table rows during search\n3. Add transition animations between loading and results states\n4. Ensure loading states are accessible with proper ARIA attributes\n5. Implement progressive loading if results are large\n6. Add timeout handling for long-running searches\n7. Test loading states with various network conditions\n8. Ensure loading states don't cause layout shifts",
           "status": "done",
           "parentTaskId": 5
@@ -337,7 +413,9 @@
           "id": 6,
           "title": "Preserve Active Filters During Search",
           "description": "Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.",
-          "dependencies": [4],
+          "dependencies": [
+            4
+          ],
           "details": "1. Refactor filter state management to separate search from other filters\n2. Modify the tRPC endpoint to accept both search terms and filter criteria\n3. Update the UI to show active filters alongside search terms\n4. Implement logic to combine search and filter criteria in queries\n5. Add visual indicators for active combined filters\n6. Create clear all/reset functionality for filters and search\n7. Test various combinations of filters and search terms\n8. Ensure filter state is preserved during navigation or page refresh",
           "status": "done",
           "parentTaskId": 5
@@ -346,7 +424,10 @@
           "id": 7,
           "title": "Implement Pagination Reset on Search Term Changes",
           "description": "Reset pagination to the first page whenever search terms change to ensure users see the most relevant results immediately.",
-          "dependencies": [4, 6],
+          "dependencies": [
+            4,
+            6
+          ],
           "details": "1. Modify the pagination state management to reset page to 1 when search term changes\n2. Update the URL parameters to reflect the page reset\n3. Ensure the UI updates to show the first page of results\n4. Add smooth scroll to top when pagination resets\n5. Implement history state management to handle browser back/forward navigation\n6. Add analytics tracking for search term changes and pagination resets\n7. Test edge cases like empty search results and rapid search term changes\n8. Ensure the reset doesn't cause jarring UI changes",
           "status": "done",
           "parentTaskId": 5
@@ -358,7 +439,9 @@
       "title": "Testing and Validation",
       "description": "Perform comprehensive testing of the enhanced Clients List page",
       "status": "pending",
-      "dependencies": [5],
+      "dependencies": [
+        5
+      ],
       "priority": "low",
       "details": "1. Write unit tests for query logic and data transformations\n2. Test role-based access control for Admin vs Manager/Client views\n3. Perform accessibility audit on the table and controls\n4. Test performance with large datasets\n5. Verify all features work across supported browsers\n6. Check that all Cursor rules are followed\n7. Validate that the implementation meets all requirements in the PRD\n8. Test edge cases like empty search results, no clients, etc.",
       "testStrategy": "Run automated tests for query logic. Manually test with different user roles. Use accessibility tools to verify ARIA compliance. Load test with large datasets to ensure performance.",
@@ -376,15 +459,19 @@
           "title": "Test Role-Based Access Control (RBAC) for All User Types",
           "description": "Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.",
           "status": "in-progress",
-          "dependencies": [1],
+          "dependencies": [
+            1
+          ],
           "details": "Simulate each user role and test all relevant UI elements and API endpoints. Attempt to access restricted features as lower-privilege users to confirm proper enforcement of RBAC policies. Document any discrepancies and update access rules as needed."
         },
         {
           "id": 3,
           "title": "Perform Accessibility Audit of Table and Controls",
           "description": "Assess the Clients List page for compliance with accessibility standards (e.g., WCAG 2.1), focusing on the table, filters, buttons, and navigation.",
-          "status": "pending",
-          "dependencies": [2],
+          "status": "in-progress",
+          "dependencies": [
+            2
+          ],
           "details": "Use automated tools (such as axe or Lighthouse) and manual testing (keyboard navigation, screen readers) to identify accessibility issues. Address problems such as missing ARIA labels, insufficient contrast, or non-semantic markup."
         },
         {
@@ -392,7 +479,9 @@
           "title": "Test Performance with Large Datasets",
           "description": "Evaluate the Clients List page's responsiveness and stability when handling large volumes of client data.",
           "status": "pending",
-          "dependencies": [3],
+          "dependencies": [
+            3
+          ],
           "details": "Seed the database or mock API with a large number of client records. Measure page load times, scrolling performance, and interaction latency. Identify and optimize any bottlenecks in data fetching, rendering, or pagination."
         },
         {
@@ -400,7 +489,9 @@
           "title": "Verify Cross-Browser Compatibility and Cursor Rule Compliance",
           "description": "Ensure that all features of the Clients List page function correctly across all supported browsers and that cursor usage follows design guidelines.",
           "status": "pending",
-          "dependencies": [4],
+          "dependencies": [
+            4
+          ],
           "details": "Test the page in each supported browser (e.g., Chrome, Firefox, Edge, Safari) on relevant platforms. Check that all interactive elements use the correct cursor styles (pointer, default, etc.) as specified in the UI guidelines."
         },
         {
@@ -408,7 +499,9 @@
           "title": "Validate PRD Requirements and Edge Case Handling",
           "description": "Confirm that the implementation meets all requirements in the Product Requirements Document (PRD) and robustly handles edge cases.",
           "status": "pending",
-          "dependencies": [5],
+          "dependencies": [
+            5
+          ],
           "details": "Cross-check the Clients List page against the PRD checklist. Test scenarios such as empty search results, no clients in the system, and invalid input. Document results and address any gaps or failures before sign-off."
         }
       ]

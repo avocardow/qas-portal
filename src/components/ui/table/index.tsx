@@ -30,6 +30,7 @@ interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {
   isHeader?: boolean; // If true, renders as <th>, otherwise <td>
   className?: string; // Optional className for styling
   colSpan?: number; // Allow colSpan attribute explicitly
+  scope?: string; // Allow scope attribute for header cells
 }
 
 // Table Component

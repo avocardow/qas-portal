@@ -30,7 +30,7 @@ Use a framework such as dbt or your project's preferred testing tool to create u
 ### Details:
 Simulate each user role and test all relevant UI elements and API endpoints. Attempt to access restricted features as lower-privilege users to confirm proper enforcement of RBAC policies. Document any discrepancies and update access rules as needed.
 
-## 3. Perform Accessibility Audit of Table and Controls [pending]
+## 3. Perform Accessibility Audit of Table and Controls [in-progress]
 ### Dependencies: 6.2
 ### Description: Assess the Clients List page for compliance with accessibility standards (e.g., WCAG 2.1), focusing on the table, filters, buttons, and navigation.
 ### Details:

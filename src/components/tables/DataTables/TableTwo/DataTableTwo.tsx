@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import {
@@ -88,7 +89,8 @@ export default function DataTableTwo({
     { key: "date", header: "Start Date", sortable: true },
     { key: "salary", header: "Salary", sortable: true },
   ];
-  const cols = columns ?? defaultColumns;
+  const baseColumns = useMemo<ColumnDef[]>(() => defaultColumns, []);
+  const cols = columns ?? baseColumns;
 
   // Use pageSize prop for items per page
   const itemsPerPage = pageSize;
@@ -109,6 +111,12 @@ export default function DataTableTwo({
         : String(b[sortKey]).localeCompare(String(a[sortKey]));
     });
   }, [data, sortKey, sortOrder]);
+
+  // Paginate sorted data to avoid rendering all rows at once
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return currentData.slice(start, start + itemsPerPage);
+  }, [currentData, currentPage, itemsPerPage]);
 
   // Calculate totalItems based on prop or fallback
   const totalItems = totalDbEntries ?? (data ?? []).length;
@@ -263,32 +271,38 @@ export default function DataTableTwo({
                   <TableCell
                     key={key}
                     isHeader
+                    scope="col"
+                    aria-sort={
+                      sortKey === key
+                        ? sortOrder === "asc"
+                          ? "ascending"
+                          : "descending"
+                        : "none"
+                    }
                     className="border border-gray-100 px-4 py-3 dark:border-white/[0.05]"
                   >
-                    <div
-                      className="flex cursor-pointer items-center justify-between"
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between p-0"
                       onClick={() => sortable && handleSort(key)}
+                      aria-label={header}
                     >
-                      <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                      <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                         {header}
-                      </p>
-                      <button className="flex flex-col gap-0.5">
+                      </span>
+                      <span aria-hidden="true" className="flex flex-col gap-0.5">
                         <AngleUpIcon
                           className={`text-gray-300 dark:text-gray-700 ${
-                            sortKey === key && sortOrder === "asc"
-                              ? "text-brand-500"
-                              : ""
+                            sortKey === key && sortOrder === "asc" ? "text-brand-500" : ""
                           }`}
                         />
                         <AngleDownIcon
                           className={`text-gray-300 dark:text-gray-700 ${
-                            sortKey === key && sortOrder === "desc"
-                              ? "text-brand-500"
-                              : ""
+                            sortKey === key && sortOrder === "desc" ? "text-brand-500" : ""
                           }`}
                         />
-                      </button>
-                    </div>
+                      </span>
+                    </button>
                   </TableCell>
                 ))}
                 <TableCell
@@ -310,8 +324,8 @@ export default function DataTableTwo({
                       columnCount={cols.length}
                     />
                   ))
-                : // Render actual data rows when not loading
-                  currentData.map((item, i) => (
+                : // Render actual data rows when not loading, limited to pageSize for performance
+                  paginatedData.map((item, i) => (
                     <TableRow key={item.id ?? i}>
                       {cols.map(({ key, cell }) => (
                         <TableCell
