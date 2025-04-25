@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { createCallerFactory } from "@/server/api/trpc";
 import { clientRouter } from "./client";
