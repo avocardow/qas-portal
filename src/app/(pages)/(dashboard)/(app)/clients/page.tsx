@@ -12,6 +12,7 @@ import DataTableTwo, {
   ColumnDef,
 } from "@/components/tables/DataTables/TableTwo/DataTableTwo";
 import Badge from "@/components/ui/badge/Badge";
+import { useRouter } from "next/navigation";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -21,6 +22,7 @@ export default function ClientsPage() {
   } | null>(null);
   // RBAC context
   const { role } = useRbac();
+  const router = useRouter();
   // Pagination, filtering state
   const [filter, setFilter] = useState("");
   // Debounce filter input to optimize queries
@@ -196,7 +198,12 @@ export default function ClientsPage() {
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
             <div className="custom-scrollbar max-w-full overflow-x-auto">
-              <DataTableTwo data={items} columns={columns} hideDeleteIcon />
+              <DataTableTwo
+                data={items}
+                columns={columns}
+                hideDeleteIcon
+                onView={(row: any) => router.push(`/clients/${row.id}`)}
+              />
             </div>
           )}
         </ComponentCard>

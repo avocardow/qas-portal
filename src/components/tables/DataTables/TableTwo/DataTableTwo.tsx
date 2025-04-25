@@ -16,6 +16,7 @@ import {
   TrashBinIcon,
 } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
+import ViewActionButton from "@/components/common/ViewActionButton";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -29,6 +30,7 @@ export interface DataTableTwoProps {
   data?: any[];
   columns?: ColumnDef[];
   hideDeleteIcon?: boolean;
+  onView?: (row: any) => void;
 }
 
 // Original static data fallback
@@ -129,6 +131,7 @@ export default function DataTableTwo({
   data,
   columns,
   hideDeleteIcon = false,
+  onView,
 }: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -326,6 +329,9 @@ export default function DataTableTwo({
                   ))}
                   <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
                     <div className="flex w-full items-center gap-2">
+                      {onView && (
+                        <ViewActionButton onClick={() => onView(item)} />
+                      )}
                       {!hideDeleteIcon && (
                         <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">
                           <TrashBinIcon />

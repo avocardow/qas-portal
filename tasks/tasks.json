@@ -144,7 +144,7 @@
           "description": "Design and implement a reusable ViewActionButton component that will be used across the application for navigating to detail pages.",
           "dependencies": [],
           "details": "Create a new component in the shared components directory that accepts clientId as a prop. Use semantic HTML with a button element for accessibility. Implement an eye/visibility icon from the project's icon library. Add appropriate ARIA labels for screen readers. Include a tooltip that appears on hover with 'View Details' text. Style according to Cursor design system with appropriate contrast and visual hierarchy as a secondary action. Ensure the button is keyboard accessible and has proper focus states. Test the component in isolation to verify it renders correctly.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -153,7 +153,7 @@
           "description": "Add navigation logic to the ViewActionButton component to direct users to the client detail page when clicked.",
           "dependencies": [1],
           "details": "Import and use the application's routing mechanism (likely React Router's useNavigate hook). Implement an onClick handler that navigates to the '/clients/[clientId]' route, passing the clientId as a parameter. Add error handling to prevent navigation issues. Test the navigation functionality to ensure it correctly routes to the appropriate client detail page. Verify that the browser history is properly updated. Ensure that the button is not triggering form submissions if placed within a form context.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -162,7 +162,7 @@
           "description": "Modify the DataTableTwo component to include the ViewActionButton in its row actions slot.",
           "dependencies": [1, 2],
           "details": "Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
