@@ -186,6 +186,11 @@ export default function ClientsPage() {
               <span>Show All</span>
             </label>
           )}
+          {role === "Admin" && (
+            <Badge size="sm" color={showAll ? "info" : "success"}>
+              {showAll ? "All Clients" : "Active Clients"}
+            </Badge>
+          )}
           {/* Conditional Add New Client button */}
           {/* Only Admin can create clients */}
           {role === "Admin" && (
