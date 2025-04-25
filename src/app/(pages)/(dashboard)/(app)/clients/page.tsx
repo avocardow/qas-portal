@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useRbac } from "@/context/RbacContext";
 import { api } from "@/utils/api";
@@ -7,7 +8,10 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import Notification from "@/components/ui/notification/Notification";
 import useDebounce from "@/hooks/useDebounce";
-import DataTableTwo from "@/components/tables/DataTables/TableTwo/DataTableTwo";
+import DataTableTwo, {
+  ColumnDef,
+} from "@/components/tables/DataTables/TableTwo/DataTableTwo";
+import Badge from "@/components/ui/badge/Badge";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -56,6 +60,62 @@ export default function ClientsPage() {
       });
     }
   }, [error]);
+
+  // Configure columns for DataTableTwo (hook must run unconditionally)
+  const columns: ColumnDef[] = React.useMemo(() => {
+    const cols: ColumnDef[] = [
+      {
+        key: "clientName",
+        header: "Client Name",
+        sortable: true,
+        cell: (row: any) => (
+          <Link href={`/clients/${row.id}`}>{row.clientName}</Link>
+        ),
+      },
+      {
+        key: "primaryContact",
+        header: "Primary Contact",
+        cell: (row: any) =>
+          row.contacts?.find((c: any) => c.isPrimary)?.name ?? "-",
+      },
+      { key: "city", header: "City", sortable: true },
+      {
+        key: "nextContactDate",
+        header: "Next Contact Date",
+        sortable: true,
+        cell: (row: any) =>
+          row.nextContactDate
+            ? new Date(row.nextContactDate).toLocaleDateString()
+            : "-",
+      },
+      {
+        key: "auditMonthEnd",
+        header: "Audit Month End",
+        sortable: true,
+        cell: (row: any) =>
+          row.auditMonthEnd
+            ? new Date(2000, row.auditMonthEnd - 1).toLocaleString("default", {
+                month: "long",
+              })
+            : "-",
+      },
+    ];
+    if (role === "Admin") {
+      cols.push({
+        key: "estAnnFees",
+        header: "Fees",
+        sortable: true,
+        cell: (row: any) => row.estAnnFees?.toString() ?? "-",
+      });
+      cols.push({
+        key: "status",
+        header: "Status",
+        sortable: true,
+        cell: (row: any) => <Badge size="sm">{row.status}</Badge>,
+      });
+    }
+    return cols;
+  }, [role]);
 
   // Protect view based on role after hooks to keep hook order consistent
   if (role !== "Admin" && role !== "Manager" && role !== "Client") {
@@ -134,7 +194,7 @@ export default function ClientsPage() {
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
             <div className="overflow-x-auto">
-              <DataTableTwo />
+              <DataTableTwo data={items} columns={columns} />
             </div>
           )}
         </ComponentCard>

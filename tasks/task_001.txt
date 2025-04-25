@@ -85,7 +85,7 @@ To remove the existing Table markup, follow these steps:
 6. Ensure any data fetching or state management remains intact for later use with the new DataTableTwo component
 </info added on 2025-04-25T05:14:11.276Z>
 
-## 3. Configure DataTableTwo with Data and Columns [pending]
+## 3. Configure DataTableTwo with Data and Columns [done]
 ### Dependencies: 1.2
 ### Description: Set up DataTableTwo with the required data and columns configuration to display the clients list.
 ### Details:

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useMemo } from "react";
@@ -16,7 +17,21 @@ import {
 } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
 
-const tableRowData = [
+// Column and props definitions for flexibility
+export interface ColumnDef {
+  key: string;
+  header: string;
+  sortable?: boolean;
+  cell?: (row: any) => React.ReactNode;
+}
+
+export interface DataTableTwoProps {
+  data?: any[];
+  columns?: ColumnDef[];
+}
+
+// Original static data fallback
+const staticTableData = [
   {
     id: 1,
     name: "Abram Schleifer",
@@ -108,18 +123,31 @@ const tableRowData = [
     salary: "$70,000",
   },
 ];
-type SortKey = "name" | "position" | "location" | "age" | "date" | "salary";
-type SortOrder = "asc" | "desc";
 
-export default function DataTableTwo() {
+export default function DataTableTwo({ data, columns }: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [sortKey, setSortKey] = useState<SortKey>("name");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortKey, setSortKey] = useState<string>(
+    columns && columns.length ? columns[0].key : "name"
+  );
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Use provided data or fallback
+  const tableData = data ?? staticTableData;
+  // Default columns if not provided
+  const defaultColumns: ColumnDef[] = [
+    { key: "name", header: "User", sortable: true },
+    { key: "position", header: "Position", sortable: true },
+    { key: "location", header: "Office", sortable: true },
+    { key: "age", header: "Age", sortable: true },
+    { key: "date", header: "Start Date", sortable: true },
+    { key: "salary", header: "Salary", sortable: true },
+  ];
+  const cols = columns ?? defaultColumns;
+
   const filteredAndSortedData = useMemo(() => {
-    return tableRowData
+    return tableData
       .filter((item) =>
         Object.values(item).some(
           (value) =>
@@ -129,15 +157,18 @@ export default function DataTableTwo() {
       )
       .sort((a, b) => {
         if (sortKey === "salary") {
-          const salaryA = Number.parseInt(a[sortKey].replace(/\$|,/g, ""));
-          const salaryB = Number.parseInt(b[sortKey].replace(/\$|,/g, ""));
+          // dynamic key access for salary, ensure string conversion
+          const rawA = (a as any)[sortKey];
+          const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
+          const rawB = (b as any)[sortKey];
+          const salaryB = Number.parseInt(String(rawB).replace(/\$|,/g, ""));
           return sortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
         }
         return sortOrder === "asc"
           ? String(a[sortKey]).localeCompare(String(b[sortKey]))
           : String(b[sortKey]).localeCompare(String(a[sortKey]));
       });
-  }, [sortKey, sortOrder, searchTerm]);
+  }, [sortKey, sortOrder, searchTerm, tableData]);
 
   const totalItems = filteredAndSortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -146,7 +177,7 @@ export default function DataTableTwo() {
     setCurrentPage(page);
   };
 
-  const handleSort = (key: SortKey) => {
+  const handleSort = (key: string) => {
     if (sortKey === key) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
@@ -235,14 +266,7 @@ export default function DataTableTwo() {
           <Table>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                {[
-                  { key: "name", label: "User" },
-                  { key: "position", label: "Position" },
-                  { key: "location", label: "Office" },
-                  { key: "age", label: "Age" },
-                  { key: "date", label: "Start Date" },
-                  { key: "salary", label: "Salary" },
-                ].map(({ key, label }) => (
+                {cols.map(({ key, header, sortable }) => (
                   <TableCell
                     key={key}
                     isHeader
@@ -250,10 +274,10 @@ export default function DataTableTwo() {
                   >
                     <div
                       className="flex cursor-pointer items-center justify-between"
-                      onClick={() => handleSort(key as SortKey)}
+                      onClick={() => sortable && handleSort(key)}
                     >
                       <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                        {label}
+                        {header}
                       </p>
                       <button className="flex flex-col gap-0.5">
                         <AngleUpIcon
@@ -286,25 +310,15 @@ export default function DataTableTwo() {
             </TableHeader>
             <TableBody>
               {currentData.map((item, i) => (
-                <TableRow key={i + 1}>
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-medium whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white">
-                    {item.name}
-                  </TableCell>
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                    {item.position}
-                  </TableCell>
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                    {item.location}
-                  </TableCell>
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                    {item.age}
-                  </TableCell>
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                    {item.date}
-                  </TableCell>
-                  <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                    {item.salary}
-                  </TableCell>
+                <TableRow key={i}>
+                  {cols.map(({ key, cell }) => (
+                    <TableCell
+                      key={key}
+                      className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400"
+                    >
+                      {cell ? cell(item) : (item[key] ?? "-")}
+                    </TableCell>
+                  ))}
                   <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
                     <div className="flex w-full items-center gap-2">
                       <button className="hover:text-error-500 dark:hover:text-error-500 text-gray-500 dark:text-gray-400">

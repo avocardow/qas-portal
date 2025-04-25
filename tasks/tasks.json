@@ -30,7 +30,7 @@
           "id": 3,
           "title": "Configure DataTableTwo with Data and Columns",
           "description": "Set up DataTableTwo with the required data and columns configuration to display the clients list.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [2],
           "details": "Prepare the data and columns objects according to DataTableTwo's API. Pass them as props to DataTableTwo. Ensure column definitions match the previous table's structure and requirements."
         },
