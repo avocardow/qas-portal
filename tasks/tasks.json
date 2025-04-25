@@ -22,7 +22,7 @@
           "id": 2,
           "title": "Remove Existing Table Markup",
           "description": "Eliminate the current Table component and all related markup from the Clients List page.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "Identify and delete the existing Table component, including its JSX, props, and any related logic or helper functions that are no longer needed.\n\n<info added on 2025-04-25T05:14:11.276Z>\nTo remove the existing Table markup, follow these steps:\n\n1. Locate the Clients List page component (likely in `src/pages/clients` or similar directory)\n\n2. Remove these specific elements:\n   - The `<Table>` component import statement\n   - All related imports like `TableHeader`, `TableBody`, `TableRow`, and `TableCell`\n   - Any table-specific props or configurations\n\n3. Delete the following code sections:\n   - The entire table rendering block (typically wrapped in a `<Table>` component)\n   - Any column definition arrays or objects\n   - Table-specific event handlers (sort, filter, pagination related to the old table)\n   - Helper functions that format or transform data specifically for the old table\n\n4. Add a temporary placeholder:\n   ```jsx\n   {/* DataTableTwo component will be implemented here */}\n   <div className=\"placeholder-for-datatable\">\n     <p>New DataTable coming soon</p>\n   </div>\n   ```\n\n5. Check for and remove any table-specific CSS classes or styles in related stylesheets\n\n6. Ensure any data fetching or state management remains intact for later use with the new DataTableTwo component\n</info added on 2025-04-25T05:14:11.276Z>"
         },

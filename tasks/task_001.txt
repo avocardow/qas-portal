@@ -50,7 +50,7 @@ To implement this import effectively:
    ```
 </info added on 2025-04-25T05:12:04.575Z>
 
-## 2. Remove Existing Table Markup [pending]
+## 2. Remove Existing Table Markup [done]
 ### Dependencies: 1.1
 ### Description: Eliminate the current Table component and all related markup from the Clients List page.
 ### Details:
