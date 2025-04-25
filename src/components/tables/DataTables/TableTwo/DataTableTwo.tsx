@@ -13,6 +13,7 @@ import { AngleDownIcon, AngleUpIcon, PencilIcon } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
 import ViewActionButton from "@/components/common/ViewActionButton";
 import { useRole } from "@/context/RbacContext";
+import useSearchService from "@/hooks/useSearchService";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -26,6 +27,8 @@ export interface DataTableTwoProps {
   data?: any[];
   columns?: ColumnDef[];
   onView?: (row: any) => void;
+  searchFn?: (term: string, signal: AbortSignal) => Promise<any[]>;
+  searchDelay?: number;
 }
 
 // Original static data fallback
@@ -126,6 +129,8 @@ export default function DataTableTwo({
   data,
   columns,
   onView,
+  searchFn,
+  searchDelay = 300,
 }: DataTableTwoProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -133,11 +138,30 @@ export default function DataTableTwo({
     columns && columns.length ? columns[0].key : "name"
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [searchTerm, setSearchTerm] = useState("");
   const currentRole = useRole();
 
   // Use provided data or fallback
   const tableData = data ?? staticTableData;
+  // Fallback local search if no searchFn provided
+  const fallbackSearchFn = (term: string, _signal: AbortSignal) => {
+    void _signal;
+    const lower = term.toLowerCase();
+    return Promise.resolve(
+      tableData.filter((item) =>
+        Object.values(item).some(
+          (value) =>
+            typeof value === "string" && value.toLowerCase().includes(lower)
+        )
+      )
+    );
+  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    results: searchResults,
+    loading: searchLoading,
+    error: searchError,
+  } = useSearchService<any[]>(searchFn ?? fallbackSearchFn, searchDelay);
   // Default columns if not provided
   const defaultColumns: ColumnDef[] = [
     { key: "name", header: "User", sortable: true },
@@ -150,28 +174,20 @@ export default function DataTableTwo({
   const cols = columns ?? defaultColumns;
 
   const filteredAndSortedData = useMemo(() => {
-    return tableData
-      .filter((item) =>
-        Object.values(item).some(
-          (value) =>
-            typeof value === "string" &&
-            value.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      )
-      .sort((a, b) => {
-        if (sortKey === "salary") {
-          // dynamic key access for salary, ensure string conversion
-          const rawA = (a as any)[sortKey];
-          const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
-          const rawB = (b as any)[sortKey];
-          const salaryB = Number.parseInt(String(rawB).replace(/\$|,/g, ""));
-          return sortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
-        }
-        return sortOrder === "asc"
-          ? String(a[sortKey]).localeCompare(String(b[sortKey]))
-          : String(b[sortKey]).localeCompare(String(a[sortKey]));
-      });
-  }, [sortKey, sortOrder, searchTerm, tableData]);
+    const dataToSort = searchResults != null ? searchResults : tableData;
+    return dataToSort.sort((a, b) => {
+      if (sortKey === "salary") {
+        const rawA = (a as any)[sortKey];
+        const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
+        const rawB = (b as any)[sortKey];
+        const salaryB = Number.parseInt(String(rawB).replace(/\$|,/g, ""));
+        return sortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
+      }
+      return sortOrder === "asc"
+        ? String(a[sortKey]).localeCompare(String(b[sortKey]))
+        : String(b[sortKey]).localeCompare(String(a[sortKey]));
+    });
+  }, [sortKey, sortOrder, searchResults, tableData]);
 
   const totalItems = filteredAndSortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -263,7 +279,12 @@ export default function DataTableTwo({
           />
         </div>
       </div>
-
+      {searchLoading && <div className="p-4 text-center">Loading...</div>}
+      {searchError && (
+        <div className="p-4 text-center text-red-500">
+          Error: {searchError.message}
+        </div>
+      )}
       <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div>
           <Table>

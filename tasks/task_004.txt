@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Status Filtering
-# Status: pending
+# Status: done
 # Dependencies: 2, 3
 # Priority: medium
 # Description: Add default Active filter and Show All toggle for Admin users
@@ -17,7 +17,7 @@
 Test default filter shows only active clients. Verify Admin users can see and toggle 'Show All'. Confirm non-Admin users don't see the toggle. Check that filter state persists during pagination.
 
 # Subtasks:
-## 1. Modify API Client Query to Accept Status Filter Parameter [pending]
+## 1. Modify API Client Query to Accept Status Filter Parameter [done]
 ### Dependencies: None
 ### Description: Update the existing api.clients.getAll.useQuery hook to accept a statusFilter parameter that will filter clients by their status.
 ### Details:
@@ -29,7 +29,7 @@ Test default filter shows only active clients. Verify Admin users can see and to
 6. Test the modified query with different status values
 7. Ensure backward compatibility for existing usages of the hook
 
-## 2. Implement Default Active Status Filter Logic [pending]
+## 2. Implement Default Active Status Filter Logic [done]
 ### Dependencies: 4.1
 ### Description: Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.
 ### Details:
@@ -41,7 +41,7 @@ Test default filter shows only active clients. Verify Admin users can see and to
 6. Verify that the initial data load correctly applies the 'active' filter
 7. Add appropriate loading states during filter transitions
 
-## 3. Create Role-Based Access Control for Filter Visibility [pending]
+## 3. Create Role-Based Access Control for Filter Visibility [done]
 ### Dependencies: 4.2
 ### Description: Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.
 ### Details:
@@ -53,7 +53,7 @@ Test default filter shows only active clients. Verify Admin users can see and to
 6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders
 7. Add appropriate error handling for RBAC failures
 
-## 4. Develop Show All Toggle UI Component [pending]
+## 4. Develop Show All Toggle UI Component [done]
 ### Dependencies: 4.3
 ### Description: Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.
 ### Details:
@@ -65,7 +65,7 @@ Test default filter shows only active clients. Verify Admin users can see and to
 6. Add hover tooltips to explain the toggle functionality
 7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)
 
-## 5. Implement Multi-Status Filter Logic [pending]
+## 5. Implement Multi-Status Filter Logic [done]
 ### Dependencies: 4.2, 4.4
 ### Description: Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.
 ### Details:
@@ -77,7 +77,7 @@ Test default filter shows only active clients. Verify Admin users can see and to
 6. Test the filter with various combinations of statuses
 7. Ensure the UI updates correctly when switching between filtered and unfiltered views
 
-## 6. Add Visual Indicator for Active Filters [pending]
+## 6. Add Visual Indicator for Active Filters [done]
 ### Dependencies: 4.4, 4.5
 ### Description: Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.
 ### Details:
@@ -89,7 +89,7 @@ Test default filter shows only active clients. Verify Admin users can see and to
 6. Add a count of total items being displayed with the current filter
 7. Test the indicator across different screen sizes and ensure it's responsive
 
-## 7. Implement Filter State Persistence During Pagination [pending]
+## 7. Implement Filter State Persistence During Pagination [done]
 ### Dependencies: 4.5, 4.6
 ### Description: Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.
 ### Details:
