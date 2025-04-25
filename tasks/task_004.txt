@@ -1,146 +1,103 @@
 # Task ID: 4
-# Title: Implement Teams Chat Integration
-# Status: done
-# Dependencies: None
+# Title: Implement Status Filtering
+# Status: pending
+# Dependencies: 2, 3
 # Priority: medium
-# Description: Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.
+# Description: Add default Active filter and Show All toggle for Admin users
 # Details:
-1. Create tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, `createGroup`
-2. Configure Graph API permissions: `Chat.ReadWrite`, `User.Read.All`
-3. Implement `/chat` page with chat list pane, message pane, and message input components
-4. Add pagination/infinite scroll for message history
-5. Create user search functionality for starting new chats
-6. Implement new chat creation flows (1:1 and group)
-7. Add loading states and error handling
+1. Modify api.clients.getAll.useQuery to accept statusFilter parameter
+2. Set default filter to status === 'active'
+3. Create a UI toggle for 'Show All' that's only visible to Admin users
+4. When toggled, include 'prospect' and 'archived' statuses in the query
+5. Use useRbac() to determine if user has Admin privileges
+6. Ensure filter state persists during pagination
+7. Add visual indicator when 'Show All' is active
 
 # Test Strategy:
-1. Verify chat list and messages load correctly
-2. Test message sending functionality
-3. Confirm user search and new chat creation work as expected
-4. Validate pagination/infinite scroll with large chat histories
-5. Test error handling for network issues and permission problems
+Test default filter shows only active clients. Verify Admin users can see and toggle 'Show All'. Confirm non-Admin users don't see the toggle. Check that filter state persists during pagination.
 
 # Subtasks:
-## 1. Set Up Microsoft Teams API Integration and Permissions [done]
+## 1. Modify API Client Query to Accept Status Filter Parameter [pending]
 ### Dependencies: None
-### Description: Configure Microsoft Graph API access and ensure the application has the necessary permissions to read and send Teams chat messages.
+### Description: Update the existing api.clients.getAll.useQuery hook to accept a statusFilter parameter that will filter clients by their status.
 ### Details:
-Register the application in Azure AD, configure required API permissions (`Chat.ReadWrite`, `User.Read.All`), and set up authentication flows. Ensure admin consent is granted for these permissions so the backend can interact with Teams chat endpoints.
+1. Locate the api.clients.getAll.useQuery implementation
+2. Add a statusFilter parameter to the query function
+3. Modify the API endpoint URL construction to include the status filter parameter when present
+4. Update the query key to include the statusFilter value to ensure proper cache invalidation
+5. Add TypeScript types for the new parameter if applicable
+6. Test the modified query with different status values
+7. Ensure backward compatibility for existing usages of the hook
 
-## 2. Implement tRPC Chat Router and Backend Procedures [done]
+## 2. Implement Default Active Status Filter Logic [pending]
 ### Dependencies: 4.1
-### Description: Develop the backend chat router with all necessary procedures for chat operations.
+### Description: Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.
 ### Details:
-Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases.
+1. Create a useState hook to manage the filter state with 'active' as the default value
+2. Update the query call to pass the current filter state
+3. Implement the filter logic in the API call to filter by 'active' status by default
+4. Add unit tests to verify the default filter behavior
+5. Ensure the filter is applied consistently across component re-renders
+6. Verify that the initial data load correctly applies the 'active' filter
+7. Add appropriate loading states during filter transitions
 
-## 3. Develop Frontend Chat Page and Core UI Components [done]
+## 3. Create Role-Based Access Control for Filter Visibility [pending]
 ### Dependencies: 4.2
-### Description: Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.
+### Description: Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.
 ### Details:
-Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible.
+1. Import and implement the useRbac() hook to check for admin privileges
+2. Create a function to determine if the current user has admin access
+3. Set up a React context if needed to make the admin status available throughout the component tree
+4. Add unit tests to verify the RBAC logic works correctly
+5. Implement conditional rendering based on admin status
+6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders
+7. Add appropriate error handling for RBAC failures
 
-<info added on 2025-04-23T09:07:45.221Z>
-For subtask 4.3, implement the chat page with the following structure:
-
-```tsx
-// src/app/(pages)/chat/page.tsx
-'use client';
-
-import { useState } from 'react';
-import { api } from '@/trpc/react';
-import ChatList from '@/components/chats/ChatList';
-import ChatWindow from '@/components/chats/ChatWindow';
-import MessageInput from '@/components/chats/MessageInput';
-
-export default function ChatPage() {
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  
-  // Fetch recent chats
-  const { data: chats, isLoading: chatsLoading, error: chatsError } = 
-    api.chat.listRecent.useQuery();
-  
-  // Fetch messages for selected chat
-  const { data: messages, isLoading: messagesLoading, error: messagesError } = 
-    api.chat.getMessages.useQuery(
-      { chatId: selectedChatId! },
-      { enabled: !!selectedChatId }
-    );
-  
-  // Send message mutation
-  const sendMessageMutation = api.chat.sendMessage.useMutation({
-    onSuccess: () => {
-      // Invalidate queries to refresh data
-      queryClient.invalidateQueries(['chat.getMessages']);
-    }
-  });
-  
-  const handleSendMessage = (content: string) => {
-    if (!selectedChatId) return;
-    
-    sendMessageMutation.mutate({
-      chatId: selectedChatId,
-      content
-    });
-  };
-
-  return (
-    <div className="flex h-screen">
-      <div className="w-1/4 border-r">
-        {chatsLoading ? (
-          <p>Loading chats...</p>
-        ) : chatsError ? (
-          <p>Error loading chats</p>
-        ) : (
-          <ChatList 
-            chats={chats || []} 
-            selectedChatId={selectedChatId}
-            onSelectChat={setSelectedChatId}
-          />
-        )}
-      </div>
-      
-      <div className="flex flex-col w-3/4">
-        {!selectedChatId ? (
-          <div className="flex-1 flex items-center justify-center">
-            <p>Select a chat to start messaging</p>
-          </div>
-        ) : (
-          <>
-            <div className="flex-1 overflow-y-auto p-4">
-              {messagesLoading ? (
-                <p>Loading messages...</p>
-              ) : messagesError ? (
-                <p>Error loading messages</p>
-              ) : (
-                <ChatWindow messages={messages || []} />
-              )}
-            </div>
-            <div className="p-4 border-t">
-              <MessageInput 
-                onSendMessage={handleSendMessage}
-                isLoading={sendMessageMutation.isLoading}
-              />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-```
-
-Include proper error handling, loading states, and query invalidation for real-time updates. Style with Tailwind CSS classes for responsive layout.
-</info added on 2025-04-23T09:07:45.221Z>
-
-## 4. Add Pagination, Infinite Scroll, and User Search Functionality [done]
+## 4. Develop Show All Toggle UI Component [pending]
 ### Dependencies: 4.3
-### Description: Enhance the chat UI with message history pagination/infinite scroll and implement user search for starting new chats.
+### Description: Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.
 ### Details:
-Implement pagination or infinite scroll in the message pane to load older messages as the user scrolls. Add a user search component that leverages the `findUsers` backend procedure, enabling users to search and select contacts for new chats.
+1. Design a toggle switch component using appropriate UI library (e.g., Material-UI Switch)
+2. Implement the toggle with clear labeling ('Show All')
+3. Style the toggle to be visually distinct and accessible
+4. Add appropriate ARIA attributes for accessibility
+5. Implement conditional rendering to only show the toggle to admin users
+6. Add hover tooltips to explain the toggle functionality
+7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)
 
-## 5. Implement New Chat Creation Flows and Robust UX States [done]
-### Dependencies: 4.4
-### Description: Enable creation of new one-to-one and group chats, and add comprehensive loading and error handling throughout the chat experience.
+## 5. Implement Multi-Status Filter Logic [pending]
+### Dependencies: 4.2, 4.4
+### Description: Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.
 ### Details:
-Integrate flows for creating new chats (both 1:1 and group) using the respective backend procedures. Ensure all UI components display appropriate loading indicators and error messages, providing a smooth and resilient user experience.
+1. Modify the filter state to handle multiple status values
+2. Update the API query to accept an array of statuses when 'Show All' is active
+3. Implement the logic to include 'prospect' and 'archived' statuses when the toggle is on
+4. Add appropriate type checking for the status array
+5. Optimize the query to handle multiple statuses efficiently
+6. Test the filter with various combinations of statuses
+7. Ensure the UI updates correctly when switching between filtered and unfiltered views
+
+## 6. Add Visual Indicator for Active Filters [pending]
+### Dependencies: 4.4, 4.5
+### Description: Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.
+### Details:
+1. Design a visual indicator component (e.g., badge, highlight, or text label)
+2. Implement the indicator to appear when 'Show All' is active
+3. Style the indicator to be noticeable but not distracting
+4. Add animations for state transitions (e.g., fade in/out when filter changes)
+5. Ensure the indicator is accessible (proper contrast, screen reader support)
+6. Add a count of total items being displayed with the current filter
+7. Test the indicator across different screen sizes and ensure it's responsive
+
+## 7. Implement Filter State Persistence During Pagination [pending]
+### Dependencies: 4.5, 4.6
+### Description: Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.
+### Details:
+1. Modify the pagination logic to include the current filter state
+2. Update the query key structure to incorporate both pagination and filter parameters
+3. Implement state management to preserve filter settings during navigation
+4. Add URL query parameters to maintain filter state on page refresh
+5. Test pagination with different filter combinations
+6. Optimize data fetching to minimize redundant requests when only changing pages
+7. Ensure the visual indicator remains consistent during pagination
 

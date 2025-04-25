@@ -1,54 +1,110 @@
 # Task ID: 5
-# Title: Implement Teams Phone Integration
-# Status: done
-# Dependencies: 3
+# Title: Enhance Search Functionality
+# Status: pending
+# Dependencies: 4
 # Priority: medium
-# Description: Enable outbound PSTN calling to clients directly from the portal using Teams Phone System, with call logging functionality.
+# Description: Implement global search across Client Name and Contact Name fields
 # Details:
-1. Create tRPC `phoneRouter` with procedures: `makePstnCall`, `logCall`
-2. Configure Graph API permissions: `Calls.Initiate.All`
-3. Create database schema for call logs (callerId, clientId, contactId, numberDialed, startTime, endTime, duration)
-4. Implement `/phone` page with client/contact search functionality
-5. Add call buttons next to contacts with phone numbers
-6. Create Admin-only dial pad UI for direct number entry
-7. Implement call logging after call initiation
-8. Add role-based visibility controls for phone features
+1. Extend the tRPC endpoint to search across client.clientName OR contacts.name
+2. Wire up DataTableTwo's search input to trigger the search
+3. Implement debounced search to prevent excessive API calls
+4. Ensure search works across all pages of data, not just the current page
+5. Add loading state during search operations
+6. Preserve other active filters (like status) when searching
+7. Reset pagination to first page when search term changes
 
 # Test Strategy:
-1. Verify PSTN calls can be initiated from contact list
-2. Test Admin dial pad functionality
-3. Confirm call logs are correctly created and stored
-4. Validate RBAC for phone features
-5. Test error handling for failed calls
+Test search functionality with various inputs. Verify it finds matches in both client names and contact names. Check debounce behavior prevents excessive API calls. Confirm search works with status filters applied.
 
 # Subtasks:
-## 1. Set Up Teams Phone System Integration and Permissions [done]
+## 1. Extend tRPC Endpoint for Cross-Field Search [pending]
 ### Dependencies: None
-### Description: Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions and external provisioning by QAS IT.
+### Description: Modify the existing tRPC endpoint to support searching across both client.clientName and contacts.name fields with proper indexing and query optimization.
 ### Details:
-Coordinate with QAS IT to provision Teams Phone System licenses, phone numbers, and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls.
+1. Add database indexes on client.clientName and contacts.name fields to improve search performance
+2. Implement a query that uses case-insensitive pattern matching (ILIKE in PostgreSQL or equivalent)
+3. Support partial matching to find results with incomplete terms
+4. Ensure the endpoint accepts pagination parameters (page, limit) to handle large result sets
+5. Add sorting options to order results by relevance or other criteria
+6. Implement proper error handling for malformed queries
+7. Test with various search terms to verify both fields are being searched correctly
+8. Document the API changes for frontend developers
 
-## 2. Design and Implement Call Logging Database Schema [done]
+## 2. Create Search Service with Debounce Implementation [pending]
 ### Dependencies: 5.1
-### Description: Create a robust database schema to store call logs, capturing all relevant call metadata.
+### Description: Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.
 ### Details:
-Define and migrate a database schema for call logs with fields: callerId, clientId, contactId, numberDialed, startTime, endTime, and duration. Ensure indexing for efficient querying and consider audit/compliance requirements for call records.
+1. Create a search service module that will manage all search-related functionality
+2. Implement debounce logic using setTimeout/clearTimeout or a library like lodash.debounce
+3. Set an appropriate debounce delay (300-500ms is typical for search)
+4. Add state management for tracking the current search term
+5. Implement loading state indicators that activate immediately when typing begins
+6. Create a mechanism to cancel in-flight requests if a new search is initiated
+7. Add error handling for failed requests
+8. Test the debounce functionality with rapid typing scenarios
 
-## 3. Develop tRPC phoneRouter with Call and Logging Procedures [done]
+## 3. Connect DataTableTwo Search Input to Search Service [pending]
 ### Dependencies: 5.2
-### Description: Implement a tRPC router exposing procedures for initiating PSTN calls and logging call details.
+### Description: Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.
 ### Details:
-Create a tRPC router named 'phoneRouter' with procedures: 'makePstnCall' (to initiate outbound calls via Teams Phone System using the Graph API) and 'logCall' (to record call details in the database). Ensure error handling, input validation, and secure access controls for these endpoints.
+1. Modify DataTableTwo component to use the search service
+2. Connect the existing search input to the debounced search function
+3. Implement onChange handler to capture user input
+4. Add clear button functionality to reset search
+5. Ensure the input is accessible with proper ARIA attributes
+6. Add placeholder text that indicates users can search by client or contact name
+7. Implement keyboard shortcuts for focusing the search input (e.g., Ctrl+F or /)
+8. Test the integration to ensure search triggers correctly
 
-## 4. Build Portal UI for Calling and Call Management [done]
-### Dependencies: 5.3
-### Description: Implement the /phone page with client/contact search, call buttons, and an admin-only dial pad for direct number entry.
+## 4. Implement Cross-Page Search Results Handling [pending]
+### Dependencies: 5.1, 5.3
+### Description: Ensure search functionality works across all pages of data, not just the current page, by modifying the data fetching logic.
 ### Details:
-Develop the /phone page UI to allow users to search for clients/contacts, display contacts with phone numbers, and show call buttons next to each. Add an admin-only dial pad component for direct number entry. Integrate UI actions with the tRPC procedures for call initiation and logging.
+1. Modify the data fetching logic to search across all records, not just the current page
+2. Update the pagination component to reset when search is performed
+3. Implement server-side filtering based on search terms
+4. Ensure total count of results is correctly calculated and displayed
+5. Maintain proper state for empty results
+6. Add visual indication that results are filtered
+7. Test with large datasets to verify all matching records are found
+8. Optimize query performance for large datasets
 
-## 5. Implement Call Logging and Role-Based Feature Controls [done]
+## 5. Add Loading States During Search Operations [pending]
+### Dependencies: 5.3, 5.4
+### Description: Implement visual feedback for users during search operations to improve perceived performance and user experience.
+### Details:
+1. Create loading indicators for the search input (e.g., spinning icon)
+2. Implement skeleton loaders for the table rows during search
+3. Add transition animations between loading and results states
+4. Ensure loading states are accessible with proper ARIA attributes
+5. Implement progressive loading if results are large
+6. Add timeout handling for long-running searches
+7. Test loading states with various network conditions
+8. Ensure loading states don't cause layout shifts
+
+## 6. Preserve Active Filters During Search [pending]
 ### Dependencies: 5.4
-### Description: Ensure all calls are logged after initiation and restrict phone features based on user roles.
+### Description: Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.
 ### Details:
-After each call is initiated, automatically invoke the 'logCall' procedure to record the call. Implement role-based visibility and access controls for phone features (e.g., dial pad, call buttons) so only authorized users can access specific functionalities. Test to ensure compliance with security and audit requirements.
+1. Refactor filter state management to separate search from other filters
+2. Modify the tRPC endpoint to accept both search terms and filter criteria
+3. Update the UI to show active filters alongside search terms
+4. Implement logic to combine search and filter criteria in queries
+5. Add visual indicators for active combined filters
+6. Create clear all/reset functionality for filters and search
+7. Test various combinations of filters and search terms
+8. Ensure filter state is preserved during navigation or page refresh
+
+## 7. Implement Pagination Reset on Search Term Changes [pending]
+### Dependencies: 5.4, 5.6
+### Description: Reset pagination to the first page whenever search terms change to ensure users see the most relevant results immediately.
+### Details:
+1. Modify the pagination state management to reset page to 1 when search term changes
+2. Update the URL parameters to reflect the page reset
+3. Ensure the UI updates to show the first page of results
+4. Add smooth scroll to top when pagination resets
+5. Implement history state management to handle browser back/forward navigation
+6. Add analytics tracking for search term changes and pagination resets
+7. Test edge cases like empty search results and rapid search term changes
+8. Ensure the reset doesn't cause jarring UI changes
 

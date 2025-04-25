@@ -1,493 +1,423 @@
 {
   "tasks": [
     {
-      "id": 9,
-      "title": "Implement RBAC Middleware and Procedure Helpers",
-      "description": "Establish authentication and permission-checking middleware and reusable helper functions for all tRPC routers.",
-      "status": "done",
-      "dependencies": [],
-      "priority": "high",
-      "details": "Implement server-side middleware (e.g., isAuthed, hasPermission) for tRPC, and create helper functions to enforce role-based access across Phase 1 and Phase 2 routers.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Create tRPC authentication middleware",
-          "description": "Implement isAuthed middleware to enforce authenticated sessions.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Add an isAuthed middleware in the tRPC context to verify session.user is defined before proceeding."
-        },
-        {
-          "id": 2,
-          "title": "Develop role and permission helpers",
-          "description": "Create helper functions hasRole and hasPermission for session.user.role checks.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Implement functions to validate user roles and specific permissions using the session object."
-        },
-        {
-          "id": 3,
-          "title": "Integrate RBAC into existing routers",
-          "description": "Apply isAuthed and permission helpers to sensitive Phase 1 and Phase 2 tRPC procedures.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Update each router (clientRouter, emailRouter, chatRouter, etc.) to include authentication and role checks on create/update/delete/mutation endpoints."
-        },
-        {
-          "id": 4,
-          "title": "Write unit tests for RBAC logic",
-          "description": "Create tests for authentication middleware and permission helpers.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Cover both allowed and forbidden scenarios for isAuthed, hasRole, and hasPermission."
-        }
-      ]
-    },
-    {
       "id": 1,
-      "title": "Implement Personal Email Integration",
-      "description": "Create the backend and frontend components for integrating personal M365 email accounts into the portal, allowing users to view, send, and reply to emails.",
-      "status": "done",
+      "title": "Integrate DataTableTwo UI Component",
+      "description": "Replace the current Table markup with DataTableTwo component in the Clients List page",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "1. Create tRPC `emailRouter` with procedures: `listFolders`, `listMessages`, `getMessage`, `sendMessage`, `createReply`, `createForward`\n2. Configure Graph API permissions: `Mail.ReadWrite`, `Mail.Send`\n3. Implement 3-column layout UI at `/email` route with folder list, message list, and message detail components\n4. Add pagination controls for message list\n5. Create compose/reply/forward modals with form validation\n6. Ensure HTML email body is sanitized before rendering\n7. Add loading states and error handling",
-      "testStrategy": "1. Verify all email procedures return expected data\n2. Test pagination functionality with large mailboxes\n3. Confirm emails can be composed, sent, replied to, and forwarded\n4. Validate HTML sanitization prevents XSS\n5. Test error handling for network issues and permission problems",
+      "details": "1. Import DataTableTwo from src/components/tables/DataTables/TableTwo/DataTableTwo.tsx\n2. Remove existing Table component and markup\n3. Configure DataTableTwo with basic props (data, columns)\n4. Ensure responsive layout is maintained\n5. Remove row-level delete icon from current implementation\n6. Setup pagination using DataTableTwo's built-in functionality\n7. Implement sorting indicators as per DataTableTwo documentation",
+      "testStrategy": "Verify the table renders correctly with sample data. Check responsive behavior across different screen sizes. Ensure pagination controls work as expected.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Configure Microsoft Graph API Authentication",
-          "description": "Verify Mail.ReadWrite and Mail.Send delegated permissions and implement a reusable GraphClient utility class",
-          "status": "done",
+          "title": "Import DataTableTwo Component",
+          "description": "Import the DataTableTwo component into the Clients List page to prepare for integration.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Confirm the Azure AD app registration includes Mail.ReadWrite and Mail.Send delegated permissions. Implement a GraphClient class to perform authenticated Graph API calls using the existing Phase 0 OAuth flow, handling token acquisition and refresh. Ensure the utility is strongly typed and reusable across email service methods."
+          "details": "Add the following import statement at the top of the Clients List page file: `import DataTableTwo from 'src/components/tables/DataTables/TableTwo/DataTableTwo'`. Ensure the path is correct and the component is available."
         },
         {
           "id": 2,
-          "title": "Implement Email Service and tRPC Router",
-          "description": "Create the backend service layer and tRPC router with all required email procedures",
-          "status": "done",
+          "title": "Remove Existing Table Markup",
+          "description": "Eliminate the current Table component and all related markup from the Clients List page.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Create an EmailService class that interfaces with Microsoft Graph API to perform email operations. Implement methods for listing folders, fetching messages, getting message details, sending messages, and creating replies/forwards. Create the tRPC emailRouter with the following procedures: listFolders, listMessages, getMessage, sendMessage, createReply, and createForward. Implement server-side pagination for message lists. Add input validation using Zod schemas for all procedures. Implement proper error handling with meaningful error messages. Add HTML sanitization for email body content using a library like DOMPurify."
+          "details": "Identify and delete the existing Table component, including its JSX, props, and any related logic or helper functions that are no longer needed."
         },
         {
           "id": 3,
-          "title": "Create Email Folder and Message List Components",
-          "description": "Implement the first two columns of the 3-column layout: folder navigation and message list",
-          "status": "done",
+          "title": "Configure DataTableTwo with Data and Columns",
+          "description": "Set up DataTableTwo with the required data and columns configuration to display the clients list.",
+          "status": "pending",
           "dependencies": [2],
-          "details": "Create a responsive layout for the /email route with a sidebar for folders and a main content area for messages. Implement the FolderList component that fetches and displays email folders from the tRPC listFolders procedure. Add folder selection functionality that triggers message list updates. Create the MessageList component that displays messages from the selected folder using the tRPC listMessages procedure. Implement pagination controls with options for page size and navigation. Add sorting functionality for messages by date, sender, or subject. Implement loading states and error handling for both components. Add a search/filter functionality for the message list."
+          "details": "Prepare the data and columns objects according to DataTableTwo's API. Pass them as props to DataTableTwo. Ensure column definitions match the previous table's structure and requirements."
         },
         {
           "id": 4,
-          "title": "Implement Message Detail Component",
-          "description": "Create the third column component for displaying the full content of selected emails",
-          "status": "done",
+          "title": "Ensure Responsive Layout",
+          "description": "Verify and adjust the layout to maintain responsiveness after integrating DataTableTwo.",
+          "status": "pending",
           "dependencies": [3],
-          "details": "Create the MessageDetail component that fetches and displays the full content of a selected email using the tRPC getMessage procedure. Implement HTML sanitization on the client side before rendering email content. Display email headers (From, To, CC, Subject, Date) in a structured format. Show email attachments with download options. Add buttons for reply, reply all, and forward actions. Implement loading states and error handling. Create a mechanism to handle and display inline images securely. Add functionality to mark messages as read when opened."
+          "details": "Test the page on various screen sizes. Adjust container classes, DataTableTwo props, or parent layout as needed to ensure the table remains responsive and visually consistent with the rest of the UI."
         },
         {
           "id": 5,
-          "title": "Develop Email Composition Components",
-          "description": "Create modals for composing new emails, replying to emails, and forwarding emails",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Create a ComposeMail modal component with form fields for recipient, cc, bcc, subject, and body. Implement a rich text editor for the email body using a library like TinyMCE or Quill. Add file attachment functionality with size limits and type validation. Create ReplyMail and ForwardMail components that pre-populate fields based on the original email. Implement form validation for all required fields and email format validation. Add draft saving functionality to prevent data loss. Implement the send functionality using the tRPC sendMessage procedure. Add loading states during sending and success/error notifications."
+          "title": "Remove Row-Level Delete Icon",
+          "description": "Remove the row-level delete icon from the new DataTableTwo implementation.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Ensure that the columns configuration for DataTableTwo does not include a delete icon or delete action. If present, remove the relevant column or cell renderer."
         },
         {
           "id": 6,
-          "title": "Implement Testing and Finalize Integration",
-          "description": "Create comprehensive tests and finalize the email integration with proper error handling and performance optimizations",
-          "status": "done",
-          "dependencies": [2, 3, 4, 5],
-          "details": "Write unit tests for the EmailService class and all tRPC procedures. Create integration tests for the complete email flow from authentication to sending. Implement end-to-end tests for the UI components. Add error boundary components to gracefully handle runtime errors. Implement proper loading states throughout the application. Optimize performance by implementing virtualized lists for large mailboxes. Add telemetry and logging for monitoring email operations. Create documentation for the email integration features. Perform security review to ensure proper handling of sensitive email data. Implement feature flags to control rollout of the email functionality."
+          "title": "Set Up Pagination Using DataTableTwo",
+          "description": "Enable and configure pagination using DataTableTwo's built-in pagination functionality.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Consult DataTableTwo documentation to enable pagination. Pass the necessary pagination props (such as page size, current page, and handlers) to the component. Test to confirm pagination works as expected."
+        },
+        {
+          "id": 7,
+          "title": "Implement Sorting Indicators",
+          "description": "Add sorting indicators to columns as specified in the DataTableTwo documentation.",
+          "status": "pending",
+          "dependencies": [3],
+          "details": "Update the columns configuration to enable sorting. Ensure sorting indicators are visible and functional, following DataTableTwo's recommended approach for sortable columns."
         }
       ]
     },
     {
       "id": 2,
-      "title": "Implement Admin Shared Mailbox Access",
-      "description": "Extend the email integration to allow Admin users to access and manage the shared admin mailbox, with proper role-based access control.",
-      "status": "done",
+      "title": "Define Column Configuration and Data Formatting",
+      "description": "Create column definitions for the Clients table with proper data formatting",
+      "status": "pending",
       "dependencies": [1],
-      "priority": "medium",
-      "details": "1. Extend tRPC `emailRouter` with shared mailbox procedures targeting `/users/{admin-email}/...` endpoints\n2. Configure additional Graph API permissions: `Mail.ReadWrite.Shared`, `Mail.Send.Shared`\n3. Implement RBAC to restrict shared mailbox access to Admin role only\n4. Add mailbox switcher UI component (tabs or dropdown) visible only to Admins\n5. Modify email components to use appropriate procedures based on selected mailbox\n6. Ensure emails sent from shared mailbox are properly attributed",
-      "testStrategy": "1. Verify only Admin users can access shared mailbox functions\n2. Test mailbox switching functionality preserves state appropriately\n3. Confirm emails sent from shared mailbox show correct sender\n4. Validate RBAC prevents unauthorized access attempts",
+      "priority": "high",
+      "details": "1. Define columns array with the following fields:\n   - Client Name (client.clientName)\n   - Primary Contact (derived from contacts where isPrimary === true)\n   - City (client.city)\n   - Next Contact Date (client.nextContactDate) formatted as locale date\n   - Audit Month End (convert client.auditMonthEnd integer to month name using Intl.DateTimeFormat)\n   - Fees (client.estAnnFees) - conditionally visible for Admin role\n   - Status (client.status) - conditionally visible for Admin role\n2. Use date-fns or Intl.DateTimeFormat for date formatting\n3. Implement logic to derive primary contact name from contacts array\n4. Add conditional rendering based on user role using useRbac()",
+      "testStrategy": "Unit test the column definitions and formatters. Verify date formatting works correctly across locales. Test conditional visibility logic with different user roles.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Extend tRPC emailRouter with Shared Mailbox Procedures",
-          "description": "Add new procedures to the tRPC emailRouter to support operations (read, send, manage) on the shared admin mailbox, targeting endpoints like /users/{admin-email}/....",
-          "status": "done",
+          "title": "Define Base Columns Array Structure",
+          "description": "Set up the initial columns array for the Clients table, specifying each column's field, header, and accessor logic.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Define procedures for accessing and managing the shared mailbox using Microsoft Graph API endpoints. Ensure these procedures can differentiate between personal and shared mailbox contexts, and structure them to support future extensibility."
+          "details": "Create a columns array with objects for each required field: Client Name, Primary Contact, City, Next Contact Date, Audit Month End, Fees, and Status. For each column, specify the field or accessor function as appropriate. Use accessor functions for derived or formatted fields (e.g., Primary Contact)."
         },
         {
           "id": 2,
-          "title": "Configure Microsoft Graph API Permissions for Shared Mailbox",
-          "description": "Verify and add Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions for the shared mailbox",
-          "status": "done",
+          "title": "Implement Primary Contact Derivation Logic",
+          "description": "Add logic to extract the primary contact's name from the contacts array for each client.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Confirm the existing Azure AD app registration includes Mail.ReadWrite.Shared and Mail.Send.Shared delegated permissions with admin consent. Update the registration if needed and validate API access to shared mailbox endpoints."
+          "details": "For the Primary Contact column, implement an accessor function that searches the contacts array for the object where isPrimary is true and returns the contact's name. Ensure this logic is robust to missing or malformed data."
         },
         {
           "id": 3,
-          "title": "Implement Role-Based Access Control (RBAC) for Shared Mailbox",
-          "description": "Restrict access to the shared admin mailbox procedures so only users with the Admin role can invoke them.",
-          "status": "done",
-          "dependencies": [1, 2],
-          "details": "Update the backend authorization logic to check user roles before allowing access to shared mailbox procedures. Ensure that only Admin users can see or interact with shared mailbox functionality, and add tests to validate RBAC enforcement."
+          "title": "Format Date Fields Using date-fns or Intl.DateTimeFormat",
+          "description": "Apply locale-aware formatting to the Next Contact Date column using date-fns or Intl.DateTimeFormat.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales."
         },
         {
           "id": 4,
-          "title": "Develop Mailbox Switcher UI Component for Admins",
-          "description": "Create a UI component (tabs or dropdown) that allows Admin users to switch between their personal mailbox and the shared admin mailbox.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Design and implement a mailbox switcher that is only visible to Admin users. Integrate it with the application's state management so that selecting a mailbox updates the context for all email operations."
+          "title": "Convert Audit Month End Integer to Month Name",
+          "description": "Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "For the Audit Month End column, implement a value formatter or accessor that takes the integer (1-12), creates a Date object, and formats it to display the full month name using Intl.DateTimeFormat."
         },
         {
           "id": 5,
-          "title": "Update Email Components for Shared Mailbox Context and Attribution",
-          "description": "Modify email-related components to use the correct mailbox procedures based on the selected mailbox, and ensure emails sent from the shared mailbox are properly attributed.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Refactor components to dynamically call the appropriate tRPC procedures depending on the active mailbox. Ensure that outgoing emails from the shared mailbox use the correct sender identity and are tracked as sent by the shared mailbox, not the individual Admin."
+          "title": "Add Conditional Rendering for Fees and Status Columns Based on User Role",
+          "description": "Implement logic to show or hide the Fees and Status columns depending on whether the user has the Admin role.",
+          "status": "pending",
+          "dependencies": [1],
+          "details": "Integrate useRbac() or equivalent RBAC logic to determine the user's role. Conditionally include the Fees and Status columns in the columns array only if the user is an Admin."
+        },
+        {
+          "id": 6,
+          "title": "Apply Value Formatters for Fees and Status Columns",
+          "description": "Format the Fees column as currency and apply any necessary formatting to the Status column.",
+          "status": "pending",
+          "dependencies": [5],
+          "details": "For the Fees column, use a value formatter to display the value as currency (e.g., using Intl.NumberFormat or a custom formatter). For the Status column, apply any required formatting or mapping to display user-friendly status labels."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Enhance Client and Audit Detail Pages",
-      "description": "Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.",
-      "status": "done",
-      "dependencies": [],
+      "title": "Implement View Action Button",
+      "description": "Add a View button/icon to each row that navigates to the client detail page",
+      "status": "pending",
+      "dependencies": [1],
       "priority": "high",
-      "details": "1. Optimize tRPC `client.getById` to include related entities: contacts, licenses, trustAccounts, audits\n2. Optimize tRPC `audit.getById` to include tasks and assignments with user information\n3. Implement tabbed interface for Client Detail page at `/clients/[clientId]` with Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs\n4. Create tables/lists for each tab with appropriate sorting and filtering\n5. Enhance Audit Detail page at `/audits/[auditId]` with core info, assigned team display, tasks table, and activity log\n6. Use Shadcn/TailAdmin components consistently for cards, badges, and tables\n7. Ensure responsive design works on various screen sizes",
-      "testStrategy": "1. Verify all relational data is correctly fetched and displayed\n2. Test tab navigation preserves state\n3. Confirm sorting and filtering functions work as expected\n4. Validate responsive design on mobile, tablet, and desktop viewports\n5. Check performance with large datasets",
+      "details": "1. Create a row action component with a View button/icon\n2. Configure the button to navigate to /clients/[clientId] on click\n3. Integrate the action component into DataTableTwo's row actions slot\n4. Apply appropriate styling according to Cursor rules\n5. Ensure the action is visible to all roles (Admin, Manager, Client)\n6. Remove any existing row-level delete functionality",
+      "testStrategy": "Test navigation to client detail page works correctly. Verify the button appears for all user roles. Check that styling matches design system requirements.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Extend tRPC Procedures to Fetch Related Entities",
-          "description": "Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.",
-          "status": "done",
+          "title": "Create ViewActionButton component",
+          "description": "Design and implement a reusable ViewActionButton component that will be used across the application for navigating to detail pages.",
           "dependencies": [],
-          "details": "Modify the tRPC router definitions so that `client.getById` returns contacts, licenses, trustAccounts, and audits, and `audit.getById` returns tasks and assignments with user information. Ensure the returned data is fully typed and optimized for frontend consumption."
+          "details": "Create a new component in the shared components directory that accepts clientId as a prop. Use semantic HTML with a button element for accessibility. Implement an eye/visibility icon from the project's icon library. Add appropriate ARIA labels for screen readers. Include a tooltip that appears on hover with 'View Details' text. Style according to Cursor design system with appropriate contrast and visual hierarchy as a secondary action. Ensure the button is keyboard accessible and has proper focus states. Test the component in isolation to verify it renders correctly.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 2,
-          "title": "Implement Tabbed Interface on Client Detail Page",
-          "description": "Create a tabbed navigation UI for the Client Detail page at `/clients/[clientId]` to organize related data into Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs.",
-          "status": "done",
+          "title": "Implement navigation functionality",
+          "description": "Add navigation logic to the ViewActionButton component to direct users to the client detail page when clicked.",
           "dependencies": [1],
-          "details": "Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each tab should be a separate component and fetch its data using the enhanced tRPC procedures."
+          "details": "Import and use the application's routing mechanism (likely React Router's useNavigate hook). Implement an onClick handler that navigates to the '/clients/[clientId]' route, passing the clientId as a parameter. Add error handling to prevent navigation issues. Test the navigation functionality to ensure it correctly routes to the appropriate client detail page. Verify that the browser history is properly updated. Ensure that the button is not triggering form submissions if placed within a form context.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 3,
-          "title": "Build Data Tables and Lists for Each Client Tab",
-          "description": "Develop tables or lists for each tab on the Client Detail page, supporting sorting and filtering where appropriate.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables using Shadcn/TailAdmin components. Add sorting and filtering controls as needed. Ensure data is fetched efficiently and displayed clearly."
+          "title": "Integrate ViewActionButton with DataTableTwo",
+          "description": "Modify the DataTableTwo component to include the ViewActionButton in its row actions slot.",
+          "dependencies": [1, 2],
+          "details": "Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 4,
-          "title": "Enhance Audit Detail Page with Relational Data",
-          "description": "Redesign the Audit Detail page at `/audits/[auditId]` to display core audit info, assigned team members, a tasks table, and an activity log.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Use Shadcn/TailAdmin cards, badges, and tables to present audit details, team assignments (with user info), tasks, and activity logs. Ensure the layout is clear and information is grouped logically."
+          "title": "Remove existing row-level delete functionality",
+          "description": "Remove any existing delete buttons or functionality from the table rows as specified in the requirements.",
+          "dependencies": [3],
+          "details": "Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 5,
-          "title": "Apply Consistent UI Components and Styling",
-          "description": "Standardize the use of Shadcn/TailAdmin components for cards, badges, and tables across both Client and Audit detail pages.",
-          "status": "done",
-          "dependencies": [3, 4],
-          "details": "Audit all UI elements on the detail pages to ensure consistent use of Shadcn/TailAdmin components. Refactor any legacy or inconsistent UI elements to match the new design system."
+          "title": "Implement responsive design for ViewActionButton",
+          "description": "Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.",
+          "dependencies": [1, 2, 3],
+          "details": "Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 6,
-          "title": "Ensure Responsive Design and Cross-Device Usability",
-          "description": "Test and refine the Client and Audit detail pages to ensure they are fully responsive and usable on all common screen sizes.",
-          "status": "done",
-          "dependencies": [5],
-          "details": "Use responsive utilities from Shadcn/TailAdmin and test layouts on various devices. Adjust breakpoints, table layouts, and navigation as needed to guarantee a seamless user experience on desktop, tablet, and mobile."
+          "title": "Configure role-based visibility",
+          "description": "Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.",
+          "dependencies": [3],
+          "details": "Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.",
+          "status": "pending",
+          "parentTaskId": 3
+        },
+        {
+          "id": 7,
+          "title": "Write comprehensive tests for ViewActionButton functionality",
+          "description": "Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.",
+          "dependencies": [1, 2, 3, 4, 5, 6],
+          "details": "Write unit tests for the ViewActionButton component to verify rendering and click behavior. Create integration tests to verify the button appears correctly in the DataTableTwo component. Test navigation to ensure clicking the button correctly routes to the client detail page. Verify accessibility by testing keyboard navigation and screen reader compatibility. Test with different screen sizes to confirm responsive behavior. Verify role-based visibility by testing with different user roles. Include edge cases such as handling clients with missing IDs or other required data. Document test coverage and any assumptions made during testing.",
+          "status": "pending",
+          "parentTaskId": 3
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement Teams Chat Integration",
-      "description": "Create backend and frontend components to integrate Microsoft Teams chat functionality, allowing users to view chat history and send messages within the portal.",
-      "status": "done",
-      "dependencies": [],
+      "title": "Implement Status Filtering",
+      "description": "Add default Active filter and Show All toggle for Admin users",
+      "status": "pending",
+      "dependencies": [2, 3],
       "priority": "medium",
-      "details": "1. Create tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, `createGroup`\n2. Configure Graph API permissions: `Chat.ReadWrite`, `User.Read.All`\n3. Implement `/chat` page with chat list pane, message pane, and message input components\n4. Add pagination/infinite scroll for message history\n5. Create user search functionality for starting new chats\n6. Implement new chat creation flows (1:1 and group)\n7. Add loading states and error handling",
-      "testStrategy": "1. Verify chat list and messages load correctly\n2. Test message sending functionality\n3. Confirm user search and new chat creation work as expected\n4. Validate pagination/infinite scroll with large chat histories\n5. Test error handling for network issues and permission problems",
+      "details": "1. Modify api.clients.getAll.useQuery to accept statusFilter parameter\n2. Set default filter to status === 'active'\n3. Create a UI toggle for 'Show All' that's only visible to Admin users\n4. When toggled, include 'prospect' and 'archived' statuses in the query\n5. Use useRbac() to determine if user has Admin privileges\n6. Ensure filter state persists during pagination\n7. Add visual indicator when 'Show All' is active",
+      "testStrategy": "Test default filter shows only active clients. Verify Admin users can see and toggle 'Show All'. Confirm non-Admin users don't see the toggle. Check that filter state persists during pagination.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Microsoft Teams API Integration and Permissions",
-          "description": "Configure Microsoft Graph API access and ensure the application has the necessary permissions to read and send Teams chat messages.",
-          "status": "done",
+          "title": "Modify API Client Query to Accept Status Filter Parameter",
+          "description": "Update the existing api.clients.getAll.useQuery hook to accept a statusFilter parameter that will filter clients by their status.",
           "dependencies": [],
-          "details": "Register the application in Azure AD, configure required API permissions (`Chat.ReadWrite`, `User.Read.All`), and set up authentication flows. Ensure admin consent is granted for these permissions so the backend can interact with Teams chat endpoints."
+          "details": "1. Locate the api.clients.getAll.useQuery implementation\n2. Add a statusFilter parameter to the query function\n3. Modify the API endpoint URL construction to include the status filter parameter when present\n4. Update the query key to include the statusFilter value to ensure proper cache invalidation\n5. Add TypeScript types for the new parameter if applicable\n6. Test the modified query with different status values\n7. Ensure backward compatibility for existing usages of the hook",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 2,
-          "title": "Implement tRPC Chat Router and Backend Procedures",
-          "description": "Develop the backend chat router with all necessary procedures for chat operations.",
-          "status": "done",
+          "title": "Implement Default Active Status Filter Logic",
+          "description": "Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.",
           "dependencies": [1],
-          "details": "Create a tRPC `chatRouter` with procedures: `listRecent`, `getMessages`, `sendMessage`, `findUsers`, `createOneToOne`, and `createGroup`. Each procedure should interact with the Microsoft Graph API to perform its respective function, handling authentication and error cases."
+          "details": "1. Create a useState hook to manage the filter state with 'active' as the default value\n2. Update the query call to pass the current filter state\n3. Implement the filter logic in the API call to filter by 'active' status by default\n4. Add unit tests to verify the default filter behavior\n5. Ensure the filter is applied consistently across component re-renders\n6. Verify that the initial data load correctly applies the 'active' filter\n7. Add appropriate loading states during filter transitions",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 3,
-          "title": "Develop Frontend Chat Page and Core UI Components",
-          "description": "Build the main `/chat` page with chat list, message pane, and message input, connecting to the backend procedures.",
-          "status": "done",
+          "title": "Create Role-Based Access Control for Filter Visibility",
+          "description": "Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.",
           "dependencies": [2],
-          "details": "Implement the chat list pane to display recent chats, a message pane to show chat history, and a message input component for sending messages. Connect these components to the tRPC backend and ensure real-time updates where possible.\n\n<info added on 2025-04-23T09:07:45.221Z>\nFor subtask 4.3, implement the chat page with the following structure:\n\n```tsx\n// src/app/(pages)/chat/page.tsx\n'use client';\n\nimport { useState } from 'react';\nimport { api } from '@/trpc/react';\nimport ChatList from '@/components/chats/ChatList';\nimport ChatWindow from '@/components/chats/ChatWindow';\nimport MessageInput from '@/components/chats/MessageInput';\n\nexport default function ChatPage() {\n  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);\n  \n  // Fetch recent chats\n  const { data: chats, isLoading: chatsLoading, error: chatsError } = \n    api.chat.listRecent.useQuery();\n  \n  // Fetch messages for selected chat\n  const { data: messages, isLoading: messagesLoading, error: messagesError } = \n    api.chat.getMessages.useQuery(\n      { chatId: selectedChatId! },\n      { enabled: !!selectedChatId }\n    );\n  \n  // Send message mutation\n  const sendMessageMutation = api.chat.sendMessage.useMutation({\n    onSuccess: () => {\n      // Invalidate queries to refresh data\n      queryClient.invalidateQueries(['chat.getMessages']);\n    }\n  });\n  \n  const handleSendMessage = (content: string) => {\n    if (!selectedChatId) return;\n    \n    sendMessageMutation.mutate({\n      chatId: selectedChatId,\n      content\n    });\n  };\n\n  return (\n    <div className=\"flex h-screen\">\n      <div className=\"w-1/4 border-r\">\n        {chatsLoading ? (\n          <p>Loading chats...</p>\n        ) : chatsError ? (\n          <p>Error loading chats</p>\n        ) : (\n          <ChatList \n            chats={chats || []} \n            selectedChatId={selectedChatId}\n            onSelectChat={setSelectedChatId}\n          />\n        )}\n      </div>\n      \n      <div className=\"flex flex-col w-3/4\">\n        {!selectedChatId ? (\n          <div className=\"flex-1 flex items-center justify-center\">\n            <p>Select a chat to start messaging</p>\n          </div>\n        ) : (\n          <>\n            <div className=\"flex-1 overflow-y-auto p-4\">\n              {messagesLoading ? (\n                <p>Loading messages...</p>\n              ) : messagesError ? (\n                <p>Error loading messages</p>\n              ) : (\n                <ChatWindow messages={messages || []} />\n              )}\n            </div>\n            <div className=\"p-4 border-t\">\n              <MessageInput \n                onSendMessage={handleSendMessage}\n                isLoading={sendMessageMutation.isLoading}\n              />\n            </div>\n          </>\n        )}\n      </div>\n    </div>\n  );\n}\n```\n\nInclude proper error handling, loading states, and query invalidation for real-time updates. Style with Tailwind CSS classes for responsive layout.\n</info added on 2025-04-23T09:07:45.221Z>"
+          "details": "1. Import and implement the useRbac() hook to check for admin privileges\n2. Create a function to determine if the current user has admin access\n3. Set up a React context if needed to make the admin status available throughout the component tree\n4. Add unit tests to verify the RBAC logic works correctly\n5. Implement conditional rendering based on admin status\n6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders\n7. Add appropriate error handling for RBAC failures",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 4,
-          "title": "Add Pagination, Infinite Scroll, and User Search Functionality",
-          "description": "Enhance the chat UI with message history pagination/infinite scroll and implement user search for starting new chats.",
-          "status": "done",
+          "title": "Develop Show All Toggle UI Component",
+          "description": "Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.",
           "dependencies": [3],
-          "details": "Implement pagination or infinite scroll in the message pane to load older messages as the user scrolls. Add a user search component that leverages the `findUsers` backend procedure, enabling users to search and select contacts for new chats."
+          "details": "1. Design a toggle switch component using appropriate UI library (e.g., Material-UI Switch)\n2. Implement the toggle with clear labeling ('Show All')\n3. Style the toggle to be visually distinct and accessible\n4. Add appropriate ARIA attributes for accessibility\n5. Implement conditional rendering to only show the toggle to admin users\n6. Add hover tooltips to explain the toggle functionality\n7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 5,
-          "title": "Implement New Chat Creation Flows and Robust UX States",
-          "description": "Enable creation of new one-to-one and group chats, and add comprehensive loading and error handling throughout the chat experience.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Integrate flows for creating new chats (both 1:1 and group) using the respective backend procedures. Ensure all UI components display appropriate loading indicators and error messages, providing a smooth and resilient user experience."
+          "title": "Implement Multi-Status Filter Logic",
+          "description": "Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.",
+          "dependencies": [2, 4],
+          "details": "1. Modify the filter state to handle multiple status values\n2. Update the API query to accept an array of statuses when 'Show All' is active\n3. Implement the logic to include 'prospect' and 'archived' statuses when the toggle is on\n4. Add appropriate type checking for the status array\n5. Optimize the query to handle multiple statuses efficiently\n6. Test the filter with various combinations of statuses\n7. Ensure the UI updates correctly when switching between filtered and unfiltered views",
+          "status": "pending",
+          "parentTaskId": 4
+        },
+        {
+          "id": 6,
+          "title": "Add Visual Indicator for Active Filters",
+          "description": "Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.",
+          "dependencies": [4, 5],
+          "details": "1. Design a visual indicator component (e.g., badge, highlight, or text label)\n2. Implement the indicator to appear when 'Show All' is active\n3. Style the indicator to be noticeable but not distracting\n4. Add animations for state transitions (e.g., fade in/out when filter changes)\n5. Ensure the indicator is accessible (proper contrast, screen reader support)\n6. Add a count of total items being displayed with the current filter\n7. Test the indicator across different screen sizes and ensure it's responsive",
+          "status": "pending",
+          "parentTaskId": 4
+        },
+        {
+          "id": 7,
+          "title": "Implement Filter State Persistence During Pagination",
+          "description": "Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.",
+          "dependencies": [5, 6],
+          "details": "1. Modify the pagination logic to include the current filter state\n2. Update the query key structure to incorporate both pagination and filter parameters\n3. Implement state management to preserve filter settings during navigation\n4. Add URL query parameters to maintain filter state on page refresh\n5. Test pagination with different filter combinations\n6. Optimize data fetching to minimize redundant requests when only changing pages\n7. Ensure the visual indicator remains consistent during pagination",
+          "status": "pending",
+          "parentTaskId": 4
         }
       ]
     },
     {
       "id": 5,
-      "title": "Implement Teams Phone Integration",
-      "description": "Enable outbound PSTN calling to clients directly from the portal using Teams Phone System, with call logging functionality.",
-      "status": "done",
-      "dependencies": [3],
+      "title": "Enhance Search Functionality",
+      "description": "Implement global search across Client Name and Contact Name fields",
+      "status": "pending",
+      "dependencies": [4],
       "priority": "medium",
-      "details": "1. Create tRPC `phoneRouter` with procedures: `makePstnCall`, `logCall`\n2. Configure Graph API permissions: `Calls.Initiate.All`\n3. Create database schema for call logs (callerId, clientId, contactId, numberDialed, startTime, endTime, duration)\n4. Implement `/phone` page with client/contact search functionality\n5. Add call buttons next to contacts with phone numbers\n6. Create Admin-only dial pad UI for direct number entry\n7. Implement call logging after call initiation\n8. Add role-based visibility controls for phone features",
-      "testStrategy": "1. Verify PSTN calls can be initiated from contact list\n2. Test Admin dial pad functionality\n3. Confirm call logs are correctly created and stored\n4. Validate RBAC for phone features\n5. Test error handling for failed calls",
+      "details": "1. Extend the tRPC endpoint to search across client.clientName OR contacts.name\n2. Wire up DataTableTwo's search input to trigger the search\n3. Implement debounced search to prevent excessive API calls\n4. Ensure search works across all pages of data, not just the current page\n5. Add loading state during search operations\n6. Preserve other active filters (like status) when searching\n7. Reset pagination to first page when search term changes",
+      "testStrategy": "Test search functionality with various inputs. Verify it finds matches in both client names and contact names. Check debounce behavior prevents excessive API calls. Confirm search works with status filters applied.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up Teams Phone System Integration and Permissions",
-          "description": "Configure Microsoft Teams Phone System for outbound PSTN calling, including necessary Microsoft Graph API permissions and external provisioning by QAS IT.",
-          "status": "done",
+          "title": "Extend tRPC Endpoint for Cross-Field Search",
+          "description": "Modify the existing tRPC endpoint to support searching across both client.clientName and contacts.name fields with proper indexing and query optimization.",
           "dependencies": [],
-          "details": "Coordinate with QAS IT to provision Teams Phone System licenses, phone numbers, and calling plans. Configure the Microsoft Graph API with the 'Calls.Initiate.All' permission to allow programmatic call initiation from the portal. Validate connectivity and permissions by testing API access for outbound calls."
+          "details": "1. Add database indexes on client.clientName and contacts.name fields to improve search performance\n2. Implement a query that uses case-insensitive pattern matching (ILIKE in PostgreSQL or equivalent)\n3. Support partial matching to find results with incomplete terms\n4. Ensure the endpoint accepts pagination parameters (page, limit) to handle large result sets\n5. Add sorting options to order results by relevance or other criteria\n6. Implement proper error handling for malformed queries\n7. Test with various search terms to verify both fields are being searched correctly\n8. Document the API changes for frontend developers",
+          "status": "pending",
+          "parentTaskId": 5
         },
         {
           "id": 2,
-          "title": "Design and Implement Call Logging Database Schema",
-          "description": "Create a robust database schema to store call logs, capturing all relevant call metadata.",
-          "status": "done",
+          "title": "Create Search Service with Debounce Implementation",
+          "description": "Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.",
           "dependencies": [1],
-          "details": "Define and migrate a database schema for call logs with fields: callerId, clientId, contactId, numberDialed, startTime, endTime, and duration. Ensure indexing for efficient querying and consider audit/compliance requirements for call records."
+          "details": "1. Create a search service module that will manage all search-related functionality\n2. Implement debounce logic using setTimeout/clearTimeout or a library like lodash.debounce\n3. Set an appropriate debounce delay (300-500ms is typical for search)\n4. Add state management for tracking the current search term\n5. Implement loading state indicators that activate immediately when typing begins\n6. Create a mechanism to cancel in-flight requests if a new search is initiated\n7. Add error handling for failed requests\n8. Test the debounce functionality with rapid typing scenarios",
+          "status": "pending",
+          "parentTaskId": 5
         },
         {
           "id": 3,
-          "title": "Develop tRPC phoneRouter with Call and Logging Procedures",
-          "description": "Implement a tRPC router exposing procedures for initiating PSTN calls and logging call details.",
-          "status": "done",
+          "title": "Connect DataTableTwo Search Input to Search Service",
+          "description": "Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.",
           "dependencies": [2],
-          "details": "Create a tRPC router named 'phoneRouter' with procedures: 'makePstnCall' (to initiate outbound calls via Teams Phone System using the Graph API) and 'logCall' (to record call details in the database). Ensure error handling, input validation, and secure access controls for these endpoints."
+          "details": "1. Modify DataTableTwo component to use the search service\n2. Connect the existing search input to the debounced search function\n3. Implement onChange handler to capture user input\n4. Add clear button functionality to reset search\n5. Ensure the input is accessible with proper ARIA attributes\n6. Add placeholder text that indicates users can search by client or contact name\n7. Implement keyboard shortcuts for focusing the search input (e.g., Ctrl+F or /)\n8. Test the integration to ensure search triggers correctly",
+          "status": "pending",
+          "parentTaskId": 5
         },
         {
           "id": 4,
-          "title": "Build Portal UI for Calling and Call Management",
-          "description": "Implement the /phone page with client/contact search, call buttons, and an admin-only dial pad for direct number entry.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Develop the /phone page UI to allow users to search for clients/contacts, display contacts with phone numbers, and show call buttons next to each. Add an admin-only dial pad component for direct number entry. Integrate UI actions with the tRPC procedures for call initiation and logging."
+          "title": "Implement Cross-Page Search Results Handling",
+          "description": "Ensure search functionality works across all pages of data, not just the current page, by modifying the data fetching logic.",
+          "dependencies": [1, 3],
+          "details": "1. Modify the data fetching logic to search across all records, not just the current page\n2. Update the pagination component to reset when search is performed\n3. Implement server-side filtering based on search terms\n4. Ensure total count of results is correctly calculated and displayed\n5. Maintain proper state for empty results\n6. Add visual indication that results are filtered\n7. Test with large datasets to verify all matching records are found\n8. Optimize query performance for large datasets",
+          "status": "pending",
+          "parentTaskId": 5
         },
         {
           "id": 5,
-          "title": "Implement Call Logging and Role-Based Feature Controls",
-          "description": "Ensure all calls are logged after initiation and restrict phone features based on user roles.",
-          "status": "done",
+          "title": "Add Loading States During Search Operations",
+          "description": "Implement visual feedback for users during search operations to improve perceived performance and user experience.",
+          "dependencies": [3, 4],
+          "details": "1. Create loading indicators for the search input (e.g., spinning icon)\n2. Implement skeleton loaders for the table rows during search\n3. Add transition animations between loading and results states\n4. Ensure loading states are accessible with proper ARIA attributes\n5. Implement progressive loading if results are large\n6. Add timeout handling for long-running searches\n7. Test loading states with various network conditions\n8. Ensure loading states don't cause layout shifts",
+          "status": "pending",
+          "parentTaskId": 5
+        },
+        {
+          "id": 6,
+          "title": "Preserve Active Filters During Search",
+          "description": "Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.",
           "dependencies": [4],
-          "details": "After each call is initiated, automatically invoke the 'logCall' procedure to record the call. Implement role-based visibility and access controls for phone features (e.g., dial pad, call buttons) so only authorized users can access specific functionalities. Test to ensure compliance with security and audit requirements."
+          "details": "1. Refactor filter state management to separate search from other filters\n2. Modify the tRPC endpoint to accept both search terms and filter criteria\n3. Update the UI to show active filters alongside search terms\n4. Implement logic to combine search and filter criteria in queries\n5. Add visual indicators for active combined filters\n6. Create clear all/reset functionality for filters and search\n7. Test various combinations of filters and search terms\n8. Ensure filter state is preserved during navigation or page refresh",
+          "status": "pending",
+          "parentTaskId": 5
+        },
+        {
+          "id": 7,
+          "title": "Implement Pagination Reset on Search Term Changes",
+          "description": "Reset pagination to the first page whenever search terms change to ensure users see the most relevant results immediately.",
+          "dependencies": [4, 6],
+          "details": "1. Modify the pagination state management to reset page to 1 when search term changes\n2. Update the URL parameters to reflect the page reset\n3. Ensure the UI updates to show the first page of results\n4. Add smooth scroll to top when pagination resets\n5. Implement history state management to handle browser back/forward navigation\n6. Add analytics tracking for search term changes and pagination resets\n7. Test edge cases like empty search results and rapid search term changes\n8. Ensure the reset doesn't cause jarring UI changes",
+          "status": "pending",
+          "parentTaskId": 5
         }
       ]
     },
     {
       "id": 6,
-      "title": "Implement SharePoint Folder Linking",
-      "description": "Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.",
-      "status": "done",
-      "dependencies": [3],
-      "priority": "high",
-      "details": "1. Create `scripts/linkSharepointFolders.ts` to automatically match clients with SharePoint folders by name\n2. Create tRPC `sharepointRouter` with procedures: `listClientFolders`, `getFolderContents`\n3. Add `client.updateSharepointFolderId` procedure with Admin/Manager RBAC\n4. Implement \"Link/Change SharePoint Folder\" button on Client Detail page for Admin/Managers\n5. Create folder selection modal using `sharepoint.listClientFolders`\n6. Add document display component on Client Detail page that shows contents of linked folder\n7. Implement \"Open in Web\" links for documents using SharePoint webUrl",
-      "testStrategy": "1. Verify automated script correctly links clients to SharePoint folders\n2. Test manual linking UI for Admin/Manager users\n3. Confirm document list displays correctly for linked folders\n4. Validate \"Open in Web\" links open documents in SharePoint\n5. Test RBAC for folder linking functionality",
+      "title": "Testing and Validation",
+      "description": "Perform comprehensive testing of the enhanced Clients List page",
+      "status": "pending",
+      "dependencies": [5],
+      "priority": "low",
+      "details": "1. Write unit tests for query logic and data transformations\n2. Test role-based access control for Admin vs Manager/Client views\n3. Perform accessibility audit on the table and controls\n4. Test performance with large datasets\n5. Verify all features work across supported browsers\n6. Check that all Cursor rules are followed\n7. Validate that the implementation meets all requirements in the PRD\n8. Test edge cases like empty search results, no clients, etc.",
+      "testStrategy": "Run automated tests for query logic. Manually test with different user roles. Use accessibility tools to verify ARIA compliance. Load test with large datasets to ensure performance.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Develop Automated Script for Client–SharePoint Folder Matching",
-          "description": "Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.",
-          "status": "done",
+          "title": "Develop and Execute Unit Tests for Query Logic and Data Transformations",
+          "description": "Write and run unit tests to validate the correctness of all query logic and data transformation functions used in the Clients List page.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders."
+          "details": "Use a framework such as dbt or your project's preferred testing tool to create unit tests with mock data. Ensure tests cover expected outputs, edge cases, and error handling for all SQL or data transformation logic. Review test results and update logic as needed to address any failures.[1][3][4]"
         },
         {
           "id": 2,
-          "title": "Implement tRPC SharePoint Router for Folder Listing and Contents",
-          "description": "Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).",
-          "status": "done",
+          "title": "Test Role-Based Access Control (RBAC) for All User Types",
+          "description": "Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.",
+          "status": "pending",
           "dependencies": [1],
-          "details": "Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption."
+          "details": "Simulate each user role and test all relevant UI elements and API endpoints. Attempt to access restricted features as lower-privilege users to confirm proper enforcement of RBAC policies. Document any discrepancies and update access rules as needed."
         },
         {
           "id": 3,
-          "title": "Add Client Folder Linking Procedure with RBAC Controls",
-          "description": "Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.",
-          "status": "done",
+          "title": "Perform Accessibility Audit of Table and Controls",
+          "description": "Assess the Clients List page for compliance with accessibility standards (e.g., WCAG 2.1), focusing on the table, filters, buttons, and navigation.",
+          "status": "pending",
           "dependencies": [2],
-          "details": "Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record."
+          "details": "Use automated tools (such as axe or Lighthouse) and manual testing (keyboard navigation, screen readers) to identify accessibility issues. Address problems such as missing ARIA labels, insufficient contrast, or non-semantic markup."
         },
         {
           "id": 4,
-          "title": "Create UI for Linking/Changing SharePoint Folder on Client Detail Page",
-          "description": "Add a 'Link/Change SharePoint Folder' button to the Client Detail page, visible to Admins/Managers, which opens a modal for folder selection.",
-          "status": "done",
+          "title": "Test Performance with Large Datasets",
+          "description": "Evaluate the Clients List page's responsiveness and stability when handling large volumes of client data.",
+          "status": "pending",
           "dependencies": [3],
-          "details": "Conditionally render the button based on user role. Trigger a modal that uses the `sharepoint.listClientFolders` procedure to display available folders for selection."
+          "details": "Seed the database or mock API with a large number of client records. Measure page load times, scrolling performance, and interaction latency. Identify and optimize any bottlenecks in data fetching, rendering, or pagination."
         },
         {
           "id": 5,
-          "title": "Build Folder Selection Modal and Document Display Component",
-          "description": "Develop a modal for selecting a SharePoint folder and a component to display the contents of the linked folder on the Client Detail page.",
-          "status": "done",
+          "title": "Verify Cross-Browser Compatibility and Cursor Rule Compliance",
+          "description": "Ensure that all features of the Clients List page function correctly across all supported browsers and that cursor usage follows design guidelines.",
+          "status": "pending",
           "dependencies": [4],
-          "details": "The modal should allow searching and selecting from available folders. The document display component should use `sharepoint.getFolderContents` to show files and folders, including 'Open in Web' links using SharePoint's webUrl."
+          "details": "Test the page in each supported browser (e.g., Chrome, Firefox, Edge, Safari) on relevant platforms. Check that all interactive elements use the correct cursor styles (pointer, default, etc.) as specified in the UI guidelines."
         },
         {
           "id": 6,
-          "title": "Integrate and Test End-to-End SharePoint Folder Linking Workflow",
-          "description": "Test the full workflow: automated and manual linking, folder selection, document display, and access controls. Fix integration issues and ensure a seamless user experience.",
-          "status": "done",
+          "title": "Validate PRD Requirements and Edge Case Handling",
+          "description": "Confirm that the implementation meets all requirements in the Product Requirements Document (PRD) and robustly handles edge cases.",
+          "status": "pending",
           "dependencies": [5],
-          "details": "Perform end-to-end testing with different user roles. Validate that folder links, document listings, and web URLs function correctly. Address any UI/UX or backend issues discovered during testing."
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "title": "Implement UI Polish and Theme Switcher",
-      "description": "Refine the overall user interface based on Phase 1 feedback and implement a theme switcher for light/dark mode with persistence.",
-      "status": "done",
-      "dependencies": [],
-      "priority": "low",
-      "details": "1. Review Phase 1 feedback and identify UI improvement areas\n2. Refine table layouts, form flows, and navigation components\n3. Ensure consistent use of Shadcn UI and TailAdmin components throughout the application\n4. Improve responsive design for all pages\n5. Implement Theme Switcher component with Light/Dark mode options\n6. Add theme persistence using localStorage or cookies\n7. Create consistent dark mode styles for all components",
-      "testStrategy": "1. Verify UI improvements address Phase 1 feedback\n2. Test responsive design across different devices and screen sizes\n3. Confirm theme switcher correctly toggles between light and dark modes\n4. Validate theme persistence across page refreshes and sessions\n5. Check for any styling inconsistencies or accessibility issues",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Analyze Phase 1 Feedback and Define UI Improvements",
-          "description": "Review all feedback collected from Phase 1 to identify specific areas of the UI that require refinement, such as usability issues, visual inconsistencies, or missing features.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Gather feedback documents, user reports, and design notes. Create a prioritized list of actionable UI improvements, focusing on table layouts, form flows, and navigation components. Document these requirements for implementation in subsequent subtasks."
-        },
-        {
-          "id": 2,
-          "title": "Refactor and Standardize UI Components",
-          "description": "Update and refine table layouts, form flows, and navigation components based on the prioritized feedback, ensuring consistent use of Shadcn UI and TailAdmin components throughout the application.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Audit existing UI components for consistency. Refactor or replace components as needed to align with design guidelines and ensure a cohesive look and feel. Leverage reusable components and maintain modular code structure for scalability and maintainability[3]."
-        },
-        {
-          "id": 3,
-          "title": "Enhance Responsive Design and Cross-Browser Compatibility",
-          "description": "Improve the responsive design of all pages and ensure cross-browser compatibility to provide a seamless experience across devices and browsers.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Test UI on various screen sizes and browsers. Adjust CSS and layout logic to resolve any issues. Use feature detection tools and polyfills where necessary to address browser-specific quirks[2][3]. Validate that all components adapt gracefully to different environments.\n\n<info added on 2025-04-23T18:39:06.181Z>\nFor subtask 3 \"Enhance Responsive Design and Cross-Browser Compatibility\", here's the additional implementation plan:\n\n- Review global breakpoints in [globals.css](mdc:src/app/(pages)/globals.css) and ensure they align with mobile-first design\n- Verify `<meta name='viewport'>` tag in [layout.tsx](mdc:src/app/(pages)/layout.tsx) is properly configured\n- Wrap all page content within a responsive container using Tailwind 'container mx-auto px-4' classes\n- Update tables in [src/components/tables] to be horizontally scrollable on small screens (overflow-x-auto)\n- Adjust header/navigation in [header] components to collapse into a mobile menu at breakpoint 'md'\n- Test on Chrome, Firefox, Safari at specific widths: 375px, 425px, 640px, 768px, 1024px\n- Add necessary vendor prefixes via autoprefixer for flexbox and grid features to ensure cross-browser compatibility\n- Implement CSS Grid fallbacks for browsers with limited support using @supports queries\n- Create a browser compatibility testing checklist document to track issues across platforms\n</info added on 2025-04-23T18:39:06.181Z>"
-        },
-        {
-          "id": 4,
-          "title": "Implement Theme Switcher Component with Persistence",
-          "description": "Develop a theme switcher component that allows users to toggle between light and dark modes, and persist their preference using localStorage or cookies.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Create a UI control for theme switching. Integrate logic to apply the selected theme across the application. Store the user's preference in localStorage or cookies and ensure the theme is restored on subsequent visits."
-        },
-        {
-          "id": 5,
-          "title": "Apply and Test Consistent Dark Mode Styles",
-          "description": "Ensure all UI components have consistent and visually appealing dark mode styles, and thoroughly test the theme switcher functionality across the application.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Audit all components for dark mode compatibility. Update styles as needed to maintain readability and aesthetic quality. Test the theme switcher across different pages, devices, and browsers to ensure reliable persistence and visual consistency.\n\n<info added on 2025-04-23T15:04:22.296Z>\n# Implementation Plan\n\n1. **Define CSS Variables & Utility Classes**\n   - In `src/app/(pages)/globals.css`, create semantic color variables:\n   ```css\n   :root {\n     --color-primary: #1a1a1a;\n     --color-surface: #ffffff;\n     --color-surface-accent: #f3f4f6;\n     --color-border: #e5e7eb;\n     --color-text-primary: #111827;\n     --color-text-secondary: #4b5563;\n   }\n   \n   .dark {\n     --color-primary: #f3f4f6;\n     --color-surface: #121212;\n     --color-surface-accent: #1e1e1e;\n     --color-border: #2e2e2e;\n     --color-text-primary: #f9fafb;\n     --color-text-secondary: #9ca3af;\n   }\n   ```\n\n2. **Component Refactoring Strategy**\n   - Replace hardcoded color values with CSS variables or Tailwind classes\n   - Example conversion:\n   ```jsx\n   // Before\n   <div className=\"bg-white border border-gray-200 text-gray-900\">\n   \n   // After\n   <div className=\"bg-surface border border-border text-primary\">\n   ```\n   - Create custom Tailwind utility classes in `tailwind.config.js`:\n   ```js\n   theme: {\n     extend: {\n       colors: {\n         surface: 'var(--color-surface)',\n         border: 'var(--color-border)',\n         primary: 'var(--color-text-primary)',\n         // etc.\n       }\n     }\n   }\n   ```\n\n3. **Testing Methodology**\n   - Create a test matrix covering all major components in both themes\n   - Test focus states, hover effects, and transitions between themes\n   - Verify contrast ratios meet WCAG AA standards using browser dev tools\n   - Test theme persistence across page navigation and browser refresh\n\n4. **Theme Toggle Implementation**\n   - Use localStorage to persist theme preference\n   - Add immediate visual feedback during theme switch with subtle transition\n\n5. **Documentation**\n   - Document theming architecture and extension patterns\n   - Include screenshots of key components in both themes\n</info added on 2025-04-23T15:04:22.296Z>"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "title": "Integration Testing and Final Polishing",
-      "description": "Perform comprehensive integration testing of all implemented features, fix any issues, and make final adjustments to ensure the portal functions as a cohesive hub for internal team operations.",
-      "status": "done",
-      "dependencies": [1, 2, 3, 4, 5, 6, 7],
-      "priority": "high",
-      "details": "1. Create end-to-end test scenarios covering all implemented features\n2. Test interactions between different components (e.g., initiating calls from client detail page)\n3. Verify all acceptance criteria from the PRD are met\n4. Optimize performance for data-heavy pages\n5. Ensure consistent error handling and user feedback throughout the application\n6. Address any remaining UI/UX issues\n7. Update documentation for new features\n8. Perform final cross-browser and device testing",
-      "testStrategy": "1. Execute end-to-end test scenarios for all user roles\n2. Verify all acceptance criteria are met\n3. Test cross-feature interactions\n4. Perform load testing with realistic data volumes\n5. Conduct usability testing with representative users\n6. Validate cross-browser compatibility\n7. Check accessibility compliance",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Develop and Execute Comprehensive Integration Test Scenarios",
-          "description": "Design and implement integration test cases that cover all interactions between modules and features, ensuring that combined components function as intended.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Identify all major workflows and user journeys across the portal. Create integration test scripts that simulate real-world usage, focusing on interactions between modules (e.g., initiating calls from client detail pages). Use automated testing tools where possible to execute these scenarios and document any failures or unexpected behaviors."
-        },
-        {
-          "id": 2,
-          "title": "Verify Acceptance Criteria and Address Functional Issues",
-          "description": "Systematically check that all acceptance criteria from the Product Requirements Document (PRD) are met, and resolve any functional defects uncovered during integration testing.",
-          "status": "done",
-          "dependencies": [1],
-          "details": "Cross-reference test results with the PRD to ensure every feature and requirement is validated. Log and prioritize any issues found, then implement fixes and retest affected areas to confirm resolution. Collaborate with stakeholders to clarify ambiguous criteria if needed."
-        },
-        {
-          "id": 3,
-          "title": "Optimize Performance and Ensure Consistent Error Handling",
-          "description": "Improve the performance of data-heavy pages and standardize error handling and user feedback mechanisms throughout the application.",
-          "status": "done",
-          "dependencies": [2],
-          "details": "Profile the application to identify slow-loading or resource-intensive pages. Apply optimizations such as query improvements, caching, or UI enhancements. Review error handling across all modules to ensure consistent messaging and user experience, updating code and UI as necessary."
-        },
-        {
-          "id": 4,
-          "title": "Finalize UI/UX, Documentation, and Cross-Platform Testing",
-          "description": "Polish the user interface and experience, update documentation for new features, and conduct final cross-browser and device compatibility testing.",
-          "status": "done",
-          "dependencies": [3],
-          "details": "Address any remaining UI/UX issues for visual consistency and usability. Update user and technical documentation to reflect the latest features and changes. Perform thorough testing across supported browsers and devices, resolving any compatibility issues before release."
-        },
-        {
-          "id": 5,
-          "title": "Review Cursor Rules Compliance & Context7 References",
-          "description": "Ensure all code changes adhere to project Cursor rules (.cursor/rules/) and leverage Context7 documentation.",
-          "status": "done",
-          "dependencies": [4],
-          "details": "Audit code for compliance with established Cursor rules. Add Context7 documentation links or patterns where necessary. Update or create rule files to capture new patterns introduced in Phase 2."
+          "details": "Cross-check the Clients List page against the PRD checklist. Test scenarios such as empty search results, no clients in the system, and invalid input. Document results and address any gaps or failures before sign-off."
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "QAS Portal - Internal Collaboration & Data Usability (MVP Phase 2)",
-    "totalTasks": 9,
-    "sourceFile": "scripts/PRD_phase2.txt",
-    "generatedAt": "2023-11-14"
+    "projectName": "Clients List Enhancement",
+    "totalTasks": 6,
+    "sourceFile": "scripts/PRD_phase2-clientsList.txt",
+    "generatedAt": "2023-11-09"
   }
 }

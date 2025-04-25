@@ -1,0 +1,86 @@
+# Overview  
+Phase 2 focuses on enhancing the **Clients List** page (`src/app/(pages)/(dashboard)/(app)/clients/page.tsx`) by adopting the advanced DataTableTwo UI, refining actions, columns, filtering, and search functionality to better support **Admin**, **Manager**, and **Client** roles.  
+
+# Core Features  
+- **Advanced Table UI**  
+  - Integrate [`DataTableTwo`](mdc:src/components/tables/DataTables/TableTwo/DataTableTwo.tsx) styling and behaviors  
+  - Replace current `<Table>` markup with DataTableTwo configuration  
+- **Row Actions**  
+  - Remove row‐level delete icon  
+  - Add a **View** button/icon that navigates to `/clients/[clientId]`  
+- **Columns & Data**  
+  1. Client Name (`client.clientName`)  
+  2. Primary Contact (lookup where `contacts.isPrimary === true`, show `contacts.name`)  
+  3. City (`client.city`)  
+  4. Next Contact Date (`client.nextContactDate`) formatted as locale date  
+  5. Audit Month End (`client.auditMonthEnd`) converted from integer to month name  
+  6. **Fees** (`client.estAnnFees`) – visible **only** to Admin role  
+  7. **Status** (`client.status`) – visible **only** to Admin role  
+- **Filtering & Search**  
+  - Default filter: `status === 'active'`  
+  - Admins see a **Show All** toggle to include `prospect` & `archived`  
+  - Global search that matches on **Client Name** OR **Contact Name**, across all pages  
+
+# User Experience  
+- **Personas**:  
+  - **Admin**: full access to view, toggle filters, and see fees/status columns  
+  - **Manager** & **Client**: read‐only table with default Active filter and View actions  
+- **Key Flows**:  
+  1. Landing on Clients List (default Active only)  
+  2. Toggling "Show All" (Admins)  
+  3. Searching by name or contact  
+  4. Clicking View → detail page  
+- **UI/UX Considerations**:  
+  - Adhere to existing **Cursor rules** for table and button patterns  
+  - Maintain responsive and accessible markup  
+  - Use DataTableTwo built‐in pagination and sort indicators  
+
+# Technical Architecture  
+- **Front-End**  
+  - Swap out `<Table>` for `<DataTableTwo>`  
+  - Define `columns` prop mapping to the new fields  
+  - Inject View button via **Row Actions** slot  
+- **Data Layer**  
+  - Extend `api.clients.getAll.useQuery` to accept `statusFilter` parameter  
+  - Map `client.contacts` to derive primary contact name  
+  - Convert `auditMonthEnd` int to month string (e.g., `1 → 'January'`) using `date-fns` or `Intl.DateTimeFormat`  
+- **Search**  
+  - Modify server query to OR‐filter on `clientName` and `contacts.name`  
+  - Ensure `debouncedSearch` triggers full‐dataset query, not just current page  
+- **Docs & Context7**  
+  - Use **Context7** to reference official DataTableTwo API docs and date formatting locale guidelines  
+  - Link to [Cursor rules](mdc:.cursor/rules/cursor_rules.mdc) and DataTableTwo design docs  
+
+# Development Roadmap  
+1. **Integrate DataTableTwo UI**  
+   - Import and configure in Clients page  
+   - Remove old table and row delete button  
+2. **Implement View Action**  
+   - Add View button/icon slot per row  
+   - Verify authorization with `useRbac()`  
+3. **Adjust Columns & Formatters**  
+   - Setup column definitions for primary contact, dates, month names  
+   - Hide Fees & Status based on role  
+4. **Status Filtering**  
+   - Default Active filter on mount  
+   - Admin "Show All" toggle UI & logic  
+5. **Search Enhancement**  
+   - Extend tRPC endpoint to search contacts  
+   - Wire up DataTableTwo search input for global search  
+6. **Testing & Validation**  
+   - Unit tests for query logic  
+   - Accessibility audit on table and controls  
+
+# Logical Dependency Chain  
+1. Core DataTableTwo integration → 2. Row Actions → 3. Column changes → 4. Filtering → 5. Search → 6. Testing  
+
+# Risks and Mitigations  
+- **Query Performance**: OR‐search across tables may slow responses → add indexes or debounce aggressively  
+- **Date Conversion**: month name mapping could be locale‐sensitive → standardize with `Intl`  
+- **Role Logic**: mismatched authorization → write end‐to‐end tests for Admin vs Manager/Client  
+
+# Appendix  
+- **Context7 References**:  
+  - DataTableTwo API docs (`vercel/nextjs` or relevant library ID)  
+  - Intl.DateTimeFormat usage examples  
+- **Cursor Rules**: ensure edits conform to [.cursor/rules/cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc)  

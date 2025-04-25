@@ -1,59 +1,56 @@
 # Task ID: 6
-# Title: Implement SharePoint Folder Linking
-# Status: done
-# Dependencies: 3
-# Priority: high
-# Description: Create an automated script and manual UI for linking Client records to their corresponding SharePoint folders, enabling document access within the portal.
+# Title: Testing and Validation
+# Status: pending
+# Dependencies: 5
+# Priority: low
+# Description: Perform comprehensive testing of the enhanced Clients List page
 # Details:
-1. Create `scripts/linkSharepointFolders.ts` to automatically match clients with SharePoint folders by name
-2. Create tRPC `sharepointRouter` with procedures: `listClientFolders`, `getFolderContents`
-3. Add `client.updateSharepointFolderId` procedure with Admin/Manager RBAC
-4. Implement "Link/Change SharePoint Folder" button on Client Detail page for Admin/Managers
-5. Create folder selection modal using `sharepoint.listClientFolders`
-6. Add document display component on Client Detail page that shows contents of linked folder
-7. Implement "Open in Web" links for documents using SharePoint webUrl
+1. Write unit tests for query logic and data transformations
+2. Test role-based access control for Admin vs Manager/Client views
+3. Perform accessibility audit on the table and controls
+4. Test performance with large datasets
+5. Verify all features work across supported browsers
+6. Check that all Cursor rules are followed
+7. Validate that the implementation meets all requirements in the PRD
+8. Test edge cases like empty search results, no clients, etc.
 
 # Test Strategy:
-1. Verify automated script correctly links clients to SharePoint folders
-2. Test manual linking UI for Admin/Manager users
-3. Confirm document list displays correctly for linked folders
-4. Validate "Open in Web" links open documents in SharePoint
-5. Test RBAC for folder linking functionality
+Run automated tests for query logic. Manually test with different user roles. Use accessibility tools to verify ARIA compliance. Load test with large datasets to ensure performance.
 
 # Subtasks:
-## 1. Develop Automated Script for Client–SharePoint Folder Matching [done]
+## 1. Develop and Execute Unit Tests for Query Logic and Data Transformations [pending]
 ### Dependencies: None
-### Description: Create a TypeScript script (`scripts/linkSharepointFolders.ts`) that automatically matches client records to SharePoint folders by name and stores the folder ID in the client record.
+### Description: Write and run unit tests to validate the correctness of all query logic and data transformation functions used in the Clients List page.
 ### Details:
-Implement logic to fetch client records and available SharePoint folders, perform name-based matching, and update each client with the corresponding SharePoint folder ID. Ensure error handling for unmatched or duplicate folders.
+Use a framework such as dbt or your project's preferred testing tool to create unit tests with mock data. Ensure tests cover expected outputs, edge cases, and error handling for all SQL or data transformation logic. Review test results and update logic as needed to address any failures.[1][3][4]
 
-## 2. Implement tRPC SharePoint Router for Folder Listing and Contents [done]
+## 2. Test Role-Based Access Control (RBAC) for All User Types [pending]
 ### Dependencies: 6.1
-### Description: Create a tRPC router (`sharepointRouter`) with procedures to list client folders (`listClientFolders`) and retrieve folder contents (`getFolderContents`).
+### Description: Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.
 ### Details:
-Integrate with SharePoint API to fetch folder lists and their contents. Support pagination, filtering, and sorting as needed. Ensure proper error handling and data shaping for frontend consumption.
+Simulate each user role and test all relevant UI elements and API endpoints. Attempt to access restricted features as lower-privilege users to confirm proper enforcement of RBAC policies. Document any discrepancies and update access rules as needed.
 
-## 3. Add Client Folder Linking Procedure with RBAC Controls [done]
+## 3. Perform Accessibility Audit of Table and Controls [pending]
 ### Dependencies: 6.2
-### Description: Implement a tRPC procedure (`client.updateSharepointFolderId`) that allows Admins and Managers to manually link or update a client's SharePoint folder ID.
+### Description: Assess the Clients List page for compliance with accessibility standards (e.g., WCAG 2.1), focusing on the table, filters, buttons, and navigation.
 ### Details:
-Enforce role-based access control (RBAC) so only Admins/Managers can perform this action. Validate folder existence before updating the client record.
+Use automated tools (such as axe or Lighthouse) and manual testing (keyboard navigation, screen readers) to identify accessibility issues. Address problems such as missing ARIA labels, insufficient contrast, or non-semantic markup.
 
-## 4. Create UI for Linking/Changing SharePoint Folder on Client Detail Page [done]
+## 4. Test Performance with Large Datasets [pending]
 ### Dependencies: 6.3
-### Description: Add a 'Link/Change SharePoint Folder' button to the Client Detail page, visible to Admins/Managers, which opens a modal for folder selection.
+### Description: Evaluate the Clients List page's responsiveness and stability when handling large volumes of client data.
 ### Details:
-Conditionally render the button based on user role. Trigger a modal that uses the `sharepoint.listClientFolders` procedure to display available folders for selection.
+Seed the database or mock API with a large number of client records. Measure page load times, scrolling performance, and interaction latency. Identify and optimize any bottlenecks in data fetching, rendering, or pagination.
 
-## 5. Build Folder Selection Modal and Document Display Component [done]
+## 5. Verify Cross-Browser Compatibility and Cursor Rule Compliance [pending]
 ### Dependencies: 6.4
-### Description: Develop a modal for selecting a SharePoint folder and a component to display the contents of the linked folder on the Client Detail page.
+### Description: Ensure that all features of the Clients List page function correctly across all supported browsers and that cursor usage follows design guidelines.
 ### Details:
-The modal should allow searching and selecting from available folders. The document display component should use `sharepoint.getFolderContents` to show files and folders, including 'Open in Web' links using SharePoint's webUrl.
+Test the page in each supported browser (e.g., Chrome, Firefox, Edge, Safari) on relevant platforms. Check that all interactive elements use the correct cursor styles (pointer, default, etc.) as specified in the UI guidelines.
 
-## 6. Integrate and Test End-to-End SharePoint Folder Linking Workflow [done]
+## 6. Validate PRD Requirements and Edge Case Handling [pending]
 ### Dependencies: 6.5
-### Description: Test the full workflow: automated and manual linking, folder selection, document display, and access controls. Fix integration issues and ensure a seamless user experience.
+### Description: Confirm that the implementation meets all requirements in the Product Requirements Document (PRD) and robustly handles edge cases.
 ### Details:
-Perform end-to-end testing with different user roles. Validate that folder links, document listings, and web URLs function correctly. Address any UI/UX or backend issues discovered during testing.
+Cross-check the Clients List page against the PRD checklist. Test scenarios such as empty search results, no clients in the system, and invalid input. Document results and address any gaps or failures before sign-off.
 

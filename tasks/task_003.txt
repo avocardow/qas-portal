@@ -1,59 +1,60 @@
 # Task ID: 3
-# Title: Enhance Client and Audit Detail Pages
-# Status: done
-# Dependencies: None
+# Title: Implement View Action Button
+# Status: pending
+# Dependencies: 1
 # Priority: high
-# Description: Improve the presentation of relational data on Client and Audit detail pages to clearly display linked entities and improve usability.
+# Description: Add a View button/icon to each row that navigates to the client detail page
 # Details:
-1. Optimize tRPC `client.getById` to include related entities: contacts, licenses, trustAccounts, audits
-2. Optimize tRPC `audit.getById` to include tasks and assignments with user information
-3. Implement tabbed interface for Client Detail page at `/clients/[clientId]` with Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs
-4. Create tables/lists for each tab with appropriate sorting and filtering
-5. Enhance Audit Detail page at `/audits/[auditId]` with core info, assigned team display, tasks table, and activity log
-6. Use Shadcn/TailAdmin components consistently for cards, badges, and tables
-7. Ensure responsive design works on various screen sizes
+1. Create a row action component with a View button/icon
+2. Configure the button to navigate to /clients/[clientId] on click
+3. Integrate the action component into DataTableTwo's row actions slot
+4. Apply appropriate styling according to Cursor rules
+5. Ensure the action is visible to all roles (Admin, Manager, Client)
+6. Remove any existing row-level delete functionality
 
 # Test Strategy:
-1. Verify all relational data is correctly fetched and displayed
-2. Test tab navigation preserves state
-3. Confirm sorting and filtering functions work as expected
-4. Validate responsive design on mobile, tablet, and desktop viewports
-5. Check performance with large datasets
+Test navigation to client detail page works correctly. Verify the button appears for all user roles. Check that styling matches design system requirements.
 
 # Subtasks:
-## 1. Extend tRPC Procedures to Fetch Related Entities [done]
+## 1. Create ViewActionButton component [pending]
 ### Dependencies: None
-### Description: Update the tRPC backend procedures for `client.getById` and `audit.getById` to include all necessary related entities for the detail pages.
+### Description: Design and implement a reusable ViewActionButton component that will be used across the application for navigating to detail pages.
 ### Details:
-Modify the tRPC router definitions so that `client.getById` returns contacts, licenses, trustAccounts, and audits, and `audit.getById` returns tasks and assignments with user information. Ensure the returned data is fully typed and optimized for frontend consumption.
+Create a new component in the shared components directory that accepts clientId as a prop. Use semantic HTML with a button element for accessibility. Implement an eye/visibility icon from the project's icon library. Add appropriate ARIA labels for screen readers. Include a tooltip that appears on hover with 'View Details' text. Style according to Cursor design system with appropriate contrast and visual hierarchy as a secondary action. Ensure the button is keyboard accessible and has proper focus states. Test the component in isolation to verify it renders correctly.
 
-## 2. Implement Tabbed Interface on Client Detail Page [done]
+## 2. Implement navigation functionality [pending]
 ### Dependencies: 3.1
-### Description: Create a tabbed navigation UI for the Client Detail page at `/clients/[clientId]` to organize related data into Overview, Contacts, Licenses, Trust Accounts, Audits, and Activity tabs.
+### Description: Add navigation logic to the ViewActionButton component to direct users to the client detail page when clicked.
 ### Details:
-Use Shadcn/TailAdmin tab components to build a responsive tabbed interface. Each tab should be a separate component and fetch its data using the enhanced tRPC procedures.
+Import and use the application's routing mechanism (likely React Router's useNavigate hook). Implement an onClick handler that navigates to the '/clients/[clientId]' route, passing the clientId as a parameter. Add error handling to prevent navigation issues. Test the navigation functionality to ensure it correctly routes to the appropriate client detail page. Verify that the browser history is properly updated. Ensure that the button is not triggering form submissions if placed within a form context.
 
-## 3. Build Data Tables and Lists for Each Client Tab [done]
-### Dependencies: 3.2
-### Description: Develop tables or lists for each tab on the Client Detail page, supporting sorting and filtering where appropriate.
+## 3. Integrate ViewActionButton with DataTableTwo [pending]
+### Dependencies: 3.1, 3.2
+### Description: Modify the DataTableTwo component to include the ViewActionButton in its row actions slot.
 ### Details:
-For Contacts, Licenses, Trust Accounts, and Audits tabs, implement data tables using Shadcn/TailAdmin components. Add sorting and filtering controls as needed. Ensure data is fetched efficiently and displayed clearly.
+Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.
 
-## 4. Enhance Audit Detail Page with Relational Data [done]
-### Dependencies: 3.1
-### Description: Redesign the Audit Detail page at `/audits/[auditId]` to display core audit info, assigned team members, a tasks table, and an activity log.
+## 4. Remove existing row-level delete functionality [pending]
+### Dependencies: 3.3
+### Description: Remove any existing delete buttons or functionality from the table rows as specified in the requirements.
 ### Details:
-Use Shadcn/TailAdmin cards, badges, and tables to present audit details, team assignments (with user info), tasks, and activity logs. Ensure the layout is clear and information is grouped logically.
+Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.
 
-## 5. Apply Consistent UI Components and Styling [done]
-### Dependencies: 3.3, 3.4
-### Description: Standardize the use of Shadcn/TailAdmin components for cards, badges, and tables across both Client and Audit detail pages.
+## 5. Implement responsive design for ViewActionButton [pending]
+### Dependencies: 3.1, 3.2, 3.3
+### Description: Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.
 ### Details:
-Audit all UI elements on the detail pages to ensure consistent use of Shadcn/TailAdmin components. Refactor any legacy or inconsistent UI elements to match the new design system.
+Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.
 
-## 6. Ensure Responsive Design and Cross-Device Usability [done]
-### Dependencies: 3.5
-### Description: Test and refine the Client and Audit detail pages to ensure they are fully responsive and usable on all common screen sizes.
+## 6. Configure role-based visibility [pending]
+### Dependencies: 3.3
+### Description: Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.
 ### Details:
-Use responsive utilities from Shadcn/TailAdmin and test layouts on various devices. Adjust breakpoints, table layouts, and navigation as needed to guarantee a seamless user experience on desktop, tablet, and mobile.
+Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.
+
+## 7. Write comprehensive tests for ViewActionButton functionality [pending]
+### Dependencies: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
+### Description: Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.
+### Details:
+Write unit tests for the ViewActionButton component to verify rendering and click behavior. Create integration tests to verify the button appears correctly in the DataTableTwo component. Test navigation to ensure clicking the button correctly routes to the client detail page. Verify accessibility by testing keyboard navigation and screen reader compatibility. Test with different screen sizes to confirm responsive behavior. Verify role-based visibility by testing with different user roles. Include edge cases such as handling clients with missing IDs or other required data. Document test coverage and any assumptions made during testing.
 
