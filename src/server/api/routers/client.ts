@@ -71,7 +71,18 @@ export const clientRouter = createTRPCRouter({
         cursor: cursor ? { id: cursor } : undefined,
         where: { clientName: { contains: filter || "" } },
         orderBy: { [sortBy]: sortOrder },
-        select: { id: true, clientName: true, city: true, status: true },
+        select: {
+          id: true,
+          clientName: true,
+          city: true,
+          status: true,
+          auditMonthEnd: true,
+          nextContactDate: true,
+          estAnnFees: true,
+          contacts: {
+            select: { name: true, isPrimary: true },
+          },
+        },
       });
       const nextCursor =
         items.length === take ? items[take - 1]?.id : undefined;
