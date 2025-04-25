@@ -72,7 +72,7 @@
       "id": 2,
       "title": "Define Column Configuration and Data Formatting",
       "description": "Create column definitions for the Clients table with proper data formatting",
-      "status": "pending",
+      "status": "done",
       "dependencies": [1],
       "priority": "high",
       "details": "1. Define columns array with the following fields:\n   - Client Name (client.clientName)\n   - Primary Contact (derived from contacts where isPrimary === true)\n   - City (client.city)\n   - Next Contact Date (client.nextContactDate) formatted as locale date\n   - Audit Month End (convert client.auditMonthEnd integer to month name using Intl.DateTimeFormat)\n   - Fees (client.estAnnFees) - conditionally visible for Admin role\n   - Status (client.status) - conditionally visible for Admin role\n2. Use date-fns or Intl.DateTimeFormat for date formatting\n3. Implement logic to derive primary contact name from contacts array\n4. Add conditional rendering based on user role using useRbac()",

@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Define Column Configuration and Data Formatting
-# Status: pending
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Create column definitions for the Clients table with proper data formatting
