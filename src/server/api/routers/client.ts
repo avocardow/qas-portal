@@ -65,7 +65,7 @@ export const clientRouter = createTRPCRouter({
         filter,
         sortBy = "clientName",
         sortOrder = "asc",
-        statusFilter,
+        statusFilter = "active",
       } = input;
       const items = await ctx.db.client.findMany({
         take,
