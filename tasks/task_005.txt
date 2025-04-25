@@ -95,7 +95,7 @@ Test search functionality with various inputs. Verify it finds matches in both c
 7. Test various combinations of filters and search terms
 8. Ensure filter state is preserved during navigation or page refresh
 
-## 7. Implement Pagination Reset on Search Term Changes [pending]
+## 7. Implement Pagination Reset on Search Term Changes [done]
 ### Dependencies: 5.4, 5.6
 ### Description: Reset pagination to the first page whenever search terms change to ensure users see the most relevant results immediately.
 ### Details:
