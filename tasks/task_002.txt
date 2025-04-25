@@ -27,19 +27,19 @@ Unit test the column definitions and formatters. Verify date formatting works co
 ### Details:
 Create a columns array with objects for each required field: Client Name, Primary Contact, City, Next Contact Date, Audit Month End, Fees, and Status. For each column, specify the field or accessor function as appropriate. Use accessor functions for derived or formatted fields (e.g., Primary Contact).
 
-## 2. Implement Primary Contact Derivation Logic [pending]
+## 2. Implement Primary Contact Derivation Logic [done]
 ### Dependencies: 2.1
 ### Description: Add logic to extract the primary contact's name from the contacts array for each client.
 ### Details:
 For the Primary Contact column, implement an accessor function that searches the contacts array for the object where isPrimary is true and returns the contact's name. Ensure this logic is robust to missing or malformed data.
 
-## 3. Format Date Fields Using date-fns or Intl.DateTimeFormat [pending]
+## 3. Format Date Fields Using date-fns or Intl.DateTimeFormat [done]
 ### Dependencies: 2.1
 ### Description: Apply locale-aware formatting to the Next Contact Date column using date-fns or Intl.DateTimeFormat.
 ### Details:
 For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales.
 
-## 4. Convert Audit Month End Integer to Month Name [pending]
+## 4. Convert Audit Month End Integer to Month Name [done]
 ### Dependencies: 2.1
 ### Description: Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.
 ### Details:

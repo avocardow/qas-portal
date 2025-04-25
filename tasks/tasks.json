@@ -90,7 +90,7 @@
           "id": 2,
           "title": "Implement Primary Contact Derivation Logic",
           "description": "Add logic to extract the primary contact's name from the contacts array for each client.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "For the Primary Contact column, implement an accessor function that searches the contacts array for the object where isPrimary is true and returns the contact's name. Ensure this logic is robust to missing or malformed data."
         },
@@ -98,7 +98,7 @@
           "id": 3,
           "title": "Format Date Fields Using date-fns or Intl.DateTimeFormat",
           "description": "Apply locale-aware formatting to the Next Contact Date column using date-fns or Intl.DateTimeFormat.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [1],
           "details": "For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales."
         },
@@ -122,7 +122,7 @@
           "id": 6,
           "title": "Apply Value Formatters for Fees and Status Columns",
           "description": "Format the Fees column as currency and apply any necessary formatting to the Status column.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [5],
           "details": "For the Fees column, use a value formatter to display the value as currency (e.g., using Intl.NumberFormat or a custom formatter). For the Status column, apply any required formatting or mapping to display user-friendly status labels."
         }
