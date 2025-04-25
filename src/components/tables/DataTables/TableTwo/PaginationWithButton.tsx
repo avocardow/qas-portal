@@ -13,69 +13,53 @@ interface PaginationProps {
 const getPageNumbers = (
   totalPages: number,
   currentPage: number,
-  maxVisibleDesktop: number,
-  maxVisibleMobile: number
+  siblings = 1 // Number of pages to show on each side of currentPage
 ): (number | null)[] => {
-  // Determine maxVisible based on a breakpoint (e.g., sm)
-  // Note: Using window width directly in React is tricky for SSR/initial render.
-  // A better approach might involve CSS or a dedicated hook, but for simplicity,
-  // we'll structure the logic assuming we can determine this.
-  // Let's simulate with a fixed assumption for now or require a media query hook.
-  // For this example, we'll just use the desktop logic for now and adjust later if needed.
-  // TODO: Implement proper responsive check (e.g., useMediaQuery hook)
-  const isMobile = false; // Placeholder: replace with actual check
-  const maxVisible = isMobile ? maxVisibleMobile : maxVisibleDesktop;
+  const totalPageNumbersToShow = siblings * 2 + 3; // siblings + current + first + last
+  const totalSlots = totalPageNumbersToShow + 2; // + 2 for potential ellipses
 
-  if (totalPages <= maxVisible) {
+  // Case 1: Total pages is less than or equal to what we want to show
+  if (totalPages <= totalSlots) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  const pages: (number | null)[] = [];
-  const sideWidth = isMobile ? 1 : 2; // How many numbers to show on each side of current
-  const leftBound = currentPage - sideWidth;
-  const rightBound = currentPage + sideWidth;
+  const leftSiblingIndex = Math.max(currentPage - siblings, 1);
+  const rightSiblingIndex = Math.min(currentPage + siblings, totalPages);
 
-  pages.push(1); // Always show first page
+  const shouldShowLeftEllipsis = leftSiblingIndex > 2;
+  const shouldShowRightEllipsis = rightSiblingIndex < totalPages - 1;
 
-  // Ellipsis or numbers after first page
-  if (leftBound > 2) {
-    pages.push(null); // Ellipsis
-  } else if (leftBound === 2) {
-    pages.push(2);
+  const firstPageIndex = 1;
+  const lastPageIndex = totalPages;
+
+  // Case 2: No left ellipsis, but right ellipsis needed
+  if (!shouldShowLeftEllipsis && shouldShowRightEllipsis) {
+    const leftItemCount = 1 + 2 * siblings + 1; // 1 + current + siblings
+    const leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
+    return [...leftRange, null, lastPageIndex];
   }
 
-  // Middle numbers
-  for (
-    let i = Math.max(2, leftBound);
-    i <= Math.min(totalPages - 1, rightBound);
-    i++
-  ) {
-    if (!pages.includes(i)) {
-      pages.push(i);
-    }
+  // Case 3: No right ellipsis, but left ellipsis needed
+  if (shouldShowLeftEllipsis && !shouldShowRightEllipsis) {
+    const rightItemCount = 1 + 2 * siblings + 1; // 1 + current + siblings
+    const rightRange = Array.from(
+      { length: rightItemCount },
+      (_, i) => totalPages - rightItemCount + i + 1
+    );
+    return [firstPageIndex, null, ...rightRange];
   }
 
-  // Ellipsis or numbers before last page
-  if (rightBound < totalPages - 1) {
-    pages.push(null); // Ellipsis
-  } else if (rightBound === totalPages - 1) {
-    pages.push(totalPages - 1);
+  // Case 4: Both ellipses needed
+  if (shouldShowLeftEllipsis && shouldShowRightEllipsis) {
+    const middleRange = Array.from(
+      { length: rightSiblingIndex - leftSiblingIndex + 1 },
+      (_, i) => leftSiblingIndex + i
+    );
+    return [firstPageIndex, null, ...middleRange, null, lastPageIndex];
   }
 
-  if (!pages.includes(totalPages)) {
-    pages.push(totalPages); // Always show last page
-  }
-
-  // Refine ellipsis placement - ensure only one if needed near ends
-  const finalPages: (number | null)[] = [];
-  let lastPushed: number | null = null;
-  for (const p of pages) {
-    if (p === null && lastPushed === null) continue; // Avoid double ellipsis
-    finalPages.push(p);
-    lastPushed = p;
-  }
-
-  return finalPages;
+  // Fallback (should not be reached if logic is correct)
+  return Array.from({ length: totalPages }, (_, i) => i + 1);
 };
 
 export default function PaginationWithButton({
@@ -113,17 +97,10 @@ export default function PaginationWithButton({
   };
 
   const renderPageNumbers = () => {
-    // Define max visible pages for desktop and mobile
-    const maxVisibleDesktop = 7; // e.g., 1 ... 4 5 6 ... 10 (includes first, last, current, 2 neighbours, 2 ellipsis)
-    const maxVisibleMobile = 5; // e.g., 1 ... 4 5 ... 10
+    // Define siblings count (e.g., 1 means N-1, N, N+1)
+    const siblingCount = 1;
 
-    // Generate the page numbers/ellipses to display
-    const pagesToRender = getPageNumbers(
-      totalPages,
-      currentPage,
-      maxVisibleDesktop,
-      maxVisibleMobile
-    );
+    const pagesToRender = getPageNumbers(totalPages, currentPage, siblingCount);
 
     // TODO: Add responsive classes (hidden sm:flex) based on actual mobile detection
     return pagesToRender.map((page, index) => (
