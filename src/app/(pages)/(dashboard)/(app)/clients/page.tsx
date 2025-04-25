@@ -202,7 +202,7 @@ export default function ClientsPage() {
           {isLoading && <p>Loading clients...</p>}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
-            <div className="overflow-x-auto">
+            <div className="custom-scrollbar max-w-full overflow-x-auto">
               <DataTableTwo data={items} columns={columns} />
             </div>
           )}
