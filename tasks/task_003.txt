@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Implement View Action Button
-# Status: in-progress
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Add a View button/icon to each row that navigates to the client detail page

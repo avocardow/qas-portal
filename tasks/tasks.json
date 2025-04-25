@@ -132,7 +132,7 @@
       "id": 3,
       "title": "Implement View Action Button",
       "description": "Add a View button/icon to each row that navigates to the client detail page",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [1],
       "priority": "high",
       "details": "1. Create a row action component with a View button/icon\n2. Configure the button to navigate to /clients/[clientId] on click\n3. Integrate the action component into DataTableTwo's row actions slot\n4. Apply appropriate styling according to Cursor rules\n5. Ensure the action is visible to all roles (Admin, Manager, Client)\n6. Remove any existing row-level delete functionality",
