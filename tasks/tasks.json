@@ -282,7 +282,7 @@
       "id": 5,
       "title": "Enhance Search Functionality",
       "description": "Implement global search across Client Name and Contact Name fields",
-      "status": "pending",
+      "status": "done",
       "dependencies": [4],
       "priority": "medium",
       "details": "1. Extend the tRPC endpoint to search across client.clientName OR contacts.name\n2. Wire up DataTableTwo's search input to trigger the search\n3. Implement debounced search to prevent excessive API calls\n4. Ensure search works across all pages of data, not just the current page\n5. Add loading state during search operations\n6. Preserve other active filters (like status) when searching\n7. Reset pagination to first page when search term changes",

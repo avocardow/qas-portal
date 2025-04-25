@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Enhance Search Functionality
-# Status: pending
+# Status: done
 # Dependencies: 4
 # Priority: medium
 # Description: Implement global search across Client Name and Contact Name fields
