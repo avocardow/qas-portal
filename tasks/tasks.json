@@ -312,7 +312,7 @@
           "description": "Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.",
           "dependencies": [2],
           "details": "1. Modify DataTableTwo component to use the search service\n2. Connect the existing search input to the debounced search function\n3. Implement onChange handler to capture user input\n4. Add clear button functionality to reset search\n5. Ensure the input is accessible with proper ARIA attributes\n6. Add placeholder text that indicates users can search by client or contact name\n7. Implement keyboard shortcuts for focusing the search input (e.g., Ctrl+F or /)\n8. Test the integration to ensure search triggers correctly",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 5
         },
         {

@@ -43,7 +43,7 @@ Test search functionality with various inputs. Verify it finds matches in both c
 7. Add error handling for failed requests
 8. Test the debounce functionality with rapid typing scenarios
 
-## 3. Connect DataTableTwo Search Input to Search Service [pending]
+## 3. Connect DataTableTwo Search Input to Search Service [done]
 ### Dependencies: 5.2
 ### Description: Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.
 ### Details:

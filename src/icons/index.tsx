@@ -1,5 +1,6 @@
 import PlusIcon from "./plus.svg";
 import CloseIcon from "./close.svg";
+import XMarkIcon from "./close.svg";
 import BoxIcon from "./box.svg";
 import CheckCircleIcon from "./check-circle.svg";
 import AlertIcon from "./alert.svg";
@@ -104,4 +105,5 @@ export {
   ChevronUpIcon,
   ChatIcon,
   MoreDotIcon,
+  XMarkIcon,
 };

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,7 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "../../../ui/table";
-import { AngleDownIcon, AngleUpIcon, PencilIcon } from "../../../../icons";
+import {
+  AngleDownIcon,
+  AngleUpIcon,
+  PencilIcon,
+  XMarkIcon,
+} from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
 import ViewActionButton from "@/components/common/ViewActionButton";
 import { useRole } from "@/context/RbacContext";
@@ -167,6 +172,7 @@ export default function DataTableTwo({
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const currentRole = useRole();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Use provided data or fallback
   const tableData = data ?? staticTableData;
@@ -251,6 +257,20 @@ export default function DataTableTwo({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
+  // Effect for Cmd/Ctrl+K shortcut
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
       <div className="flex flex-col gap-4 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
@@ -309,12 +329,23 @@ export default function DataTableTwo({
 
         <div className="relative flex items-center">
           <input
+            ref={searchInputRef}
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search here..."
-            className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2 pr-9 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+            placeholder="Search Clients or Contacts (⌘K)..."
+            aria-label="Search Clients or Contacts"
+            className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2 pr-16 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
           />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              aria-label="Clear search"
+              className="absolute top-1/2 right-10 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+            >
+              <XMarkIcon className="h-4 w-4" />
+            </button>
+          )}
           <span className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
             <svg
               className="fill-current"
