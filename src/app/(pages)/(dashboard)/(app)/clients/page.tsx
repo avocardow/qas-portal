@@ -68,9 +68,18 @@ export default function ClientsPage() {
         key: "clientName",
         header: "Client Name",
         sortable: true,
-        cell: (row: any) => (
-          <Link href={`/clients/${row.id}`}>{row.clientName}</Link>
-        ),
+        cell: (row: any) => {
+          const name = row.clientName || "";
+          const display = name.length > 25 ? `${name.slice(0, 25)}…` : name;
+          return (
+            <Link
+              href={`/clients/${row.id}`}
+              className="block max-w-[200px] truncate"
+            >
+              {display}
+            </Link>
+          );
+        },
       },
       {
         key: "primaryContact",
