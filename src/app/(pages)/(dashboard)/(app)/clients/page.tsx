@@ -7,7 +7,6 @@ import Link from "next/link";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import Notification from "@/components/ui/notification/Notification";
-import useDebounce from "@/hooks/useDebounce";
 import DataTableTwo, {
   ColumnDef,
 } from "@/components/tables/DataTables/TableTwo/DataTableTwo";
@@ -23,17 +22,14 @@ export default function ClientsPage() {
   // RBAC context
   const { role } = useRbac();
   const router = useRouter();
-  // Pagination, filtering state
-  const [filter, setFilter] = useState("");
+  // Pagination and toggle state
   const [showAll, setShowAll] = useState(false);
-  // Debounce filter input to optimize queries
-  const debouncedFilter = useDebounce(filter, 500);
   const [pageSize] = useState(10);
 
   // Fetch paginated data with current controls
   const statusFilter = showAll ? undefined : "active";
   const clientsQuery = api.clients.getAll.useQuery(
-    { take: pageSize, filter: debouncedFilter, showAll, statusFilter },
+    { take: pageSize, showAll, statusFilter },
     {
       refetchOnWindowFocus: false,
       staleTime: 600000,
@@ -165,46 +161,20 @@ export default function ClientsPage() {
 
   return (
     <div>
-      {/* Filter, Add New, and pagination controls */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Search clients..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-          />
-          {role === "Admin" && (
-            <label className="inline-flex items-center space-x-1">
-              <input
-                type="checkbox"
-                checked={showAll}
-                onChange={() => setShowAll((prev) => !prev)}
-                className="form-checkbox h-4 w-4 text-blue-600"
-              />
-              <span>Show All</span>
-            </label>
-          )}
-          {role === "Admin" && (
-            <Badge size="sm" color={showAll ? "info" : "success"}>
-              {showAll ? "All Clients" : "Active Clients"}
-            </Badge>
-          )}
-          {/* Conditional Add New Client button */}
-          {/* Only Admin can create clients */}
-          {role === "Admin" && (
-            <Link href="/clients/new">
-              <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
-                Add New Client
-              </button>
-            </Link>
-          )}
-        </div>
-      </div>
       <PageBreadcrumb pageTitle="Clients" />
       <div className="space-y-6">
-        <ComponentCard title="Clients">
+        <ComponentCard
+          title="Clients"
+          actions={
+            role === "Admin" && (
+              <Link href="/clients/new">
+                <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
+                  Add New Client
+                </button>
+              </Link>
+            )
+          }
+        >
           {notification && (
             <Notification
               variant={notification.variant}
@@ -215,13 +185,34 @@ export default function ClientsPage() {
           {isLoading && <p>Loading clients...</p>}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {items && (
-            <div className="custom-scrollbar max-w-full overflow-x-auto">
-              <DataTableTwo
-                data={items}
-                columns={columns}
-                onView={(row: any) => router.push(`/clients/${row.id}`)}
-              />
-            </div>
+            <>
+              {/* Show All toggle and status badge next to table search */}
+              <div className="mb-4 flex items-center space-x-2">
+                {role === "Admin" && (
+                  <label className="inline-flex items-center space-x-1">
+                    <input
+                      type="checkbox"
+                      checked={showAll}
+                      onChange={() => setShowAll((prev) => !prev)}
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <span>Show All</span>
+                  </label>
+                )}
+                {role === "Admin" && (
+                  <Badge size="sm" color={showAll ? "info" : "success"}>
+                    {showAll ? "All Clients" : "Active Clients"}
+                  </Badge>
+                )}
+              </div>
+              <div className="custom-scrollbar max-w-full overflow-x-auto">
+                <DataTableTwo
+                  data={items}
+                  columns={columns}
+                  onView={(row: any) => router.push(`/clients/${row.id}`)}
+                />
+              </div>
+            </>
           )}
         </ComponentCard>
       </div>
