@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Table,
   TableBody,
@@ -143,18 +143,21 @@ export default function DataTableTwo({
   // Use provided data or fallback
   const tableData = data ?? staticTableData;
   // Fallback local search if no searchFn provided
-  const fallbackSearchFn = (term: string, _signal: AbortSignal) => {
-    void _signal;
-    const lower = term.toLowerCase();
-    return Promise.resolve(
-      tableData.filter((item) =>
-        Object.values(item).some(
-          (value) =>
-            typeof value === "string" && value.toLowerCase().includes(lower)
+  const fallbackSearchFn = useCallback(
+    (term: string, _signal: AbortSignal) => {
+      void _signal;
+      const lower = term.toLowerCase();
+      return Promise.resolve(
+        tableData.filter((item) =>
+          Object.values(item).some(
+            (value) =>
+              typeof value === "string" && value.toLowerCase().includes(lower)
+          )
         )
-      )
-    );
-  };
+      );
+    },
+    [tableData]
+  );
   const {
     searchTerm,
     setSearchTerm,
