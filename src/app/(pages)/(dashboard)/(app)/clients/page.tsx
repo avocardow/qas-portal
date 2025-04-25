@@ -25,6 +25,7 @@ export default function ClientsPage() {
   const router = useRouter();
   // Pagination, filtering state
   const [filter, setFilter] = useState("");
+  const [showAll, setShowAll] = useState(false);
   // Debounce filter input to optimize queries
   const debouncedFilter = useDebounce(filter, 500);
   const [pageSize] = useState(10);
@@ -173,6 +174,17 @@ export default function ClientsPage() {
             onChange={(e) => setFilter(e.target.value)}
             className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
+          {role === "Admin" && (
+            <label className="inline-flex items-center space-x-1">
+              <input
+                type="checkbox"
+                checked={showAll}
+                onChange={() => setShowAll((prev) => !prev)}
+                className="form-checkbox h-4 w-4 text-blue-600"
+              />
+              <span>Show All</span>
+            </label>
+          )}
           {/* Conditional Add New Client button */}
           {/* Only Admin can create clients */}
           {role === "Admin" && (
