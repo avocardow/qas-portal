@@ -171,6 +171,7 @@ export default function DataTableTwo({
             <div className="relative z-20 bg-transparent">
               <select
                 id="datatable-pagesize-select"
+                data-testid="datatable-select"
                 className="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none py-2 pr-8 pl-3 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 value={itemsPerPage}
                 onChange={(e) =>
@@ -219,6 +220,7 @@ export default function DataTableTwo({
         <div className="relative flex items-center">
           <input
             ref={searchInputRef}
+            data-testid="datatable-search-input"
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -229,6 +231,7 @@ export default function DataTableTwo({
           {searchTerm && (
             <button
               onClick={() => setSearchTerm("")}
+              data-testid="datatable-clear-button"
               aria-label="Clear search"
               className="absolute top-1/2 right-10 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
@@ -265,7 +268,7 @@ export default function DataTableTwo({
       <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div>
           <Table>
-            <caption className="sr-only">Clients table</caption>
+            <caption className="sr-only" data-testid="datatable-caption">Clients table</caption>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 {cols.map(({ key, header, sortable }) => (

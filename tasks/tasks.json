@@ -458,7 +458,7 @@
           "id": 2,
           "title": "Test Role-Based Access Control (RBAC) for All User Types",
           "description": "Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],

@@ -24,7 +24,7 @@ Run automated tests for query logic. Manually test with different user roles. Us
 ### Details:
 Use a framework such as dbt or your project's preferred testing tool to create unit tests with mock data. Ensure tests cover expected outputs, edge cases, and error handling for all SQL or data transformation logic. Review test results and update logic as needed to address any failures.[1][3][4]
 
-## 2. Test Role-Based Access Control (RBAC) for All User Types [in-progress]
+## 2. Test Role-Based Access Control (RBAC) for All User Types [done]
 ### Dependencies: 6.1
 ### Description: Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.
 ### Details:
