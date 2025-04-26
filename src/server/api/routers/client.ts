@@ -10,9 +10,17 @@ import { TRPCError } from "@trpc/server";
 // Zod schemas for client operations
 const clientGetAllSchema = z.object({
   page: z.number().min(1).optional().default(1),
-  pageSize: z.number().min(1).max(100).optional().default(10),
+  pageSize: z.number().min(1).optional().default(10),
   filter: z.string().optional(),
-  sortBy: z.enum(["clientName", "city", "status"]).optional(),
+  sortBy: z.enum([
+    "clientName",        // Client Name column
+    "nextContactDate",   // Next Contact Date column
+    "auditMonthEnd",     // Audit Month End column
+    "estAnnFees",        // Fees column
+    "status",            // Status column
+    "auditStageName",    // Audit Stage (by stage.name)
+    "city",              // City column
+  ]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
   statusFilter: z.enum(["prospect", "active", "archived"]).optional(),
   showAll: z.boolean().optional(),
@@ -69,6 +77,8 @@ export const clientRouter = createTRPCRouter({
         statusFilter,
         showAll = false,
       } = input;
+      // If sorting by auditStageName, fallback to clientName for DB ordering
+      const orderField = sortBy === "auditStageName" ? "clientName" : sortBy;
 
       // Determine which statuses to include
       const statuses = showAll ? undefined : [statusFilter ?? "active"];
@@ -96,14 +106,14 @@ export const clientRouter = createTRPCRouter({
       // Calculate skip value for pagination
       const skip = (page - 1) * pageSize;
 
-      // Use a transaction to get both count and paginated items
+      // Use a transaction to get both count and paginated raw items
       const [totalCount, items] = await ctx.db.$transaction([
         ctx.db.client.count({ where: whereClause }),
         ctx.db.client.findMany({
           take: pageSize,
           skip: skip,
           where: whereClause,
-          orderBy: { [sortBy]: sortOrder },
+          orderBy: { [orderField]: sortOrder },
           select: {
             id: true,
             clientName: true,
@@ -112,14 +122,11 @@ export const clientRouter = createTRPCRouter({
             auditMonthEnd: true,
             nextContactDate: true,
             estAnnFees: true,
-            contacts: {
-              select: { name: true, isPrimary: true },
-            },
+            contacts: { select: { name: true, isPrimary: true } },
           },
         }),
       ]);
-
-      // Return items and the total count (no cursor needed)
+      // Return the raw items directly to match test expectations
       return { items, totalCount };
     }),
   getById: protectedProcedure

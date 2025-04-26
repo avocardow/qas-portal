@@ -13,7 +13,7 @@ export default function ContentWrapper({ children }: ContentWrapperProps) {
 
   return (
     <div
-      className={`flex-1 transition-all duration-300 ease-in-out ${
+      className={`flex-1 overflow-x-hidden transition-all duration-300 ease-in-out ${
         sidebarOpen ? "lg:ml-[290px]" : "lg:ml-[90px]"
       }`}
     >

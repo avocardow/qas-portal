@@ -26,7 +26,7 @@ export const contactGetAllSchema = z.object({
   take: z.number().min(1).max(100).optional(),
   cursor: z.string().uuid().optional(),
   filter: z.string().optional(),
-  sortBy: z.string().optional(),
+  sortBy: z.enum(["name", "city", "status"]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
 });
 
@@ -43,12 +43,13 @@ export const contactRouter = createTRPCRouter({
     .use(enforceRole(["Admin", "Manager", "Client"]))
     .input(contactGetAllSchema)
     .query(async ({ ctx, input }) => {
-      const { take = 10, cursor, filter } = input;
+      const { take = 10, cursor, filter, sortBy = "name", sortOrder = "asc" } = input;
       const items = await ctx.db.contact.findMany({
         take,
         skip: cursor ? 1 : 0,
         cursor: cursor ? { id: cursor } : undefined,
         where: { name: { contains: filter || "" } },
+        orderBy: { [sortBy]: sortOrder },
       });
       const nextCursor =
         items.length === take ? items[take - 1]?.id : undefined;

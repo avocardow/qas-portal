@@ -55,10 +55,11 @@ const TableBody: React.FC<TableBodyProps> = ({ children, className }) => {
 };
 
 // TableRow Component
-const TableRow: React.FC<TableRowProps> = ({ children, className }) => {
+const TableRow: React.FC<TableRowProps> = ({ children, className, ...rest }) => {
   return (
     <tr
       className={`border-b border-gray-200 dark:border-gray-700 ${className ?? ""}`}
+      {...rest}
     >
       {children}
     </tr>

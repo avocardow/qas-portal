@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRbac } from "@/context/RbacContext";
 import { api } from "@/utils/api";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import Notification from "@/components/ui/notification/Notification";
@@ -11,8 +11,8 @@ import DataTableTwo, {
   ColumnDef,
 } from "@/components/tables/DataTables/TableTwo/DataTableTwo";
 import Badge from "@/components/ui/badge/Badge";
-import { useRouter } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
+import Button from "@/components/ui/button/Button";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -26,9 +26,18 @@ export default function ClientsPage() {
   // --- Pagination and Filter State ---
   const [showAll, setShowAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const [sortBy, setSortBy] = useState<
+    "clientName" |
+    "nextContactDate" |
+    "auditMonthEnd" |
+    "estAnnFees" |
+    "status" |
+    "auditStageName"
+  >("clientName");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   // --- End Pagination and Filter State ---
 
   const utils = api.useUtils(); // Get tRPC utils for pre-fetching
@@ -44,6 +53,8 @@ export default function ClientsPage() {
       showAll,
       statusFilter,
       filter: debouncedSearchTerm,
+      sortBy,
+      sortOrder,
     },
     {
       refetchOnWindowFocus: false,
@@ -66,6 +77,8 @@ export default function ClientsPage() {
         showAll,
         statusFilter,
         filter: debouncedSearchTerm,
+        sortBy,
+        sortOrder,
       };
 
       // Prefetch next page
@@ -86,6 +99,8 @@ export default function ClientsPage() {
     clientsQuery.data,
     utils,
     debouncedSearchTerm,
+    sortBy,
+    sortOrder,
   ]);
   // --- End Pre-fetching Logic ---
 
@@ -113,6 +128,9 @@ export default function ClientsPage() {
     }
   }, [error]);
 
+  // Maximum length for client names before truncation
+  const MAX_CLIENT_NAME_LENGTH = 60;
+
   // Base column definitions for Clients table (memoized)
   const baseColumns = React.useMemo<ColumnDef[]>(
     () => [
@@ -121,32 +139,33 @@ export default function ClientsPage() {
         header: "Client Name",
         sortable: true,
         cell: (row: any) => {
-          const name = row.clientName || "";
-          const display = name.length > 25 ? `${name.slice(0, 25)}…` : name;
-          return (
-            <Link
-              href={`/clients/${row.id}`}
-              className="block max-w-[200px] truncate"
-            >
-              {display}
-            </Link>
-          );
+          const name = row.clientName ?? "-";
+          return name.length > MAX_CLIENT_NAME_LENGTH
+            ? name.slice(0, MAX_CLIENT_NAME_LENGTH) + "..."
+            : name;
         },
       },
       {
         key: "primaryContact",
         header: "Primary Contact",
+        sortable: false,
         cell: (row: any) =>
           row.contacts?.find((c: any) => c.isPrimary)?.name ?? "-",
       },
-      { key: "city", header: "City", sortable: true },
+      {
+        key: "auditStageName",
+        header: "Audit Stage",
+        sortable: true,
+        cell: (row: any) => row.auditStageName ?? "-",
+      },
       {
         key: "nextContactDate",
-        header: "Next Contact Date",
+        header: "Next Contact",
         sortable: true,
         cell: (row: any) =>
           row.nextContactDate
             ? new Date(row.nextContactDate).toLocaleDateString("en-GB", {
+                weekday: "short",
                 day: "2-digit",
                 month: "2-digit",
                 year: "2-digit",
@@ -155,11 +174,11 @@ export default function ClientsPage() {
       },
       {
         key: "auditMonthEnd",
-        header: "Audit Month End",
+        header: "Audit End",
         sortable: true,
         cell: (row: any) =>
           row.auditMonthEnd
-            ? new Intl.DateTimeFormat("default", { month: "short" }).format(
+            ? new Intl.DateTimeFormat("default", { month: "long" }).format(
                 new Date(2000, row.auditMonthEnd - 1)
               )
             : "-",
@@ -222,18 +241,21 @@ export default function ClientsPage() {
   }
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <PageBreadcrumb pageTitle="Clients" />
       <div className="space-y-6">
         <ComponentCard
-          title="Clients"
+          title="Client Directory"
           actions={
             role === "Admin" && (
-              <Link href="/clients/new">
-                <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
-                  Add New Client
-                </button>
-              </Link>
+              <Button
+                aria-label="Add New Client"
+                size="sm"
+                variant="outline"
+                onClick={() => router.push('/clients/new')}
+              >
+                Add New Client
+              </Button>
             )
           }
         >
@@ -246,7 +268,7 @@ export default function ClientsPage() {
           )}
           {!items?.length && !isLoading && !error && <p>No clients found.</p>}
           {(items || isLoading) && (
-            <div className="custom-scrollbar max-w-full overflow-x-auto">
+            <div className="custom-scrollbar w-full overflow-x-auto">
               <DataTableTwo
                 data={items}
                 isLoading={isLoading}
@@ -254,26 +276,53 @@ export default function ClientsPage() {
                 totalDbEntries={totalDbEntries}
                 currentPage={currentPage}
                 pageSize={pageSize}
+                onItemsPerPageChange={(size) => {
+                  // Cap pageSize to available entries
+                  const newSize = typeof totalDbEntries === 'number'
+                    ? Math.min(size, totalDbEntries)
+                    : size;
+                  setPageSize(newSize);
+                  setCurrentPage(1);
+                }}
                 onPageChange={handlePageChange}
-                onView={(row: any) => router.push(`/clients/${row.id}`)}
+                onRowClick={(row) => router.push(`/clients/${row.id}`)}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 serverSide
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                onSortChange={(key, order) => {
+                  setSortBy(
+                    key as
+                      | "clientName"
+                      | "nextContactDate"
+                      | "auditMonthEnd"
+                      | "estAnnFees"
+                      | "status"
+                      | "auditStageName"
+                  );
+                  setSortOrder(order);
+                  setCurrentPage(1);
+                }}
                 extraControls={
                   <>
                     {role === "Admin" && (
-                      <label className="inline-flex items-center space-x-1">
+                      <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         <input
                           type="checkbox"
                           checked={showAll}
                           onChange={() => setShowAll((prev) => !prev)}
-                          className="form-checkbox h-4 w-4 text-blue-600"
+                          className="form-checkbox h-5 w-5 text-blue-500 dark:text-blue-400 focus:ring-blue-300 dark:focus:ring-blue-600"
                         />
                         <span>Show All</span>
                       </label>
                     )}
                     {role === "Admin" && (
-                      <Badge size="sm" color={showAll ? "info" : "success"}>
+                      <Badge
+                        size="sm"
+                        variant={showAll ? "light" : "solid"}
+                        color={showAll ? "primary" : "success"}
+                      >
                         {showAll ? "All Clients" : "Active Clients"}
                       </Badge>
                     )}

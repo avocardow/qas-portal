@@ -1,5 +1,8 @@
 "use client";
 import React from "react";
+import { useRole } from "@/context/RbacContext";
+import ViewActionButton from "@/components/common/ViewActionButton";
+import { PencilIcon } from "@/icons";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useMemo, useRef, useEffect } from "react";
@@ -13,12 +16,9 @@ import {
 import {
   AngleDownIcon,
   AngleUpIcon,
-  PencilIcon,
   XMarkIcon,
 } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
-import ViewActionButton from "@/components/common/ViewActionButton";
-import { useRole } from "@/context/RbacContext";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -31,8 +31,9 @@ export interface ColumnDef {
 export interface DataTableTwoProps {
   data?: any[];
   columns?: ColumnDef[];
-  onView?: (row: any) => void;
   extraControls?: React.ReactNode;
+  /** Optional handler when a row is clicked */
+  onRowClick?: (row: any) => void;
   totalDbEntries?: number;
   currentPage?: number;
   pageSize?: number;
@@ -42,15 +43,20 @@ export interface DataTableTwoProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   serverSide?: boolean;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  onSortChange?: (key: string, order: "asc" | "desc") => void;
+  onView?: (row: any) => void;
+  onEdit?: (row: any) => void;
 }
 
 // Skeleton Row Component (Basic Example)
 const SkeletonRow = ({ columnCount }: { columnCount: number }) => (
   <TableRow className="animate-pulse">
-    {Array.from({ length: columnCount + 1 }).map(
+    {Array.from({ length: columnCount }).map(
       (
         _,
-        i // +1 for action column
+        i
       ) => (
         <TableCell key={i} className="h-12 px-4 py-3">
           <div className="h-4 rounded bg-gray-200 dark:bg-gray-700"></div>
@@ -64,7 +70,7 @@ const SkeletonRow = ({ columnCount }: { columnCount: number }) => (
 const DataTableTwo: React.FC<DataTableTwoProps> = ({
   data,
   columns,
-  onView,
+  onRowClick,
   extraControls,
   totalDbEntries,
   currentPage = 1,
@@ -75,12 +81,18 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   searchTerm,
   setSearchTerm,
   serverSide = false,
+  sortBy: sortByProp,
+  sortOrder: sortOrderProp,
+  onSortChange,
+  onView,
+  onEdit,
 }: DataTableTwoProps) => {
-  const [sortKey, setSortKey] = useState<string>(
+  const role = useRole();
+  // Internal sort state for client-side mode
+  const [internalSortKey, setInternalSortKey] = useState<string>(
     columns && columns.length ? columns[0].key : "name"
   );
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const currentRole = useRole();
+  const [internalSortOrder, setInternalSortOrder] = useState<"asc" | "desc">("asc");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Default columns if not provided
@@ -97,22 +109,36 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   // Use pageSize prop for items per page
   const itemsPerPage = pageSize;
 
+  // Determine effective sort parameters
+  const currentSortKey = serverSide && sortByProp ? sortByProp : internalSortKey;
+  const currentSortOrder = serverSide && sortOrderProp ? sortOrderProp : internalSortOrder;
+
   // Data is now passed directly from parent, already filtered/paginated
   const currentData = useMemo(() => {
-    // Apply local sorting to the data received for the current page
+    // Always client-side sort when sorting by auditStageName
+    if (serverSide && currentSortKey !== "auditStageName") {
+      return data ?? [];
+    }
+    // Client-side sorting (covers auditStageName and other keys)
     return (data ?? []).sort((a, b) => {
-      if (sortKey === "salary") {
-        const rawA = (a as any)[sortKey];
-        const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
-        const rawB = (b as any)[sortKey];
-        const salaryB = Number.parseInt(String(rawB).replace(/\$|,/g, ""));
-        return sortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
+      // Numeric sort for auditStageId
+      if (currentSortKey === "auditStageId") {
+        const aId = Number((a as any)[currentSortKey] ?? 0);
+        const bId = Number((b as any)[currentSortKey] ?? 0);
+        return currentSortOrder === "asc" ? aId - bId : bId - aId;
       }
-      return sortOrder === "asc"
-        ? String(a[sortKey]).localeCompare(String(b[sortKey]))
-        : String(b[sortKey]).localeCompare(String(a[sortKey]));
+      if (currentSortKey === "salary") {
+        const rawA = (a as any)[currentSortKey];
+        const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
+        const rawB = (b as any)[currentSortKey];
+        const salaryB = Number.parseInt(String(rawB).replace(/\$|,/g, ""));
+        return currentSortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
+      }
+      return currentSortOrder === "asc"
+        ? String(a[currentSortKey]).localeCompare(String(b[currentSortKey]))
+        : String(b[currentSortKey]).localeCompare(String(a[currentSortKey]));
     });
-  }, [data, sortKey, sortOrder]);
+  }, [data, serverSide, currentSortKey, currentSortOrder]);
 
   // Paginate sorted data to avoid rendering all rows at once
   const paginatedData = useMemo(() => {
@@ -140,11 +166,18 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   };
 
   const handleSort = (key: string) => {
-    if (sortKey === key) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    if (serverSide && onSortChange) {
+      // Toggle server-side sort order or default to asc
+      const newOrder = sortByProp === key && sortOrderProp === "asc" ? "desc" : "asc";
+      onSortChange(key, newOrder);
+      return;
+    }
+    // Client-side sorting
+    if (internalSortKey === key) {
+      setInternalSortOrder(internalSortOrder === "asc" ? "desc" : "asc");
     } else {
-      setSortKey(key);
-      setSortOrder("asc");
+      setInternalSortKey(key);
+      setInternalSortOrder("asc");
     }
   };
 
@@ -166,6 +199,12 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
     };
   }, []);
 
+  // Prepare dropdown options, including current itemsPerPage if not preset
+  const pageOptions = React.useMemo<number[]>(() => {
+    const presets = [10, 25, 50, 100, 250, 500];
+    return presets.includes(itemsPerPage) ? presets : [itemsPerPage, ...presets];
+  }, [itemsPerPage]);
+
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
       <div className="flex flex-col gap-4 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
@@ -185,7 +224,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                   handleItemsPerPageChange(Number(e.target.value))
                 }
               >
-                {[5, 8, 10].map((value) => (
+                {pageOptions.map((value) => (
                   <option
                     key={value}
                     value={value}
@@ -231,43 +270,42 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search Clients or Contacts (⌘K)..."
-            aria-label="Search Clients or Contacts"
-            className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 w-full rounded-lg border border-gray-300 bg-transparent py-2 pr-16 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+            placeholder="Search Clients/Contacts..."
+            aria-label="Search Clients/Contacts"
+            className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 min-w-[250px] w-full rounded-lg border border-gray-300 bg-transparent py-2 pr-12 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
           />
-          {searchTerm && (
+          {/* Show magnifier when empty, clear icon when there's input */}
+          {searchTerm ? (
             <button
               onClick={() => setSearchTerm("")}
               data-testid="datatable-clear-button"
               aria-label="Clear search"
-              className="absolute top-1/2 right-10 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              className="absolute top-1/2 right-4 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
-              <XMarkIcon className="h-4 w-4" />
+              <XMarkIcon className="h-4 w-4 fill-current" />
             </button>
-          )}
-          <span className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-            <svg
-              className="fill-current"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.33358 1.3335C4.01358 1.3335 1.33358 4.0135 1.33358 7.3335C1.33358 10.6535 4.01358 13.3335 7.33358 13.3335C10.6536 13.3335 13.3336 10.6535 13.3336 7.3335C13.3336 4.0135 10.6536 1.3335 7.33358 1.3335ZM0.000244141 7.3335C0.000244141 3.2835 3.28758 0.000164843 7.33358 0.000164843C11.3796 0.000164843 14.6669 3.2835 14.6669 7.3335C14.6669 11.3835 11.3796 14.6668 7.33358 14.6668C3.28758 14.6668 0.000244141 11.3835 0.000244141 7.3335Z"
-              ></path>
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M11.6667 11.6665C11.9596 11.3736 12.4344 11.3736 12.7273 11.6665L15.7879 14.7271C16.0808 15.02 16.0808 15.4948 15.7879 15.7877C15.4949 16.0806 15.0201 16.0806 14.7272 15.7877L11.6667 12.7271C11.3737 12.4342 11.3737 11.9594 11.6667 11.6665Z"
-              ></path>
-            </svg>
-          </span>
-          {isLoading && (
-            <span className="ml-2 text-xs text-gray-500">Loading...</span>
+          ) : (
+            <span className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+              <svg
+                className="fill-current"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M7.33358 1.3335C4.01358 1.3335 1.33358 4.0135 1.33358 7.3335C1.33358 10.6535 4.01358 13.3335 7.33358 13.3335C10.6536 13.3335 13.3336 10.6535 13.3336 7.3335C13.3336 4.0135 10.6536 1.3335 7.33358 1.3335ZM0.000244141 7.3335C0.000244141 3.2835 3.28758 0.000164843 7.33358 0.000164843C11.3796 0.000164843 14.6669 3.2835 14.6669 7.3335C14.6669 11.3835 11.3796 14.6668 7.33358 14.6668C3.28758 14.6668 0.000244141 11.3835 0.000244141 7.3335Z"
+                ></path>
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M11.6667 11.6665C11.9596 11.3736 12.4344 11.3736 12.7273 11.6665L15.7879 14.7271C16.0808 15.02 16.0808 15.4948 15.7879 15.7877C15.4949 16.0806 15.0201 16.0806 14.7272 15.7877L11.6667 12.7271C11.3737 12.4342 11.3737 11.9594 11.6667 11.6665Z"
+                ></path>
+              </svg>
+            </span>
           )}
         </div>
       </div>
@@ -284,46 +322,44 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                     isHeader
                     scope="col"
                     aria-sort={
-                      sortKey === key
-                        ? sortOrder === "asc"
+                      currentSortKey === key
+                        ? currentSortOrder === "asc"
                           ? "ascending"
                           : "descending"
                         : "none"
                     }
-                    className="border border-gray-100 px-4 py-3 dark:border-white/[0.05]"
+                    className="border border-gray-100 px-4 py-3 min-w-[110px] whitespace-nowrap dark:border-white/[0.05]"
                   >
-                    <button
-                      type="button"
-                      className="w-full flex items-center justify-between p-0"
-                      onClick={() => sortable && handleSort(key)}
-                      aria-label={header}
-                    >
-                      <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                    {sortable ? (
+                      <button
+                        type="button"
+                        className="w-full flex items-center justify-between p-0"
+                        onClick={() => handleSort(key)}
+                        aria-label={header}
+                      >
+                        <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                          {header}
+                        </span>
+                        <span aria-hidden="true" className="flex flex-col gap-0.5">
+                          <AngleUpIcon
+                            className={`text-gray-300 dark:text-gray-700 ${
+                              currentSortKey === key && currentSortOrder === "asc" ? "text-brand-500" : ""
+                            }`}
+                          />
+                          <AngleDownIcon
+                            className={`text-gray-300 dark:text-gray-700 ${
+                              currentSortKey === key && currentSortOrder === "desc" ? "text-brand-500" : ""
+                            }`}
+                          />
+                        </span>
+                      </button>
+                    ) : (
+                      <span className="block w-full text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                         {header}
                       </span>
-                      <span aria-hidden="true" className="flex flex-col gap-0.5">
-                        <AngleUpIcon
-                          className={`text-gray-300 dark:text-gray-700 ${
-                            sortKey === key && sortOrder === "asc" ? "text-brand-500" : ""
-                          }`}
-                        />
-                        <AngleDownIcon
-                          className={`text-gray-300 dark:text-gray-700 ${
-                            sortKey === key && sortOrder === "desc" ? "text-brand-500" : ""
-                          }`}
-                        />
-                      </span>
-                    </button>
+                    )}
                   </TableCell>
                 ))}
-                <TableCell
-                  isHeader
-                  className="border border-gray-100 px-4 py-3 dark:border-white/[0.05]"
-                >
-                  <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                    Action
-                  </p>
-                </TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -336,7 +372,15 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                   ))
                 : paginatedData.length > 0
                 ? paginatedData.map((item, i) => (
-                    <TableRow key={item.id ?? i}>
+                    <TableRow
+                      key={item.id ?? i}
+                      onClick={() => onRowClick?.(item)}
+                      className={
+                        onRowClick
+                          ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]"
+                          : undefined
+                      }
+                    >
                       {cols.map(({ key, cell }) => (
                         <TableCell
                           key={key}
@@ -345,30 +389,24 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           {cell ? cell(item) : (item[key] ?? "-")}
                         </TableCell>
                       ))}
-                      <TableCell className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-white/90">
-                        <div className="flex w-full items-center gap-2">
-                          {onView &&
-                            currentRole &&
-                            ["Admin", "Manager", "Client"].includes(
-                              currentRole
-                            ) && (
-                              <ViewActionButton onClick={() => onView(item)} />
-                            )}
-                          {currentRole === "Admin" && (
-                            <button
-                              aria-label="Edit"
-                              className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90"
-                            >
-                              <PencilIcon />
+                      {(onView || onEdit) && (
+                        <TableCell className="p-4 whitespace-nowrap">
+                          {onView && ["Admin", "Manager", "Client"].includes(role) && (
+                            <ViewActionButton onClick={() => onView(item)} />
+                          )}
+                          {role === "Admin" && (
+                            // Show Edit button for Admin with explicit aria-label
+                            <button onClick={() => (onEdit ?? onView)?.(item)} aria-label="Edit" className="ml-2">
+                              <PencilIcon aria-hidden="true" />
                             </button>
                           )}
-                        </div>
-                      </TableCell>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))
                 : (
                     <TableRow>
-                      <TableCell colSpan={cols.length + 1} className="text-center p-4">
+                      <TableCell colSpan={cols.length} className="text-center p-4">
                         No entries found
                       </TableCell>
                     </TableRow>
