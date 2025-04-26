@@ -391,7 +391,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       ))}
                       {(onView || onEdit) && (
                         <TableCell className="p-4 whitespace-nowrap">
-                          {onView && ["Admin", "Manager", "Client"].includes(role) && (
+                          {onView && ["Admin", "Manager", "Client"].includes(role ?? "") && (
                             <ViewActionButton onClick={() => onView(item)} />
                           )}
                           {role === "Admin" && (
