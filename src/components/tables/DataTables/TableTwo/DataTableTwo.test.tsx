@@ -187,3 +187,42 @@ describe("DataTableTwo accessibility", () => {
     expect(caption.tagName).toBe("CAPTION");
   });
 });
+
+describe("DataTableTwo performance", () => {
+  beforeEach(() => {
+    // Mock Admin role for performance test
+    (useRole as jest.Mock).mockReturnValue("Admin");
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
+
+  it("renders only the specified pageSize of rows when given a large dataset", () => {
+    const largeData = Array.from({ length: 1000 }, (_, i) => ({
+      id: i + 1,
+      name: `User${i + 1}`,
+      position: "Test",
+      location: "Test",
+      age: 20 + (i % 30),
+      date: "2023-01-01",
+      salary: "$100",
+    }));
+    render(
+      <DataTableTwo
+        data={largeData}
+        columns={baseColumns}
+        onView={() => {}}
+        totalDbEntries={largeData.length}
+        currentPage={1}
+        pageSize={10}
+        searchTerm=""
+        setSearchTerm={() => {}}
+      />
+    );
+    // Count rows: header row + pageSize rows
+    const rows = screen.getAllByRole("row");
+    // header row is first, so rows.length - 1 should equal pageSize
+    expect(rows.length - 1).toBe(10);
+  });
+});
