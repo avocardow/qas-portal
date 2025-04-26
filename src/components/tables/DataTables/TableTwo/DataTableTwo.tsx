@@ -316,50 +316,54 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
             <caption className="sr-only" data-testid="datatable-caption">Clients table</caption>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                {cols.map(({ key, header, sortable }) => (
-                  <TableCell
-                    key={key}
-                    isHeader
-                    scope="col"
-                    aria-sort={
-                      currentSortKey === key
-                        ? currentSortOrder === "asc"
-                          ? "ascending"
-                          : "descending"
-                        : "none"
-                    }
-                    className="border border-gray-100 px-4 py-3 min-w-[110px] whitespace-nowrap dark:border-white/[0.05]"
-                  >
-                    {sortable ? (
-                      <button
-                        type="button"
-                        className="w-full flex items-center justify-between p-0"
-                        onClick={() => handleSort(key)}
-                        aria-label={header}
-                      >
-                        <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                {cols.map(({ key, header, sortable }, idx) => {
+                  // Add lg:sticky to freeze the first column on desktop
+                  const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:bg-white lg:dark:bg-gray-900 lg:z-10' : '';
+                  return (
+                    <TableCell
+                      key={key}
+                      isHeader
+                      scope="col"
+                      aria-sort={
+                        currentSortKey === key
+                          ? currentSortOrder === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : "none"
+                      }
+                      className={`border border-gray-100 px-4 py-3 min-w-[110px] whitespace-nowrap dark:border-white/[0.05] ${headerSticky}`}
+                    >
+                      {sortable ? (
+                        <button
+                          type="button"
+                          className="w-full flex items-center justify-between p-0"
+                          onClick={() => handleSort(key)}
+                          aria-label={header}
+                        >
+                          <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                            {header}
+                          </span>
+                          <span aria-hidden="true" className="flex flex-col gap-0.5">
+                            <AngleUpIcon
+                              className={`text-gray-300 dark:text-gray-700 ${
+                                currentSortKey === key && currentSortOrder === "asc" ? "text-brand-500" : ""
+                              }`}
+                            />
+                            <AngleDownIcon
+                              className={`text-gray-300 dark:text-gray-700 ${
+                                currentSortKey === key && currentSortOrder === "desc" ? "text-brand-500" : ""
+                              }`}
+                            />
+                          </span>
+                        </button>
+                      ) : (
+                        <span className="block w-full text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                           {header}
                         </span>
-                        <span aria-hidden="true" className="flex flex-col gap-0.5">
-                          <AngleUpIcon
-                            className={`text-gray-300 dark:text-gray-700 ${
-                              currentSortKey === key && currentSortOrder === "asc" ? "text-brand-500" : ""
-                            }`}
-                          />
-                          <AngleDownIcon
-                            className={`text-gray-300 dark:text-gray-700 ${
-                              currentSortKey === key && currentSortOrder === "desc" ? "text-brand-500" : ""
-                            }`}
-                          />
-                        </span>
-                      </button>
-                    ) : (
-                      <span className="block w-full text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                        {header}
-                      </span>
-                    )}
-                  </TableCell>
-                ))}
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -381,14 +385,18 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           : undefined
                       }
                     >
-                      {cols.map(({ key, cell }) => (
-                        <TableCell
-                          key={key}
-                          className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400"
-                        >
-                          {cell ? cell(item) : (item[key] ?? "-")}
-                        </TableCell>
-                      ))}
+                      {cols.map(({ key, cell }, idx) => {
+                        // Freeze first column on desktop
+                        const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:bg-white lg:dark:bg-gray-900 lg:z-10' : '';
+                        return (
+                          <TableCell
+                            key={key}
+                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky}`}
+                          >
+                            {cell ? cell(item) : (item[key] ?? "-")}
+                          </TableCell>
+                        );
+                      })}
                       {(onView || onEdit) && (
                         <TableCell className="p-4 whitespace-nowrap">
                           {onView && ["Admin", "Manager", "Client"].includes(role ?? "") && (
