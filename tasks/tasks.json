@@ -488,7 +488,7 @@
           "id": 5,
           "title": "Verify Cross-Browser Compatibility and Cursor Rule Compliance",
           "description": "Ensure that all features of the Clients List page function correctly across all supported browsers and that cursor usage follows design guidelines.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
