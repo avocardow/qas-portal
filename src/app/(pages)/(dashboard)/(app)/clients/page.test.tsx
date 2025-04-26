@@ -1,9 +1,11 @@
 import React from 'react';
 import { vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 // Mock Next.js useRouter to avoid invariant error during tests
+// Shared mock for router.push
+const pushMock = vi.fn();
 vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({ push: pushMock }),
 }));
 // Mock the API data fetching hook
 vi.mock('@/utils/api', () => ({
@@ -18,7 +20,7 @@ vi.mock('@/utils/api', () => ({
 }));
 // Mock UI components to simplify rendering
 vi.mock('@/components/common/PageBreadCrumb', () => ({ default: () => <div /> }));
-vi.mock('@/components/common/ComponentCard', () => ({ default: ({ children, actions }) => <div>{actions}{children}</div> }));
+vi.mock('@/components/common/ComponentCard', () => ({ default: ({ children, actions }: { children?: React.ReactNode; actions?: React.ReactNode }) => <div>{actions}{children}</div> }));
 vi.mock('@/components/ui/notification/Notification', () => ({ default: () => <div /> }));
 vi.mock('@/components/tables/DataTables/TableTwo/DataTableTwo', () => ({ default: () => <div /> }));
 vi.mock('@/components/ui/badge/Badge', () => ({ default: () => <div /> }));
@@ -27,6 +29,9 @@ import ClientsPage from './page';
 import * as rbacModule from '@/context/RbacContext';
 
 describe('ClientsPage RBAC', () => {
+  beforeEach(() => {
+    pushMock.mockClear();
+  });
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -59,5 +64,19 @@ describe('ClientsPage RBAC', () => {
     expect(screen.queryByRole('button', { name: /add new client/i })).toBeNull();
     const titleClient = screen.getByText(/clients/i);
     expect(titleClient).toBeTruthy();
+  });
+
+  test('routes to New Client page when Add New Client button is clicked', () => {
+    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+    render(<ClientsPage />);
+    const addButton = screen.getByRole('button', { name: /add new client/i });
+    fireEvent.click(addButton);
+    expect(pushMock).toHaveBeenCalledWith('/clients/new');
+  });
+
+  test('shows No clients found message when there are no clients', () => {
+    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+    render(<ClientsPage />);
+    expect(screen.getByText(/no clients found/i)).toBeTruthy();
   });
 }); 

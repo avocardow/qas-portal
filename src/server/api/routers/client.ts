@@ -117,17 +117,25 @@ export const clientRouter = createTRPCRouter({
           select: {
             id: true,
             clientName: true,
-            city: true,
             status: true,
             auditMonthEnd: true,
             nextContactDate: true,
             estAnnFees: true,
             contacts: { select: { name: true, isPrimary: true } },
+            audits: {
+              take: 1,
+              orderBy: { auditYear: "desc" },
+              select: { stage: { select: { name: true } } },
+            },
           },
         }),
       ]);
-      // Return the raw items directly to match test expectations
-      return { items, totalCount };
+      // Map audit stage name onto items for client-side sorting
+      const resultItems = items.map((item) => ({
+        ...item,
+        auditStageName: item.audits?.[0]?.stage?.name ?? null,
+      }));
+      return { items: resultItems, totalCount };
     }),
   getById: protectedProcedure
     .use(enforceRole(["Admin", "Manager", "Client"]))

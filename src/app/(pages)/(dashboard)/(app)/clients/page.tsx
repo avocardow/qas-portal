@@ -156,7 +156,7 @@ export default function ClientsPage() {
         key: "auditStageName",
         header: "Audit Stage",
         sortable: true,
-        cell: (row: any) => row.auditStageName ?? "-",
+        cell: (row: any) => row.audits?.[0]?.stage?.name ?? "-",
       },
       {
         key: "nextContactDate",

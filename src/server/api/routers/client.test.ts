@@ -116,7 +116,9 @@ describe("clientRouter getAll", () => {
     expect(ctx.db.client.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ take: 10, skip: 0 })
     );
-    expect(result).toEqual({ items: dummyClients, totalCount: 2 });
+    // Include auditStageName field added by the router
+    const expectedItemsAll = dummyClients.map(item => ({ ...item, auditStageName: null }));
+    expect(result).toEqual({ items: expectedItemsAll, totalCount: 2 });
   });
 
   it("should filter and sort clients based on input", async () => {
@@ -142,7 +144,9 @@ describe("clientRouter getAll", () => {
     expect(ctx.db.client.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ take: 1, skip: 1, orderBy: { city: "desc" } })
     );
-    expect(result).toEqual({ items: filteredClients, totalCount: 1 });
+    // Include auditStageName field for filtered items
+    const expectedFilteredItems = filteredClients.map(item => ({ ...item, auditStageName: null }));
+    expect(result).toEqual({ items: expectedFilteredItems, totalCount: 1 });
   });
 
   it("should show all statuses when showAll is true", async () => {
@@ -198,7 +202,9 @@ describe("clientRouter getAll", () => {
     ctx.db.client.findMany.mockResolvedValue(dummyClients);
     const caller = callClient(ctx);
     const result = await caller.getAll({});
-    expect(result).toEqual({ items: dummyClients, totalCount: 2 });
+    // Include auditStageName field for manager items
+    const expectedManagerItems = dummyClients.map(item => ({ ...item, auditStageName: null }));
+    expect(result).toEqual({ items: expectedManagerItems, totalCount: 2 });
   });
 
   it("should forbid unauthorized roles", async () => {

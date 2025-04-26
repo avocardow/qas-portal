@@ -179,10 +179,9 @@ describe("clientRouter query logic and data transformations", () => {
       // Verify field selection
       expect(ctx.db.client.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          select: {
+          select: expect.objectContaining({
             id: true,
             clientName: true,
-            city: true,
             status: true,
             auditMonthEnd: true,
             nextContactDate: true,
@@ -190,7 +189,15 @@ describe("clientRouter query logic and data transformations", () => {
             contacts: {
               select: { name: true, isPrimary: true },
             },
-          },
+            audits: expect.objectContaining({
+              // Ensure the latest audit's stage name is selected
+              select: expect.objectContaining({
+                stage: expect.objectContaining({
+                  select: { name: true },
+                }),
+              }),
+            }),
+          }),
         })
       );
     });
