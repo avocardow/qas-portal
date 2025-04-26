@@ -321,15 +321,14 @@ export default function DataTableTwo({
             </TableHeader>
             <TableBody>
               {isLoading
-                ? // Render skeleton rows when loading
-                  Array.from({ length: pageSize }).map((_, index) => (
+                ? Array.from({ length: pageSize }).map((_, index) => (
                     <SkeletonRow
                       key={`skeleton-${index}`}
                       columnCount={cols.length}
                     />
                   ))
-                : // Render actual data rows when not loading, limited to pageSize for performance
-                  paginatedData.map((item, i) => (
+                : paginatedData.length > 0
+                ? paginatedData.map((item, i) => (
                     <TableRow key={item.id ?? i}>
                       {cols.map(({ key, cell }) => (
                         <TableCell
@@ -359,7 +358,14 @@ export default function DataTableTwo({
                         </div>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ))
+                : (
+                    <TableRow>
+                      <TableCell colSpan={cols.length + 1} className="text-center p-4">
+                        No entries found
+                      </TableCell>
+                    </TableRow>
+                  )}
             </TableBody>
           </Table>
         </div>
