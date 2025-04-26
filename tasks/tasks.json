@@ -468,7 +468,7 @@
           "id": 3,
           "title": "Perform Accessibility Audit of Table and Controls",
           "description": "Assess the Clients List page for compliance with accessibility standards (e.g., WCAG 2.1), focusing on the table, filters, buttons, and navigation.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -478,7 +478,7 @@
           "id": 4,
           "title": "Test Performance with Large Datasets",
           "description": "Evaluate the Clients List page's responsiveness and stability when handling large volumes of client data.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
