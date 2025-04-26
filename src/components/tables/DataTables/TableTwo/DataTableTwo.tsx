@@ -317,8 +317,8 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 {cols.map(({ key, header, sortable }, idx) => {
-                  // Add lg:sticky to freeze the first column on desktop
-                  const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:bg-white lg:dark:bg-gray-900 lg:z-10' : '';
+                  // Add lg:sticky to freeze the first column on desktop (no extra background)
+                  const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10' : '';
                   return (
                     <TableCell
                       key={key}
@@ -386,8 +386,8 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       }
                     >
                       {cols.map(({ key, cell }, idx) => {
-                        // Freeze first column on desktop
-                        const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:bg-white lg:dark:bg-gray-900 lg:z-10' : '';
+                        // Freeze first column on desktop (no extra background)
+                        const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10' : '';
                         return (
                           <TableCell
                             key={key}
