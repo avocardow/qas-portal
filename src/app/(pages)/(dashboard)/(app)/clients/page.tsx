@@ -258,6 +258,7 @@ export default function ClientsPage() {
                 onView={(row: any) => router.push(`/clients/${row.id}`)}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
+                serverSide
                 extraControls={
                   <>
                     {role === "Admin" && (
