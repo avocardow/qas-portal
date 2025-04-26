@@ -41,6 +41,7 @@ export interface DataTableTwoProps {
   isLoading?: boolean;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
+  serverSide?: boolean;
 }
 
 // Skeleton Row Component (Basic Example)
@@ -59,7 +60,8 @@ const SkeletonRow = ({ columnCount }: { columnCount: number }) => (
   </TableRow>
 );
 
-export default function DataTableTwo({
+// Define DataTableTwo as a React functional component with explicit props to ensure TS recognizes all props
+const DataTableTwo: React.FC<DataTableTwoProps> = ({
   data,
   columns,
   onView,
@@ -72,7 +74,8 @@ export default function DataTableTwo({
   isLoading,
   searchTerm,
   setSearchTerm,
-}: DataTableTwoProps) {
+  serverSide = false,
+}: DataTableTwoProps) => {
   const [sortKey, setSortKey] = useState<string>(
     columns && columns.length ? columns[0].key : "name"
   );
@@ -113,9 +116,13 @@ export default function DataTableTwo({
 
   // Paginate sorted data to avoid rendering all rows at once
   const paginatedData = useMemo(() => {
+    if (serverSide) {
+      // In server-side mode, data already represents current page
+      return data ?? [];
+    }
     const start = (currentPage - 1) * itemsPerPage;
     return currentData.slice(start, start + itemsPerPage);
-  }, [currentData, currentPage, itemsPerPage]);
+  }, [serverSide, data, currentData, currentPage, itemsPerPage]);
 
   // Calculate totalItems based on prop or fallback
   const totalItems = totalDbEntries ?? (data ?? []).length;
@@ -388,4 +395,6 @@ export default function DataTableTwo({
       </div>
     </div>
   );
-}
+};
+
+export default DataTableTwo;
