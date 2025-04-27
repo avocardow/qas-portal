@@ -4,9 +4,17 @@ import { useSession } from "next-auth/react";
 import { rbacPolicy, type Role } from "@/utils/rbacPolicy";
 
 export type RbacContextType = {
+  /** The _effective_ role (impersonated if Developer) */
   role: Role | null;
   permissions: string[];
   canAccess: (permission: string) => boolean;
+
+  /** Which role you're impersonating (only for Developer) */
+  impersonatedRole: Role | null;
+  setImpersonatedRole: (role: Role | null) => void;
+
+  /** Your real session role, before impersonation */
+  sessionRole: Role | null;
 };
 
 const RbacContext = createContext<RbacContextType | undefined>(undefined);
@@ -19,6 +27,9 @@ export const useRbac = (): RbacContextType => {
       role: null,
       permissions: [],
       canAccess: () => false,
+      impersonatedRole: null,
+      setImpersonatedRole: () => {},
+      sessionRole: null,
     };
   }
   return context;
@@ -50,38 +61,46 @@ export const RbacProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { data: session, status } = useSession();
-  const [role, setRole] = useState<Role | null>(null);
-  const [permissions, setPermissions] = useState<string[]>([]);
+
+  const [sessionRole, setSessionRole] = useState<Role | null>(null);
+
+  const [impersonatedRole, setImpersonatedRole] = useState<Role | null>(null);
 
   useEffect(() => {
     if (status === "authenticated" && session?.user?.role) {
-      const userRole = session.user.role as Role;
-      setRole(userRole);
-      setPermissions(rbacPolicy[userRole] || []);
-      if (process.env.NODE_ENV === "development") {
-        console.debug(
-          "[RBAC] role:",
-          userRole,
-          "permissions:",
-          rbacPolicy[userRole]
-        );
-      }
+      setSessionRole(session.user.role as Role);
     } else {
-      setRole(null);
-      setPermissions([]);
+      setSessionRole(null);
     }
   }, [session, status]);
 
+  const effectiveRole =
+    sessionRole === "Developer" && impersonatedRole
+      ? impersonatedRole
+      : sessionRole;
+  const effectivePermissions = effectiveRole
+    ? rbacPolicy[effectiveRole]
+    : [];
+
   const canAccessFn = (permission: string): boolean => {
-    return permissions.includes(permission);
+    // 🚀 Developers skip all RBAC checks
+    if (sessionRole === "Developer") {
+      return true;
+    }
+    return effectivePermissions.includes(permission);
   };
 
   return (
     <RbacContext.Provider
       value={{
-        role,
-        permissions,
+        role: effectiveRole,
+        permissions: effectivePermissions,
         canAccess: canAccessFn,
+
+        impersonatedRole,
+        setImpersonatedRole,
+
+        sessionRole,
       }}
     >
       {children}

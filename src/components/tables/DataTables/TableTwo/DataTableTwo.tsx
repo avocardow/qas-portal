@@ -399,11 +399,11 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       })}
                       {(onView || onEdit) && (
                         <TableCell className="p-4 whitespace-nowrap">
-                          {onView && ["Admin", "Manager", "Client"].includes(role ?? "") && (
+                          {onView && ["Admin", "Manager", "Client", "Developer"].includes(role ?? "") && (
                             <ViewActionButton onClick={() => onView(item)} />
                           )}
-                          {role === "Admin" && (
-                            // Show Edit button for Admin with explicit aria-label
+                          {(role === "Admin" || role === "Developer") && (
+                            // Show Edit button for Admin/Developer with explicit aria-label
                             <button onClick={() => (onEdit ?? onView)?.(item)} aria-label="Edit" className="ml-2">
                               <PencilIcon aria-hidden="true" />
                             </button>

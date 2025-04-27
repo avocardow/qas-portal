@@ -124,6 +124,11 @@ export const protectedProcedure = t.procedure.use(isAuthed);
 export const enforceRole = (allowedRoles: string[]) =>
   t.middleware(({ ctx, next }) => {
     const userRole = ctx.session?.user?.role;
+    // 🚀 Developers bypass all role checks
+    if (userRole === "Developer") {
+      logAccessDecision(userRole, `ROLE:${allowedRoles.join(",")}`, true);
+      return next({ ctx: { session: ctx.session! } });
+    }
     const allowed = Boolean(userRole && allowedRoles.includes(userRole));
     logAccessDecision(
       userRole ?? "",
@@ -152,6 +157,11 @@ export const enforcePermission = (permission: string) =>
   t.middleware(async ({ ctx, next }) => {
     if (!ctx.session?.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    // 🚀 Developers bypass all permission checks
+    if (ctx.session.user.role === "Developer") {
+      logAccessDecision(ctx.session.user.role, permission, true);
+      return next({ ctx: { session: ctx.session } });
     }
     const userRoleName = ctx.session.user.role;
     if (!userRoleName) {

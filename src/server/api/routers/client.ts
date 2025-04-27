@@ -43,7 +43,7 @@ const clientUpdateSchema = clientCreateSchema.extend({
 
 export const clientRouter = createTRPCRouter({
   getAll: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Client"]))
+    .use(enforceRole(["Admin", "Manager", "Client", "Developer"]))
     .input(clientGetAllSchema)
     .query(async ({ ctx, input }) => {
       const role = ctx.session.user.role ?? "";
@@ -64,7 +64,7 @@ export const clientRouter = createTRPCRouter({
         });
         return { items: [client], nextCursor: undefined };
       }
-      if (!["Admin", "Manager"].includes(role)) {
+      if (!["Admin", "Manager", "Developer"].includes(role)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
       // Admin/Manager: full list with pagination
@@ -138,7 +138,7 @@ export const clientRouter = createTRPCRouter({
       return { items: resultItems, totalCount };
     }),
   getById: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Client"]))
+    .use(enforceRole(["Admin", "Manager", "Client", "Developer"]))
     .input(clientByIdSchema)
     .query(async ({ ctx, input }) => {
       const role = ctx.session.user.role ?? "";
@@ -162,7 +162,7 @@ export const clientRouter = createTRPCRouter({
           },
         });
       }
-      if (!["Admin", "Manager"].includes(role)) {
+      if (!["Admin", "Manager", "Developer"].includes(role)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
       // Admin/Manager: full details

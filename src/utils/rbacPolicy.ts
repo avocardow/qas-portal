@@ -5,7 +5,7 @@ import {
   PHONE_PERMISSIONS,
 } from "@/constants/permissions";
 
-export type Role = "Admin" | "Manager" | "Auditor" | "Staff" | "Client";
+export type Role = "Admin" | "Manager" | "Auditor" | "Staff" | "Client" | "Developer";
 
 const { GET_BY_CLIENT_ID: AUDIT_GET_BY_CLIENT_ID, GET_BY_ID: AUDIT_GET_BY_ID } =
   AUDIT_PERMISSIONS;
@@ -34,4 +34,21 @@ export const rbacPolicy: Record<Role, string[]> = {
   Auditor: [AUDIT_GET_BY_CLIENT_ID, AUDIT_GET_BY_ID],
   Staff: [TASK_GET_BY_AUDIT_ID, TASK_GET_ASSIGNED_TO_ME, TASK_GET_ALL],
   Client: [DOC_GET_BY_CLIENT_ID, DOC_GET_BY_AUDIT_ID, DOC_GET_BY_TASK_ID],
+  Developer: [
+    ...Object.values(AUDIT_PERMISSIONS),
+    ...Object.values(TASK_PERMISSIONS),
+    ...Object.values(DOCUMENT_PERMISSIONS),
+    ...Object.values(PHONE_PERMISSIONS),
+  ],
+};
+
+export const canAccess = (permission: string, role: Role | null): boolean => {
+  // 🚀 Developers bypass every check
+  if (role === "Developer") {
+    return true;
+  }
+  if (!role) {
+    return false;
+  }
+  return (rbacPolicy[role] || []).includes(permission);
 };

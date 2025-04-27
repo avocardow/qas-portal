@@ -51,8 +51,8 @@ export default function ContactsPage() {
   const isLoading = contactsQuery.isLoading;
   const error = contactsQuery.error;
 
-  // Protect view based on role
-  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
+  // Protect view based on role (Admins, Managers, Clients, Developers)
+  if (role !== "Admin" && role !== "Manager" && role !== "Client" && role !== "Developer") {
     return <p>You are not authorized to view contacts.</p>;
   }
 
@@ -101,8 +101,8 @@ export default function ContactsPage() {
             className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
           {/* Conditional Add New Contact button */}
-          {/* Only Admin can create contacts */}
-          {role === "Admin" && (
+          {/* Only Admin or Developer can create contacts */}
+          {(role === "Admin" || role === "Developer") && (
             <Link href="/contacts/new">
               <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
                 Add New Contact
@@ -213,8 +213,8 @@ export default function ContactsPage() {
                       <TableCell className="text-gray-700 dark:text-gray-200">
                         {contact.status}
                       </TableCell>
-                      {/* Only Admin can edit or delete contacts */}
-                      {role === "Admin" && (
+                      {/* Only Admin or Developer can edit or delete contacts */}
+                      {(role === "Admin" || role === "Developer") && (
                         <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
                           <Link href={`/contacts/${contact.id}/edit`}>
                             <button className="btn bg-blue-500 text-white hover:bg-blue-600">

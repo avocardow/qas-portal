@@ -190,7 +190,7 @@ export default function ClientsPage() {
   // Configure columns for DataTableTwo using baseColumns
   const columns: ColumnDef[] = React.useMemo(() => {
     const cols = [...baseColumns];
-    if (role === "Admin") {
+    if (role === "Admin" || role === "Developer") {
       cols.push({
         key: "estAnnFees",
         header: "Fees",
@@ -236,7 +236,8 @@ export default function ClientsPage() {
   }, [role, baseColumns]);
 
   // Protect view based on role after hooks to keep hook order consistent
-  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
+  // Grant Developer full access regardless of impersonation
+  if (role !== "Admin" && role !== "Manager" && role !== "Client" && role !== "Developer") {
     return <p>You are not authorized to view clients.</p>;
   }
 
@@ -247,7 +248,7 @@ export default function ClientsPage() {
         <ComponentCard
           title="Client Directory"
           actions={
-            role === "Admin" && (
+            (role === "Admin" || role === "Developer") && (
               <Button
                 aria-label="Add New Client"
                 size="sm"
@@ -306,7 +307,7 @@ export default function ClientsPage() {
                 }}
                 extraControls={
                   <>
-                    {role === "Admin" && (
+                    {(role === "Admin" || role === "Developer") && (
                       <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         <input
                           type="checkbox"
@@ -317,7 +318,7 @@ export default function ClientsPage() {
                         <span>Show All</span>
                       </label>
                     )}
-                    {role === "Admin" && (
+                    {(role === "Admin" || role === "Developer") && (
                       <Badge
                         size="sm"
                         variant={showAll ? "light" : "solid"}
