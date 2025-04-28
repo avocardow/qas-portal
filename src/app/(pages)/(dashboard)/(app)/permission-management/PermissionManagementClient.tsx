@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { api } from '@/utils/api';
 import Authorized from '@/components/Authorized';
 import { ROLE_PERMISSION_PERMISSIONS } from '@/constants/permissions';
@@ -25,13 +25,26 @@ export default function PermissionManagementClient() {
 
   // Notification state
   const [notification, setNotification] = useState<{
-    variant: 'success' | 'error';
+    variant: 'success' | 'error' | 'warning';
     title: string;
     description?: string;
   } | null>(null);
 
+  // Determine if selected mapping already exists
+  const duplicateExists = useMemo(() => {
+    if (!selectedRoleId || !selectedPermissionId) return false;
+    return mappingsQuery.data?.some(m =>
+      m.roleId === selectedRoleId && m.permissionId === selectedPermissionId
+    ) ?? false;
+  }, [selectedRoleId, selectedPermissionId, mappingsQuery.data]);
+
   // Handle assignment of permission to role
   const handleAssign = async () => {
+    // Prevent duplicate assignments
+    if (duplicateExists) {
+      setNotification({ variant: 'warning', title: 'Permission already assigned to this role.' });
+      return;
+    }
     if (!selectedRoleId || !selectedPermissionId) {
       setNotification({ variant: 'error', title: 'Please select both role and permission.' });
       return;
@@ -98,12 +111,20 @@ export default function PermissionManagementClient() {
           </select>
           <Button
             onClick={handleAssign}
-            disabled={assignMutation.status === 'pending'}
+            disabled={assignMutation.status === 'pending' || duplicateExists}
           >
-            Assign Permission
+            {duplicateExists ? 'Already Assigned' : 'Assign Permission'}
           </Button>
         </div>
       </Authorized>
+
+      {/* Warning for duplicate mapping */}
+      {duplicateExists && (
+        <Notification
+          variant="warning"
+          title="This permission is already assigned."
+        />
+      )}
 
       {/* Mappings Table */}
       <div className="overflow-x-auto">
