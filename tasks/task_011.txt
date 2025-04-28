@@ -1,6 +1,6 @@
 # Task ID: 11
 # Title: Implement Permission Refresh Mechanism
-# Status: pending
+# Status: in-progress
 # Dependencies: 4, 10
 # Priority: low
 # Description: Create a system to update user permissions in real-time when role assignments change.
@@ -23,7 +23,7 @@ Create tests that simulate permission changes and verify that the UI updates acc
 ### Details:
 Implement a WebSocket connection for real-time updates or a polling mechanism that checks for permission changes at regular intervals. Include configuration options for refresh frequency and connection management. The detection system should compare permission timestamps or version numbers to identify changes. Implement debouncing logic to prevent excessive updates when multiple permission changes occur in rapid succession. Add appropriate error handling for connection failures and recovery mechanisms.
 
-## 2. Update PermissionProvider Service [pending]
+## 2. Update PermissionProvider Service [done]
 ### Dependencies: 11.1
 ### Description: Enhance the existing PermissionProvider to handle permission refresh events
 ### Details:

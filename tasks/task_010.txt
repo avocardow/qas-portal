@@ -1,6 +1,6 @@
 # Task ID: 10
 # Title: Implement Permission Management Admin UI
-# Status: in-progress
+# Status: done
 # Dependencies: 7
 # Priority: low
 # Description: Build admin screens for managing role-permission mappings in real-time.

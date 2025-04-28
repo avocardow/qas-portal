@@ -578,7 +578,7 @@
       "id": 10,
       "title": "Implement Permission Management Admin UI",
       "description": "Build admin screens for managing role-permission mappings in real-time.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         7
       ],
@@ -630,7 +630,7 @@
       "id": 11,
       "title": "Implement Permission Refresh Mechanism",
       "description": "Create a system to update user permissions in real-time when role assignments change.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         4,
         10
@@ -651,7 +651,7 @@
           "id": 2,
           "title": "Update PermissionProvider Service",
           "description": "Enhance the existing PermissionProvider to handle permission refresh events",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
