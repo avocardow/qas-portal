@@ -26,6 +26,7 @@ export interface ColumnDef {
   header: string;
   sortable?: boolean;
   cell?: (row: any) => React.ReactNode;
+  permission?: string; // Optional permission required to view this column
 }
 
 export interface DataTableTwoProps {

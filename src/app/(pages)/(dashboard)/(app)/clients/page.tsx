@@ -13,6 +13,7 @@ import DataTableTwo, {
 import Badge from "@/components/ui/badge/Badge";
 import useDebounce from "@/hooks/useDebounce";
 import Button from "@/components/ui/button/Button";
+import { useAbility } from '@/hooks/useAbility';
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -23,6 +24,7 @@ export default function ClientsPage() {
   // RBAC context
   const { role } = useRbac();
   const router = useRouter();
+  const { can } = useAbility();
   // --- Pagination and Filter State ---
   const [showAll, setShowAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -187,11 +189,10 @@ export default function ClientsPage() {
     []
   );
 
-  // Configure columns for DataTableTwo using baseColumns
-  const columns: ColumnDef[] = React.useMemo(() => {
-    const cols = [...baseColumns];
-    if (role === "Admin" || role === "Developer") {
-      cols.push({
+  // Permission-based admin columns
+  const adminColumns = React.useMemo<ColumnDef[]>(
+    () => [
+      {
         key: "estAnnFees",
         header: "Fees",
         sortable: true,
@@ -204,8 +205,9 @@ export default function ClientsPage() {
                 maximumFractionDigits: 0,
               }).format(row.estAnnFees)
             : "-",
-      });
-      cols.push({
+        permission: "clients.view.billing",
+      },
+      {
         key: "status",
         header: "Status",
         sortable: true,
@@ -230,10 +232,23 @@ export default function ClientsPage() {
             </Badge>
           );
         },
-      });
-    }
+        permission: "clients.view.status",
+      },
+    ],
+    []
+  );
+
+  // Compose columns based on permissions
+  const columns: ColumnDef[] = React.useMemo(() => {
+    const cols = [...baseColumns];
+    // Add admin columns if user has permission
+    adminColumns.forEach((col) => {
+      if (col.permission && can(col.permission)) {
+        cols.push(col);
+      }
+    });
     return cols;
-  }, [role, baseColumns]);
+  }, [baseColumns, adminColumns, can]);
 
   // Protect view based on role after hooks to keep hook order consistent
   // Grant Developer full access regardless of impersonation
