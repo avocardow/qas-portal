@@ -422,7 +422,7 @@
           "id": 2,
           "title": "Insert Permissions into Supabase Permissions Table",
           "description": "Insert the extracted permissions into the Supabase `permissions` table, including appropriate descriptions for each permission.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],

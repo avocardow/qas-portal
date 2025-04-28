@@ -24,7 +24,7 @@ Test the script in a development environment first. Verify that all permissions 
 ### Details:
 Implement a parser (in Node.js or SQL) that scans the policy files, collects all unique permission constants, and prepares them for insertion. Ensure the extraction logic handles duplicates and edge cases.
 
-## 2. Insert Permissions into Supabase Permissions Table [pending]
+## 2. Insert Permissions into Supabase Permissions Table [done]
 ### Dependencies: 7.1
 ### Description: Insert the extracted permissions into the Supabase `permissions` table, including appropriate descriptions for each permission.
 ### Details:
