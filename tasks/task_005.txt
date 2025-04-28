@@ -1,110 +1,61 @@
 # Task ID: 5
-# Title: Enhance Search Functionality
-# Status: done
+# Title: Build Authorized Component
+# Status: pending
 # Dependencies: 4
-# Priority: medium
-# Description: Implement global search across Client Name and Contact Name fields
+# Priority: high
+# Description: Create a reusable component that conditionally renders children based on permission checks.
 # Details:
-1. Extend the tRPC endpoint to search across client.clientName OR contacts.name
-2. Wire up DataTableTwo's search input to trigger the search
-3. Implement debounced search to prevent excessive API calls
-4. Ensure search works across all pages of data, not just the current page
-5. Add loading state during search operations
-6. Preserve other active filters (like status) when searching
-7. Reset pagination to first page when search term changes
+1. Create `src/components/Authorized.tsx`
+2. Implement a component that uses the `useAbility` hook
+3. Accept props: `action`, `subject`, `fallback` (optional component to show when unauthorized)
+4. Conditionally render children based on permission check
+5. Add TypeScript prop types
+6. Optimize to prevent unnecessary re-renders
+7. Document usage examples for the component
 
 # Test Strategy:
-Test search functionality with various inputs. Verify it finds matches in both client names and contact names. Check debounce behavior prevents excessive API calls. Confirm search works with status filters applied.
+Write component tests that verify rendering behavior with different permission scenarios. Test with and without fallback components, and verify that updates to permissions correctly affect rendering.
 
 # Subtasks:
-## 1. Extend tRPC Endpoint for Cross-Field Search [done]
+## 1. Create Authorized Component File [pending]
 ### Dependencies: None
-### Description: Modify the existing tRPC endpoint to support searching across both client.clientName and contacts.name fields with proper indexing and query optimization.
+### Description: Create a new file named `Authorized.tsx` in the `src/components` directory.
 ### Details:
-1. Add database indexes on client.clientName and contacts.name fields to improve search performance
-2. Implement a query that uses case-insensitive pattern matching (ILIKE in PostgreSQL or equivalent)
-3. Support partial matching to find results with incomplete terms
-4. Ensure the endpoint accepts pagination parameters (page, limit) to handle large result sets
-5. Add sorting options to order results by relevance or other criteria
-6. Implement proper error handling for malformed queries
-7. Test with various search terms to verify both fields are being searched correctly
-8. Document the API changes for frontend developers
+This file will serve as the base for the reusable authorized component. Ensure it is correctly placed within your project structure.
 
-## 2. Create Search Service with Debounce Implementation [done]
+## 2. Implement useAbility Hook Integration [pending]
 ### Dependencies: 5.1
-### Description: Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.
+### Description: Integrate the `useAbility` hook into the `Authorized` component to handle permission checks.
 ### Details:
-1. Create a search service module that will manage all search-related functionality
-2. Implement debounce logic using setTimeout/clearTimeout or a library like lodash.debounce
-3. Set an appropriate debounce delay (300-500ms is typical for search)
-4. Add state management for tracking the current search term
-5. Implement loading state indicators that activate immediately when typing begins
-6. Create a mechanism to cancel in-flight requests if a new search is initiated
-7. Add error handling for failed requests
-8. Test the debounce functionality with rapid typing scenarios
+Use the `useAbility` hook to fetch or determine the user's abilities. This hook should be part of a library like CASL or a custom implementation.
 
-## 3. Connect DataTableTwo Search Input to Search Service [done]
-### Dependencies: 5.2
-### Description: Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.
+## 3. Define Component Props and Types [pending]
+### Dependencies: 5.1
+### Description: Define the props for the `Authorized` component, including `action`, `subject`, and an optional `fallback` component.
 ### Details:
-1. Modify DataTableTwo component to use the search service
-2. Connect the existing search input to the debounced search function
-3. Implement onChange handler to capture user input
-4. Add clear button functionality to reset search
-5. Ensure the input is accessible with proper ARIA attributes
-6. Add placeholder text that indicates users can search by client or contact name
-7. Implement keyboard shortcuts for focusing the search input (e.g., Ctrl+F or /)
-8. Test the integration to ensure search triggers correctly
+Use TypeScript to define the types for these props, ensuring clarity and type safety. The `action` and `subject` props will be used for permission checks, while `fallback` will be displayed if the user lacks permission.
 
-## 4. Implement Cross-Page Search Results Handling [done]
-### Dependencies: 5.1, 5.3
-### Description: Ensure search functionality works across all pages of data, not just the current page, by modifying the data fetching logic.
+## 4. Implement Conditional Rendering Logic [pending]
+### Dependencies: 5.2, 5.3
+### Description: Conditionally render the children of the `Authorized` component based on the permission check using the `useAbility` hook.
 ### Details:
-1. Modify the data fetching logic to search across all records, not just the current page
-2. Update the pagination component to reset when search is performed
-3. Implement server-side filtering based on search terms
-4. Ensure total count of results is correctly calculated and displayed
-5. Maintain proper state for empty results
-6. Add visual indication that results are filtered
-7. Test with large datasets to verify all matching records are found
-8. Optimize query performance for large datasets
+Use the `useAbility` hook to check if the user has the required permission. If they do, render the children; otherwise, render the `fallback` component if provided.
 
-## 5. Add Loading States During Search Operations [done]
-### Dependencies: 5.3, 5.4
-### Description: Implement visual feedback for users during search operations to improve perceived performance and user experience.
-### Details:
-1. Create loading indicators for the search input (e.g., spinning icon)
-2. Implement skeleton loaders for the table rows during search
-3. Add transition animations between loading and results states
-4. Ensure loading states are accessible with proper ARIA attributes
-5. Implement progressive loading if results are large
-6. Add timeout handling for long-running searches
-7. Test loading states with various network conditions
-8. Ensure loading states don't cause layout shifts
-
-## 6. Preserve Active Filters During Search [done]
+## 5. Optimize for Performance [pending]
 ### Dependencies: 5.4
-### Description: Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.
+### Description: Optimize the component to prevent unnecessary re-renders.
 ### Details:
-1. Refactor filter state management to separate search from other filters
-2. Modify the tRPC endpoint to accept both search terms and filter criteria
-3. Update the UI to show active filters alongside search terms
-4. Implement logic to combine search and filter criteria in queries
-5. Add visual indicators for active combined filters
-6. Create clear all/reset functionality for filters and search
-7. Test various combinations of filters and search terms
-8. Ensure filter state is preserved during navigation or page refresh
+Use React hooks like `useMemo` or `useCallback` to memoize functions or values that don't change frequently. This ensures that the component only re-renders when necessary.
 
-## 7. Implement Pagination Reset on Search Term Changes [done]
-### Dependencies: 5.4, 5.6
-### Description: Reset pagination to the first page whenever search terms change to ensure users see the most relevant results immediately.
+## 6. Document Usage Examples [pending]
+### Dependencies: 5.4
+### Description: Create documentation for the `Authorized` component, including usage examples.
 ### Details:
-1. Modify the pagination state management to reset page to 1 when search term changes
-2. Update the URL parameters to reflect the page reset
-3. Ensure the UI updates to show the first page of results
-4. Add smooth scroll to top when pagination resets
-5. Implement history state management to handle browser back/forward navigation
-6. Add analytics tracking for search term changes and pagination resets
-7. Test edge cases like empty search results and rapid search term changes
-8. Ensure the reset doesn't cause jarring UI changes
+Document how to use the component, including how to pass props and how it handles different scenarios (e.g., authorized vs. unauthorized users). Include code snippets to illustrate its usage.
+
+## 7. Test and Validate Component Functionality [pending]
+### Dependencies: 5.5, 5.6
+### Description: Write tests to validate the functionality of the `Authorized` component.
+### Details:
+Use a testing framework like Jest or Cypress to write unit tests and integration tests. Ensure the component behaves correctly in various scenarios, such as when the user is authorized or unauthorized.
 

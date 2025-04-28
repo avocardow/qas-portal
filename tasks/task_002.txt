@@ -1,59 +1,54 @@
 # Task ID: 2
-# Title: Define Column Configuration and Data Formatting
-# Status: done
-# Dependencies: 1
+# Title: Audit Existing Permission Usage
+# Status: pending
+# Dependencies: None
 # Priority: high
-# Description: Create column definitions for the Clients table with proper data formatting
+# Description: Scan the codebase to inventory all current permission checks, hooks, and components to ensure complete migration coverage.
 # Details:
-1. Define columns array with the following fields:
-   - Client Name (client.clientName)
-   - Primary Contact (derived from contacts where isPrimary === true)
-   - City (client.city)
-   - Next Contact Date (client.nextContactDate) formatted as locale date
-   - Audit Month End (convert client.auditMonthEnd integer to month name using Intl.DateTimeFormat)
-   - Fees (client.estAnnFees) - conditionally visible for Admin role
-   - Status (client.status) - conditionally visible for Admin role
-2. Use date-fns or Intl.DateTimeFormat for date formatting
-3. Implement logic to derive primary contact name from contacts array
-4. Add conditional rendering based on user role using useRbac()
+1. Run `grep -R "usePermission\(" src/` to find all hook usages
+2. Run `grep -R "enforcePermission" src/` to find all middleware usages
+3. Run `grep -R "RequirePermission" src/` to find all component usages
+4. Search for imports of permission constants like `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS`
+5. Document all findings in a spreadsheet with columns: file path, line number, permission type, permission value
+6. Categorize permissions by functional area (client management, audit, tasks, etc.)
 
 # Test Strategy:
-Unit test the column definitions and formatters. Verify date formatting works correctly across locales. Test conditional visibility logic with different user roles.
+Validate completeness by cross-referencing with application routes and features. Ensure no permission checks are missed by reviewing key protected areas of the application.
 
 # Subtasks:
-## 1. Define Base Columns Array Structure [done]
+## 1. Identify and Document Permission Hook Usages [pending]
 ### Dependencies: None
-### Description: Set up the initial columns array for the Clients table, specifying each column's field, header, and accessor logic.
+### Description: Search the codebase for all instances of permission-related hooks and document their usage.
 ### Details:
-Create a columns array with objects for each required field: Client Name, Primary Contact, City, Next Contact Date, Audit Month End, Fees, and Status. For each column, specify the field or accessor function as appropriate. Use accessor functions for derived or formatted fields (e.g., Primary Contact).
+Run `grep -R "usePermission(" src/` to locate all usages of the permission hook. For each result, record the file path, line number, and relevant permission value in a spreadsheet. This ensures that all hook-based permission checks are inventoried for migration coverage.
 
-## 2. Implement Primary Contact Derivation Logic [done]
+## 2. Identify and Document Permission Middleware Usages [pending]
 ### Dependencies: 2.1
-### Description: Add logic to extract the primary contact's name from the contacts array for each client.
+### Description: Locate all middleware functions enforcing permissions and document their occurrences.
 ### Details:
-For the Primary Contact column, implement an accessor function that searches the contacts array for the object where isPrimary is true and returns the contact's name. Ensure this logic is robust to missing or malformed data.
+Run `grep -R "enforcePermission" src/` to find all middleware-based permission checks. For each occurrence, log the file path, line number, and permission value in the same spreadsheet. This step ensures middleware permission checks are included in the audit.
 
-## 3. Format Date Fields Using date-fns or Intl.DateTimeFormat [done]
-### Dependencies: 2.1
-### Description: Apply locale-aware formatting to the Next Contact Date column using date-fns or Intl.DateTimeFormat.
+## 3. Identify and Document Permission Component Usages [pending]
+### Dependencies: 2.2
+### Description: Search for all permission-enforcing components and document their usage.
 ### Details:
-For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales.
+Run `grep -R "RequirePermission" src/` to find all component-based permission checks. Record each instance with file path, line number, and permission value in the spreadsheet. This captures all UI-level permission enforcement.
 
-## 4. Convert Audit Month End Integer to Month Name [done]
-### Dependencies: 2.1
-### Description: Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.
+## 4. Audit Permission Constant Imports [pending]
+### Dependencies: 2.3
+### Description: Search for and document all imports of permission constants throughout the codebase.
 ### Details:
-For the Audit Month End column, implement a value formatter or accessor that takes the integer (1-12), creates a Date object, and formats it to display the full month name using Intl.DateTimeFormat.
+Search for imports of permission constants such as `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS` using `grep` or IDE search. Document each import's file path and line number, and note the specific constants used. This step ensures all permission references are captured, even if not directly enforced by hooks or components.
 
-## 5. Add Conditional Rendering for Fees and Status Columns Based on User Role [done]
-### Dependencies: 2.1
-### Description: Implement logic to show or hide the Fees and Status columns depending on whether the user has the Admin role.
+## 5. Consolidate and Structure Permission Audit Data [pending]
+### Dependencies: 2.4
+### Description: Aggregate all findings into a structured spreadsheet for analysis and migration planning.
 ### Details:
-Integrate useRbac() or equivalent RBAC logic to determine the user's role. Conditionally include the Fees and Status columns in the columns array only if the user is an Admin.
+Combine all documented permission usages into a single spreadsheet with columns: file path, line number, permission type (hook, middleware, component, constant), and permission value. Ensure consistency and completeness of the data for further analysis.
 
-## 6. Apply Value Formatters for Fees and Status Columns [done]
+## 6. Categorize Permissions by Functional Area [pending]
 ### Dependencies: 2.5
-### Description: Format the Fees column as currency and apply any necessary formatting to the Status column.
+### Description: Analyze and categorize each permission usage by its functional area to support migration coverage.
 ### Details:
-For the Fees column, use a value formatter to display the value as currency (e.g., using Intl.NumberFormat or a custom formatter). For the Status column, apply any required formatting or mapping to display user-friendly status labels.
+Review each documented permission usage and assign it to a functional area such as client management, audit, or tasks. Add a 'functional area' column to the spreadsheet and populate it accordingly. This categorization will help ensure migration completeness and facilitate targeted testing.
 

@@ -2,515 +2,744 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Integrate DataTableTwo UI Component",
-      "description": "Replace the current Table markup with DataTableTwo component in the Clients List page",
-      "status": "done",
+      "title": "Evaluate and Select Permission Library",
+      "description": "Compare CASL and AccessControl libraries based on feature parity, ESM support, bundle size, and community support to select the most appropriate library for our permission engine.",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
-      "details": "1. Import DataTableTwo from src/components/tables/DataTables/TableTwo/DataTableTwo.tsx\n2. Remove existing Table component and markup\n3. Configure DataTableTwo with basic props (data, columns)\n4. Ensure responsive layout is maintained\n5. Remove row-level delete icon from current implementation\n6. Setup pagination using DataTableTwo's built-in functionality\n7. Implement sorting indicators as per DataTableTwo documentation",
-      "testStrategy": "Verify the table renders correctly with sample data. Check responsive behavior across different screen sizes. Ensure pagination controls work as expected.",
+      "details": "1. Use Context7 to review documentation for both CASL and AccessControl via `mcp_context7_get-library-docs`\n2. Create a comparison matrix with criteria: action/subject model support, dynamic conditions, ESM compatibility, bundle size, community activity\n3. Build small proof-of-concept implementations with both libraries\n4. Test performance with a representative set of permission rules\n5. Document findings and make a final selection with justification\n6. Install the selected library with `npm install` or `yarn add`",
+      "testStrategy": "Create a test harness that validates the library against our key use cases: role-based permissions, conditional permissions, and performance with large rule sets. Document the results.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Import DataTableTwo Component",
-          "description": "Import the DataTableTwo component into the Clients List page to prepare for integration.",
-          "status": "done",
+          "title": "Create Comparison Matrix and Documentation Analysis",
+          "description": "Analyze documentation for both CASL and AccessControl libraries to create a comprehensive comparison matrix based on key criteria including feature support, ESM compatibility, bundle size, and community activity.",
           "dependencies": [],
-          "details": "Add the following import statement at the top of the Clients List page file: `import DataTableTwo from 'src/components/tables/DataTables/TableTwo/DataTableTwo'`. Ensure the path is correct and the component is available.\n\n<info added on 2025-04-25T05:12:04.575Z>\nTo implement this import effectively:\n\n1. Locate the Clients List page file (likely in `src/pages/Clients` or similar directory)\n\n2. Add the import statement after existing table-related imports for better code organization:\n   ```javascript\n   // Existing imports\n   import Table from 'src/components/tables/Table';\n   // Add the new import here\n   import DataTableTwo from 'src/components/tables/DataTables/TableTwo/DataTableTwo';\n   ```\n\n3. Verify the component exists by checking the import path in your IDE or running a quick build to catch any path errors\n\n4. Consider adding a comment above the import explaining the transition plan:\n   ```javascript\n   // DataTableTwo will replace the current Table implementation in subsequent tasks\n   import DataTableTwo from 'src/components/tables/DataTables/TableTwo/DataTableTwo';\n   ```\n\n5. If using TypeScript, you may need to import any associated types:\n   ```javascript\n   import DataTableTwo, { DataTableTwoProps } from 'src/components/tables/DataTables/TableTwo/DataTableTwo';\n   ```\n</info added on 2025-04-25T05:12:04.575Z>"
+          "details": "1. Use Context7 to retrieve and review complete documentation for both libraries via `mcp_context7_get-library-docs`\n2. Create a structured comparison matrix with the following criteria:\n   - Action/subject model support and flexibility\n   - Dynamic conditions and field-level permission capabilities\n   - ESM module compatibility and import syntax\n   - Bundle size analysis (use tools like Bundlephobia)\n   - Community activity metrics (GitHub stars, issues, PRs, last commit)\n   - TypeScript support quality\n   - Integration options with React and other frameworks\n3. Document the permission models of each library (CASL's Ability model vs AccessControl's RBAC approach)\n4. Analyze documentation quality and learning curve\n5. Test for: Ability to handle complex permission scenarios with nested resources\n6. Create a summary document with initial findings\n\nTesting approach: Verify documentation completeness and accuracy by cross-referencing with GitHub repositories and community discussions.",
+          "status": "done",
+          "parentTaskId": 1
         },
         {
           "id": 2,
-          "title": "Remove Existing Table Markup",
-          "description": "Eliminate the current Table component and all related markup from the Clients List page.",
-          "status": "done",
+          "title": "Develop Proof-of-Concept Implementations",
+          "description": "Build small proof-of-concept implementations with both CASL and AccessControl libraries to evaluate their practical usage, API ergonomics, and implementation patterns.",
           "dependencies": [
             1
           ],
-          "details": "Identify and delete the existing Table component, including its JSX, props, and any related logic or helper functions that are no longer needed.\n\n<info added on 2025-04-25T05:14:11.276Z>\nTo remove the existing Table markup, follow these steps:\n\n1. Locate the Clients List page component (likely in `src/pages/clients` or similar directory)\n\n2. Remove these specific elements:\n   - The `<Table>` component import statement\n   - All related imports like `TableHeader`, `TableBody`, `TableRow`, and `TableCell`\n   - Any table-specific props or configurations\n\n3. Delete the following code sections:\n   - The entire table rendering block (typically wrapped in a `<Table>` component)\n   - Any column definition arrays or objects\n   - Table-specific event handlers (sort, filter, pagination related to the old table)\n   - Helper functions that format or transform data specifically for the old table\n\n4. Add a temporary placeholder:\n   ```jsx\n   {/* DataTableTwo component will be implemented here */}\n   <div className=\"placeholder-for-datatable\">\n     <p>New DataTable coming soon</p>\n   </div>\n   ```\n\n5. Check for and remove any table-specific CSS classes or styles in related stylesheets\n\n6. Ensure any data fetching or state management remains intact for later use with the new DataTableTwo component\n</info added on 2025-04-25T05:14:11.276Z>"
+          "details": "1. Create a simple test project with both libraries installed\n2. For CASL implementation:\n   - Define an ability configuration using the AbilityBuilder pattern\n   - Implement permission checks for CRUD operations on a sample resource\n   - Test field-level permissions using CASL's subject field filtering\n   - Implement conditional permissions based on user attributes\n   - Test integration with React components using @casl/react\n\n3. For AccessControl implementation:\n   - Define a grants object with role-based permissions\n   - Implement permission checks for CRUD operations\n   - Test ownership-based permissions using the 'own' vs 'any' concepts\n   - Implement attribute-based filtering if supported\n\n4. Document code patterns and implementation differences\n5. Evaluate TypeScript type safety and developer experience\n\nTesting approach: Create unit tests for each implementation to verify correct permission enforcement across various scenarios including: basic CRUD permissions, conditional permissions, field-level access control, and role inheritance.",
+          "status": "done",
+          "parentTaskId": 1
         },
         {
           "id": 3,
-          "title": "Configure DataTableTwo with Data and Columns",
-          "description": "Set up DataTableTwo with the required data and columns configuration to display the clients list.",
-          "status": "done",
+          "title": "Performance and Bundle Size Testing",
+          "description": "Conduct comprehensive performance testing and bundle size analysis for both libraries with representative permission rule sets to evaluate runtime efficiency and impact on application size.",
           "dependencies": [
             2
           ],
-          "details": "Prepare the data and columns objects according to DataTableTwo's API. Pass them as props to DataTableTwo. Ensure column definitions match the previous table's structure and requirements."
+          "details": "1. Create a standardized test suite with the following components:\n   - A representative set of 50-100 permission rules of varying complexity\n   - Test cases for common permission check patterns\n   - Benchmarking code to measure execution time\n\n2. Measure and compare performance metrics:\n   - Initialization time for permission configuration\n   - Execution time for simple permission checks\n   - Execution time for complex conditional checks\n   - Memory usage patterns\n\n3. Analyze bundle size impact:\n   - Use webpack-bundle-analyzer to visualize bundle composition\n   - Measure tree-shaking effectiveness with different import patterns\n   - Test ESM vs CommonJS bundle size differences\n   - Evaluate impact when using partial imports\n\n4. Test scalability with large permission sets\n5. Document performance findings with quantitative metrics\n\nTesting approach: Use Jest for performance testing with realistic permission scenarios. Create multiple test runs to ensure statistical significance. Document both average and worst-case performance characteristics.",
+          "status": "in-progress",
+          "parentTaskId": 1
         },
         {
           "id": 4,
-          "title": "Ensure Responsive Layout",
-          "description": "Verify and adjust the layout to maintain responsiveness after integrating DataTableTwo.",
-          "status": "done",
+          "title": "Final Selection and Integration",
+          "description": "Based on the comprehensive analysis and testing, make a final library selection, document the justification, and integrate the chosen library into the project.",
           "dependencies": [
+            1,
+            2,
             3
           ],
-          "details": "Test the page on various screen sizes. Adjust container classes, DataTableTwo props, or parent layout as needed to ensure the table remains responsive and visually consistent with the rest of the UI."
-        },
-        {
-          "id": 5,
-          "title": "Remove Row-Level Delete Icon",
-          "description": "Remove the row-level delete icon from the new DataTableTwo implementation.",
-          "status": "done",
-          "dependencies": [
-            3
-          ],
-          "details": "Ensure that the columns configuration for DataTableTwo does not include a delete icon or delete action. If present, remove the relevant column or cell renderer."
-        },
-        {
-          "id": 6,
-          "title": "Set Up Pagination Using DataTableTwo",
-          "description": "Enable and configure pagination using DataTableTwo's built-in pagination functionality.",
-          "status": "done",
-          "dependencies": [
-            3
-          ],
-          "details": "Consult DataTableTwo documentation to enable pagination. Pass the necessary pagination props (such as page size, current page, and handlers) to the component. Test to confirm pagination works as expected."
-        },
-        {
-          "id": 7,
-          "title": "Implement Sorting Indicators",
-          "description": "Add sorting indicators to columns as specified in the DataTableTwo documentation.",
-          "status": "done",
-          "dependencies": [
-            3
-          ],
-          "details": "Update the columns configuration to enable sorting. Ensure sorting indicators are visible and functional, following DataTableTwo's recommended approach for sortable columns."
+          "details": "1. Create a final decision matrix that weighs all evaluation criteria:\n   - Feature completeness for project requirements\n   - Performance characteristics with realistic workloads\n   - Bundle size impact and optimization potential\n   - Developer experience and API ergonomics\n   - Community support and maintenance outlook\n   - Integration capabilities with existing architecture\n\n2. Document the final selection with clear justification:\n   - Summarize key advantages of the selected library\n   - Address potential limitations and mitigation strategies\n   - Include performance and bundle size metrics from testing\n\n3. Create an integration plan:\n   - Install the selected library with proper version pinning\n   - Create a centralized permission configuration module\n   - Document standard patterns for permission checks\n   - Provide examples for UI integration (React components, etc.)\n\n4. Implement a simple permission service that encapsulates the library's API\n5. Create documentation for other developers on how to use the permission system\n\nTesting approach: Create integration tests that verify the permission system works correctly with the application's authentication system and properly enforces permissions across different user roles and scenarios.",
+          "status": "pending",
+          "parentTaskId": 1
         }
       ]
     },
     {
       "id": 2,
-      "title": "Define Column Configuration and Data Formatting",
-      "description": "Create column definitions for the Clients table with proper data formatting",
-      "status": "done",
-      "dependencies": [
-        1
-      ],
+      "title": "Audit Existing Permission Usage",
+      "description": "Scan the codebase to inventory all current permission checks, hooks, and components to ensure complete migration coverage.",
+      "status": "pending",
+      "dependencies": [],
       "priority": "high",
-      "details": "1. Define columns array with the following fields:\n   - Client Name (client.clientName)\n   - Primary Contact (derived from contacts where isPrimary === true)\n   - City (client.city)\n   - Next Contact Date (client.nextContactDate) formatted as locale date\n   - Audit Month End (convert client.auditMonthEnd integer to month name using Intl.DateTimeFormat)\n   - Fees (client.estAnnFees) - conditionally visible for Admin role\n   - Status (client.status) - conditionally visible for Admin role\n2. Use date-fns or Intl.DateTimeFormat for date formatting\n3. Implement logic to derive primary contact name from contacts array\n4. Add conditional rendering based on user role using useRbac()",
-      "testStrategy": "Unit test the column definitions and formatters. Verify date formatting works correctly across locales. Test conditional visibility logic with different user roles.",
+      "details": "1. Run `grep -R \"usePermission\\(\" src/` to find all hook usages\n2. Run `grep -R \"enforcePermission\" src/` to find all middleware usages\n3. Run `grep -R \"RequirePermission\" src/` to find all component usages\n4. Search for imports of permission constants like `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS`\n5. Document all findings in a spreadsheet with columns: file path, line number, permission type, permission value\n6. Categorize permissions by functional area (client management, audit, tasks, etc.)",
+      "testStrategy": "Validate completeness by cross-referencing with application routes and features. Ensure no permission checks are missed by reviewing key protected areas of the application.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define Base Columns Array Structure",
-          "description": "Set up the initial columns array for the Clients table, specifying each column's field, header, and accessor logic.",
-          "status": "done",
+          "title": "Identify and Document Permission Hook Usages",
+          "description": "Search the codebase for all instances of permission-related hooks and document their usage.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create a columns array with objects for each required field: Client Name, Primary Contact, City, Next Contact Date, Audit Month End, Fees, and Status. For each column, specify the field or accessor function as appropriate. Use accessor functions for derived or formatted fields (e.g., Primary Contact)."
+          "details": "Run `grep -R \"usePermission(\" src/` to locate all usages of the permission hook. For each result, record the file path, line number, and relevant permission value in a spreadsheet. This ensures that all hook-based permission checks are inventoried for migration coverage."
         },
         {
           "id": 2,
-          "title": "Implement Primary Contact Derivation Logic",
-          "description": "Add logic to extract the primary contact's name from the contacts array for each client.",
-          "status": "done",
+          "title": "Identify and Document Permission Middleware Usages",
+          "description": "Locate all middleware functions enforcing permissions and document their occurrences.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "For the Primary Contact column, implement an accessor function that searches the contacts array for the object where isPrimary is true and returns the contact's name. Ensure this logic is robust to missing or malformed data."
+          "details": "Run `grep -R \"enforcePermission\" src/` to find all middleware-based permission checks. For each occurrence, log the file path, line number, and permission value in the same spreadsheet. This step ensures middleware permission checks are included in the audit."
         },
         {
           "id": 3,
-          "title": "Format Date Fields Using date-fns or Intl.DateTimeFormat",
-          "description": "Apply locale-aware formatting to the Next Contact Date column using date-fns or Intl.DateTimeFormat.",
-          "status": "done",
+          "title": "Identify and Document Permission Component Usages",
+          "description": "Search for all permission-enforcing components and document their usage.",
+          "status": "pending",
           "dependencies": [
-            1
+            2
           ],
-          "details": "For the Next Contact Date column, use a value formatter or accessor function to convert the raw date into a locale-formatted string. Use date-fns's format function or Intl.DateTimeFormat for consistent date display across locales."
+          "details": "Run `grep -R \"RequirePermission\" src/` to find all component-based permission checks. Record each instance with file path, line number, and permission value in the spreadsheet. This captures all UI-level permission enforcement."
         },
         {
           "id": 4,
-          "title": "Convert Audit Month End Integer to Month Name",
-          "description": "Transform the auditMonthEnd integer into a month name using Intl.DateTimeFormat.",
-          "status": "done",
+          "title": "Audit Permission Constant Imports",
+          "description": "Search for and document all imports of permission constants throughout the codebase.",
+          "status": "pending",
           "dependencies": [
-            1
+            3
           ],
-          "details": "For the Audit Month End column, implement a value formatter or accessor that takes the integer (1-12), creates a Date object, and formats it to display the full month name using Intl.DateTimeFormat."
+          "details": "Search for imports of permission constants such as `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS` using `grep` or IDE search. Document each import's file path and line number, and note the specific constants used. This step ensures all permission references are captured, even if not directly enforced by hooks or components."
         },
         {
           "id": 5,
-          "title": "Add Conditional Rendering for Fees and Status Columns Based on User Role",
-          "description": "Implement logic to show or hide the Fees and Status columns depending on whether the user has the Admin role.",
-          "status": "done",
+          "title": "Consolidate and Structure Permission Audit Data",
+          "description": "Aggregate all findings into a structured spreadsheet for analysis and migration planning.",
+          "status": "pending",
           "dependencies": [
-            1
+            4
           ],
-          "details": "Integrate useRbac() or equivalent RBAC logic to determine the user's role. Conditionally include the Fees and Status columns in the columns array only if the user is an Admin."
+          "details": "Combine all documented permission usages into a single spreadsheet with columns: file path, line number, permission type (hook, middleware, component, constant), and permission value. Ensure consistency and completeness of the data for further analysis."
         },
         {
           "id": 6,
-          "title": "Apply Value Formatters for Fees and Status Columns",
-          "description": "Format the Fees column as currency and apply any necessary formatting to the Status column.",
-          "status": "done",
+          "title": "Categorize Permissions by Functional Area",
+          "description": "Analyze and categorize each permission usage by its functional area to support migration coverage.",
+          "status": "pending",
           "dependencies": [
             5
           ],
-          "details": "For the Fees column, use a value formatter to display the value as currency (e.g., using Intl.NumberFormat or a custom formatter). For the Status column, apply any required formatting or mapping to display user-friendly status labels."
+          "details": "Review each documented permission usage and assign it to a functional area such as client management, audit, or tasks. Add a 'functional area' column to the spreadsheet and populate it accordingly. This categorization will help ensure migration completeness and facilitate targeted testing."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Implement View Action Button",
-      "description": "Add a View button/icon to each row that navigates to the client detail page",
-      "status": "done",
+      "title": "Create Permission Policy Definitions",
+      "description": "Define the central policy file that maps actions to roles, serving as the single source of truth for permissions.",
+      "status": "pending",
       "dependencies": [
-        1
+        1,
+        2
       ],
       "priority": "high",
-      "details": "1. Create a row action component with a View button/icon\n2. Configure the button to navigate to /clients/[clientId] on click\n3. Integrate the action component into DataTableTwo's row actions slot\n4. Apply appropriate styling according to Cursor rules\n5. Ensure the action is visible to all roles (Admin, Manager, Client)\n6. Remove any existing row-level delete functionality",
-      "testStrategy": "Test navigation to client detail page works correctly. Verify the button appears for all user roles. Check that styling matches design system requirements.",
+      "details": "1. Create a `policies/permissions.ts` (or JSON/YAML) file\n2. Define the permission structure based on the selected library's syntax\n3. Map each role (Developer, Admin, Manager, Auditor, Staff, Client) to their allowed actions\n4. Include conditional permissions where needed\n5. Document the schema and usage patterns\n6. Ensure all permissions discovered in the audit are represented\n7. Group permissions logically by feature area",
+      "testStrategy": "Write unit tests that validate the policy file loads correctly and returns expected permissions for each role. Test edge cases like conditional permissions and role inheritance if applicable.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create ViewActionButton component",
-          "description": "Design and implement a reusable ViewActionButton component that will be used across the application for navigating to detail pages.",
+          "title": "Design Permission Schema and Structure",
+          "description": "Define the schema and structure for the central permission policy file based on RBAC principles, ensuring it can represent all required roles and actions while supporting conditional permissions.",
           "dependencies": [],
-          "details": "Create a new component in the shared components directory that accepts clientId as a prop. Use semantic HTML with a button element for accessibility. Implement an eye/visibility icon from the project's icon library. Add appropriate ARIA labels for screen readers. Include a tooltip that appears on hover with 'View Details' text. Style according to Cursor design system with appropriate contrast and visual hierarchy as a secondary action. Ensure the button is keyboard accessible and has proper focus states. Test the component in isolation to verify it renders correctly.",
-          "status": "done",
+          "details": "1. Analyze the existing roles (Developer, Admin, Manager, Auditor, Staff, Client) and their required permissions\n2. Choose between JSON, YAML, or TypeScript for the policy definition format (TypeScript recommended for type safety)\n3. Design a schema that groups permissions logically by feature area\n4. Include support for conditional permissions (e.g., resource ownership constraints)\n5. Document the schema with examples and usage patterns\n6. Create a draft structure that follows the least privilege principle\n7. Test the schema with sample role definitions to ensure it meets all requirements\n8. Validate that the schema can represent all permissions discovered in the audit",
+          "status": "pending",
           "parentTaskId": 3
         },
         {
           "id": 2,
-          "title": "Implement navigation functionality",
-          "description": "Add navigation logic to the ViewActionButton component to direct users to the client detail page when clicked.",
+          "title": "Implement Core Permission Policy File",
+          "description": "Create the central permissions.ts file with the defined schema and implement the core role definitions with their associated permissions.",
           "dependencies": [
             1
           ],
-          "details": "Import and use the application's routing mechanism (likely React Router's useNavigate hook). Implement an onClick handler that navigates to the '/clients/[clientId]' route, passing the clientId as a parameter. Add error handling to prevent navigation issues. Test the navigation functionality to ensure it correctly routes to the appropriate client detail page. Verify that the browser history is properly updated. Ensure that the button is not triggering form submissions if placed within a form context.",
-          "status": "done",
+          "details": "1. Create the `policies/permissions.ts` file using the schema designed in subtask 1\n2. Implement the base permission structure with TypeScript interfaces for type safety\n3. Define constants for all action types (e.g., 'user:create', 'client:view')\n4. Group permissions logically by feature area as determined in the schema design\n5. Implement the core roles (Admin, Developer) with their complete permission sets\n6. Add JSDoc comments to document the purpose and usage of each permission group\n7. Create utility functions for permission checking if needed\n8. Write unit tests to verify the structure and basic permission checks\n9. Ensure the implementation follows the centralized policy management best practice",
+          "status": "pending",
           "parentTaskId": 3
         },
         {
           "id": 3,
-          "title": "Integrate ViewActionButton with DataTableTwo",
-          "description": "Modify the DataTableTwo component to include the ViewActionButton in its row actions slot.",
+          "title": "Complete Role-Based Permission Mappings",
+          "description": "Extend the permission policy file to include all roles (Manager, Auditor, Staff, Client) with their specific permission sets and implement conditional permissions where required.",
           "dependencies": [
-            1,
             2
           ],
-          "details": "Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.",
-          "status": "done",
+          "details": "1. Add the remaining roles (Manager, Auditor, Staff, Client) to the permissions.ts file\n2. Map each role to their allowed actions based on the audit findings\n3. Implement conditional permissions using parameterized rules (e.g., resource ownership constraints)\n4. Ensure each role follows the least privilege principle\n5. Group related permissions logically by feature area for better maintainability\n6. Validate that all permissions discovered in the audit are represented\n7. Add detailed comments explaining the rationale behind permission assignments\n8. Create comprehensive tests for each role to verify correct permission mappings\n9. Implement edge cases and special conditions identified during the audit",
+          "status": "pending",
           "parentTaskId": 3
         },
         {
           "id": 4,
-          "title": "Remove existing row-level delete functionality",
-          "description": "Remove any existing delete buttons or functionality from the table rows as specified in the requirements.",
+          "title": "Create Permission Utilities and Documentation",
+          "description": "Develop utility functions for permission checking, create comprehensive documentation, and implement integration tests to ensure the permission system works as expected.",
           "dependencies": [
             3
           ],
-          "details": "Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.",
-          "status": "done",
-          "parentTaskId": 3
-        },
-        {
-          "id": 5,
-          "title": "Implement responsive design for ViewActionButton",
-          "description": "Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.",
-          "dependencies": [
-            1,
-            2,
-            3
-          ],
-          "details": "Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.",
-          "status": "done",
-          "parentTaskId": 3
-        },
-        {
-          "id": 6,
-          "title": "Configure role-based visibility",
-          "description": "Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.",
-          "dependencies": [
-            3
-          ],
-          "details": "Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.",
-          "status": "done",
-          "parentTaskId": 3
-        },
-        {
-          "id": 7,
-          "title": "Write comprehensive tests for ViewActionButton functionality",
-          "description": "Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.",
-          "dependencies": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
-          "details": "Write unit tests for the ViewActionButton component to verify rendering and click behavior. Create integration tests to verify the button appears correctly in the DataTableTwo component. Test navigation to ensure clicking the button correctly routes to the client detail page. Verify accessibility by testing keyboard navigation and screen reader compatibility. Test with different screen sizes to confirm responsive behavior. Verify role-based visibility by testing with different user roles. Include edge cases such as handling clients with missing IDs or other required data. Document test coverage and any assumptions made during testing.",
-          "status": "done",
+          "details": "1. Create helper functions for common permission checks (e.g., hasPermission, canAccess)\n2. Implement utility methods for role-based permission validation\n3. Write comprehensive documentation explaining the permission structure, roles, and usage patterns\n4. Create a permissions cheat sheet for developers showing which roles can access which features\n5. Implement integration tests that verify permissions work correctly in real application scenarios\n6. Add examples of how to use the permission system in different contexts (API routes, UI components)\n7. Document the process for updating permissions when new features are added\n8. Create visualization of permission hierarchies for easier understanding\n9. Ensure all code is properly typed with TypeScript for better developer experience\n10. Validate that the implementation follows all best practices identified in the research",
+          "status": "pending",
           "parentTaskId": 3
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement Status Filtering",
-      "description": "Add default Active filter and Show All toggle for Admin users",
-      "status": "done",
+      "title": "Implement PermissionProvider and useAbility Hook",
+      "description": "Create a React context provider that loads user permissions and exposes them through a custom hook.",
+      "status": "pending",
       "dependencies": [
-        2,
         3
       ],
-      "priority": "medium",
-      "details": "1. Modify api.clients.getAll.useQuery to accept statusFilter parameter\n2. Set default filter to status === 'active'\n3. Create a UI toggle for 'Show All' that's only visible to Admin users\n4. When toggled, include 'prospect' and 'archived' statuses in the query\n5. Use useRbac() to determine if user has Admin privileges\n6. Ensure filter state persists during pagination\n7. Add visual indicator when 'Show All' is active",
-      "testStrategy": "Test default filter shows only active clients. Verify Admin users can see and toggle 'Show All'. Confirm non-Admin users don't see the toggle. Check that filter state persists during pagination.",
+      "priority": "high",
+      "details": "1. Create `src/contexts/PermissionContext.tsx`\n2. Implement a provider that fetches the current user's roles on mount\n3. Initialize the permission library with policies from task #3\n4. Create a `useAbility` hook that returns permission checking functions\n5. Add methods like `can(action, subject)` and `cannot(action, subject)`\n6. Include TypeScript types for all exports\n7. Add caching to prevent unnecessary re-renders\n8. Implement a way to refresh permissions when roles change",
+      "testStrategy": "Write unit tests with React Testing Library to verify the provider initializes correctly and the hook returns expected values for different user roles. Test that permission changes are reflected correctly.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Modify API Client Query to Accept Status Filter Parameter",
-          "description": "Update the existing api.clients.getAll.useQuery hook to accept a statusFilter parameter that will filter clients by their status.",
+          "title": "Create PermissionContext with TypeScript Types",
+          "description": "Set up the foundation for the permission system by creating the context structure, defining TypeScript interfaces, and establishing the permission model.",
           "dependencies": [],
-          "details": "1. Locate the api.clients.getAll.useQuery implementation\n2. Add a statusFilter parameter to the query function\n3. Modify the API endpoint URL construction to include the status filter parameter when present\n4. Update the query key to include the statusFilter value to ensure proper cache invalidation\n5. Add TypeScript types for the new parameter if applicable\n6. Test the modified query with different status values\n7. Ensure backward compatibility for existing usages of the hook",
-          "status": "done",
+          "details": "1. Create `src/contexts/PermissionContext.tsx` file\n2. Define TypeScript interfaces for permissions, roles, and context value\n3. Create a basic context structure using React's createContext\n4. Define types for actions (e.g., 'create', 'read', 'update', 'delete') and subjects (e.g., 'project', 'user', 'message')\n5. Create a type-safe interface for the ability-checking functions (can/cannot)\n6. Export the context and necessary types\n7. Test the types by creating a simple mock implementation\n\nImplement using TypeScript generics to ensure type safety across the permission system. Use discriminated union types for actions and subjects to enable autocomplete in consuming components.",
+          "status": "pending",
           "parentTaskId": 4
         },
         {
           "id": 2,
-          "title": "Implement Default Active Status Filter Logic",
-          "description": "Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.",
+          "title": "Implement PermissionProvider with Role Fetching",
+          "description": "Create the provider component that fetches user roles and initializes the permission system with policies from the previous task.",
           "dependencies": [
             1
           ],
-          "details": "1. Create a useState hook to manage the filter state with 'active' as the default value\n2. Update the query call to pass the current filter state\n3. Implement the filter logic in the API call to filter by 'active' status by default\n4. Add unit tests to verify the default filter behavior\n5. Ensure the filter is applied consistently across component re-renders\n6. Verify that the initial data load correctly applies the 'active' filter\n7. Add appropriate loading states during filter transitions",
-          "status": "done",
+          "details": "1. Import the context created in subtask #1\n2. Create a PermissionProvider component that accepts children\n3. Implement a useEffect hook to fetch the current user's roles on mount\n4. Add state to store the fetched roles and loading status\n5. Initialize the permission library with policies from task #3\n6. Create a memoized value object containing permission state and functions\n7. Wrap the children with the context provider\n8. Add error handling for failed role fetching\n9. Implement a refreshPermissions function to reload permissions when needed\n\nUse React.memo and useMemo to prevent unnecessary re-renders. Implement proper loading states during the initial fetch. Consider using SWR or React Query for data fetching with built-in caching and revalidation capabilities.",
+          "status": "pending",
           "parentTaskId": 4
         },
         {
           "id": 3,
-          "title": "Create Role-Based Access Control for Filter Visibility",
-          "description": "Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.",
+          "title": "Develop useAbility Hook with Caching",
+          "description": "Create a custom hook that provides permission checking functions with performance optimizations to prevent unnecessary re-renders.",
           "dependencies": [
+            1,
             2
           ],
-          "details": "1. Import and implement the useRbac() hook to check for admin privileges\n2. Create a function to determine if the current user has admin access\n3. Set up a React context if needed to make the admin status available throughout the component tree\n4. Add unit tests to verify the RBAC logic works correctly\n5. Implement conditional rendering based on admin status\n6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders\n7. Add appropriate error handling for RBAC failures",
-          "status": "done",
+          "details": "1. Create a new file for the hook (e.g., `src/hooks/useAbility.ts`)\n2. Import the PermissionContext\n3. Implement the useAbility hook that consumes the context\n4. Add the core permission checking methods: can(action, subject) and cannot(action, subject)\n5. Implement memoization for permission check results to prevent re-renders\n6. Add TypeScript generics to ensure type safety\n7. Include error handling for when the hook is used outside the provider\n8. Add unit tests for the hook functionality\n\nUse React.useCallback to memoize the permission checking functions. Implement a simple caching mechanism using a Map to store previous check results. Consider adding a debug mode that logs permission checks in development environments.",
+          "status": "pending",
           "parentTaskId": 4
         },
         {
           "id": 4,
-          "title": "Develop Show All Toggle UI Component",
-          "description": "Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.",
-          "dependencies": [
-            3
-          ],
-          "details": "1. Design a toggle switch component using appropriate UI library (e.g., Material-UI Switch)\n2. Implement the toggle with clear labeling ('Show All')\n3. Style the toggle to be visually distinct and accessible\n4. Add appropriate ARIA attributes for accessibility\n5. Implement conditional rendering to only show the toggle to admin users\n6. Add hover tooltips to explain the toggle functionality\n7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)",
-          "status": "done",
-          "parentTaskId": 4
-        },
-        {
-          "id": 5,
-          "title": "Implement Multi-Status Filter Logic",
-          "description": "Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.",
+          "title": "Implement Permission Refresh Mechanism",
+          "description": "Create a system to refresh permissions when user roles change and integrate the permission system with the application.",
           "dependencies": [
             2,
-            4
+            3
           ],
-          "details": "1. Modify the filter state to handle multiple status values\n2. Update the API query to accept an array of statuses when 'Show All' is active\n3. Implement the logic to include 'prospect' and 'archived' statuses when the toggle is on\n4. Add appropriate type checking for the status array\n5. Optimize the query to handle multiple statuses efficiently\n6. Test the filter with various combinations of statuses\n7. Ensure the UI updates correctly when switching between filtered and unfiltered views",
-          "status": "done",
-          "parentTaskId": 4
-        },
-        {
-          "id": 6,
-          "title": "Add Visual Indicator for Active Filters",
-          "description": "Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.",
-          "dependencies": [
-            4,
-            5
-          ],
-          "details": "1. Design a visual indicator component (e.g., badge, highlight, or text label)\n2. Implement the indicator to appear when 'Show All' is active\n3. Style the indicator to be noticeable but not distracting\n4. Add animations for state transitions (e.g., fade in/out when filter changes)\n5. Ensure the indicator is accessible (proper contrast, screen reader support)\n6. Add a count of total items being displayed with the current filter\n7. Test the indicator across different screen sizes and ensure it's responsive",
-          "status": "done",
-          "parentTaskId": 4
-        },
-        {
-          "id": 7,
-          "title": "Implement Filter State Persistence During Pagination",
-          "description": "Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.",
-          "dependencies": [
-            5,
-            6
-          ],
-          "details": "1. Modify the pagination logic to include the current filter state\n2. Update the query key structure to incorporate both pagination and filter parameters\n3. Implement state management to preserve filter settings during navigation\n4. Add URL query parameters to maintain filter state on page refresh\n5. Test pagination with different filter combinations\n6. Optimize data fetching to minimize redundant requests when only changing pages\n7. Ensure the visual indicator remains consistent during pagination",
-          "status": "done",
+          "details": "1. Enhance the PermissionProvider to expose a refreshPermissions method\n2. Implement a permission cache invalidation mechanism\n3. Create an event-based system to trigger permission refreshes (e.g., after user profile updates)\n4. Add a usePermissionRefresh hook that components can use to trigger refreshes\n5. Implement optimistic updates for better UX during permission changes\n6. Create a higher-order component (HOC) for protecting routes based on permissions\n7. Add integration tests that verify the refresh mechanism works correctly\n8. Document the complete permission system with usage examples\n\nUse React's useReducer for complex state management of the permission system. Implement a pub/sub pattern for permission change notifications across the application. Consider adding a small localStorage cache to persist permissions between page refreshes for improved performance.",
+          "status": "pending",
           "parentTaskId": 4
         }
       ]
     },
     {
       "id": 5,
-      "title": "Enhance Search Functionality",
-      "description": "Implement global search across Client Name and Contact Name fields",
-      "status": "done",
+      "title": "Build Authorized Component",
+      "description": "Create a reusable component that conditionally renders children based on permission checks.",
+      "status": "pending",
       "dependencies": [
         4
       ],
-      "priority": "medium",
-      "details": "1. Extend the tRPC endpoint to search across client.clientName OR contacts.name\n2. Wire up DataTableTwo's search input to trigger the search\n3. Implement debounced search to prevent excessive API calls\n4. Ensure search works across all pages of data, not just the current page\n5. Add loading state during search operations\n6. Preserve other active filters (like status) when searching\n7. Reset pagination to first page when search term changes",
-      "testStrategy": "Test search functionality with various inputs. Verify it finds matches in both client names and contact names. Check debounce behavior prevents excessive API calls. Confirm search works with status filters applied.",
+      "priority": "high",
+      "details": "1. Create `src/components/Authorized.tsx`\n2. Implement a component that uses the `useAbility` hook\n3. Accept props: `action`, `subject`, `fallback` (optional component to show when unauthorized)\n4. Conditionally render children based on permission check\n5. Add TypeScript prop types\n6. Optimize to prevent unnecessary re-renders\n7. Document usage examples for the component",
+      "testStrategy": "Write component tests that verify rendering behavior with different permission scenarios. Test with and without fallback components, and verify that updates to permissions correctly affect rendering.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Extend tRPC Endpoint for Cross-Field Search",
-          "description": "Modify the existing tRPC endpoint to support searching across both client.clientName and contacts.name fields with proper indexing and query optimization.",
+          "title": "Create Authorized Component File",
+          "description": "Create a new file named `Authorized.tsx` in the `src/components` directory.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Add database indexes on client.clientName and contacts.name fields to improve search performance\n2. Implement a query that uses case-insensitive pattern matching (ILIKE in PostgreSQL or equivalent)\n3. Support partial matching to find results with incomplete terms\n4. Ensure the endpoint accepts pagination parameters (page, limit) to handle large result sets\n5. Add sorting options to order results by relevance or other criteria\n6. Implement proper error handling for malformed queries\n7. Test with various search terms to verify both fields are being searched correctly\n8. Document the API changes for frontend developers",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "This file will serve as the base for the reusable authorized component. Ensure it is correctly placed within your project structure."
         },
         {
           "id": 2,
-          "title": "Create Search Service with Debounce Implementation",
-          "description": "Develop a dedicated search service that handles debounced queries to prevent excessive API calls while providing responsive feedback.",
+          "title": "Implement useAbility Hook Integration",
+          "description": "Integrate the `useAbility` hook into the `Authorized` component to handle permission checks.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Create a search service module that will manage all search-related functionality\n2. Implement debounce logic using setTimeout/clearTimeout or a library like lodash.debounce\n3. Set an appropriate debounce delay (300-500ms is typical for search)\n4. Add state management for tracking the current search term\n5. Implement loading state indicators that activate immediately when typing begins\n6. Create a mechanism to cancel in-flight requests if a new search is initiated\n7. Add error handling for failed requests\n8. Test the debounce functionality with rapid typing scenarios",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Use the `useAbility` hook to fetch or determine the user's abilities. This hook should be part of a library like CASL or a custom implementation."
         },
         {
           "id": 3,
-          "title": "Connect DataTableTwo Search Input to Search Service",
-          "description": "Wire up the existing search input in DataTableTwo to trigger the search service and handle user interactions.",
+          "title": "Define Component Props and Types",
+          "description": "Define the props for the `Authorized` component, including `action`, `subject`, and an optional `fallback` component.",
+          "status": "pending",
           "dependencies": [
-            2
+            1
           ],
-          "details": "1. Modify DataTableTwo component to use the search service\n2. Connect the existing search input to the debounced search function\n3. Implement onChange handler to capture user input\n4. Add clear button functionality to reset search\n5. Ensure the input is accessible with proper ARIA attributes\n6. Add placeholder text that indicates users can search by client or contact name\n7. Implement keyboard shortcuts for focusing the search input (e.g., Ctrl+F or /)\n8. Test the integration to ensure search triggers correctly",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Use TypeScript to define the types for these props, ensuring clarity and type safety. The `action` and `subject` props will be used for permission checks, while `fallback` will be displayed if the user lacks permission."
         },
         {
           "id": 4,
-          "title": "Implement Cross-Page Search Results Handling",
-          "description": "Ensure search functionality works across all pages of data, not just the current page, by modifying the data fetching logic.",
+          "title": "Implement Conditional Rendering Logic",
+          "description": "Conditionally render the children of the `Authorized` component based on the permission check using the `useAbility` hook.",
+          "status": "pending",
           "dependencies": [
-            1,
+            2,
             3
           ],
-          "details": "1. Modify the data fetching logic to search across all records, not just the current page\n2. Update the pagination component to reset when search is performed\n3. Implement server-side filtering based on search terms\n4. Ensure total count of results is correctly calculated and displayed\n5. Maintain proper state for empty results\n6. Add visual indication that results are filtered\n7. Test with large datasets to verify all matching records are found\n8. Optimize query performance for large datasets",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Use the `useAbility` hook to check if the user has the required permission. If they do, render the children; otherwise, render the `fallback` component if provided."
         },
         {
           "id": 5,
-          "title": "Add Loading States During Search Operations",
-          "description": "Implement visual feedback for users during search operations to improve perceived performance and user experience.",
+          "title": "Optimize for Performance",
+          "description": "Optimize the component to prevent unnecessary re-renders.",
+          "status": "pending",
           "dependencies": [
-            3,
             4
           ],
-          "details": "1. Create loading indicators for the search input (e.g., spinning icon)\n2. Implement skeleton loaders for the table rows during search\n3. Add transition animations between loading and results states\n4. Ensure loading states are accessible with proper ARIA attributes\n5. Implement progressive loading if results are large\n6. Add timeout handling for long-running searches\n7. Test loading states with various network conditions\n8. Ensure loading states don't cause layout shifts",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Use React hooks like `useMemo` or `useCallback` to memoize functions or values that don't change frequently. This ensures that the component only re-renders when necessary."
         },
         {
           "id": 6,
-          "title": "Preserve Active Filters During Search",
-          "description": "Modify the search logic to maintain other active filters (like status) when performing searches to allow for combined filtering.",
+          "title": "Document Usage Examples",
+          "description": "Create documentation for the `Authorized` component, including usage examples.",
+          "status": "pending",
           "dependencies": [
             4
           ],
-          "details": "1. Refactor filter state management to separate search from other filters\n2. Modify the tRPC endpoint to accept both search terms and filter criteria\n3. Update the UI to show active filters alongside search terms\n4. Implement logic to combine search and filter criteria in queries\n5. Add visual indicators for active combined filters\n6. Create clear all/reset functionality for filters and search\n7. Test various combinations of filters and search terms\n8. Ensure filter state is preserved during navigation or page refresh",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Document how to use the component, including how to pass props and how it handles different scenarios (e.g., authorized vs. unauthorized users). Include code snippets to illustrate its usage."
         },
         {
           "id": 7,
-          "title": "Implement Pagination Reset on Search Term Changes",
-          "description": "Reset pagination to the first page whenever search terms change to ensure users see the most relevant results immediately.",
+          "title": "Test and Validate Component Functionality",
+          "description": "Write tests to validate the functionality of the `Authorized` component.",
+          "status": "pending",
           "dependencies": [
-            4,
+            5,
             6
           ],
-          "details": "1. Modify the pagination state management to reset page to 1 when search term changes\n2. Update the URL parameters to reflect the page reset\n3. Ensure the UI updates to show the first page of results\n4. Add smooth scroll to top when pagination resets\n5. Implement history state management to handle browser back/forward navigation\n6. Add analytics tracking for search term changes and pagination resets\n7. Test edge cases like empty search results and rapid search term changes\n8. Ensure the reset doesn't cause jarring UI changes",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Use a testing framework like Jest or Cypress to write unit tests and integration tests. Ensure the component behaves correctly in various scenarios, such as when the user is authorized or unauthorized."
         }
       ]
     },
     {
       "id": 6,
-      "title": "Testing and Validation",
-      "description": "Perform comprehensive testing of the enhanced Clients List page",
-      "status": "done",
+      "title": "Refactor Backend Permission Middleware",
+      "description": "Update the enforcePermission middleware to use the new policy engine for consistent frontend and backend permission checks.",
+      "status": "pending",
       "dependencies": [
-        5
+        3
       ],
-      "priority": "low",
-      "details": "1. Write unit tests for query logic and data transformations\n2. Test role-based access control for Admin vs Manager/Client views\n3. Perform accessibility audit on the table and controls\n4. Test performance with large datasets\n5. Verify all features work across supported browsers\n6. Check that all Cursor rules are followed\n7. Validate that the implementation meets all requirements in the PRD\n8. Test edge cases like empty search results, no clients, etc.",
-      "testStrategy": "Run automated tests for query logic. Manually test with different user roles. Use accessibility tools to verify ARIA compliance. Load test with large datasets to ensure performance.",
+      "priority": "medium",
+      "details": "1. Refactor `src/middleware/enforcePermission.ts`\n2. Initialize the permission library with the same policies used in the frontend\n3. Update the middleware to use the library's checking methods\n4. Ensure proper error responses when permissions are denied\n5. Update TRPC middleware to use the new enforcement logic\n6. Add logging for permission denials\n7. Maintain backward compatibility during migration",
+      "testStrategy": "Write unit tests for the middleware that verify it correctly allows or denies requests based on user roles. Test with various endpoints and permission scenarios.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Develop and Execute Unit Tests for Query Logic and Data Transformations",
-          "description": "Write and run unit tests to validate the correctness of all query logic and data transformation functions used in the Clients List page.",
-          "status": "done",
+          "title": "Integrate New Policy Engine into Backend",
+          "description": "Install and configure the new policy engine library in the backend codebase to ensure it matches the version and configuration used in the frontend.",
+          "status": "pending",
           "dependencies": [],
-          "details": "Use a framework such as dbt or your project's preferred testing tool to create unit tests with mock data. Ensure tests cover expected outputs, edge cases, and error handling for all SQL or data transformation logic. Review test results and update logic as needed to address any failures.[1][3][4]"
+          "details": "Add the policy engine as a dependency in the backend project. Initialize it with the same policy definitions as the frontend, ensuring consistency in permission logic across both environments."
         },
         {
           "id": 2,
-          "title": "Test Role-Based Access Control (RBAC) for All User Types",
-          "description": "Verify that Admin, Manager, and Client users see only the data and controls appropriate to their roles, and that unauthorized access is prevented.",
-          "status": "done",
+          "title": "Refactor enforcePermission Middleware to Use Policy Engine",
+          "description": "Update the existing enforcePermission middleware to utilize the new policy engine for permission checks instead of the legacy logic.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Simulate each user role and test all relevant UI elements and API endpoints. Attempt to access restricted features as lower-privilege users to confirm proper enforcement of RBAC policies. Document any discrepancies and update access rules as needed."
+          "details": "Replace the old permission checking code in src/middleware/enforcePermission.ts with calls to the policy engine's checking methods. Ensure the middleware retrieves user context and requested action/resource, then delegates permission evaluation to the policy engine."
         },
         {
           "id": 3,
-          "title": "Perform Accessibility Audit of Table and Controls",
-          "description": "Assess the Clients List page for compliance with accessibility standards (e.g., WCAG 2.1), focusing on the table, filters, buttons, and navigation.",
-          "status": "done",
+          "title": "Implement Consistent Error Handling for Permission Denials",
+          "description": "Ensure that when permission checks fail, the middleware returns standardized error responses that align with frontend expectations.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Use automated tools (such as axe or Lighthouse) and manual testing (keyboard navigation, screen readers) to identify accessibility issues. Address problems such as missing ARIA labels, insufficient contrast, or non-semantic markup."
+          "details": "Define and return clear HTTP error codes (e.g., 403 Forbidden) and structured error messages when permissions are denied. Ensure error responses are consistent with frontend handling and include relevant details for debugging."
         },
         {
           "id": 4,
-          "title": "Test Performance with Large Datasets",
-          "description": "Evaluate the Clients List page's responsiveness and stability when handling large volumes of client data.",
-          "status": "done",
+          "title": "Update TRPC Middleware to Use New Enforcement Logic",
+          "description": "Modify the TRPC middleware layer to invoke the refactored enforcePermission middleware, ensuring all API endpoints are protected by the new policy engine.",
+          "status": "pending",
           "dependencies": [
-            3
+            2
           ],
-          "details": "Seed the database or mock API with a large number of client records. Measure page load times, scrolling performance, and interaction latency. Identify and optimize any bottlenecks in data fetching, rendering, or pagination."
+          "details": "Replace any direct permission checks or legacy enforcement logic in TRPC middleware with calls to the updated enforcePermission middleware. Test that all routes requiring permissions are correctly guarded."
         },
         {
           "id": 5,
-          "title": "Verify Cross-Browser Compatibility and Cursor Rule Compliance",
-          "description": "Ensure that all features of the Clients List page function correctly across all supported browsers and that cursor usage follows design guidelines.",
-          "status": "done",
+          "title": "Add Logging for Permission Denials",
+          "description": "Implement logging within the middleware to record details of permission denials for auditing and debugging purposes.",
+          "status": "pending",
           "dependencies": [
-            4
+            3
           ],
-          "details": "Test the page in each supported browser (e.g., Chrome, Firefox, Edge, Safari) on relevant platforms. Check that all interactive elements use the correct cursor styles (pointer, default, etc.) as specified in the UI guidelines."
+          "details": "Integrate a logging solution (e.g., Winston, Bunyan) to capture user identity, requested action, resource, and reason for denial whenever a permission check fails. Ensure logs are structured and do not expose sensitive information."
         },
         {
           "id": 6,
-          "title": "Validate PRD Requirements and Edge Case Handling",
-          "description": "Confirm that the implementation meets all requirements in the Product Requirements Document (PRD) and robustly handles edge cases.",
-          "status": "done",
+          "title": "Maintain Backward Compatibility During Migration",
+          "description": "Ensure that the migration to the new policy engine does not break existing functionality by supporting legacy permission checks where necessary.",
+          "status": "pending",
           "dependencies": [
-            5
+            2
           ],
-          "details": "Cross-check the Clients List page against the PRD checklist. Test scenarios such as empty search results, no clients in the system, and invalid input. Document results and address any gaps or failures before sign-off."
+          "details": "Implement a fallback mechanism in the middleware to use the old permission logic for routes or features not yet migrated to the new policy engine. Gradually phase out legacy checks as all endpoints are updated."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Create Database Migration Script",
+      "description": "Develop a script to migrate existing permission constants into the Supabase permissions and rolePermissions tables.",
+      "status": "pending",
+      "dependencies": [
+        2,
+        3
+      ],
+      "priority": "medium",
+      "details": "1. Create a Node.js script or SQL file in `scripts/migratePermissions.js` or `scripts/migratePermissions.sql`\n2. Extract all unique permissions from the policy definitions\n3. Insert these into the `permissions` table with appropriate descriptions\n4. Map roles to permissions based on the policy file\n5. Insert these mappings into the `rolePermissions` table\n6. Add error handling and validation\n7. Make the script idempotent (safe to run multiple times)\n8. Document how to run the script via Supabase SQL editor or CLI",
+      "testStrategy": "Test the script in a development environment first. Verify that all permissions are correctly inserted and that role mappings match the policy definitions. Create a rollback script for safety.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Extract Unique Permissions from Policy Definitions",
+          "description": "Parse the existing policy definitions to identify and extract all unique permission constants required for migration.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Implement a parser (in Node.js or SQL) that scans the policy files, collects all unique permission constants, and prepares them for insertion. Ensure the extraction logic handles duplicates and edge cases."
+        },
+        {
+          "id": 2,
+          "title": "Insert Permissions into Supabase Permissions Table",
+          "description": "Insert the extracted permissions into the Supabase `permissions` table, including appropriate descriptions for each permission.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Develop logic to insert each unique permission into the `permissions` table. Use SQL `INSERT ... ON CONFLICT DO NOTHING` or equivalent to ensure idempotency. Provide meaningful descriptions for each permission, either from the policy file or by generating them programmatically."
+        },
+        {
+          "id": 3,
+          "title": "Map Roles to Permissions Based on Policy File",
+          "description": "Determine the mapping between roles and permissions as defined in the policy file, preparing data for insertion into the `rolePermissions` table.",
+          "status": "pending",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Parse the policy file to associate each role with its corresponding permissions. Structure this mapping data for efficient batch insertion, ensuring consistency with the permissions already inserted."
+        },
+        {
+          "id": 4,
+          "title": "Insert Role-Permission Mappings into rolePermissions Table",
+          "description": "Insert the role-permission mappings into the Supabase `rolePermissions` table, ensuring the process is idempotent and includes error handling.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Implement batch insertion logic for the `rolePermissions` table, using SQL upsert patterns or equivalent to avoid duplicates. Add error handling and validation to ensure data integrity and script robustness."
+        },
+        {
+          "id": 5,
+          "title": "Document and Validate the Migration Script",
+          "description": "Write clear documentation on how to run the migration script using the Supabase SQL editor or CLI, and validate that the script is idempotent and robust.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Prepare a README or inline documentation explaining script usage, prerequisites, and troubleshooting. Test the script by running it multiple times to confirm idempotency and validate that all data is correctly migrated without duplication or errors."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Update Navigation Components",
+      "description": "Refactor the application sidebar to show or hide items based on user permissions.",
+      "status": "pending",
+      "dependencies": [
+        4,
+        5
+      ],
+      "priority": "medium",
+      "details": "1. Update `AppSidebar.tsx` to use the new permission system\n2. Replace any `usePermission` hooks with `useAbility`\n3. Wrap navigation items with the `<Authorized>` component\n4. Define the required permission for each navigation item\n5. Ensure smooth rendering without layout shifts when items are hidden\n6. Test with different user roles to verify correct visibility",
+      "testStrategy": "Create tests that render the sidebar with different user roles and verify that the correct navigation items are shown or hidden. Include snapshot tests to catch unintended changes.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Define Permission Structure and Create Authorized Component",
+          "description": "Set up the foundation for permission-based navigation by defining the permission structure and creating the Authorized component that will wrap navigation items.",
+          "dependencies": [],
+          "details": "1. Define a centralized permission structure in a dedicated file (e.g., `permissions.ts`):\n   - Create enums or constants for all navigation-related permissions\n   - Define role-to-permission mappings for different user roles\n\n2. Create the `<Authorized>` component that will wrap navigation items:\n   - Accept `permission` or `permissions` prop to specify required access\n   - Use the new `useAbility` hook to check if the current user has the required permission\n   - Implement proper TypeScript typing for the component\n   - Add support for rendering fallback content when permission is denied\n\n3. Testing approach:\n   - Write unit tests for the `<Authorized>` component with different permission scenarios\n   - Test with mock user contexts having different permission sets\n   - Verify that children are rendered only when permissions are satisfied",
+          "status": "pending",
+          "parentTaskId": 8
+        },
+        {
+          "id": 2,
+          "title": "Refactor AppSidebar Structure for Permission-Based Rendering",
+          "description": "Update the AppSidebar component to support permission-based rendering without causing layout shifts when items are hidden.",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Refactor `AppSidebar.tsx` structure to support permission-based rendering:\n   - Analyze the current sidebar structure and identify potential layout shift issues\n   - Implement a consistent layout structure that won't shift when items are hidden\n   - Consider using CSS Grid or Flexbox with placeholder elements if needed\n   - Replace any direct permission checks with the new permission system\n\n2. Create a navigation item configuration that includes permission requirements:\n   - Define a data structure for navigation items that includes title, icon, link, and required permission\n   - Move hardcoded navigation items into this configuration\n   - Ensure the structure is extensible for future navigation changes\n\n3. Testing approach:\n   - Create snapshot tests for the sidebar with different permission sets\n   - Manually test layout stability by toggling permissions\n   - Verify that no layout shifts occur when items are hidden",
+          "status": "pending",
+          "parentTaskId": 8
+        },
+        {
+          "id": 3,
+          "title": "Implement Permission-Based Navigation Items",
+          "description": "Apply the Authorized component to each navigation item and replace any existing permission hooks with useAbility.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Replace all `usePermission` hooks with `useAbility` throughout the navigation components:\n   - Update import statements\n   - Refactor any permission check logic to use the new hook syntax\n   - Ensure proper typing for the new hook usage\n\n2. Wrap each navigation item with the `<Authorized>` component:\n   - Use the permission configuration from the previous subtask\n   - Apply the `<Authorized>` component to each navigation item\n   - Ensure that the component hierarchy remains clean and maintainable\n\n3. Implement proper accessibility for hidden navigation items:\n   - Ensure hidden items are not accessible via keyboard navigation\n   - Verify that screen readers don't announce hidden items\n   - Add appropriate ARIA attributes if needed\n\n4. Testing approach:\n   - Test each navigation item with different permission sets\n   - Verify that items appear and disappear correctly based on permissions\n   - Check accessibility with screen reader and keyboard navigation tests",
+          "status": "pending",
+          "parentTaskId": 8
+        },
+        {
+          "id": 4,
+          "title": "Test and Optimize Permission-Based Navigation",
+          "description": "Perform comprehensive testing with different user roles and optimize the implementation for performance and user experience.",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "1. Create test scenarios for different user roles:\n   - Define test cases for admin, regular user, and other relevant roles\n   - Create mock user contexts with different permission sets\n   - Test navigation rendering for each role\n\n2. Optimize performance:\n   - Memoize permission checks to prevent unnecessary re-renders\n   - Use React.memo for navigation items that don't change frequently\n   - Implement lazy loading for navigation sections if applicable\n\n3. Enhance user experience:\n   - Add subtle animations or transitions when navigation items appear/disappear\n   - Ensure the sidebar maintains a consistent visual weight regardless of visible items\n   - Consider adding tooltips for navigation items that explain permission requirements\n\n4. Final verification and documentation:\n   - Verify that all requirements from the task description are met\n   - Document the new permission-based navigation system\n   - Create examples for adding new navigation items with permissions\n   - Update any relevant developer documentation\n\n5. Testing approach:\n   - Perform end-to-end testing with different user roles\n   - Measure and document performance metrics\n   - Conduct cross-browser testing to ensure consistent behavior",
+          "status": "pending",
+          "parentTaskId": 8
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Update Table and UI Components",
+      "description": "Refactor client tables and action buttons to respect the new permission system.",
+      "status": "pending",
+      "dependencies": [
+        4,
+        5
+      ],
+      "priority": "medium",
+      "details": "1. Update `ClientsPage.tsx` to show/hide admin-only columns based on permissions\n2. Wrap the \"New Client\" button with the `<Authorized>` component\n3. Update any other action buttons with appropriate permission checks\n4. Implement graceful fallback states for missing permissions\n5. Ensure responsive design is maintained when elements are hidden\n6. Test with different user roles to verify correct visibility",
+      "testStrategy": "Write component tests that verify tables and buttons are correctly shown or hidden based on user permissions. Test with all defined user roles to ensure correct behavior.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Refactor Client Table Columns for Permission-Based Visibility",
+          "description": "Update the ClientsPage.tsx table to show or hide admin-only columns based on the current user's permissions.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Identify which columns are admin-only. Use the new permission system to conditionally render these columns. Ensure that hiding columns does not break table layout or responsiveness. Test with different permission sets to confirm correct column visibility."
+        },
+        {
+          "id": 2,
+          "title": "Wrap Action Buttons with Permission Checks",
+          "description": "Update all action buttons, including the 'New Client' button, to enforce permission checks using the <Authorized> component or equivalent logic.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Locate all action buttons on ClientsPage.tsx and related components. Wrap each button with the <Authorized> component, specifying the required permission. Ensure that buttons are hidden or disabled for users lacking the necessary permissions, and that the UI remains consistent."
+        },
+        {
+          "id": 3,
+          "title": "Implement Graceful Fallback States for Restricted Actions",
+          "description": "Provide user-friendly fallback UI for cases where users lack permissions, such as empty states, tooltips, or messages explaining restricted access.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "For each restricted action or hidden element, add fallback UI elements (e.g., tooltips, banners, or placeholder text) to inform users why features are unavailable. Ensure these states are accessible and maintain the overall responsive design."
+        },
+        {
+          "id": 4,
+          "title": "Test and Validate Permission-Based UI with Multiple User Roles",
+          "description": "Thoroughly test the updated table and UI components with various user roles to verify correct permission enforcement and responsive behavior.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Create or use test accounts with different permission levels (e.g., admin, standard user, restricted user). Validate that columns and buttons appear or are hidden as expected. Check that fallback states render properly and that the UI remains responsive across devices and screen sizes."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Implement Permission Management Admin UI",
+      "description": "Build admin screens for managing role-permission mappings in real-time.",
+      "status": "pending",
+      "dependencies": [
+        7
+      ],
+      "priority": "low",
+      "details": "1. Create new pages for permission management in the admin section\n2. Implement CRUD operations for role-permission mappings\n3. Create a UI to assign/revoke permissions for each role\n4. Add real-time updates using Supabase subscriptions if available\n5. Implement validation to prevent invalid permission assignments\n6. Add confirmation dialogs for potentially disruptive changes\n7. Include search and filtering capabilities for large permission sets",
+      "testStrategy": "Create end-to-end tests that verify the admin UI correctly updates role-permission mappings in the database. Test that changes are immediately reflected in the application's permission behavior.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design and Build Permission Management Admin UI Pages",
+          "description": "Create new admin section pages dedicated to permission management, including layouts for listing roles, permissions, and their mappings.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Develop the UI structure for permission management within the admin area. This includes pages for viewing all roles, all permissions, and a matrix or list showing current role-permission mappings. Incorporate search and filtering components to handle large permission sets. Ensure the UI is intuitive and scalable for future enhancements."
+        },
+        {
+          "id": 2,
+          "title": "Implement CRUD Operations for Role-Permission Mappings",
+          "description": "Develop backend and frontend logic to create, read, update, and delete role-permission mappings, ensuring data integrity and validation.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Set up API endpoints and database models for managing role-permission associations. Integrate these endpoints with the admin UI to allow admins to add, modify, or remove mappings. Implement validation logic to prevent invalid or conflicting permission assignments, and ensure changes are reflected accurately in the UI."
+        },
+        {
+          "id": 3,
+          "title": "Enable Real-Time Updates and Confirmation Dialogs",
+          "description": "Integrate Supabase subscriptions (or equivalent) for real-time updates and add confirmation dialogs for disruptive changes.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Utilize Supabase's real-time features to subscribe to changes in role-permission mappings, updating the UI instantly when changes occur. Implement confirmation dialogs for actions that could have significant impact, such as revoking critical permissions or deleting mappings, to prevent accidental disruptions."
+        },
+        {
+          "id": 4,
+          "title": "Develop Permission Assignment and Revocation UI with Validation",
+          "description": "Build interactive UI components for assigning and revoking permissions per role, with robust validation and user feedback.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Create interfaces (e.g., checklists, toggles, or drag-and-drop) for admins to assign or revoke permissions for each role. Integrate validation to prevent invalid assignments (such as conflicting or duplicate permissions) and provide clear feedback or error messages. Ensure the UI leverages real-time updates and confirmation dialogs for a seamless admin experience."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Implement Permission Refresh Mechanism",
+      "description": "Create a system to update user permissions in real-time when role assignments change.",
+      "status": "pending",
+      "dependencies": [
+        4,
+        10
+      ],
+      "priority": "low",
+      "details": "1. Implement a WebSocket or polling mechanism to detect permission changes\n2. Update the PermissionProvider to refresh permissions when notified\n3. Ensure UI components re-render appropriately when permissions change\n4. Add a manual refresh option for fallback\n5. Implement debouncing to prevent excessive updates\n6. Add error handling for failed permission refreshes\n7. Include logging for debugging permission update issues",
+      "testStrategy": "Create tests that simulate permission changes and verify that the UI updates accordingly. Test both automatic and manual refresh mechanisms.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Permission Change Detection System",
+          "description": "Create a mechanism to detect when user permissions or role assignments change in the system",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Implement a WebSocket connection for real-time updates or a polling mechanism that checks for permission changes at regular intervals. Include configuration options for refresh frequency and connection management. The detection system should compare permission timestamps or version numbers to identify changes. Implement debouncing logic to prevent excessive updates when multiple permission changes occur in rapid succession. Add appropriate error handling for connection failures and recovery mechanisms."
+        },
+        {
+          "id": 2,
+          "title": "Update PermissionProvider Service",
+          "description": "Enhance the existing PermissionProvider to handle permission refresh events",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Modify the PermissionProvider service to subscribe to the permission change detection system. Implement methods to refresh the permission cache when notified of changes. Create a permission refresh workflow that fetches updated permissions from the authorization server using refresh tokens. Add support for both automatic refreshes triggered by the detection system and manual refreshes initiated by users. Implement proper error handling for failed permission refreshes, including retry logic and fallback mechanisms. Ensure the provider maintains a consistent state even during refresh operations."
+        },
+        {
+          "id": 3,
+          "title": "Implement UI Component Refresh Logic",
+          "description": "Ensure UI components re-render appropriately when permissions change",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Create a permission context or observable that UI components can subscribe to for permission updates. Implement a notification system that triggers UI component re-renders when permissions change. Ensure that permission-dependent UI elements (like buttons, menu items, or form fields) update their visibility or enabled state based on the latest permissions. Add transition effects for smooth UI updates when permissions change. Test various UI components under different permission change scenarios to ensure consistent behavior."
+        },
+        {
+          "id": 4,
+          "title": "Add Logging and Manual Refresh Controls",
+          "description": "Implement comprehensive logging and user-facing controls for permission refreshes",
+          "status": "pending",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Create a logging system that records all permission refresh events, including successful updates, failures, and retry attempts. Implement a user-facing manual refresh button or option in appropriate locations (user profile, settings page, or system header). Add visual indicators to show when permissions are being refreshed. Create an admin dashboard component to monitor permission refresh status across the system. Implement notification mechanisms to alert users when their permissions have changed significantly. Add detailed error messages and troubleshooting guidance for failed permission refreshes."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Create CI Validation for Permissions",
+      "description": "Develop CI checks to ensure all permission constants in code are represented in the database.",
+      "status": "pending",
+      "dependencies": [
+        2,
+        7
+      ],
+      "priority": "low",
+      "details": "1. Create a CI script that extracts all permission checks from the codebase\n2. Compare these against the permissions in the database\n3. Fail the build if any permissions are missing from the database\n4. Generate a report of unused permissions\n5. Add the script to the CI pipeline\n6. Document the process for adding new permissions\n7. Create a guide for developers on how to properly use the permission system",
+      "testStrategy": "Test the CI script with known mismatches to verify it correctly identifies missing or unused permissions. Ensure it integrates properly with the CI pipeline.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Develop Script to Extract and Compare Permission Constants",
+          "description": "Create a script that scans the codebase to extract all permission constants and compares them against the permissions stored in the database.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Implement a script (e.g., in Python, Node.js, or your project's primary language) that parses the codebase to identify all permission constants used in permission checks. Connect to the database and retrieve the list of permissions. Compare the two sets to identify any permissions present in code but missing from the database. Ensure the script outputs a clear summary of missing permissions."
+        },
+        {
+          "id": 2,
+          "title": "Implement CI Build Failure on Missing Permissions",
+          "description": "Integrate the extraction and comparison script into the CI pipeline so that the build fails if any permissions used in code are missing from the database.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Add the script to the CI configuration (e.g., GitHub Actions, GitLab CI, Jenkins). Configure the pipeline to run the script as part of the validation steps. Ensure the CI job fails with an appropriate error message if missing permissions are detected, preventing merges or deployments until the issue is resolved."
+        },
+        {
+          "id": 3,
+          "title": "Generate and Report Unused Permissions",
+          "description": "Enhance the script to identify permissions present in the database but not referenced in the code, and generate a report listing these unused permissions.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Extend the comparison logic to also detect permissions that exist in the database but are not used anywhere in the codebase. Output these as a separate section in the script's report, making it easy for developers or administrators to review and clean up obsolete permissions."
+        },
+        {
+          "id": 4,
+          "title": "Document Permission Validation Workflow and Developer Guide",
+          "description": "Create comprehensive documentation for the permission validation process, including instructions for adding new permissions and guidelines for developers on using the permission system.",
+          "status": "pending",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "Write clear documentation describing how the CI permission validation works, how to add new permissions to both code and database, and best practices for using the permission system. Include troubleshooting steps for common issues and a guide for interpreting the CI reports. Make this documentation accessible to all developers (e.g., in the project wiki or docs folder)."
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "Clients List Enhancement",
-    "totalTasks": 6,
-    "sourceFile": "scripts/PRD_phase2-clientsList.txt",
-    "generatedAt": "2023-11-09"
+    "projectName": "Permission System Migration",
+    "totalTasks": 12,
+    "sourceFile": "scripts/PRD_permissions-upgrade.txt",
+    "generatedAt": "2023-11-15"
   }
 }

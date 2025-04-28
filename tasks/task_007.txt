@@ -1,0 +1,50 @@
+# Task ID: 7
+# Title: Create Database Migration Script
+# Status: pending
+# Dependencies: 2, 3
+# Priority: medium
+# Description: Develop a script to migrate existing permission constants into the Supabase permissions and rolePermissions tables.
+# Details:
+1. Create a Node.js script or SQL file in `scripts/migratePermissions.js` or `scripts/migratePermissions.sql`
+2. Extract all unique permissions from the policy definitions
+3. Insert these into the `permissions` table with appropriate descriptions
+4. Map roles to permissions based on the policy file
+5. Insert these mappings into the `rolePermissions` table
+6. Add error handling and validation
+7. Make the script idempotent (safe to run multiple times)
+8. Document how to run the script via Supabase SQL editor or CLI
+
+# Test Strategy:
+Test the script in a development environment first. Verify that all permissions are correctly inserted and that role mappings match the policy definitions. Create a rollback script for safety.
+
+# Subtasks:
+## 1. Extract Unique Permissions from Policy Definitions [pending]
+### Dependencies: None
+### Description: Parse the existing policy definitions to identify and extract all unique permission constants required for migration.
+### Details:
+Implement a parser (in Node.js or SQL) that scans the policy files, collects all unique permission constants, and prepares them for insertion. Ensure the extraction logic handles duplicates and edge cases.
+
+## 2. Insert Permissions into Supabase Permissions Table [pending]
+### Dependencies: 7.1
+### Description: Insert the extracted permissions into the Supabase `permissions` table, including appropriate descriptions for each permission.
+### Details:
+Develop logic to insert each unique permission into the `permissions` table. Use SQL `INSERT ... ON CONFLICT DO NOTHING` or equivalent to ensure idempotency. Provide meaningful descriptions for each permission, either from the policy file or by generating them programmatically.
+
+## 3. Map Roles to Permissions Based on Policy File [pending]
+### Dependencies: 7.1, 7.2
+### Description: Determine the mapping between roles and permissions as defined in the policy file, preparing data for insertion into the `rolePermissions` table.
+### Details:
+Parse the policy file to associate each role with its corresponding permissions. Structure this mapping data for efficient batch insertion, ensuring consistency with the permissions already inserted.
+
+## 4. Insert Role-Permission Mappings into rolePermissions Table [pending]
+### Dependencies: 7.3
+### Description: Insert the role-permission mappings into the Supabase `rolePermissions` table, ensuring the process is idempotent and includes error handling.
+### Details:
+Implement batch insertion logic for the `rolePermissions` table, using SQL upsert patterns or equivalent to avoid duplicates. Add error handling and validation to ensure data integrity and script robustness.
+
+## 5. Document and Validate the Migration Script [pending]
+### Dependencies: 7.4
+### Description: Write clear documentation on how to run the migration script using the Supabase SQL editor or CLI, and validate that the script is idempotent and robust.
+### Details:
+Prepare a README or inline documentation explaining script usage, prerequisites, and troubleshooting. Test the script by running it multiple times to confirm idempotency and validate that all data is correctly migrated without duplication or errors.
+

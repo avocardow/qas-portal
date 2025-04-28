@@ -1,60 +1,75 @@
 # Task ID: 3
-# Title: Implement View Action Button
-# Status: done
-# Dependencies: 1
+# Title: Create Permission Policy Definitions
+# Status: pending
+# Dependencies: 1, 2
 # Priority: high
-# Description: Add a View button/icon to each row that navigates to the client detail page
+# Description: Define the central policy file that maps actions to roles, serving as the single source of truth for permissions.
 # Details:
-1. Create a row action component with a View button/icon
-2. Configure the button to navigate to /clients/[clientId] on click
-3. Integrate the action component into DataTableTwo's row actions slot
-4. Apply appropriate styling according to Cursor rules
-5. Ensure the action is visible to all roles (Admin, Manager, Client)
-6. Remove any existing row-level delete functionality
+1. Create a `policies/permissions.ts` (or JSON/YAML) file
+2. Define the permission structure based on the selected library's syntax
+3. Map each role (Developer, Admin, Manager, Auditor, Staff, Client) to their allowed actions
+4. Include conditional permissions where needed
+5. Document the schema and usage patterns
+6. Ensure all permissions discovered in the audit are represented
+7. Group permissions logically by feature area
 
 # Test Strategy:
-Test navigation to client detail page works correctly. Verify the button appears for all user roles. Check that styling matches design system requirements.
+Write unit tests that validate the policy file loads correctly and returns expected permissions for each role. Test edge cases like conditional permissions and role inheritance if applicable.
 
 # Subtasks:
-## 1. Create ViewActionButton component [done]
+## 1. Design Permission Schema and Structure [pending]
 ### Dependencies: None
-### Description: Design and implement a reusable ViewActionButton component that will be used across the application for navigating to detail pages.
+### Description: Define the schema and structure for the central permission policy file based on RBAC principles, ensuring it can represent all required roles and actions while supporting conditional permissions.
 ### Details:
-Create a new component in the shared components directory that accepts clientId as a prop. Use semantic HTML with a button element for accessibility. Implement an eye/visibility icon from the project's icon library. Add appropriate ARIA labels for screen readers. Include a tooltip that appears on hover with 'View Details' text. Style according to Cursor design system with appropriate contrast and visual hierarchy as a secondary action. Ensure the button is keyboard accessible and has proper focus states. Test the component in isolation to verify it renders correctly.
+1. Analyze the existing roles (Developer, Admin, Manager, Auditor, Staff, Client) and their required permissions
+2. Choose between JSON, YAML, or TypeScript for the policy definition format (TypeScript recommended for type safety)
+3. Design a schema that groups permissions logically by feature area
+4. Include support for conditional permissions (e.g., resource ownership constraints)
+5. Document the schema with examples and usage patterns
+6. Create a draft structure that follows the least privilege principle
+7. Test the schema with sample role definitions to ensure it meets all requirements
+8. Validate that the schema can represent all permissions discovered in the audit
 
-## 2. Implement navigation functionality [done]
+## 2. Implement Core Permission Policy File [pending]
 ### Dependencies: 3.1
-### Description: Add navigation logic to the ViewActionButton component to direct users to the client detail page when clicked.
+### Description: Create the central permissions.ts file with the defined schema and implement the core role definitions with their associated permissions.
 ### Details:
-Import and use the application's routing mechanism (likely React Router's useNavigate hook). Implement an onClick handler that navigates to the '/clients/[clientId]' route, passing the clientId as a parameter. Add error handling to prevent navigation issues. Test the navigation functionality to ensure it correctly routes to the appropriate client detail page. Verify that the browser history is properly updated. Ensure that the button is not triggering form submissions if placed within a form context.
+1. Create the `policies/permissions.ts` file using the schema designed in subtask 1
+2. Implement the base permission structure with TypeScript interfaces for type safety
+3. Define constants for all action types (e.g., 'user:create', 'client:view')
+4. Group permissions logically by feature area as determined in the schema design
+5. Implement the core roles (Admin, Developer) with their complete permission sets
+6. Add JSDoc comments to document the purpose and usage of each permission group
+7. Create utility functions for permission checking if needed
+8. Write unit tests to verify the structure and basic permission checks
+9. Ensure the implementation follows the centralized policy management best practice
 
-## 3. Integrate ViewActionButton with DataTableTwo [done]
-### Dependencies: 3.1, 3.2
-### Description: Modify the DataTableTwo component to include the ViewActionButton in its row actions slot.
+## 3. Complete Role-Based Permission Mappings [pending]
+### Dependencies: 3.2
+### Description: Extend the permission policy file to include all roles (Manager, Auditor, Staff, Client) with their specific permission sets and implement conditional permissions where required.
 ### Details:
-Locate the DataTableTwo component and identify the row actions slot implementation. Add the ViewActionButton component to the row actions area, passing the appropriate clientId from the row data. Ensure the button is properly aligned with other action buttons if present. Maintain appropriate spacing between action buttons according to the design system. Test the integration to verify the button appears correctly in each row of the table. Ensure the component receives the correct clientId for each row.
+1. Add the remaining roles (Manager, Auditor, Staff, Client) to the permissions.ts file
+2. Map each role to their allowed actions based on the audit findings
+3. Implement conditional permissions using parameterized rules (e.g., resource ownership constraints)
+4. Ensure each role follows the least privilege principle
+5. Group related permissions logically by feature area for better maintainability
+6. Validate that all permissions discovered in the audit are represented
+7. Add detailed comments explaining the rationale behind permission assignments
+8. Create comprehensive tests for each role to verify correct permission mappings
+9. Implement edge cases and special conditions identified during the audit
 
-## 4. Remove existing row-level delete functionality [done]
+## 4. Create Permission Utilities and Documentation [pending]
 ### Dependencies: 3.3
-### Description: Remove any existing delete buttons or functionality from the table rows as specified in the requirements.
+### Description: Develop utility functions for permission checking, create comprehensive documentation, and implement integration tests to ensure the permission system works as expected.
 ### Details:
-Identify and remove any delete buttons or icons from the row actions area. Remove any associated delete handlers or confirmation dialogs. Ensure that removing this functionality doesn't break any existing code. Update any tests that might be expecting delete functionality. Verify that the delete functionality is completely removed from the UI and that no orphaned code remains. Test to confirm that clicking on row actions doesn't trigger any delete-related behavior.
-
-## 5. Implement responsive design for ViewActionButton [done]
-### Dependencies: 3.1, 3.2, 3.3
-### Description: Ensure the ViewActionButton is usable and accessible across all device sizes and screen resolutions.
-### Details:
-Add responsive styling to ensure the button is easily tappable on mobile devices (minimum touch target size of 44x44px). Implement media queries if necessary to adjust the button size or spacing on smaller screens. Test on various device sizes to ensure the button remains accessible and visually appealing. Verify that the tooltip appears correctly on both desktop and mobile devices. Ensure that the button doesn't overflow or cause layout issues on small screens. Test with touch interactions to verify mobile usability.
-
-## 6. Configure role-based visibility [done]
-### Dependencies: 3.3
-### Description: Ensure the ViewActionButton is visible to all user roles (Admin, Manager, Client) as specified in the requirements.
-### Details:
-Review the application's role-based access control system. Verify that the ViewActionButton is not restricted by any role-based conditions. If necessary, explicitly configure the button to be visible to all roles. Test with different user roles to confirm visibility for Admin, Manager, and Client roles. Document the role-based visibility configuration for future reference. Ensure that while the button is visible to all roles, the navigation still respects any role-based access restrictions on the client detail page itself.
-
-## 7. Write comprehensive tests for ViewActionButton functionality [done]
-### Dependencies: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
-### Description: Create unit and integration tests to ensure the ViewActionButton works correctly in all scenarios.
-### Details:
-Write unit tests for the ViewActionButton component to verify rendering and click behavior. Create integration tests to verify the button appears correctly in the DataTableTwo component. Test navigation to ensure clicking the button correctly routes to the client detail page. Verify accessibility by testing keyboard navigation and screen reader compatibility. Test with different screen sizes to confirm responsive behavior. Verify role-based visibility by testing with different user roles. Include edge cases such as handling clients with missing IDs or other required data. Document test coverage and any assumptions made during testing.
+1. Create helper functions for common permission checks (e.g., hasPermission, canAccess)
+2. Implement utility methods for role-based permission validation
+3. Write comprehensive documentation explaining the permission structure, roles, and usage patterns
+4. Create a permissions cheat sheet for developers showing which roles can access which features
+5. Implement integration tests that verify permissions work correctly in real application scenarios
+6. Add examples of how to use the permission system in different contexts (API routes, UI components)
+7. Document the process for updating permissions when new features are added
+8. Create visualization of permission hierarchies for easier understanding
+9. Ensure all code is properly typed with TypeScript for better developer experience
+10. Validate that the implementation follows all best practices identified in the research
 

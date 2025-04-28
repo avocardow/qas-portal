@@ -1,0 +1,74 @@
+# Overview
+We are migrating our application's existing role-based access control (RBAC) system to a centralized, policy-driven permissions engine. Hard-coded permission checks and scattered `usePermission` hooks make it difficult to maintain, audit, and evolve what each role can see or do. This new system will streamline management of visibility, navigation, API access, and UI elements through a single source of truth.
+
+# Core Features
+- **Central Policy Engine**: Integrate a mature library (e.g., CASL or AccessControl) for defining and enforcing rules in one place.
+- **Dynamic UI Guards**: Replace individual `RequirePermission` and scattered checks with a unified `<Authorized>` component and a `useAbility` hook.
+- **Unified Backend Enforcement**: Refactor `enforcePermission` middleware to leverage the same engine and policy definitions.
+- **Configurable Role-Permission Store**: Leverage Supabase's existing `permissions` and `rolePermissions` tables to map roles to actions, and build an admin UI for real-time updates.
+- **Incremental Migration Script**: Automate copying existing constants into the new policy language and deprecate old checks after validation.
+
+# Library Evaluation
+- Evaluate candidate libraries (CASL vs AccessControl) by:  
+  - Reviewing Context7 docs via `mcp_context7_get-library-docs`.  
+  - Checking feature parity (action/subject model, dynamic conditions).  
+  - Verifying ESM support and bundle size impact.  
+  - Defining acceptance criteria for chosen library (performance, ergonomics, community support).
+
+# User Experience
+- **User Personas**:
+  - *Developer*: Full access to all features and settings.
+  - *Admin*: Full access to all completed and production-ready features and settings.
+  - *Manager*: Broad reporting and task management capabilities.
+  - *Auditor*: Read-only audit views.
+  - *Staff*: Task-oriented views and actions.
+  - *Client*: Limited document views and self-service.
+- **Key Flows**:
+  1. **Navigation**: Sidebar items show or hide based on current ability.
+  2. **Clients Table**: Admin-only columns appear for Developer/Admin but hidden for other roles.
+  3. **New Client Button**: Visible only to roles with `client.create` permission.
+  4. **API Calls**: Calls are allowed or rejected via unified middleware and UI feedback.
+- **UI/UX Considerations**:
+  - Graceful fallback states when permissions are missing.
+  - Real-time updates when an admin changes role assignments.
+
+# Technical Architecture
+- **Permission Library**: Use CASL/AccessControl via Context7 for official docs ([CASL docs](https://casl.js.org) / [AccessControl docs](https://onury.io/accesscontrol/)).
+- **Policy Definition**: Write JSON/YAML policies loaded at app start; map actions (e.g., `audit.create`) to roles.
+- **Front-end**: Build a `PermissionProvider` that fetches current user's roles & permissions, exposes `useAbility(permission)` hook, and an `<Authorized>` component.
+- **Back-end**: Refactor `enforcePermission` and update TRPC middleware to use policy engine. Leverage existing `rolePermission` DB table for persistence.
+- **Data Models** (existing Supabase tables):
+  - `roles` (id Int PK, name String unique, description String?)
+  - `permissions` (id Int PK, action String unique, description String?)
+  - `rolePermissions` (roleId Int FK, permissionId Int FK, composite PK)
+- **APIs & Integrations**:
+  - `GET /api/permissions` to fetch current user's allowed actions.
+  - Admin UI endpoints to CRUD role-permission mappings.
+- **Infrastructure**:
+  - Use or update a Node script to backfill Supabase `permissions` table from old permission constants.
+  - OR, run the raw SQL migration in `scripts/migratePermissions.sql` directly via the Supabase SQL editor or CLI (`supabase db query`/`psql`).
+  - CI step to validate that all current checks in code are represented in the `permissions` table.
+
+# Development Roadmap
+1. **Audit & Inventory**: Scan UI and API for all `AUDIT_PERMISSIONS`, `TASK_PERMISSIONS`, `usePermission`, `<RequirePermission>`, and `enforcePermission` usages by:
+  - Running `grep -R "usePermission\(" src/` and `grep -R "enforcePermission" src/`.  
+  - Listing all pages/components that import permission constants or hooks.  
+  - Documenting these in a shared spreadsheet or ticket system.
+2. **Policy Engine Setup**: Install library, configure Context7 docs, define base policies for each role.
+3. **Task Breakdown**:
+  - 1. Choose and install permission library  
+  - 2. Create `policies/permissions.ts` (or JSON) file with action-to-role mappings  
+  - 3. Implement `PermissionProvider` and `useAbility` hook  
+  - 4. Build `<Authorized>` component wrapping `RequirePermission` logic  
+  - 5. Refactor `enforcePermission` middleware to use the policy engine  
+  - 6. Migrate existing constants into Supabase (SQL or Node)  
+  - 7. Incrementally update UI:  
+    - Sidebar items (AppSidebar.tsx)  
+    - Clients table columns (ClientsPage.tsx)  
+    - Action buttons (`Add New Client`, etc.)  
+  - 8. Build Admin UI screens for CRUD on `rolePermissions`  
+  - 9. Write unit & end-to-end tests for each permission boundary  
+  - 10. Add CI validation for permission constants vs database entries
+
+# Logical Dependency Chain
+- 1 → 2 → 3

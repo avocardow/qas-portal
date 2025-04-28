@@ -1,0 +1,43 @@
+# Task ID: 10
+# Title: Implement Permission Management Admin UI
+# Status: pending
+# Dependencies: 7
+# Priority: low
+# Description: Build admin screens for managing role-permission mappings in real-time.
+# Details:
+1. Create new pages for permission management in the admin section
+2. Implement CRUD operations for role-permission mappings
+3. Create a UI to assign/revoke permissions for each role
+4. Add real-time updates using Supabase subscriptions if available
+5. Implement validation to prevent invalid permission assignments
+6. Add confirmation dialogs for potentially disruptive changes
+7. Include search and filtering capabilities for large permission sets
+
+# Test Strategy:
+Create end-to-end tests that verify the admin UI correctly updates role-permission mappings in the database. Test that changes are immediately reflected in the application's permission behavior.
+
+# Subtasks:
+## 1. Design and Build Permission Management Admin UI Pages [pending]
+### Dependencies: None
+### Description: Create new admin section pages dedicated to permission management, including layouts for listing roles, permissions, and their mappings.
+### Details:
+Develop the UI structure for permission management within the admin area. This includes pages for viewing all roles, all permissions, and a matrix or list showing current role-permission mappings. Incorporate search and filtering components to handle large permission sets. Ensure the UI is intuitive and scalable for future enhancements.
+
+## 2. Implement CRUD Operations for Role-Permission Mappings [pending]
+### Dependencies: 10.1
+### Description: Develop backend and frontend logic to create, read, update, and delete role-permission mappings, ensuring data integrity and validation.
+### Details:
+Set up API endpoints and database models for managing role-permission associations. Integrate these endpoints with the admin UI to allow admins to add, modify, or remove mappings. Implement validation logic to prevent invalid or conflicting permission assignments, and ensure changes are reflected accurately in the UI.
+
+## 3. Enable Real-Time Updates and Confirmation Dialogs [pending]
+### Dependencies: 10.2
+### Description: Integrate Supabase subscriptions (or equivalent) for real-time updates and add confirmation dialogs for disruptive changes.
+### Details:
+Utilize Supabase's real-time features to subscribe to changes in role-permission mappings, updating the UI instantly when changes occur. Implement confirmation dialogs for actions that could have significant impact, such as revoking critical permissions or deleting mappings, to prevent accidental disruptions.
+
+## 4. Develop Permission Assignment and Revocation UI with Validation [pending]
+### Dependencies: 10.3
+### Description: Build interactive UI components for assigning and revoking permissions per role, with robust validation and user feedback.
+### Details:
+Create interfaces (e.g., checklists, toggles, or drag-and-drop) for admins to assign or revoke permissions for each role. Integrate validation to prevent invalid assignments (such as conflicting or duplicate permissions) and provide clear feedback or error messages. Ensure the UI leverages real-time updates and confirmation dialogs for a seamless admin experience.
+

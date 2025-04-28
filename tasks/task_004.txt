@@ -1,103 +1,80 @@
 # Task ID: 4
-# Title: Implement Status Filtering
-# Status: done
-# Dependencies: 2, 3
-# Priority: medium
-# Description: Add default Active filter and Show All toggle for Admin users
+# Title: Implement PermissionProvider and useAbility Hook
+# Status: pending
+# Dependencies: 3
+# Priority: high
+# Description: Create a React context provider that loads user permissions and exposes them through a custom hook.
 # Details:
-1. Modify api.clients.getAll.useQuery to accept statusFilter parameter
-2. Set default filter to status === 'active'
-3. Create a UI toggle for 'Show All' that's only visible to Admin users
-4. When toggled, include 'prospect' and 'archived' statuses in the query
-5. Use useRbac() to determine if user has Admin privileges
-6. Ensure filter state persists during pagination
-7. Add visual indicator when 'Show All' is active
+1. Create `src/contexts/PermissionContext.tsx`
+2. Implement a provider that fetches the current user's roles on mount
+3. Initialize the permission library with policies from task #3
+4. Create a `useAbility` hook that returns permission checking functions
+5. Add methods like `can(action, subject)` and `cannot(action, subject)`
+6. Include TypeScript types for all exports
+7. Add caching to prevent unnecessary re-renders
+8. Implement a way to refresh permissions when roles change
 
 # Test Strategy:
-Test default filter shows only active clients. Verify Admin users can see and toggle 'Show All'. Confirm non-Admin users don't see the toggle. Check that filter state persists during pagination.
+Write unit tests with React Testing Library to verify the provider initializes correctly and the hook returns expected values for different user roles. Test that permission changes are reflected correctly.
 
 # Subtasks:
-## 1. Modify API Client Query to Accept Status Filter Parameter [done]
+## 1. Create PermissionContext with TypeScript Types [pending]
 ### Dependencies: None
-### Description: Update the existing api.clients.getAll.useQuery hook to accept a statusFilter parameter that will filter clients by their status.
+### Description: Set up the foundation for the permission system by creating the context structure, defining TypeScript interfaces, and establishing the permission model.
 ### Details:
-1. Locate the api.clients.getAll.useQuery implementation
-2. Add a statusFilter parameter to the query function
-3. Modify the API endpoint URL construction to include the status filter parameter when present
-4. Update the query key to include the statusFilter value to ensure proper cache invalidation
-5. Add TypeScript types for the new parameter if applicable
-6. Test the modified query with different status values
-7. Ensure backward compatibility for existing usages of the hook
+1. Create `src/contexts/PermissionContext.tsx` file
+2. Define TypeScript interfaces for permissions, roles, and context value
+3. Create a basic context structure using React's createContext
+4. Define types for actions (e.g., 'create', 'read', 'update', 'delete') and subjects (e.g., 'project', 'user', 'message')
+5. Create a type-safe interface for the ability-checking functions (can/cannot)
+6. Export the context and necessary types
+7. Test the types by creating a simple mock implementation
 
-## 2. Implement Default Active Status Filter Logic [done]
+Implement using TypeScript generics to ensure type safety across the permission system. Use discriminated union types for actions and subjects to enable autocomplete in consuming components.
+
+## 2. Implement PermissionProvider with Role Fetching [pending]
 ### Dependencies: 4.1
-### Description: Set up the default filtering logic to only show clients with 'active' status when no filter is explicitly specified.
+### Description: Create the provider component that fetches user roles and initializes the permission system with policies from the previous task.
 ### Details:
-1. Create a useState hook to manage the filter state with 'active' as the default value
-2. Update the query call to pass the current filter state
-3. Implement the filter logic in the API call to filter by 'active' status by default
-4. Add unit tests to verify the default filter behavior
-5. Ensure the filter is applied consistently across component re-renders
-6. Verify that the initial data load correctly applies the 'active' filter
-7. Add appropriate loading states during filter transitions
+1. Import the context created in subtask #1
+2. Create a PermissionProvider component that accepts children
+3. Implement a useEffect hook to fetch the current user's roles on mount
+4. Add state to store the fetched roles and loading status
+5. Initialize the permission library with policies from task #3
+6. Create a memoized value object containing permission state and functions
+7. Wrap the children with the context provider
+8. Add error handling for failed role fetching
+9. Implement a refreshPermissions function to reload permissions when needed
 
-## 3. Create Role-Based Access Control for Filter Visibility [done]
-### Dependencies: 4.2
-### Description: Implement logic to determine if a user has Admin privileges using the useRbac() hook, which will control the visibility of the 'Show All' toggle.
-### Details:
-1. Import and implement the useRbac() hook to check for admin privileges
-2. Create a function to determine if the current user has admin access
-3. Set up a React context if needed to make the admin status available throughout the component tree
-4. Add unit tests to verify the RBAC logic works correctly
-5. Implement conditional rendering based on admin status
-6. Ensure the RBAC check is performant and doesn't cause unnecessary re-renders
-7. Add appropriate error handling for RBAC failures
+Use React.memo and useMemo to prevent unnecessary re-renders. Implement proper loading states during the initial fetch. Consider using SWR or React Query for data fetching with built-in caching and revalidation capabilities.
 
-## 4. Develop Show All Toggle UI Component [done]
-### Dependencies: 4.3
-### Description: Create a toggle UI component that allows Admin users to switch between viewing only active clients and viewing all clients including those with 'prospect' and 'archived' statuses.
+## 3. Develop useAbility Hook with Caching [pending]
+### Dependencies: 4.1, 4.2
+### Description: Create a custom hook that provides permission checking functions with performance optimizations to prevent unnecessary re-renders.
 ### Details:
-1. Design a toggle switch component using appropriate UI library (e.g., Material-UI Switch)
-2. Implement the toggle with clear labeling ('Show All')
-3. Style the toggle to be visually distinct and accessible
-4. Add appropriate ARIA attributes for accessibility
-5. Implement conditional rendering to only show the toggle to admin users
-6. Add hover tooltips to explain the toggle functionality
-7. Ensure the toggle state is visually clear (e.g., different colors for on/off states)
+1. Create a new file for the hook (e.g., `src/hooks/useAbility.ts`)
+2. Import the PermissionContext
+3. Implement the useAbility hook that consumes the context
+4. Add the core permission checking methods: can(action, subject) and cannot(action, subject)
+5. Implement memoization for permission check results to prevent re-renders
+6. Add TypeScript generics to ensure type safety
+7. Include error handling for when the hook is used outside the provider
+8. Add unit tests for the hook functionality
 
-## 5. Implement Multi-Status Filter Logic [done]
-### Dependencies: 4.2, 4.4
-### Description: Develop the logic to include 'prospect' and 'archived' statuses in the query when the 'Show All' toggle is activated by an Admin user.
-### Details:
-1. Modify the filter state to handle multiple status values
-2. Update the API query to accept an array of statuses when 'Show All' is active
-3. Implement the logic to include 'prospect' and 'archived' statuses when the toggle is on
-4. Add appropriate type checking for the status array
-5. Optimize the query to handle multiple statuses efficiently
-6. Test the filter with various combinations of statuses
-7. Ensure the UI updates correctly when switching between filtered and unfiltered views
+Use React.useCallback to memoize the permission checking functions. Implement a simple caching mechanism using a Map to store previous check results. Consider adding a debug mode that logs permission checks in development environments.
 
-## 6. Add Visual Indicator for Active Filters [done]
-### Dependencies: 4.4, 4.5
-### Description: Implement a visual indicator that clearly shows when the 'Show All' filter is active, helping users understand which clients are currently being displayed.
+## 4. Implement Permission Refresh Mechanism [pending]
+### Dependencies: 4.2, 4.3
+### Description: Create a system to refresh permissions when user roles change and integrate the permission system with the application.
 ### Details:
-1. Design a visual indicator component (e.g., badge, highlight, or text label)
-2. Implement the indicator to appear when 'Show All' is active
-3. Style the indicator to be noticeable but not distracting
-4. Add animations for state transitions (e.g., fade in/out when filter changes)
-5. Ensure the indicator is accessible (proper contrast, screen reader support)
-6. Add a count of total items being displayed with the current filter
-7. Test the indicator across different screen sizes and ensure it's responsive
+1. Enhance the PermissionProvider to expose a refreshPermissions method
+2. Implement a permission cache invalidation mechanism
+3. Create an event-based system to trigger permission refreshes (e.g., after user profile updates)
+4. Add a usePermissionRefresh hook that components can use to trigger refreshes
+5. Implement optimistic updates for better UX during permission changes
+6. Create a higher-order component (HOC) for protecting routes based on permissions
+7. Add integration tests that verify the refresh mechanism works correctly
+8. Document the complete permission system with usage examples
 
-## 7. Implement Filter State Persistence During Pagination [done]
-### Dependencies: 4.5, 4.6
-### Description: Ensure that the selected filter state persists when users navigate between pages of results, maintaining a consistent view of the data.
-### Details:
-1. Modify the pagination logic to include the current filter state
-2. Update the query key structure to incorporate both pagination and filter parameters
-3. Implement state management to preserve filter settings during navigation
-4. Add URL query parameters to maintain filter state on page refresh
-5. Test pagination with different filter combinations
-6. Optimize data fetching to minimize redundant requests when only changing pages
-7. Ensure the visual indicator remains consistent during pagination
+Use React's useReducer for complex state management of the permission system. Implement a pub/sub pattern for permission change notifications across the application. Consider adding a small localStorage cache to persist permissions between page refreshes for improved performance.
 
