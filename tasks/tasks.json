@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Evaluate and Select Permission Library",
       "description": "Compare CASL and AccessControl libraries based on feature parity, ESM support, bundle size, and community support to select the most appropriate library for our permission engine.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "1. Use Context7 to review documentation for both CASL and AccessControl via `mcp_context7_get-library-docs`\n2. Create a comparison matrix with criteria: action/subject model support, dynamic conditions, ESM compatibility, bundle size, community activity\n3. Build small proof-of-concept implementations with both libraries\n4. Test performance with a representative set of permission rules\n5. Document findings and make a final selection with justification\n6. Install the selected library with `npm install` or `yarn add`",
@@ -60,7 +60,7 @@
       "id": 2,
       "title": "Audit Existing Permission Usage",
       "description": "Scan the codebase to inventory all current permission checks, hooks, and components to ensure complete migration coverage.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "1. Run `grep -R \"usePermission\\(\" src/` to find all hook usages\n2. Run `grep -R \"enforcePermission\" src/` to find all middleware usages\n3. Run `grep -R \"RequirePermission\" src/` to find all component usages\n4. Search for imports of permission constants like `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS`\n5. Document all findings in a spreadsheet with columns: file path, line number, permission type, permission value\n6. Categorize permissions by functional area (client management, audit, tasks, etc.)",
@@ -70,7 +70,7 @@
           "id": 1,
           "title": "Identify and Document Permission Hook Usages",
           "description": "Search the codebase for all instances of permission-related hooks and document their usage.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Run `grep -R \"usePermission(\" src/` to locate all usages of the permission hook. For each result, record the file path, line number, and relevant permission value in a spreadsheet. This ensures that all hook-based permission checks are inventoried for migration coverage."
         },
@@ -78,7 +78,7 @@
           "id": 2,
           "title": "Identify and Document Permission Middleware Usages",
           "description": "Locate all middleware functions enforcing permissions and document their occurrences.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],
@@ -88,7 +88,7 @@
           "id": 3,
           "title": "Identify and Document Permission Component Usages",
           "description": "Search for all permission-enforcing components and document their usage.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],

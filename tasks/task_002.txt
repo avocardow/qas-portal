@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Audit Existing Permission Usage
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Scan the codebase to inventory all current permission checks, hooks, and components to ensure complete migration coverage.
@@ -16,19 +16,19 @@
 Validate completeness by cross-referencing with application routes and features. Ensure no permission checks are missed by reviewing key protected areas of the application.
 
 # Subtasks:
-## 1. Identify and Document Permission Hook Usages [in-progress]
+## 1. Identify and Document Permission Hook Usages [done]
 ### Dependencies: None
 ### Description: Search the codebase for all instances of permission-related hooks and document their usage.
 ### Details:
 Run `grep -R "usePermission(" src/` to locate all usages of the permission hook. For each result, record the file path, line number, and relevant permission value in a spreadsheet. This ensures that all hook-based permission checks are inventoried for migration coverage.
 
-## 2. Identify and Document Permission Middleware Usages [pending]
+## 2. Identify and Document Permission Middleware Usages [in-progress]
 ### Dependencies: 2.1
 ### Description: Locate all middleware functions enforcing permissions and document their occurrences.
 ### Details:
 Run `grep -R "enforcePermission" src/` to find all middleware-based permission checks. For each occurrence, log the file path, line number, and permission value in the same spreadsheet. This step ensures middleware permission checks are included in the audit.
 
-## 3. Identify and Document Permission Component Usages [pending]
+## 3. Identify and Document Permission Component Usages [done]
 ### Dependencies: 2.2
 ### Description: Search for all permission-enforcing components and document their usage.
 ### Details:

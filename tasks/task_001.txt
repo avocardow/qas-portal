@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Evaluate and Select Permission Library
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Compare CASL and AccessControl libraries based on feature parity, ESM support, bundle size, and community support to select the most appropriate library for our permission engine.
