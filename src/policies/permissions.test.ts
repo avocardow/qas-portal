@@ -61,7 +61,7 @@ describe("roleHasPermission", () => {
   });
 
   test("Unknown role returns empty permissions", () => {
-    // @ts-ignore: testing unknown role fallback
+    // @ts-expect-error: testing unknown role fallback
     expect(getPermissionsForRole("UnknownRole" as Role)).toEqual([]);
   });
 }); 
