@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { Role, Permission, getPermissionsForRole, roleHasPermission } from '@/policies/permissions';
+import { Role, Permission, getPermissionsForRole } from '@/policies/permissions';
 
 export interface PermissionContextValue {
   roles: Role[];
