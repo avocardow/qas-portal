@@ -130,7 +130,7 @@
       "id": 3,
       "title": "Create Permission Policy Definitions",
       "description": "Define the central policy file that maps actions to roles, serving as the single source of truth for permissions.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         1,
         2
@@ -156,7 +156,7 @@
             1
           ],
           "details": "1. Create the `policies/permissions.ts` file using the schema designed in subtask 1\n2. Implement the base permission structure with TypeScript interfaces for type safety\n3. Define constants for all action types (e.g., 'user:create', 'client:view')\n4. Group permissions logically by feature area as determined in the schema design\n5. Implement the core roles (Admin, Developer) with their complete permission sets\n6. Add JSDoc comments to document the purpose and usage of each permission group\n7. Create utility functions for permission checking if needed\n8. Write unit tests to verify the structure and basic permission checks\n9. Ensure the implementation follows the centralized policy management best practice",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 3
         },
         {
@@ -187,7 +187,7 @@
       "id": 4,
       "title": "Implement PermissionProvider and useAbility Hook",
       "description": "Create a React context provider that loads user permissions and exposes them through a custom hook.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         3
       ],
@@ -201,7 +201,7 @@
           "description": "Set up the foundation for the permission system by creating the context structure, defining TypeScript interfaces, and establishing the permission model.",
           "dependencies": [],
           "details": "1. Create `src/contexts/PermissionContext.tsx` file\n2. Define TypeScript interfaces for permissions, roles, and context value\n3. Create a basic context structure using React's createContext\n4. Define types for actions (e.g., 'create', 'read', 'update', 'delete') and subjects (e.g., 'project', 'user', 'message')\n5. Create a type-safe interface for the ability-checking functions (can/cannot)\n6. Export the context and necessary types\n7. Test the types by creating a simple mock implementation\n\nImplement using TypeScript generics to ensure type safety across the permission system. Use discriminated union types for actions and subjects to enable autocomplete in consuming components.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -212,7 +212,7 @@
             1
           ],
           "details": "1. Import the context created in subtask #1\n2. Create a PermissionProvider component that accepts children\n3. Implement a useEffect hook to fetch the current user's roles on mount\n4. Add state to store the fetched roles and loading status\n5. Initialize the permission library with policies from task #3\n6. Create a memoized value object containing permission state and functions\n7. Wrap the children with the context provider\n8. Add error handling for failed role fetching\n9. Implement a refreshPermissions function to reload permissions when needed\n\nUse React.memo and useMemo to prevent unnecessary re-renders. Implement proper loading states during the initial fetch. Consider using SWR or React Query for data fetching with built-in caching and revalidation capabilities.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -224,7 +224,7 @@
             2
           ],
           "details": "1. Create a new file for the hook (e.g., `src/hooks/useAbility.ts`)\n2. Import the PermissionContext\n3. Implement the useAbility hook that consumes the context\n4. Add the core permission checking methods: can(action, subject) and cannot(action, subject)\n5. Implement memoization for permission check results to prevent re-renders\n6. Add TypeScript generics to ensure type safety\n7. Include error handling for when the hook is used outside the provider\n8. Add unit tests for the hook functionality\n\nUse React.useCallback to memoize the permission checking functions. Implement a simple caching mechanism using a Map to store previous check results. Consider adding a debug mode that logs permission checks in development environments.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -236,7 +236,7 @@
             3
           ],
           "details": "1. Enhance the PermissionProvider to expose a refreshPermissions method\n2. Implement a permission cache invalidation mechanism\n3. Create an event-based system to trigger permission refreshes (e.g., after user profile updates)\n4. Add a usePermissionRefresh hook that components can use to trigger refreshes\n5. Implement optimistic updates for better UX during permission changes\n6. Create a higher-order component (HOC) for protecting routes based on permissions\n7. Add integration tests that verify the refresh mechanism works correctly\n8. Document the complete permission system with usage examples\n\nUse React's useReducer for complex state management of the permission system. Implement a pub/sub pattern for permission change notifications across the application. Consider adding a small localStorage cache to persist permissions between page refreshes for improved performance.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         }
       ]
@@ -245,7 +245,7 @@
       "id": 5,
       "title": "Build Authorized Component",
       "description": "Create a reusable component that conditionally renders children based on permission checks.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         4
       ],
@@ -257,7 +257,7 @@
           "id": 1,
           "title": "Create Authorized Component File",
           "description": "Create a new file named `Authorized.tsx` in the `src/components` directory.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "This file will serve as the base for the reusable authorized component. Ensure it is correctly placed within your project structure."
         },
@@ -265,7 +265,7 @@
           "id": 2,
           "title": "Implement useAbility Hook Integration",
           "description": "Integrate the `useAbility` hook into the `Authorized` component to handle permission checks.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -275,7 +275,7 @@
           "id": 3,
           "title": "Define Component Props and Types",
           "description": "Define the props for the `Authorized` component, including `action`, `subject`, and an optional `fallback` component.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -285,7 +285,7 @@
           "id": 4,
           "title": "Implement Conditional Rendering Logic",
           "description": "Conditionally render the children of the `Authorized` component based on the permission check using the `useAbility` hook.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2,
             3
@@ -296,7 +296,7 @@
           "id": 5,
           "title": "Optimize for Performance",
           "description": "Optimize the component to prevent unnecessary re-renders.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             4
           ],

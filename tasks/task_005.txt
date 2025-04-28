@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Build Authorized Component
-# Status: pending
+# Status: in-progress
 # Dependencies: 4
 # Priority: high
 # Description: Create a reusable component that conditionally renders children based on permission checks.
@@ -17,31 +17,31 @@
 Write component tests that verify rendering behavior with different permission scenarios. Test with and without fallback components, and verify that updates to permissions correctly affect rendering.
 
 # Subtasks:
-## 1. Create Authorized Component File [pending]
+## 1. Create Authorized Component File [done]
 ### Dependencies: None
 ### Description: Create a new file named `Authorized.tsx` in the `src/components` directory.
 ### Details:
 This file will serve as the base for the reusable authorized component. Ensure it is correctly placed within your project structure.
 
-## 2. Implement useAbility Hook Integration [pending]
+## 2. Implement useAbility Hook Integration [done]
 ### Dependencies: 5.1
 ### Description: Integrate the `useAbility` hook into the `Authorized` component to handle permission checks.
 ### Details:
 Use the `useAbility` hook to fetch or determine the user's abilities. This hook should be part of a library like CASL or a custom implementation.
 
-## 3. Define Component Props and Types [pending]
+## 3. Define Component Props and Types [done]
 ### Dependencies: 5.1
 ### Description: Define the props for the `Authorized` component, including `action`, `subject`, and an optional `fallback` component.
 ### Details:
 Use TypeScript to define the types for these props, ensuring clarity and type safety. The `action` and `subject` props will be used for permission checks, while `fallback` will be displayed if the user lacks permission.
 
-## 4. Implement Conditional Rendering Logic [pending]
+## 4. Implement Conditional Rendering Logic [done]
 ### Dependencies: 5.2, 5.3
 ### Description: Conditionally render the children of the `Authorized` component based on the permission check using the `useAbility` hook.
 ### Details:
 Use the `useAbility` hook to check if the user has the required permission. If they do, render the children; otherwise, render the `fallback` component if provided.
 
-## 5. Optimize for Performance [pending]
+## 5. Optimize for Performance [in-progress]
 ### Dependencies: 5.4
 ### Description: Optimize the component to prevent unnecessary re-renders.
 ### Details:

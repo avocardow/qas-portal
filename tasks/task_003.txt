@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Create Permission Policy Definitions
-# Status: in-progress
+# Status: done
 # Dependencies: 1, 2
 # Priority: high
 # Description: Define the central policy file that maps actions to roles, serving as the single source of truth for permissions.
@@ -120,7 +120,7 @@ export function hasConditionalPermission(
 This implementation provides a type-safe structure with constants for permissions, clear role definitions, and helper functions for permission checks. The conditional permissions use evaluator functions that can be customized for different access control scenarios.
 </info added on 2025-04-28T05:13:04.050Z>
 
-## 2. Implement Core Permission Policy File [in-progress]
+## 2. Implement Core Permission Policy File [done]
 ### Dependencies: 3.1
 ### Description: Create the central permissions.ts file with the defined schema and implement the core role definitions with their associated permissions.
 ### Details:
