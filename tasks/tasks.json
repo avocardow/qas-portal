@@ -546,7 +546,7 @@
           "id": 2,
           "title": "Wrap Action Buttons with Permission Checks",
           "description": "Update all action buttons, including the 'New Client' button, to enforce permission checks using the <Authorized> component or equivalent logic.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],

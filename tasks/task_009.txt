@@ -136,7 +136,7 @@ Identify which columns are admin-only. Use the new permission system to conditio
    ```
 </info added on 2025-04-28T11:30:41.954Z>
 
-## 2. Wrap Action Buttons with Permission Checks [in-progress]
+## 2. Wrap Action Buttons with Permission Checks [done]
 ### Dependencies: 9.1
 ### Description: Update all action buttons, including the 'New Client' button, to enforce permission checks using the <Authorized> component or equivalent logic.
 ### Details:
