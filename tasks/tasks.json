@@ -306,7 +306,7 @@
           "id": 6,
           "title": "Document Usage Examples",
           "description": "Create documentation for the `Authorized` component, including usage examples.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             4
           ],

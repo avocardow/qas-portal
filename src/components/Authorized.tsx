@@ -12,10 +12,21 @@ export type AuthorizedProps = {
 };
 
 /**
- * Usage Example:
+ * Usage Examples:
  *
+ * // Basic usage
  * <Authorized action="read:document" fallback={<div>No access</div>}>
  *   <DocumentContent />
+ * </Authorized>
+ *
+ * // With subject
+ * <Authorized action="update:user" subject={user} fallback={<LoginPrompt />}>
+ *   <UserEditor user={user} />
+ * </Authorized>
+ *
+ * // Without fallback (defaults to null)
+ * <Authorized action="create:document">
+ *   <NewDocumentForm />
  * </Authorized>
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

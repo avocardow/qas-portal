@@ -47,7 +47,7 @@ Use the `useAbility` hook to check if the user has the required permission. If t
 ### Details:
 Use React hooks like `useMemo` or `useCallback` to memoize functions or values that don't change frequently. This ensures that the component only re-renders when necessary.
 
-## 6. Document Usage Examples [in-progress]
+## 6. Document Usage Examples [done]
 ### Dependencies: 5.4
 ### Description: Create documentation for the `Authorized` component, including usage examples.
 ### Details:
