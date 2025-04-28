@@ -389,7 +389,7 @@
           "id": 6,
           "title": "Maintain Backward Compatibility During Migration",
           "description": "Ensure that the migration to the new policy engine does not break existing functionality by supporting legacy permission checks where necessary.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             2
           ],
