@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Build Authorized Component
-# Status: in-progress
+# Status: done
 # Dependencies: 4
 # Priority: high
 # Description: Create a reusable component that conditionally renders children based on permission checks.
@@ -53,7 +53,7 @@ Use React hooks like `useMemo` or `useCallback` to memoize functions or values t
 ### Details:
 Document how to use the component, including how to pass props and how it handles different scenarios (e.g., authorized vs. unauthorized users). Include code snippets to illustrate its usage.
 
-## 7. Test and Validate Component Functionality [in-progress]
+## 7. Test and Validate Component Functionality [done]
 ### Dependencies: 5.5, 5.6
 ### Description: Write tests to validate the functionality of the `Authorized` component.
 ### Details:

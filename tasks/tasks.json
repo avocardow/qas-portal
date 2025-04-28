@@ -341,7 +341,7 @@
           "id": 1,
           "title": "Integrate New Policy Engine into Backend",
           "description": "Install and configure the new policy engine library in the backend codebase to ensure it matches the version and configuration used in the frontend.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Add the policy engine as a dependency in the backend project. Initialize it with the same policy definitions as the frontend, ensuring consistency in permission logic across both environments."
         },

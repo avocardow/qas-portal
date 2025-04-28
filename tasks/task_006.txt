@@ -17,7 +17,7 @@
 Write unit tests for the middleware that verify it correctly allows or denies requests based on user roles. Test with various endpoints and permission scenarios.
 
 # Subtasks:
-## 1. Integrate New Policy Engine into Backend [in-progress]
+## 1. Integrate New Policy Engine into Backend [done]
 ### Dependencies: None
 ### Description: Install and configure the new policy engine library in the backend codebase to ensure it matches the version and configuration used in the frontend.
 ### Details:
