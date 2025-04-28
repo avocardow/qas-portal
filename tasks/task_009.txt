@@ -1,6 +1,6 @@
 # Task ID: 9
 # Title: Update Table and UI Components
-# Status: in-progress
+# Status: done
 # Dependencies: 4, 5
 # Priority: medium
 # Description: Refactor client tables and action buttons to respect the new permission system.
@@ -192,13 +192,13 @@ Locate all action buttons on ClientsPage.tsx and related components. Wrap each b
    - Ensure proper loading states when permission checks are async
 </info added on 2025-04-28T11:38:00.646Z>
 
-## 3. Implement Graceful Fallback States for Restricted Actions [pending]
+## 3. Implement Graceful Fallback States for Restricted Actions [done]
 ### Dependencies: 9.2
 ### Description: Provide user-friendly fallback UI for cases where users lack permissions, such as empty states, tooltips, or messages explaining restricted access.
 ### Details:
 For each restricted action or hidden element, add fallback UI elements (e.g., tooltips, banners, or placeholder text) to inform users why features are unavailable. Ensure these states are accessible and maintain the overall responsive design.
 
-## 4. Test and Validate Permission-Based UI with Multiple User Roles [pending]
+## 4. Test and Validate Permission-Based UI with Multiple User Roles [done]
 ### Dependencies: 9.3
 ### Description: Thoroughly test the updated table and UI components with various user roles to verify correct permission enforcement and responsive behavior.
 ### Details:
