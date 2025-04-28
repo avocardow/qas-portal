@@ -23,7 +23,7 @@ Write unit tests for the middleware that verify it correctly allows or denies re
 ### Details:
 Add the policy engine as a dependency in the backend project. Initialize it with the same policy definitions as the frontend, ensuring consistency in permission logic across both environments.
 
-## 2. Refactor enforcePermission Middleware to Use Policy Engine [pending]
+## 2. Refactor enforcePermission Middleware to Use Policy Engine [in-progress]
 ### Dependencies: 6.1
 ### Description: Update the existing enforcePermission middleware to utilize the new policy engine for permission checks instead of the legacy logic.
 ### Details:

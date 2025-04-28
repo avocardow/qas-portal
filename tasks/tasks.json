@@ -349,7 +349,7 @@
           "id": 2,
           "title": "Refactor enforcePermission Middleware to Use Policy Engine",
           "description": "Update the existing enforcePermission middleware to utilize the new policy engine for permission checks instead of the legacy logic.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],

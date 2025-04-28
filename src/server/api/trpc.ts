@@ -160,36 +160,28 @@ export const enforcePermission = (permission: string) =>
     if (!ctx.session?.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
+    const userRole = ctx.session.user.role;
     // 🚀 Developers bypass all permission checks
-    if (ctx.session.user.role === "Developer") {
-      logAccessDecision(ctx.session.user.role, permission, true);
+    if (userRole === "Developer") {
+      logAccessDecision(userRole, permission, true);
       return next({ ctx: { session: ctx.session } });
-    }
-    const userRoleName = ctx.session.user.role;
-    if (!userRoleName) {
-      logAccessDecision("", permission, false);
-      throwForbiddenError("Access denied");
     }
     // Static policy engine check
-    const staticAllowed = hasPermission(userRoleName as PolicyRole, permission);
+    const staticAllowed = hasPermission(userRole as PolicyRole, permission);
     if (staticAllowed) {
-      logAccessDecision(userRoleName, permission, true);
+      logAccessDecision(userRole, permission, true);
       return next({ ctx: { session: ctx.session } });
     }
+    // Fallback dynamic permission lookup in DB
     const permissionRecord = await ctx.db.rolePermission.findFirst({
-      where: {
-        role: { name: userRoleName },
-        permission: { action: permission },
-      },
+      where: { role: { name: userRole }, permission: { action: permission } },
     });
-    const allowed = Boolean(permissionRecord);
-    logAccessDecision(userRoleName, permission, allowed);
-    if (!allowed) {
+    const dynamicAllowed = Boolean(permissionRecord);
+    logAccessDecision(userRole, permission, dynamicAllowed);
+    if (!dynamicAllowed) {
       throwForbiddenError("Insufficient permissions");
     }
-    return next({
-      ctx: { session: ctx.session },
-    });
+    return next({ ctx: { session: ctx.session } });
   });
 
 // Procedure builder to require a specific permission
