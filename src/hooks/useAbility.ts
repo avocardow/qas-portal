@@ -9,9 +9,10 @@ export interface UseAbilityHook {
 }
 
 export function useAbility(): UseAbilityHook {
-  const { can: contextCan, cannot: contextCannot, roles, permissions } = usePermissionContext();
+  const { can: contextCan, roles, permissions } = usePermissionContext();
 
   // Reset cache when roles or permissions change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const cache = useMemo(() => new Map<string, boolean>(), [roles, permissions]);
 
   const can = useCallback((permission: Permission | string): boolean => {
