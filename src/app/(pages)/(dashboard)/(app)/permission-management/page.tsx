@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import PermissionManagementClient from './PermissionManagementClient';
 
 export const metadata: Metadata = {
   title: "Permission Management | TailAdmin - Admin",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function PermissionManagementPage() {
   return (
     <DashboardPlaceholderPageTemplate heading="Permission Management">
-      {/* Future UI components will go here */}
+      <PermissionManagementClient />
     </DashboardPlaceholderPageTemplate>
   );
 }

@@ -20,7 +20,14 @@ export const rolePermissionRouter = createTRPCRouter({
         include: { role: true, permission: true },
       });
     }),
-
+  getRoles: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.GET_ALL)
+    .query(async ({ ctx }) => {
+      return ctx.db.role.findMany();
+    }),
+  getPermissions: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.GET_ALL)
+    .query(async ({ ctx }) => {
+      return ctx.db.permission.findMany();
+    }),
   assign: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.ASSIGN)
     .input(assignSchema)
     .mutation(async ({ ctx, input }) => {

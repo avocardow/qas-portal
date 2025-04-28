@@ -598,17 +598,17 @@
           "id": 2,
           "title": "Implement CRUD Operations for Role-Permission Mappings",
           "description": "Develop backend and frontend logic to create, read, update, and delete role-permission mappings, ensuring data integrity and validation.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],
-          "details": "Set up API endpoints and database models for managing role-permission associations. Integrate these endpoints with the admin UI to allow admins to add, modify, or remove mappings. Implement validation logic to prevent invalid or conflicting permission assignments, and ensure changes are reflected accurately in the UI."
+          "details": "Set up API endpoints and database models for managing role-permission associations. Integrate these endpoints with the admin UI to allow admins to add, modify, or remove mappings. Implement validation logic to prevent invalid or conflicting permission assignments, and ensure changes are reflected accurately in the UI.\n\n<info added on 2025-04-28T14:19:32.469Z>\nFor implementing the TRPC router for role-permission mappings:\n\n```typescript\n// src/server/api/routers/rolePermission.ts\nimport { z } from \"zod\";\nimport { createTRPCRouter, permissionProcedure } from \"../trpc\";\nimport { ROLE_PERMISSION_PERMISSIONS } from \"~/constants/permissions\";\n\nexport const rolePermissionRouter = createTRPCRouter({\n  getAll: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.READ)\n    .query(async ({ ctx }) => {\n      return ctx.db.rolePermission.findMany({\n        include: { role: true, permission: true },\n      });\n    }),\n    \n  assign: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.CREATE)\n    .input(z.object({\n      roleId: z.string(),\n      permissionId: z.string(),\n    }))\n    .mutation(async ({ ctx, input }) => {\n      return ctx.db.rolePermission.create({\n        data: {\n          roleId: input.roleId,\n          permissionId: input.permissionId,\n        },\n      });\n    }),\n    \n  unassign: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.DELETE)\n    .input(z.object({\n      roleId: z.string(),\n      permissionId: z.string(),\n    }))\n    .mutation(async ({ ctx, input }) => {\n      return ctx.db.rolePermission.delete({\n        where: {\n          roleId_permissionId: {\n            roleId: input.roleId,\n            permissionId: input.permissionId,\n          },\n        },\n      });\n    }),\n});\n\n// Update src/server/api/root.ts\n// Add: rolePermission: rolePermissionRouter,\n\n// Add to src/constants/permissions.ts\nexport const ROLE_PERMISSION_PERMISSIONS = {\n  CREATE: \"role_permission.create\",\n  READ: \"role_permission.read\",\n  UPDATE: \"role_permission.update\",\n  DELETE: \"role_permission.delete\",\n} as const;\n```\n\nInclude validation in the assign procedure to check for existing mappings and role/permission validity before creating new associations.\n</info added on 2025-04-28T14:19:32.469Z>"
         },
         {
           "id": 3,
           "title": "Enable Real-Time Updates and Confirmation Dialogs",
           "description": "Integrate Supabase subscriptions (or equivalent) for real-time updates and add confirmation dialogs for disruptive changes.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
