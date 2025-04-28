@@ -57,20 +57,18 @@ describe('ClientsPage RBAC', () => {
     expect(addButton).toBeTruthy();
   });
 
-  test('allows Manager to view page without Add New Client button', () => {
+  test('shows disabled Add New Client button for Manager when lacking permissions', () => {
     vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });
     renderWithPermissionProvider(<ClientsPage />);
-    expect(screen.queryByRole('button', { name: /add new client/i })).toBeNull();
-    const title = screen.getByText(/clients/i);
-    expect(title).toBeTruthy();
+    const button = screen.getByRole('button', { name: /add new client/i });
+    expect(button.disabled).toBe(true);
   });
 
-  test('allows Client to view page without Add New Client button', () => {
+  test('shows disabled Add New Client button for Client when lacking permissions', () => {
     vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Client', permissions: [], canAccess: () => true });
     renderWithPermissionProvider(<ClientsPage />);
-    expect(screen.queryByRole('button', { name: /add new client/i })).toBeNull();
-    const titleClient = screen.getByText(/clients/i);
-    expect(titleClient).toBeTruthy();
+    const button = screen.getByRole('button', { name: /add new client/i });
+    expect(button.disabled).toBe(true);
   });
 
   test('routes to New Client page when Add New Client button is clicked', () => {

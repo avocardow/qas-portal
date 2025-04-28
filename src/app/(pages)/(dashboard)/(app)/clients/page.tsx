@@ -263,12 +263,22 @@ export default function ClientsPage() {
         <ComponentCard
           title="Client Directory"
           actions={
-            (role === "Admin" || role === "Developer") && (
+            (role === "Admin" || role === "Developer") ? (
               <Button
                 aria-label="Add New Client"
                 size="sm"
                 variant="outline"
                 onClick={() => router.push('/clients/new')}
+              >
+                Add New Client
+              </Button>
+            ) : (
+              <Button
+                aria-label="Add New Client"
+                size="sm"
+                variant="outline"
+                disabled
+                title="Insufficient permissions"
               >
                 Add New Client
               </Button>
