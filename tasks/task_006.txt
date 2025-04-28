@@ -35,19 +35,19 @@ Replace the old permission checking code in src/middleware/enforcePermission.ts 
 ### Details:
 Define and return clear HTTP error codes (e.g., 403 Forbidden) and structured error messages when permissions are denied. Ensure error responses are consistent with frontend handling and include relevant details for debugging.
 
-## 4. Update TRPC Middleware to Use New Enforcement Logic [pending]
+## 4. Update TRPC Middleware to Use New Enforcement Logic [done]
 ### Dependencies: 6.2
 ### Description: Modify the TRPC middleware layer to invoke the refactored enforcePermission middleware, ensuring all API endpoints are protected by the new policy engine.
 ### Details:
 Replace any direct permission checks or legacy enforcement logic in TRPC middleware with calls to the updated enforcePermission middleware. Test that all routes requiring permissions are correctly guarded.
 
-## 5. Add Logging for Permission Denials [pending]
+## 5. Add Logging for Permission Denials [done]
 ### Dependencies: 6.3
 ### Description: Implement logging within the middleware to record details of permission denials for auditing and debugging purposes.
 ### Details:
 Integrate a logging solution (e.g., Winston, Bunyan) to capture user identity, requested action, resource, and reason for denial whenever a permission check fails. Ensure logs are structured and do not expose sensitive information.
 
-## 6. Maintain Backward Compatibility During Migration [pending]
+## 6. Maintain Backward Compatibility During Migration [in-progress]
 ### Dependencies: 6.2
 ### Description: Ensure that the migration to the new policy engine does not break existing functionality by supporting legacy permission checks where necessary.
 ### Details:

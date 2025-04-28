@@ -369,7 +369,7 @@
           "id": 4,
           "title": "Update TRPC Middleware to Use New Enforcement Logic",
           "description": "Modify the TRPC middleware layer to invoke the refactored enforcePermission middleware, ensuring all API endpoints are protected by the new policy engine.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -379,7 +379,7 @@
           "id": 5,
           "title": "Add Logging for Permission Denials",
           "description": "Implement logging within the middleware to record details of permission denials for auditing and debugging purposes.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -389,7 +389,7 @@
           "id": 6,
           "title": "Maintain Backward Compatibility During Migration",
           "description": "Ensure that the migration to the new policy engine does not break existing functionality by supporting legacy permission checks where necessary.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2
           ],

@@ -17,8 +17,9 @@ import {
   throwForbiddenError,
   logAccessDecision,
 } from "@/server/api/utils/rbac";
-import { hasPermission } from "@/utils/permissionUtils";
+import { hasPermission, canAccessPermission } from "@/utils/permissionUtils";
 import type { Role as PolicyRole } from "@/policies/permissions";
+import { logger } from "@/server/api/utils/logger";
 
 /**
  * 1. CONTEXT
@@ -158,10 +159,12 @@ export const adminOrManagerProcedure = protectedProcedure.use(
 export const enforcePermission = (permission: string) =>
   t.middleware(async ({ ctx, next }) => {
     if (!ctx.session?.user) {
+      logger.warn("Unauthorized access attempt", { permission });
       throw new TRPCError({ code: "UNAUTHORIZED", message: "User is not authenticated" });
     }
     const role = ctx.session.user.role;
     if (!role) {
+      logger.warn("Permission denied: no role", { userId: ctx.session?.user?.id, permission });
       logAccessDecision("", permission, false);
       throwForbiddenError(`Insufficient permissions for action '${permission}'`);
     }
@@ -183,6 +186,14 @@ export const enforcePermission = (permission: string) =>
     const dynamicAllowed = Boolean(permissionRecord);
     logAccessDecision(role, permission, dynamicAllowed);
     if (!dynamicAllowed) {
+      // Legacy RBAC policy fallback for backward compatibility
+      const legacyAllowed = canAccessPermission(role as PolicyRole, permission);
+      if (legacyAllowed) {
+        logAccessDecision(role, permission, true);
+        logger.info("Legacy permission allowed", { userId: ctx.session.user.id, role, permission });
+        return next({ ctx: { session: ctx.session } });
+      }
+      logger.warn("Permission denied", { userId: ctx.session.user.id, role, permission });
       throwForbiddenError(`Insufficient permissions for action '${permission}'`);
     }
     return next({ ctx: { session: ctx.session } });
