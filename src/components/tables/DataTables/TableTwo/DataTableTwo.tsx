@@ -18,7 +18,7 @@ import {
   XMarkIcon,
 } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
-import Authorized from "@/components/Authorized";
+import { useRole } from '@/context/RbacContext';
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -89,6 +89,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   onEdit,
 }: DataTableTwoProps) => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const role = useRole();
 
   // Default columns if not provided
   const baseColumns = React.useMemo<ColumnDef[]>(() => [
@@ -398,19 +399,15 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           </TableCell>
                         );
                       })}
-                      {(onView || onEdit) && (
+                      {(onView || role === 'Admin') && (
                         <TableCell className="p-4 whitespace-nowrap">
-                          {onView && (
-                            <Authorized action="view:client" subject={item} fallback={null}>
-                              <ViewActionButton onClick={() => onView(item)} />
-                            </Authorized>
+                          {onView && (role === 'Admin' || role === 'Manager' || role === 'Client') && (
+                            <ViewActionButton onClick={() => onView(item)} />
                           )}
-                          {onEdit && (
-                            <Authorized action="edit:client" subject={item} fallback={null}>
-                              <button onClick={() => onEdit(item)} aria-label="Edit" className="ml-2">
-                                <PencilIcon aria-hidden="true" />
-                              </button>
-                            </Authorized>
+                          {role === 'Admin' && (
+                            <button onClick={() => onEdit?.(item)} aria-label="Edit" className="ml-2">
+                              <PencilIcon aria-hidden="true" />
+                            </button>
                           )}
                         </TableCell>
                       )}
