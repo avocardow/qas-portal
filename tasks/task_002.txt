@@ -22,7 +22,7 @@ Validate completeness by cross-referencing with application routes and features.
 ### Details:
 Run `grep -R "usePermission(" src/` to locate all usages of the permission hook. For each result, record the file path, line number, and relevant permission value in a spreadsheet. This ensures that all hook-based permission checks are inventoried for migration coverage.
 
-## 2. Identify and Document Permission Middleware Usages [in-progress]
+## 2. Identify and Document Permission Middleware Usages [done]
 ### Dependencies: 2.1
 ### Description: Locate all middleware functions enforcing permissions and document their occurrences.
 ### Details:
@@ -34,7 +34,7 @@ Run `grep -R "enforcePermission" src/` to find all middleware-based permission c
 ### Details:
 Run `grep -R "RequirePermission" src/` to find all component-based permission checks. Record each instance with file path, line number, and permission value in the spreadsheet. This captures all UI-level permission enforcement.
 
-## 4. Audit Permission Constant Imports [pending]
+## 4. Audit Permission Constant Imports [in-progress]
 ### Dependencies: 2.3
 ### Description: Search for and document all imports of permission constants throughout the codebase.
 ### Details:

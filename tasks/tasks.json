@@ -78,7 +78,7 @@
           "id": 2,
           "title": "Identify and Document Permission Middleware Usages",
           "description": "Locate all middleware functions enforcing permissions and document their occurrences.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -98,7 +98,7 @@
           "id": 4,
           "title": "Audit Permission Constant Imports",
           "description": "Search for and document all imports of permission constants throughout the codebase.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             3
           ],
