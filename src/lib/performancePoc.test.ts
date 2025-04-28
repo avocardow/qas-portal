@@ -1,6 +1,5 @@
 import { performance } from 'perf_hooks';
 import { defineArticleAbilities, Article } from './caslPoc';
-import { canReadAny, canUpdateOwn, canDeleteAny } from './accessControlPoc';
 
 describe('Performance and Bundle Size Testing POC', () => {
   const iterations = 10000;
@@ -24,16 +23,5 @@ describe('Performance and Bundle Size Testing POC', () => {
     }
     const end = performance.now();
     console.log(`CASL permission check average: ${((end - start) / iterations).toFixed(4)} ms`);
-  });
-
-  it('measures AccessControl permission check time (avg per check)', () => {
-    const start = performance.now();
-    for (let i = 0; i < iterations; i++) {
-      canReadAny('user');
-      canUpdateOwn('user');
-      canDeleteAny('admin');
-    }
-    const end = performance.now();
-    console.log(`AccessControl permission check batch average: ${((end - start) / (iterations * 3)).toFixed(4)} ms`);
   });
 }); 

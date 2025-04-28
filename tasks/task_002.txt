@@ -16,7 +16,7 @@
 Validate completeness by cross-referencing with application routes and features. Ensure no permission checks are missed by reviewing key protected areas of the application.
 
 # Subtasks:
-## 1. Identify and Document Permission Hook Usages [pending]
+## 1. Identify and Document Permission Hook Usages [in-progress]
 ### Dependencies: None
 ### Description: Search the codebase for all instances of permission-related hooks and document their usage.
 ### Details:

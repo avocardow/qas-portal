@@ -1,6 +1,5 @@
 #!/usr/bin/env tsx
 import { defineArticleAbilities, Article } from '../src/lib/caslPoc';
-import { canReadAny, canUpdateOwn, canDeleteAny } from '../src/lib/accessControlPoc';
 import { execSync } from 'child_process';
 
 const iterations = 100000;
@@ -29,18 +28,7 @@ measure('CASL can delete (admin)', () => {
   ability.can('delete', 'Article');
 });
 
-// AccessControl benchmarks
-measure('AC canReadAny (user)', () => {
-  canReadAny('user');
-});
-measure('AC canUpdateOwn (user)', () => {
-  canUpdateOwn('user');
-});
-measure('AC canDeleteAny (admin)', () => {
-  canDeleteAny('admin');
-});
-
-// Bundle size checks
+// Bundle size check for CASL
 console.log('\nBundle Sizes');
 function getSize(folder: string): string {
   try {
@@ -51,5 +39,4 @@ function getSize(folder: string): string {
     return 'N/A';
   }
 }
-console.log(`CASL size: ${getSize('node_modules/@casl/ability')}`);
-console.log(`AccessControl size: ${getSize('node_modules/accesscontrol')}`); 
+console.log(`CASL size: ${getSize('node_modules/@casl/ability')}`); 
