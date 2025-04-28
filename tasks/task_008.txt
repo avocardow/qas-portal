@@ -159,7 +159,7 @@ Create tests that render the sidebar with different user roles and verify that t
    - Manually test layout stability by toggling permissions
    - Verify that no layout shifts occur when items are hidden
 
-## 3. Implement Permission-Based Navigation Items [pending]
+## 3. Implement Permission-Based Navigation Items [done]
 ### Dependencies: 8.1, 8.2
 ### Description: Apply the Authorized component to each navigation item and replace any existing permission hooks with useAbility.
 ### Details:
@@ -182,6 +182,59 @@ Create tests that render the sidebar with different user roles and verify that t
    - Test each navigation item with different permission sets
    - Verify that items appear and disappear correctly based on permissions
    - Check accessibility with screen reader and keyboard navigation tests
+
+<info added on 2025-04-28T11:14:25.291Z>
+Here's additional implementation information for subtask 8.3:
+
+```typescript
+// Implementation example for AppSidebar.tsx
+import { useAbility } from 'src/hooks/useAbility';
+import { Authorized } from 'src/components/Authorized';
+import { pagePermissionMap } from 'src/config/permissions';
+
+// Example of wrapping navigation items with Authorized component
+const TeamNavigationItems = () => {
+  return (
+    <>
+      {teamPages.map((page) => (
+        <Authorized 
+          key={page.path}
+          action={pagePermissionMap[page.path] || 'read'} 
+          subject="teams"
+          fallback={null} // Completely remove from DOM for accessibility
+        >
+          <SidebarItem 
+            to={page.path}
+            label={page.label}
+            icon={page.icon}
+          />
+        </Authorized>
+      ))}
+    </>
+  );
+};
+```
+
+Implementation notes:
+- When refactoring, ensure `fallback={null}` is used consistently to completely unmount unauthorized items from the DOM
+- Add data-testid attributes to navigation containers for easier testing: `data-testid="authorized-nav-item"`
+- For keyboard navigation, verify tab order is preserved when items are filtered by permissions
+- Create a utility function to test permission combinations:
+```typescript
+// src/utils/testPermissions.ts
+export const simulateUserWithPermissions = (permissions) => {
+  // Mock the useAbility hook for testing different permission scenarios
+  jest.mock('src/hooks/useAbility', () => ({
+    useAbility: () => ({
+      can: (action, subject) => permissions.some(p => 
+        p.action === action && p.subject === subject
+      )
+    })
+  }));
+};
+```
+- Check for any permission-based logic in related components: `MobileNavigation.tsx`, `HeaderNavigation.tsx`, and ensure consistent implementation
+</info added on 2025-04-28T11:14:25.291Z>
 
 ## 4. Test and Optimize Permission-Based Navigation [pending]
 ### Dependencies: 8.1, 8.2, 8.3

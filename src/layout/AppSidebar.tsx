@@ -114,7 +114,7 @@ const AppSidebar: React.FC = () => {
                 {teamPages.map((page) => {
                   const permission = pagePermissionMap[page.path];
                   const navItem = (
-                    <li key={page.name}>
+                    <li key={page.name} data-testid={`nav-item-${page.name.toLowerCase()}`}>
                       <Link
                         href={page.path}
                         className={`menu-item group ${
@@ -126,6 +126,8 @@ const AppSidebar: React.FC = () => {
                             ? "lg:justify-center"
                             : "justify-start"
                         }`}
+                        tabIndex={permission ? undefined : 0}
+                        aria-hidden={permission ? undefined : false}
                       >
                         <span className="menu-item-icon-inactive">
                           <span className="inline-block h-3 w-3 rounded-full bg-gray-400"></span>
@@ -137,7 +139,7 @@ const AppSidebar: React.FC = () => {
                     </li>
                   );
                   return permission ? (
-                    <Authorized action={permission} key={page.name}>
+                    <Authorized action={permission} key={page.name} fallback={null}>
                       {navItem}
                     </Authorized>
                   ) : (
