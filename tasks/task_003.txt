@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Create Permission Policy Definitions
-# Status: pending
+# Status: in-progress
 # Dependencies: 1, 2
 # Priority: high
 # Description: Define the central policy file that maps actions to roles, serving as the single source of truth for permissions.
@@ -17,7 +17,7 @@
 Write unit tests that validate the policy file loads correctly and returns expected permissions for each role. Test edge cases like conditional permissions and role inheritance if applicable.
 
 # Subtasks:
-## 1. Design Permission Schema and Structure [pending]
+## 1. Design Permission Schema and Structure [done]
 ### Dependencies: None
 ### Description: Define the schema and structure for the central permission policy file based on RBAC principles, ensuring it can represent all required roles and actions while supporting conditional permissions.
 ### Details:
@@ -29,6 +29,96 @@ Write unit tests that validate the policy file loads correctly and returns expec
 6. Create a draft structure that follows the least privilege principle
 7. Test the schema with sample role definitions to ensure it meets all requirements
 8. Validate that the schema can represent all permissions discovered in the audit
+
+<info added on 2025-04-28T05:13:04.050Z>
+Here's additional information for the schema implementation:
+
+```typescript
+// src/policies/permissions.ts
+
+// Permission constants grouped by feature area
+export const UserPermissions = {
+  CREATE_USER: 'user:create',
+  READ_USER: 'user:read',
+  UPDATE_USER: 'user:update',
+  DELETE_USER: 'user:delete',
+  LIST_USERS: 'user:list',
+};
+
+export const ProjectPermissions = {
+  CREATE_PROJECT: 'project:create',
+  READ_PROJECT: 'project:read',
+  UPDATE_PROJECT: 'project:update',
+  DELETE_PROJECT: 'project:delete',
+  LIST_PROJECTS: 'project:list',
+};
+
+// Add more feature areas as needed
+
+// Permission type definition
+export type Permission = string;
+
+// Condition type for conditional permissions
+export type PermissionCondition = {
+  type: 'ownership' | 'team' | 'department' | 'custom';
+  evaluator: (user: any, resource: any) => boolean;
+};
+
+// Role definition with conditional permissions
+export type Role = {
+  name: string;
+  description: string;
+  permissions: Permission[];
+  conditionalPermissions?: {
+    permission: Permission;
+    condition: PermissionCondition;
+  }[];
+};
+
+// Example role implementation
+export const roles: Record<string, Role> = {
+  DEVELOPER: {
+    name: 'Developer',
+    description: 'Standard developer with limited access',
+    permissions: [
+      UserPermissions.READ_USER,
+      ProjectPermissions.READ_PROJECT,
+      ProjectPermissions.LIST_PROJECTS,
+    ],
+    conditionalPermissions: [
+      {
+        permission: ProjectPermissions.UPDATE_PROJECT,
+        condition: {
+          type: 'ownership',
+          evaluator: (user, project) => project.ownerId === user.id,
+        },
+      },
+    ],
+  },
+  // Define other roles similarly
+};
+
+// Helper function to check permissions
+export function hasPermission(userRole: string, permission: Permission): boolean {
+  const role = roles[userRole];
+  return role?.permissions.includes(permission) || false;
+}
+
+// Helper for conditional permissions
+export function hasConditionalPermission(
+  userRole: string, 
+  permission: Permission, 
+  user: any, 
+  resource: any
+): boolean {
+  const role = roles[userRole];
+  const conditionalPerm = role?.conditionalPermissions?.find(cp => cp.permission === permission);
+  return conditionalPerm ? conditionalPerm.condition.evaluator(user, resource) : false;
+}
+```
+
+This implementation provides a type-safe structure with constants for permissions, clear role definitions, and helper functions for permission checks. The conditional permissions use evaluator functions that can be customized for different access control scenarios.
+</info added on 2025-04-28T05:13:04.050Z>
 
 ## 2. Implement Core Permission Policy File [pending]
 ### Dependencies: 3.1
