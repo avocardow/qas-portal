@@ -546,11 +546,11 @@
           "id": 2,
           "title": "Wrap Action Buttons with Permission Checks",
           "description": "Update all action buttons, including the 'New Client' button, to enforce permission checks using the <Authorized> component or equivalent logic.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],
-          "details": "Locate all action buttons on ClientsPage.tsx and related components. Wrap each button with the <Authorized> component, specifying the required permission. Ensure that buttons are hidden or disabled for users lacking the necessary permissions, and that the UI remains consistent."
+          "details": "Locate all action buttons on ClientsPage.tsx and related components. Wrap each button with the <Authorized> component, specifying the required permission. Ensure that buttons are hidden or disabled for users lacking the necessary permissions, and that the UI remains consistent.\n\n<info added on 2025-04-28T11:38:00.646Z>\n## Implementation Plan\n\n1. **Button Identification**:\n   - Primary buttons: 'Add New Client', 'Export', 'Bulk Actions'\n   - Row action buttons: 'Edit', 'Delete', 'View Details'\n   - Filter/sort controls if they trigger sensitive actions\n\n2. **Permission Structure**:\n   - Define clear permission constants in a central location:\n   ```typescript\n   // permissions.ts\n   export const PERMISSIONS = {\n     CLIENTS: {\n       CREATE: 'clients:create',\n       READ: 'clients:read',\n       UPDATE: 'clients:update',\n       DELETE: 'clients:delete',\n       EXPORT: 'clients:export'\n     }\n   };\n   ```\n\n3. **Implementation Examples**:\n   ```tsx\n   // For primary actions\n   <Authorized permission={PERMISSIONS.CLIENTS.CREATE} fallback={null}>\n     <Button onClick={handleAddClient}>Add New Client</Button>\n   </Authorized>\n\n   // For row actions with fallback UI\n   <Authorized \n     permission={PERMISSIONS.CLIENTS.UPDATE} \n     fallback={<Button disabled tooltip=\"Insufficient permissions\">Edit</Button>}>\n     <Button onClick={() => handleEdit(client.id)}>Edit</Button>\n   </Authorized>\n   ```\n\n4. **Testing Strategy**:\n   - Create test cases with mock permission sets\n   - Verify button presence/absence with different user roles\n   - Test fallback UI rendering when specified\n   - Ensure action handlers aren't triggered when permissions are missing\n\n5. **Edge Cases**:\n   - Handle compound actions requiring multiple permissions\n   - Consider permission inheritance for nested components\n   - Ensure proper loading states when permission checks are async\n</info added on 2025-04-28T11:38:00.646Z>"
         },
         {
           "id": 3,

@@ -136,11 +136,61 @@ Identify which columns are admin-only. Use the new permission system to conditio
    ```
 </info added on 2025-04-28T11:30:41.954Z>
 
-## 2. Wrap Action Buttons with Permission Checks [pending]
+## 2. Wrap Action Buttons with Permission Checks [in-progress]
 ### Dependencies: 9.1
 ### Description: Update all action buttons, including the 'New Client' button, to enforce permission checks using the <Authorized> component or equivalent logic.
 ### Details:
 Locate all action buttons on ClientsPage.tsx and related components. Wrap each button with the <Authorized> component, specifying the required permission. Ensure that buttons are hidden or disabled for users lacking the necessary permissions, and that the UI remains consistent.
+
+<info added on 2025-04-28T11:38:00.646Z>
+## Implementation Plan
+
+1. **Button Identification**:
+   - Primary buttons: 'Add New Client', 'Export', 'Bulk Actions'
+   - Row action buttons: 'Edit', 'Delete', 'View Details'
+   - Filter/sort controls if they trigger sensitive actions
+
+2. **Permission Structure**:
+   - Define clear permission constants in a central location:
+   ```typescript
+   // permissions.ts
+   export const PERMISSIONS = {
+     CLIENTS: {
+       CREATE: 'clients:create',
+       READ: 'clients:read',
+       UPDATE: 'clients:update',
+       DELETE: 'clients:delete',
+       EXPORT: 'clients:export'
+     }
+   };
+   ```
+
+3. **Implementation Examples**:
+   ```tsx
+   // For primary actions
+   <Authorized permission={PERMISSIONS.CLIENTS.CREATE} fallback={null}>
+     <Button onClick={handleAddClient}>Add New Client</Button>
+   </Authorized>
+
+   // For row actions with fallback UI
+   <Authorized 
+     permission={PERMISSIONS.CLIENTS.UPDATE} 
+     fallback={<Button disabled tooltip="Insufficient permissions">Edit</Button>}>
+     <Button onClick={() => handleEdit(client.id)}>Edit</Button>
+   </Authorized>
+   ```
+
+4. **Testing Strategy**:
+   - Create test cases with mock permission sets
+   - Verify button presence/absence with different user roles
+   - Test fallback UI rendering when specified
+   - Ensure action handlers aren't triggered when permissions are missing
+
+5. **Edge Cases**:
+   - Handle compound actions requiring multiple permissions
+   - Consider permission inheritance for nested components
+   - Ensure proper loading states when permission checks are async
+</info added on 2025-04-28T11:38:00.646Z>
 
 ## 3. Implement Graceful Fallback States for Restricted Actions [pending]
 ### Dependencies: 9.2

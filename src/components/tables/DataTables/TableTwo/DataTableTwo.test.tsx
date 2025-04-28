@@ -5,6 +5,8 @@ import "@testing-library/jest-dom";
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
+import { PermissionProvider } from '@/contexts/PermissionContext';
+import { SessionProvider } from 'next-auth/react';
 
 // Mock useRole hook
 vi.mock("@/context/RbacContext", () => {
@@ -51,6 +53,14 @@ const baseColumns: DataTableTwoProps["columns"] = [
   { key: "name", header: "Name" },
 ];
 
+function renderWithPermissionProvider(ui) {
+  return render(
+    <SessionProvider session={null}>
+      <PermissionProvider>{ui}</PermissionProvider>
+    </SessionProvider>
+  );
+}
+
 describe("DataTableTwo action buttons", () => {
   beforeEach(() => {
     (useRole as jest.Mock).mockReset();
@@ -63,7 +73,7 @@ describe("DataTableTwo action buttons", () => {
   it("renders View and Edit buttons for Admin role and triggers onView", async () => {
     (useRole as jest.Mock).mockReturnValue("Admin");
     const handleView = vi.fn();
-    render(
+    renderWithPermissionProvider(
       <DataTableTwo
         data={mockData}
         columns={baseColumns}
@@ -88,7 +98,7 @@ describe("DataTableTwo action buttons", () => {
       cleanup(); // Clean up after each render
       (useRole as jest.Mock).mockReturnValue(role);
       const handleView = vi.fn();
-      render(
+      renderWithPermissionProvider(
         <DataTableTwo
           data={mockData}
           columns={baseColumns}
@@ -110,7 +120,7 @@ describe("DataTableTwo action buttons", () => {
 
   it("renders no action buttons if no onView or insufficient role", () => {
     (useRole as jest.Mock).mockReturnValue("Staff");
-    render(
+    renderWithPermissionProvider(
       <DataTableTwo
         data={mockData}
         columns={baseColumns}
@@ -140,7 +150,7 @@ describe("DataTableTwo accessibility", () => {
       { key: "age", header: "Age", sortable: true },
     ];
     const data = [{ id: 1, name: "Alice", age: 30 }];
-    render(
+    renderWithPermissionProvider(
       <DataTableTwo
         data={data}
         columns={columns}
@@ -170,7 +180,7 @@ describe("DataTableTwo accessibility", () => {
     // Render with caption in DataTableTwo
     const columns = [{ key: "name", header: "Name", sortable: true }];
     const data = [{ id: 1, name: "Alice" }];
-    render(
+    renderWithPermissionProvider(
       <DataTableTwo
         data={data}
         columns={columns}
@@ -208,7 +218,7 @@ describe("DataTableTwo performance", () => {
       date: "2023-01-01",
       salary: "$100",
     }));
-    render(
+    renderWithPermissionProvider(
       <DataTableTwo
         data={largeData}
         columns={baseColumns}

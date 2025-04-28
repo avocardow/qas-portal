@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
-import { useRole } from "@/context/RbacContext";
 import ViewActionButton from "@/components/common/ViewActionButton";
 import { PencilIcon } from "@/icons";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -19,6 +18,7 @@ import {
   XMarkIcon,
 } from "../../../../icons";
 import PaginationWithButton from "./PaginationWithButton";
+import Authorized from "@/components/Authorized";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -88,16 +88,10 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   onView,
   onEdit,
 }: DataTableTwoProps) => {
-  const role = useRole();
-  // Internal sort state for client-side mode
-  const [internalSortKey, setInternalSortKey] = useState<string>(
-    columns && columns.length ? columns[0].key : "name"
-  );
-  const [internalSortOrder, setInternalSortOrder] = useState<"asc" | "desc">("asc");
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   // Default columns if not provided
-  const baseColumns = useMemo<ColumnDef[]>(() => [
+  const baseColumns = React.useMemo<ColumnDef[]>(() => [
     { key: "name", header: "User", sortable: true },
     { key: "position", header: "Position", sortable: true },
     { key: "location", header: "Office", sortable: true },
@@ -110,39 +104,41 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   // Use pageSize prop for items per page
   const itemsPerPage = pageSize;
 
-  // Determine effective sort parameters
-  const currentSortKey = serverSide && sortByProp ? sortByProp : internalSortKey;
-  const currentSortOrder = serverSide && sortOrderProp ? sortOrderProp : internalSortOrder;
+  // Internal sort state for client-side mode
+  const [internalSortKey, setInternalSortKey] = React.useState<string>(
+    columns && columns.length ? columns[0].key : "name"
+  );
+  const [internalSortOrder, setInternalSortOrder] = React.useState<"asc" | "desc">("asc");
 
   // Data is now passed directly from parent, already filtered/paginated
-  const currentData = useMemo(() => {
+  const currentData = React.useMemo(() => {
     // Always client-side sort when sorting by auditStageName
-    if (serverSide && currentSortKey !== "auditStageName") {
+    if (serverSide && internalSortKey !== "auditStageName") {
       return data ?? [];
     }
     // Client-side sorting (covers auditStageName and other keys)
     return (data ?? []).sort((a, b) => {
       // Numeric sort for auditStageId
-      if (currentSortKey === "auditStageId") {
-        const aId = Number((a as any)[currentSortKey] ?? 0);
-        const bId = Number((b as any)[currentSortKey] ?? 0);
-        return currentSortOrder === "asc" ? aId - bId : bId - aId;
+      if (internalSortKey === "auditStageId") {
+        const aId = Number((a as any)[internalSortKey] ?? 0);
+        const bId = Number((b as any)[internalSortKey] ?? 0);
+        return internalSortOrder === "asc" ? aId - bId : bId - aId;
       }
-      if (currentSortKey === "salary") {
-        const rawA = (a as any)[currentSortKey];
+      if (internalSortKey === "salary") {
+        const rawA = (a as any)[internalSortKey];
         const salaryA = Number.parseInt(String(rawA).replace(/\$|,/g, ""));
-        const rawB = (b as any)[currentSortKey];
+        const rawB = (b as any)[internalSortKey];
         const salaryB = Number.parseInt(String(rawB).replace(/\$|,/g, ""));
-        return currentSortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
+        return internalSortOrder === "asc" ? salaryA - salaryB : salaryB - salaryA;
       }
-      return currentSortOrder === "asc"
-        ? String(a[currentSortKey]).localeCompare(String(b[currentSortKey]))
-        : String(b[currentSortKey]).localeCompare(String(a[currentSortKey]));
+      return internalSortOrder === "asc"
+        ? String(a[internalSortKey]).localeCompare(String(b[internalSortKey]))
+        : String(b[internalSortKey]).localeCompare(String(a[internalSortKey]));
     });
-  }, [data, serverSide, currentSortKey, currentSortOrder]);
+  }, [data, serverSide, internalSortKey, internalSortOrder]);
 
   // Paginate sorted data to avoid rendering all rows at once
-  const paginatedData = useMemo(() => {
+  const paginatedData = React.useMemo(() => {
     if (serverSide) {
       // In server-side mode, data already represents current page
       return data ?? [];
@@ -205,6 +201,10 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
     const presets = [10, 25, 50, 100, 250, 500];
     return presets.includes(itemsPerPage) ? presets : [itemsPerPage, ...presets];
   }, [itemsPerPage]);
+
+  // Determine effective sort parameters
+  const currentSortKey = serverSide && sortByProp ? sortByProp : internalSortKey;
+  const currentSortOrder = serverSide && sortOrderProp ? sortOrderProp : internalSortOrder;
 
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
@@ -400,14 +400,17 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       })}
                       {(onView || onEdit) && (
                         <TableCell className="p-4 whitespace-nowrap">
-                          {onView && ["Admin", "Manager", "Client", "Developer"].includes(role ?? "") && (
-                            <ViewActionButton onClick={() => onView(item)} />
+                          {onView && (
+                            <Authorized action="view:client" subject={item} fallback={null}>
+                              <ViewActionButton onClick={() => onView(item)} />
+                            </Authorized>
                           )}
-                          {(role === "Admin" || role === "Developer") && (
-                            // Show Edit button for Admin/Developer with explicit aria-label
-                            <button onClick={() => (onEdit ?? onView)?.(item)} aria-label="Edit" className="ml-2">
-                              <PencilIcon aria-hidden="true" />
-                            </button>
+                          {onEdit && (
+                            <Authorized action="edit:client" subject={item} fallback={null}>
+                              <button onClick={() => onEdit(item)} aria-label="Edit" className="ml-2">
+                                <PencilIcon aria-hidden="true" />
+                              </button>
+                            </Authorized>
                           )}
                         </TableCell>
                       )}
