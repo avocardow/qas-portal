@@ -75,4 +75,47 @@ return <button disabled={!canEdit}>Edit Task</button>;
 3. Add or update tests in `src/policies/permissions.test.ts`.
 4. Update `docs/permissions.md` as needed.
 
---- 
+## Permission Validation Workflow
+
+To ensure our code permissions stay in sync with the database, follow this workflow:
+
+### 1. Running the Validation Script Locally
+
+Developers can verify permissions before pushing changes:
+
+```bash
+# Install dependencies (if not already done)
+pnpm install
+
+# Run the validation script
+pnpm run validate:permissions
+```
+
+The script will output:
+- **Missing Permissions**: Actions defined in code but not found in the database (build will exit with error code `1`).
+- **Unused Permissions**: Actions in the database not referenced by any code (warning only).
+
+### 2. Adding a New Permission
+
+When introducing a new permission action:
+
+1. **Define the constant** in [`src/constants/permissions.ts`](mdc:src/constants/permissions.ts).
+2. **Update the permission schema** in [`src/policies/permissions.ts`](mdc:src/policies/permissions.ts) to assign it to the appropriate roles.
+3. **Write or update tests** in `src/policies/permissions.test.ts` to cover the new action.
+4. **Run the validation script** locally (`pnpm run validate:permissions`) to catch any missing permissions errors.
+5. **Push your changes** and ensure CI passes; the build will fail if permissions are missing from the database.
+
+### 3. CI Integration
+
+The GitHub Actions pipeline includes a step to validate permissions:
+
+```yaml
+- name: Validate Permissions
+  run: pnpm run validate:permissions
+```
+
+If the script detects missing permissions, the CI job will fail and prevent merging until the discrepancy is resolved.
+
+---
+
+*Last updated: $(date "+%Y-%m-%d %H:%M:%S")* 
