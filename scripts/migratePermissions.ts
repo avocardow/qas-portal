@@ -31,12 +31,15 @@ import { rbacPolicy } from '../src/utils/rbacPolicy';
     console.log('Connected to database');
 
     // 1. Backfill permissions
-    const permissionActions = [
-      ...Object.values(AUDIT_PERMISSIONS),
-      ...Object.values(TASK_PERMISSIONS),
-      ...Object.values(DOCUMENT_PERMISSIONS),
-      ...Object.values(PHONE_PERMISSIONS),
-    ];
+    // Extract unique permission actions from policy definitions
+    const permissionActions = Array.from(
+      new Set([
+        ...Object.values(AUDIT_PERMISSIONS),
+        ...Object.values(TASK_PERMISSIONS),
+        ...Object.values(DOCUMENT_PERMISSIONS),
+        ...Object.values(PHONE_PERMISSIONS),
+      ])
+    );
     console.log(`Upserting ${permissionActions.length} permission actions...`);
     for (const action of permissionActions) {
       await prisma.permission.upsert({
