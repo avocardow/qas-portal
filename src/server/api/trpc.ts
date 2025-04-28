@@ -17,6 +17,7 @@ import {
   throwForbiddenError,
   logAccessDecision,
 } from "@/server/api/utils/rbac";
+import { hasPermission } from "@/utils/permissionUtils";
 
 /**
  * 1. CONTEXT
@@ -167,6 +168,12 @@ export const enforcePermission = (permission: string) =>
     if (!userRoleName) {
       logAccessDecision("", permission, false);
       throwForbiddenError("Access denied");
+    }
+    // Static policy engine check
+    const staticAllowed = hasPermission(userRoleName, permission);
+    if (staticAllowed) {
+      logAccessDecision(userRoleName, permission, true);
+      return next({ ctx: { session: ctx.session } });
     }
     const permissionRecord = await ctx.db.rolePermission.findFirst({
       where: {

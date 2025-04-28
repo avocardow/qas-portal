@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Refactor Backend Permission Middleware
-# Status: pending
+# Status: in-progress
 # Dependencies: 3
 # Priority: medium
 # Description: Update the enforcePermission middleware to use the new policy engine for consistent frontend and backend permission checks.
@@ -17,7 +17,7 @@
 Write unit tests for the middleware that verify it correctly allows or denies requests based on user roles. Test with various endpoints and permission scenarios.
 
 # Subtasks:
-## 1. Integrate New Policy Engine into Backend [pending]
+## 1. Integrate New Policy Engine into Backend [in-progress]
 ### Dependencies: None
 ### Description: Install and configure the new policy engine library in the backend codebase to ensure it matches the version and configuration used in the frontend.
 ### Details:
