@@ -5,9 +5,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { HorizontaLDots } from "../icons/index";
-import { usePermission } from "@/context/RbacContext";
 import { TASK_PERMISSIONS, PHONE_PERMISSIONS } from "@/constants/permissions";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
+import Authorized from "@/components/Authorized";
 
 // import SidebarWidget from "./SidebarWidget";
 
@@ -34,13 +34,17 @@ const clientPages: { name: string; path: string }[] = [
   { name: "Billing", path: "/billing" },
 ];
 
+// Define required permissions for each page
+const pagePermissionMap: Record<string, string | undefined> = {
+  "/tasks": TASK_PERMISSIONS.GET_ALL,
+  "/audits": AUDIT_PERMISSIONS.GET_BY_CLIENT_ID,
+  "/phone": PHONE_PERMISSIONS.MAKE_CALL,
+  // Add more mappings as needed
+};
+
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
-  const canViewTasks = usePermission(TASK_PERMISSIONS.GET_ALL);
-  const canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
-  const canUsePhone = usePermission(PHONE_PERMISSIONS.MAKE_CALL);
-
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
   return (
@@ -108,16 +112,8 @@ const AppSidebar: React.FC = () => {
               </h2>
               <ul className="flex flex-col gap-4">
                 {teamPages.map((page) => {
-                  if (page.path === "/tasks" && !canViewTasks) {
-                    return null;
-                  }
-                  if (page.path === "/audits" && !canViewAudits) {
-                    return null;
-                  }
-                  if (page.path === "/phone" && !canUsePhone) {
-                    return null;
-                  }
-                  return (
+                  const permission = pagePermissionMap[page.path];
+                  const navItem = (
                     <li key={page.name}>
                       <Link
                         href={page.path}
@@ -139,6 +135,13 @@ const AppSidebar: React.FC = () => {
                         )}
                       </Link>
                     </li>
+                  );
+                  return permission ? (
+                    <Authorized action={permission} key={page.name}>
+                      {navItem}
+                    </Authorized>
+                  ) : (
+                    navItem
                   );
                 })}
               </ul>

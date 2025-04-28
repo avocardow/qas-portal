@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Update Navigation Components
-# Status: pending
+# Status: in-progress
 # Dependencies: 4, 5
 # Priority: medium
 # Description: Refactor the application sidebar to show or hide items based on user permissions.
@@ -16,7 +16,7 @@
 Create tests that render the sidebar with different user roles and verify that the correct navigation items are shown or hidden. Include snapshot tests to catch unintended changes.
 
 # Subtasks:
-## 1. Define Permission Structure and Create Authorized Component [in-progress]
+## 1. Define Permission Structure and Create Authorized Component [done]
 ### Dependencies: None
 ### Description: Set up the foundation for permission-based navigation by defining the permission structure and creating the Authorized component that will wrap navigation items.
 ### Details:
@@ -139,7 +139,7 @@ Create tests that render the sidebar with different user roles and verify that t
    - Provide clear examples in documentation for different usage patterns
 </info added on 2025-04-28T10:50:17.929Z>
 
-## 2. Refactor AppSidebar Structure for Permission-Based Rendering [pending]
+## 2. Refactor AppSidebar Structure for Permission-Based Rendering [in-progress]
 ### Dependencies: 8.1
 ### Description: Update the AppSidebar component to support permission-based rendering without causing layout shifts when items are hidden.
 ### Details:
