@@ -630,7 +630,7 @@
       "id": 11,
       "title": "Implement Permission Refresh Mechanism",
       "description": "Create a system to update user permissions in real-time when role assignments change.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         4,
         10
@@ -671,7 +671,7 @@
           "id": 4,
           "title": "Add Logging and Manual Refresh Controls",
           "description": "Implement comprehensive logging and user-facing controls for permission refreshes",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             2,
             3
