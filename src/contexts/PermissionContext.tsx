@@ -1,5 +1,7 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+"use client";
+import React, { createContext, useContext, ReactNode, useMemo } from 'react';
 import { Role, Permission, getPermissionsForRole } from '@/policies/permissions';
+import { useSession } from 'next-auth/react';
 
 export interface PermissionContextValue {
   roles: Role[];
@@ -21,16 +23,20 @@ export const usePermissionContext = (): PermissionContextValue => {
 
 // Props for PermissionProvider including children
 interface PermissionProviderProps {
-  roles: Role[];
   children: ReactNode;
 }
 
 // PermissionProvider component
-export const PermissionProvider = ({ roles, children }: PermissionProviderProps) => {
+export const PermissionProvider = ({ children }: PermissionProviderProps) => {
+  const { data: session } = useSession();
+  const roles: Role[] = useMemo(() => {
+    const roleName = session?.user.role;
+    return roleName ? [roleName as Role] : [];
+  }, [session?.user.role]);
   const [permissions, setPermissions] = React.useState<Permission[]>([]);
 
   React.useEffect(() => {
-    // Initialize permissions based on roles
+    // Initialize permissions based on derived roles
     const perms = roles.flatMap(role => getPermissionsForRole(role));
     setPermissions(perms);
   }, [roles]);
