@@ -684,7 +684,7 @@
       "id": 12,
       "title": "Create CI Validation for Permissions",
       "description": "Develop CI checks to ensure all permission constants in code are represented in the database.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2,
         7
@@ -697,7 +697,7 @@
           "id": 1,
           "title": "Develop Script to Extract and Compare Permission Constants",
           "description": "Create a script that scans the codebase to extract all permission constants and compares them against the permissions stored in the database.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Implement a script (e.g., in Python, Node.js, or your project's primary language) that parses the codebase to identify all permission constants used in permission checks. Connect to the database and retrieve the list of permissions. Compare the two sets to identify any permissions present in code but missing from the database. Ensure the script outputs a clear summary of missing permissions."
         },
@@ -705,7 +705,7 @@
           "id": 2,
           "title": "Implement CI Build Failure on Missing Permissions",
           "description": "Integrate the extraction and comparison script into the CI pipeline so that the build fails if any permissions used in code are missing from the database.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -715,7 +715,7 @@
           "id": 3,
           "title": "Generate and Report Unused Permissions",
           "description": "Enhance the script to identify permissions present in the database but not referenced in the code, and generate a report listing these unused permissions.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -725,7 +725,7 @@
           "id": 4,
           "title": "Document Permission Validation Workflow and Developer Guide",
           "description": "Create comprehensive documentation for the permission validation process, including instructions for adding new permissions and guidelines for developers on using the permission system.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2,
