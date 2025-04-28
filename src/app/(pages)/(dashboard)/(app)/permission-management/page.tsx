@@ -1,5 +1,3 @@
-"use client";
-
 import type { Metadata } from "next";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 
