@@ -8,18 +8,21 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 // Add RbacProvider import
 import { RbacProvider } from "@/context/RbacContext";
+import { PermissionProvider } from '@/contexts/PermissionContext';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    // Wrap everything with SessionProvider at the top level
     <SessionProvider>
       <TRPCProvider>
-        <ThemeProvider>
-          <SidebarProvider>
-            {/* Wrap children with RbacProvider */}
-            <RbacProvider>{children}</RbacProvider>
-          </SidebarProvider>
-        </ThemeProvider>
+        <PermissionProvider>
+          <ThemeProvider>
+            <SidebarProvider>
+              <RbacProvider>
+                {children}
+              </RbacProvider>
+            </SidebarProvider>
+          </ThemeProvider>
+        </PermissionProvider>
       </TRPCProvider>
     </SessionProvider>
   );

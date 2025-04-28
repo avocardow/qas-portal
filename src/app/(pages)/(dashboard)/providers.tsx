@@ -6,6 +6,7 @@ import TRPCProvider from "@/app/_trpc/Provider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { RbacProvider } from "@/context/RbacContext";
+import { PermissionProvider } from "@/contexts/PermissionContext";
 
 interface ProvidersProps {
   session: Session | null;
@@ -16,11 +17,13 @@ export default function Providers({ session, children }: ProvidersProps) {
   return (
     <SessionProvider session={session}>
       <TRPCProvider>
-        <ThemeProvider>
-          <SidebarProvider>
-            <RbacProvider>{children}</RbacProvider>
-          </SidebarProvider>
-        </ThemeProvider>
+        <PermissionProvider>
+          <ThemeProvider>
+            <SidebarProvider>
+              <RbacProvider>{children}</RbacProvider>
+            </SidebarProvider>
+          </ThemeProvider>
+        </PermissionProvider>
       </TRPCProvider>
     </SessionProvider>
   );

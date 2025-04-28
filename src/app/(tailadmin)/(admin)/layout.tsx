@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { SessionProvider } from "next-auth/react";
 import TRPCProvider from "@/app/_trpc/Provider";
 import { RbacProvider } from "@/context/RbacContext";
+import { PermissionProvider } from "@/contexts/PermissionContext";
 
 export default function AdminLayout({
   children,
@@ -20,26 +21,28 @@ export default function AdminLayout({
   return (
     <SessionProvider>
       <TRPCProvider>
-        <ThemeProvider>
-          <SidebarProvider>
-            <RbacProvider>
-              <div className="min-h-screen lg:flex">
-                {/* Sidebar and Backdrop */}
-                <AppSidebar />
-                <Backdrop />
-                {/* Main Content Area */}
-                <div className="flex-1 transition-all duration-300 ease-in-out lg:ml-[290px]">
-                  {/* Header */}
-                  <AppHeader />
-                  {/* Page Content */}
-                  <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
-                    {children}
+        <PermissionProvider>
+          <ThemeProvider>
+            <SidebarProvider>
+              <RbacProvider>
+                <div className="min-h-screen lg:flex">
+                  {/* Sidebar and Backdrop */}
+                  <AppSidebar />
+                  <Backdrop />
+                  {/* Main Content Area */}
+                  <div className="flex-1 transition-all duration-300 ease-in-out lg:ml-[290px]">
+                    {/* Header */}
+                    <AppHeader />
+                    {/* Page Content */}
+                    <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+                      {children}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </RbacProvider>
-          </SidebarProvider>
-        </ThemeProvider>
+              </RbacProvider>
+            </SidebarProvider>
+          </ThemeProvider>
+        </PermissionProvider>
       </TRPCProvider>
     </SessionProvider>
   );
