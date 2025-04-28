@@ -5,6 +5,8 @@ import type { Permission } from '@/policies/permissions';
 
 export type AuthorizedProps = {
   action: Permission | string;
+  /** Optional subject to check permissions against */
+  subject?: unknown;
   fallback?: ReactNode;
   children?: ReactNode;
 };
@@ -16,7 +18,8 @@ export type AuthorizedProps = {
  *   <DocumentContent />
  * </Authorized>
  */
-const Authorized: React.FC<AuthorizedProps> = React.memo(function Authorized({ action, fallback = null, children }: AuthorizedProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Authorized: React.FC<AuthorizedProps> = React.memo(function Authorized({ action, subject: _subject, fallback = null, children }: AuthorizedProps) {
   const { can } = useAbility();
   const isAllowed = useMemo(() => can(action), [can, action]);
   if (!isAllowed) {
