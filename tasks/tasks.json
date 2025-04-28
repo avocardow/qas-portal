@@ -401,7 +401,7 @@
       "id": 7,
       "title": "Create Database Migration Script",
       "description": "Develop a script to migrate existing permission constants into the Supabase permissions and rolePermissions tables.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2,
         3

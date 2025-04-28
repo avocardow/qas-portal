@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Create Database Migration Script
-# Status: in-progress
+# Status: done
 # Dependencies: 2, 3
 # Priority: medium
 # Description: Develop a script to migrate existing permission constants into the Supabase permissions and rolePermissions tables.
