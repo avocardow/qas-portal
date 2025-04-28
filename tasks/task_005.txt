@@ -41,13 +41,13 @@ Use TypeScript to define the types for these props, ensuring clarity and type sa
 ### Details:
 Use the `useAbility` hook to check if the user has the required permission. If they do, render the children; otherwise, render the `fallback` component if provided.
 
-## 5. Optimize for Performance [in-progress]
+## 5. Optimize for Performance [done]
 ### Dependencies: 5.4
 ### Description: Optimize the component to prevent unnecessary re-renders.
 ### Details:
 Use React hooks like `useMemo` or `useCallback` to memoize functions or values that don't change frequently. This ensures that the component only re-renders when necessary.
 
-## 6. Document Usage Examples [pending]
+## 6. Document Usage Examples [in-progress]
 ### Dependencies: 5.4
 ### Description: Create documentation for the `Authorized` component, including usage examples.
 ### Details:

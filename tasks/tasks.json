@@ -296,7 +296,7 @@
           "id": 5,
           "title": "Optimize for Performance",
           "description": "Optimize the component to prevent unnecessary re-renders.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -306,7 +306,7 @@
           "id": 6,
           "title": "Document Usage Examples",
           "description": "Create documentation for the `Authorized` component, including usage examples.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             4
           ],
