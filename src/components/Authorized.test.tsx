@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import Authorized from './Authorized';
 import { vi, type Mock } from 'vitest';
 import { useAbility } from '@/hooks/useAbility';
+import '@testing-library/jest-dom';
 
 // Mock useAbility hook
 vi.mock('@/hooks/useAbility');
@@ -32,5 +33,15 @@ describe('Authorized Component', () => {
     );
     expect(screen.queryByTestId('child')).toBeNull();
     expect(screen.getByTestId('fallback')).toBeInTheDocument();
+  });
+
+  it('renders nothing when permission is denied and no fallback provided', () => {
+    mockUseAbility.mockReturnValue({ can: () => false, cannot: () => true });
+    const { container } = render(
+      <Authorized action="test:action">
+        <div data-testid="child">Allowed Content</div>
+      </Authorized>
+    );
+    expect(container).toBeEmptyDOMElement();
   });
 }); 

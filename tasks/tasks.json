@@ -316,7 +316,7 @@
           "id": 7,
           "title": "Test and Validate Component Functionality",
           "description": "Write tests to validate the functionality of the `Authorized` component.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             5,
             6
