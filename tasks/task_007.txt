@@ -18,7 +18,7 @@
 Test the script in a development environment first. Verify that all permissions are correctly inserted and that role mappings match the policy definitions. Create a rollback script for safety.
 
 # Subtasks:
-## 1. Extract Unique Permissions from Policy Definitions [in-progress]
+## 1. Extract Unique Permissions from Policy Definitions [done]
 ### Dependencies: None
 ### Description: Parse the existing policy definitions to identify and extract all unique permission constants required for migration.
 ### Details:

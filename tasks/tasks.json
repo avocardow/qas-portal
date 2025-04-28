@@ -414,7 +414,7 @@
           "id": 1,
           "title": "Extract Unique Permissions from Policy Definitions",
           "description": "Parse the existing policy definitions to identify and extract all unique permission constants required for migration.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Implement a parser (in Node.js or SQL) that scans the policy files, collects all unique permission constants, and prepares them for insertion. Ensure the extraction logic handles duplicates and edge cases."
         },
