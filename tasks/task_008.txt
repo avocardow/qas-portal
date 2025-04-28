@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Update Navigation Components
-# Status: in-progress
+# Status: done
 # Dependencies: 4, 5
 # Priority: medium
 # Description: Refactor the application sidebar to show or hide items based on user permissions.
@@ -236,7 +236,7 @@ export const simulateUserWithPermissions = (permissions) => {
 - Check for any permission-based logic in related components: `MobileNavigation.tsx`, `HeaderNavigation.tsx`, and ensure consistent implementation
 </info added on 2025-04-28T11:14:25.291Z>
 
-## 4. Test and Optimize Permission-Based Navigation [pending]
+## 4. Test and Optimize Permission-Based Navigation [done]
 ### Dependencies: 8.1, 8.2, 8.3
 ### Description: Perform comprehensive testing with different user roles and optimize the implementation for performance and user experience.
 ### Details:
@@ -265,4 +265,69 @@ export const simulateUserWithPermissions = (permissions) => {
    - Perform end-to-end testing with different user roles
    - Measure and document performance metrics
    - Conduct cross-browser testing to ensure consistent behavior
+
+<info added on 2025-04-28T11:19:25.306Z>
+### Implementation Plan for Test and Optimize Permission-Based Navigation
+
+#### Test Coverage Implementation
+- Create dedicated test files for each navigation section (e.g., `AppSidebar.test.tsx`, `NavigationItems.test.tsx`)
+- Implement role-based test fixtures with predefined permission sets:
+  ```typescript
+  const userRoles = {
+    admin: { permissions: ['all:read', 'all:write', 'all:delete'] },
+    manager: { permissions: ['team:read', 'team:write', 'reports:read'] },
+    staff: { permissions: ['tasks:read', 'tasks:write', 'profile:read'] },
+    client: { permissions: ['projects:read', 'messages:read', 'messages:write'] },
+    auditor: { permissions: ['reports:read', 'logs:read'] }
+  };
+  ```
+
+#### Testing Implementation
+- Use React Testing Library's `renderWithProviders` custom renderer:
+  ```typescript
+  test('hides restricted navigation items for Staff role', () => {
+    renderWithProviders(<AppSidebar />, {
+      preloadedState: { auth: { user: userRoles.staff } }
+    });
+    expect(screen.queryByText('Admin Panel')).not.toBeInTheDocument();
+    expect(screen.getByText('My Tasks')).toBeInTheDocument();
+  });
+  ```
+- Test navigation state persistence across route changes
+
+#### Performance Optimization
+- Implement a custom hook for permission checking with memoization:
+  ```typescript
+  export const usePermissionCheck = (requiredPermission) => {
+    const { permissions } = useSelector(state => state.auth.user);
+    return useMemo(() => 
+      permissions.includes(requiredPermission), 
+      [permissions, requiredPermission]
+    );
+  };
+  ```
+- Add React DevTools Profiler measurements before and after optimizations
+- Set performance budgets for navigation render time (target <50ms)
+
+#### UX Enhancements
+- Implement CSS transitions with configurable durations:
+  ```css
+  .nav-item {
+    transition: opacity 0.2s ease, height 0.3s ease;
+    height: auto;
+    opacity: 1;
+  }
+  .nav-item.hidden {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+  ```
+- Add placeholder elements for restricted items (optional, configurable)
+
+#### Documentation Additions
+- Create a "Permission-Based Navigation" section in the developer docs
+- Include a decision tree flowchart for permission evaluation
+- Document performance testing results and optimization strategies
+</info added on 2025-04-28T11:19:25.306Z>
 
