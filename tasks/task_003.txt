@@ -148,7 +148,7 @@ This implementation provides a type-safe structure with constants for permission
 8. Create comprehensive tests for each role to verify correct permission mappings
 9. Implement edge cases and special conditions identified during the audit
 
-## 4. Create Permission Utilities and Documentation [pending]
+## 4. Create Permission Utilities and Documentation [done]
 ### Dependencies: 3.3
 ### Description: Develop utility functions for permission checking, create comprehensive documentation, and implement integration tests to ensure the permission system works as expected.
 ### Details:
@@ -162,4 +162,30 @@ This implementation provides a type-safe structure with constants for permission
 8. Create visualization of permission hierarchies for easier understanding
 9. Ensure all code is properly typed with TypeScript for better developer experience
 10. Validate that the implementation follows all best practices identified in the research
+
+<info added on 2025-04-28T05:34:27.810Z>
+For subtask 3.4, I recommend enhancing the implementation with:
+
+The `permissionUtils.ts` should include:
+- `hasPermission(user, permission)`: Checks if a user has a specific permission
+- `canAccessResource(user, resource, action)`: Validates access to a specific resource
+- `listUserPermissions(user)`: Returns all permissions for a user
+- `checkRoleAccess(role, permission)`: Role-based permission validation
+- `mergePermissions(basePermissions, additionalPermissions)`: Utility for combining permission sets
+
+Structure the tests to cover:
+- Individual permission checks
+- Role inheritance scenarios
+- Edge cases (null users, missing permissions)
+- Mock authentication contexts
+
+In the documentation:
+- Include a permissions matrix table showing roles vs. features
+- Add code examples for common scenarios (route guards, component rendering)
+- Document permission naming conventions
+- Include a section on troubleshooting permission issues
+- Add a flowchart showing the permission evaluation process
+
+Consider implementing a permission debugger utility that logs permission checks during development.
+</info added on 2025-04-28T05:34:27.810Z>
 
