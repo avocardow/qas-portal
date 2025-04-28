@@ -120,7 +120,7 @@ export function hasConditionalPermission(
 This implementation provides a type-safe structure with constants for permissions, clear role definitions, and helper functions for permission checks. The conditional permissions use evaluator functions that can be customized for different access control scenarios.
 </info added on 2025-04-28T05:13:04.050Z>
 
-## 2. Implement Core Permission Policy File [pending]
+## 2. Implement Core Permission Policy File [in-progress]
 ### Dependencies: 3.1
 ### Description: Create the central permissions.ts file with the defined schema and implement the core role definitions with their associated permissions.
 ### Details:
@@ -134,7 +134,7 @@ This implementation provides a type-safe structure with constants for permission
 8. Write unit tests to verify the structure and basic permission checks
 9. Ensure the implementation follows the centralized policy management best practice
 
-## 3. Complete Role-Based Permission Mappings [pending]
+## 3. Complete Role-Based Permission Mappings [done]
 ### Dependencies: 3.2
 ### Description: Extend the permission policy file to include all roles (Manager, Auditor, Staff, Client) with their specific permission sets and implement conditional permissions where required.
 ### Details:

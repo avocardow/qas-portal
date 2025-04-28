@@ -156,7 +156,7 @@
             1
           ],
           "details": "1. Create the `policies/permissions.ts` file using the schema designed in subtask 1\n2. Implement the base permission structure with TypeScript interfaces for type safety\n3. Define constants for all action types (e.g., 'user:create', 'client:view')\n4. Group permissions logically by feature area as determined in the schema design\n5. Implement the core roles (Admin, Developer) with their complete permission sets\n6. Add JSDoc comments to document the purpose and usage of each permission group\n7. Create utility functions for permission checking if needed\n8. Write unit tests to verify the structure and basic permission checks\n9. Ensure the implementation follows the centralized policy management best practice",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 3
         },
         {
@@ -167,7 +167,7 @@
             2
           ],
           "details": "1. Add the remaining roles (Manager, Auditor, Staff, Client) to the permissions.ts file\n2. Map each role to their allowed actions based on the audit findings\n3. Implement conditional permissions using parameterized rules (e.g., resource ownership constraints)\n4. Ensure each role follows the least privilege principle\n5. Group related permissions logically by feature area for better maintainability\n6. Validate that all permissions discovered in the audit are represented\n7. Add detailed comments explaining the rationale behind permission assignments\n8. Create comprehensive tests for each role to verify correct permission mappings\n9. Implement edge cases and special conditions identified during the audit",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 3
         },
         {
