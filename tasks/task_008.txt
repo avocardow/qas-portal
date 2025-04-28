@@ -16,7 +16,7 @@
 Create tests that render the sidebar with different user roles and verify that the correct navigation items are shown or hidden. Include snapshot tests to catch unintended changes.
 
 # Subtasks:
-## 1. Define Permission Structure and Create Authorized Component [pending]
+## 1. Define Permission Structure and Create Authorized Component [in-progress]
 ### Dependencies: None
 ### Description: Set up the foundation for permission-based navigation by defining the permission structure and creating the Authorized component that will wrap navigation items.
 ### Details:
@@ -34,6 +34,110 @@ Create tests that render the sidebar with different user roles and verify that t
    - Write unit tests for the `<Authorized>` component with different permission scenarios
    - Test with mock user contexts having different permission sets
    - Verify that children are rendered only when permissions are satisfied
+
+<info added on 2025-04-28T10:50:17.929Z>
+## Implementation Details for Permission Structure
+
+1. **Permission Schema Design**:
+   ```typescript
+   // Example implementation for permissions.ts
+   export enum Permission {
+     VIEW_DASHBOARD = 'view:dashboard',
+     MANAGE_USERS = 'manage:users',
+     EDIT_SETTINGS = 'edit:settings',
+     // Add all navigation-related permissions
+   }
+
+   export enum Role {
+     ADMIN = 'admin',
+     MANAGER = 'manager',
+     USER = 'user',
+   }
+
+   export const rolePermissions: Record<Role, Permission[]> = {
+     [Role.ADMIN]: Object.values(Permission),
+     [Role.MANAGER]: [Permission.VIEW_DASHBOARD, Permission.EDIT_SETTINGS],
+     [Role.USER]: [Permission.VIEW_DASHBOARD],
+   };
+   ```
+
+2. **Authorized Component Implementation**:
+   ```typescript
+   // Example implementation for Authorized.tsx
+   import React from 'react';
+   import { useAbility } from '../hooks/useAbility';
+   import { Permission } from '../policies/permissions';
+
+   interface AuthorizedProps {
+     permissions: Permission | Permission[];
+     fallback?: React.ReactNode;
+     children: React.ReactNode;
+   }
+
+   export const Authorized: React.FC<AuthorizedProps> = ({ 
+     permissions, 
+     fallback = null, 
+     children 
+   }) => {
+     const { can } = useAbility();
+     
+     const hasPermission = Array.isArray(permissions)
+       ? permissions.some(permission => can(permission))
+       : can(permissions);
+     
+     return hasPermission ? <>{children}</> : <>{fallback}</>;
+   };
+   ```
+
+3. **Unit Testing Strategy**:
+   ```typescript
+   // Example test for Authorized.tsx
+   describe('Authorized', () => {
+     it('renders children when user has permission', () => {
+       // Mock useAbility to return true for specific permission
+       jest.mock('../hooks/useAbility', () => ({
+         useAbility: () => ({ can: () => true })
+       }));
+       
+       render(
+         <Authorized permissions={Permission.VIEW_DASHBOARD}>
+           <div data-testid="protected-content">Protected Content</div>
+         </Authorized>
+       );
+       
+       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+     });
+     
+     it('renders fallback when user lacks permission', () => {
+       // Mock useAbility to return false
+       jest.mock('../hooks/useAbility', () => ({
+         useAbility: () => ({ can: () => false })
+       }));
+       
+       render(
+         <Authorized 
+           permissions={Permission.MANAGE_USERS}
+           fallback={<div data-testid="fallback">Access Denied</div>}
+         >
+           <div>Protected Content</div>
+         </Authorized>
+       );
+       
+       expect(screen.getByTestId('fallback')).toBeInTheDocument();
+       expect(screen.queryByText('Protected Content')).not.toBeInTheDocument();
+     });
+   });
+   ```
+
+4. **Performance Considerations**:
+   - Implement memoization for permission checks to avoid unnecessary re-renders
+   - Consider using React.memo for the Authorized component itself
+   - Cache permission results when checking multiple permissions
+
+5. **Migration Path from Legacy Components**:
+   - Create a HOC version of Authorized for class components if needed
+   - Provide clear examples in documentation for different usage patterns
+</info added on 2025-04-28T10:50:17.929Z>
 
 ## 2. Refactor AppSidebar Structure for Permission-Based Rendering [pending]
 ### Dependencies: 8.1
