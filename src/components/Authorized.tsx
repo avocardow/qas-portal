@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { useAbility } from '@/hooks/useAbility';
 
 import type { Permission } from '@/policies/permissions';
@@ -9,12 +9,20 @@ export type AuthorizedProps = {
   children?: ReactNode;
 };
 
-// Authorized component integrates permission checks
-export default function Authorized({ action, fallback = null, children }: AuthorizedProps) {
+/**
+ * Usage Example:
+ *
+ * <Authorized action="read:document" fallback={<div>No access</div>}>
+ *   <DocumentContent />
+ * </Authorized>
+ */
+const Authorized: React.FC<AuthorizedProps> = React.memo(function Authorized({ action, fallback = null, children }: AuthorizedProps) {
   const { can } = useAbility();
-  const isAllowed = can(action);
+  const isAllowed = useMemo(() => can(action), [can, action]);
   if (!isAllowed) {
     return <>{fallback}</>;
   }
   return <>{children}</>;
-} 
+});
+
+export default Authorized; 
