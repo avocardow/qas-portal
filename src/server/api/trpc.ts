@@ -158,12 +158,12 @@ export const adminOrManagerProcedure = protectedProcedure.use(
 export const enforcePermission = (permission: string) =>
   t.middleware(async ({ ctx, next }) => {
     if (!ctx.session?.user) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "User is not authenticated" });
     }
     const role = ctx.session.user.role;
     if (!role) {
       logAccessDecision("", permission, false);
-      throwForbiddenError("Insufficient permissions");
+      throwForbiddenError(`Insufficient permissions for action '${permission}'`);
     }
     // 🚀 Developers bypass all permission checks
     if (role === "Developer") {
@@ -183,7 +183,7 @@ export const enforcePermission = (permission: string) =>
     const dynamicAllowed = Boolean(permissionRecord);
     logAccessDecision(role, permission, dynamicAllowed);
     if (!dynamicAllowed) {
-      throwForbiddenError("Insufficient permissions");
+      throwForbiddenError(`Insufficient permissions for action '${permission}'`);
     }
     return next({ ctx: { session: ctx.session } });
   });

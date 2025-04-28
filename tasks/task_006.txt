@@ -23,13 +23,13 @@ Write unit tests for the middleware that verify it correctly allows or denies re
 ### Details:
 Add the policy engine as a dependency in the backend project. Initialize it with the same policy definitions as the frontend, ensuring consistency in permission logic across both environments.
 
-## 2. Refactor enforcePermission Middleware to Use Policy Engine [in-progress]
+## 2. Refactor enforcePermission Middleware to Use Policy Engine [done]
 ### Dependencies: 6.1
 ### Description: Update the existing enforcePermission middleware to utilize the new policy engine for permission checks instead of the legacy logic.
 ### Details:
 Replace the old permission checking code in src/middleware/enforcePermission.ts with calls to the policy engine's checking methods. Ensure the middleware retrieves user context and requested action/resource, then delegates permission evaluation to the policy engine.
 
-## 3. Implement Consistent Error Handling for Permission Denials [pending]
+## 3. Implement Consistent Error Handling for Permission Denials [done]
 ### Dependencies: 6.2
 ### Description: Ensure that when permission checks fail, the middleware returns standardized error responses that align with frontend expectations.
 ### Details:

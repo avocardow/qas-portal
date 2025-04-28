@@ -349,7 +349,7 @@
           "id": 2,
           "title": "Refactor enforcePermission Middleware to Use Policy Engine",
           "description": "Update the existing enforcePermission middleware to utilize the new policy engine for permission checks instead of the legacy logic.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -359,7 +359,7 @@
           "id": 3,
           "title": "Implement Consistent Error Handling for Permission Denials",
           "description": "Ensure that when permission checks fail, the middleware returns standardized error responses that align with frontend expectations.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],

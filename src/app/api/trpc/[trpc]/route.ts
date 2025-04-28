@@ -29,6 +29,18 @@ const handler = (req: NextRequest) =>
             );
           }
         : undefined,
+    responseMeta: ({ errors }) => {
+      if (errors.length) {
+        const error = errors[0];
+        if (error.code === "UNAUTHORIZED") {
+          return { status: 401 };
+        }
+        if (error.code === "FORBIDDEN") {
+          return { status: 403 };
+        }
+      }
+      return {};
+    },
   });
 
 export { handler as GET, handler as POST };
