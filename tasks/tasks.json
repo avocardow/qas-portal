@@ -60,7 +60,7 @@
       "id": 2,
       "title": "Audit Existing Permission Usage",
       "description": "Scan the codebase to inventory all current permission checks, hooks, and components to ensure complete migration coverage.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "1. Run `grep -R \"usePermission\\(\" src/` to find all hook usages\n2. Run `grep -R \"enforcePermission\" src/` to find all middleware usages\n3. Run `grep -R \"RequirePermission\" src/` to find all component usages\n4. Search for imports of permission constants like `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS`\n5. Document all findings in a spreadsheet with columns: file path, line number, permission type, permission value\n6. Categorize permissions by functional area (client management, audit, tasks, etc.)",
@@ -98,7 +98,7 @@
           "id": 4,
           "title": "Audit Permission Constant Imports",
           "description": "Search for and document all imports of permission constants throughout the codebase.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -108,7 +108,7 @@
           "id": 5,
           "title": "Consolidate and Structure Permission Audit Data",
           "description": "Aggregate all findings into a structured spreadsheet for analysis and migration planning.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -118,7 +118,7 @@
           "id": 6,
           "title": "Categorize Permissions by Functional Area",
           "description": "Analyze and categorize each permission usage by its functional area to support migration coverage.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5
           ],
