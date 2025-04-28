@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import { Role, Permission, getPermissionsForRole } from '@/policies/permissions';
 import { useSession } from 'next-auth/react';
 
@@ -35,24 +35,26 @@ export const PermissionProvider = ({ children }: PermissionProviderProps) => {
   }, [session?.user.role]);
   const [permissions, setPermissions] = React.useState<Permission[]>([]);
 
-  React.useEffect(() => {
-    // Initialize permissions based on derived roles
+  // Create a callback to refresh permissions based on current roles
+  const refreshPermissions = useCallback(async () => {
     const perms = roles.flatMap(role => getPermissionsForRole(role));
     setPermissions(perms);
   }, [roles]);
 
-  const can = (permission: Permission | string) => {
+  // Call refreshPermissions on mount and when roles change
+  React.useEffect(() => {
+    refreshPermissions();
+  }, [refreshPermissions]);
+
+  const can = useCallback((permission: Permission | string) => {
     // Developer bypass
-    if (roles.includes('Developer' as Role)) return true;
+    if (roles.includes('Developer' as Role)) {
+      return true;
+    }
     return permissions.includes(permission as Permission);
-  };
+  }, [permissions, roles]);
 
-  const cannot = (permission: Permission | string) => !can(permission);
-
-  const refreshPermissions = async () => {
-    // Stub: no-op for now
-    return Promise.resolve();
-  };
+  const cannot = useCallback((permission: Permission | string) => !can(permission), [can]);
 
   return (
     <PermissionContext.Provider value={{ roles, permissions, can, cannot, refreshPermissions }}>
