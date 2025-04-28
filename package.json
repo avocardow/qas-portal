@@ -14,7 +14,8 @@
     "db:seed": "prisma db seed",
     "postinstall": "prisma generate",
     "test:email": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/server/utils/msGraphEmail.ts",
-    "migrate:permissions": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/migratePermissions.ts"
+    "migrate:permissions": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/migratePermissions.ts",
+    "analyze:bundle": "ANALYZE=true next build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -84,6 +85,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@next/bundle-analyzer": "^15.3.1",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -112,7 +114,8 @@
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.2",
-    "vitest-mock-extended": "^3.1.0"
+    "vitest-mock-extended": "^3.1.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
