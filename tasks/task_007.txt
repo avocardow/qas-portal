@@ -143,9 +143,44 @@ Implement batch insertion logic for the `rolePermissions` table, using SQL upser
    - Compare actual vs. expected counts and report discrepancies
 </info added on 2025-04-28T10:22:03.004Z>
 
-## 5. Document and Validate the Migration Script [pending]
+## 5. Document and Validate the Migration Script [done]
 ### Dependencies: 7.4
 ### Description: Write clear documentation on how to run the migration script using the Supabase SQL editor or CLI, and validate that the script is idempotent and robust.
 ### Details:
 Prepare a README or inline documentation explaining script usage, prerequisites, and troubleshooting. Test the script by running it multiple times to confirm idempotency and validate that all data is correctly migrated without duplication or errors.
+
+<info added on 2025-04-28T10:43:32.385Z>
+For subtask "Document and Validate the Migration Script", here's additional implementation information:
+
+## Documentation Approach
+- Create a dedicated `MIGRATION.md` file in the project root to centralize all migration-related documentation
+- Add comprehensive JSDoc comments to the `migratePermissions.ts` script including:
+  - `@description` - Purpose of the script
+  - `@usage` - Command examples
+  - `@params` - Any CLI arguments
+  - `@returns` - Expected output/results
+
+## Validation Implementation
+- Implement a `--dry-run` flag that shows what would be migrated without making changes
+- Add a `--verify` mode that runs post-migration queries to confirm:
+  - All source permissions were successfully mapped
+  - No orphaned permission records exist
+  - Role-permission relationships are correctly established
+- Create test fixtures with sample data to validate against edge cases
+
+## Idempotency Enhancements
+- Implement transaction wrapping to prevent partial migrations
+- Add checksums for migrated data to detect and prevent duplicate runs
+- Log migration runs with timestamps in a `migration_history` table
+
+## CLI Improvements
+- Add progress indicators for long-running migrations
+- Implement colored console output to distinguish between info/warning/error messages
+- Support environment-specific configuration via `.env` variables
+
+## Troubleshooting Guide
+- Document common error scenarios and their solutions
+- Add a "Rollback Procedure" section explaining how to revert changes if needed
+- Include contact information for support
+</info added on 2025-04-28T10:43:32.385Z>
 

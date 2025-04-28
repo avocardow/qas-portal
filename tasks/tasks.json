@@ -453,11 +453,11 @@
           "id": 5,
           "title": "Document and Validate the Migration Script",
           "description": "Write clear documentation on how to run the migration script using the Supabase SQL editor or CLI, and validate that the script is idempotent and robust.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
-          "details": "Prepare a README or inline documentation explaining script usage, prerequisites, and troubleshooting. Test the script by running it multiple times to confirm idempotency and validate that all data is correctly migrated without duplication or errors."
+          "details": "Prepare a README or inline documentation explaining script usage, prerequisites, and troubleshooting. Test the script by running it multiple times to confirm idempotency and validate that all data is correctly migrated without duplication or errors.\n\n<info added on 2025-04-28T10:43:32.385Z>\nFor subtask \"Document and Validate the Migration Script\", here's additional implementation information:\n\n## Documentation Approach\n- Create a dedicated `MIGRATION.md` file in the project root to centralize all migration-related documentation\n- Add comprehensive JSDoc comments to the `migratePermissions.ts` script including:\n  - `@description` - Purpose of the script\n  - `@usage` - Command examples\n  - `@params` - Any CLI arguments\n  - `@returns` - Expected output/results\n\n## Validation Implementation\n- Implement a `--dry-run` flag that shows what would be migrated without making changes\n- Add a `--verify` mode that runs post-migration queries to confirm:\n  - All source permissions were successfully mapped\n  - No orphaned permission records exist\n  - Role-permission relationships are correctly established\n- Create test fixtures with sample data to validate against edge cases\n\n## Idempotency Enhancements\n- Implement transaction wrapping to prevent partial migrations\n- Add checksums for migrated data to detect and prevent duplicate runs\n- Log migration runs with timestamps in a `migration_history` table\n\n## CLI Improvements\n- Add progress indicators for long-running migrations\n- Implement colored console output to distinguish between info/warning/error messages\n- Support environment-specific configuration via `.env` variables\n\n## Troubleshooting Guide\n- Document common error scenarios and their solutions\n- Add a \"Rollback Procedure\" section explaining how to revert changes if needed\n- Include contact information for support\n</info added on 2025-04-28T10:43:32.385Z>"
         }
       ]
     },
