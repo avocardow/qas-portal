@@ -57,6 +57,21 @@ describe('ClientsPage RBAC', () => {
     expect(addButton).toBeTruthy();
   });
 
+  test('allows Developer to view page and see Add New Client button', () => {
+    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });
+    renderWithPermissionProvider(<ClientsPage />);
+    const addButton = screen.getByRole('button', { name: /add new client/i });
+    expect(addButton).toBeTruthy();
+  });
+
+  test('routes to New Client page when Developer clicks Add New Client button', () => {
+    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });
+    renderWithPermissionProvider(<ClientsPage />);
+    const addButton = screen.getByRole('button', { name: /add new client/i });
+    fireEvent.click(addButton);
+    expect(pushMock).toHaveBeenCalledWith('/clients/new');
+  });
+
   test('shows disabled Add New Client button for Manager when lacking permissions', () => {
     vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });
     renderWithPermissionProvider(<ClientsPage />);
