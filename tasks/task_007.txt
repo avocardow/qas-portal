@@ -74,11 +74,74 @@ The mapping implementation requires careful handling of the rbacPolicy object st
 5. **Performance Optimization**: Use Map data structures for role and permission lookups rather than repeated database queries.
 </info added on 2025-04-28T10:07:37.052Z>
 
-## 4. Insert Role-Permission Mappings into rolePermissions Table [pending]
+## 4. Insert Role-Permission Mappings into rolePermissions Table [done]
 ### Dependencies: 7.3
 ### Description: Insert the role-permission mappings into the Supabase `rolePermissions` table, ensuring the process is idempotent and includes error handling.
 ### Details:
 Implement batch insertion logic for the `rolePermissions` table, using SQL upsert patterns or equivalent to avoid duplicates. Add error handling and validation to ensure data integrity and script robustness.
+
+<info added on 2025-04-28T10:22:03.004Z>
+# Implementation Plan Review and Enhancements
+
+## Current Implementation Analysis
+- The existing migration script handles basic upsert operations but could benefit from performance and reliability improvements.
+- The sequential processing of role-permission mappings may be inefficient for large datasets.
+
+## Recommended Enhancements
+1. **Transaction Management**:
+   ```typescript
+   // Wrap operations in a transaction for atomicity
+   const { error } = await supabase.rpc('begin_transaction');
+   try {
+     // Perform all upsert operations
+     // ...
+     await supabase.rpc('commit_transaction');
+   } catch (e) {
+     await supabase.rpc('rollback_transaction');
+     console.error('Transaction failed:', e);
+   }
+   ```
+
+2. **Batch Processing**:
+   ```typescript
+   // Prepare batch of role-permission mappings
+   const mappingBatch = rolesToProcess.flatMap(role => 
+     role.permissions.map(perm => ({
+       roleId: role.id,
+       permissionId: perm.id,
+       createdAt: new Date().toISOString()
+     }))
+   );
+   
+   // Insert in batches of 100
+   for (let i = 0; i < mappingBatch.length; i += 100) {
+     const batch = mappingBatch.slice(i, i + 100);
+     await supabase.from('rolePermissions').upsert(batch);
+   }
+   ```
+
+3. **Enhanced Validation & Reporting**:
+   - Implement pre-validation to identify all missing roles/permissions before processing
+   - Generate a comprehensive report of changes made and issues encountered
+   - Add checksums or version tracking to detect when re-runs are necessary
+
+4. **Retry Logic**:
+   ```typescript
+   const upsertWithRetry = async (data, attempts = 3) => {
+     for (let i = 0; i < attempts; i++) {
+       const { error } = await supabase.from('rolePermissions').upsert(data);
+       if (!error) return true;
+       console.warn(`Attempt ${i+1} failed, retrying...`);
+       await new Promise(r => setTimeout(r, 1000 * i));
+     }
+     return false;
+   };
+   ```
+
+5. **Verification Step**:
+   - Add a verification query after migration to ensure all expected mappings exist
+   - Compare actual vs. expected counts and report discrepancies
+</info added on 2025-04-28T10:22:03.004Z>
 
 ## 5. Document and Validate the Migration Script [pending]
 ### Dependencies: 7.4
