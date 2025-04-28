@@ -37,8 +37,13 @@ export const PermissionProvider = ({ children }: PermissionProviderProps) => {
 
   // Create a callback to refresh permissions based on current roles
   const refreshPermissions = useCallback(async () => {
-    const perms = roles.flatMap(role => getPermissionsForRole(role));
-    setPermissions(perms);
+    try {
+      const perms = roles.flatMap(role => getPermissionsForRole(role));
+      setPermissions(perms);
+      console.info('[PermissionContext] permissions refreshed', perms);
+    } catch (error) {
+      console.error('[PermissionContext] error refreshing permissions:', error);
+    }
   }, [roles]);
 
   // Call refreshPermissions on mount and when roles change
