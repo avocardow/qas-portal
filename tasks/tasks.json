@@ -432,12 +432,12 @@
           "id": 3,
           "title": "Map Roles to Permissions Based on Policy File",
           "description": "Determine the mapping between roles and permissions as defined in the policy file, preparing data for insertion into the `rolePermissions` table.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2
           ],
-          "details": "Parse the policy file to associate each role with its corresponding permissions. Structure this mapping data for efficient batch insertion, ensuring consistency with the permissions already inserted."
+          "details": "Parse the policy file to associate each role with its corresponding permissions. Structure this mapping data for efficient batch insertion, ensuring consistency with the permissions already inserted.\n\n<info added on 2025-04-28T10:07:37.052Z>\nThe mapping implementation requires careful handling of the rbacPolicy object structure. Here's additional technical information:\n\n1. **Data Structure Analysis**: The rbacPolicy object uses a nested structure where each role maps to an array of permission strings. These permission strings need to be matched with the actual permission IDs in the database.\n\n2. **Batch Processing Approach**: \n   ```typescript\n   // Efficient batch processing example\n   const roleMappings = [];\n   for (const [roleName, permissions] of Object.entries(rbacPolicy)) {\n     const roleId = rolesMap.get(roleName);\n     if (!roleId) {\n       logger.warn(`Role ${roleName} not found in database`);\n       continue;\n     }\n     \n     for (const permissionName of permissions) {\n       const permissionId = permissionsMap.get(permissionName);\n       if (permissionId) {\n         roleMappings.push({ roleId, permissionId });\n       }\n     }\n   }\n   \n   // Then use a single batch insert\n   await db.rolePermissions.createMany({\n     data: roleMappings,\n     skipDuplicates: true\n   });\n   ```\n\n3. **Validation Strategy**: Implement pre-insertion validation to ensure all referenced permissions exist, preventing partial role configurations.\n\n4. **Transaction Management**: Consider wrapping the entire mapping process in a database transaction to ensure atomicity.\n\n5. **Performance Optimization**: Use Map data structures for role and permission lookups rather than repeated database queries.\n</info added on 2025-04-28T10:07:37.052Z>"
         },
         {
           "id": 4,
