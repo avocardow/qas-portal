@@ -46,6 +46,14 @@ export const PermissionProvider = ({ children }: PermissionProviderProps) => {
     refreshPermissions();
   }, [refreshPermissions]);
 
+  // Poll for permission changes every 30 seconds
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      refreshPermissions();
+    }, 30000); // Poll every 30 seconds
+    return () => clearInterval(interval);
+  }, [refreshPermissions]);
+
   const can = useCallback((permission: Permission | string) => {
     // Developer bypass
     if (roles.includes('Developer' as Role)) {
