@@ -643,7 +643,7 @@
           "id": 1,
           "title": "Implement Permission Change Detection System",
           "description": "Create a mechanism to detect when user permissions or role assignments change in the system",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Implement a WebSocket connection for real-time updates or a polling mechanism that checks for permission changes at regular intervals. Include configuration options for refresh frequency and connection management. The detection system should compare permission timestamps or version numbers to identify changes. Implement debouncing logic to prevent excessive updates when multiple permission changes occur in rapid succession. Add appropriate error handling for connection failures and recovery mechanisms."
         },
@@ -671,7 +671,7 @@
           "id": 4,
           "title": "Add Logging and Manual Refresh Controls",
           "description": "Implement comprehensive logging and user-facing controls for permission refreshes",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2,
             3

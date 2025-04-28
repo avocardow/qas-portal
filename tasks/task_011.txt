@@ -17,7 +17,7 @@
 Create tests that simulate permission changes and verify that the UI updates accordingly. Test both automatic and manual refresh mechanisms.
 
 # Subtasks:
-## 1. Implement Permission Change Detection System [pending]
+## 1. Implement Permission Change Detection System [done]
 ### Dependencies: None
 ### Description: Create a mechanism to detect when user permissions or role assignments change in the system
 ### Details:
@@ -35,7 +35,7 @@ Modify the PermissionProvider service to subscribe to the permission change dete
 ### Details:
 Create a permission context or observable that UI components can subscribe to for permission updates. Implement a notification system that triggers UI component re-renders when permissions change. Ensure that permission-dependent UI elements (like buttons, menu items, or form fields) update their visibility or enabled state based on the latest permissions. Add transition effects for smooth UI updates when permissions change. Test various UI components under different permission change scenarios to ensure consistent behavior.
 
-## 4. Add Logging and Manual Refresh Controls [pending]
+## 4. Add Logging and Manual Refresh Controls [in-progress]
 ### Dependencies: 11.2, 11.3
 ### Description: Implement comprehensive logging and user-facing controls for permission refreshes
 ### Details:
