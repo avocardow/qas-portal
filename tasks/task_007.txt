@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Create Database Migration Script
-# Status: pending
+# Status: in-progress
 # Dependencies: 2, 3
 # Priority: medium
 # Description: Develop a script to migrate existing permission constants into the Supabase permissions and rolePermissions tables.
@@ -18,7 +18,7 @@
 Test the script in a development environment first. Verify that all permissions are correctly inserted and that role mappings match the policy definitions. Create a rollback script for safety.
 
 # Subtasks:
-## 1. Extract Unique Permissions from Policy Definitions [pending]
+## 1. Extract Unique Permissions from Policy Definitions [in-progress]
 ### Dependencies: None
 ### Description: Parse the existing policy definitions to identify and extract all unique permission constants required for migration.
 ### Details:

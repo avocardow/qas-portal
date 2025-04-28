@@ -329,7 +329,7 @@
       "id": 6,
       "title": "Refactor Backend Permission Middleware",
       "description": "Update the enforcePermission middleware to use the new policy engine for consistent frontend and backend permission checks.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         3
       ],
@@ -401,7 +401,7 @@
       "id": 7,
       "title": "Create Database Migration Script",
       "description": "Develop a script to migrate existing permission constants into the Supabase permissions and rolePermissions tables.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2,
         3
@@ -414,7 +414,7 @@
           "id": 1,
           "title": "Extract Unique Permissions from Policy Definitions",
           "description": "Parse the existing policy definitions to identify and extract all unique permission constants required for migration.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Implement a parser (in Node.js or SQL) that scans the policy files, collects all unique permission constants, and prepares them for insertion. Ensure the extraction logic handles duplicates and edge cases."
         },

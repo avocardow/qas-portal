@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Refactor Backend Permission Middleware
-# Status: in-progress
+# Status: done
 # Dependencies: 3
 # Priority: medium
 # Description: Update the enforcePermission middleware to use the new policy engine for consistent frontend and backend permission checks.
