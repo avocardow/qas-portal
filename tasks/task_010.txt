@@ -61,7 +61,7 @@ Example tab structure:
 ```
 </info added on 2025-04-28T14:01:16.222Z>
 
-## 2. Implement CRUD Operations for Role-Permission Mappings [in-progress]
+## 2. Implement CRUD Operations for Role-Permission Mappings [done]
 ### Dependencies: 10.1
 ### Description: Develop backend and frontend logic to create, read, update, and delete role-permission mappings, ensuring data integrity and validation.
 ### Details:
@@ -130,15 +130,274 @@ export const ROLE_PERMISSION_PERMISSIONS = {
 Include validation in the assign procedure to check for existing mappings and role/permission validity before creating new associations.
 </info added on 2025-04-28T14:19:32.469Z>
 
+<info added on 2025-04-28T14:53:44.536Z>
+<info added on 2025-04-29T10:15:23.456Z>
+For implementing unit tests for the role-permission router:
+
+```typescript
+// src/server/api/routers/rolePermission.test.ts
+import { expect, describe, it, vi, beforeEach } from "vitest";
+import { createCallerFactory } from "~/server/api/root";
+import { createInnerTRPCContext } from "~/server/api/trpc";
+import { rolePermissionRouter } from "./rolePermission";
+import { ROLE_PERMISSION_PERMISSIONS } from "~/constants/permissions";
+
+// Mock the database client
+const mockDb = {
+  rolePermission: {
+    findMany: vi.fn(),
+    create: vi.fn(),
+    delete: vi.fn(),
+    findFirst: vi.fn(),
+  },
+  role: {
+    findUnique: vi.fn(),
+  },
+  permission: {
+    findUnique: vi.fn(),
+  },
+};
+
+// Mock session with admin permissions
+const mockSession = {
+  user: {
+    id: "admin-user-id",
+    permissions: Object.values(ROLE_PERMISSION_PERMISSIONS),
+  },
+};
+
+describe("rolePermissionRouter", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  const caller = createCallerFactory(rolePermissionRouter)(
+    createInnerTRPCContext({
+      session: mockSession,
+      db: mockDb as any,
+    })
+  );
+
+  describe("getAll", () => {
+    it("should return all role-permission mappings", async () => {
+      const mockMappings = [
+        { roleId: "role1", permissionId: "perm1", role: {}, permission: {} },
+      ];
+      mockDb.rolePermission.findMany.mockResolvedValue(mockMappings);
+
+      const result = await caller.getAll();
+      expect(result).toEqual(mockMappings);
+      expect(mockDb.rolePermission.findMany).toHaveBeenCalledWith({
+        include: { role: true, permission: true },
+      });
+    });
+  });
+
+  describe("assign", () => {
+    it("should create a new role-permission mapping", async () => {
+      const input = { roleId: "role1", permissionId: "perm1" };
+      mockDb.role.findUnique.mockResolvedValue({ id: "role1" });
+      mockDb.permission.findUnique.mockResolvedValue({ id: "perm1" });
+      mockDb.rolePermission.findFirst.mockResolvedValue(null);
+      mockDb.rolePermission.create.mockResolvedValue(input);
+
+      const result = await caller.assign(input);
+      expect(result).toEqual(input);
+      expect(mockDb.rolePermission.create).toHaveBeenCalledWith({
+        data: input,
+      });
+    });
+
+    it("should throw an error if mapping already exists", async () => {
+      const input = { roleId: "role1", permissionId: "perm1" };
+      mockDb.role.findUnique.mockResolvedValue({ id: "role1" });
+      mockDb.permission.findUnique.mockResolvedValue({ id: "perm1" });
+      mockDb.rolePermission.findFirst.mockResolvedValue(input);
+
+      await expect(caller.assign(input)).rejects.toThrow(
+        "This permission is already assigned to the role"
+      );
+      expect(mockDb.rolePermission.create).not.toHaveBeenCalled();
+    });
+
+    it("should throw an error if role doesn't exist", async () => {
+      const input = { roleId: "invalid", permissionId: "perm1" };
+      mockDb.role.findUnique.mockResolvedValue(null);
+      mockDb.permission.findUnique.mockResolvedValue({ id: "perm1" });
+
+      await expect(caller.assign(input)).rejects.toThrow("Role not found");
+      expect(mockDb.rolePermission.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("unassign", () => {
+    it("should delete a role-permission mapping", async () => {
+      const input = { roleId: "role1", permissionId: "perm1" };
+      mockDb.rolePermission.delete.mockResolvedValue(input);
+
+      const result = await caller.unassign(input);
+      expect(result).toEqual(input);
+      expect(mockDb.rolePermission.delete).toHaveBeenCalledWith({
+        where: {
+          roleId_permissionId: input,
+        },
+      });
+    });
+  });
+});
+```
+
+To enhance the router implementation with validation:
+
+```typescript
+// Add to rolePermissionRouter.ts
+assign: permissionProcedure(ROLE_PERMISSION_PERMISSIONS.CREATE)
+  .input(z.object({
+    roleId: z.string(),
+    permissionId: z.string(),
+  }))
+  .mutation(async ({ ctx, input }) => {
+    // Validate role exists
+    const role = await ctx.db.role.findUnique({
+      where: { id: input.roleId },
+    });
+    if (!role) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Role not found",
+      });
+    }
+
+    // Validate permission exists
+    const permission = await ctx.db.permission.findUnique({
+      where: { id: input.permissionId },
+    });
+    if (!permission) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Permission not found",
+      });
+    }
+
+    // Check for existing mapping
+    const existing = await ctx.db.rolePermission.findFirst({
+      where: {
+        roleId: input.roleId,
+        permissionId: input.permissionId,
+      },
+    });
+    if (existing) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "This permission is already assigned to the role",
+      });
+    }
+
+    return ctx.db.rolePermission.create({
+      data: {
+        roleId: input.roleId,
+        permissionId: input.permissionId,
+      },
+    });
+  }),
+```
+</info added on 2025-04-29T10:15:23.456Z>
+</info added on 2025-04-28T14:53:44.536Z>
+
 ## 3. Enable Real-Time Updates and Confirmation Dialogs [done]
 ### Dependencies: 10.2
 ### Description: Integrate Supabase subscriptions (or equivalent) for real-time updates and add confirmation dialogs for disruptive changes.
 ### Details:
 Utilize Supabase's real-time features to subscribe to changes in role-permission mappings, updating the UI instantly when changes occur. Implement confirmation dialogs for actions that could have significant impact, such as revoking critical permissions or deleting mappings, to prevent accidental disruptions.
 
-## 4. Develop Permission Assignment and Revocation UI with Validation [pending]
+## 4. Develop Permission Assignment and Revocation UI with Validation [done]
 ### Dependencies: 10.3
 ### Description: Build interactive UI components for assigning and revoking permissions per role, with robust validation and user feedback.
 ### Details:
 Create interfaces (e.g., checklists, toggles, or drag-and-drop) for admins to assign or revoke permissions for each role. Integrate validation to prevent invalid assignments (such as conflicting or duplicate permissions) and provide clear feedback or error messages. Ensure the UI leverages real-time updates and confirmation dialogs for a seamless admin experience.
+
+<info added on 2025-04-28T14:57:59.030Z>
+Here's the additional implementation plan information:
+
+```javascript
+// Client-side validation implementation
+const duplicateExists = useMemo(() => {
+  if (!selectedPermission || !selectedRole) return false;
+  
+  return mappingsData?.some(mapping => 
+    mapping.permissionId === selectedPermission.id && 
+    mapping.roleId === selectedRole.id
+  );
+}, [selectedPermission, selectedRole, mappingsData]);
+
+// UI feedback components
+const DuplicateWarning = () => (
+  <Alert severity="warning" className="mt-2">
+    This permission is already assigned to the selected role.
+  </Alert>
+);
+
+// Enhanced handleAssign function
+const handleAssign = async () => {
+  if (duplicateExists) {
+    toast.error("Permission already assigned to this role");
+    return;
+  }
+  
+  setIsSubmitting(true);
+  try {
+    await assignPermission({
+      variables: {
+        roleId: selectedRole.id,
+        permissionId: selectedPermission.id
+      }
+    });
+    toast.success("Permission assigned successfully");
+    resetSelections();
+  } catch (error) {
+    toast.error(`Assignment failed: ${error.message}`);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+// Button state management
+<Button 
+  onClick={handleAssign}
+  disabled={!selectedRole || !selectedPermission || duplicateExists || isSubmitting}
+  variant="contained"
+  color="primary"
+  startIcon={duplicateExists ? <ErrorIcon /> : <AddIcon />}
+>
+  {duplicateExists ? "Already Assigned" : "Assign Permission"}
+</Button>
+```
+
+Include a confirmation dialog for revocation:
+
+```javascript
+const [showRevocationDialog, setShowRevocationDialog] = useState(false);
+const [mappingToRevoke, setMappingToRevoke] = useState(null);
+
+const handleRevocationConfirm = async () => {
+  try {
+    await revokePermission({
+      variables: { id: mappingToRevoke.id }
+    });
+    toast.success("Permission revoked successfully");
+  } catch (error) {
+    toast.error(`Revocation failed: ${error.message}`);
+  } finally {
+    setShowRevocationDialog(false);
+    setMappingToRevoke(null);
+  }
+};
+
+// Trigger dialog from UI
+const initiateRevocation = (mapping) => {
+  setMappingToRevoke(mapping);
+  setShowRevocationDialog(true);
+};
+```
+</info added on 2025-04-28T14:57:59.030Z>
 
