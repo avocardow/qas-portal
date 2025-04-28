@@ -139,7 +139,7 @@ Create tests that render the sidebar with different user roles and verify that t
    - Provide clear examples in documentation for different usage patterns
 </info added on 2025-04-28T10:50:17.929Z>
 
-## 2. Refactor AppSidebar Structure for Permission-Based Rendering [in-progress]
+## 2. Refactor AppSidebar Structure for Permission-Based Rendering [done]
 ### Dependencies: 8.1
 ### Description: Update the AppSidebar component to support permission-based rendering without causing layout shifts when items are hidden.
 ### Details:

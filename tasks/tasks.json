@@ -491,7 +491,7 @@
             1
           ],
           "details": "1. Refactor `AppSidebar.tsx` structure to support permission-based rendering:\n   - Analyze the current sidebar structure and identify potential layout shift issues\n   - Implement a consistent layout structure that won't shift when items are hidden\n   - Consider using CSS Grid or Flexbox with placeholder elements if needed\n   - Replace any direct permission checks with the new permission system\n\n2. Create a navigation item configuration that includes permission requirements:\n   - Define a data structure for navigation items that includes title, icon, link, and required permission\n   - Move hardcoded navigation items into this configuration\n   - Ensure the structure is extensible for future navigation changes\n\n3. Testing approach:\n   - Create snapshot tests for the sidebar with different permission sets\n   - Manually test layout stability by toggling permissions\n   - Verify that no layout shifts occur when items are hidden",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 8
         },
         {
