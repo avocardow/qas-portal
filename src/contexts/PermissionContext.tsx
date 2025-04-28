@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { Role, Permission, getPermissionsForRole } from '@/policies/permissions';
 
 export interface PermissionContextValue {
@@ -19,7 +19,14 @@ export const usePermissionContext = (): PermissionContextValue => {
   return context;
 };
 
-export const PermissionProvider: React.FC<{ roles: Role[] }> = ({ roles, children }) => {
+// Props for PermissionProvider including children
+interface PermissionProviderProps {
+  roles: Role[];
+  children: ReactNode;
+}
+
+// PermissionProvider component
+export const PermissionProvider = ({ roles, children }: PermissionProviderProps) => {
   const [permissions, setPermissions] = React.useState<Permission[]>([]);
 
   React.useEffect(() => {
