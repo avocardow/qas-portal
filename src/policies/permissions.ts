@@ -15,7 +15,8 @@ export type Permission =
   | (typeof TASK_PERMISSIONS)[keyof typeof TASK_PERMISSIONS]
   | (typeof DOCUMENT_PERMISSIONS)[keyof typeof DOCUMENT_PERMISSIONS]
   | (typeof PHONE_PERMISSIONS)[keyof typeof PHONE_PERMISSIONS]
-  | (typeof CLIENT_PERMISSIONS)[keyof typeof CLIENT_PERMISSIONS];
+  | (typeof CLIENT_PERMISSIONS)[keyof typeof CLIENT_PERMISSIONS]
+  | (typeof ROLE_PERMISSION_PERMISSIONS)[keyof typeof ROLE_PERMISSION_PERMISSIONS];
 
 /**
  * Roles in the system.
