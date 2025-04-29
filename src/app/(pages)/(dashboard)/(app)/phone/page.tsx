@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useAbility } from "@/hooks/useAbility";
 import { PHONE_PERMISSIONS } from "@/constants/permissions";
+import Authorized from "@/components/Authorized";
 
 export default function PhonePage() {
   // Hooks and mutations
@@ -34,120 +35,114 @@ export default function PhonePage() {
     makeCall.mutate({ clientId: selectedClientId, contactId, number });
   };
 
-  // Permission check after hooks
-  if (!canMakeCall) {
-    return (
-      <p className="text-red-500">
-        You do not have permission to access Phone features.
-      </p>
-    );
-  }
-
+  // Feature gating using Authorized component
   return (
-    <div>
-      <PageBreadcrumb pageTitle="Phone" />
-      <h1 className="mb-4 text-2xl font-semibold">Phone</h1>
+    <Authorized action={PHONE_PERMISSIONS.MAKE_CALL} fallback={<p className="text-red-500">You do not have permission to access Phone features.</p>}>
+      <div>
+        <PageBreadcrumb pageTitle="Phone" />
+        <h1 className="mb-4 text-2xl font-semibold">Phone</h1>
 
-      {/* Client Search */}
-      {!selectedClientId && (
-        <div className="mb-6 flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Search clients..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="rounded border border-gray-300 px-2 py-1"
-          />
-        </div>
-      )}
+        {/* Client Search */}
+        {!selectedClientId && (
+          <div className="mb-6 flex items-center space-x-2">
+            <input
+              type="text"
+              placeholder="Search clients..."
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="rounded border border-gray-300 px-2 py-1"
+            />
+          </div>
+        )}
 
-      {/* Client List */}
-      {!selectedClientId && clientsQuery.data?.items && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell isHeader>ID</TableCell>
-              <TableCell isHeader>Name</TableCell>
-              <TableCell isHeader>Actions</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {clientsQuery.data.items.map((client) => (
-              <TableRow key={client.id}>
-                <TableCell>{client.id}</TableCell>
-                <TableCell>{client.clientName}</TableCell>
-                <TableCell>
-                  <button
-                    onClick={() => setSelectedClientId(client.id)}
-                    className="btn bg-blue-500 px-2 py-1 text-white"
-                  >
-                    View Contacts
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-
-      {/* Contacts List and Call Buttons */}
-      {selectedClientId && clientQuery.data && (
-        <div className="space-y-4">
-          <button
-            onClick={() => setSelectedClientId(null)}
-            className="text-blue-500 hover:underline"
-          >
-            ← Back to Clients
-          </button>
-          <h2 className="text-xl font-medium">
-            Contacts for {clientQuery.data.clientName}
-          </h2>
+        {/* Client List */}
+        {!selectedClientId && clientsQuery.data?.items && (
           <Table>
             <TableHeader>
               <TableRow>
+                <TableCell isHeader>ID</TableCell>
                 <TableCell isHeader>Name</TableCell>
-                <TableCell isHeader>Phone</TableCell>
-                <TableCell isHeader>Call</TableCell>
+                <TableCell isHeader>Actions</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {clientQuery.data.contacts.map((c) => (
-                <TableRow key={c.id}>
-                  <TableCell>{c.name || "–"}</TableCell>
-                  <TableCell>{c.phone || "–"}</TableCell>
+              {clientsQuery.data.items.map((client) => (
+                <TableRow key={client.id}>
+                  <TableCell>{client.id}</TableCell>
+                  <TableCell>{client.clientName}</TableCell>
                   <TableCell>
-                    {c.phone ? (
-                      canMakeCall ? (
-                        <button
-                          onClick={() => handleCall(c.id, c.phone!)}
-                          className="btn bg-green-500 px-2 py-1 text-white"
-                        >
-                          Call
-                        </button>
-                      ) : (
-                        <span className="text-gray-500">Not Authorized</span>
-                      )
-                    ) : (
-                      <span className="text-gray-500">No Number</span>
-                    )}
+                    <button
+                      onClick={() => setSelectedClientId(client.id)}
+                      className="btn bg-blue-500 px-2 py-1 text-white"
+                    >
+                      View Contacts
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+        )}
 
-          {/* Call status */}
-          {makeCall.status === "pending" && <p>Calling...</p>}
-          {makeCall.error && (
-            <p className="text-red-500">Error: {makeCall.error.message}</p>
-          )}
-          {makeCall.data && (
-            <p className="text-green-600">
-              Call initiated. Log ID: {makeCall.data.callLogId}
-            </p>
-          )}
-        </div>
-      )}
-    </div>
+        {/* Contacts List and Call Buttons */}
+        {selectedClientId && clientQuery.data && (
+          <div className="space-y-4">
+            <button
+              onClick={() => setSelectedClientId(null)}
+              className="text-blue-500 hover:underline"
+            >
+              ← Back to Clients
+            </button>
+            <h2 className="text-xl font-medium">
+              Contacts for {clientQuery.data.clientName}
+            </h2>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Name</TableCell>
+                  <TableCell isHeader>Phone</TableCell>
+                  <TableCell isHeader>Call</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {clientQuery.data.contacts.map((c) => (
+                  <TableRow key={c.id}>
+                    <TableCell>{c.name || "–"}</TableCell>
+                    <TableCell>{c.phone || "–"}</TableCell>
+                    <TableCell>
+                      {c.phone ? (
+                        canMakeCall ? (
+                          <button
+                            onClick={() => handleCall(c.id, c.phone!)}
+                            className="btn bg-green-500 px-2 py-1 text-white"
+                          >
+                            Call
+                          </button>
+                        ) : (
+                          <span className="text-gray-500">Not Authorized</span>
+                        )
+                      ) : (
+                        <span className="text-gray-500">No Number</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            {/* Call status */}
+            {makeCall.status === "pending" && <p>Calling...</p>}
+            {makeCall.error && (
+              <p className="text-red-500">Error: {makeCall.error.message}</p>
+            )}
+            {makeCall.data && (
+              <p className="text-green-600">
+                Call initiated. Log ID: {makeCall.data.callLogId}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </Authorized>
   );
 }

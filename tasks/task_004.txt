@@ -72,7 +72,7 @@ Create a test harness that allows toggling between different user roles to visua
 6. Update form validation to account for conditionally rendered fields
 7. Ensure error messages and help text are properly handled with conditional rendering
 
-## 6. Replace Feature Section Permission Checks [pending]
+## 6. Replace Feature Section Permission Checks [done]
 ### Dependencies: 4.1
 ### Description: Update larger UI sections and feature areas to use Authorized components for permission-based visibility.
 ### Details:
@@ -84,7 +84,7 @@ Create a test harness that allows toggling between different user roles to visua
 6. Update any responsive behavior that might be affected by conditional rendering
 7. Ensure loading states are properly handled when sections are conditionally rendered
 
-## 7. Implement Comprehensive Testing and Validation [pending]
+## 7. Implement Comprehensive Testing and Validation [in-progress]
 ### Dependencies: 4.2, 4.3, 4.4, 4.5, 4.6
 ### Description: Create tests and validation procedures to ensure all permission-based UI gating works correctly across the application.
 ### Details:

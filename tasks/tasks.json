@@ -308,7 +308,7 @@
             1
           ],
           "details": "1. Identify entire sections, cards, or feature areas that should be conditionally displayed\n2. Replace section-level conditional rendering with Authorized component wrappers\n3. For complex layouts, ensure the Authorized component doesn't break grid or flexbox structures\n4. Consider adding placeholder or alternative content for unauthorized sections\n5. Test page layouts with different permission sets to ensure correct section visibility\n6. Update any responsive behavior that might be affected by conditional rendering\n7. Ensure loading states are properly handled when sections are conditionally rendered",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -323,7 +323,7 @@
             6
           ],
           "details": "1. Create unit tests for the Authorized component with various permission scenarios\n2. Develop integration tests for key pages to verify correct element visibility\n3. Create a permission testing matrix to systematically verify all UI elements\n4. Implement visual regression tests to catch unexpected UI changes\n5. Verify that all action props exactly match the permissionSchema strings\n6. Test edge cases like loading states and permission changes while using the app\n7. Document any components that required special handling for the Authorized wrapper\n8. Create a validation checklist for developers to use when implementing new features",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 4
         }
       ]
