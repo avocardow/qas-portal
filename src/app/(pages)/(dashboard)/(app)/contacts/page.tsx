@@ -2,7 +2,7 @@
 // @ts-nocheck
 "use client";
 import React, { useState } from "react";
-import { useRbac } from "@/context/RbacContext";
+import { useRole } from "@/context/RbacContext";
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Link from "next/link";
@@ -22,7 +22,7 @@ type SortField = "name" | "city" | "status";
 
 export default function ContactsPage() {
   // RBAC context
-  const { role } = useRbac();
+  const role = useRole();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
   // Debounce filter input to optimize queries

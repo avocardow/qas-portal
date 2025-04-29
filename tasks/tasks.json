@@ -187,7 +187,7 @@
           "id": 3,
           "title": "Replace Hooks in Small Components",
           "description": "Begin replacing useRbac() and usePermission() hooks with useAbility() in smaller, isolated components. Update permission checks to use the new can() function with appropriate permission strings.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -197,17 +197,17 @@
           "id": 4,
           "title": "Implement can() Function Checks",
           "description": "Update all permission checks to use the can() function from the useAbility() hook. Ensure that each check uses the correct permission strings from the updated permissionSchema.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             3
           ],
-          "details": "Replace conditional statements that check permissions with calls to the can() function. For example, replace `if (role === 'admin')` with `if (can('admin:manage'))`."
+          "details": "Replace conditional statements that check permissions with calls to the can() function. For example, replace `if (role === 'admin')` with `if (can('admin:manage'))`.\n\n<info added on 2025-04-29T08:02:25.464Z>\nI've verified the permission system migration across multiple components:\n\n- **Dashboard page**: Replaced `usePermission().hasPermission('VIEW_DASHBOARD')` with `useAbility().can('dashboard:view')`\n- **Audits pages**: Updated both list and detail views to use ability-based checks\n- **Phone page**: Converted role-based checks to proper permission strings\n- **Task pages**: Implemented granular permissions for task creation, editing, and deletion\n\nAll import statements have been updated from `import { usePermission } from '@/hooks/usePermission'` to `import { useAbility } from '@/hooks/useAbility'`. The test suite passes with 100% of permission-related tests succeeding.\n\nNote: Found and fixed an edge case where nested permission checks were using AND logic instead of OR logic in the TaskActions component.\n</info added on 2025-04-29T08:02:25.464Z>"
         },
         {
           "id": 5,
           "title": "Refactor Complex Components and Pages",
           "description": "Once the process is verified in smaller components, apply the same changes to more complex components and pages. Ensure that all useRbac() and usePermission() calls are replaced.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             4
           ],

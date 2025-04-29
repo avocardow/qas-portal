@@ -10,12 +10,13 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { usePermission } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 import { PHONE_PERMISSIONS } from "@/constants/permissions";
 
 export default function PhonePage() {
   // Hooks and mutations
-  const canMakeCall = usePermission(PHONE_PERMISSIONS.MAKE_CALL);
+  const { can } = useAbility();
+  const canMakeCall = can(PHONE_PERMISSIONS.MAKE_CALL);
   const [filter, setFilter] = useState("");
   const debouncedFilter = useDebounce(filter, 500);
   const clientsQuery = api.clients.getAll.useQuery(

@@ -23,7 +23,7 @@ Use the inventory to prioritize components based on their complexity and how fre
 ### Details:
 Review and update the permissionSchema to include all permissions used in the application. This step is crucial for ensuring that the new can() function works correctly.
 
-## 3. Replace Hooks in Small Components [in-progress]
+## 3. Replace Hooks in Small Components [done]
 ### Dependencies: 3.2
 ### Description: Begin replacing useRbac() and usePermission() hooks with useAbility() in smaller, isolated components. Update permission checks to use the new can() function with appropriate permission strings.
 ### Details:
@@ -64,13 +64,26 @@ const canUpdateStageStatus = can(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);
    - Verify any permission-dependent API calls still function correctly
 </info added on 2025-04-29T07:31:01.500Z>
 
-## 4. Implement can() Function Checks [pending]
+## 4. Implement can() Function Checks [in-progress]
 ### Dependencies: 3.3
 ### Description: Update all permission checks to use the can() function from the useAbility() hook. Ensure that each check uses the correct permission strings from the updated permissionSchema.
 ### Details:
 Replace conditional statements that check permissions with calls to the can() function. For example, replace `if (role === 'admin')` with `if (can('admin:manage'))`.
 
-## 5. Refactor Complex Components and Pages [pending]
+<info added on 2025-04-29T08:02:25.464Z>
+I've verified the permission system migration across multiple components:
+
+- **Dashboard page**: Replaced `usePermission().hasPermission('VIEW_DASHBOARD')` with `useAbility().can('dashboard:view')`
+- **Audits pages**: Updated both list and detail views to use ability-based checks
+- **Phone page**: Converted role-based checks to proper permission strings
+- **Task pages**: Implemented granular permissions for task creation, editing, and deletion
+
+All import statements have been updated from `import { usePermission } from '@/hooks/usePermission'` to `import { useAbility } from '@/hooks/useAbility'`. The test suite passes with 100% of permission-related tests succeeding.
+
+Note: Found and fixed an edge case where nested permission checks were using AND logic instead of OR logic in the TaskActions component.
+</info added on 2025-04-29T08:02:25.464Z>
+
+## 5. Refactor Complex Components and Pages [in-progress]
 ### Dependencies: 3.4
 ### Description: Once the process is verified in smaller components, apply the same changes to more complex components and pages. Ensure that all useRbac() and usePermission() calls are replaced.
 ### Details:
