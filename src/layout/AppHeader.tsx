@@ -7,7 +7,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { useRbac } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 import { usePermissionContext } from '@/contexts/PermissionContext';
 
 const AppHeader: React.FC = () => {

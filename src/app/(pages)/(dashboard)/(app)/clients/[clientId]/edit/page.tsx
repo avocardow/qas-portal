@@ -8,7 +8,7 @@ import { useRouter, useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import { useRbac } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 
 // Zod schema for validation
 const formSchema = z.object({

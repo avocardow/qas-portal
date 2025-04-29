@@ -14,7 +14,7 @@ import {
 import { api } from "@/utils/api";
 import Button from "@/components/ui/button/Button";
 import DocumentReferences from "@/components/common/DocumentReferences";
-import { usePermission } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 import {
   AUDIT_PERMISSIONS,
   TASK_PERMISSIONS,
@@ -25,13 +25,14 @@ import Badge from "@/components/ui/badge/Badge";
 export default function AuditDetailPage() {
   const { auditId } = useParams() as { auditId: string };
   const router = useRouter();
-  const canViewAudit = usePermission(AUDIT_PERMISSIONS.GET_BY_ID);
-  const canAssignUser = usePermission(AUDIT_PERMISSIONS.ASSIGN_USER);
-  const canUnassignUser = usePermission(AUDIT_PERMISSIONS.UNASSIGN_USER);
-  const canCreateTask = usePermission(TASK_PERMISSIONS.CREATE);
-  const canViewTasks = usePermission(TASK_PERMISSIONS.GET_BY_AUDIT_ID);
-  const canUpdateTask = usePermission(TASK_PERMISSIONS.UPDATE);
-  const canViewDocuments = usePermission(DOCUMENT_PERMISSIONS.GET_BY_AUDIT_ID);
+  const { can } = useAbility();
+  const canViewAudit = can(AUDIT_PERMISSIONS.GET_BY_ID);
+  const canAssignUser = can(AUDIT_PERMISSIONS.ASSIGN_USER);
+  const canUnassignUser = can(AUDIT_PERMISSIONS.UNASSIGN_USER);
+  const canCreateTask = can(TASK_PERMISSIONS.CREATE);
+  const canViewTasks = can(TASK_PERMISSIONS.GET_BY_AUDIT_ID);
+  const canUpdateTask = can(TASK_PERMISSIONS.UPDATE);
+  const canViewDocuments = can(DOCUMENT_PERMISSIONS.GET_BY_AUDIT_ID);
   const {
     data: audit,
     isLoading,

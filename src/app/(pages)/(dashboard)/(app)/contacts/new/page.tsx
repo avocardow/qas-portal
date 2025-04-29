@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
-import { useRbac } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 
 // Define form schema matching contact fields
 const formSchema = z.object({

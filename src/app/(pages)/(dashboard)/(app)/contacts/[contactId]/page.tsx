@@ -6,7 +6,7 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/utils/api";
-import { useRbac } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 import ComponentCard from "@/components/common/ComponentCard";
 import {
   Table,

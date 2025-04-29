@@ -197,7 +197,7 @@
           "id": 4,
           "title": "Implement can() Function Checks",
           "description": "Update all permission checks to use the can() function from the useAbility() hook. Ensure that each check uses the correct permission strings from the updated permissionSchema.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             3
           ],

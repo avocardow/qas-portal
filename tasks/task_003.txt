@@ -64,7 +64,7 @@ const canUpdateStageStatus = can(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);
    - Verify any permission-dependent API calls still function correctly
 </info added on 2025-04-29T07:31:01.500Z>
 
-## 4. Implement can() Function Checks [in-progress]
+## 4. Implement can() Function Checks [done]
 ### Dependencies: 3.3
 ### Description: Update all permission checks to use the can() function from the useAbility() hook. Ensure that each check uses the correct permission strings from the updated permissionSchema.
 ### Details:
