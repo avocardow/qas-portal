@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
-import { useAbility } from "@/hooks/useAbility";
 
 // Define form schema
 const formSchema = z.object({
@@ -27,7 +26,6 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function NewClientPage() {
   // Hooks must run unconditionally
-  const { role } = useRbac();
   const router = useRouter();
   const {
     register,
@@ -50,10 +48,6 @@ export default function NewClientPage() {
       onError: (err) => console.error(err),
     });
   };
-  // Guard after hooks
-  if (role !== "Admin") {
-    return <p>You are not authorized to create clients.</p>;
-  }
   return (
     <DashboardPlaceholderPageTemplate heading="New Client">
       <PageBreadcrumb pageTitle="New Client" />

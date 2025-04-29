@@ -28,7 +28,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function EditContactPage() {
-  const { role } = useRbac();
+  const { can } = useAbility();
   const router = useRouter();
   const { contactId } = useParams() as { contactId: string };
 
@@ -84,8 +84,8 @@ export default function EditContactPage() {
     }
   };
 
-  // Guard after hooks
-  if (role !== "Admin") {
+  // Guard after hooks using permission checks
+  if (!can("task.update")) {
     return <p>You are not authorized to edit contacts.</p>;
   }
   if (contactQuery.isLoading) {

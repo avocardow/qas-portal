@@ -26,7 +26,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function EditClientPage() {
-  const { role } = useRbac();
+  const { can } = useAbility();
   const router = useRouter();
   const { clientId } = useParams() as { clientId: string };
 
@@ -81,8 +81,8 @@ export default function EditClientPage() {
     }
   };
 
-  // Guard after hooks
-  if (role !== "Admin") {
+  // Guard after hooks using permission checks
+  if (!can("clients.view.status")) {
     return <p>You are not authorized to edit clients.</p>;
   }
   if (clientQuery.isLoading) {

@@ -25,7 +25,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function NewContactPage() {
   // Hooks must run unconditionally
-  const { role } = useRbac();
+  const { can } = useAbility();
   const { data: clientsList } = api.clients.getAll.useQuery({ pageSize: 1000 });
   const router = useRouter();
   const {
@@ -35,16 +35,16 @@ export default function NewContactPage() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
+  // Initialize create contact mutation
   const createContactMutation = api.contact.create.useMutation();
   const onSubmit = (data: FormData) => {
-    // Submit contact create mutation
     createContactMutation.mutate(data, {
       onSuccess: (created) => router.push(`/contacts/${created.id}`),
       onError: (err) => console.error(err),
     });
   };
   // Guard after hooks
-  if (role !== "Admin") {
+  if (!can("task.create")) {
     return <p>You are not authorized to create contacts.</p>;
   }
   return (

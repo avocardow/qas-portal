@@ -1,6 +1,6 @@
-import React from "react";
-import { useAbility } from "@/hooks/useAbility";
+import React from 'react';
 import { rbacPolicy, type Role } from "@/utils/rbacPolicy";
+import { useRbac } from '@/context/RbacContext';
 
 const ViewAsDropdown: React.FC = () => {
   const { impersonatedRole, setImpersonatedRole } = useRbac();

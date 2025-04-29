@@ -7,15 +7,13 @@ import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { useAbility } from "@/hooks/useAbility";
 import { usePermissionContext } from '@/contexts/PermissionContext';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  const { sessionRole } = useRbac();
-  const { refreshPermissions } = usePermissionContext();
+  const { roles, refreshPermissions } = usePermissionContext();
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -172,7 +170,7 @@ const AppHeader: React.FC = () => {
               title="Refresh Permissions"
               className="p-2 text-gray-500 hover:text-gray-700"
             >🔄</button>
-            {sessionRole === "Developer" && <ViewAsDropdown />}
+            {roles.includes('Developer') && <ViewAsDropdown />}
             {/* <!-- Dark Mode Toggler --> */}
             <ThemeToggleButton />
             {/* <!-- Dark Mode Toggler --> */}

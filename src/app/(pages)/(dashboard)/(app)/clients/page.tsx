@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useAbility } from "@/hooks/useAbility";
-import { useRbac } from "@/context/RbacContext";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -21,8 +20,7 @@ export default function ClientsPage() {
     title: string;
     description?: string;
   } | null>(null);
-  // RBAC context
-  const { role } = useRbac();
+  const { can } = useAbility();
   const router = useRouter();
   // --- Pagination and Filter State ---
   const [showAll, setShowAll] = useState(false);
@@ -242,9 +240,8 @@ export default function ClientsPage() {
     return [...baseColumns, ...adminColumns];
   }, [baseColumns, adminColumns]);
 
-  // Protect view based on role after hooks to keep hook order consistent
-  // Grant Developer full access regardless of impersonation
-  if (role !== "Admin" && role !== "Manager" && role !== "Client" && role !== "Developer") {
+  // Protect view based on permission checks using useAbility
+  if (!can("clients.view.billing") && !can("clients.view.status")) {
     return <p>You are not authorized to view clients.</p>;
   }
 
@@ -255,7 +252,7 @@ export default function ClientsPage() {
         <ComponentCard
           title="Client Directory"
           actions={
-            (role === "Admin" || role === "Developer") ? (
+            can("clients.view.billing") ? (
               <Button
                 aria-label="Add New Client"
                 size="sm"
@@ -324,7 +321,7 @@ export default function ClientsPage() {
                 }}
                 extraControls={
                   <>
-                    {(role === "Admin" || role === "Developer") && (
+                    {can("clients.view.billing") && (
                       <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         <input
                           type="checkbox"
@@ -335,7 +332,7 @@ export default function ClientsPage() {
                         <span>Show All</span>
                       </label>
                     )}
-                    {(role === "Admin" || role === "Developer") && (
+                    {can("clients.view.billing") && (
                       <Badge
                         size="sm"
                         variant={showAll ? "light" : "solid"}

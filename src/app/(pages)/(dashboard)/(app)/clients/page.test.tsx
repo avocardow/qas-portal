@@ -26,7 +26,7 @@ vi.mock('@/components/tables/DataTables/TableTwo/DataTableTwo', () => ({ default
 vi.mock('@/components/ui/badge/Badge', () => ({ default: () => <div /> }));
 
 import ClientsPage from './page';
-import * as rbacModule from '@/context/RbacContext';
+import * as abilityModule from '@/hooks/useAbility';
 import { PermissionProvider } from '@/contexts/PermissionContext';
 import * as nextAuth from 'next-auth/react';
 
@@ -44,28 +44,28 @@ describe('ClientsPage RBAC', () => {
   }
 
   test('shows unauthorized message to users without a recognized role', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: null, permissions: [], canAccess: () => false });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => false, cannot: () => true });
     renderWithPermissionProvider(<ClientsPage />);
     const message = screen.getByText(/you are not authorized to view clients/i);
     expect(message).toBeTruthy();
   });
 
   test('allows Admin to view page and see Add New Client button', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     const addButton = screen.getByRole('button', { name: /add new client/i });
     expect(addButton).toBeTruthy();
   });
 
   test('allows Developer to view page and see Add New Client button', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     const addButton = screen.getByRole('button', { name: /add new client/i });
     expect(addButton).toBeTruthy();
   });
 
   test('routes to New Client page when Developer clicks Add New Client button', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     const addButton = screen.getByRole('button', { name: /add new client/i });
     fireEvent.click(addButton);
@@ -73,21 +73,27 @@ describe('ClientsPage RBAC', () => {
   });
 
   test('shows disabled Add New Client button for Manager when lacking permissions', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({
+      can: (permission) => permission === 'clients.view.status',
+      cannot: (permission) => permission !== 'clients.view.status',
+    });
     renderWithPermissionProvider(<ClientsPage />);
     const button = screen.getByRole('button', { name: /add new client/i });
     expect(button.disabled).toBe(true);
   });
 
   test('shows disabled Add New Client button for Client when lacking permissions', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Client', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({
+      can: (permission) => permission === 'clients.view.status',
+      cannot: (permission) => permission !== 'clients.view.status',
+    });
     renderWithPermissionProvider(<ClientsPage />);
     const button = screen.getByRole('button', { name: /add new client/i });
     expect(button.disabled).toBe(true);
   });
 
   test('routes to New Client page when Add New Client button is clicked', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     const addButton = screen.getByRole('button', { name: /add new client/i });
     fireEvent.click(addButton);
@@ -95,7 +101,7 @@ describe('ClientsPage RBAC', () => {
   });
 
   test('shows No clients found message when there are no clients', () => {
-    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+    vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     expect(screen.getByText(/no clients found/i)).toBeTruthy();
   });

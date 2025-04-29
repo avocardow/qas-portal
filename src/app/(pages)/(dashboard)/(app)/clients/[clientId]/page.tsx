@@ -6,7 +6,6 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/utils/api";
-import { useAbility } from "@/hooks/useAbility";
 import ComponentCard from "@/components/common/ComponentCard";
 import {
   Table,
@@ -21,6 +20,7 @@ import { TabButton } from "@/components/ui/tabs/TabWithUnderline";
 import Badge from "@/components/ui/badge/Badge";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
+import { useAbility } from "@/hooks/useAbility";
 
 type TabKey =
   | "Summary"
@@ -40,7 +40,7 @@ export default function ClientDetailPage() {
     isLoading,
     isError,
   } = api.clients.getById.useQuery({ clientId });
-  const { role } = useRbac();
+  const { can } = useAbility();
   const { isOpen, openModal, closeModal } = useModal();
   // Folder selection state and queries
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
@@ -100,7 +100,7 @@ export default function ClientDetailPage() {
     }
   };
 
-  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
+  if (!can("clients.view.billing") && !can("clients.view.status")) {
     return <p>You are not authorized to view client details.</p>;
   }
 
@@ -137,7 +137,7 @@ export default function ClientDetailPage() {
     >
       <PageBreadcrumb pageTitle={client.clientName} />
       <div className="mb-4 flex justify-end space-x-2">
-        {role === "Admin" && (
+        {can("clients.view.status") && (
           <>
             <Link href={`/clients/${clientId}/edit`}>
               <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-800">
@@ -155,7 +155,7 @@ export default function ClientDetailPage() {
             </button>
           </>
         )}
-        {(role === "Admin" || role === "Manager") && (
+        {can("clients.view.status") && (
           <button
             onClick={openModal}
             className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:text-white dark:hover:bg-green-800"

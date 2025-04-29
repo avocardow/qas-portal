@@ -6,7 +6,6 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/utils/api";
-import { useAbility } from "@/hooks/useAbility";
 import ComponentCard from "@/components/common/ComponentCard";
 import {
   Table,
@@ -19,6 +18,7 @@ import AuditList from "@/components/audit/AuditList";
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { TabButton } from "@/components/ui/tabs/TabWithUnderline";
 import Badge from "@/components/ui/badge/Badge";
+import { useAbility } from "@/hooks/useAbility";
 
 type TabKey =
   | "Summary"
@@ -38,7 +38,7 @@ export default function ContactDetailPage() {
     isLoading,
     isError,
   } = api.contact.getById.useQuery({ contactId });
-  const { role } = useRbac();
+  const { can } = useAbility();
 
   // Tab state
   const detailContact = contact as any;
@@ -68,7 +68,7 @@ export default function ContactDetailPage() {
     }
   };
 
-  if (role !== "Admin" && role !== "Manager" && role !== "Client") {
+  if (!can("clients.view.status")) {
     return <p>You are not authorized to view contact details.</p>;
   }
 
@@ -105,7 +105,7 @@ export default function ContactDetailPage() {
     >
       <PageBreadcrumb pageTitle={contact.name ?? ""} />
       <div className="mb-4 flex justify-end space-x-2">
-        {role === "Admin" && (
+        {can("clients.edit") && (
           <>
             <Link href={`/contacts/${contactId}/edit`}>
               <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-700 dark:text-white dark:hover:bg-blue-800">
