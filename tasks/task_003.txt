@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Refactor Hook Usage
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: high
 # Description: Replace all useRbac() and usePermission() hook calls with useAbility() throughout the codebase.
@@ -11,23 +11,58 @@ Using the inventory from Task 1, systematically replace each hook usage followin
 For each component refactored, manually test with different user roles to verify permission checks still work correctly. Write unit tests for critical components that use useAbility() to ensure they render correctly based on permissions.
 
 # Subtasks:
-## 1. Inventory and Planning [pending]
+## 1. Inventory and Planning [done]
 ### Dependencies: None
 ### Description: Review the inventory from Task 1 and identify all components and pages that use the useRbac() and usePermission() hooks. Plan the replacement strategy based on component complexity and usage frequency.
 ### Details:
 Use the inventory to prioritize components based on their complexity and how frequently they are used. Start with smaller, isolated components to ensure a smooth transition.
 
-## 2. Update Permission Schema [pending]
+## 2. Update Permission Schema [done]
 ### Dependencies: 3.1
 ### Description: Ensure the permissionSchema is up-to-date and includes all necessary permission strings. Verify that each permission string is correctly defined and matches the intended functionality.
 ### Details:
 Review and update the permissionSchema to include all permissions used in the application. This step is crucial for ensuring that the new can() function works correctly.
 
-## 3. Replace Hooks in Small Components [pending]
+## 3. Replace Hooks in Small Components [in-progress]
 ### Dependencies: 3.2
 ### Description: Begin replacing useRbac() and usePermission() hooks with useAbility() in smaller, isolated components. Update permission checks to use the new can() function with appropriate permission strings.
 ### Details:
 Start with simple components to test the replacement process and ensure it works as expected before moving to more complex components.
+
+<info added on 2025-04-29T07:31:01.500Z>
+For the AuditList.tsx component replacement:
+
+1. Current implementation:
+```typescript
+import { usePermission } from '@/context/RbacContext';
+
+// Inside component
+const canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
+const canCreateAudit = usePermission(AUDIT_PERMISSIONS.CREATE);
+const canUpdateStageStatus = usePermission(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);
+```
+
+2. New implementation:
+```typescript
+import { useAbility } from '@/hooks/useAbility';
+
+// Inside component
+const { can } = useAbility();
+const canViewAudits = can(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
+const canCreateAudit = can(AUDIT_PERMISSIONS.CREATE);
+const canUpdateStageStatus = can(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);
+```
+
+3. Testing approach: After making these changes, verify that:
+   - The audit list visibility behaves correctly
+   - Create audit button appears only for authorized users
+   - Stage status updates are properly restricted
+
+4. Potential issues to watch for:
+   - Ensure AUDIT_PERMISSIONS constants are correctly imported
+   - Check for any conditional rendering that depends on these permissions
+   - Verify any permission-dependent API calls still function correctly
+</info added on 2025-04-29T07:31:01.500Z>
 
 ## 4. Implement can() Function Checks [pending]
 ### Dependencies: 3.3

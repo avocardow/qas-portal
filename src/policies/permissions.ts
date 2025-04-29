@@ -4,6 +4,7 @@ import {
   DOCUMENT_PERMISSIONS,
   PHONE_PERMISSIONS,
   CLIENT_PERMISSIONS,
+  ROLE_PERMISSION_PERMISSIONS,
 } from '@/constants/permissions';
 
 /**
@@ -45,6 +46,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ...Object.values(PHONE_PERMISSIONS),
     CLIENT_PERMISSIONS.VIEW_BILLING,
     CLIENT_PERMISSIONS.VIEW_STATUS,
+    ...Object.values(ROLE_PERMISSION_PERMISSIONS),
   ],
   Manager: [
     ...Object.values(AUDIT_PERMISSIONS),

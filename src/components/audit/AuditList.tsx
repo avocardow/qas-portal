@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import Button from "@/components/ui/button/Button";
 import Badge from "@/components/ui/badge/Badge";
-import { usePermission } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 
 interface AuditListProps {
@@ -19,9 +19,10 @@ interface AuditListProps {
 
 const AuditList: React.FC<AuditListProps> = ({ clientId }) => {
   const router = useRouter();
-  const canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
-  const canCreateAudit = usePermission(AUDIT_PERMISSIONS.CREATE);
-  const canUpdateStageStatus = usePermission(
+  const { can } = useAbility();
+  const canViewAudits = can(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
+  const canCreateAudit = can(AUDIT_PERMISSIONS.CREATE);
+  const canUpdateStageStatus = can(
     AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS
   );
   const {

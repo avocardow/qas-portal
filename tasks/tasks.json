@@ -157,7 +157,7 @@
       "id": 3,
       "title": "Refactor Hook Usage",
       "description": "Replace all useRbac() and usePermission() hook calls with useAbility() throughout the codebase.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -169,7 +169,7 @@
           "id": 1,
           "title": "Inventory and Planning",
           "description": "Review the inventory from Task 1 and identify all components and pages that use the useRbac() and usePermission() hooks. Plan the replacement strategy based on component complexity and usage frequency.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Use the inventory to prioritize components based on their complexity and how frequently they are used. Start with smaller, isolated components to ensure a smooth transition."
         },
@@ -177,7 +177,7 @@
           "id": 2,
           "title": "Update Permission Schema",
           "description": "Ensure the permissionSchema is up-to-date and includes all necessary permission strings. Verify that each permission string is correctly defined and matches the intended functionality.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -187,11 +187,11 @@
           "id": 3,
           "title": "Replace Hooks in Small Components",
           "description": "Begin replacing useRbac() and usePermission() hooks with useAbility() in smaller, isolated components. Update permission checks to use the new can() function with appropriate permission strings.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2
           ],
-          "details": "Start with simple components to test the replacement process and ensure it works as expected before moving to more complex components."
+          "details": "Start with simple components to test the replacement process and ensure it works as expected before moving to more complex components.\n\n<info added on 2025-04-29T07:31:01.500Z>\nFor the AuditList.tsx component replacement:\n\n1. Current implementation:\n```typescript\nimport { usePermission } from '@/context/RbacContext';\n\n// Inside component\nconst canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);\nconst canCreateAudit = usePermission(AUDIT_PERMISSIONS.CREATE);\nconst canUpdateStageStatus = usePermission(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);\n```\n\n2. New implementation:\n```typescript\nimport { useAbility } from '@/hooks/useAbility';\n\n// Inside component\nconst { can } = useAbility();\nconst canViewAudits = can(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);\nconst canCreateAudit = can(AUDIT_PERMISSIONS.CREATE);\nconst canUpdateStageStatus = can(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);\n```\n\n3. Testing approach: After making these changes, verify that:\n   - The audit list visibility behaves correctly\n   - Create audit button appears only for authorized users\n   - Stage status updates are properly restricted\n\n4. Potential issues to watch for:\n   - Ensure AUDIT_PERMISSIONS constants are correctly imported\n   - Check for any conditional rendering that depends on these permissions\n   - Verify any permission-dependent API calls still function correctly\n</info added on 2025-04-29T07:31:01.500Z>"
         },
         {
           "id": 4,
