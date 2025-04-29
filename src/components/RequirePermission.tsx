@@ -1,5 +1,5 @@
 import React from "react";
-import { usePermission } from "@/context/RbacContext";
+import { useAbility } from "@/hooks/useAbility";
 
 export type RequirePermissionProps = {
   permission: string;
@@ -12,7 +12,8 @@ export default function RequirePermission({
   fallback = <p>You are not authorized to access this content.</p>,
   children,
 }: RequirePermissionProps) {
-  const allowed = usePermission(permission);
+  const { can } = useAbility();
+  const allowed = can(permission);
   if (!allowed) {
     return <>{fallback}</>;
   }
