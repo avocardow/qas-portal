@@ -239,7 +239,7 @@
       "id": 4,
       "title": "Implement Authorized Component Gating",
       "description": "Replace direct permission checks in JSX with the Authorized component wrapper for consistent UI element gating.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         3
       ],
@@ -323,7 +323,7 @@
             6
           ],
           "details": "1. Create unit tests for the Authorized component with various permission scenarios\n2. Develop integration tests for key pages to verify correct element visibility\n3. Create a permission testing matrix to systematically verify all UI elements\n4. Implement visual regression tests to catch unexpected UI changes\n5. Verify that all action props exactly match the permissionSchema strings\n6. Test edge cases like loading states and permission changes while using the app\n7. Document any components that required special handling for the Authorized wrapper\n8. Create a validation checklist for developers to use when implementing new features",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 4
         }
       ]
@@ -332,7 +332,7 @@
       "id": 5,
       "title": "Remove Legacy RBAC Code",
       "description": "Delete the RbacContext and related policy files after confirming all usages have been migrated.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         3,
         4
@@ -346,8 +346,8 @@
           "title": "Audit Legacy RBAC Usage",
           "description": "Perform a comprehensive audit of the codebase to identify all components that use the legacy RbacContext and related policy files.",
           "dependencies": [],
-          "details": "Use grep or similar tools to search for all imports and references to RbacContext.tsx and related policy files. Create a detailed inventory listing all files, components, and functions that use the legacy RBAC system. Document each usage pattern and its purpose to ensure complete migration verification. Command examples: `grep -r \"import.*RbacContext\" --include=\"*.tsx\" --include=\"*.ts\" ./src`, `grep -r \"useContext.*RbacContext\" --include=\"*.tsx\" --include=\"*.ts\" ./src`. Store results in a spreadsheet or document for tracking migration status.",
-          "status": "pending",
+          "details": "Use grep or similar tools to search for all imports and references to RbacContext.tsx and related policy files. Create a detailed inventory listing all files, components, and functions that use the legacy RBAC system. Document each usage pattern and its purpose to ensure complete migration verification. Command examples: `grep -r \"import.*RbacContext\" --include=\"*.tsx\" --include=\"*.ts\" ./src`, `grep -r \"useContext.*RbacContext\" --include=\"*.tsx\" --include=\"*.ts\" ./src`. Store results in a spreadsheet or document for tracking migration status.\n\n<info added on 2025-04-29T19:49:49.909Z>\nBased on the findings from the audit, here's additional information to add to the subtask details:\n\nThe audit has revealed specific locations of legacy RBAC usage:\n\n1. **Core RBAC Components:**\n   - Main context file: `src/context/RbacContext.tsx`\n   - RbacProvider implementations:\n     - `src/app/(pages)/providers.tsx`\n     - `src/app/(tailadmin)/(admin)/layout.tsx`\n\n2. **Hook Usage Patterns:**\n   - `useRbac` hook: Used in `src/components/header/ViewAsDropdown.tsx` for role-based UI rendering\n   - `useRole` hook: Found in multiple components:\n     - `src/components/email/EmailSidebar/EmailSidebar.tsx` (likely for permission-based feature toggling)\n     - DataTableTwo component and associated tests (for conditional rendering of table actions)\n     - Dashboard pages (possibly for metric visibility control)\n     - Contacts pages (likely for CRUD operation permissions)\n\nThis mapping provides a clear picture of how RBAC hooks are distributed across the application, with particular concentration in UI components that require dynamic permission-based rendering. Focus migration efforts on these identified components, starting with the provider implementations.\n</info added on 2025-04-29T19:49:49.909Z>",
+          "status": "done",
           "parentTaskId": 5
         },
         {
@@ -357,8 +357,8 @@
           "dependencies": [
             1
           ],
-          "details": "Using the inventory created in subtask 1, systematically check each component to verify it has been migrated to the new permission system. Create test cases for each permission scenario to ensure functionality is preserved. Implement unit and integration tests that verify the new permission checks work correctly. Document any edge cases or special handling required. For each migrated component, add a comment indicating the migration is complete with a reference to the relevant test case.",
-          "status": "pending",
+          "details": "Using the inventory created in subtask 1, systematically check each component to verify it has been migrated to the new permission system. Create test cases for each permission scenario to ensure functionality is preserved. Implement unit and integration tests that verify the new permission checks work correctly. Document any edge cases or special handling required. For each migrated component, add a comment indicating the migration is complete with a reference to the relevant test case.\n\n<info added on 2025-04-29T19:50:30.522Z>\nTo address the incomplete migration issue:\n\n1. Run a comprehensive codebase scan using:\n   ```bash\n   grep -r \"useRbac\\|useRole\\|RbacProvider\" --include=\"*.{js,jsx,ts,tsx}\" ./src\n   ```\n\n2. Create a migration tracking spreadsheet with columns:\n   - Component path\n   - Legacy imports found\n   - Migration status\n   - Test coverage status\n   - Migration PR link\n\n3. For each component still using legacy RBAC:\n   - Map the existing permission checks to equivalent useAbility calls\n   - Verify permission context is properly provided in component hierarchy\n   - Test both positive and negative permission scenarios\n\n4. Common migration patterns to watch for:\n   - Replace `useRole('admin')` with `useAbility('can', 'manage', 'all')`\n   - Replace `useRbac.can('edit', 'users')` with `useAbility('can', 'edit', 'users')`\n   - Replace RbacProvider with appropriate PermissionContext providers\n\n5. Add regression tests specifically targeting permission boundaries that may have changed during migration.\n\n6. Implement a CI check that fails if legacy RBAC imports are detected in new code.\n</info added on 2025-04-29T19:50:30.522Z>",
+          "status": "in-progress",
           "parentTaskId": 5
         },
         {
@@ -382,7 +382,7 @@
             3
           ],
           "details": "Identify all policy files related to the legacy RBAC system. Delete src/context/RbacContext.tsx and all identified policy files. Ensure that any test files specifically for these components are also removed. Update any build configurations or module maps that might reference these files. Commit these changes with a clear message indicating the removal of legacy RBAC code as part of the migration to the new permission system.",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 5
         },
         {

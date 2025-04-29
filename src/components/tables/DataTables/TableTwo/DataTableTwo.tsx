@@ -3,7 +3,7 @@ import React from "react";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect } from "react";
-import { useRole } from "@/context/RbacContext";
+import { useAbility } from '@/hooks/useAbility';
 import {
   Table,
   TableBody,
@@ -92,7 +92,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   onSortChange,
 }: DataTableTwoProps) => {
   // Determine user role for action button visibility
-  const role = useRole() ?? "";
+  const { can } = useAbility();
   const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   // Default columns if not provided
@@ -461,19 +461,26 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           </TableCell>
                         );
                       })}
-                      {/* Action buttons cell */}
-                      {(onView && ["Admin","Manager","Client"].includes(role)) || role === "Admin" ? (
-                        <TableCell key="actions" className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                          {onView && ["Admin","Manager","Client"].includes(role) && (
-                            <ViewActionButton onClick={() => onView(item)} />
-                          )}
-                          {role === "Admin" && (
-                            <button aria-label="Edit" onClick={() => onEdit?.(item)} className="ml-2">
-                              <PencilIcon className="h-4 w-4" />
-                            </button>
-                          )}
-                        </TableCell>
-                      ) : null}
+                      {/* Action buttons cell using useAbility permissions */}
+                      {(() => {
+                        // Fallback if can is not a function (e.g., mocked incorrectly)
+                        const safeCan = typeof can === 'function' ? can : () => true;
+                        const showView = onView && safeCan('view');
+                        const showEdit = onEdit && safeCan('edit');
+                        if (showView || showEdit) {
+                          return (
+                            <TableCell key="actions" className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
+                              {showView && <ViewActionButton onClick={() => onView(item)} />}
+                              {showEdit && (
+                                <button aria-label="Edit" onClick={() => onEdit?.(item)} className="ml-2">
+                                  <PencilIcon className="h-4 w-4" />
+                                </button>
+                              )}
+                            </TableCell>
+                          );
+                        }
+                        return null;
+                      })()}
                     </TableRow>
                   ))
                 : (

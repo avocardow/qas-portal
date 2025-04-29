@@ -4,18 +4,17 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
+import { vi, type Mock } from "vitest";
 import { PermissionProvider } from '@/contexts/PermissionContext';
 import { SessionProvider } from 'next-auth/react';
 
-// Mock useRole hook
-vi.mock("@/context/RbacContext", () => {
-  return {
-    __esModule: true,
-    useRole: vi.fn(),
-  };
-});
-import { useRole } from "@/context/RbacContext";
+// Mock useAbility hook and provide alias for tests
+vi.mock('@/hooks/useAbility', () => ({
+  __esModule: true,
+  useAbility: vi.fn(),
+}));
+import { useAbility } from '@/hooks/useAbility';
+const mockUseAbility = useAbility as Mock;
 
 // Mock icon components to avoid invalid tag names from SVG imports
 vi.mock("@/icons", () => {
@@ -63,7 +62,7 @@ function renderWithPermissionProvider(ui) {
 
 describe("DataTableTwo action buttons", () => {
   beforeEach(() => {
-    (useRole as jest.Mock).mockReset();
+    mockUseAbility.mockReset();
   });
 
   afterEach(() => {
@@ -71,13 +70,15 @@ describe("DataTableTwo action buttons", () => {
   });
 
   it("renders View and Edit buttons for Admin role and triggers onView", async () => {
-    (useRole as jest.Mock).mockReturnValue("Admin");
+    mockUseAbility.mockReturnValue({ can: () => true, cannot: () => false });
     const handleView = vi.fn();
+    const handleEdit = vi.fn();
     renderWithPermissionProvider(
       <DataTableTwo
         data={mockData}
         columns={baseColumns}
         onView={handleView}
+        onEdit={handleEdit}
         searchTerm=""
         setSearchTerm={() => {}}
       />
@@ -93,33 +94,26 @@ describe("DataTableTwo action buttons", () => {
     expect(handleView).toHaveBeenCalledWith(mockData[0]);
   });
 
-  it("renders only View button for Manager and Client roles", () => {
-    ["Manager", "Client"].forEach((role) => {
-      cleanup(); // Clean up after each render
-      (useRole as jest.Mock).mockReturnValue(role);
-      const handleView = vi.fn();
-      renderWithPermissionProvider(
-        <DataTableTwo
-          data={mockData}
-          columns={baseColumns}
-          onView={handleView}
-          searchTerm=""
-          setSearchTerm={() => {}}
-        />
-      );
-      // View button should exist
-      const viewButtons = screen.getAllByRole("button", { name: /view/i });
-      expect(viewButtons).toHaveLength(1);
-      // Edit button should not exist
-      expect(
-        screen.queryByRole("button", { name: /edit/i })
-      ).not.toBeInTheDocument();
-      cleanup(); // Clean up before next iteration
-    });
+  it("renders only View button when edit permission is denied", () => {
+    // Only view permission granted
+    mockUseAbility.mockReturnValue({ can: (permission: string) => permission === 'view', cannot: (permission: string) => permission !== 'view' });
+    cleanup();
+    const handleView = vi.fn();
+    renderWithPermissionProvider(
+      <DataTableTwo
+        data={mockData}
+        columns={baseColumns}
+        onView={handleView}
+        searchTerm=""
+        setSearchTerm={() => {}}
+      />
+    );
+    expect(screen.getAllByRole("button", { name: /view/i })).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: /edit/i })).not.toBeInTheDocument();
   });
 
-  it("renders no action buttons if no onView or insufficient role", () => {
-    (useRole as jest.Mock).mockReturnValue("Staff");
+  it("renders no action buttons if no permissions", () => {
+    mockUseAbility.mockReturnValue({ can: () => false, cannot: () => true });
     renderWithPermissionProvider(
       <DataTableTwo
         data={mockData}
@@ -136,8 +130,8 @@ describe("DataTableTwo action buttons", () => {
 // Accessibility tests for DataTableTwo header sorting
 describe("DataTableTwo accessibility", () => {
   beforeEach(() => {
-    (useRole as jest.Mock).mockReset();
-    (useRole as jest.Mock).mockReturnValue("Admin");
+    mockUseAbility.mockReset();
+    mockUseAbility.mockReturnValue({ can: () => true, cannot: () => false });
   });
 
   afterEach(() => {
@@ -200,8 +194,9 @@ describe("DataTableTwo accessibility", () => {
 
 describe("DataTableTwo performance", () => {
   beforeEach(() => {
-    // Mock Admin role for performance test
-    (useRole as jest.Mock).mockReturnValue("Admin");
+    // Reset and mock ability hook for performance tests
+    mockUseAbility.mockReset();
+    mockUseAbility.mockReturnValue({ can: () => true, cannot: () => false });
   });
 
   afterEach(() => {
