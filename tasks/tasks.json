@@ -426,7 +426,7 @@
       "id": 6,
       "title": "Testing and Documentation",
       "description": "Perform comprehensive testing across the application and document the migration for future reference.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         5
       ],
@@ -438,9 +438,9 @@
           "id": 1,
           "title": "Create Comprehensive Test Plan",
           "description": "Develop a structured test plan covering all major application pages and features across different user roles",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
-          "details": "Create a matrix-style test plan document that maps each application page/feature against all user roles. Include test scenarios for both positive testing (users with correct permissions) and negative testing (users without permissions). Define expected outcomes for each test case. Prioritize critical paths and high-risk areas. Include environment setup requirements and test data needed. The test plan should specifically address permission boundaries between roles and edge cases where permissions might overlap."
+          "details": "Create a matrix-style test plan document that maps each application page/feature against all user roles. Include test scenarios for both positive testing (users with correct permissions) and negative testing (users without permissions). Define expected outcomes for each test case. Prioritize critical paths and high-risk areas. Include environment setup requirements and test data needed. The test plan should specifically address permission boundaries between roles and edge cases where permissions might overlap.\n\n<info added on 2025-04-29T21:39:23.154Z>\nHere's the additional information for the test plan:\n\n```markdown\n## Test Implementation Details\n\n### Unit Test Implementation\n- Configure Jest mocks for AbilityContext to simulate different permission scenarios\n- Create test fixtures with predefined role/permission combinations\n- Implement snapshot testing for permission-dependent UI components\n- Test coverage target: >90% for permission-related hooks and components\n\n### Integration Test Strategy\n- Use MSW (Mock Service Worker) to intercept API calls and simulate server responses\n- Create test data factories to generate consistent test fixtures\n- Implement user session simulation with different role contexts\n- Test matrix should include cross-browser verification (Chrome, Firefox, Safari)\n\n### E2E Testing Specifics\n- Implement custom Cypress commands for role-based authentication\n- Create reusable test patterns for common permission-gated workflows\n- Record videos of permission boundary tests for documentation\n- Test data reset between test runs to ensure isolation\n\n### Performance Testing\n- Measure render time differences with/without permission checks\n- Verify caching mechanisms for permission data\n- Test permission resolution under high load (many rules/roles)\n\n### Regression Test Automation\n- Automate permission boundary tests to run on PR creation\n- Implement visual regression tests for permission-dependent UI elements\n- Create CI pipeline stage specifically for RBAC testing\n\n### Test Reporting\n- Generate permission coverage reports showing tested/untested permission combinations\n- Include permission test results in CI/CD dashboard\n- Document any permission edge cases discovered during testing\n```\n</info added on 2025-04-29T21:39:23.154Z>"
         },
         {
           "id": 2,
