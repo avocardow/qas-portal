@@ -85,7 +85,7 @@
       "id": 2,
       "title": "Update Provider Configuration",
       "description": "Remove RbacProvider and ensure PermissionProvider properly wraps the application in the providers.tsx file.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         1
       ],
@@ -97,7 +97,7 @@
           "id": 1,
           "title": "Locate and Open providers.tsx File",
           "description": "Find the providers.tsx file located at src/app/(pages)/(dashboard)/providers.tsx and open it in your code editor.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Use your file system or IDE to navigate to the specified path and open the file for editing."
         },
@@ -105,7 +105,7 @@
           "id": 2,
           "title": "Remove RbacProvider Component",
           "description": "Delete the <RbacProvider> component from the providers.tsx file.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -115,7 +115,7 @@
           "id": 3,
           "title": "Verify Presence of PermissionProvider",
           "description": "Check if the <PermissionProvider> component is already present in the providers.tsx file.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -125,7 +125,7 @@
           "id": 4,
           "title": "Add PermissionProvider if Necessary",
           "description": "If the <PermissionProvider> component is not present, add it to the providers.tsx file following the pattern outlined in the technical architecture section.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -135,7 +135,7 @@
           "id": 5,
           "title": "Position PermissionProvider Correctly",
           "description": "Ensure the <PermissionProvider> component is positioned correctly in the provider hierarchy.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -145,7 +145,7 @@
           "id": 6,
           "title": "Verify Provider Configuration",
           "description": "Test the application to ensure the <PermissionProvider> is functioning as expected and has access to the user context and other dependencies.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5
           ],
