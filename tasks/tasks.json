@@ -239,7 +239,7 @@
       "id": 4,
       "title": "Implement Authorized Component Gating",
       "description": "Replace direct permission checks in JSX with the Authorized component wrapper for consistent UI element gating.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         3
       ],
@@ -253,7 +253,7 @@
           "description": "Create or update the Authorized component to handle permission-based UI element gating consistently across the application.",
           "dependencies": [],
           "details": "1. Review the existing Authorized component in @/components/Authorized\n2. Ensure it accepts an 'action' prop that corresponds to permission strings\n3. Implement proper fallback handling (null by default)\n4. Add support for multiple permissions (array of strings)\n5. Optimize with React.memo to prevent unnecessary re-renders\n6. Add proper TypeScript typing for the component props\n7. Test the component with various permission scenarios\n8. Document usage patterns for the team",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {

@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Authorized Component Gating
-# Status: pending
+# Status: in-progress
 # Dependencies: 3
 # Priority: medium
 # Description: Replace direct permission checks in JSX with the Authorized component wrapper for consistent UI element gating.
@@ -11,7 +11,7 @@ Import the Authorized component from @/components/Authorized. Replace conditiona
 Create a test harness that allows toggling between different user roles to visually verify UI elements appear/disappear appropriately. Add component tests that verify the Authorized component correctly shows/hides children based on permissions.
 
 # Subtasks:
-## 1. Create Authorized Component Wrapper [pending]
+## 1. Create Authorized Component Wrapper [done]
 ### Dependencies: None
 ### Description: Create or update the Authorized component to handle permission-based UI element gating consistently across the application.
 ### Details:
