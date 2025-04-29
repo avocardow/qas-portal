@@ -48,7 +48,7 @@ Create a test harness that allows toggling between different user roles to visua
 6. Update breadcrumb navigation if it uses permission-based rendering
 7. Verify mobile navigation components work correctly with the Authorized wrapper
 
-## 4. Replace Table Column Permission Checks [pending]
+## 4. Replace Table Column Permission Checks [done]
 ### Dependencies: 4.1
 ### Description: Update table configurations to use Authorized components for permission-based column visibility.
 ### Details:

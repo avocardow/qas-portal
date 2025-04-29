@@ -286,7 +286,7 @@
             1
           ],
           "details": "1. Identify tables with columns that should be conditionally displayed based on permissions\n2. For tables using column definitions, wrap column cell renderers with Authorized components\n3. For action columns with multiple buttons, wrap each button individually\n4. Update any column visibility logic that uses permissions\n5. Test tables with different user permission sets to ensure correct column visibility\n6. Ensure table responsiveness is maintained after adding Authorized wrappers\n7. Update any column customization features to respect permission boundaries",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {

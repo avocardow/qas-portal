@@ -14,6 +14,7 @@ import Badge from "@/components/ui/badge/Badge";
 import useDebounce from "@/hooks/useDebounce";
 import Button from "@/components/ui/button/Button";
 import Authorized from "@/components/Authorized";
+import { CLIENT_PERMISSIONS } from "@/constants/permissions";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -203,7 +204,7 @@ export default function ClientsPage() {
                 maximumFractionDigits: 0,
               }).format(row.estAnnFees)
             : "-",
-        permission: "clients.view.billing",
+        permission: CLIENT_PERMISSIONS.VIEW_BILLING,
       },
       {
         key: "status",
@@ -230,7 +231,7 @@ export default function ClientsPage() {
             </Badge>
           );
         },
-        permission: "clients.view.status",
+        permission: CLIENT_PERMISSIONS.VIEW_STATUS,
       },
     ],
     []
@@ -242,7 +243,7 @@ export default function ClientsPage() {
   }, [baseColumns, adminColumns]);
 
   // Protect view based on permission checks using useAbility
-  if (!can("clients.view.billing") && !can("clients.view.status")) {
+  if (!can(CLIENT_PERMISSIONS.VIEW_BILLING) && !can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
     return <p>You are not authorized to view clients.</p>;
   }
 
@@ -324,7 +325,7 @@ export default function ClientsPage() {
                 }}
                 extraControls={
                   <>
-                    {can("clients.view.billing") && (
+                    {can(CLIENT_PERMISSIONS.VIEW_BILLING) && (
                       <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         <input
                           type="checkbox"
@@ -335,7 +336,7 @@ export default function ClientsPage() {
                         <span>Show All</span>
                       </label>
                     )}
-                    {can("clients.view.billing") && (
+                    {can(CLIENT_PERMISSIONS.VIEW_BILLING) && (
                       <Badge
                         size="sm"
                         variant={showAll ? "light" : "solid"}
