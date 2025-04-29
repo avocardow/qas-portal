@@ -17,8 +17,7 @@ import {
   throwForbiddenError,
   logAccessDecision,
 } from "@/server/api/utils/rbac";
-import { hasPermission, canAccessPermission } from "@/utils/permissionUtils";
-import type { Role as PolicyRole } from "@/policies/permissions";
+import { roleHasPermission as hasPermission, type Role as PolicyRole } from "@/policies/permissions";
 import { logger } from "@/server/api/utils/logger";
 
 /**
@@ -186,13 +185,6 @@ export const enforcePermission = (permission: string) =>
     const dynamicAllowed = Boolean(permissionRecord);
     logAccessDecision(role, permission, dynamicAllowed);
     if (!dynamicAllowed) {
-      // Legacy RBAC policy fallback for backward compatibility
-      const legacyAllowed = canAccessPermission(role as PolicyRole, permission);
-      if (legacyAllowed) {
-        logAccessDecision(role, permission, true);
-        logger.info("Legacy permission allowed", { userId: ctx.session.user.id, role, permission });
-        return next({ ctx: { session: ctx.session } });
-      }
       logger.warn("Permission denied", { userId: ctx.session.user.id, role, permission });
       throwForbiddenError(`Insufficient permissions for action '${permission}'`);
     }
