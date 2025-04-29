@@ -1,0 +1,53 @@
+id,file,line,patternType,match,migrationStatus
+1,"src/context/RbacContext.tsx",4,import,"import { rbacPolicy, type Role } from ""@/utils/rbacPolicy"";",pending
+2,"src/context/RbacContext.tsx",10,unknown,"canAccess: (permission: string) => boolean;",pending
+3,"src/context/RbacContext.tsx",29,unknown,"canAccess: () => false,",pending
+4,"src/context/RbacContext.tsx",39,useRbac,"return useRbac().role;",pending
+5,"src/context/RbacContext.tsx",43,useRbac,"return useRbac().permissions;",pending
+6,"src/context/RbacContext.tsx",47,useRbac,"return useRbac().canAccess(permission);",pending
+7,"src/context/RbacContext.tsx",51,unknown,"* canAccess utility function when you have a role outside of hooks.",pending
+8,"src/context/RbacContext.tsx",55,export,"export const canAccess = (permission: string, role: Role | null): boolean => {",pending
+9,"src/context/RbacContext.tsx",57,return,"return (rbacPolicy[role] || []).includes(permission);",pending
+10,"src/context/RbacContext.tsx",82,unknown,"? rbacPolicy[effectiveRole]",pending
+11,"src/context/RbacContext.tsx",85,unknown,"const canAccessFn = (permission: string): boolean => {",pending
+12,"src/context/RbacContext.tsx",98,unknown,"canAccess: canAccessFn,",pending
+13,"src/app/(pages)/(dashboard)/(app)/clients/[clientId]/edit/page.tsx",29,useRbac,"const { role } = useRbac();",pending
+14,"src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx",43,useRbac,"const { role } = useRbac();",pending
+15,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",47,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: null, permissions: [], canAccess: () => false });",pending
+16,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",54,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });",pending
+17,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",61,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });",pending
+18,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",68,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });",pending
+19,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",76,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });",pending
+20,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",83,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Client', permissions: [], canAccess: () => true });",pending
+21,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",90,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });",pending
+22,"src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",98,useRbac,"vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });",pending
+23,"src/app/(pages)/(dashboard)/(app)/clients/new/page.tsx",30,useRbac,"const { role } = useRbac();",pending
+24,"src/app/(pages)/(dashboard)/(app)/clients/page.tsx",24,useRbac,"const { role } = useRbac();",pending
+25,"src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/edit/page.tsx",31,useRbac,"const { role } = useRbac();",pending
+26,"src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/page.tsx",41,useRbac,"const { role } = useRbac();",pending
+27,"src/app/(pages)/(dashboard)/(app)/contacts/new/page.tsx",28,useRbac,"const { role } = useRbac();",pending
+28,"src/app/(pages)/(dashboard)/(app)/contacts/page.tsx",25,useRbac,"const { role } = useRbac();",pending
+29,"src/layout/AppHeader.tsx",17,useRbac,"const { sessionRole } = useRbac();",pending
+30,"src/server/api/trpc.ts",20,import,"import { hasPermission, canAccessPermission } from ""@/utils/permissionUtils"";",pending
+31,"src/server/api/trpc.ts",190,unknown,"const legacyAllowed = canAccessPermission(role as PolicyRole, permission);",pending
+32,"src/server/api/utils/rbac.ts",2,import,"import { rbacPolicy } from ""@/utils/rbacPolicy"";",pending
+33,"src/server/api/utils/rbac.ts",8,unknown,"const permissions = (rbacPolicy as Record<string, string[]>)[role] || [];",pending
+34,"src/utils/permissionUtils.ts",7,import,"import { canAccess as canAccessServer } from ""@/utils/rbacPolicy"";",pending
+35,"src/utils/permissionUtils.ts",29,export,"export function canAccessPermission(",pending
+36,"src/utils/permissionUtils.ts",33,return,"return canAccessServer(permission, role);",pending
+37,"src/utils/rbacPolicy.test.ts",1,import,"import { rbacPolicy } from ""./rbacPolicy"";",pending
+38,"src/utils/rbacPolicy.test.ts",17,unknown,"expect(rbacPolicy.Admin.sort()).toEqual(allPermissions.sort());",pending
+39,"src/utils/rbacPolicy.test.ts",25,unknown,"expect(rbacPolicy.Manager.sort()).toEqual(expected.sort());",pending
+40,"src/utils/rbacPolicy.test.ts",30,unknown,"expect(rbacPolicy.Auditor.sort()).toEqual(",pending
+41,"src/utils/rbacPolicy.test.ts",37,unknown,"expect(rbacPolicy.Staff.sort()).toEqual(",pending
+42,"src/utils/rbacPolicy.test.ts",45,unknown,"expect(rbacPolicy.Client.sort()).toEqual(",pending
+43,"src/utils/rbacPolicy.ts",23,export,"export const rbacPolicy: Record<Role, string[]> = {",pending
+44,"src/utils/rbacPolicy.ts",45,export,"export const canAccess = (permission: string, role: Role | null): boolean => {",pending
+45,"src/utils/rbacPolicy.ts",53,return,"return (rbacPolicy[role] || []).includes(permission);",pending
+46,"src/utils/permissionUtils.test.ts",4,unknown,"canAccessPermission,",pending
+47,"src/utils/permissionUtils.test.ts",33,unknown,"describe('canAccessPermission', () => {",pending
+48,"src/utils/permissionUtils.test.ts",35,unknown,"expect(canAccessPermission('Admin', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(true);",pending
+49,"src/utils/permissionUtils.test.ts",39,unknown,"expect(canAccessPermission('Staff', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(false);",pending
+50,"src/components/header/ViewAsDropdown.tsx",3,import,"import { rbacPolicy, type Role } from ""@/utils/rbacPolicy"";",pending
+51,"src/components/header/ViewAsDropdown.tsx",6,useRbac,"const { impersonatedRole, setImpersonatedRole } = useRbac();",pending
+52,"src/components/header/ViewAsDropdown.tsx",8,unknown,"const roles = Object.keys(rbacPolicy).filter((r) => r !== ""Developer"") as Role[];",pending

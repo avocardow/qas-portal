@@ -22,7 +22,7 @@
           "id": 2,
           "title": "Execute comprehensive codebase scan",
           "description": "Run the configured scanning tools across the entire codebase to identify all instances of RBAC usage",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -32,7 +32,7 @@
           "id": 3,
           "title": "Create structured inventory database",
           "description": "Develop a structured database or spreadsheet to catalog and categorize all RBAC usage findings",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -42,7 +42,7 @@
           "id": 4,
           "title": "Analyze and categorize RBAC patterns",
           "description": "Review the inventory to identify common patterns, group similar implementations, and categorize by complexity",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],

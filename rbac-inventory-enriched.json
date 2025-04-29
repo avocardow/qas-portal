@@ -1,0 +1,418 @@
+[
+  {
+    "id": 1,
+    "file": "src/context/RbacContext.tsx",
+    "line": 4,
+    "patternType": "import",
+    "match": "import { rbacPolicy, type Role } from \"@/utils/rbacPolicy\";",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 2,
+    "file": "src/context/RbacContext.tsx",
+    "line": 10,
+    "patternType": "unknown",
+    "match": "canAccess: (permission: string) => boolean;",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 3,
+    "file": "src/context/RbacContext.tsx",
+    "line": 29,
+    "patternType": "unknown",
+    "match": "canAccess: () => false,",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 4,
+    "file": "src/context/RbacContext.tsx",
+    "line": 39,
+    "patternType": "useRbac",
+    "match": "return useRbac().role;",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 5,
+    "file": "src/context/RbacContext.tsx",
+    "line": 43,
+    "patternType": "useRbac",
+    "match": "return useRbac().permissions;",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 6,
+    "file": "src/context/RbacContext.tsx",
+    "line": 47,
+    "patternType": "useRbac",
+    "match": "return useRbac().canAccess(permission);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 7,
+    "file": "src/context/RbacContext.tsx",
+    "line": 51,
+    "patternType": "unknown",
+    "match": "* canAccess utility function when you have a role outside of hooks.",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 8,
+    "file": "src/context/RbacContext.tsx",
+    "line": 55,
+    "patternType": "export",
+    "match": "export const canAccess = (permission: string, role: Role | null): boolean => {",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 9,
+    "file": "src/context/RbacContext.tsx",
+    "line": 57,
+    "patternType": "return",
+    "match": "return (rbacPolicy[role] || []).includes(permission);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 10,
+    "file": "src/context/RbacContext.tsx",
+    "line": 82,
+    "patternType": "unknown",
+    "match": "? rbacPolicy[effectiveRole]",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 11,
+    "file": "src/context/RbacContext.tsx",
+    "line": 85,
+    "patternType": "unknown",
+    "match": "const canAccessFn = (permission: string): boolean => {",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 12,
+    "file": "src/context/RbacContext.tsx",
+    "line": 98,
+    "patternType": "unknown",
+    "match": "canAccess: canAccessFn,",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 13,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/[clientId]/edit/page.tsx",
+    "line": 29,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 14,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx",
+    "line": 43,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 15,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 47,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: null, permissions: [], canAccess: () => false });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 16,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 54,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 17,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 61,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 18,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 68,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 19,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 76,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 20,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 83,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Client', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 21,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 90,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 22,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 98,
+    "patternType": "useRbac",
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 23,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/new/page.tsx",
+    "line": 30,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 24,
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.tsx",
+    "line": 24,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 25,
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/edit/page.tsx",
+    "line": 31,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 26,
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/page.tsx",
+    "line": 41,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 27,
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/new/page.tsx",
+    "line": 28,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 28,
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/page.tsx",
+    "line": 25,
+    "patternType": "useRbac",
+    "match": "const { role } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 29,
+    "file": "src/layout/AppHeader.tsx",
+    "line": 17,
+    "patternType": "useRbac",
+    "match": "const { sessionRole } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 30,
+    "file": "src/server/api/trpc.ts",
+    "line": 20,
+    "patternType": "import",
+    "match": "import { hasPermission, canAccessPermission } from \"@/utils/permissionUtils\";",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 31,
+    "file": "src/server/api/trpc.ts",
+    "line": 190,
+    "patternType": "unknown",
+    "match": "const legacyAllowed = canAccessPermission(role as PolicyRole, permission);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 32,
+    "file": "src/server/api/utils/rbac.ts",
+    "line": 2,
+    "patternType": "import",
+    "match": "import { rbacPolicy } from \"@/utils/rbacPolicy\";",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 33,
+    "file": "src/server/api/utils/rbac.ts",
+    "line": 8,
+    "patternType": "unknown",
+    "match": "const permissions = (rbacPolicy as Record<string, string[]>)[role] || [];",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 34,
+    "file": "src/utils/permissionUtils.ts",
+    "line": 7,
+    "patternType": "import",
+    "match": "import { canAccess as canAccessServer } from \"@/utils/rbacPolicy\";",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 35,
+    "file": "src/utils/permissionUtils.ts",
+    "line": 29,
+    "patternType": "export",
+    "match": "export function canAccessPermission(",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 36,
+    "file": "src/utils/permissionUtils.ts",
+    "line": 33,
+    "patternType": "return",
+    "match": "return canAccessServer(permission, role);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 37,
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 1,
+    "patternType": "import",
+    "match": "import { rbacPolicy } from \"./rbacPolicy\";",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 38,
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 17,
+    "patternType": "unknown",
+    "match": "expect(rbacPolicy.Admin.sort()).toEqual(allPermissions.sort());",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 39,
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 25,
+    "patternType": "unknown",
+    "match": "expect(rbacPolicy.Manager.sort()).toEqual(expected.sort());",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 40,
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 30,
+    "patternType": "unknown",
+    "match": "expect(rbacPolicy.Auditor.sort()).toEqual(",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 41,
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 37,
+    "patternType": "unknown",
+    "match": "expect(rbacPolicy.Staff.sort()).toEqual(",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 42,
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 45,
+    "patternType": "unknown",
+    "match": "expect(rbacPolicy.Client.sort()).toEqual(",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 43,
+    "file": "src/utils/rbacPolicy.ts",
+    "line": 23,
+    "patternType": "export",
+    "match": "export const rbacPolicy: Record<Role, string[]> = {",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 44,
+    "file": "src/utils/rbacPolicy.ts",
+    "line": 45,
+    "patternType": "export",
+    "match": "export const canAccess = (permission: string, role: Role | null): boolean => {",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 45,
+    "file": "src/utils/rbacPolicy.ts",
+    "line": 53,
+    "patternType": "return",
+    "match": "return (rbacPolicy[role] || []).includes(permission);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 46,
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 4,
+    "patternType": "unknown",
+    "match": "canAccessPermission,",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 47,
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 33,
+    "patternType": "unknown",
+    "match": "describe('canAccessPermission', () => {",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 48,
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 35,
+    "patternType": "unknown",
+    "match": "expect(canAccessPermission('Admin', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(true);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 49,
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 39,
+    "patternType": "unknown",
+    "match": "expect(canAccessPermission('Staff', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(false);",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 50,
+    "file": "src/components/header/ViewAsDropdown.tsx",
+    "line": 3,
+    "patternType": "import",
+    "match": "import { rbacPolicy, type Role } from \"@/utils/rbacPolicy\";",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 51,
+    "file": "src/components/header/ViewAsDropdown.tsx",
+    "line": 6,
+    "patternType": "useRbac",
+    "match": "const { impersonatedRole, setImpersonatedRole } = useRbac();",
+    "migrationStatus": "pending"
+  },
+  {
+    "id": 52,
+    "file": "src/components/header/ViewAsDropdown.tsx",
+    "line": 8,
+    "patternType": "unknown",
+    "match": "const roles = Object.keys(rbacPolicy).filter((r) => r !== \"Developer\") as Role[];",
+    "migrationStatus": "pending"
+  }
+]
