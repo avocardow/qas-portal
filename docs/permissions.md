@@ -62,9 +62,10 @@ if (!hasPermission(userRole, "task.create")) {
 #### In React Component
 
 ```tsx
-import { usePermission } from '@/context/RbacContext';
+import { useAbility } from '@/hooks/useAbility';
 
-const canEdit = usePermission('task.update');
+const { can } = useAbility();
+const canEdit = can('task.update');
 return <button disabled={!canEdit}>Edit Task</button>;
 ```
 

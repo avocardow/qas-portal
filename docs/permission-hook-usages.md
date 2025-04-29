@@ -1,5 +1,24 @@
 # Permission Hook Usages Inventory
 
+The project now uses the `useAbility` hook and `can(permission)` function for permission checks instead of the legacy `usePermission` hook.
+
+```typescript
+import { useAbility } from '@/hooks/useAbility';
+const { can } = useAbility();
+
+if (can('task.getAll')) {
+  // Fetch and render tasks
+}
+```
+
+Use the `<Authorized>` component for memoized UI gating:
+
+```tsx
+<Authorized action="task.getAll" fallback={<div>No access</div>}>
+  <TasksList />
+</Authorized>
+```
+
 Below is a list of all instances of `usePermission(...)` across the codebase, including file path, line number, and permission constant used.
 
 - **src/layout/AppSidebar.tsx**

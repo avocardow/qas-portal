@@ -4,7 +4,7 @@ Below is a list of all instances of the `<RequirePermission>` component across t
 
 - **src/components/RequirePermission.tsx**
   - Line 10: `export default function RequirePermission({ permission, children }: RequirePermissionProps)` – Component definition
-  - Line 14: `const allowed = usePermission(permission);` – Permission check within the component
+  - Line 14: `const { can } = useAbility(); const allowed = can(permission);` – Permission check using useAbility hook
 
 - **src/components/Authorized.tsx**
   - Line 1: `export default const Authorized: React.FC<AuthorizedProps>` – Component definition using `useAbility` for permission checks

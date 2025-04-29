@@ -17,7 +17,7 @@ import {
   throwForbiddenError,
   logAccessDecision,
 } from "@/server/api/utils/rbac";
-import { roleHasPermission as hasPermission, type Role as PolicyRole } from "@/policies/permissions";
+import { roleHasPermission as hasPermission, type Role as PolicyRole, type Permission } from "@/policies/permissions";
 import { logger } from "@/server/api/utils/logger";
 
 /**
@@ -173,7 +173,7 @@ export const enforcePermission = (permission: string) =>
       return next({ ctx: { session: ctx.session } });
     }
     // Static policy engine check
-    const staticAllowed = hasPermission(role as PolicyRole, permission);
+    const staticAllowed = hasPermission(role as PolicyRole, permission as Permission);
     if (staticAllowed) {
       logAccessDecision(role, permission, true);
       return next({ ctx: { session: ctx.session } });

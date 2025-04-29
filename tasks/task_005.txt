@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Remove Legacy RBAC Code
-# Status: in-progress
+# Status: done
 # Dependencies: 3, 4
 # Priority: low
 # Description: Delete the RbacContext and related policy files after confirming all usages have been migrated.
@@ -75,31 +75,31 @@ To address the incomplete migration issue:
 6. Implement a CI check that fails if legacy RBAC imports are detected in new code.
 </info added on 2025-04-29T19:50:30.522Z>
 
-## 3. Create Backup of Legacy RBAC Code [pending]
+## 3. Create Backup of Legacy RBAC Code [done]
 ### Dependencies: 5.1, 5.2
 ### Description: Create a backup of all legacy RBAC code before deletion to ensure recovery is possible if needed.
 ### Details:
 Create a separate branch in the version control system to preserve the legacy code. Additionally, export all relevant files (RbacContext.tsx and related policy files) to a separate archive. Document the structure and relationships between these files for future reference. Include comments about any non-obvious behaviors or implementation details that might be relevant for troubleshooting during the transition period. Store this backup in a designated location accessible to the development team.
 
-## 4. Remove RbacContext.tsx and Policy Files [in-progress]
+## 4. Remove RbacContext.tsx and Policy Files [done]
 ### Dependencies: 5.2, 5.3
 ### Description: Delete the RbacContext.tsx file and all related policy files from the codebase after confirming they are no longer needed.
 ### Details:
 Identify all policy files related to the legacy RBAC system. Delete src/context/RbacContext.tsx and all identified policy files. Ensure that any test files specifically for these components are also removed. Update any build configurations or module maps that might reference these files. Commit these changes with a clear message indicating the removal of legacy RBAC code as part of the migration to the new permission system.
 
-## 5. Clean Up Imports and References [pending]
+## 5. Clean Up Imports and References [done]
 ### Dependencies: 5.4
 ### Description: Remove all imports and references to the deleted RBAC files throughout the codebase.
 ### Details:
 Use IDE tools or grep to find all remaining imports of RbacContext and policy files. Remove these imports and any associated code that is no longer needed. Check for any conditional logic that might be based on the old RBAC system and refactor as needed. Run linting tools to catch any unused variables or imports that might remain after removing references. Test the application to ensure no runtime errors occur due to missing imports.
 
-## 6. Update Documentation [pending]
+## 6. Update Documentation [done]
 ### Dependencies: 5.4, 5.5
 ### Description: Update all documentation that references the old RBAC system to point to the new PermissionContext/useAbility approach.
 ### Details:
 Identify all documentation files (README.md, wiki pages, inline comments, etc.) that mention the legacy RBAC system. Update these documents to reference the new permission system instead. Include migration guides for developers who might be familiar with the old system. Add examples of how to use the new PermissionContext/useAbility approach for common permission scenarios. Create or update architecture diagrams to reflect the new permission system. Ensure API documentation is updated to reflect any changes in how permissions are checked.
 
-## 7. Final Verification and Testing [pending]
+## 7. Final Verification and Testing [done]
 ### Dependencies: 5.5, 5.6
 ### Description: Perform comprehensive testing to ensure the application functions correctly after removing the legacy RBAC code.
 ### Details:
