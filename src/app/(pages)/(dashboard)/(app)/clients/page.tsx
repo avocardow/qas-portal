@@ -13,6 +13,7 @@ import DataTableTwo, {
 import Badge from "@/components/ui/badge/Badge";
 import useDebounce from "@/hooks/useDebounce";
 import Button from "@/components/ui/button/Button";
+import Authorized from "@/components/Authorized";
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -252,7 +253,19 @@ export default function ClientsPage() {
         <ComponentCard
           title="Client Directory"
           actions={
-            can("clients.view.billing") ? (
+            <Authorized action="clients.view.billing"
+              fallback={
+                <Button
+                  aria-label="Add New Client"
+                  size="sm"
+                  variant="outline"
+                  disabled
+                  title="Insufficient permissions"
+                >
+                  Add New Client
+                </Button>
+              }
+            >
               <Button
                 aria-label="Add New Client"
                 size="sm"
@@ -261,17 +274,7 @@ export default function ClientsPage() {
               >
                 Add New Client
               </Button>
-            ) : (
-              <Button
-                aria-label="Add New Client"
-                size="sm"
-                variant="outline"
-                disabled
-                title="Insufficient permissions"
-              >
-                Add New Client
-              </Button>
-            )
+            </Authorized>
           }
         >
           {notification && (
