@@ -297,7 +297,7 @@
             1
           ],
           "details": "1. Identify form fields, sections, or controls that should be conditionally displayed\n2. Replace conditional rendering with Authorized component wrappers\n3. For form libraries (like Formik or React Hook Form), ensure Authorized components don't interfere with form state\n4. Consider adding disabled state for unauthorized fields instead of hiding them completely where appropriate\n5. Test form submission with different permission sets to ensure correct behavior\n6. Update form validation to account for conditionally rendered fields\n7. Ensure error messages and help text are properly handled with conditional rendering",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {

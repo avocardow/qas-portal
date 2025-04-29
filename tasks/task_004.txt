@@ -60,7 +60,7 @@ Create a test harness that allows toggling between different user roles to visua
 6. Ensure table responsiveness is maintained after adding Authorized wrappers
 7. Update any column customization features to respect permission boundaries
 
-## 5. Replace Form Element Permission Checks [pending]
+## 5. Replace Form Element Permission Checks [done]
 ### Dependencies: 4.1
 ### Description: Update forms to use Authorized components for conditionally rendering form elements based on permissions.
 ### Details:
