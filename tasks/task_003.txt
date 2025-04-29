@@ -83,19 +83,19 @@ All import statements have been updated from `import { usePermission } from '@/h
 Note: Found and fixed an edge case where nested permission checks were using AND logic instead of OR logic in the TaskActions component.
 </info added on 2025-04-29T08:02:25.464Z>
 
-## 5. Refactor Complex Components and Pages [in-progress]
+## 5. Refactor Complex Components and Pages [done]
 ### Dependencies: 3.4
 ### Description: Once the process is verified in smaller components, apply the same changes to more complex components and pages. Ensure that all useRbac() and usePermission() calls are replaced.
 ### Details:
 Expand the replacement to more complex components and pages, ensuring that all hook calls are updated and permission checks are correctly implemented.
 
-## 6. Testing and Verification [pending]
+## 6. Testing and Verification [done]
 ### Dependencies: 3.5
 ### Description: Conduct thorough testing of the refactored components and pages to ensure that the new hook usage works correctly and does not introduce any bugs or security vulnerabilities.
 ### Details:
 Perform unit tests, integration tests, and UI tests to verify that the replacement of hooks does not affect the functionality or security of the application.
 
-## 7. Final Review and Deployment [pending]
+## 7. Final Review and Deployment [in-progress]
 ### Dependencies: 3.6
 ### Description: Review the entire codebase to ensure all useRbac() and usePermission() hooks have been replaced. Deploy the updated codebase to production after successful testing.
 ### Details:

@@ -207,7 +207,7 @@
           "id": 5,
           "title": "Refactor Complex Components and Pages",
           "description": "Once the process is verified in smaller components, apply the same changes to more complex components and pages. Ensure that all useRbac() and usePermission() calls are replaced.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -217,7 +217,7 @@
           "id": 6,
           "title": "Testing and Verification",
           "description": "Conduct thorough testing of the refactored components and pages to ensure that the new hook usage works correctly and does not introduce any bugs or security vulnerabilities.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5
           ],
@@ -227,7 +227,7 @@
           "id": 7,
           "title": "Final Review and Deployment",
           "description": "Review the entire codebase to ensure all useRbac() and usePermission() hooks have been replaced. Deploy the updated codebase to production after successful testing.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             6
           ],
