@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAbility } from "@/hooks/useAbility";
 import { useRole } from "@/context/RbacContext";
 import { TASK_PERMISSIONS, AUDIT_PERMISSIONS } from "@/constants/permissions";
+import Authorized from "@/components/Authorized";
 
 export default function DashboardPage() {
   const role = useRole();
@@ -18,6 +19,7 @@ export default function DashboardPage() {
   return (
     <DashboardPlaceholderPageTemplate heading="Dashboard">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Authorized action={"clients.view.status"} fallback={null}>
         {canViewClients && (
           <ComponentCard title="Clients">
             <p>Manage clients</p>
@@ -26,6 +28,8 @@ export default function DashboardPage() {
             </Link>
           </ComponentCard>
         )}
+        </Authorized>
+        <Authorized action={AUDIT_PERMISSIONS.GET_BY_CLIENT_ID} fallback={null}>
         {canViewAudits && (
           <ComponentCard title="Audits">
             <p>View and manage audits</p>
@@ -34,6 +38,8 @@ export default function DashboardPage() {
             </Link>
           </ComponentCard>
         )}
+        </Authorized>
+        <Authorized action={TASK_PERMISSIONS.GET_ALL} fallback={null}>
         {canViewTasks && (
           <ComponentCard title="Tasks">
             <p>View and manage tasks</p>
@@ -42,6 +48,7 @@ export default function DashboardPage() {
             </Link>
           </ComponentCard>
         )}
+        </Authorized>
       </div>
     </DashboardPlaceholderPageTemplate>
   );

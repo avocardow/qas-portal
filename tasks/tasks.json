@@ -275,7 +275,7 @@
             1
           ],
           "details": "1. Search for navigation links with permission checks in menus, sidebars, and headers\n2. Replace conditional rendering with <Authorized action=\"permission\"><Link /></Authorized>\n3. For complex navigation components, ensure the Authorized wrapper doesn't break styling\n4. Check for any custom link components that might need special handling\n5. Test navigation to ensure links appear/disappear correctly based on permissions\n6. Update breadcrumb navigation if it uses permission-based rendering\n7. Verify mobile navigation components work correctly with the Authorized wrapper",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 4
         },
         {

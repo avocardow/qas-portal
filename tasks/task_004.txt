@@ -36,7 +36,7 @@ Create a test harness that allows toggling between different user roles to visua
 6. Pay special attention to action buttons in tables, forms, and card components
 7. Update any unit tests that may be affected by this change
 
-## 3. Replace Link Permission Checks [in-progress]
+## 3. Replace Link Permission Checks [done]
 ### Dependencies: 4.1
 ### Description: Identify and replace all conditional link rendering based on permissions with the Authorized component wrapper.
 ### Details:
