@@ -1,0 +1,33 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Enforce using useAbility hook for permission checks instead of useRbac and usePermission
+globs: src/**/*.{ts,tsx}
+alwaysApply: true
+---
+
+- **Use useAbility for permission checks**
+  - Replace `useRbac()` and `usePermission()` hook calls with `const { can } = useAbility();`
+  - Do not import or use `useRbac` or `usePermission` in components or pages
+
+- **Use `can(permission)` for permission logic**
+  - Use `can('permission.name')` or `can(PERMISSIONS.XYZ)` for conditional rendering or logic
+
+- **Prefer `<Authorized action={permission}>` wrapper for UI gating**
+  - Use `<Authorized action={...} fallback={...}>` to conditionally render JSX based on permissions
+
+- **Examples**
+
+```typescript
+// ✅ DO:
+import { useAbility } from '@/hooks/useAbility';
+const { can } = useAbility();
+if (can('task.getAll')) { /* ... */ }
+
+// ❌ DON'T:
+import { useRbac } from '@/context/RbacContext';
+const { permissions } = useRbac();
+```

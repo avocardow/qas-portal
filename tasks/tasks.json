@@ -227,7 +227,7 @@
           "id": 7,
           "title": "Final Review and Deployment",
           "description": "Review the entire codebase to ensure all useRbac() and usePermission() hooks have been replaced. Deploy the updated codebase to production after successful testing.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             6
           ],

@@ -95,7 +95,7 @@ Expand the replacement to more complex components and pages, ensuring that all h
 ### Details:
 Perform unit tests, integration tests, and UI tests to verify that the replacement of hooks does not affect the functionality or security of the application.
 
-## 7. Final Review and Deployment [in-progress]
+## 7. Final Review and Deployment [done]
 ### Dependencies: 3.6
 ### Description: Review the entire codebase to ensure all useRbac() and usePermission() hooks have been replaced. Deploy the updated codebase to production after successful testing.
 ### Details:
