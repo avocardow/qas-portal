@@ -72,5 +72,41 @@ Many components accept a `permission` or use `Authorized`:
 - Prefer `<Authorized>` for wrapping entire UI fragments.
 - Keep policy definitions DRY and grouped by feature.
 
+## 7. Server-side Enforcement (permissionProcedure)
+
+Defined in [src/server/api/utils/rbac.ts](src/server/api/utils/rbac.ts):
+```typescript
+import { TRPCError } from '@trpc/server';
+import { rbacPolicy } from '@/utils/rbacPolicy';
+
+export function hasPermission(role: Role | null, permission: string): boolean {
+  // Check policy mapping for given role
+  return !!role && (rbacPolicy[role] || []).includes(permission);
+}
+
+export const permissionProcedure = t.procedure
+  .use(async ({ ctx, next, rawInput }) => {
+    const { role } = ctx.session;
+    const required = (rawInput as { permission: string }).permission;
+    if (!hasPermission(role, required)) {
+      // Log denied access with context
+      ctx.logger.warn(`Permission denied`, { role, permission: required, userId: ctx.session.userId });
+      throw new TRPCError({ code: 'FORBIDDEN', message: `Insufficient permissions: ${required}` });
+    }
+    return next();
+  });
+```
+- **Key Points**
+  - Enforces permissions on the server before executing resolver logic
+  - Logs all denied access attempts for auditing
+  - Throws `TRPCError` with `FORBIDDEN` status for unauthorized calls
+
+## 8. Edge Cases & Special Conditions
+
+- **Hardcoded Defaults**: Some flows default to `Client` when no session role is present; ensure session and impersonation states are handled explicitly.
+- **Impersonation Flow**: `sessionRole` vs `role` in UI context (e.g., in [src/layout/AppHeader.tsx](src/layout/AppHeader.tsx)) must correctly reflect when a user is acting on behalf of another.
+- **Custom Hooks Overrides**: Overriding `useRbac` in tests (e.g., via `vi.spyOn`) may bypass real permission logic; document testing patterns to avoid false positives.
+- **Mixed RBAC & ABAC**: In some endpoints (e.g., document queries), access combines role-based checks with resource-based conditions; ensure logic in `hasPermission` and query filters align.
+
 ---
-*Generated on `$(date)` by automation script.* 
+*Last updated on `$(date)`* 
