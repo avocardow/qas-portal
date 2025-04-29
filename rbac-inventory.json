@@ -1,0 +1,262 @@
+[
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 4,
+    "match": "import { rbacPolicy, type Role } from \"@/utils/rbacPolicy\";"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 10,
+    "match": "canAccess: (permission: string) => boolean;"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 29,
+    "match": "canAccess: () => false,"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 39,
+    "match": "return useRbac().role;"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 43,
+    "match": "return useRbac().permissions;"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 47,
+    "match": "return useRbac().canAccess(permission);"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 51,
+    "match": "* canAccess utility function when you have a role outside of hooks."
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 55,
+    "match": "export const canAccess = (permission: string, role: Role | null): boolean => {"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 57,
+    "match": "return (rbacPolicy[role] || []).includes(permission);"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 82,
+    "match": "? rbacPolicy[effectiveRole]"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 85,
+    "match": "const canAccessFn = (permission: string): boolean => {"
+  },
+  {
+    "file": "src/context/RbacContext.tsx",
+    "line": 98,
+    "match": "canAccess: canAccessFn,"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/[clientId]/edit/page.tsx",
+    "line": 29,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx",
+    "line": 43,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 47,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: null, permissions: [], canAccess: () => false });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 54,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 61,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 68,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 76,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 83,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Client', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 90,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx",
+    "line": 98,
+    "match": "vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/new/page.tsx",
+    "line": 30,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/clients/page.tsx",
+    "line": 24,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/edit/page.tsx",
+    "line": 31,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/page.tsx",
+    "line": 41,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/new/page.tsx",
+    "line": 28,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/app/(pages)/(dashboard)/(app)/contacts/page.tsx",
+    "line": 25,
+    "match": "const { role } = useRbac();"
+  },
+  {
+    "file": "src/layout/AppHeader.tsx",
+    "line": 17,
+    "match": "const { sessionRole } = useRbac();"
+  },
+  {
+    "file": "src/server/api/trpc.ts",
+    "line": 20,
+    "match": "import { hasPermission, canAccessPermission } from \"@/utils/permissionUtils\";"
+  },
+  {
+    "file": "src/server/api/trpc.ts",
+    "line": 190,
+    "match": "const legacyAllowed = canAccessPermission(role as PolicyRole, permission);"
+  },
+  {
+    "file": "src/server/api/utils/rbac.ts",
+    "line": 2,
+    "match": "import { rbacPolicy } from \"@/utils/rbacPolicy\";"
+  },
+  {
+    "file": "src/server/api/utils/rbac.ts",
+    "line": 8,
+    "match": "const permissions = (rbacPolicy as Record<string, string[]>)[role] || [];"
+  },
+  {
+    "file": "src/utils/permissionUtils.ts",
+    "line": 7,
+    "match": "import { canAccess as canAccessServer } from \"@/utils/rbacPolicy\";"
+  },
+  {
+    "file": "src/utils/permissionUtils.ts",
+    "line": 29,
+    "match": "export function canAccessPermission("
+  },
+  {
+    "file": "src/utils/permissionUtils.ts",
+    "line": 33,
+    "match": "return canAccessServer(permission, role);"
+  },
+  {
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 1,
+    "match": "import { rbacPolicy } from \"./rbacPolicy\";"
+  },
+  {
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 17,
+    "match": "expect(rbacPolicy.Admin.sort()).toEqual(allPermissions.sort());"
+  },
+  {
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 25,
+    "match": "expect(rbacPolicy.Manager.sort()).toEqual(expected.sort());"
+  },
+  {
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 30,
+    "match": "expect(rbacPolicy.Auditor.sort()).toEqual("
+  },
+  {
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 37,
+    "match": "expect(rbacPolicy.Staff.sort()).toEqual("
+  },
+  {
+    "file": "src/utils/rbacPolicy.test.ts",
+    "line": 45,
+    "match": "expect(rbacPolicy.Client.sort()).toEqual("
+  },
+  {
+    "file": "src/utils/rbacPolicy.ts",
+    "line": 23,
+    "match": "export const rbacPolicy: Record<Role, string[]> = {"
+  },
+  {
+    "file": "src/utils/rbacPolicy.ts",
+    "line": 45,
+    "match": "export const canAccess = (permission: string, role: Role | null): boolean => {"
+  },
+  {
+    "file": "src/utils/rbacPolicy.ts",
+    "line": 53,
+    "match": "return (rbacPolicy[role] || []).includes(permission);"
+  },
+  {
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 4,
+    "match": "canAccessPermission,"
+  },
+  {
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 33,
+    "match": "describe('canAccessPermission', () => {"
+  },
+  {
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 35,
+    "match": "expect(canAccessPermission('Admin', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(true);"
+  },
+  {
+    "file": "src/utils/permissionUtils.test.ts",
+    "line": 39,
+    "match": "expect(canAccessPermission('Staff', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(false);"
+  },
+  {
+    "file": "src/components/header/ViewAsDropdown.tsx",
+    "line": 3,
+    "match": "import { rbacPolicy, type Role } from \"@/utils/rbacPolicy\";"
+  },
+  {
+    "file": "src/components/header/ViewAsDropdown.tsx",
+    "line": 6,
+    "match": "const { impersonatedRole, setImpersonatedRole } = useRbac();"
+  },
+  {
+    "file": "src/components/header/ViewAsDropdown.tsx",
+    "line": 8,
+    "match": "const roles = Object.keys(rbacPolicy).filter((r) => r !== \"Developer\") as Role[];"
+  }
+]
