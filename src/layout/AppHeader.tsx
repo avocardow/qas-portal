@@ -2,7 +2,6 @@
 import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
 import NotificationDropdown from "@/components/header/NotificationDropdown";
 import UserDropdown from "@/components/header/UserDropdown";
-import ViewAsDropdown from "@/components/header/ViewAsDropdown";
 import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +12,7 @@ const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  const { roles, refreshPermissions } = usePermissionContext();
+  const { refreshPermissions } = usePermissionContext();
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -170,7 +169,6 @@ const AppHeader: React.FC = () => {
               title="Refresh Permissions"
               className="p-2 text-gray-500 hover:text-gray-700"
             >🔄</button>
-            {roles.includes('Developer') && <ViewAsDropdown />}
             {/* <!-- Dark Mode Toggler --> */}
             <ThemeToggleButton />
             {/* <!-- Dark Mode Toggler --> */}

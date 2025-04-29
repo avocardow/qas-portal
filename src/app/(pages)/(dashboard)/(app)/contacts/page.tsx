@@ -2,7 +2,7 @@
 // @ts-nocheck
 "use client";
 import React, { useState } from "react";
-import { useRole } from "@/context/RbacContext";
+import { usePermissionContext } from '@/contexts/PermissionContext';
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Link from "next/link";
@@ -22,7 +22,7 @@ type SortField = "name" | "city" | "status";
 
 export default function ContactsPage() {
   // RBAC context
-  const role = useRole();
+  const { roles } = usePermissionContext();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
   // Debounce filter input to optimize queries
@@ -52,7 +52,7 @@ export default function ContactsPage() {
   const error = contactsQuery.error;
 
   // Protect view based on role (Admins, Managers, Clients, Developers)
-  if (role !== "Admin" && role !== "Manager" && role !== "Client" && role !== "Developer") {
+  if (!roles.includes("Admin") && !roles.includes("Manager") && !roles.includes("Client") && !roles.includes("Developer")) {
     return <p>You are not authorized to view contacts.</p>;
   }
 
@@ -102,7 +102,7 @@ export default function ContactsPage() {
           />
           {/* Conditional Add New Contact button */}
           {/* Only Admin or Developer can create contacts */}
-          {(role === "Admin" || role === "Developer") && (
+          {(roles.includes("Admin") || roles.includes("Developer")) && (
             <Link href="/contacts/new">
               <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
                 Add New Contact
@@ -214,7 +214,7 @@ export default function ContactsPage() {
                         {contact.status}
                       </TableCell>
                       {/* Only Admin or Developer can edit or delete contacts */}
-                      {(role === "Admin" || role === "Developer") && (
+                      {(roles.includes("Admin") || roles.includes("Developer")) && (
                         <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
                           <Link href={`/contacts/${contact.id}/edit`}>
                             <button className="btn bg-blue-500 text-white hover:bg-blue-600">

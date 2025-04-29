@@ -39,7 +39,7 @@ The audit has revealed specific locations of legacy RBAC usage:
 This mapping provides a clear picture of how RBAC hooks are distributed across the application, with particular concentration in UI components that require dynamic permission-based rendering. Focus migration efforts on these identified components, starting with the provider implementations.
 </info added on 2025-04-29T19:49:49.909Z>
 
-## 2. Verify Complete Migration to New Permission System [in-progress]
+## 2. Verify Complete Migration to New Permission System [done]
 ### Dependencies: 5.1
 ### Description: Confirm that all previously identified usages of the legacy RBAC system have been properly migrated to the new PermissionContext/useAbility approach.
 ### Details:

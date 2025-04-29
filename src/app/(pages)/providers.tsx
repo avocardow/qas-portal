@@ -7,7 +7,6 @@ import TRPCProvider from "@/app/_trpc/Provider"; // Assuming this is your tRPC P
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 // Add RbacProvider import
-import { RbacProvider } from "@/context/RbacContext";
 import { PermissionProvider } from '@/contexts/PermissionContext';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -17,9 +16,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <PermissionProvider>
           <ThemeProvider>
             <SidebarProvider>
-              <RbacProvider>
-                {children}
-              </RbacProvider>
+              {children}
             </SidebarProvider>
           </ThemeProvider>
         </PermissionProvider>

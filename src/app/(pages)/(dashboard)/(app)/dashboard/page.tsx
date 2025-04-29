@@ -4,15 +4,15 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import ComponentCard from "@/components/common/ComponentCard";
 import Link from "next/link";
 import { useAbility } from "@/hooks/useAbility";
-import { useRole } from "@/context/RbacContext";
+import { usePermissionContext } from '@/contexts/PermissionContext';
 import { TASK_PERMISSIONS, AUDIT_PERMISSIONS } from "@/constants/permissions";
 import Authorized from "@/components/Authorized";
 
 export default function DashboardPage() {
-  const role = useRole();
+  const { roles } = usePermissionContext();
   const { can } = useAbility();
   const canViewClients =
-    role === "Admin" || role === "Manager" || role === "Client";
+    roles.includes("Admin") || roles.includes("Manager") || roles.includes("Client");
   const canViewAudits = can(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
   const canViewTasks = can(TASK_PERMISSIONS.GET_ALL);
 
