@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Refactor Hook Usage
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: high
 # Description: Replace all useRbac() and usePermission() hook calls with useAbility() throughout the codebase.

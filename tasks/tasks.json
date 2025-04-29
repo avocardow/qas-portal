@@ -157,7 +157,7 @@
       "id": 3,
       "title": "Refactor Hook Usage",
       "description": "Replace all useRbac() and usePermission() hook calls with useAbility() throughout the codebase.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
