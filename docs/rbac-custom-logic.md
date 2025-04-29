@@ -2,34 +2,29 @@
 
 This document outlines the custom RBAC (Role-Based Access Control) logic implemented in the project, covering policy definitions, context hooks, permission checks, and component usage.
 
-## 1. Policy Mapping (`rbacPolicy`)
+## 1. Permission Hook (`useAbility`)
 
-Defined in [src/utils/rbacPolicy.ts](src/utils/rbacPolicy.ts):
+Defined in [src/hooks/useAbility.ts](src/hooks/useAbility.ts):
 ```typescript
-export const rbacPolicy: Record<Role, string[]> = {
-  Admin:   [/* all permissions */],
-  Manager: [/* subset of permissions */],
-  Client:  [/* client-level permissions */],
-  // ... other roles
-}
+import { useAbility } from '@/hooks/useAbility';
+
+export function useAbility(): { can: (permission: string) => boolean; cannot: (permission: string) => boolean };
 ```
 - **Key Points**
-  - Maps each `Role` to an array of permission strings.
-  - Used by `canAccess(permission, role)` utility for quick lookups.
+  - `can(permission)`: Returns `boolean` indicating if the user has the specified permission.
+  - `cannot(permission)`: Returns the opposite of `can(permission)`.
 
-## 2. Context Hook (`useRbac`)
+## 2. Authorized Component
 
-Defined in [src/context/RbacContext.tsx](src/context/RbacContext.tsx):
-```typescript
-export const useRbac = () => {
-  const { role, permissions, canAccess } = useContext(RbacContext);
-  return { role, permissions, canAccess };
-};
+Defined in [src/components/Authorized.tsx](src/components/Authorized.tsx):
+```tsx
+<Authorized action="task.update" fallback={<NoAccess />}> 
+  <UserEditor />
+</Authorized>
 ```
 - **Key Points**
-  - `role`: Current user role (e.g., `'Admin'`).
-  - `permissions`: Derived from `rbacPolicy[role]`.
-  - `canAccess(permission: string)`: Returns `boolean` based on policy.
+  - Wraps children in a permission guard using `useAbility().can(action)`.
+  - `fallback`: Optional element rendered when access is denied (defaults to `null`).
 
 ## 3. CASL Integration (`useAbility`)
 
@@ -41,20 +36,7 @@ Defined in [src/hooks/useAbility.ts](src/hooks/useAbility.ts):
   if (can('update:document')) { /* show edit UI */ }
   ```
 
-## 4. Authorized Component
-
-Defined in [src/components/Authorized.tsx](src/components/Authorized.tsx):
-```tsx
-<Authorized action="update:user" fallback={<NoAccess />}>
-  <UserEditor />
-</Authorized>
-```
-- **Key Points**
-  - Wraps children in a permission guard.
-  - `action`: Permission string to check via `useAbility().can(action)`.
-  - `fallback`: Optional element rendered when access is denied (defaults to `null`).
-
-## 5. Component-Level Gating
+## 4. Component-Level Gating
 
 Many components accept a `permission` or use `Authorized`:
 - In tables (e.g., `DataTableTwo`), columns with `permission`:
@@ -65,14 +47,14 @@ Many components accept a `permission` or use `Authorized`:
   ```
 - Action buttons (View/Edit) use `useRole()` and `onView`/`onEdit` handlers.
 
-## 6. Best Practices
+## 5. Best Practices
 
 - Define new permissions in `rbacPolicy` before use.
 - Use `useRbac().canAccess` or `useAbility().can` for inline checks.
 - Prefer `<Authorized>` for wrapping entire UI fragments.
 - Keep policy definitions DRY and grouped by feature.
 
-## 7. Server-side Enforcement (permissionProcedure)
+## 6. Server-side Enforcement (permissionProcedure)
 
 Defined in [src/server/api/utils/rbac.ts](src/server/api/utils/rbac.ts):
 ```typescript
@@ -101,7 +83,7 @@ export const permissionProcedure = t.procedure
   - Logs all denied access attempts for auditing
   - Throws `TRPCError` with `FORBIDDEN` status for unauthorized calls
 
-## 8. Edge Cases & Special Conditions
+## 7. Edge Cases & Special Conditions
 
 - **Hardcoded Defaults**: Some flows default to `Client` when no session role is present; ensure session and impersonation states are handled explicitly.
 - **Impersonation Flow**: `sessionRole` vs `role` in UI context (e.g., in [src/layout/AppHeader.tsx](src/layout/AppHeader.tsx)) must correctly reflect when a user is acting on behalf of another.
