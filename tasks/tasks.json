@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Inventory Existing RBAC Usage",
       "description": "Create a comprehensive inventory of all useRbac(), canAccess(), and rbacPolicy usages throughout the codebase to plan the migration strategy.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "Use grep or similar tools to search the codebase for all instances of 'useRbac', 'canAccess', 'rbacPolicy', and other related terms. Create a spreadsheet or document listing each file, the specific usage pattern, and the permission strings being checked. Group findings by component type (buttons, pages, etc.) and complexity. Document any custom logic that might need special handling during migration.",
@@ -52,7 +52,7 @@
           "id": 5,
           "title": "Document custom RBAC logic",
           "description": "Identify and document any custom or complex RBAC logic that requires special handling during migration",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -62,7 +62,7 @@
           "id": 6,
           "title": "Map component dependencies and interactions",
           "description": "Analyze how RBAC-protected components interact with each other and identify dependency chains",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -72,7 +72,7 @@
           "id": 7,
           "title": "Generate comprehensive migration planning report",
           "description": "Create a detailed report with migration recommendations based on the inventory analysis",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5,
             6
