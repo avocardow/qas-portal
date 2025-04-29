@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAbility } from "@/hooks/useAbility";
 import Authorized from "@/components/Authorized";
 import { TASK_PERMISSIONS } from "@/constants/permissions";
 
@@ -26,9 +25,7 @@ const createTaskSchema = z.object({
 type CreateTaskForm = z.infer<typeof createTaskSchema>;
 
 export default function NewTaskPage() {
-  // RBAC: guard create task permission
-  const { can } = useAbility();
-  const canCreateTask = can(TASK_PERMISSIONS.CREATE);
+  // RBAC: permission guarded by Authorized component
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultAuditId = searchParams.get("auditId") ?? "";
