@@ -5,7 +5,6 @@ import type { Session } from "next-auth";
 import TRPCProvider from "@/app/_trpc/Provider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
-import { RbacProvider } from "@/context/RbacContext";
 import { PermissionProvider } from "@/contexts/PermissionContext";
 
 interface ProvidersProps {
@@ -20,7 +19,7 @@ export default function Providers({ session, children }: ProvidersProps) {
         <PermissionProvider>
           <ThemeProvider>
             <SidebarProvider>
-              <RbacProvider>{children}</RbacProvider>
+              {children}
             </SidebarProvider>
           </ThemeProvider>
         </PermissionProvider>
