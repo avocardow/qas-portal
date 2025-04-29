@@ -1,10 +1,9 @@
 "use client";
 import React from "react";
-import ViewActionButton from "@/components/common/ViewActionButton";
-import { PencilIcon } from "@/icons";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect } from "react";
+import { useRole } from "@/context/RbacContext";
 import {
   Table,
   TableBody,
@@ -16,9 +15,11 @@ import {
   AngleDownIcon,
   AngleUpIcon,
   XMarkIcon,
-} from "../../../../icons";
+  PencilIcon,
+} from "@/icons";
 import PaginationWithButton from "./PaginationWithButton";
-import { useRole } from '@/context/RbacContext';
+import Authorized from "../../../Authorized";
+import ViewActionButton from "@/components/common/ViewActionButton";
 
 // Column and props definitions for flexibility
 export interface ColumnDef {
@@ -35,6 +36,10 @@ export interface DataTableTwoProps {
   extraControls?: React.ReactNode;
   /** Optional handler when a row is clicked */
   onRowClick?: (row: any) => void;
+  /** Optional handler for View action */
+  onView?: (row: any) => void;
+  /** Optional handler for Edit action */
+  onEdit?: (row: any) => void;
   totalDbEntries?: number;
   currentPage?: number;
   pageSize?: number;
@@ -47,8 +52,6 @@ export interface DataTableTwoProps {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   onSortChange?: (key: string, order: "asc" | "desc") => void;
-  onView?: (row: any) => void;
-  onEdit?: (row: any) => void;
 }
 
 // Skeleton Row Component (Basic Example)
@@ -72,6 +75,8 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   data,
   columns,
   onRowClick,
+  onView,
+  onEdit,
   extraControls,
   totalDbEntries,
   currentPage = 1,
@@ -85,11 +90,10 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   sortBy: sortByProp,
   sortOrder: sortOrderProp,
   onSortChange,
-  onView,
-  onEdit,
 }: DataTableTwoProps) => {
+  // Determine user role for action button visibility
+  const role = useRole() ?? "";
   const searchInputRef = React.useRef<HTMLInputElement>(null);
-  const role = useRole();
 
   // Default columns if not provided
   const baseColumns = React.useMemo<ColumnDef[]>(() => [
@@ -318,9 +322,56 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
             <caption className="sr-only" data-testid="datatable-caption">Clients table</caption>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                {cols.map(({ key, header, sortable }, idx) => {
+                {cols.map(({ key, header, sortable, permission }, idx) => {
                   // Add lg:sticky to freeze the first column on desktop (no extra background)
                   const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white lg:dark:bg-[#1c2539]' : '';
+                  if (permission) {
+                    return (
+                      <Authorized key={key} action={permission} fallback={null}>
+                        <TableCell
+                          isHeader
+                          scope="col"
+                          aria-sort={
+                            currentSortKey === key
+                              ? currentSortOrder === "asc"
+                                ? "ascending"
+                                : "descending"
+                              : "none"
+                          }
+                          className={`border border-gray-100 px-4 py-3 min-w-[110px] whitespace-nowrap dark:border-white/[0.05] ${headerSticky}`}
+                        >
+                          {sortable ? (
+                            <button
+                              type="button"
+                              className="w-full flex items-center justify-between p-0"
+                              onClick={() => handleSort(key)}
+                              aria-label={header}
+                            >
+                              <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                                {header}
+                              </span>
+                              <span aria-hidden="true" className="flex flex-col gap-0.5">
+                                <AngleUpIcon
+                                  className={`text-gray-300 dark:text-gray-700 ${
+                                    currentSortKey === key && currentSortOrder === "asc" ? "text-brand-500" : ""
+                                  }`}
+                                />
+                                <AngleDownIcon
+                                  className={`text-gray-300 dark:text-gray-700 ${
+                                    currentSortKey === key && currentSortOrder === "desc" ? "text-brand-500" : ""
+                                  }`}
+                                />
+                              </span>
+                            </button>
+                          ) : (
+                            <span className="block w-full text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                              {header}
+                            </span>
+                          )}
+                        </TableCell>
+                      </Authorized>
+                    );
+                  }
                   return (
                     <TableCell
                       key={key}
@@ -387,9 +438,20 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           : undefined
                       }
                     >
-                      {cols.map(({ key, cell }, idx) => {
+                      {cols.map(({ key, cell, permission }, idx) => {
                         // Freeze first column on desktop (no extra background)
                         const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white lg:dark:bg-[#1c2539]' : '';
+                        if (permission) {
+                          return (
+                            <Authorized key={key} action={permission} fallback={null}>
+                              <TableCell
+                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky}`}
+                              >
+                                {cell ? cell(item) : (item[key] ?? "-")}
+                              </TableCell>
+                            </Authorized>
+                          );
+                        }
                         return (
                           <TableCell
                             key={key}
@@ -399,18 +461,19 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           </TableCell>
                         );
                       })}
-                      {(onView || role === 'Admin') && (
-                        <TableCell className="p-4 whitespace-nowrap">
-                          {onView && (role === 'Admin' || role === 'Manager' || role === 'Client') && (
+                      {/* Action buttons cell */}
+                      {(onView && ["Admin","Manager","Client"].includes(role)) || role === "Admin" ? (
+                        <TableCell key="actions" className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
+                          {onView && ["Admin","Manager","Client"].includes(role) && (
                             <ViewActionButton onClick={() => onView(item)} />
                           )}
-                          {role === 'Admin' && (
-                            <button onClick={() => onEdit?.(item)} aria-label="Edit" className="ml-2">
-                              <PencilIcon aria-hidden="true" />
+                          {role === "Admin" && (
+                            <button aria-label="Edit" onClick={() => onEdit?.(item)} className="ml-2">
+                              <PencilIcon className="h-4 w-4" />
                             </button>
                           )}
                         </TableCell>
-                      )}
+                      ) : null}
                     </TableRow>
                   ))
                 : (

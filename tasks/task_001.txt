@@ -1,115 +1,55 @@
 # Task ID: 1
-# Title: Evaluate and Select Permission Library
-# Status: done
+# Title: Inventory Existing RBAC Usage
+# Status: in-progress
 # Dependencies: None
 # Priority: high
-# Description: Compare CASL and AccessControl libraries based on feature parity, ESM support, bundle size, and community support to select the most appropriate library for our permission engine.
+# Description: Create a comprehensive inventory of all useRbac(), canAccess(), and rbacPolicy usages throughout the codebase to plan the migration strategy.
 # Details:
-1. Use Context7 to review documentation for both CASL and AccessControl via `mcp_context7_get-library-docs`
-2. Create a comparison matrix with criteria: action/subject model support, dynamic conditions, ESM compatibility, bundle size, community activity
-3. Build small proof-of-concept implementations with both libraries
-4. Test performance with a representative set of permission rules
-5. Document findings and make a final selection with justification
-6. Install the selected library with `npm install` or `yarn add`
+Use grep or similar tools to search the codebase for all instances of 'useRbac', 'canAccess', 'rbacPolicy', and other related terms. Create a spreadsheet or document listing each file, the specific usage pattern, and the permission strings being checked. Group findings by component type (buttons, pages, etc.) and complexity. Document any custom logic that might need special handling during migration.
 
 # Test Strategy:
-Create a test harness that validates the library against our key use cases: role-based permissions, conditional permissions, and performance with large rule sets. Document the results.
+Validate the inventory by cross-checking with Context7 and manual code review to ensure no usage patterns are missed. The inventory should include file paths, line numbers, and the specific permission checks being performed.
 
 # Subtasks:
-## 1. Create Comparison Matrix and Documentation Analysis [done]
+## 1. Set up automated code scanning tools [done]
 ### Dependencies: None
-### Description: Analyze documentation for both CASL and AccessControl libraries to create a comprehensive comparison matrix based on key criteria including feature support, ESM compatibility, bundle size, and community activity.
+### Description: Configure and set up code scanning tools to automatically identify RBAC-related patterns across the codebase
 ### Details:
-1. Use Context7 to retrieve and review complete documentation for both libraries via `mcp_context7_get-library-docs`
-2. Create a structured comparison matrix with the following criteria:
-   - Action/subject model support and flexibility
-   - Dynamic conditions and field-level permission capabilities
-   - ESM module compatibility and import syntax
-   - Bundle size analysis (use tools like Bundlephobia)
-   - Community activity metrics (GitHub stars, issues, PRs, last commit)
-   - TypeScript support quality
-   - Integration options with React and other frameworks
-3. Document the permission models of each library (CASL's Ability model vs AccessControl's RBAC approach)
-4. Analyze documentation quality and learning curve
-5. Test for: Ability to handle complex permission scenarios with nested resources
-6. Create a summary document with initial findings
+Install and configure grep, ripgrep, or specialized code analysis tools to search for RBAC-related patterns. Create search patterns for 'useRbac()', 'canAccess()', 'rbacPolicy', and other authorization-related functions. Set up the tools to output results in a structured format (JSON or CSV) that can be easily imported into analysis tools. Include file paths, line numbers, and surrounding context in the output format. Test the scanning setup on a small subset of the codebase to verify accuracy.
 
-Testing approach: Verify documentation completeness and accuracy by cross-referencing with GitHub repositories and community discussions.
-
-## 2. Develop Proof-of-Concept Implementations [done]
+## 2. Execute comprehensive codebase scan [in-progress]
 ### Dependencies: 1.1
-### Description: Build small proof-of-concept implementations with both CASL and AccessControl libraries to evaluate their practical usage, API ergonomics, and implementation patterns.
+### Description: Run the configured scanning tools across the entire codebase to identify all instances of RBAC usage
 ### Details:
-1. Create a simple test project with both libraries installed
-2. For CASL implementation:
-   - Define an ability configuration using the AbilityBuilder pattern
-   - Implement permission checks for CRUD operations on a sample resource
-   - Test field-level permissions using CASL's subject field filtering
-   - Implement conditional permissions based on user attributes
-   - Test integration with React components using @casl/react
+Execute the scanning tools across all repositories and branches that contain production code. Include both frontend and backend code in the scan. Ensure the scan covers all programming languages used in the project (JavaScript, TypeScript, etc.). Run additional targeted searches for indirect RBAC implementations that might use different naming conventions. Collect all scan results into a centralized location for analysis. Document any scanning errors or inaccessible code areas.
 
-3. For AccessControl implementation:
-   - Define a grants object with role-based permissions
-   - Implement permission checks for CRUD operations
-   - Test ownership-based permissions using the 'own' vs 'any' concepts
-   - Implement attribute-based filtering if supported
-
-4. Document code patterns and implementation differences
-5. Evaluate TypeScript type safety and developer experience
-
-Testing approach: Create unit tests for each implementation to verify correct permission enforcement across various scenarios including: basic CRUD permissions, conditional permissions, field-level access control, and role inheritance.
-
-## 3. Performance and Bundle Size Testing [done]
+## 3. Create structured inventory database [pending]
 ### Dependencies: 1.2
-### Description: Conduct comprehensive performance testing and bundle size analysis for both libraries with representative permission rule sets to evaluate runtime efficiency and impact on application size.
+### Description: Develop a structured database or spreadsheet to catalog and categorize all RBAC usage findings
 ### Details:
-1. Create a standardized test suite with the following components:
-   - A representative set of 50-100 permission rules of varying complexity
-   - Test cases for common permission check patterns
-   - Benchmarking code to measure execution time
+Create a spreadsheet or database with columns for: file path, line number, function/method name, RBAC pattern type (useRbac, canAccess, etc.), permission strings being checked, component type (button, page, API endpoint, etc.), and additional notes. Import the scan results into this structure, cleaning and normalizing the data as needed. Add metadata fields for tracking migration status later. Create unique identifiers for each RBAC usage instance to reference during migration.
 
-2. Measure and compare performance metrics:
-   - Initialization time for permission configuration
-   - Execution time for simple permission checks
-   - Execution time for complex conditional checks
-   - Memory usage patterns
-
-3. Analyze bundle size impact:
-   - Use webpack-bundle-analyzer to visualize bundle composition
-   - Measure tree-shaking effectiveness with different import patterns
-   - Test ESM vs CommonJS bundle size differences
-   - Evaluate impact when using partial imports
-
-4. Test scalability with large permission sets
-5. Document performance findings with quantitative metrics
-
-Testing approach: Use Jest for performance testing with realistic permission scenarios. Create multiple test runs to ensure statistical significance. Document both average and worst-case performance characteristics.
-
-## 4. Final Selection and Integration [done]
-### Dependencies: 1.1, 1.2, 1.3
-### Description: Based on the comprehensive analysis and testing, make a final library selection, document the justification, and integrate the chosen library into the project.
+## 4. Analyze and categorize RBAC patterns [pending]
+### Dependencies: 1.3
+### Description: Review the inventory to identify common patterns, group similar implementations, and categorize by complexity
 ### Details:
-1. Create a final decision matrix that weighs all evaluation criteria:
-   - Feature completeness for project requirements
-   - Performance characteristics with realistic workloads
-   - Bundle size impact and optimization potential
-   - Developer experience and API ergonomics
-   - Community support and maintenance outlook
-   - Integration capabilities with existing architecture
+Analyze the collected data to identify common RBAC implementation patterns. Group similar implementations together based on their structure and purpose. Categorize each instance by complexity (simple permission check, complex conditional logic, custom implementations, etc.). Identify any deprecated or inconsistent RBAC implementations. Tag components that handle sensitive operations or data for special attention. Create a summary of pattern categories with counts and examples.
 
-2. Document the final selection with clear justification:
-   - Summarize key advantages of the selected library
-   - Address potential limitations and mitigation strategies
-   - Include performance and bundle size metrics from testing
+## 5. Document custom RBAC logic [pending]
+### Dependencies: 1.4
+### Description: Identify and document any custom or complex RBAC logic that requires special handling during migration
+### Details:
+Review each complex RBAC implementation identified in the previous step. Document the business logic and security requirements behind each custom implementation. Create flowcharts or decision trees for complex permission checks. Interview relevant developers or product owners to understand the rationale behind custom implementations. Identify any hardcoded roles or permissions that should be configurable. Document edge cases and special conditions that trigger specific access controls.
 
-3. Create an integration plan:
-   - Install the selected library with proper version pinning
-   - Create a centralized permission configuration module
-   - Document standard patterns for permission checks
-   - Provide examples for UI integration (React components, etc.)
+## 6. Map component dependencies and interactions [pending]
+### Dependencies: 1.4
+### Description: Analyze how RBAC-protected components interact with each other and identify dependency chains
+### Details:
+Map the relationships between components that use RBAC checks. Identify parent-child relationships where permissions cascade. Document cases where multiple RBAC checks protect the same resource through different paths. Create visualization diagrams of complex permission structures. Identify potential security gaps where RBAC implementations might be inconsistent across related components. Document API endpoints and their corresponding frontend components that should have matching RBAC implementations.
 
-4. Implement a simple permission service that encapsulates the library's API
-5. Create documentation for other developers on how to use the permission system
-
-Testing approach: Create integration tests that verify the permission system works correctly with the application's authentication system and properly enforces permissions across different user roles and scenarios.
+## 7. Generate comprehensive migration planning report [pending]
+### Dependencies: 1.5, 1.6
+### Description: Create a detailed report with migration recommendations based on the inventory analysis
+### Details:
+Compile all findings into a comprehensive report document. Include statistics on RBAC usage patterns and their distribution across the codebase. Prioritize components for migration based on security importance, complexity, and dependencies. Recommend standardized approaches for different types of RBAC implementations. Identify potential risks and challenges for the migration process. Create a phased migration plan with estimated effort for each component group. Include recommendations for testing and validation procedures during migration.
 

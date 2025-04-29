@@ -1,54 +1,49 @@
 # Task ID: 2
-# Title: Audit Existing Permission Usage
-# Status: done
-# Dependencies: None
+# Title: Update Provider Configuration
+# Status: pending
+# Dependencies: 1
 # Priority: high
-# Description: Scan the codebase to inventory all current permission checks, hooks, and components to ensure complete migration coverage.
+# Description: Remove RbacProvider and ensure PermissionProvider properly wraps the application in the providers.tsx file.
 # Details:
-1. Run `grep -R "usePermission\(" src/` to find all hook usages
-2. Run `grep -R "enforcePermission" src/` to find all middleware usages
-3. Run `grep -R "RequirePermission" src/` to find all component usages
-4. Search for imports of permission constants like `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS`
-5. Document all findings in a spreadsheet with columns: file path, line number, permission type, permission value
-6. Categorize permissions by functional area (client management, audit, tasks, etc.)
+Locate src/app/(pages)/(dashboard)/providers.tsx and remove the <RbacProvider> component. Ensure <PermissionProvider> is present and wraps all children components. Verify the provider has access to the user context and any other dependencies it needs. If PermissionProvider is not already present, add it following the pattern in the technical architecture section. Ensure it's positioned correctly in the provider hierarchy.
 
 # Test Strategy:
-Validate completeness by cross-referencing with application routes and features. Ensure no permission checks are missed by reviewing key protected areas of the application.
+Test the application startup to ensure no provider-related errors occur. Verify that basic permission checks still function after the provider swap by testing a few key pages with different user roles.
 
 # Subtasks:
-## 1. Identify and Document Permission Hook Usages [done]
+## 1. Locate and Open providers.tsx File [pending]
 ### Dependencies: None
-### Description: Search the codebase for all instances of permission-related hooks and document their usage.
+### Description: Find the providers.tsx file located at src/app/(pages)/(dashboard)/providers.tsx and open it in your code editor.
 ### Details:
-Run `grep -R "usePermission(" src/` to locate all usages of the permission hook. For each result, record the file path, line number, and relevant permission value in a spreadsheet. This ensures that all hook-based permission checks are inventoried for migration coverage.
+Use your file system or IDE to navigate to the specified path and open the file for editing.
 
-## 2. Identify and Document Permission Middleware Usages [done]
+## 2. Remove RbacProvider Component [pending]
 ### Dependencies: 2.1
-### Description: Locate all middleware functions enforcing permissions and document their occurrences.
+### Description: Delete the <RbacProvider> component from the providers.tsx file.
 ### Details:
-Run `grep -R "enforcePermission" src/` to find all middleware-based permission checks. For each occurrence, log the file path, line number, and permission value in the same spreadsheet. This step ensures middleware permission checks are included in the audit.
+Search for the <RbacProvider> component in the file and remove it entirely, ensuring no references remain.
 
-## 3. Identify and Document Permission Component Usages [done]
+## 3. Verify Presence of PermissionProvider [pending]
 ### Dependencies: 2.2
-### Description: Search for all permission-enforcing components and document their usage.
+### Description: Check if the <PermissionProvider> component is already present in the providers.tsx file.
 ### Details:
-Run `grep -R "RequirePermission" src/` to find all component-based permission checks. Record each instance with file path, line number, and permission value in the spreadsheet. This captures all UI-level permission enforcement.
+Look for the <PermissionProvider> component in the file. If it exists, proceed to the next step. If not, prepare to add it.
 
-## 4. Audit Permission Constant Imports [done]
+## 4. Add PermissionProvider if Necessary [pending]
 ### Dependencies: 2.3
-### Description: Search for and document all imports of permission constants throughout the codebase.
+### Description: If the <PermissionProvider> component is not present, add it to the providers.tsx file following the pattern outlined in the technical architecture section.
 ### Details:
-Search for imports of permission constants such as `AUDIT_PERMISSIONS` and `TASK_PERMISSIONS` using `grep` or IDE search. Document each import's file path and line number, and note the specific constants used. This step ensures all permission references are captured, even if not directly enforced by hooks or components.
+Refer to the technical architecture documentation for the correct implementation pattern. Ensure it wraps all children components correctly.
 
-## 5. Consolidate and Structure Permission Audit Data [done]
+## 5. Position PermissionProvider Correctly [pending]
 ### Dependencies: 2.4
-### Description: Aggregate all findings into a structured spreadsheet for analysis and migration planning.
+### Description: Ensure the <PermissionProvider> component is positioned correctly in the provider hierarchy.
 ### Details:
-Combine all documented permission usages into a single spreadsheet with columns: file path, line number, permission type (hook, middleware, component, constant), and permission value. Ensure consistency and completeness of the data for further analysis.
+Verify that <PermissionProvider> is placed in the correct order relative to other providers, ensuring it has access to the user context and any other necessary dependencies.
 
-## 6. Categorize Permissions by Functional Area [done]
+## 6. Verify Provider Configuration [pending]
 ### Dependencies: 2.5
-### Description: Analyze and categorize each permission usage by its functional area to support migration coverage.
+### Description: Test the application to ensure the <PermissionProvider> is functioning as expected and has access to the user context and other dependencies.
 ### Details:
-Review each documented permission usage and assign it to a functional area such as client management, audit, or tasks. Add a 'functional area' column to the spreadsheet and populate it accordingly. This categorization will help ensure migration completeness and facilitate targeted testing.
+Run the application and perform tests to verify that the <PermissionProvider> is correctly wrapping components and handling permissions as intended.
 

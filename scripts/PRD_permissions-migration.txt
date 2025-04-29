@@ -1,0 +1,75 @@
+# File: scripts/PRD_permissions-migration.txt
+
+<context>
+# Overview  
+This document covers the full migration from the legacy `RbacContext` approach to the new unified `PermissionContext`/`useAbility` RBAC system. The goal is to retire the old context, consolidate all permission checks into one source of truth (`permissionSchema`), and ensure consistent enforcement across the entire dashboard UI and API surface.
+
+# Core Features  
+- **Unified Permissions Layer**  
+  - Use `PermissionContext` + `useAbility()` everywhere for permission checks  
+  - Centralize all permission strings in `permissionSchema`  
+- **Authorized Component Integration**  
+  - Leverage the `<Authorized action="…">` wrapper for gating UI elements  
+- **Provider Refactor**  
+  - Remove `<RbacProvider>` and hook implementations once migration is complete  
+- **Context7 Adoption**  
+  - Consult official docs (e.g. NextAuth, React Context) via Context7 during development  
+- **Cursor Rules Compliance**  
+  - Follow all [cursor rules](mdc:.cursor/rules/cursor_rules.mdc) when adding or updating code and documentation  
+
+# User Experience  
+- **Developers** will write their permission logic exclusively via `useAbility` or `<Authorized>`.  
+- **Reviewers** should see consistent RBAC patterns enforced across pages.  
+- **Testers** can validate gating by toggling roles in docs or test harness.  
+</context>
+
+<PRD>
+# Technical Architecture  
+- Remove all `useRbac()` and `RbacProvider` references.  
+- Wrap the app in `<PermissionProvider>` only, ensuring it sits above the pages in `src/app/(pages)/(dashboard)/providers.tsx`.  
+- Refactor every hook call:
+  ```ts
+  // OLD
+  const { role, canAccess } = useRbac();
+  // NEW
+  const { can } = useAbility();
+  ```  
+- Update components to import and use `Authorized` from `@/components/Authorized` for UI gating.  
+- Delete `src/context/RbacContext.tsx` and any related policy files after migration.  
+
+# Development Roadmap  
+1. **Inventory & Planning**  
+   - List all `useRbac()`, `canAccess()`, and `rbacPolicy` usages  
+2. **Provider Swap**  
+   - In `providers.tsx`: remove `<RbacProvider>`, ensure `<PermissionProvider>` wraps all children  
+3. **Hook Refactor**  
+   - Replace `useRbac`/`usePermission` calls with `useAbility`  
+4. **Component Gating**  
+   - Ensure all gated columns, buttons, and routes use `<Authorized action="…">`  
+5. **Cleanup**  
+   - Remove legacy context files and old policy code  
+6. **Testing & Validation**  
+   - Smoke-test each page with various roles  
+   - Add unit/integration tests for `useAbility` checks  
+
+# Logical Dependency Chain  
+1. Inventory existing RBAC hooks and providers  
+2. Swap providers in the root layout  
+3. Refactor smallest components/hooks (e.g. buttons, links)  
+4. Refactor larger pages (clients, tasks, audits)  
+5. Remove legacy code  
+6. Final QA and launch  
+
+# Risks and Mitigations  
+- **Risk:** Missing a permission string or flag  
+  - **Mitigation:** Use `grep` and Context7 to verify all `permission` props match schema  
+- **Risk:** Break existing gating logic  
+  - **Mitigation:** Migrate in small batches, add tests for each page  
+- **Risk:** Developer bypass overrides hiding logic  
+  - **Mitigation:** Confirm `PermissionContext` bypass only applies to “Developer” role  
+
+# Appendix  
+- **Cursor Rules:** See [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) for formatting guidelines  
+- **Context7:** Reference official React Context & NextAuth docs via Context7 for best practices  
+- **Git Practices:** Create a changeset after migration to document the RBAC overhaul  
+</PRD>

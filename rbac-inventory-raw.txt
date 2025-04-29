@@ -1,0 +1,52 @@
+src/context/RbacContext.tsx:4:import { rbacPolicy, type Role } from "@/utils/rbacPolicy";
+src/context/RbacContext.tsx:10:  canAccess: (permission: string) => boolean;
+src/context/RbacContext.tsx:29:      canAccess: () => false,
+src/context/RbacContext.tsx:39:  return useRbac().role;
+src/context/RbacContext.tsx:43:  return useRbac().permissions;
+src/context/RbacContext.tsx:47:  return useRbac().canAccess(permission);
+src/context/RbacContext.tsx:51: * canAccess utility function when you have a role outside of hooks.
+src/context/RbacContext.tsx:55:export const canAccess = (permission: string, role: Role | null): boolean => {
+src/context/RbacContext.tsx:57:  return (rbacPolicy[role] || []).includes(permission);
+src/context/RbacContext.tsx:82:    ? rbacPolicy[effectiveRole]
+src/context/RbacContext.tsx:85:  const canAccessFn = (permission: string): boolean => {
+src/context/RbacContext.tsx:98:        canAccess: canAccessFn,
+src/app/(pages)/(dashboard)/(app)/clients/[clientId]/edit/page.tsx:29:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx:43:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:47:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: null, permissions: [], canAccess: () => false });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:54:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:61:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:68:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Developer', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:76:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Manager', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:83:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Client', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:90:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/page.test.tsx:98:    vi.spyOn(rbacModule, 'useRbac').mockReturnValue({ role: 'Admin', permissions: [], canAccess: () => true });
+src/app/(pages)/(dashboard)/(app)/clients/new/page.tsx:30:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/clients/page.tsx:24:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/edit/page.tsx:31:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/contacts/[contactId]/page.tsx:41:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/contacts/new/page.tsx:28:  const { role } = useRbac();
+src/app/(pages)/(dashboard)/(app)/contacts/page.tsx:25:  const { role } = useRbac();
+src/layout/AppHeader.tsx:17:  const { sessionRole } = useRbac();
+src/server/api/trpc.ts:20:import { hasPermission, canAccessPermission } from "@/utils/permissionUtils";
+src/server/api/trpc.ts:190:      const legacyAllowed = canAccessPermission(role as PolicyRole, permission);
+src/server/api/utils/rbac.ts:2:import { rbacPolicy } from "@/utils/rbacPolicy";
+src/server/api/utils/rbac.ts:8:  const permissions = (rbacPolicy as Record<string, string[]>)[role] || [];
+src/utils/permissionUtils.ts:7:import { canAccess as canAccessServer } from "@/utils/rbacPolicy";
+src/utils/permissionUtils.ts:29:export function canAccessPermission(
+src/utils/permissionUtils.ts:33:  return canAccessServer(permission, role);
+src/utils/rbacPolicy.test.ts:1:import { rbacPolicy } from "./rbacPolicy";
+src/utils/rbacPolicy.test.ts:17:    expect(rbacPolicy.Admin.sort()).toEqual(allPermissions.sort());
+src/utils/rbacPolicy.test.ts:25:    expect(rbacPolicy.Manager.sort()).toEqual(expected.sort());
+src/utils/rbacPolicy.test.ts:30:    expect(rbacPolicy.Auditor.sort()).toEqual(
+src/utils/rbacPolicy.test.ts:37:    expect(rbacPolicy.Staff.sort()).toEqual(
+src/utils/rbacPolicy.test.ts:45:    expect(rbacPolicy.Client.sort()).toEqual(
+src/utils/rbacPolicy.ts:23:export const rbacPolicy: Record<Role, string[]> = {
+src/utils/rbacPolicy.ts:45:export const canAccess = (permission: string, role: Role | null): boolean => {
+src/utils/rbacPolicy.ts:53:  return (rbacPolicy[role] || []).includes(permission);
+src/utils/permissionUtils.test.ts:4:  canAccessPermission,
+src/utils/permissionUtils.test.ts:33:  describe('canAccessPermission', () => {
+src/utils/permissionUtils.test.ts:35:      expect(canAccessPermission('Admin', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(true);
+src/utils/permissionUtils.test.ts:39:      expect(canAccessPermission('Staff', DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID)).toBe(false);
+src/components/header/ViewAsDropdown.tsx:3:import { rbacPolicy, type Role } from "@/utils/rbacPolicy";
+src/components/header/ViewAsDropdown.tsx:6:  const { impersonatedRole, setImpersonatedRole } = useRbac();
+src/components/header/ViewAsDropdown.tsx:8:  const roles = Object.keys(rbacPolicy).filter((r) => r !== "Developer") as Role[];

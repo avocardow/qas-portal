@@ -1,191 +1,55 @@
 # Task ID: 3
-# Title: Create Permission Policy Definitions
-# Status: done
-# Dependencies: 1, 2
+# Title: Refactor Hook Usage
+# Status: pending
+# Dependencies: 2
 # Priority: high
-# Description: Define the central policy file that maps actions to roles, serving as the single source of truth for permissions.
+# Description: Replace all useRbac() and usePermission() hook calls with useAbility() throughout the codebase.
 # Details:
-1. Create a `policies/permissions.ts` (or JSON/YAML) file
-2. Define the permission structure based on the selected library's syntax
-3. Map each role (Developer, Admin, Manager, Auditor, Staff, Client) to their allowed actions
-4. Include conditional permissions where needed
-5. Document the schema and usage patterns
-6. Ensure all permissions discovered in the audit are represented
-7. Group permissions logically by feature area
+Using the inventory from Task 1, systematically replace each hook usage following the pattern: const { role, canAccess } = useRbac(); → const { can } = useAbility();. Update all permission checks to use the new can() function with the appropriate permission strings from permissionSchema. Ensure all permission strings match those defined in the schema. Start with smaller, isolated components before moving to more complex pages.
 
 # Test Strategy:
-Write unit tests that validate the policy file loads correctly and returns expected permissions for each role. Test edge cases like conditional permissions and role inheritance if applicable.
+For each component refactored, manually test with different user roles to verify permission checks still work correctly. Write unit tests for critical components that use useAbility() to ensure they render correctly based on permissions.
 
 # Subtasks:
-## 1. Design Permission Schema and Structure [done]
+## 1. Inventory and Planning [pending]
 ### Dependencies: None
-### Description: Define the schema and structure for the central permission policy file based on RBAC principles, ensuring it can represent all required roles and actions while supporting conditional permissions.
+### Description: Review the inventory from Task 1 and identify all components and pages that use the useRbac() and usePermission() hooks. Plan the replacement strategy based on component complexity and usage frequency.
 ### Details:
-1. Analyze the existing roles (Developer, Admin, Manager, Auditor, Staff, Client) and their required permissions
-2. Choose between JSON, YAML, or TypeScript for the policy definition format (TypeScript recommended for type safety)
-3. Design a schema that groups permissions logically by feature area
-4. Include support for conditional permissions (e.g., resource ownership constraints)
-5. Document the schema with examples and usage patterns
-6. Create a draft structure that follows the least privilege principle
-7. Test the schema with sample role definitions to ensure it meets all requirements
-8. Validate that the schema can represent all permissions discovered in the audit
+Use the inventory to prioritize components based on their complexity and how frequently they are used. Start with smaller, isolated components to ensure a smooth transition.
 
-<info added on 2025-04-28T05:13:04.050Z>
-Here's additional information for the schema implementation:
-
-```typescript
-// src/policies/permissions.ts
-
-// Permission constants grouped by feature area
-export const UserPermissions = {
-  CREATE_USER: 'user:create',
-  READ_USER: 'user:read',
-  UPDATE_USER: 'user:update',
-  DELETE_USER: 'user:delete',
-  LIST_USERS: 'user:list',
-};
-
-export const ProjectPermissions = {
-  CREATE_PROJECT: 'project:create',
-  READ_PROJECT: 'project:read',
-  UPDATE_PROJECT: 'project:update',
-  DELETE_PROJECT: 'project:delete',
-  LIST_PROJECTS: 'project:list',
-};
-
-// Add more feature areas as needed
-
-// Permission type definition
-export type Permission = string;
-
-// Condition type for conditional permissions
-export type PermissionCondition = {
-  type: 'ownership' | 'team' | 'department' | 'custom';
-  evaluator: (user: any, resource: any) => boolean;
-};
-
-// Role definition with conditional permissions
-export type Role = {
-  name: string;
-  description: string;
-  permissions: Permission[];
-  conditionalPermissions?: {
-    permission: Permission;
-    condition: PermissionCondition;
-  }[];
-};
-
-// Example role implementation
-export const roles: Record<string, Role> = {
-  DEVELOPER: {
-    name: 'Developer',
-    description: 'Standard developer with limited access',
-    permissions: [
-      UserPermissions.READ_USER,
-      ProjectPermissions.READ_PROJECT,
-      ProjectPermissions.LIST_PROJECTS,
-    ],
-    conditionalPermissions: [
-      {
-        permission: ProjectPermissions.UPDATE_PROJECT,
-        condition: {
-          type: 'ownership',
-          evaluator: (user, project) => project.ownerId === user.id,
-        },
-      },
-    ],
-  },
-  // Define other roles similarly
-};
-
-// Helper function to check permissions
-export function hasPermission(userRole: string, permission: Permission): boolean {
-  const role = roles[userRole];
-  return role?.permissions.includes(permission) || false;
-}
-
-// Helper for conditional permissions
-export function hasConditionalPermission(
-  userRole: string, 
-  permission: Permission, 
-  user: any, 
-  resource: any
-): boolean {
-  const role = roles[userRole];
-  const conditionalPerm = role?.conditionalPermissions?.find(cp => cp.permission === permission);
-  return conditionalPerm ? conditionalPerm.condition.evaluator(user, resource) : false;
-}
-```
-
-This implementation provides a type-safe structure with constants for permissions, clear role definitions, and helper functions for permission checks. The conditional permissions use evaluator functions that can be customized for different access control scenarios.
-</info added on 2025-04-28T05:13:04.050Z>
-
-## 2. Implement Core Permission Policy File [done]
+## 2. Update Permission Schema [pending]
 ### Dependencies: 3.1
-### Description: Create the central permissions.ts file with the defined schema and implement the core role definitions with their associated permissions.
+### Description: Ensure the permissionSchema is up-to-date and includes all necessary permission strings. Verify that each permission string is correctly defined and matches the intended functionality.
 ### Details:
-1. Create the `policies/permissions.ts` file using the schema designed in subtask 1
-2. Implement the base permission structure with TypeScript interfaces for type safety
-3. Define constants for all action types (e.g., 'user:create', 'client:view')
-4. Group permissions logically by feature area as determined in the schema design
-5. Implement the core roles (Admin, Developer) with their complete permission sets
-6. Add JSDoc comments to document the purpose and usage of each permission group
-7. Create utility functions for permission checking if needed
-8. Write unit tests to verify the structure and basic permission checks
-9. Ensure the implementation follows the centralized policy management best practice
+Review and update the permissionSchema to include all permissions used in the application. This step is crucial for ensuring that the new can() function works correctly.
 
-## 3. Complete Role-Based Permission Mappings [done]
+## 3. Replace Hooks in Small Components [pending]
 ### Dependencies: 3.2
-### Description: Extend the permission policy file to include all roles (Manager, Auditor, Staff, Client) with their specific permission sets and implement conditional permissions where required.
+### Description: Begin replacing useRbac() and usePermission() hooks with useAbility() in smaller, isolated components. Update permission checks to use the new can() function with appropriate permission strings.
 ### Details:
-1. Add the remaining roles (Manager, Auditor, Staff, Client) to the permissions.ts file
-2. Map each role to their allowed actions based on the audit findings
-3. Implement conditional permissions using parameterized rules (e.g., resource ownership constraints)
-4. Ensure each role follows the least privilege principle
-5. Group related permissions logically by feature area for better maintainability
-6. Validate that all permissions discovered in the audit are represented
-7. Add detailed comments explaining the rationale behind permission assignments
-8. Create comprehensive tests for each role to verify correct permission mappings
-9. Implement edge cases and special conditions identified during the audit
+Start with simple components to test the replacement process and ensure it works as expected before moving to more complex components.
 
-## 4. Create Permission Utilities and Documentation [done]
+## 4. Implement can() Function Checks [pending]
 ### Dependencies: 3.3
-### Description: Develop utility functions for permission checking, create comprehensive documentation, and implement integration tests to ensure the permission system works as expected.
+### Description: Update all permission checks to use the can() function from the useAbility() hook. Ensure that each check uses the correct permission strings from the updated permissionSchema.
 ### Details:
-1. Create helper functions for common permission checks (e.g., hasPermission, canAccess)
-2. Implement utility methods for role-based permission validation
-3. Write comprehensive documentation explaining the permission structure, roles, and usage patterns
-4. Create a permissions cheat sheet for developers showing which roles can access which features
-5. Implement integration tests that verify permissions work correctly in real application scenarios
-6. Add examples of how to use the permission system in different contexts (API routes, UI components)
-7. Document the process for updating permissions when new features are added
-8. Create visualization of permission hierarchies for easier understanding
-9. Ensure all code is properly typed with TypeScript for better developer experience
-10. Validate that the implementation follows all best practices identified in the research
+Replace conditional statements that check permissions with calls to the can() function. For example, replace `if (role === 'admin')` with `if (can('admin:manage'))`.
 
-<info added on 2025-04-28T05:34:27.810Z>
-For subtask 3.4, I recommend enhancing the implementation with:
+## 5. Refactor Complex Components and Pages [pending]
+### Dependencies: 3.4
+### Description: Once the process is verified in smaller components, apply the same changes to more complex components and pages. Ensure that all useRbac() and usePermission() calls are replaced.
+### Details:
+Expand the replacement to more complex components and pages, ensuring that all hook calls are updated and permission checks are correctly implemented.
 
-The `permissionUtils.ts` should include:
-- `hasPermission(user, permission)`: Checks if a user has a specific permission
-- `canAccessResource(user, resource, action)`: Validates access to a specific resource
-- `listUserPermissions(user)`: Returns all permissions for a user
-- `checkRoleAccess(role, permission)`: Role-based permission validation
-- `mergePermissions(basePermissions, additionalPermissions)`: Utility for combining permission sets
+## 6. Testing and Verification [pending]
+### Dependencies: 3.5
+### Description: Conduct thorough testing of the refactored components and pages to ensure that the new hook usage works correctly and does not introduce any bugs or security vulnerabilities.
+### Details:
+Perform unit tests, integration tests, and UI tests to verify that the replacement of hooks does not affect the functionality or security of the application.
 
-Structure the tests to cover:
-- Individual permission checks
-- Role inheritance scenarios
-- Edge cases (null users, missing permissions)
-- Mock authentication contexts
-
-In the documentation:
-- Include a permissions matrix table showing roles vs. features
-- Add code examples for common scenarios (route guards, component rendering)
-- Document permission naming conventions
-- Include a section on troubleshooting permission issues
-- Add a flowchart showing the permission evaluation process
-
-Consider implementing a permission debugger utility that logs permission checks during development.
-</info added on 2025-04-28T05:34:27.810Z>
+## 7. Final Review and Deployment [pending]
+### Dependencies: 3.6
+### Description: Review the entire codebase to ensure all useRbac() and usePermission() hooks have been replaced. Deploy the updated codebase to production after successful testing.
+### Details:
+Conduct a final review to confirm that all hook replacements are complete and correct. Deploy the updated application to production once verified.
 

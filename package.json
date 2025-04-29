@@ -15,6 +15,7 @@
     "postinstall": "prisma generate",
     "test:email": "NODE_OPTIONS='--loader ts-node/esm' ts-node src/server/utils/msGraphEmail.ts",
     "migrate:permissions": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/migratePermissions.ts",
+    "validate:permissions": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/validatePermissions.ts",
     "analyze:bundle": "ANALYZE=true next build"
   },
   "dependencies": {

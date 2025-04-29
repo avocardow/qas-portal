@@ -3,6 +3,7 @@ import {
   TASK_PERMISSIONS,
   DOCUMENT_PERMISSIONS,
   PHONE_PERMISSIONS,
+  CLIENT_PERMISSIONS,
 } from '@/constants/permissions';
 
 /**
@@ -12,7 +13,8 @@ export type Permission =
   | (typeof AUDIT_PERMISSIONS)[keyof typeof AUDIT_PERMISSIONS]
   | (typeof TASK_PERMISSIONS)[keyof typeof TASK_PERMISSIONS]
   | (typeof DOCUMENT_PERMISSIONS)[keyof typeof DOCUMENT_PERMISSIONS]
-  | (typeof PHONE_PERMISSIONS)[keyof typeof PHONE_PERMISSIONS];
+  | (typeof PHONE_PERMISSIONS)[keyof typeof PHONE_PERMISSIONS]
+  | (typeof CLIENT_PERMISSIONS)[keyof typeof CLIENT_PERMISSIONS];
 
 /**
  * Roles in the system.
@@ -41,6 +43,8 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ...Object.values(TASK_PERMISSIONS),
     ...Object.values(DOCUMENT_PERMISSIONS),
     ...Object.values(PHONE_PERMISSIONS),
+    CLIENT_PERMISSIONS.VIEW_BILLING,
+    CLIENT_PERMISSIONS.VIEW_STATUS,
   ],
   Manager: [
     ...Object.values(AUDIT_PERMISSIONS),

@@ -13,7 +13,6 @@ import DataTableTwo, {
 import Badge from "@/components/ui/badge/Badge";
 import useDebounce from "@/hooks/useDebounce";
 import Button from "@/components/ui/button/Button";
-import { useAbility } from '@/hooks/useAbility';
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -24,7 +23,6 @@ export default function ClientsPage() {
   // RBAC context
   const { role } = useRbac();
   const router = useRouter();
-  const { can } = useAbility();
   // --- Pagination and Filter State ---
   const [showAll, setShowAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -238,17 +236,10 @@ export default function ClientsPage() {
     []
   );
 
-  // Compose columns based on permissions
+  // Compose columns (all); DataTableTwo will wrap based on 'permission'
   const columns: ColumnDef[] = React.useMemo(() => {
-    const cols = [...baseColumns];
-    // Add admin columns if user has permission
-    adminColumns.forEach((col) => {
-      if (col.permission && can(col.permission)) {
-        cols.push(col);
-      }
-    });
-    return cols;
-  }, [baseColumns, adminColumns, can]);
+    return [...baseColumns, ...adminColumns];
+  }, [baseColumns, adminColumns]);
 
   // Protect view based on role after hooks to keep hook order consistent
   // Grant Developer full access regardless of impersonation

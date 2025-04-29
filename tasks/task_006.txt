@@ -1,55 +1,49 @@
 # Task ID: 6
-# Title: Refactor Backend Permission Middleware
-# Status: done
-# Dependencies: 3
+# Title: Testing and Documentation
+# Status: pending
+# Dependencies: 5
 # Priority: medium
-# Description: Update the enforcePermission middleware to use the new policy engine for consistent frontend and backend permission checks.
+# Description: Perform comprehensive testing across the application and document the migration for future reference.
 # Details:
-1. Refactor `src/middleware/enforcePermission.ts`
-2. Initialize the permission library with the same policies used in the frontend
-3. Update the middleware to use the library's checking methods
-4. Ensure proper error responses when permissions are denied
-5. Update TRPC middleware to use the new enforcement logic
-6. Add logging for permission denials
-7. Maintain backward compatibility during migration
+Create a test plan covering all major pages and features with different user roles. Smoke-test each page to verify permissions are enforced correctly. Add unit and integration tests specifically for useAbility checks. Create a changeset documenting the RBAC overhaul following Cursor Rules. Update any developer documentation to reflect the new permission system. Verify that the Developer role bypass works as expected but doesn't affect other roles.
 
 # Test Strategy:
-Write unit tests for the middleware that verify it correctly allows or denies requests based on user roles. Test with various endpoints and permission scenarios.
+Execute the test plan with multiple user roles. Verify each permission-gated feature works correctly. Use automated tests where possible. Document any edge cases or special considerations for future reference. Have another developer review the changes and test independently.
 
 # Subtasks:
-## 1. Integrate New Policy Engine into Backend [done]
+## 1. Create Comprehensive Test Plan [pending]
 ### Dependencies: None
-### Description: Install and configure the new policy engine library in the backend codebase to ensure it matches the version and configuration used in the frontend.
+### Description: Develop a structured test plan covering all major application pages and features across different user roles
 ### Details:
-Add the policy engine as a dependency in the backend project. Initialize it with the same policy definitions as the frontend, ensuring consistency in permission logic across both environments.
+Create a matrix-style test plan document that maps each application page/feature against all user roles. Include test scenarios for both positive testing (users with correct permissions) and negative testing (users without permissions). Define expected outcomes for each test case. Prioritize critical paths and high-risk areas. Include environment setup requirements and test data needed. The test plan should specifically address permission boundaries between roles and edge cases where permissions might overlap.
 
-## 2. Refactor enforcePermission Middleware to Use Policy Engine [done]
+## 2. Implement Unit and Integration Tests for useAbility [pending]
 ### Dependencies: 6.1
-### Description: Update the existing enforcePermission middleware to utilize the new policy engine for permission checks instead of the legacy logic.
+### Description: Develop automated tests specifically for the useAbility permission check functionality
 ### Details:
-Replace the old permission checking code in src/middleware/enforcePermission.ts with calls to the policy engine's checking methods. Ensure the middleware retrieves user context and requested action/resource, then delegates permission evaluation to the policy engine.
+Create unit tests for the useAbility hook/function that verify it correctly evaluates permissions for different user roles. Test with mock user contexts representing each role in the system. Implement integration tests that verify useAbility works correctly when integrated with actual components. Include tests for edge cases such as undefined permissions, role changes, and permission inheritance. Use Jest for unit tests and consider Cypress or React Testing Library for integration tests. Ensure tests verify that the Developer role bypass works as expected without affecting other roles.
 
-## 3. Implement Consistent Error Handling for Permission Denials [done]
-### Dependencies: 6.2
-### Description: Ensure that when permission checks fail, the middleware returns standardized error responses that align with frontend expectations.
+## 3. Perform Smoke Testing Across Application [pending]
+### Dependencies: 6.1
+### Description: Execute smoke tests on all application pages to verify correct permission enforcement
 ### Details:
-Define and return clear HTTP error codes (e.g., 403 Forbidden) and structured error messages when permissions are denied. Ensure error responses are consistent with frontend handling and include relevant details for debugging.
+Following the test plan from subtask 1, manually navigate through each page of the application with different user role accounts. Verify that permissions are enforced correctly - users can only access and perform actions they're authorized for. Document any discrepancies between expected and actual behavior. Pay special attention to areas where permissions might cascade or inherit. Test the Developer role bypass functionality to ensure it works as expected but doesn't affect other roles. Create a checklist of all pages tested and their pass/fail status.
 
-## 4. Update TRPC Middleware to Use New Enforcement Logic [done]
-### Dependencies: 6.2
-### Description: Modify the TRPC middleware layer to invoke the refactored enforcePermission middleware, ensuring all API endpoints are protected by the new policy engine.
+## 4. Create RBAC Migration Changeset Documentation [pending]
+### Dependencies: 6.2, 6.3
+### Description: Document the RBAC implementation changes following Cursor Rules
 ### Details:
-Replace any direct permission checks or legacy enforcement logic in TRPC middleware with calls to the updated enforcePermission middleware. Test that all routes requiring permissions are correctly guarded.
+Create a comprehensive changeset document that follows the Cursor Rules format. Include all components modified, new components created, and permission structures implemented. Document the permission model architecture, including how roles are defined and how permissions are checked. Include code examples showing the before and after implementation of permission checks. Document any database or API changes related to permissions. Create diagrams showing the permission flow and inheritance. This documentation should serve as both a record of changes and a guide for understanding the new system.
 
-## 5. Add Logging for Permission Denials [done]
-### Dependencies: 6.3
-### Description: Implement logging within the middleware to record details of permission denials for auditing and debugging purposes.
+## 5. Update Developer Documentation [pending]
+### Dependencies: 6.4
+### Description: Revise existing developer documentation to reflect the new permission system
 ### Details:
-Integrate a logging solution (e.g., Winston, Bunyan) to capture user identity, requested action, resource, and reason for denial whenever a permission check fails. Ensure logs are structured and do not expose sensitive information.
+Review all existing developer documentation and update it to reflect the new RBAC system. Create new documentation sections specifically for the permission system, including how to use the useAbility hook, how to define new permissions, and best practices for permission checks. Include examples of correct implementation patterns. Update any API documentation to include permission requirements for each endpoint. Create a troubleshooting guide for common permission-related issues. Ensure documentation includes information about the Developer role bypass functionality and when it should be used.
 
-## 6. Maintain Backward Compatibility During Migration [done]
-### Dependencies: 6.2
-### Description: Ensure that the migration to the new policy engine does not break existing functionality by supporting legacy permission checks where necessary.
+## 6. Conduct Final Verification and Regression Testing [pending]
+### Dependencies: 6.3, 6.4, 6.5
+### Description: Perform final verification of the RBAC implementation and regression testing
 ### Details:
-Implement a fallback mechanism in the middleware to use the old permission logic for routes or features not yet migrated to the new policy engine. Gradually phase out legacy checks as all endpoints are updated.
+Conduct a final verification pass to ensure all aspects of the RBAC system are working correctly. Verify that all documentation accurately reflects the implemented system. Perform regression testing to ensure the RBAC changes haven't negatively impacted existing functionality. Test critical user journeys end-to-end with different user roles. Verify edge cases such as role changes, permission inheritance, and the Developer role bypass. Document any issues found and create a final report summarizing the testing results, including test coverage metrics, issues found and resolved, and any remaining concerns or recommendations.
 
