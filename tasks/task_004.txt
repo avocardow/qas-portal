@@ -24,7 +24,7 @@ Create a test harness that allows toggling between different user roles to visua
 7. Test the component with various permission scenarios
 8. Document usage patterns for the team
 
-## 2. Replace Button Permission Checks [pending]
+## 2. Replace Button Permission Checks [done]
 ### Dependencies: 4.1
 ### Description: Identify and replace all conditional button rendering based on permissions with the Authorized component wrapper.
 ### Details:

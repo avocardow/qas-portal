@@ -264,7 +264,7 @@
             1
           ],
           "details": "1. Search codebase for patterns like {canAccess('permission') && <Button />}\n2. Replace with <Authorized action=\"permission\"><Button /></Authorized>\n3. For multiple permission checks, use appropriate logic in the Authorized component\n4. Ensure action props match exactly with permissionSchema strings\n5. Test each button to verify it appears/disappears correctly based on user permissions\n6. Pay special attention to action buttons in tables, forms, and card components\n7. Update any unit tests that may be affected by this change",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
