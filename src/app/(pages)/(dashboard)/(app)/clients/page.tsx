@@ -195,15 +195,18 @@ export default function ClientsPage() {
         key: "estAnnFees",
         header: "Fees",
         sortable: true,
-        cell: (row: any) =>
-          row.estAnnFees != null
-            ? new Intl.NumberFormat("en-AU", {
-                style: "currency",
-                currency: "AUD",
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              }).format(row.estAnnFees)
-            : "-",
+        cell: (row: any) => (
+          <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING} fallback="-">
+            {row.estAnnFees != null
+              ? new Intl.NumberFormat("en-AU", {
+                  style: "currency",
+                  currency: "AUD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(row.estAnnFees)
+              : "-"}
+          </Authorized>
+        ),
         permission: CLIENT_PERMISSIONS.VIEW_BILLING,
       },
       {
@@ -226,9 +229,11 @@ export default function ClientsPage() {
               color = "info";
           }
           return (
-            <Badge size="sm" variant="solid" color={color}>
-              {row.status}
-            </Badge>
+            <Authorized action={CLIENT_PERMISSIONS.VIEW_STATUS} fallback="-">
+              <Badge size="sm" variant="solid" color={color}>
+                {row.status}
+              </Badge>
+            </Authorized>
           );
         },
         permission: CLIENT_PERMISSIONS.VIEW_STATUS,
@@ -240,7 +245,7 @@ export default function ClientsPage() {
   // Compose columns: include only columns the user has permission to view
   const columns: ColumnDef[] = React.useMemo(() => {
     const filteredAdmin = adminColumns.filter(
-      (col) => col.permission && can(col.permission)
+      (col) => !col.permission || can(col.permission)
     );
     return [...baseColumns, ...filteredAdmin];
   }, [baseColumns, adminColumns, can]);
