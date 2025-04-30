@@ -6,7 +6,6 @@ import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { usePermissionContext } from '@/contexts/PermissionContext';
 import { useImpersonationContext } from '@/contexts/ImpersonationContext';
 import { useSession } from 'next-auth/react';
 import type { Role } from '@/policies/permissions';
@@ -15,7 +14,6 @@ const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  const { refreshPermissions } = usePermissionContext();
   const { impersonatedRole, impersonate, revert } = useImpersonationContext();
   const { data: session } = useSession();
   const actualRole = session?.user.role as Role;
@@ -190,7 +188,7 @@ const AppHeader: React.FC = () => {
                     }
                   }}
                 >
-                  <option value="" disabled>Impersonate Role</option>
+                  <option value="" disabled>View As Role</option>
                   {allRoles.map(role => (
                     <option key={role} value={role}>{role}</option>
                   ))}
