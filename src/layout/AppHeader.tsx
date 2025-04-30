@@ -8,6 +8,7 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { usePermissionContext } from '@/contexts/PermissionContext';
 import { useImpersonationContext } from '@/contexts/ImpersonationContext';
+import { useSession } from 'next-auth/react';
 import type { Role } from '@/policies/permissions';
 
 const AppHeader: React.FC = () => {
@@ -16,6 +17,9 @@ const AppHeader: React.FC = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   const { refreshPermissions, roles } = usePermissionContext();
   const { impersonatedRole, impersonate, revert } = useImpersonationContext();
+  const { data: session } = useSession();
+  const actualRole = session?.user.role as Role;
+  const allRoles: Role[] = ['Developer','Admin','Manager','Auditor','Staff','Client'];
   const isDeveloper = roles.includes('Developer');
 
   const handleToggle = () => {
@@ -179,24 +183,24 @@ const AppHeader: React.FC = () => {
             <NotificationDropdown />
             {/* Impersonation Dropdown for Developers */}
             {isDeveloper && (
-              <div className="relative">
-                {impersonatedRole ? (
-                  <div className="flex items-center gap-2 bg-yellow-100 border border-yellow-400 px-2 py-1 rounded">
-                    <span className="text-yellow-800">Impersonating: {impersonatedRole}</span>
-                    <button onClick={revert} className="text-red-600 underline">Revert</button>
-                  </div>
-                ) : (
-                  <select
-                    className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
-                    defaultValue=""
-                    onChange={(e) => impersonate(e.target.value as Role)}
-                  >
-                    <option value="" disabled>Impersonate Role</option>
-                    {(['Admin','Manager','Auditor','Staff','Client'] as Role[]).map(role => (
-                      <option key={role} value={role}>{role}</option>
-                    ))}
-                  </select>
-                )}
+              <div className="relative flex items-center gap-2">
+                <select
+                  className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
+                  value={impersonatedRole ?? ""}
+                  onChange={(e) => {
+                    const selected = e.target.value as Role;
+                    if (impersonatedRole && selected === actualRole) {
+                      revert();
+                    } else {
+                      impersonate(selected);
+                    }
+                  }}
+                >
+                  <option value="" disabled>Impersonate Role</option>
+                  {allRoles.map(role => (
+                    <option key={role} value={role}>{role}</option>
+                  ))}
+                </select>
               </div>
             )}
           </div>
