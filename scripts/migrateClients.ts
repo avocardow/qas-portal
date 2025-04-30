@@ -1,4 +1,5 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import type { Prisma, ClientStatus, Contact } from "@prisma/client";
 import { parse } from "csv-parse";
 import * as fs from "fs";
 import * as path from "path";
@@ -13,7 +14,7 @@ const __dirname = dirname(__filename);
 const prisma = new PrismaClient();
 
 // --- Configuration ---
-const csvFilePath = path.resolve(__dirname, "../data/clients.csv"); // This line should now work
+const csvFilePath = path.resolve(__dirname, "../data/QASClientDatabase.csv"); // This line should now work
 // !!!!! REPLACE 'YOUR_ADMIN_USER_ID' with the actual UUID of the user running the script !!!!!
 const scriptRunnerUserId = "283ac3ae-7c54-405b-b9f8-f0fd2e39027e"; // <<<--- CONFIRM/CHANGE THIS
 const defaultAuditStatusName = "In Progress"; // Default status for initial audit
@@ -46,6 +47,7 @@ function parseCsvDate(dateStr: string | undefined | null): Date | null {
   dateStr = dateStr.trim();
   const formats = [
     "dd/MM/yyyy",
+    "dd/MM/yy",
     "MM/dd/yy",
     "M/d/yy",
     "yyyy-MM-dd",
@@ -55,11 +57,13 @@ function parseCsvDate(dateStr: string | undefined | null): Date | null {
   for (const format of formats) {
     try {
       let parts;
-      let year: number | undefined,
-        month: number | undefined,
-        day: number | undefined;
+      let year!: number;
+      let month!: number;
+      let day!: number;
       if (format === "dd/MM/yyyy")
         parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      else if (format === "dd/MM/yy")
+        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
       else if (format === "MM/dd/yy")
         parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
       else if (format === "M/d/yy")
@@ -73,14 +77,19 @@ function parseCsvDate(dateStr: string | undefined | null): Date | null {
 
       if (!parts) continue;
 
-      if (format === "dd/MM/yyyy") [, day, month, year] = parts.map(Number);
-      else if (format === "MM/dd/yy" || format === "M/d/yy") {
+      if (format === "dd/MM/yyyy") {
+        [, day, month, year] = parts.map(Number);
+      } else if (format === "dd/MM/yy") {
+        [, day, month, year] = parts.map(Number);
+        if (year < 100) year += 2000;
+      } else if (format === "MM/dd/yy" || format === "M/d/yy") {
         [, month, day, year] = parts.map(Number);
-        if (year !== undefined && year < 100) year += 2000;
-      } else if (format === "yyyy-MM-dd")
+        if (year < 100) year += 2000;
+      } else if (format === "yyyy-MM-dd") {
         [, year, month, day] = parts.map(Number);
-      else if (format === "MM/dd/yyyy" || format === "M/d/yyyy")
+      } else if (format === "MM/dd/yyyy" || format === "M/d/yyyy") {
         [, month, day, year] = parts.map(Number);
+      }
 
       if (
         year &&
@@ -108,34 +117,36 @@ function parseCsvDate(dateStr: string | undefined | null): Date | null {
   return null;
 }
 
+/**
+ * Parse a log string into date/content pairs.
+ * Supports dd/MM/yyyy or dd/MM/yy (Excel style) at start,
+ * with optional leading apostrophe and hyphen separators.
+ */
 function parseActivityLog(
   logText: string | undefined | null
 ): { date: Date | null; content: string }[] {
   if (!logText?.trim()) return [];
-  logText = logText.trim();
-  const entries: { date: Date | null; content: string }[] = [];
-  const potentialEntries = logText.split(
-    /; |(?='?\b(?:[0-2]?\d|3[01])\/(?:0?\d|1[0-2])\/\d{2,4}\b)/g
-  );
-  potentialEntries.forEach((entry) => {
-    entry = entry.trim();
-    if (!entry) return;
-    const dateMatch = entry.match(
-      /^'?\b((?:[0-2]?\d|3[01])\/(?:0?\d|1[0-2])\/\d{2,4})\b\s*-?\s*/
-    );
-    let date: Date | null = null;
-    let content = entry;
-    if (dateMatch?.[1]) {
-      date = parseCsvDate(dateMatch[1]);
-      if (date) {
-        content = entry.substring(dateMatch[0].length).trim();
-      }
+  const trimmed = logText.trim();
+  // split on semicolons
+  const parts = trimmed.split(/\s*;\s*/).map((p) => p.trim()).filter(Boolean);
+  const pattern = /^'?\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})\b(?:\s*-\s*|\s+)([\s\S]+)/;
+  const results: { date: Date | null; content: string }[] = [];
+  parts.forEach((part) => {
+    const m = part.match(pattern);
+    if (m) {
+      const d = parseInt(m[1], 10);
+      const mo = parseInt(m[2], 10);
+      let y = parseInt(m[3], 10);
+      if (m[3].length === 2) y += 2000;
+      const date = new Date(Date.UTC(y, mo - 1, d));
+      const content = m[4].trim();
+      results.push({ date, content });
+    } else {
+      // no leading date, store entire part
+      results.push({ date: null, content: part });
     }
-    if (content) entries.push({ date, content });
   });
-  if (entries.length === 0 && logText)
-    entries.push({ date: null, content: logText });
-  return entries;
+  return results;
 }
 
 // --- Main Migration Function ---
@@ -195,7 +206,11 @@ async function main() {
 
     try {
       await prisma.$transaction(async (tx) => {
-        // 1. Create Client
+        // Prepare client-status mapping from CSV (Active, Archived, Prospect)
+        const clientStatusRaw = record["Status"]?.trim().toLowerCase();
+        const clientStatus = ["active", "archived", "prospect"].includes(clientStatusRaw)
+          ? (clientStatusRaw as ClientStatus)
+          : "active";
         const client = await tx.client.create({
           data: {
             clientName: clientName,
@@ -203,11 +218,11 @@ async function main() {
             address: record["Address"] || null,
             city: record["City"] || null,
             postcode: record["Postcode"] || null,
-            status: "active",
-            auditMonthEnd: monthToNumber(record["Audit Month End"]),
-            nextContactDate: parseCsvDate(record["Next Contact Date"]),
-            estAnnFees: record["Est Ann Fees (ex GST)"]
-              ? parseFloat(record["Est Ann Fees (ex GST)"].replace(/[,"]/g, ""))
+            status: clientStatus,
+            auditMonthEnd: monthToNumber(record["Audit End"]),
+            nextContactDate: parseCsvDate(record["Next Contact"]),
+            estAnnFees: record["Fees"]
+              ? parseFloat(record["Fees"].replace(/[,"\s]/g, ""))
               : null,
             // softwareAccess field removed from Client model
           },
@@ -244,7 +259,7 @@ async function main() {
             title: `Contact ${i + 1}`,
             isPrimary: i === 0,
           };
-          let existingContactByEmail = null;
+          let existingContactByEmail: Contact | null = null;
           if (contactData.email) {
             try {
               existingContactByEmail = await tx.contact.findFirst({
@@ -279,7 +294,7 @@ async function main() {
         if (emails.length > contactNames.length) {
           for (let i = contactNames.length; i < emails.length; i++) {
             const email = emails[i];
-            let existingContactByEmail = null;
+            let existingContactByEmail: Contact | null = null;
             if (email) {
               try {
                 existingContactByEmail = await tx.contact.findFirst({
@@ -433,23 +448,26 @@ async function main() {
             ? 2000 + parseInt(auditYearMatch[1])
             : parseInt(auditYearMatch[1])
           : new Date().getFullYear();
-        const stageName = record["Status"]?.trim().toLowerCase();
-        let stageId: number | undefined = undefined;
-        if (stageName) {
-          if (stageName.includes("final audit"))
-            stageId = auditStagesMap.get("reporting");
-          else if (stageName.includes("1st interim"))
+        // Map audit stage and status from new CSV columns
+        const stageNameRaw = record["Audit Stage"]?.trim().toLowerCase();
+        let stageId: number | undefined;
+        if (stageNameRaw) {
+          if (
+            stageNameRaw.includes("final audit") ||
+            stageNameRaw.includes("year-end audit")
+          ) {
+            stageId = auditStagesMap.get("year-end audit");
+          } else if (stageNameRaw.includes("1st interim")) {
             stageId = auditStagesMap.get("1st interim review");
-          else if (stageName.includes("2nd interim"))
+          } else if (stageNameRaw.includes("2nd interim")) {
             stageId = auditStagesMap.get("2nd interim review");
-          else stageId = auditStagesMap.get("planning");
-          if (!stageId)
-            console.warn(
-              `  Could not map CSV Status "${record["Status"]}" to AuditStage ID for client ${clientName}.`
-            );
+          } else {
+            stageId = auditStagesMap.get("planning");
+          }
+          if (!stageId) console.warn(`Could not map Audit Stage "${record["Audit Stage"]}"`);
         }
         let reportDueDate: Date | null = null;
-        const auditMonthEndNum = monthToNumber(record["Audit Month End"]);
+        const auditMonthEndNum = monthToNumber(record["Audit End"]);
         if (auditMonthEndNum) {
           const yearEndMonthIndex = auditMonthEndNum - 1;
           const dueMonthIndex = (yearEndMonthIndex + 3) % 12;
@@ -461,12 +479,16 @@ async function main() {
           );
         }
 
+        // Before creating audit, map the CSV 'Audit Status' column
+        const auditStatusRaw = record["Audit Status"]?.trim().toLowerCase();
+        const auditStatusId = auditStatusesMap.get(auditStatusRaw) ?? defaultStatusId;
+
         initialAudit = await tx.audit.create({
           data: {
             clientId: client.id,
             auditYear: auditYear,
             stageId: stageId,
-            statusId: defaultStatusId,
+            statusId: auditStatusId,
             reportDueDate: reportDueDate,
             createdAt: new Date(),
           },
@@ -474,7 +496,8 @@ async function main() {
         console.log(`    Created initial audit record for year ${auditYear}`);
 
         // 6. Create Activity Log Entries
-        const activityLogEntries = parseActivityLog(record["Agile Notes"]);
+        const rawNotes = record["Notes"] || "";
+        const activityLogEntries = parseActivityLog(rawNotes);
         if (activityLogEntries.length > 0 && initialAudit) {
           const logData = activityLogEntries.map((entry) => ({
             auditId: initialAudit!.id,

@@ -214,23 +214,24 @@ export default function ClientsPage() {
         header: "Status",
         sortable: true,
         cell: (row: any) => {
-          let color: "success" | "warning" | "error" | "info" = "info";
-          switch (row.status) {
-            case "Active":
+          const status = String(row.status).toLowerCase();
+          let color: "success" | "warning" | "error" | "info" | "primary" | "dark" | "light" = "info";
+          switch (status) {
+            case "active":
               color = "success";
               break;
-            case "Pending":
-              color = "warning";
+            case "archived":
+              color = "light";
               break;
-            case "Inactive":
-              color = "error";
+            case "prospect":
+              color = "primary";
               break;
             default:
               color = "info";
           }
           return (
             <Authorized action={CLIENT_PERMISSIONS.VIEW_STATUS} fallback="-">
-              <Badge size="sm" variant="solid" color={color}>
+              <Badge size="sm" variant="light" color={color}>
                 {row.status}
               </Badge>
             </Authorized>
