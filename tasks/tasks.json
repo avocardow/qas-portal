@@ -496,6 +496,95 @@
           "details": "Conduct a final verification pass to ensure all aspects of the RBAC system are working correctly. Verify that all documentation accurately reflects the implemented system. Perform regression testing to ensure the RBAC changes haven't negatively impacted existing functionality. Test critical user journeys end-to-end with different user roles. Verify edge cases such as role changes, permission inheritance, and the Developer role bypass. Document any issues found and create a final report summarizing the testing results, including test coverage metrics, issues found and resolved, and any remaining concerns or recommendations."
         }
       ]
+    },
+    {
+      "id": 7,
+      "title": "Implement Developer Impersonation Feature in AppHeader",
+      "description": "Add a dropdown menu in the AppHeader component that allows developers to impersonate different user roles for testing purposes without having to log out and back in.",
+      "details": "Create a role impersonation dropdown in the AppHeader that is only visible to users with developer permissions. The implementation should include:\n\n1. A dropdown component in the AppHeader that displays the current role and allows switching to other available roles\n2. A session management service update to handle temporary role switching without affecting the actual user permissions in the database\n3. Visual indication in the UI that shows when a user is in impersonation mode (e.g., a colored border or badge)\n4. The ability to revert to the original role\n5. Proper access controls to ensure only developers can access this feature\n6. Session persistence so the impersonated role remains active during page navigation\n7. Logging of role impersonation events for security auditing\n\nThe feature should not affect production data or allow unauthorized privilege escalation. All actions taken while impersonating should be clearly marked in logs and any generated data.",
+      "testStrategy": "Testing should verify both functionality and security aspects:\n\n1. Unit tests:\n   - Verify the dropdown only appears for users with developer permissions\n   - Test that the role switching logic correctly updates the session\n   - Ensure the UI correctly reflects the impersonated state\n\n2. Integration tests:\n   - Confirm that impersonated permissions correctly limit/grant access to features\n   - Verify that navigating between pages maintains the impersonated role\n   - Test that logging out clears any impersonation state\n\n3. Security tests:\n   - Verify non-developer users cannot access the impersonation feature via API or direct URL manipulation\n   - Ensure impersonation events are properly logged with original and impersonated user information\n   - Test that impersonated roles cannot perform actions that would permanently elevate privileges\n\n4. User acceptance testing:\n   - Have developers verify the feature works as expected across different roles\n   - Confirm the visual indicators are clear and intuitive\n   - Verify that reverting to original role works correctly",
+      "status": "in-progress",
+      "dependencies": [
+        6
+      ],
+      "priority": "medium",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create ImpersonationContext and Session Management Service",
+          "description": "Implement a React Context provider and session management service to handle role impersonation state across the application without affecting database permissions.",
+          "dependencies": [],
+          "details": "1. Create an ImpersonationContext.js file with state for the current impersonated role, original role, and impersonation status.\n2. Implement functions for startImpersonation(role), stopImpersonation(), and getCurrentRole().\n3. Add session persistence using localStorage/sessionStorage to maintain impersonation state during page navigation.\n4. Create a session management service that intercepts API requests to inject impersonation headers (e.g., 'x-impersonate-role').\n5. Implement security checks to ensure only users with developer permissions can activate impersonation.\n6. Add logging functionality to record impersonation events with timestamps, original role, and impersonated role for security auditing.\n7. Test the context by creating a simple component that uses the impersonation hooks and verifies state changes and persistence.\n8. Ensure the implementation doesn't affect actual user permissions in the database by keeping impersonation at the frontend/API request level.\n\n<info added on 2025-04-30T02:51:04.212Z>\nHere's additional implementation information for the impersonation service and context:\n\n```typescript\n// src/lib/impersonationService.ts\nimport { Role } from '@/types';\n\ninterface ImpersonationData {\n  originalRole: Role;\n  impersonatedRole: Role;\n  timestamp: number;\n}\n\nexport const impersonationService = {\n  getImpersonationData(): ImpersonationData | null {\n    if (typeof window === 'undefined') return null;\n    const data = sessionStorage.getItem('impersonationData');\n    return data ? JSON.parse(data) : null;\n  },\n  \n  setImpersonation(originalRole: Role, impersonatedRole: Role): void {\n    const data: ImpersonationData = {\n      originalRole,\n      impersonatedRole,\n      timestamp: Date.now()\n    };\n    sessionStorage.setItem('impersonationData', JSON.stringify(data));\n    // Log impersonation event\n    console.info(`Impersonation started: ${originalRole} → ${impersonatedRole}`);\n  },\n  \n  clearImpersonation(): void {\n    const data = this.getImpersonationData();\n    if (data) {\n      console.info(`Impersonation ended: ${data.impersonatedRole} → ${data.originalRole}`);\n      sessionStorage.removeItem('impersonationData');\n    }\n  },\n  \n  isImpersonating(): boolean {\n    return this.getImpersonationData() !== null;\n  }\n};\n\n// src/contexts/ImpersonationContext.tsx\nexport interface ImpersonationContextType {\n  isImpersonating: boolean;\n  originalRole: Role | null;\n  impersonatedRole: Role | null;\n  impersonate: (role: Role) => void;\n  revert: () => void;\n}\n\n// Add API interceptor to inject headers\nexport const setupImpersonationInterceptor = (axiosInstance) => {\n  axiosInstance.interceptors.request.use((config) => {\n    const impersonationData = impersonationService.getImpersonationData();\n    if (impersonationData) {\n      config.headers = config.headers || {};\n      config.headers['x-impersonate-role'] = impersonationData.impersonatedRole;\n    }\n    return config;\n  });\n};\n\n// Add security check function\nexport const canImpersonate = (currentUserRole: Role): boolean => {\n  // Only developers or admins can impersonate\n  return ['DEVELOPER', 'ADMIN'].includes(currentUserRole);\n};\n```\n\nFor the context implementation, include error handling and role validation:\n\n```typescript\n// In ImpersonationContext.tsx\nconst impersonate = useCallback((role: Role) => {\n  if (!canImpersonate(user.role)) {\n    console.error('Permission denied: Current user cannot impersonate');\n    return false;\n  }\n  \n  if (role === user.role) {\n    console.warn('Cannot impersonate your own role');\n    return false;\n  }\n  \n  impersonationService.setImpersonation(user.role, role);\n  setImpersonatedRole(role);\n  setOriginalRole(user.role);\n  setIsImpersonating(true);\n  return true;\n}, [user]);\n```\n\nFor testing, create a simple component:\n\n```typescript\n// src/components/ImpersonationTester.tsx\nimport { useImpersonationContext } from '@/contexts/ImpersonationContext';\nimport { Role } from '@/types';\n\nexport const ImpersonationTester = () => {\n  const { isImpersonating, originalRole, impersonatedRole, impersonate, revert } = useImpersonationContext();\n  \n  return (\n    <div className=\"p-4 border rounded\">\n      <h2>Impersonation Test</h2>\n      <div>Status: {isImpersonating ? 'Active' : 'Inactive'}</div>\n      {isImpersonating && (\n        <div>\n          <p>Original Role: {originalRole}</p>\n          <p>Impersonated Role: {impersonatedRole}</p>\n        </div>\n      )}\n      <div className=\"mt-4 space-x-2\">\n        <button onClick={() => impersonate('USER')}>Impersonate User</button>\n        <button onClick={() => impersonate('ADMIN')}>Impersonate Admin</button>\n        <button onClick={revert}>Stop Impersonation</button>\n      </div>\n    </div>\n  );\n};\n```\n</info added on 2025-04-30T02:51:04.212Z>",
+          "status": "in-progress",
+          "parentTaskId": 7
+        },
+        {
+          "id": 2,
+          "title": "Implement Impersonation UI Components in AppHeader",
+          "description": "Add a dropdown menu in the AppHeader that allows developers to select different user roles for impersonation, with clear visual indicators for impersonation mode.",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Create a RoleImpersonationDropdown component that displays available roles for impersonation.\n2. Use the ImpersonationContext from subtask 1 to manage role selection and display the current impersonated role.\n3. Implement conditional rendering to only show the dropdown to users with developer permissions.\n4. Add a visual indicator (colored border, badge, or banner) that clearly shows when a user is in impersonation mode.\n5. Include the current impersonated role in the indicator.\n6. Add a prominent 'Return to Original Role' button to exit impersonation mode.\n7. Ensure the dropdown component is styled consistently with the existing AppHeader design.\n8. Implement hover states and tooltips to explain the impersonation feature to developers.\n9. Test the dropdown with different user roles to ensure it correctly displays and changes roles.\n10. Verify that the visual indicators appear and disappear appropriately when entering and exiting impersonation mode.",
+          "status": "done",
+          "parentTaskId": 7
+        },
+        {
+          "id": 3,
+          "title": "Integrate Impersonation with Application Permissions and API Layer",
+          "description": "Connect the impersonation feature with the application's permission system and API layer to ensure proper role simulation without affecting production data.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Modify the application's permission checking system to consider the impersonated role when determining access rights.\n2. Update API request interceptors to include impersonation headers when a user is in impersonation mode.\n3. Implement backend middleware to process impersonation headers and temporarily adjust permissions for the request.\n4. Add special flags to any data created or modified during impersonation to clearly mark it in logs and databases.\n5. Ensure all actions taken while impersonating are logged with both the original and impersonated roles.\n6. Implement safeguards to prevent unauthorized privilege escalation through the impersonation feature.\n7. Create unit and integration tests to verify that impersonation correctly affects UI permissions (showing/hiding elements based on role).\n8. Test API requests to confirm they include the correct impersonation headers.\n9. Verify that reverting to the original role correctly restores all original permissions.\n10. Document the impersonation feature for other developers, including security considerations and testing procedures.",
+          "status": "done",
+          "parentTaskId": 7
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Gate Fees and Status Columns in Clients Table Using Authorized Component",
+      "description": "Implement access control for the Fees and Status columns in the Clients table by utilizing the new Authorized component and useAbility hook to restrict visibility based on user permissions.",
+      "details": "This task involves modifying the Clients table to conditionally render the Fees and Status columns based on user permissions:\n\n1. Import the new Authorized component and useAbility hook in the Clients table component\n2. Determine the appropriate ability/permission that should control access to the Fees column (likely financial or billing permissions)\n3. Determine the appropriate ability/permission that should control access to the Status column (likely client management permissions)\n4. Wrap the Fees column content in the Authorized component with the appropriate ability check\n5. Wrap the Status column content in the Authorized component with the appropriate ability check\n6. For both columns, implement appropriate fallback content to display when a user lacks permission (e.g., a dash, 'Restricted', or completely hide the column)\n7. If completely hiding columns, ensure the table layout remains consistent and doesn't break when columns are removed\n8. Update any related filtering or sorting functionality to account for potentially hidden columns\n9. Ensure that any data export functionality respects these same permission restrictions\n\nThe implementation should use the new authorization pattern consistently and avoid any direct references to the legacy RBAC system that was removed in Task #5.",
+      "testStrategy": "Testing should verify proper access control across different user roles:\n\n1. Unit Tests:\n   - Test the Clients table component with mocked useAbility responses for different permission scenarios\n   - Verify correct rendering/hiding of Fees column based on permissions\n   - Verify correct rendering/hiding of Status column based on permissions\n   - Test fallback content displays correctly when permissions are denied\n\n2. Integration Tests:\n   - Verify the component works correctly with the actual useAbility hook (not mocked)\n   - Test that filtering and sorting still work correctly when columns are hidden\n\n3. Manual Testing:\n   - Use the developer impersonation feature (from Task #7) to test with different user roles:\n     - Admin users should see both Fees and Status columns\n     - Users with financial permissions but not client management should see Fees but not Status\n     - Users with client management but not financial permissions should see Status but not Fees\n     - Users with neither permission should see neither column\n   - Verify the table layout remains visually consistent regardless of which columns are visible\n   - Test data export functionality to ensure it respects the same permissions",
+      "status": "done",
+      "dependencies": [],
+      "priority": "medium",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Authorized Component and useAbility Hook for Column Access Control",
+          "description": "Create or adapt the Authorized component and useAbility hook to handle column-level access control in the Clients table. This foundation will enable permission-based visibility of sensitive data.",
+          "dependencies": [],
+          "details": "1. Create or adapt the Authorized component that accepts resource, action, children, and fallback props\n2. Implement the useAbility hook to check user permissions against required abilities\n3. Define the specific permission constants for fees access ('read:client:fees') and status access ('read:client:status')\n4. Ensure the hook properly integrates with the existing authentication system\n5. Add appropriate TypeScript interfaces/types for the component and hook\n6. Write unit tests for the Authorized component with various permission scenarios\n7. Test the useAbility hook with mocked permission sets\n8. Document the component and hook usage patterns for team reference\n\nTesting approach: Create Jest unit tests that verify the Authorized component renders children when permissions exist and fallback content when they don't. Mock the useAbility hook to return different permission sets for testing.",
+          "status": "done",
+          "parentTaskId": 8
+        },
+        {
+          "id": 2,
+          "title": "Implement Permission-Based Column Rendering in Clients Table",
+          "description": "Modify the Clients table component to conditionally render the Fees and Status columns based on user permissions using the Authorized component and useAbility hook.",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Import the Authorized component and useAbility hook in the Clients table component\n2. Identify the table header and data cell rendering logic for the Fees column\n3. Wrap the Fees column header and data cells with the Authorized component using the 'read:client:fees' permission\n4. Implement appropriate fallback content for unauthorized Fees access (e.g., a dash or 'Restricted')\n5. Repeat steps 3-4 for the Status column using the 'read:client:status' permission\n6. Ensure table layout remains consistent when columns are hidden (consider using CSS grid or flexbox for stability)\n7. Update any column configuration objects that might be used for dynamic rendering\n8. Test the component with different user permission sets to verify correct rendering\n\nTesting approach: Create component tests that render the Clients table with different mocked permission sets and verify that columns appear or are hidden appropriately. Check that the table layout remains stable regardless of which columns are visible.",
+          "status": "done",
+          "parentTaskId": 8
+        },
+        {
+          "id": 3,
+          "title": "Update Related Functionality to Respect Column Permissions",
+          "description": "Ensure that all related table functionality (sorting, filtering, exporting, etc.) respects the same permission restrictions applied to the Fees and Status columns.",
+          "dependencies": [
+            2
+          ],
+          "details": "1. Identify all places where the Fees and Status columns are referenced in sorting functionality\n2. Modify sorting logic to check permissions before allowing sorts on restricted columns\n3. Update filtering components to hide filter options for columns the user cannot access\n4. Modify any data export functionality to exclude restricted columns from exports\n5. Update any column visibility toggles to respect permission restrictions\n6. Ensure search functionality doesn't reveal restricted data in results\n7. Add integration tests that verify these features respect permissions\n8. Perform end-to-end testing with different user roles to verify complete implementation\n\nTesting approach: Create integration tests that simulate user interactions like sorting, filtering, and exporting with different permission sets. Verify that these operations correctly respect column access permissions. Include edge cases like what happens when a user's permissions change while using the application.",
+          "status": "done",
+          "parentTaskId": 8
+        }
+      ]
     }
   ],
   "metadata": {
