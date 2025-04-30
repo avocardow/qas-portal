@@ -26,7 +26,8 @@ enum ActivityLogType {
   note
   email_sent
   email_received
-  call_logged
+  call_in
+  call_out
   status_change
   stage_change
   document_request
@@ -35,6 +36,7 @@ enum ActivityLogType {
   task_created
   task_completed
   meeting_summary
+  billing_commentary
 }
 
 // ========== Core Entities ==========
@@ -50,7 +52,8 @@ model Client {
   auditMonthEnd      Int?
   nextContactDate    DateTime?      @db.Timestamptz
   estAnnFees         Decimal?       @db.Decimal(10, 2)
-  sharepointFolderId String?
+  internalFolderId   String?        // internal SharePoint folder ID (was sharepointFolderId)
+  externalFolderId   String?        // external URL (Dropbox or other supplied by client)
   xeroContactId      String?        @unique
   createdAt          DateTime       @default(now()) @db.Timestamptz
   updatedAt          DateTime       @updatedAt @db.Timestamptz
