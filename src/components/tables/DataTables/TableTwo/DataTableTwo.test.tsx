@@ -52,7 +52,7 @@ const baseColumns: DataTableTwoProps["columns"] = [
   { key: "name", header: "Name" },
 ];
 
-function renderWithPermissionProvider(ui) {
+function renderWithPermissionProvider(ui: React.ReactElement) {
   return render(
     <SessionProvider session={null}>
       <PermissionProvider>{ui}</PermissionProvider>

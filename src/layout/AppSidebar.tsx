@@ -5,8 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { HorizontaLDots } from "../icons/index";
-import { TASK_PERMISSIONS, PHONE_PERMISSIONS } from "@/constants/permissions";
-import { AUDIT_PERMISSIONS } from "@/constants/permissions";
+import { NAV_PERMISSIONS, type NavPermission } from "@/constants/permissions";
 import Authorized from "@/components/Authorized";
 
 // import SidebarWidget from "./SidebarWidget";
@@ -34,12 +33,25 @@ const clientPages: { name: string; path: string }[] = [
   { name: "Billing", path: "/billing" },
 ];
 
-// Define required permissions for each page
-const pagePermissionMap: Record<string, string | undefined> = {
-  "/tasks": TASK_PERMISSIONS.GET_ALL,
-  "/audits": AUDIT_PERMISSIONS.GET_BY_CLIENT_ID,
-  "/phone": PHONE_PERMISSIONS.MAKE_CALL,
-  // Add more mappings as needed
+// Define required permissions for navigation menu items
+const navPermissionMap: Record<string, NavPermission> = {
+  "/email": NAV_PERMISSIONS.TEAM_EMAIL,
+  "/tasks": NAV_PERMISSIONS.TEAM_TASKS,
+  "/settings": NAV_PERMISSIONS.TEAM_SETTINGS,
+  "/account": NAV_PERMISSIONS.TEAM_ACCOUNT,
+  "/phone": NAV_PERMISSIONS.TEAM_PHONE,
+  "/invoices": NAV_PERMISSIONS.TEAM_INVOICES,
+  "/files": NAV_PERMISSIONS.TEAM_FILES,
+  "/dashboard": NAV_PERMISSIONS.TEAM_DASHBOARD,
+  "/clients": NAV_PERMISSIONS.TEAM_CLIENTS,
+  "/contacts": NAV_PERMISSIONS.TEAM_CONTACTS,
+  "/chat": NAV_PERMISSIONS.TEAM_CHAT,
+  "/calendar": NAV_PERMISSIONS.TEAM_CALENDAR,
+  "/audits": NAV_PERMISSIONS.TEAM_AUDITS,
+  "/documents": NAV_PERMISSIONS.CLIENT_DOCUMENTS,
+  "/profile": NAV_PERMISSIONS.CLIENT_PROFILE,
+  "/home": NAV_PERMISSIONS.CLIENT_HOME,
+  "/billing": NAV_PERMISSIONS.CLIENT_BILLING,
 };
 
 const AppSidebar: React.FC = () => {
@@ -97,6 +109,7 @@ const AppSidebar: React.FC = () => {
           <div className="flex flex-col gap-4">
             {/* Team Pages Group */}
             <div>
+              <Authorized action={NAV_PERMISSIONS.PAGE_HEADINGS} fallback={null}>
               <h2
                 className={`mb-4 flex text-xs leading-[20px] text-gray-400 uppercase ${
                   !isExpanded && !isHovered
@@ -110,9 +123,10 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
+              </Authorized>
               <ul className="flex flex-col gap-4">
                 {teamPages.map((page) => {
-                  const permission = pagePermissionMap[page.path];
+                  const permission = navPermissionMap[page.path];
                   const navItem = (
                     <li key={page.name} data-testid={`nav-item-${page.name.toLowerCase()}`}>
                       <Link
@@ -139,7 +153,7 @@ const AppSidebar: React.FC = () => {
                     </li>
                   );
                   return permission ? (
-                    <Authorized action={permission} key={page.name} fallback={null}>
+                    <Authorized action={permission} fallback={null} key={page.name}>
                       {navItem}
                     </Authorized>
                   ) : (
@@ -150,6 +164,7 @@ const AppSidebar: React.FC = () => {
             </div>
             {/* Client Pages Group */}
             <div>
+              <Authorized action={NAV_PERMISSIONS.PAGE_HEADINGS} fallback={null}>
               <h2
                 className={`mb-4 flex text-xs leading-[20px] text-gray-400 uppercase ${
                   !isExpanded && !isHovered
@@ -163,30 +178,41 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
+              </Authorized>
               <ul className="flex flex-col gap-4">
-                {clientPages.map((page) => (
-                  <li key={page.name}>
-                    <Link
-                      href={page.path}
-                      className={`menu-item group ${
-                        isActive(page.path)
-                          ? "menu-item-active"
-                          : "menu-item-inactive"
-                      } cursor-pointer ${
-                        !isExpanded && !isHovered
-                          ? "lg:justify-center"
-                          : "justify-start"
-                      }`}
-                    >
-                      <span className="menu-item-icon-inactive">
-                        <span className="inline-block h-3 w-3 rounded-full bg-gray-400"></span>
-                      </span>
-                      {(isExpanded || isHovered || isMobileOpen) && (
-                        <span className="menu-item-text">{page.name}</span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                {clientPages.map((page) => {
+                  const permission = navPermissionMap[page.path];
+                  const navItem = (
+                    <li key={page.name} data-testid={`nav-item-${page.name.toLowerCase()}`}>
+                      <Link
+                        href={page.path}
+                        className={`menu-item group ${
+                          isActive(page.path)
+                            ? "menu-item-active"
+                            : "menu-item-inactive"
+                        } cursor-pointer ${
+                          !isExpanded && !isHovered
+                            ? "lg:justify-center"
+                            : "justify-start"
+                        }`}
+                      >
+                        <span className="menu-item-icon-inactive">
+                          <span className="inline-block h-3 w-3 rounded-full bg-gray-400"></span>
+                        </span>
+                        {(isExpanded || isHovered || isMobileOpen) && (
+                          <span className="menu-item-text">{page.name}</span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                  return permission ? (
+                    <Authorized action={permission} fallback={null} key={page.name}>
+                      {navItem}
+                    </Authorized>
+                  ) : (
+                    navItem
+                  );
+                })}
               </ul>
             </div>
           </div>

@@ -60,3 +60,28 @@ export const CLIENT_PERMISSIONS = {
 
 export type ClientPermission =
   (typeof CLIENT_PERMISSIONS)[keyof typeof CLIENT_PERMISSIONS];
+
+// Permissions for navigation menu items
+export const NAV_PERMISSIONS = {
+  TEAM_EMAIL: 'nav.team.email',
+  TEAM_TASKS: 'nav.team.tasks',
+  TEAM_SETTINGS: 'nav.team.settings',
+  TEAM_ACCOUNT: 'nav.team.account',
+  TEAM_PHONE: 'nav.team.phone',
+  TEAM_INVOICES: 'nav.team.invoices',
+  TEAM_FILES: 'nav.team.files',
+  TEAM_DASHBOARD: 'nav.team.dashboard',
+  TEAM_CLIENTS: 'nav.team.clients',
+  TEAM_CONTACTS: 'nav.team.contacts',
+  TEAM_CHAT: 'nav.team.chat',
+  TEAM_CALENDAR: 'nav.team.calendar',
+  TEAM_AUDITS: 'nav.team.audits',
+  CLIENT_DOCUMENTS: 'nav.client.documents',
+  CLIENT_PROFILE: 'nav.client.profile',
+  CLIENT_HOME: 'nav.client.home',
+  CLIENT_BILLING: 'nav.client.billing',
+  // Permission to view section headings in navigation sidebar
+  PAGE_HEADINGS: 'nav.page.headings',
+} as const;
+
+export type NavPermission = (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS];

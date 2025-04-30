@@ -169,10 +169,6 @@ const AppHeader: React.FC = () => {
           } shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 lg:flex lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="2xsm:gap-3 flex items-center gap-2">
-            {/* <!-- Dark Mode Toggler --> */}
-            <ThemeToggleButton />
-            {/* <!-- Notification Menu Area --> */}
-            <NotificationDropdown />
             {/* Impersonation Dropdown for Developers */}
             {isDeveloper && (
               <div className="relative flex items-center gap-2">
@@ -188,13 +184,17 @@ const AppHeader: React.FC = () => {
                     }
                   }}
                 >
-                  <option value="" disabled>View As Role</option>
+                  <option value="" disabled>View as...</option>
                   {allRoles.map(role => (
                     <option key={role} value={role}>{role}</option>
                   ))}
                 </select>
               </div>
             )}
+            {/* <!-- Dark Mode Toggler --> */}
+            <ThemeToggleButton />
+            {/* <!-- Notification Menu Area --> */}
+            <NotificationDropdown />
           </div>
           {/* <!-- User Area --> */}
           <UserDropdown />
