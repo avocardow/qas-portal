@@ -166,6 +166,34 @@ const { can } = useAbility();
 
 *End of permission updates for React usage.*
 
----
+## API Permissions Reference
 
-*Last updated: $(date "+%Y-%m-%d %H:%M:%S")* 
+The server-side permission checks are enforced in tRPC routers using the `useAbility` hook and custom middleware. For each API endpoint, ensure the corresponding permission string is defined in `src/constants/permissions.ts` and assigned to roles in `src/policies/permissions.ts`.
+
+| Router                        | Procedure                 | Permission Name             |
+|-------------------------------|---------------------------|-----------------------------|
+| `rolePermissionRouter`        | `getAll`, `getRoles`
+|                               | `getPermissions`          | `rolePermission.getAll`     |
+|                               | `assign`                  | `rolePermission.assign`     |
+|                               | `unassign`                | `rolePermission.unassign`   |
+| `clientRouter`                | `getAll`                  | `client.getAll`             |
+|                               | `getById`                 | `client.getById`            |
+| `contactRouter`               | `create`, `update`        | `contact.create`, `contact.update` |
+| `documentRouter`              | `getByClientId`           | `document.getByClientId`    |
+|                               | `getByAuditId`            | `document.getByAuditId`     |
+|                               | `getByTaskId`             | `document.getByTaskId`      |
+| `taskRouter`                  | `create`, `update`
+|                               | `delete`                  | `task.create`, `task.update`, `task.delete` |
+| `auditRouter` (`audits`)      | `create`, `getByClientId` | `audit.create`, `audit.getByClientId` |
+| `sharepointRouter`            | `listClientFolders`       | `rolePermission.getAll`     |
+|                               | `getFolderContents`       | `rolePermission.getAll`     |
+
+## Troubleshooting Common Permission Issues
+
+- **Permission Denied Errors**: Ensure the permission string used in `can(...)` or `<Authorized>` matches exactly (case-sensitive) with the constants in `src/constants/permissions.ts`.
+- **Developer Bypass Not Working**: Verify the `ROLE` constant for Developer is spelled correctly (`Developer`) and included in `permissionSchema` for all permissions.
+- **Tests Failing for Permission Checks**: Check that the test context properly mocks `AbilityContext` with the correct `permissions` array and `role`.
+- **Endpoint Access Unexpectedly Allowed**: Confirm that the router middleware uses `can` to enforce permissions before executing business logic.
+- **UI Components Not Rendering**: Ensure `<Authorized>` wrappers are placed around the correct JSX elements and fallback props are provided if needed.
+
+*Last updated: $(date "+%Y-%m-%d")* 
