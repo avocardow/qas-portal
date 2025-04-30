@@ -15,7 +15,7 @@ const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  const { refreshPermissions, roles } = usePermissionContext();
+  const { refreshPermissions } = usePermissionContext();
   const { impersonatedRole, impersonate, revert } = useImpersonationContext();
   const { data: session } = useSession();
   const actualRole = session?.user.role as Role;
