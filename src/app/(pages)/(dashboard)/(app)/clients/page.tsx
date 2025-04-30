@@ -250,6 +250,25 @@ export default function ClientsPage() {
     return [...baseColumns, ...filteredAdmin];
   }, [baseColumns, adminColumns, can]);
 
+  // Reset sorting if it refers to unauthorized columns
+  useEffect(() => {
+    if (!can(CLIENT_PERMISSIONS.VIEW_BILLING) && sortBy === 'estAnnFees') {
+      setSortBy('clientName');
+      setSortOrder('asc');
+    }
+    if (!can(CLIENT_PERMISSIONS.VIEW_STATUS) && sortBy === 'status') {
+      setSortBy('clientName');
+      setSortOrder('asc');
+    }
+  }, [can, sortBy, setSortBy, setSortOrder]);
+
+  // Reset showAll state if user cannot view Status
+  useEffect(() => {
+    if (!can(CLIENT_PERMISSIONS.VIEW_STATUS) && showAll) {
+      setShowAll(false);
+    }
+  }, [can, showAll]);
+
   // Protect view based on permission checks using useAbility
   if (!can(CLIENT_PERMISSIONS.VIEW_BILLING) && !can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
     return <p>You are not authorized to view clients.</p>;
@@ -262,7 +281,7 @@ export default function ClientsPage() {
         <ComponentCard
           title="Client Directory"
           actions={
-            <Authorized action="clients.view.billing"
+            <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING}
               fallback={
                 <Button
                   aria-label="Add New Client"
@@ -333,7 +352,7 @@ export default function ClientsPage() {
                 }}
                 extraControls={
                   <>
-                    {can(CLIENT_PERMISSIONS.VIEW_BILLING) && (
+                    {can(CLIENT_PERMISSIONS.VIEW_STATUS) && (
                       <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                         <input
                           type="checkbox"
@@ -344,7 +363,7 @@ export default function ClientsPage() {
                         <span>Show All</span>
                       </label>
                     )}
-                    {can(CLIENT_PERMISSIONS.VIEW_BILLING) && (
+                    {can(CLIENT_PERMISSIONS.VIEW_STATUS) && (
                       <Badge
                         size="sm"
                         variant={showAll ? "light" : "solid"}
