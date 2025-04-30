@@ -3,6 +3,7 @@ import React, { createContext, useContext, ReactNode, useMemo, useCallback } fro
 import { Role, Permission, getPermissionsForRole } from '@/policies/permissions';
 import { useSession } from 'next-auth/react';
 import { impersonationService } from '@/lib/impersonationService';
+import { useImpersonationContext } from '@/contexts/ImpersonationContext';
 
 export interface PermissionContextValue {
   roles: Role[];
@@ -30,14 +31,22 @@ interface PermissionProviderProps {
 // PermissionProvider component
 export const PermissionProvider = ({ children }: PermissionProviderProps) => {
   const { data: session } = useSession();
+  // Subscribe to impersonation context if available
+  let impersonationContext;
+  try {
+    impersonationContext = useImpersonationContext();
+  } catch {
+    impersonationContext = undefined;
+  }
   const roles: Role[] = useMemo(() => {
-    const imp = impersonationService.getImpersonatedRole();
+    // Prefer context-driven impersonation, fallback to storage
+    const imp = impersonationContext?.impersonatedRole ?? impersonationService.getImpersonatedRole();
     if (imp) {
       return [imp];
     }
     const roleName = session?.user.role;
     return roleName ? [roleName as Role] : [];
-  }, [session?.user.role]);
+  }, [session?.user.role, impersonationContext?.impersonatedRole]);
   const [permissions, setPermissions] = React.useState<Permission[]>([]);
 
   // Create a callback to refresh permissions based on current roles
