@@ -67,8 +67,9 @@ export const PermissionProvider = ({ children }: PermissionProviderProps) => {
   }, [refreshPermissions]);
 
   const can = useCallback((permission: Permission | string) => {
-    // Developer bypass
-    if (roles.includes('Developer' as Role)) {
+    // Developer bypass (case-insensitive)
+    const isDeveloperRole = roles.some((r) => r.toLowerCase() === 'developer');
+    if (isDeveloperRole) {
       return true;
     }
     return permissions.includes(permission as Permission);

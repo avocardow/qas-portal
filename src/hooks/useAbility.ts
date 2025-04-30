@@ -2,7 +2,6 @@
 import { useMemo, useCallback } from 'react';
 import { usePermissionContext } from '@/contexts/PermissionContext';
 import type { Permission } from '@/policies/permissions';
-import type { Role } from '@/policies/permissions';
 
 export interface UseAbilityHook {
   can: (permission: Permission | string) => boolean;
@@ -22,8 +21,9 @@ export function useAbility(): UseAbilityHook {
       return cache.get(key)!;
     }
     let result: boolean;
-    // Developer bypass: always allow if user has Developer role
-    if (roles.includes('Developer' as Role)) {
+    // Developer bypass: always allow if user has Developer role (case-insensitive)
+    const isDeveloperRole = roles.some((r) => r.toString().toLowerCase() === 'developer');
+    if (isDeveloperRole) {
       result = true;
     } else {
       result = contextCan(permission);
