@@ -20,7 +20,7 @@ const AppHeader: React.FC = () => {
   const { data: session } = useSession();
   const actualRole = session?.user.role as Role;
   const allRoles: Role[] = ['Developer','Admin','Manager','Auditor','Staff','Client'];
-  const isDeveloper = roles.includes('Developer');
+  const isDeveloper = actualRole === 'Developer';
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
