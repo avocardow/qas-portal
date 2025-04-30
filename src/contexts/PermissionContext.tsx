@@ -31,12 +31,10 @@ interface PermissionProviderProps {
 export const PermissionProvider = ({ children }: PermissionProviderProps) => {
   const { data: session } = useSession();
   const roles: Role[] = useMemo(() => {
-    // Check for impersonation override
     const imp = impersonationService.getImpersonatedRole();
     if (imp) {
       return [imp];
     }
-    // Fallback to actual user role
     const roleName = session?.user.role;
     return roleName ? [roleName as Role] : [];
   }, [session?.user.role]);
