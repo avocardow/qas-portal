@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Testing and Documentation
-# Status: pending
+# Status: in-progress
 # Dependencies: 5
 # Priority: medium
 # Description: Perform comprehensive testing across the application and document the migration for future reference.
@@ -11,13 +11,54 @@ Create a test plan covering all major pages and features with different user rol
 Execute the test plan with multiple user roles. Verify each permission-gated feature works correctly. Use automated tests where possible. Document any edge cases or special considerations for future reference. Have another developer review the changes and test independently.
 
 # Subtasks:
-## 1. Create Comprehensive Test Plan [pending]
+## 1. Create Comprehensive Test Plan [done]
 ### Dependencies: None
 ### Description: Develop a structured test plan covering all major application pages and features across different user roles
 ### Details:
 Create a matrix-style test plan document that maps each application page/feature against all user roles. Include test scenarios for both positive testing (users with correct permissions) and negative testing (users without permissions). Define expected outcomes for each test case. Prioritize critical paths and high-risk areas. Include environment setup requirements and test data needed. The test plan should specifically address permission boundaries between roles and edge cases where permissions might overlap.
 
-## 2. Implement Unit and Integration Tests for useAbility [pending]
+<info added on 2025-04-29T21:39:23.154Z>
+Here's the additional information for the test plan:
+
+```markdown
+## Test Implementation Details
+
+### Unit Test Implementation
+- Configure Jest mocks for AbilityContext to simulate different permission scenarios
+- Create test fixtures with predefined role/permission combinations
+- Implement snapshot testing for permission-dependent UI components
+- Test coverage target: >90% for permission-related hooks and components
+
+### Integration Test Strategy
+- Use MSW (Mock Service Worker) to intercept API calls and simulate server responses
+- Create test data factories to generate consistent test fixtures
+- Implement user session simulation with different role contexts
+- Test matrix should include cross-browser verification (Chrome, Firefox, Safari)
+
+### E2E Testing Specifics
+- Implement custom Cypress commands for role-based authentication
+- Create reusable test patterns for common permission-gated workflows
+- Record videos of permission boundary tests for documentation
+- Test data reset between test runs to ensure isolation
+
+### Performance Testing
+- Measure render time differences with/without permission checks
+- Verify caching mechanisms for permission data
+- Test permission resolution under high load (many rules/roles)
+
+### Regression Test Automation
+- Automate permission boundary tests to run on PR creation
+- Implement visual regression tests for permission-dependent UI elements
+- Create CI pipeline stage specifically for RBAC testing
+
+### Test Reporting
+- Generate permission coverage reports showing tested/untested permission combinations
+- Include permission test results in CI/CD dashboard
+- Document any permission edge cases discovered during testing
+```
+</info added on 2025-04-29T21:39:23.154Z>
+
+## 2. Implement Unit and Integration Tests for useAbility [in-progress]
 ### Dependencies: 6.1
 ### Description: Develop automated tests specifically for the useAbility permission check functionality
 ### Details:

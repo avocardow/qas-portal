@@ -2,6 +2,7 @@
 import { useMemo, useCallback } from 'react';
 import { usePermissionContext } from '@/contexts/PermissionContext';
 import type { Permission } from '@/policies/permissions';
+import type { Role } from '@/policies/permissions';
 
 export interface UseAbilityHook {
   can: (permission: Permission | string) => boolean;
@@ -20,13 +21,19 @@ export function useAbility(): UseAbilityHook {
     if (cache.has(key)) {
       return cache.get(key)!;
     }
-    const result = contextCan(permission);
+    let result: boolean;
+    // Developer bypass: always allow if user has Developer role
+    if (roles.includes('Developer' as Role)) {
+      result = true;
+    } else {
+      result = contextCan(permission);
+    }
     cache.set(key, result);
     if (process.env.NODE_ENV === 'development') {
       console.debug(`[useAbility] permission "${key}" check: ${result}`);
     }
     return result;
-  }, [cache, contextCan]);
+  }, [cache, contextCan, roles]);
 
   const cannot = useCallback((permission: Permission | string): boolean => !can(permission), [can]);
 
