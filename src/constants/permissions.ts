@@ -53,6 +53,7 @@ export type RolePermissionPermission =
 
 // Add client-specific permissions for gating table columns
 export const CLIENT_PERMISSIONS = {
+  VIEW: "clients.view",
   VIEW_BILLING: "clients.view.billing",
   VIEW_STATUS: "clients.view.status",
 } as const;

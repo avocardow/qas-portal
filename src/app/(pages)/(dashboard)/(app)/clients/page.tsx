@@ -270,7 +270,11 @@ export default function ClientsPage() {
   }, [can, showAll]);
 
   // Protect view based on permission checks using useAbility
-  if (!can(CLIENT_PERMISSIONS.VIEW_BILLING) && !can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
+  if (
+    !can(CLIENT_PERMISSIONS.VIEW) &&
+    !can(CLIENT_PERMISSIONS.VIEW_BILLING) &&
+    !can(CLIENT_PERMISSIONS.VIEW_STATUS)
+  ) {
     return <p>You are not authorized to view clients.</p>;
   }
 

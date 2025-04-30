@@ -45,6 +45,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ...Object.values(TASK_PERMISSIONS),
     ...Object.values(DOCUMENT_PERMISSIONS),
     ...Object.values(PHONE_PERMISSIONS),
+    CLIENT_PERMISSIONS.VIEW,
     CLIENT_PERMISSIONS.VIEW_BILLING,
     CLIENT_PERMISSIONS.VIEW_STATUS,
     ...Object.values(ROLE_PERMISSION_PERMISSIONS),
@@ -52,15 +53,18 @@ export const permissionSchema: Record<Role, Permission[]> = {
   Manager: [
     ...Object.values(AUDIT_PERMISSIONS),
     ...Object.values(TASK_PERMISSIONS),
+    CLIENT_PERMISSIONS.VIEW,
   ],
   Auditor: [
     AUDIT_PERMISSIONS.GET_BY_CLIENT_ID,
     AUDIT_PERMISSIONS.GET_BY_ID,
+    CLIENT_PERMISSIONS.VIEW,
   ],
   Staff: [
     TASK_PERMISSIONS.GET_BY_AUDIT_ID,
     TASK_PERMISSIONS.GET_ASSIGNED_TO_ME,
     TASK_PERMISSIONS.GET_ALL,
+    CLIENT_PERMISSIONS.VIEW,
   ],
   Client: [
     DOCUMENT_PERMISSIONS.GET_BY_CLIENT_ID,
