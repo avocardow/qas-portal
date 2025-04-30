@@ -2,6 +2,7 @@
 import React, { createContext, useContext, ReactNode, useMemo, useCallback } from 'react';
 import { Role, Permission, getPermissionsForRole } from '@/policies/permissions';
 import { useSession } from 'next-auth/react';
+import { impersonationService } from '@/lib/impersonationService';
 
 export interface PermissionContextValue {
   roles: Role[];
@@ -30,6 +31,12 @@ interface PermissionProviderProps {
 export const PermissionProvider = ({ children }: PermissionProviderProps) => {
   const { data: session } = useSession();
   const roles: Role[] = useMemo(() => {
+    // Check for impersonation override
+    const imp = impersonationService.getImpersonatedRole();
+    if (imp) {
+      return [imp];
+    }
+    // Fallback to actual user role
     const roleName = session?.user.role;
     return roleName ? [roleName as Role] : [];
   }, [session?.user.role]);

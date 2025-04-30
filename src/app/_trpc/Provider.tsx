@@ -6,6 +6,7 @@ import React, { useState } from "react";
 
 import { api } from "@/utils/api";
 import superjson from "superjson";
+import { impersonationService } from '@/lib/impersonationService';
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -42,6 +43,14 @@ export default function TRPCProvider({
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           transformer: superjson, // Use superjson
+          headers: () => {
+            const headers: Record<string, string> = {};
+            const impRole = impersonationService.getImpersonatedRole();
+            if (impRole) {
+              headers['x-impersonate-role'] = impRole;
+            }
+            return headers;
+          },
         }),
       ],
     })

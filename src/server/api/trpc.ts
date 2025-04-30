@@ -33,7 +33,21 @@ import { logger } from "@/server/api/utils/logger";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await getServerAuthSession();
+  let session = await getServerAuthSession();
+  // Check for impersonation header and override session role if present
+  const impHeader = opts.headers.get('x-impersonate-role');
+  if (impHeader && session?.user) {
+    // Temporarily override user role for impersonation mode
+    session = {
+      ...session,
+      user: {
+        ...session.user,
+        role: impHeader as typeof session.user.role,
+      },
+    };
+    // Optionally log impersonation event
+    console.info(`[TRPC] Impersonating role: ${impHeader} for user ${session.user.id}`);
+  }
 
   return {
     db,
