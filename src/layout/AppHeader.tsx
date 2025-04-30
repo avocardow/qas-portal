@@ -7,12 +7,16 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { usePermissionContext } from '@/contexts/PermissionContext';
+import { useImpersonationContext } from '@/contexts/ImpersonationContext';
+import type { Role } from '@/policies/permissions';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-  const { refreshPermissions } = usePermissionContext();
+  const { refreshPermissions, roles } = usePermissionContext();
+  const { impersonatedRole, impersonate, revert } = useImpersonationContext();
+  const isDeveloper = roles.includes('Developer');
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -171,9 +175,30 @@ const AppHeader: React.FC = () => {
             >🔄</button>
             {/* <!-- Dark Mode Toggler --> */}
             <ThemeToggleButton />
-            {/* <!-- Dark Mode Toggler --> */}
-            <NotificationDropdown />
             {/* <!-- Notification Menu Area --> */}
+            <NotificationDropdown />
+            {/* Impersonation Dropdown for Developers */}
+            {isDeveloper && (
+              <div className="relative">
+                {impersonatedRole ? (
+                  <div className="flex items-center gap-2 bg-yellow-100 border border-yellow-400 px-2 py-1 rounded">
+                    <span className="text-yellow-800">Impersonating: {impersonatedRole}</span>
+                    <button onClick={revert} className="text-red-600 underline">Revert</button>
+                  </div>
+                ) : (
+                  <select
+                    className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
+                    defaultValue=""
+                    onChange={(e) => impersonate(e.target.value as Role)}
+                  >
+                    <option value="" disabled>Impersonate Role</option>
+                    {(['Admin','Manager','Auditor','Staff','Client'] as Role[]).map(role => (
+                      <option key={role} value={role}>{role}</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )}
           </div>
           {/* <!-- User Area --> */}
           <UserDropdown />
