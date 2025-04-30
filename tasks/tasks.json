@@ -446,7 +446,7 @@
           "id": 2,
           "title": "Implement Unit and Integration Tests for useAbility",
           "description": "Develop automated tests specifically for the useAbility permission check functionality",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -456,7 +456,7 @@
           "id": 3,
           "title": "Perform Smoke Testing Across Application",
           "description": "Execute smoke tests on all application pages to verify correct permission enforcement",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],
@@ -466,7 +466,7 @@
           "id": 4,
           "title": "Create RBAC Migration Changeset Documentation",
           "description": "Document the RBAC implementation changes following Cursor Rules",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2,
             3

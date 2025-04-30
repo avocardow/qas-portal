@@ -179,3 +179,35 @@ A major update focused on Next.js 15 implementation and comprehensive redesign.
 ## License
 
 Refer to our [LICENSE](https://tailadmin.com/license) page for more information.
+
+### Permissions & Authorization
+
+The application uses a centralized permission system powered by the `useAbility` hook and the `<Authorized>` component:
+
+- **useAbility Hook**  
+  Import via:
+  ```typescript
+  import { useAbility } from '@/hooks/useAbility';
+  const { can, cannot } = useAbility();
+  ```
+  - `can(permissionName: string)`: Returns `true` if the current user has the given permission (with Developer bypass).
+  - `cannot(permissionName: string)`: Returns the negation of `can()`.
+
+- **<Authorized> Component**  
+  Import via:
+  ```tsx
+  import Authorized from '@/components/Authorized';
+  ```
+  Wrap JSX elements to gate rendering based on permissions:
+  ```tsx
+  <Authorized action="task.update" fallback={<div>Access Denied</div>}>
+    <button>Edit Task</button>
+  </Authorized>
+  ```
+
+- **Developer Bypass**  
+  Users in the **Developer** role automatically bypass all permission checks, granting full access to actions and UI elements.
+
+For detailed usage patterns and best practices, see [Permissions Documentation](docs/permissions.md).
+
+## Theming

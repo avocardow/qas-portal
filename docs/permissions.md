@@ -117,6 +117,55 @@ The GitHub Actions pipeline includes a step to validate permissions:
 
 If the script detects missing permissions, the CI job will fail and prevent merging until the discrepancy is resolved.
 
+## React Hooks Usage
+
+Replace legacy `useRbac` and `usePermission` hooks with `useAbility`:
+```typescript
+import { useAbility } from '@/hooks/useAbility';
+
+export default function MyComponent() {
+  const { can, cannot } = useAbility();
+  // Developer bypass: users with Developer role always pass
+  if (!can('task.create')) {
+    return <div>You don't have permission</div>;
+  }
+  return <button>Create Task</button>;
+}
+```
+
+## Authorized Component Usage
+
+Use the `<Authorized>` wrapper for declarative UI gating:
+```tsx
+import Authorized from '@/components/Authorized';
+
+function TaskButton() {
+  return (
+    <Authorized action="task.update" fallback={<span>Access Denied</span>}>
+      <button>Edit Task</button>
+    </Authorized>
+  );
+}
+```
+
+- The `fallback` prop is optional (defaults to `null`).
+- Supports arrays of permission strings: `<Authorized action={['permA', 'permB']}>`.
+
+## Developer Bypass Behavior
+
+The `useAbility` hook automatically allows **Developer** role users to bypass all permission checks:
+```typescript
+const { can } = useAbility();
+// can('any.permission.name') === true if role includes Developer
+```
+
+## Quick Reference Updates
+
+- **Deprecated**: `useRbac`, `usePermission` hooks and direct permission checks in components.
+- **Preferred**: `useAbility` hook and `<Authorized>` component for consistent usage.
+
+*End of permission updates for React usage.*
+
 ---
 
 *Last updated: $(date "+%Y-%m-%d %H:%M:%S")* 

@@ -58,19 +58,19 @@ Here's the additional information for the test plan:
 ```
 </info added on 2025-04-29T21:39:23.154Z>
 
-## 2. Implement Unit and Integration Tests for useAbility [in-progress]
+## 2. Implement Unit and Integration Tests for useAbility [done]
 ### Dependencies: 6.1
 ### Description: Develop automated tests specifically for the useAbility permission check functionality
 ### Details:
 Create unit tests for the useAbility hook/function that verify it correctly evaluates permissions for different user roles. Test with mock user contexts representing each role in the system. Implement integration tests that verify useAbility works correctly when integrated with actual components. Include tests for edge cases such as undefined permissions, role changes, and permission inheritance. Use Jest for unit tests and consider Cypress or React Testing Library for integration tests. Ensure tests verify that the Developer role bypass works as expected without affecting other roles.
 
-## 3. Perform Smoke Testing Across Application [pending]
+## 3. Perform Smoke Testing Across Application [in-progress]
 ### Dependencies: 6.1
 ### Description: Execute smoke tests on all application pages to verify correct permission enforcement
 ### Details:
 Following the test plan from subtask 1, manually navigate through each page of the application with different user role accounts. Verify that permissions are enforced correctly - users can only access and perform actions they're authorized for. Document any discrepancies between expected and actual behavior. Pay special attention to areas where permissions might cascade or inherit. Test the Developer role bypass functionality to ensure it works as expected but doesn't affect other roles. Create a checklist of all pages tested and their pass/fail status.
 
-## 4. Create RBAC Migration Changeset Documentation [pending]
+## 4. Create RBAC Migration Changeset Documentation [in-progress]
 ### Dependencies: 6.2, 6.3
 ### Description: Document the RBAC implementation changes following Cursor Rules
 ### Details:
