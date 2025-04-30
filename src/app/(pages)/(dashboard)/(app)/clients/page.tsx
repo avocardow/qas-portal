@@ -237,10 +237,13 @@ export default function ClientsPage() {
     []
   );
 
-  // Compose columns (all); DataTableTwo will wrap based on 'permission'
+  // Compose columns: include only columns the user has permission to view
   const columns: ColumnDef[] = React.useMemo(() => {
-    return [...baseColumns, ...adminColumns];
-  }, [baseColumns, adminColumns]);
+    const filteredAdmin = adminColumns.filter(
+      (col) => col.permission && can(col.permission)
+    );
+    return [...baseColumns, ...filteredAdmin];
+  }, [baseColumns, adminColumns, can]);
 
   // Protect view based on permission checks using useAbility
   if (!can(CLIENT_PERMISSIONS.VIEW_BILLING) && !can(CLIENT_PERMISSIONS.VIEW_STATUS)) {

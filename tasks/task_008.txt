@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Gate Fees and Status Columns in Clients Table Using Authorized Component
-# Status: done
+# Status: in-progress
 # Dependencies: None
 # Priority: medium
 # Description: Implement access control for the Fees and Status columns in the Clients table by utilizing the new Authorized component and useAbility hook to restrict visibility based on user permissions.
