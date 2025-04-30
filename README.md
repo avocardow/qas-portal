@@ -15,6 +15,7 @@ easily.
 - [🌐 Live Site](https://nextjs-demo.tailadmin.com)
 - [📘 Project Documentation](docs/project-documentation.md)
 - [📝 Permissions Documentation](docs/permissions.md)
+- [👨‍💻 Developer Documentation: Permissions](docs/permissions.md)
 
 ## Installation
 

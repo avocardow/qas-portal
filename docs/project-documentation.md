@@ -145,6 +145,10 @@ Below is a list of current placeholder pages (using `DashboardPlaceholderPageTem
 | `/dashboard/app/settings/templates`     | Templates    | Template library for emails, documents, and notifications              |
 | `/dashboard/app/settings/templates/new` | New Template | Form for creating new templates                                        |
 
+## Authorization and Permissions
+
+The application enforces role-based access control (RBAC) using a centralized permission system. For detailed developer documentation on permissions, including how to use the `useAbility` hook, `<Authorized>` component, and define new permissions, see [Permissions Documentation](permissions.md).
+
 ## Next Steps for Phase 1 Development
 
 Below is an outline of the immediate next steps for Phase 1 development:
