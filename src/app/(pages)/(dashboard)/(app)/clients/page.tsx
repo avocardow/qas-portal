@@ -25,7 +25,7 @@ export default function ClientsPage() {
   const { can } = useAbility();
   const router = useRouter();
   // --- Pagination and Filter State ---
-  const [showAll, setShowAll] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<'active' | 'prospect' | 'archived' | 'all'>('active');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,9 +44,9 @@ export default function ClientsPage() {
   const utils = api.useUtils(); // Get tRPC utils for pre-fetching
 
   // Fetch paginated data with current controls
-  const statusFilter: "active" | "prospect" | "archived" | undefined = showAll
-    ? undefined
-    : "active";
+  const showAll = selectedStatus === 'all';
+  const statusFilter: "active" | "prospect" | "archived" | undefined =
+    showAll ? undefined : (selectedStatus as "active" | "prospect" | "archived");
   const clientsQuery = api.clients.getAll.useQuery(
     {
       page: currentPage,
@@ -262,12 +262,13 @@ export default function ClientsPage() {
     }
   }, [can, sortBy, setSortBy, setSortOrder]);
 
-  // Reset showAll state if user cannot view Status
+  // Reset status filter to 'active' if user cannot view Status
   useEffect(() => {
-    if (!can(CLIENT_PERMISSIONS.VIEW_STATUS) && showAll) {
-      setShowAll(false);
+    if (!can(CLIENT_PERMISSIONS.VIEW_STATUS) && selectedStatus !== 'active') {
+      setSelectedStatus('active');
+      setCurrentPage(1);
     }
-  }, [can, showAll]);
+  }, [can, selectedStatus]);
 
   // Protect view based on permission checks using useAbility
   if (
@@ -357,24 +358,20 @@ export default function ClientsPage() {
                 extraControls={
                   <>
                     {can(CLIENT_PERMISSIONS.VIEW_STATUS) && (
-                      <label className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                        <input
-                          type="checkbox"
-                          checked={showAll}
-                          onChange={() => setShowAll((prev) => !prev)}
-                          className="form-checkbox h-5 w-5 text-blue-500 dark:text-blue-400 focus:ring-blue-300 dark:focus:ring-blue-600"
-                        />
-                        <span>Show All</span>
-                      </label>
-                    )}
-                    {can(CLIENT_PERMISSIONS.VIEW_STATUS) && (
-                      <Badge
-                        size="sm"
-                        variant={showAll ? "light" : "solid"}
-                        color={showAll ? "primary" : "success"}
+                      <select
+                        id="client-status-select"
+                        value={selectedStatus}
+                        onChange={(e) => {
+                          setSelectedStatus(e.target.value as 'active' | 'prospect' | 'archived' | 'all');
+                          setCurrentPage(1);
+                        }}
+                        className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-9 rounded-lg border border-gray-300 bg-transparent py-2 pr-8 pl-3 text-sm text-gray-800 dark:bg-gray-900 dark:text-white"
                       >
-                        {showAll ? "All Clients" : "Active Clients"}
-                      </Badge>
+                        <option value="active">Active Clients</option>
+                        <option value="archived">Archived Clients</option>
+                        <option value="prospect">Prospective Clients</option>
+                        <option value="all">All Clients</option>
+                      </select>
                     )}
                   </>
                 }
