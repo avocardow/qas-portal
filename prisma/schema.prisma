@@ -227,7 +227,6 @@ model AuditStage {
   id           Int     @id @default(autoincrement())
   name         String  @unique
   description  String?
-  displayOrder Int?
   audits       Audit[]
 
   @@map("auditStages")

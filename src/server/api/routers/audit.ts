@@ -142,7 +142,7 @@ export const auditRouter = createTRPCRouter({
     .input(z.void())
     .query(async ({ ctx }) => {
       const stages = await ctx.db.auditStage.findMany({
-        orderBy: { displayOrder: "asc" },
+        orderBy: { id: "asc" },
       });
       return stages;
     }),
