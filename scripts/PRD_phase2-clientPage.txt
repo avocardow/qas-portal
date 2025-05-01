@@ -5,8 +5,11 @@ This Client Profile page surfaces all relevant data about a client in QLD Audit 
 # Core Features  
 0. **Full Data Dump**  
    - Initially load *all* client and related entity fields (contacts, licenses, trustAccounts, audits, activityLogs, documentReferences) from the database API to allow refinement and gating later.
+0a. **Client Manager Card**  
+   - Display the assigned team member (client manager) with name, role, and contact info; link to their profile.  
 1. **Lifetime Fees Card** (1a)  
    - Show total historical fees billed to the client with a numeric summary and sparkline trend.  
+   - **Billing Commentary:** accompany fees with the latest `billing_commentary` activityLog entries to explain rationale (Admin only).  
 2. **YoY Growth Chart** (1c)  
    - Display a small bar/line chart of annual `estAnnFees` history using TailAdmin's chart component.  
 3. **Customer Health Score** (1d)  
@@ -28,6 +31,7 @@ This Client Profile page surfaces all relevant data about a client in QLD Audit 
 10. **Activity Card** (6a)  
    - TailAdmin `ActivitiesCard`: recent notes, call logs, status changes with icons.  
    - **Pagination:** show the most recent items with pagination controls to avoid loading all items at once.  
+   - **Quick-Add Activity:** inline controls to add any activityLog type (Note, Email, Call, Billing Commentary, Meeting, Document), always linked to the Client, optionally a Contact, and the current team member.  
 11. **Tabbed Activity Log** (6b)  
    - `<Tabs>` grouping "Notes", "Emails", "Calls", "Status Changes" (inspired by `/tabs`).  
 12. **Filter & Search** (6c)  
@@ -68,57 +72,42 @@ This Client Profile page surfaces all relevant data about a client in QLD Audit 
 <PRD>
 # Technical Architecture  
 - **Page:** `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`  
-- **Data Fetching:** tRPC call `api.clients.getById({ clientId })` with Prisma relations: contacts → licenses, trustAccounts, audits, activityLogs, documentReferences.  
-- **Components:**  
-  - KPI cards: `ComponentCard` + chart components (e.g., `GrowthChart`, custom FeeCard).  
-  - Tables: `DataTableTwo` for contacts/trust accounts.  
-  - Charts: TailAdmin chart wrappers (e.g., Chart.js via TailAdmin).  
-  - Tabs & ProgressBar: reuse `/tabs` and `/progress-bar` UI-elements.  
-  - File browser: embed `AllFolders` + `RecentFileTable` from File-Manager.  
-  - Activity: `ActivitiesCard` + custom `TabbedActivityLog`.  
-- **Permissions:** Use `useAbility()` and `<Authorized>` (see [useAbility rules](mdc:.cursor/rules/useAbility.mdc)) to gate features.  
-  - **Edit Permission:** `clients.edit` for updating client details.  
-  - **Archive Permission:** `clients.archive` for setting status to archived.  
-  - **Private Data:** fees (`estAnnFees`) and other sensitive fields are limited to Admins only.  
-- **Context7 References:**  
-  - DataTableTwo APIDocs (Context7: `vercel/nextjs#DataTableTwo`)  
-  - Intl.DateTimeFormat (MDN docs via Context7)  
-  - Next.js App Router data fetching guidelines (`nextjs/docs/app/building-your-application/data-fetching`)  
+- **Data Fetching:** tRPC call `api.clients.getById({ clientId })` with Prisma relations: contacts → licenses, trustAccounts, audits, activityLogs, documentReferences, **assignedUser** (client manager).  
+- **Components:**
+  - KPI cards: `ComponentCard` + chart components (e.g., `GrowthChart`, custom FeeCard).
+  - Tables: `DataTableTwo` for contacts/trust accounts.
+  - Charts: TailAdmin chart wrappers (e.g., Chart.js via TailAdmin).
+  - Tabs & ProgressBar: reuse `/tabs` and `/progress-bar` UI-elements.
+  - File browser: embed `AllFolders` + `RecentFileTable` from File-Manager.
+  - Activity: `ActivitiesCard` + custom `TabbedActivityLog`.
+- **Permissions:** Use `useAbility()` and `<Authorized>` (see [useAbility rules](mdc:.cursor/rules/useAbility.mdc)) to gate features.
+  - **Edit Permission:** `clients.edit` for updating client details.
+  - **Archive Permission:** `clients.archive` for setting status to archived.
+  - **Private Data:** fees (`estAnnFees`) and other sensitive fields are limited to Admins only.
+- **Context7 References:**
+  - DataTableTwo APIDocs (Context7: `vercel/nextjs#DataTableTwo`)
+  - Intl.DateTimeFormat (MDN docs via Context7)
+  - Next.js App Router data fetching guidelines (`nextjs/docs/app/building-your-application/data-fetching`)
 
-# Development Roadmap  
-1. **Data Layer & API**  
-   - Extend `getById` to include all relations.  
-   - Add pagination/filter input for activity log and files.  
-2. **Layout & Scaffolding**  
-   - Create page wrapper using TailAdmin grid & `PageBreadcrumb`.  
-   - Scaffold KPI section and basic `useQuery` hook.  
-3. **Feature Implementation**  
-   - KPI cards (1,2,3).  
-   - Audit schedule & progress bar (4,5).  
-   - Contacts & network diagram (6,7).  
-   - Trust accounts + software links (8,9).  
-   - Activity log & meeting minutes (10,11,12).  
-   - File browser & invoices card (13,14).  
-   - Compliance checklist & alerts (15,16).  
-   - Action buttons & projections (17,18,19,20).  
-4. **Permissions & Polishing**  
-   - Gate content via `can()`.  
-   - Responsive breakpoints & accessibility checks.  
-   - Write Storybook stories & unit tests.  
+# Development Roadmap
+- **Data Layer & API:** Extend getById, add pagination/filter.
+- **Layout & Scaffolding:** TailAdmin grid, `PageBreadcrumb`, `useQuery`.
+- **Feature Implementation:** KPI cards; audit schedule & progress; contacts & network; trust accounts & software links; activity & quick-add; file browser & invoices; compliance checklist & alerts; action buttons & projections.
+- **Permissions & Polishing:** Gate with `can()`, responsive & A11y checks, Storybook & unit tests.
 
-# Logical Dependency Chain  
-1. Extend API (relations) → 2. Page scaffolding → 3. KPI & audit features → 4. Tables & file browser → 5. Activity & notes → 6. Compliance & projections → 7. Permissions & tests
+# Logical Dependency Chain
+1. Data Layer & API → 2. Layout & Scaffolding → 3. KPI & audit features → 4. Tables & file browser → 5. Activity & quick-add → 6. Compliance & projections → 7. Permissions & tests
 
-# Risks and Mitigations  
-- **Data Volume & Performance:** fetching all relations can be heavy → use `select` to limit fields, add pagination for logs/files.  
-- **Chart & Table Complexity:** many UI modules risk slow initial load → lazy-load non-critical sections; use React Suspense.  
-- **Permission Drift:** new features may expose private data → enforce `<Authorized>` wrappers and add unit tests for permission gating.
+# Risks and Mitigations
+- **Data Volume & Performance:** use `select`, pagination, lazy-load.
+- **UI Complexity:** defer non-critical sections behind Suspense; optimize bundles.
+- **Permission Drift:** enforce `<Authorized>`, add RBAC tests.
 
-# Appendix  
-- **Cursor Rules:** adhere to [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) for edits.  
-- **Context7 IDs:**  
-  - `vercel/nextjs#app-router-data-fetching`  
-  - `vercel/nextjs#headlessui-tabs`  
-  - `radix-ui/primitives#Progress`  
+# Appendix
+- **Cursor Rules:** follow [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc).
+- **Context7 IDs:**
+  - `vercel/nextjs#app-router-data-fetching`
+  - `vercel/nextjs#headlessui-tabs`
+  - `radix-ui/primitives#Progress`
   - `prisma/prisma-client-js#relations`
-</PRD> 
+</PRD>
