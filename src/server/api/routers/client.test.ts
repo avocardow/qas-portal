@@ -22,28 +22,28 @@ describe("clientRouter updateSharepointFolderId", () => {
   });
 
   it("should update sharepointFolderId for Admin", async () => {
-    const updated = { id: dummyClientId, sharepointFolderId: "folder123" };
+    const updated = { id: dummyClientId, internalFolderId: "folder123" };
     ctx.db.client.update.mockResolvedValue(updated);
     const caller = callClient(ctx);
     const result = await caller.updateSharepointFolderId({
       clientId: dummyClientId,
-      sharepointFolderId: "folder123",
+      internalFolderId: "folder123",
     });
     expect(ctx.db.client.update).toHaveBeenCalledWith({
       where: { id: dummyClientId },
-      data: { sharepointFolderId: "folder123" },
+      data: { internalFolderId: "folder123" },
     });
     expect(result).toEqual(updated);
   });
 
   it("should allow Manager role", async () => {
     ctx.session.user.role = "Manager";
-    const updated = { id: dummyClientId, sharepointFolderId: "folder456" };
+    const updated = { id: dummyClientId, internalFolderId: "folder456" };
     ctx.db.client.update.mockResolvedValue(updated);
     const caller = callClient(ctx);
     const result = await caller.updateSharepointFolderId({
       clientId: dummyClientId,
-      sharepointFolderId: "folder456",
+      internalFolderId: "folder456",
     });
     expect(result).toEqual(updated);
   });
@@ -54,7 +54,7 @@ describe("clientRouter updateSharepointFolderId", () => {
     await expect(
       caller.updateSharepointFolderId({
         clientId: dummyClientId,
-        sharepointFolderId: "folder123",
+        internalFolderId: "folder123",
       })
     ).rejects.toBeInstanceOf(TRPCError);
   });

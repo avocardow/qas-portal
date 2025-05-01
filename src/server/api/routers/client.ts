@@ -201,14 +201,14 @@ export const clientRouter = createTRPCRouter({
     .input(
       z.object({
         clientId: z.string().uuid(),
-        sharepointFolderId: z.string(),
+        internalFolderId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { clientId, sharepointFolderId } = input;
+      const { clientId, internalFolderId } = input;
       return ctx.db.client.update({
         where: { id: clientId },
-        data: { sharepointFolderId },
+        data: { internalFolderId },
       });
     }),
 });

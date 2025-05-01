@@ -53,7 +53,7 @@ export default function ClientDetailPage() {
   const handleLinkFolder = () => {
     if (selectedFolderId) {
       linkFolderMutation.mutate(
-        { clientId, sharepointFolderId: selectedFolderId },
+        { clientId, internalFolderId: selectedFolderId },
         {
           onSuccess: () => {
             closeModal();
@@ -78,9 +78,9 @@ export default function ClientDetailPage() {
     isLoading: spLoading,
     isError: spIsError,
   } = api.sharepoint.getFolderContents.useQuery(
-    { folderId: client?.sharepointFolderId ?? "" },
+    { folderId: client?.internalFolderId ?? "" },
     {
-      enabled: activeTab === "Documents" && Boolean(client?.sharepointFolderId),
+      enabled: activeTab === "Documents" && Boolean(client?.internalFolderId),
     }
   );
 
@@ -160,7 +160,7 @@ export default function ClientDetailPage() {
             onClick={openModal}
             className="btn bg-green-500 text-white hover:bg-green-600 dark:bg-green-700 dark:text-white dark:hover:bg-green-800"
           >
-            {client?.sharepointFolderId
+            {client?.internalFolderId
               ? "Change SharePoint Folder"
               : "Link SharePoint Folder"}
           </button>
@@ -497,7 +497,7 @@ export default function ClientDetailPage() {
           )}
           {activeTab === "Documents" && (
             <>
-              {client?.sharepointFolderId ? (
+              {client?.internalFolderId ? (
                 <>
                   {spLoading && <p>Loading folder contents...</p>}
                   {spIsError && <p>Error loading folder contents.</p>}
@@ -555,7 +555,7 @@ export default function ClientDetailPage() {
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-lg">
         <div className="p-4">
           <h2 className="text-lg font-semibold">
-            {client?.sharepointFolderId
+            {client?.internalFolderId
               ? "Change SharePoint Folder"
               : "Link SharePoint Folder"}
           </h2>
