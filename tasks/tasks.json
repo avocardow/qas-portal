@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Setup Client Profile Page Structure",
       "description": "Create the basic page structure for the client profile at the specified path with routing and layout components.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "Create the page file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Set up the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Include `PageBreadcrumb` component at the top. Implement the basic page structure with placeholder sections for all the required components (KPI cards, tables, charts, etc.). Follow Cursor rules for code styling and component usage.",
@@ -14,7 +14,7 @@
           "id": 1,
           "title": "Create basic client profile page file with routing",
           "description": "Set up the initial page file at the specified path with proper Next.js routing configuration",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create the file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Implement the basic React component structure with proper TypeScript typing for the dynamic route parameter. Set up the page component to receive and validate the clientId parameter from the URL. Include proper export default statement and implement basic error handling for invalid client IDs."
         },

@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Setup Client Profile Page Structure
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Create the basic page structure for the client profile at the specified path with routing and layout components.
@@ -11,7 +11,7 @@ Create the page file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/pa
 Verify page renders without errors. Test responsive breakpoints to ensure layout collapses properly on mobile. Check that routing with dynamic [clientId] parameter works correctly.
 
 # Subtasks:
-## 1. Create basic client profile page file with routing [pending]
+## 1. Create basic client profile page file with routing [done]
 ### Dependencies: None
 ### Description: Set up the initial page file at the specified path with proper Next.js routing configuration
 ### Details:
