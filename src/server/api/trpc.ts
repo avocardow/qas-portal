@@ -194,7 +194,7 @@ export const enforcePermission = (permission: string) =>
     }
     // Fallback dynamic permission lookup in DB
     const permissionRecord = await ctx.db.rolePermission.findFirst({
-      where: { role: { name: role }, permission: { action: permission } },
+      where: { role: { name: role }, permission: { name: permission } },
     });
     const dynamicAllowed = Boolean(permissionRecord);
     logAccessDecision(role, permission, dynamicAllowed);
