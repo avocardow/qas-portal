@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import type { AdapterUser } from "next-auth/adapters";
 import {
   getServerSession,
   type DefaultSession,
@@ -31,17 +32,17 @@ interface UserForSignIn extends NextAuthUser {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     // --- signIn Callback (Unchanged) ---
-    async signIn({ user, account }) {
-      if (account?.provider === "azure-ad" && user.email) {
-        const userExists = await db.user.findUnique({
-          where: { email: user.email },
-        });
-
+    async signIn({ user }) {
+      // Assign default role for new users based on email
+      if (user.email) {
+        const userExists = await db.user.findUnique({ where: { email: user.email } });
         if (!userExists) {
-          // !!!!! Ensure '4' is the correct default role ID !!!!!
-          const defaultRoleId = 4; // <--- Your default Role ID
-
-          (user as UserForSignIn).roleId = defaultRoleId;
+          const defaultRoleName = "Client"; // Change to desired default role
+          const defaultRole = await db.role.findUnique({ where: { name: defaultRoleName } });
+          if (!defaultRole) {
+            throw new Error(`Default role '${defaultRoleName}' not found in database`);
+          }
+          (user as UserForSignIn).roleId = defaultRole.id;
         }
       }
       return true;
@@ -74,7 +75,19 @@ export const authOptions: NextAuthOptions = {
       return `${baseUrl}/dashboard`;
     },
   },
-  adapter: PrismaAdapter(db),
+  adapter: {
+    ...PrismaAdapter(db),
+    createUser: async (data: AdapterUser) => {
+      // Assign the 'Client' role by default
+      const defaultRoleName = "Client";
+      const defaultRole = await db.role.findUnique({ where: { name: defaultRoleName } });
+      if (!defaultRole) {
+        throw new Error(`Default role '${defaultRoleName}' not found in database`);
+      }
+      // Create user with the default roleId
+      return await db.user.create({ data: { ...data, roleId: defaultRole.id } });
+    },
+  },
   providers: [
     AzureADProvider({
       clientId: env.AZURE_AD_CLIENT_ID,

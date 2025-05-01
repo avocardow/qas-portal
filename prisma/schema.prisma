@@ -217,29 +217,8 @@ model Role {
   name        String   @unique
   description String?
   users       User[]
-  permissions RolePermission[]
 
   @@map("roles")
-}
-
-model Permission {
-  id          Int      @id @default(autoincrement())
-  action      String   @unique
-  description String?
-  roles       RolePermission[]
-
-  @@map("permissions")
-}
-
-model RolePermission {
-  roleId       Int
-  permissionId Int
-
-  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-
-  @@id([roleId, permissionId])
-  @@map("rolePermissions")
 }
 
 // ========== Audit & Task Management ==========

@@ -6,7 +6,7 @@ import {
   CLIENT_PERMISSIONS,
   ROLE_PERMISSION_PERMISSIONS,
   NAV_PERMISSIONS,
-} from '@/constants/permissions';
+} from '../constants/permissions.ts';
 
 /**
  * Permission type representing all possible permission strings.

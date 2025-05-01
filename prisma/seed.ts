@@ -1,96 +1,25 @@
 import { PrismaClient } from "@prisma/client";
 import "dotenv/config";
-import {
-  AUDIT_PERMISSIONS,
-  TASK_PERMISSIONS,
-  DOCUMENT_PERMISSIONS,
-} from "../src/constants/permissions";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const roles = ["Admin", "Manager", "Auditor", "Staff", "Client"];
-  for (const name of roles) {
-    await prisma.role.upsert({
-      where: { name },
-      update: {},
-      create: { name },
-    });
-    console.log(`Seeded role: ${name}`);
+  const roles: Array<{ name: string; id?: number }> = [
+    { name: "Developer", id: 0 },
+    { name: "Admin", id: 1 },
+    { name: "Manager", id: 2 },
+    { name: "Auditor", id: 3 },
+    { name: "Staff", id: 4 },
+    { name: "Client", id: 5 },
+  ];
+  for (const role of roles) {
+    const createData = role.id !== undefined ? { id: role.id, name: role.name } : { name: role.name };
+    await prisma.role.upsert({ where: { name: role.name }, update: {}, create: createData });
+    console.log(`Seeded role: ${role.name}`);
   }
   console.log("Seeded all roles successfully");
 
-  // Seed audit permissions
-  const auditPermissions = Object.values(AUDIT_PERMISSIONS).map((action) => ({
-    action,
-  }));
-  await prisma.permission.createMany({
-    data: auditPermissions,
-    skipDuplicates: true,
-  });
-  console.log("Seeded audit permissions successfully");
-
-  // Seed task permissions
-  const taskPermissions = Object.values(TASK_PERMISSIONS).map((action) => ({
-    action,
-  }));
-  await prisma.permission.createMany({
-    data: taskPermissions,
-    skipDuplicates: true,
-  });
-  console.log("Seeded task permissions successfully");
-
-  // Seed document permissions
-  const documentPermissions = Object.values(DOCUMENT_PERMISSIONS).map(
-    (action) => ({ action })
-  );
-  await prisma.permission.createMany({
-    data: documentPermissions,
-    skipDuplicates: true,
-  });
-  console.log("Seeded document permissions successfully");
-
-  // Assign permissions to roles
-  const [adminRole, managerRole, auditorRole] = await Promise.all([
-    prisma.role.findUnique({ where: { name: "Admin" } }),
-    prisma.role.findUnique({ where: { name: "Manager" } }),
-    prisma.role.findUnique({ where: { name: "Auditor" } }),
-  ]);
-
-  const allPermissions = await prisma.permission.findMany({
-    where: { action: { in: auditPermissions.map((p) => p.action) } },
-  });
-  const auditorActions: string[] = [
-    AUDIT_PERMISSIONS.GET_BY_CLIENT_ID,
-    AUDIT_PERMISSIONS.GET_BY_ID,
-  ];
-  const auditorPermissions = allPermissions.filter((p) =>
-    auditorActions.includes(p.action)
-  );
-
-  // Create role-permission mappings
-  const rolePermissionData = [
-    // Admin gets all permissions
-    ...allPermissions.map((p) => ({
-      roleId: adminRole!.id,
-      permissionId: p.id,
-    })),
-    // Manager gets all audit permissions
-    ...allPermissions.map((p) => ({
-      roleId: managerRole!.id,
-      permissionId: p.id,
-    })),
-    // Auditor only gets read permissions
-    ...auditorPermissions.map((p) => ({
-      roleId: auditorRole!.id,
-      permissionId: p.id,
-    })),
-  ];
-  await prisma.rolePermission.createMany({
-    data: rolePermissionData,
-    skipDuplicates: true,
-  });
-  console.log("Assigned audit permissions to roles successfully");
+  // Permissions seeding removed per new useAbility system
 }
 
 main()

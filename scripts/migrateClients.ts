@@ -182,6 +182,13 @@ async function main() {
     defaultAuditStatusName.toLowerCase()
   );
 
+  // Create normalized auditStagesMap for matching names without hyphens/spaces
+  const auditStagesMapNormalized = new Map<string, number>();
+  auditStagesMap.forEach((id, name) => {
+    const normalized = name.replace(/[-\s]/g, "");
+    auditStagesMapNormalized.set(normalized, id);
+  });
+
   if (!defaultStatusId) {
     console.error(
       `Default Audit Status "${defaultAuditStatusName}" not found.`
@@ -211,6 +218,12 @@ async function main() {
         const clientStatus = ["active", "archived", "prospect"].includes(clientStatusRaw)
           ? (clientStatusRaw as ClientStatus)
           : "active";
+        // Determine actual CSV 'Fees' header key, trimming whitespace
+        const feesKey = Object.keys(record).find((k) => k.trim().toLowerCase() === "fees");
+        const feesValue = feesKey ? record[feesKey]?.trim() : undefined;
+        const estAnnFeesVal = feesValue
+          ? parseFloat(feesValue.replace(/[",\s]/g, ""))
+          : null;
         const client = await tx.client.create({
           data: {
             clientName: clientName,
@@ -221,9 +234,7 @@ async function main() {
             status: clientStatus,
             auditMonthEnd: monthToNumber(record["Audit End"]),
             nextContactDate: parseCsvDate(record["Next Contact"]),
-            estAnnFees: record["Fees"]
-              ? parseFloat(record["Fees"].replace(/[,"\s]/g, ""))
-              : null,
+            estAnnFees: estAnnFeesVal,
             // softwareAccess field removed from Client model
           },
         });
@@ -448,23 +459,16 @@ async function main() {
             ? 2000 + parseInt(auditYearMatch[1])
             : parseInt(auditYearMatch[1])
           : new Date().getFullYear();
-        // Map audit stage and status from new CSV columns
-        const stageNameRaw = record["Audit Stage"]?.trim().toLowerCase();
-        let stageId: number | undefined;
-        if (stageNameRaw) {
-          if (
-            stageNameRaw.includes("final audit") ||
-            stageNameRaw.includes("year-end audit")
-          ) {
-            stageId = auditStagesMap.get("year-end audit");
-          } else if (stageNameRaw.includes("1st interim")) {
-            stageId = auditStagesMap.get("1st interim review");
-          } else if (stageNameRaw.includes("2nd interim")) {
-            stageId = auditStagesMap.get("2nd interim review");
-          } else {
-            stageId = auditStagesMap.get("planning");
-          }
-          if (!stageId) console.warn(`Could not map Audit Stage "${record["Audit Stage"]}"`);
+        // Map Audit Stage using normalization
+        const rawStage = record["Audit Stage"]?.trim().toLowerCase() || "";
+        let stageId: number | undefined = auditStagesMap.get(rawStage);
+        if (!stageId && rawStage) {
+          // Try normalized match without spaces or hyphens
+          const normRaw = rawStage.replace(/[-\s]/g, "");
+          stageId = auditStagesMapNormalized.get(normRaw);
+        }
+        if (!stageId) {
+          console.warn(`Could not map Audit Stage "${record["Audit Stage"]}" (raw: ${rawStage})`);
         }
         let reportDueDate: Date | null = null;
         const auditMonthEndNum = monthToNumber(record["Audit End"]);
