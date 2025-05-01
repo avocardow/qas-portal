@@ -23,6 +23,7 @@ async function main() {
 
   // Seed Audit Stages with explicit IDs
   const auditStages = [
+    { id: 0, name: 'Onboarding', description: 'Initial setup and preparation tasks before the audit starts' },
     { id: 1, name: 'Planning', description: 'Initial planning and risk assessment' },
     { id: 2, name: '1st Interim Review', description: 'First periodic review during the year' },
     { id: 3, name: '2nd Interim Review', description: 'Second periodic review during the year' },
@@ -41,6 +42,7 @@ async function main() {
 
   // Seed Audit Statuses with explicit IDs
   const auditStatuses = [
+    { id: 0, name: 'Awaiting Appointment', description: 'Audit scheduled but awaiting initial engagement meeting' },
     { id: 1, name: 'Not Started', description: 'Audit cycle initiated but work not commenced' },
     { id: 2, name: 'In Progress', description: 'Actively working on the current stage' },
     { id: 3, name: 'Awaiting Documents', description: 'Waiting for information/documents from the client' },
