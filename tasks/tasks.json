@@ -117,7 +117,7 @@
           "id": 3,
           "title": "Implement the getById tRPC procedure",
           "description": "Create the tRPC procedure that accepts a clientId parameter and returns the client data",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2
@@ -128,7 +128,7 @@
           "id": 4,
           "title": "Connect tRPC router to Next.js App Router",
           "description": "Ensure the clients router is properly connected to the main tRPC router and exposed via the API route",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -138,7 +138,7 @@
           "id": 5,
           "title": "Create client data fetching hooks",
           "description": "Implement React hooks for fetching client data using the tRPC client",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             4
           ],

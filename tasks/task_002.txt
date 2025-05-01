@@ -23,19 +23,19 @@ Create a new router file (e.g., 'app/server/routers/clients.ts') that will conta
 ### Details:
 In the clients router, create a helper function that constructs the Prisma query to fetch a client by ID. Include all required relations in the include object: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Initially fetch all fields for each relation to allow for refinement later. Structure the query to handle potential null values and optimize for performance.
 
-## 3. Implement the getById tRPC procedure [pending]
+## 3. Implement the getById tRPC procedure [done]
 ### Dependencies: 2.1, 2.2
 ### Description: Create the tRPC procedure that accepts a clientId parameter and returns the client data
 ### Details:
 Implement the getById procedure using tRPC's query method. Use zod to validate the input parameter (clientId). Call the Prisma query function created in the previous subtask. Implement proper error handling for cases like invalid IDs or database errors. Return the full client object with all relations. The procedure should be defined as: publicProcedure.input(z.object({ clientId: z.string() })).query(async ({ input }) => { /* implementation */ }).
 
-## 4. Connect tRPC router to Next.js App Router [pending]
+## 4. Connect tRPC router to Next.js App Router [done]
 ### Dependencies: 2.3
 ### Description: Ensure the clients router is properly connected to the main tRPC router and exposed via the API route
 ### Details:
 Import the clients router in your main router file and merge it with other routers. Ensure the API route handler at 'app/api/trpc/[trpc]/route.ts' is properly set up to handle the new client queries. Test the endpoint by navigating to the appropriate URL (e.g., http://localhost:3000/api/trpc/clients.getById) with the required parameters to verify it's working correctly.
 
-## 5. Create client data fetching hooks [pending]
+## 5. Create client data fetching hooks [in-progress]
 ### Dependencies: 2.4
 ### Description: Implement React hooks for fetching client data using the tRPC client
 ### Details:
