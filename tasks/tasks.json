@@ -22,7 +22,7 @@
           "id": 2,
           "title": "Implement responsive TailAdmin grid layout",
           "description": "Set up the responsive grid layout structure using TailAdmin components",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
