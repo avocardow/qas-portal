@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Client Data Fetching
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Set up tRPC call to fetch all client data with related entities using Prisma relations.
@@ -11,13 +11,13 @@ Implement the tRPC call `api.clients.getById({ clientId })` with all required Pr
 Test API call with various client IDs. Verify all related entities are properly loaded. Check error handling for non-existent clients or server errors.
 
 # Subtasks:
-## 1. Create tRPC router for client queries [pending]
+## 1. Create tRPC router for client queries [done]
 ### Dependencies: None
 ### Description: Set up the basic tRPC router structure for client-related queries
 ### Details:
 Create a new router file (e.g., 'app/server/routers/clients.ts') that will contain all client-related procedures. Initialize the router with the publicProcedure from your tRPC setup. This will serve as the foundation for implementing the getById procedure. Make sure to export the router properly so it can be merged with your main router.
 
-## 2. Define Prisma query with all required relations [pending]
+## 2. Define Prisma query with all required relations [in-progress]
 ### Dependencies: 2.1
 ### Description: Implement the Prisma query that fetches a client by ID with all required relations
 ### Details:

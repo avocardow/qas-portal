@@ -254,17 +254,20 @@ describe("clientRouter getById", () => {
     ctx.db.client.findUniqueOrThrow.mockResolvedValue(dummyClientData);
     const caller = callClient(ctx);
     const resultAdmin = await caller.getById({ clientId: dummyClientId });
-    expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith({
-      where: { id: dummyClientId },
-      include: {
-        contacts: true,
-        licenses: true,
-        trustAccounts: true,
-        audits: true,
-        activityLogs: true,
-        notes: true,
-      },
-    });
+    expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: dummyClientId },
+        include: expect.objectContaining({
+          contacts: true,
+          licenses: true,
+          trustAccounts: true,
+          audits: true,
+          activityLogs: true,
+          notes: true,
+          documents: true,
+        }),
+      })
+    );
     expect(resultAdmin).toEqual(dummyClientData);
 
     ctx.session.user.role = "Manager";

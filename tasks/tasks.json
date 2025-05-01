@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Setup Client Profile Page Structure",
       "description": "Create the basic page structure for the client profile at the specified path with routing and layout components.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "Create the page file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Set up the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Include `PageBreadcrumb` component at the top. Implement the basic page structure with placeholder sections for all the required components (KPI cards, tables, charts, etc.). Follow Cursor rules for code styling and component usage.",
@@ -42,7 +42,7 @@
           "id": 4,
           "title": "Create placeholder sections for KPI cards",
           "description": "Set up the structure for KPI cards section with appropriate grid positioning",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -52,7 +52,7 @@
           "id": 5,
           "title": "Implement placeholder sections for tables",
           "description": "Create the structure for data tables with proper grid positioning",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -62,7 +62,7 @@
           "id": 6,
           "title": "Add placeholder sections for charts",
           "description": "Create the structure for chart components with proper grid positioning",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -72,7 +72,7 @@
           "id": 7,
           "title": "Integrate layout components and finalize page structure",
           "description": "Connect all placeholder sections and ensure proper layout integration",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3,
             4,
@@ -87,7 +87,7 @@
       "id": 2,
       "title": "Implement Client Data Fetching",
       "description": "Set up tRPC call to fetch all client data with related entities using Prisma relations.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         1
       ],
@@ -99,7 +99,7 @@
           "id": 1,
           "title": "Create tRPC router for client queries",
           "description": "Set up the basic tRPC router structure for client-related queries",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create a new router file (e.g., 'app/server/routers/clients.ts') that will contain all client-related procedures. Initialize the router with the publicProcedure from your tRPC setup. This will serve as the foundation for implementing the getById procedure. Make sure to export the router properly so it can be merged with your main router."
         },
@@ -107,7 +107,7 @@
           "id": 2,
           "title": "Define Prisma query with all required relations",
           "description": "Implement the Prisma query that fetches a client by ID with all required relations",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],

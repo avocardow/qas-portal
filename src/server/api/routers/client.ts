@@ -159,6 +159,7 @@ export const clientRouter = createTRPCRouter({
             audits: true,
             activityLogs: true,
             notes: true,
+            documents: true,
           },
         });
       }
@@ -175,6 +176,7 @@ export const clientRouter = createTRPCRouter({
           audits: true,
           activityLogs: true,
           notes: true,
+          documents: true,
         },
       });
     }),

@@ -136,6 +136,7 @@ export default function ClientDetailPage() {
       className="max-w-4xl"
     >
       <div className="gap-6 space-y-5 sm:space-y-6 xl:grid xl:grid-cols-12 xl:space-y-0">
+        {/* Header spanning full width */}
         <div className="xl:col-span-12">
           <PageBreadcrumb pageTitle={client.clientName} />
           <div className="mb-4 flex justify-end space-x-2">
@@ -168,6 +169,9 @@ export default function ClientDetailPage() {
               </button>
             )}
           </div>
+        </div>
+        {/* KPI Cards in left column */}
+        <div className="xl:col-span-4">
           <ComponentCard title="KPI Cards">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
@@ -176,6 +180,9 @@ export default function ClientDetailPage() {
               <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
             </div>
           </ComponentCard>
+        </div>
+        {/* Client Details in right column */}
+        <div className="xl:col-span-8">
           <ComponentCard title="Client Details">
             {/* Tabs Navigation */}
             <div className="border-b border-gray-200 dark:border-gray-800">

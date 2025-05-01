@@ -221,6 +221,7 @@ describe("clientRouter query logic and data transformations", () => {
           audits: true,
           activityLogs: true,
           notes: true,
+          documents: true,
         },
       });
     });
@@ -244,6 +245,7 @@ describe("clientRouter query logic and data transformations", () => {
           audits: true,
           activityLogs: true,
           notes: true,
+          documents: true,
         },
       });
     });
