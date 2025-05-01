@@ -21,42 +21,42 @@ async function main() {
   }
   console.log("Seeded all roles successfully");
 
-  // Seed Audit Stages
+  // Seed Audit Stages with explicit IDs
   const auditStages = [
-    { name: 'Planning', displayOrder: 1, description: 'Initial planning and risk assessment' },
-    { name: '1st Interim Review', displayOrder: 2, description: 'First periodic review during the year' },
-    { name: '2nd Interim Review', displayOrder: 3, description: 'Second periodic review during the year' },
-    { name: 'Year-End Audit', displayOrder: 4, description: 'Final audit procedures for the year end' },
-    { name: 'Reporting', displayOrder: 5, description: 'Preparation and finalization of the audit report' },
-    { name: 'Post-Audit', displayOrder: 6, description: 'Follow-up and completion tasks' },
+    { id: 1, name: 'Planning', displayOrder: 1, description: 'Initial planning and risk assessment' },
+    { id: 2, name: '1st Interim Review', displayOrder: 2, description: 'First periodic review during the year' },
+    { id: 3, name: '2nd Interim Review', displayOrder: 3, description: 'Second periodic review during the year' },
+    { id: 4, name: 'Year-End Audit', displayOrder: 4, description: 'Final audit procedures for the year end' },
+    { id: 5, name: 'Reporting', displayOrder: 5, description: 'Preparation and finalization of the audit report' },
+    { id: 6, name: 'Post-Audit', displayOrder: 6, description: 'Follow-up and completion tasks' },
   ];
   for (const stage of auditStages) {
     await prisma.auditStage.upsert({
       where: { name: stage.name },
       update: { displayOrder: stage.displayOrder, description: stage.description },
-      create: stage,
+      create: { id: stage.id, name: stage.name, displayOrder: stage.displayOrder, description: stage.description },
     });
     console.log(`Seeded audit stage: ${stage.name}`);
   }
 
-  // Seed Audit Statuses
+  // Seed Audit Statuses with explicit IDs
   const auditStatuses = [
-    { name: 'Not Started', description: 'Audit cycle initiated but work not commenced' },
-    { name: 'In Progress', description: 'Actively working on the current stage' },
-    { name: 'Awaiting Documents', description: 'Waiting for information/documents from the client' },
-    { name: 'Information Received', description: 'Documents received, ready for processing/review' },
-    { name: 'Queries Sent', description: 'Questions or requests for clarification sent to client' },
-    { name: 'In Review', description: 'Internal review of workpapers/findings' },
-    { name: 'Awaiting Payment', description: 'Waiting for invoice payment before proceeding/lodging' },
-    { name: 'Ready to Lodge', description: 'Audit complete, report finalized, ready for OFT submission' },
-    { name: 'Lodged with OFT', description: 'Audit report submitted to the Office of Fair Trading' },
-    { name: 'Completed', description: 'Audit cycle fully completed for the year' },
+    { id: 1, name: 'Not Started', description: 'Audit cycle initiated but work not commenced' },
+    { id: 2, name: 'In Progress', description: 'Actively working on the current stage' },
+    { id: 3, name: 'Awaiting Documents', description: 'Waiting for information/documents from the client' },
+    { id: 4, name: 'Information Received', description: 'Documents received, ready for processing/review' },
+    { id: 5, name: 'Queries Sent', description: 'Questions or requests for clarification sent to client' },
+    { id: 6, name: 'In Review', description: 'Internal review of workpapers/findings' },
+    { id: 7, name: 'Awaiting Payment', description: 'Waiting for invoice payment before proceeding/lodging' },
+    { id: 8, name: 'Ready to Lodge', description: 'Audit complete, report finalized, ready for OFT submission' },
+    { id: 9, name: 'Lodged with OFT', description: 'Audit report submitted to the Office of Fair Trading' },
+    { id: 10, name: 'Completed', description: 'Audit cycle fully completed for the year' },
   ];
   for (const status of auditStatuses) {
     await prisma.auditStatus.upsert({
       where: { name: status.name },
       update: { description: status.description },
-      create: status,
+      create: { id: status.id, name: status.name, description: status.description },
     });
     console.log(`Seeded audit status: ${status.name}`);
   }
