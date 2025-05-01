@@ -23,7 +23,7 @@ Create the file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.ts
 ### Details:
 Implement the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Create the main container div with appropriate TailAdmin classes. Set up responsive breakpoints for different screen sizes (sm, md, lg, xl). Ensure the layout follows the Cursor code styling rules. Add appropriate padding, margins, and gap settings for the grid layout.
 
-## 3. Add PageBreadcrumb component [pending]
+## 3. Add PageBreadcrumb component [done]
 ### Dependencies: 1.2
 ### Description: Integrate the PageBreadcrumb component at the top of the page
 ### Details:

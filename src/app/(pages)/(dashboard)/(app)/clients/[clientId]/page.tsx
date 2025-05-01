@@ -168,6 +168,14 @@ export default function ClientDetailPage() {
               </button>
             )}
           </div>
+          <ComponentCard title="KPI Cards">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+              <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+              <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+              <div className="h-20 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+            </div>
+          </ComponentCard>
           <ComponentCard title="Client Details">
             {/* Tabs Navigation */}
             <div className="border-b border-gray-200 dark:border-gray-800">

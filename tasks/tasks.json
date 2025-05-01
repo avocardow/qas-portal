@@ -32,7 +32,7 @@
           "id": 3,
           "title": "Add PageBreadcrumb component",
           "description": "Integrate the PageBreadcrumb component at the top of the page",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
