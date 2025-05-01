@@ -1,0 +1,55 @@
+# Task ID: 4
+# Title: Build Audit Progress and Schedule Components
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Create the audit cycle progress bar and upcoming audit schedule components.
+# Details:
+Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for date formatting as referenced in Context7.
+
+# Test Strategy:
+Test progress calculation logic with various date ranges. Verify schedule displays correctly with different audit statuses. Check date formatting across browsers.
+
+# Subtasks:
+## 1. Set up TailAdmin progress bar component structure [pending]
+### Dependencies: None
+### Description: Create the base structure for the Audit Cycle Progress Bar component using TailAdmin's progress-bar component
+### Details:
+Create a new React component file for the Audit Cycle Progress Bar. Import the necessary TailAdmin progress bar component from the component library. Set up the component's basic structure with props for current progress percentage, last audit date, and next audit due date. The progress bar should be responsive and follow the TailAdmin styling guidelines with appropriate background colors and rounded corners.
+
+## 2. Implement progress calculation logic [pending]
+### Dependencies: 4.1
+### Description: Create utility functions to calculate progress percentage between last audit's reportDueDate and next due date
+### Details:
+Develop a utility function that takes the last audit's reportDueDate and the next audit due date as inputs and calculates the current progress as a percentage. The calculation should handle edge cases such as when the dates are invalid or when the current date is outside the expected range. Implement proper date handling using JavaScript's Date object. The function should return a value between 0-100 representing the percentage completion of the audit cycle.
+
+## 3. Add date formatting with Intl.DateTimeFormat [pending]
+### Dependencies: 4.2
+### Description: Implement date formatting utilities using Intl.DateTimeFormat for consistent date display
+### Details:
+Create a utility function that uses Intl.DateTimeFormat to format dates consistently throughout the components. Configure the formatter with appropriate locale and formatting options (day, month, year, etc.). Ensure the function handles different date formats and edge cases gracefully. This utility will be used for displaying dates in both the progress bar and upcoming schedule components.
+
+## 4. Complete Audit Cycle Progress Bar component [pending]
+### Dependencies: 4.1, 4.2, 4.3
+### Description: Finalize the progress bar component with labels, tooltips, and responsive design
+### Details:
+Enhance the progress bar component with labels showing the last audit date and next due date using the date formatting utility. Add tooltips to display additional information when users hover over different parts of the progress bar. Implement responsive design to ensure the component displays correctly on different screen sizes. Add appropriate accessibility attributes (aria-* tags) and ensure the component meets accessibility standards.
+
+## 5. Create Upcoming Audit Schedule card structure [pending]
+### Dependencies: 4.3
+### Description: Set up the base structure for the Upcoming Audit Schedule component based on CRM UpcomingSchedule
+### Details:
+Create a new React component for the Upcoming Audit Schedule card, following the design pattern of the CRM UpcomingSchedule component. Set up the card container with appropriate styling, header, and content areas. Implement the component to accept an array of upcoming audit milestones as props. Use TailAdmin card components and styling guidelines to maintain consistency with the rest of the dashboard.
+
+## 6. Implement milestone listing functionality [pending]
+### Dependencies: 4.5
+### Description: Develop the functionality to list and display upcoming audit milestones in chronological order
+### Details:
+Implement the logic to sort and display upcoming audit milestones in chronological order. Each milestone should display the event name, date (formatted using the date formatting utility), and any additional relevant information. Add visual indicators for different types of milestones (e.g., planning meetings, fieldwork, report deadlines). Implement conditional styling to highlight imminent milestones or those requiring attention.
+
+## 7. Integrate components with data sources and test [pending]
+### Dependencies: 4.4, 4.6
+### Description: Connect the components to data sources and perform comprehensive testing
+### Details:
+Integrate both components with the appropriate data sources to fetch audit dates and milestones. Implement data fetching logic with proper error handling and loading states. Test the components with various data scenarios including edge cases (no data, past due dates, etc.). Verify that the progress calculation works correctly across different audit cycle timeframes. Ensure both components render correctly and maintain performance when integrated into the larger application.
+

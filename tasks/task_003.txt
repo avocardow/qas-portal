@@ -1,0 +1,102 @@
+# Task ID: 3
+# Title: Develop KPI Cards and Charts
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Create the financial KPI cards and charts at the top of the profile page.
+# Details:
+Implement the following KPI components using TailAdmin's ComponentCard and chart components: 1) Lifetime Fees Card with sparkline trend, 2) YoY Growth Chart using TailAdmin's chart component, 3) Customer Health Score with colored ribbon, 4) Client Manager Card showing assigned team member. Use the useAbility hook to gate sensitive financial data (estAnnFees) to Admin users only. Include billing commentary from activityLog entries for Admins.
+
+# Test Strategy:
+Verify charts render correctly with sample data. Test permission gating for sensitive fields. Check responsive design of cards at different breakpoints.
+
+# Subtasks:
+## 1. Create Base KPI Card Components with Data Access Control [pending]
+### Dependencies: None
+### Description: Implement the foundational KPI card components with proper data access control using the useAbility hook to gate sensitive financial information for Admin users only.
+### Details:
+1. Create a reusable KPICard component that extends TailAdmin's ComponentCard with the following features:
+   - Configurable title, value, and optional unit display
+   - Support for sparkline/trend visualization
+   - Color-coded indicators for positive/negative values
+   - Responsive design for all screen sizes
+
+2. Implement the useAbility hook integration to gate sensitive financial data:
+   - Create a withFinancialDataAccess HOC or custom hook that checks user permissions
+   - Apply conditional rendering for estAnnFees and other sensitive data
+   - Implement fallback UI for non-admin users (e.g., 'Restricted' message or simplified view)
+
+3. Build the specific KPI card implementations:
+   - Lifetime Fees Card with sparkline trend visualization
+   - Customer Health Score card with colored ribbon indicator
+   - Client Manager Card showing assigned team member
+
+4. Set up unit tests for the components:
+   - Test rendering with and without admin permissions
+   - Test conditional display of sensitive data
+   - Test responsive behavior
+
+Use TailAdmin's existing component structure for consistency while ensuring the cards follow best practices for KPI visualization with clear, uncluttered presentation of metrics.
+
+## 2. Implement YoY Growth Chart Component [pending]
+### Dependencies: 3.1
+### Description: Create the Year-over-Year Growth chart component using TailAdmin's chart components with appropriate visualizations for financial trend data.
+### Details:
+1. Analyze TailAdmin's chart component capabilities and select the appropriate chart type for YoY growth visualization:
+   - Bar chart for month-by-month comparison
+   - Line chart for continuous trend visualization
+   - Consider dual-axis chart if comparing multiple metrics
+
+2. Implement the YoY Growth Chart component:
+   - Create a wrapper around TailAdmin's chart component
+   - Configure appropriate axes, legends, and tooltips
+   - Implement responsive sizing based on container width
+   - Add interactive elements (hover states, tooltips with detailed data)
+
+3. Add data transformation utilities:
+   - Create functions to format raw financial data for chart consumption
+   - Implement percentage calculation for YoY comparisons
+   - Add support for different time period comparisons (YoY, QoQ, MoM)
+
+4. Implement performance optimizations:
+   - Use React.memo to prevent unnecessary re-renders
+   - Implement data memoization for expensive calculations
+   - Consider lazy loading for the chart component
+
+5. Write tests for the chart component:
+   - Test rendering with various data scenarios
+   - Test responsiveness and resize behavior
+   - Test data transformation functions
+
+Ensure the chart follows financial data visualization best practices with clear labeling, appropriate color schemes for financial data, and tooltips that provide context for the displayed metrics.
+
+## 3. Integrate Billing Commentary and Finalize KPI Dashboard Layout [pending]
+### Dependencies: 3.1, 3.2
+### Description: Integrate billing commentary from activityLog entries for Admin users and finalize the layout of all KPI components at the top of the profile page.
+### Details:
+1. Implement the billing commentary feature for Admin users:
+   - Create a BillingCommentary component that filters activityLog entries related to billing
+   - Apply the useAbility hook to ensure only Admin users can view this component
+   - Design an expandable/collapsible interface for detailed commentary
+   - Implement sorting by date with most recent comments first
+
+2. Create a responsive grid layout for the KPI dashboard:
+   - Arrange KPI cards in a responsive grid at the top of the profile page
+   - Position the YoY Growth Chart prominently
+   - Ensure proper spacing and alignment between components
+   - Implement breakpoints for different screen sizes (desktop, tablet, mobile)
+
+3. Add final integration and state management:
+   - Connect all components to their respective data sources
+   - Implement loading states and error handling
+   - Add refresh functionality for real-time data updates
+   - Ensure consistent styling across all KPI components
+
+4. Implement comprehensive testing:
+   - Create integration tests for the complete KPI dashboard
+   - Test the dashboard with different user roles and permissions
+   - Verify responsive behavior across different viewport sizes
+   - Test data refresh and error handling scenarios
+
+Finalize the implementation by ensuring all components maintain visual consistency with TailAdmin's design system, follow accessibility best practices (WCAG compliance), and provide a cohesive user experience that highlights the most important financial KPIs at a glance.
+

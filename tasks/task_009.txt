@@ -1,0 +1,31 @@
+# Task ID: 9
+# Title: Build Compliance Components
+# Status: pending
+# Dependencies: 2
+# Priority: low
+# Description: Create the regulatory checklist, alerts, and meeting minutes components.
+# Details:
+Implement the Regulatory Checklist showing compliance items with check marks. Create Alerts & Warnings for missing or expired documentation and upcoming license renewals. Build the Meeting Minutes Panel for recording audit meeting notes with auto-append to activity log. Implement Email Thread Panel to embed the last 3 client email threads via Outlook/Gmail integration.
+
+# Test Strategy:
+Test checklist state changes. Verify alerts trigger correctly based on document status. Test meeting minutes recording and verify they appear in the activity log.
+
+# Subtasks:
+## 1. Implement Regulatory Checklist Component [pending]
+### Dependencies: None
+### Description: Create a component that displays compliance items with check marks and status indicators
+### Details:
+Develop a checklist component that shows regulatory compliance items with their current status. The component should include: 1) A data model to store compliance items with attributes like item name, status (compliant/non-compliant), due date, and last check date; 2) A UI interface with checkboxes, status indicators (using color coding for quick visual reference), and the ability to filter items by category or status; 3) Functionality to mark items as complete or incomplete with timestamp tracking; 4) Integration with the backend API to fetch and update compliance data. Consider implementing a progress indicator showing overall compliance percentage. The component should follow the application's design system and be responsive for different screen sizes.
+
+## 2. Build Alerts & Warnings System [pending]
+### Dependencies: 9.1
+### Description: Develop notification components for missing documentation, expired items, and upcoming renewals
+### Details:
+Create an alerts and warnings system that monitors compliance status and notifies users of issues. Implementation should include: 1) A notification engine that checks for missing documentation, expired items, and upcoming license renewals based on predefined rules and timeframes; 2) A visual alert component with priority levels (high/medium/low) and appropriate styling for each level; 3) A dashboard widget showing a summary of current alerts with the ability to expand for details; 4) Functionality to dismiss or snooze alerts with audit logging of these actions; 5) Configuration options for alert thresholds (e.g., warn 30/60/90 days before expiration). The alerts should be persistent until resolved and should refresh automatically when underlying data changes.
+
+## 3. Develop Meeting Minutes and Email Integration Panels [pending]
+### Dependencies: 9.1, 9.2
+### Description: Create components for recording audit meeting notes and displaying recent client email communications
+### Details:
+Implement two related panels for communication tracking: 1) Meeting Minutes Panel with rich text editor for recording audit meeting notes, auto-saving capability, participant tagging, action item assignment, and automatic appending to the activity log with timestamps; 2) Email Thread Panel that connects to Outlook/Gmail APIs to fetch and display the last 3 client email threads, including sender/recipient information, timestamps, subject lines, and message previews with the ability to expand full messages. Both panels should share a common design language and include search/filter capabilities. For the email integration, implement proper authentication handling, caching for performance, and privacy controls to ensure only authorized users can view email content. The panels should be collapsible and resizable to fit different workflow needs.
+

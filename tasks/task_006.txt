@@ -1,0 +1,49 @@
+# Task ID: 6
+# Title: Develop Trust Accounts Table and Software Links
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Create the trust accounts table with software integration links.
+# Details:
+Implement the Trust Accounts Table using DataTableTwo with columns for Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Add 'Open in Xero' or 'Open in SharePoint' action buttons in each trust account row, linking to the account's management software or external feed.
+
+# Test Strategy:
+Test table with various trust account configurations. Verify external links open correctly. Test responsive behavior of the table on different screen sizes.
+
+# Subtasks:
+## 1. Create DataTableTwo schema for Trust Accounts [pending]
+### Dependencies: None
+### Description: Define the data structure for the Trust Accounts table with all required columns and data types
+### Details:
+Implement the DataTableTwo schema with the following columns: Account Name (string), Bank Name (string), BSB (string), Account Number (string), Software Access badge (boolean), Last Reconciliation Date (date), Management Software (string), and Software URL (string). Define appropriate data types, validation rules, and default values for each column. Ensure the schema supports filtering and sorting operations that will be needed for the table view.
+
+## 2. Implement data fetching and storage logic [pending]
+### Dependencies: 6.1
+### Description: Create the backend services to fetch, store, and update trust account data
+### Details:
+Develop the data service that will handle CRUD operations for trust accounts. Implement methods to fetch trust account data from the database, create new accounts, update existing accounts, and delete accounts when needed. Include error handling and validation logic. If using SharePoint as a data source, implement the SharePoint REST API calls to interact with the SharePoint lists that store trust account data. Ensure proper authentication and authorization checks are in place.
+
+## 3. Build Trust Accounts Table UI component [pending]
+### Dependencies: 6.1, 6.2
+### Description: Create the DataTableTwo component to display trust accounts with all required columns
+### Details:
+Implement the UI component using DataTableTwo to display trust accounts. Configure the table with all columns defined in the schema. Implement sorting, filtering, and pagination features. Style the table according to design specifications, including the Software Access badge visual indicator. Ensure the table is responsive and accessible. Add empty state handling and loading indicators for better user experience.
+
+## 4. Implement software integration links logic [pending]
+### Dependencies: 6.2
+### Description: Create the logic to generate and validate external software links
+### Details:
+Develop the service to generate valid links to external software systems (Xero, SharePoint) based on the managementSoftware and softwareUrl fields. Implement URL validation and security checks. Create helper functions to format URLs with proper parameters and authentication tokens if needed. For SharePoint links, use the SharePoint high-trust configuration to ensure secure access. For Xero, implement the appropriate API authentication flow. Include error handling for cases where links cannot be generated.
+
+## 5. Add action buttons with software links [pending]
+### Dependencies: 6.3, 6.4
+### Description: Implement 'Open in Xero' and 'Open in SharePoint' action buttons in each table row
+### Details:
+Extend the DataTableTwo component to include action buttons in each row. Implement conditional rendering to show 'Open in Xero' or 'Open in SharePoint' buttons based on the managementSoftware field. Connect the buttons to the software integration links logic to generate the correct URLs. Add click handlers that open the links in a new tab/window. Implement visual feedback for button interactions (hover, active states). Ensure buttons are only enabled for users with appropriate permissions.
+
+## 6. Implement last reconciliation date tracking [pending]
+### Dependencies: 6.2, 6.3
+### Description: Add functionality to track and update the last reconciliation date for trust accounts
+### Details:
+Implement the logic to track when trust accounts were last reconciled. Create a mechanism to update the last reconciliation date field when reconciliation actions are performed. Add visual indicators in the table to highlight accounts that haven't been reconciled recently (e.g., color coding or warning icons for accounts past a certain threshold). Include sorting capability to allow users to sort by reconciliation date. Add filtering options to show only accounts that need reconciliation.
+

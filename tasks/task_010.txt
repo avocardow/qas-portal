@@ -1,0 +1,31 @@
+# Task ID: 10
+# Title: Implement Action Buttons and Client Value Projection
+# Status: pending
+# Dependencies: 3, 7
+# Priority: low
+# Description: Create the action buttons and client lifetime value projection components.
+# Details:
+Implement Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Use the useAbility hook to gate the Archive action with the clients.archive permission. Create the Client Lifetime Value Projection chart to forecast next year's fees based on past trends.
+
+# Test Strategy:
+Test each action button functionality. Verify Archive confirmation modal works and updates client.status correctly. Test permission gating for restricted actions. Verify projection calculations with various historical data patterns.
+
+# Subtasks:
+## 1. Implement Action Buttons with Permission Gating [pending]
+### Dependencies: None
+### Description: Create reusable action button components for quick actions (Add Contact, Link Bank Feed, Request Document, Schedule Audit, Archive Client). Integrate the useAbility hook to gate the Archive Client button based on the clients.archive permission, and implement a confirmation modal for the Archive action.
+### Details:
+Define a reusable Button component, ensuring proper event handling and styling for each action. Place these buttons within the client UI, using the useAbility hook to conditionally render or disable the Archive Client button based on user permissions. For the Archive action, trigger a modal dialog to confirm the user's intent before proceeding. Reference React button best practices for accessibility and maintainability[3][5].
+
+## 2. Integrate Action Buttons into the Client Card or Dashboard [pending]
+### Dependencies: 10.1
+### Description: Embed the action buttons into the appropriate client-facing component, such as a client card or dashboard, ensuring a cohesive and accessible layout.
+### Details:
+Update the client card or dashboard component to include the action buttons in a visually organized manner, using a container (e.g., a div with an action button group class). Ensure spacing, alignment, and responsive design. Test that each button triggers the correct handler and that the Archive button respects permission gating and confirmation modal behavior[5].
+
+## 3. Develop Client Lifetime Value Projection Chart Component [pending]
+### Dependencies: 10.2
+### Description: Create a chart component that forecasts the client's next year's fees based on historical data and trends, and integrate it into the client view.
+### Details:
+Design and implement a chart (e.g., using a charting library like Chart.js or Recharts) that visualizes the client's historical fees and projects the next year's value using a suitable forecasting method (e.g., linear regression or moving average). Fetch and process the necessary data, and display the chart within the client dashboard or detail view, ensuring it complements the action buttons and overall UI.
+

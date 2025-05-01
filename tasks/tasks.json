@@ -2,595 +2,745 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Inventory Existing RBAC Usage",
-      "description": "Create a comprehensive inventory of all useRbac(), canAccess(), and rbacPolicy usages throughout the codebase to plan the migration strategy.",
-      "status": "done",
+      "title": "Setup Client Profile Page Structure",
+      "description": "Create the basic page structure for the client profile at the specified path with routing and layout components.",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "Use grep or similar tools to search the codebase for all instances of 'useRbac', 'canAccess', 'rbacPolicy', and other related terms. Create a spreadsheet or document listing each file, the specific usage pattern, and the permission strings being checked. Group findings by component type (buttons, pages, etc.) and complexity. Document any custom logic that might need special handling during migration.",
-      "testStrategy": "Validate the inventory by cross-checking with Context7 and manual code review to ensure no usage patterns are missed. The inventory should include file paths, line numbers, and the specific permission checks being performed.",
+      "details": "Create the page file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Set up the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Include `PageBreadcrumb` component at the top. Implement the basic page structure with placeholder sections for all the required components (KPI cards, tables, charts, etc.). Follow Cursor rules for code styling and component usage.",
+      "testStrategy": "Verify page renders without errors. Test responsive breakpoints to ensure layout collapses properly on mobile. Check that routing with dynamic [clientId] parameter works correctly.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set up automated code scanning tools",
-          "description": "Configure and set up code scanning tools to automatically identify RBAC-related patterns across the codebase",
-          "status": "done",
+          "title": "Create basic client profile page file with routing",
+          "description": "Set up the initial page file at the specified path with proper Next.js routing configuration",
+          "status": "pending",
           "dependencies": [],
-          "details": "Install and configure grep, ripgrep, or specialized code analysis tools to search for RBAC-related patterns. Create search patterns for 'useRbac()', 'canAccess()', 'rbacPolicy', and other authorization-related functions. Set up the tools to output results in a structured format (JSON or CSV) that can be easily imported into analysis tools. Include file paths, line numbers, and surrounding context in the output format. Test the scanning setup on a small subset of the codebase to verify accuracy."
+          "details": "Create the file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Implement the basic React component structure with proper TypeScript typing for the dynamic route parameter. Set up the page component to receive and validate the clientId parameter from the URL. Include proper export default statement and implement basic error handling for invalid client IDs."
         },
         {
           "id": 2,
-          "title": "Execute comprehensive codebase scan",
-          "description": "Run the configured scanning tools across the entire codebase to identify all instances of RBAC usage",
-          "status": "done",
+          "title": "Implement responsive TailAdmin grid layout",
+          "description": "Set up the responsive grid layout structure using TailAdmin components",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Execute the scanning tools across all repositories and branches that contain production code. Include both frontend and backend code in the scan. Ensure the scan covers all programming languages used in the project (JavaScript, TypeScript, etc.). Run additional targeted searches for indirect RBAC implementations that might use different naming conventions. Collect all scan results into a centralized location for analysis. Document any scanning errors or inaccessible code areas."
+          "details": "Implement the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Create the main container div with appropriate TailAdmin classes. Set up responsive breakpoints for different screen sizes (sm, md, lg, xl). Ensure the layout follows the Cursor code styling rules. Add appropriate padding, margins, and gap settings for the grid layout."
         },
         {
           "id": 3,
-          "title": "Create structured inventory database",
-          "description": "Develop a structured database or spreadsheet to catalog and categorize all RBAC usage findings",
-          "status": "done",
+          "title": "Add PageBreadcrumb component",
+          "description": "Integrate the PageBreadcrumb component at the top of the page",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Create a spreadsheet or database with columns for: file path, line number, function/method name, RBAC pattern type (useRbac, canAccess, etc.), permission strings being checked, component type (button, page, API endpoint, etc.), and additional notes. Import the scan results into this structure, cleaning and normalizing the data as needed. Add metadata fields for tracking migration status later. Create unique identifiers for each RBAC usage instance to reference during migration."
+          "details": "Import the `PageBreadcrumb` component from the shared components library. Configure the breadcrumb with the correct navigation path (Dashboard > Clients > Client Profile). Ensure the client name is dynamically displayed in the breadcrumb when available. Style the breadcrumb according to the design system with proper spacing above and below the component."
         },
         {
           "id": 4,
-          "title": "Analyze and categorize RBAC patterns",
-          "description": "Review the inventory to identify common patterns, group similar implementations, and categorize by complexity",
-          "status": "done",
+          "title": "Create placeholder sections for KPI cards",
+          "description": "Set up the structure for KPI cards section with appropriate grid positioning",
+          "status": "pending",
           "dependencies": [
-            3
+            2
           ],
-          "details": "Analyze the collected data to identify common RBAC implementation patterns. Group similar implementations together based on their structure and purpose. Categorize each instance by complexity (simple permission check, complex conditional logic, custom implementations, etc.). Identify any deprecated or inconsistent RBAC implementations. Tag components that handle sensitive operations or data for special attention. Create a summary of pattern categories with counts and examples."
+          "details": "Create a section for KPI cards with appropriate grid column spans. Implement placeholder components for each KPI card with loading states. Position the KPI cards in the top section of the page. Use TailAdmin card components with proper styling. Include placeholder titles, values, and icons for each KPI card."
         },
         {
           "id": 5,
-          "title": "Document custom RBAC logic",
-          "description": "Identify and document any custom or complex RBAC logic that requires special handling during migration",
-          "status": "done",
+          "title": "Implement placeholder sections for tables",
+          "description": "Create the structure for data tables with proper grid positioning",
+          "status": "pending",
           "dependencies": [
-            4
+            2
           ],
-          "details": "Review each complex RBAC implementation identified in the previous step. Document the business logic and security requirements behind each custom implementation. Create flowcharts or decision trees for complex permission checks. Interview relevant developers or product owners to understand the rationale behind custom implementations. Identify any hardcoded roles or permissions that should be configurable. Document edge cases and special conditions that trigger specific access controls."
+          "details": "Set up placeholder table components in the appropriate grid positions. Create table headers with placeholder column names. Implement skeleton loading states for table rows. Add pagination controls as placeholders. Ensure tables are responsive and maintain proper styling on different screen sizes. Follow TailAdmin table component guidelines."
         },
         {
           "id": 6,
-          "title": "Map component dependencies and interactions",
-          "description": "Analyze how RBAC-protected components interact with each other and identify dependency chains",
-          "status": "done",
+          "title": "Add placeholder sections for charts",
+          "description": "Create the structure for chart components with proper grid positioning",
+          "status": "pending",
           "dependencies": [
-            4
+            2
           ],
-          "details": "Map the relationships between components that use RBAC checks. Identify parent-child relationships where permissions cascade. Document cases where multiple RBAC checks protect the same resource through different paths. Create visualization diagrams of complex permission structures. Identify potential security gaps where RBAC implementations might be inconsistent across related components. Document API endpoints and their corresponding frontend components that should have matching RBAC implementations."
+          "details": "Implement placeholder chart components in the designated grid areas. Set up chart containers with appropriate dimensions and responsive behavior. Add placeholder titles and legends for each chart. Create skeleton loading states for charts. Ensure chart containers follow the design system's styling guidelines."
         },
         {
           "id": 7,
-          "title": "Generate comprehensive migration planning report",
-          "description": "Create a detailed report with migration recommendations based on the inventory analysis",
-          "status": "done",
+          "title": "Integrate layout components and finalize page structure",
+          "description": "Connect all placeholder sections and ensure proper layout integration",
+          "status": "pending",
           "dependencies": [
+            3,
+            4,
             5,
             6
           ],
-          "details": "Compile all findings into a comprehensive report document. Include statistics on RBAC usage patterns and their distribution across the codebase. Prioritize components for migration based on security importance, complexity, and dependencies. Recommend standardized approaches for different types of RBAC implementations. Identify potential risks and challenges for the migration process. Create a phased migration plan with estimated effort for each component group. Include recommendations for testing and validation procedures during migration."
+          "details": "Connect all previously created sections into a cohesive page layout. Ensure proper spacing between all components. Implement any necessary wrapper components for consistent styling. Add appropriate error boundaries around each section. Test the responsive behavior across all breakpoints. Verify that the layout follows the Cursor rules for code styling and component usage. Add comments for future implementation of actual data fetching and component functionality."
         }
       ]
     },
     {
       "id": 2,
-      "title": "Update Provider Configuration",
-      "description": "Remove RbacProvider and ensure PermissionProvider properly wraps the application in the providers.tsx file.",
-      "status": "done",
+      "title": "Implement Client Data Fetching",
+      "description": "Set up tRPC call to fetch all client data with related entities using Prisma relations.",
+      "status": "pending",
       "dependencies": [
         1
       ],
       "priority": "high",
-      "details": "Locate src/app/(pages)/(dashboard)/providers.tsx and remove the <RbacProvider> component. Ensure <PermissionProvider> is present and wraps all children components. Verify the provider has access to the user context and any other dependencies it needs. If PermissionProvider is not already present, add it following the pattern in the technical architecture section. Ensure it's positioned correctly in the provider hierarchy.",
-      "testStrategy": "Test the application startup to ensure no provider-related errors occur. Verify that basic permission checks still function after the provider swap by testing a few key pages with different user roles.",
+      "details": "Implement the tRPC call `api.clients.getById({ clientId })` with all required Prisma relations: contacts → licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Use Next.js App Router data fetching patterns as referenced in Context7. Implement error handling and loading states. Initially load all client and related entity fields to allow for refinement later.",
+      "testStrategy": "Test API call with various client IDs. Verify all related entities are properly loaded. Check error handling for non-existent clients or server errors.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Locate and Open providers.tsx File",
-          "description": "Find the providers.tsx file located at src/app/(pages)/(dashboard)/providers.tsx and open it in your code editor.",
-          "status": "done",
+          "title": "Create tRPC router for client queries",
+          "description": "Set up the basic tRPC router structure for client-related queries",
+          "status": "pending",
           "dependencies": [],
-          "details": "Use your file system or IDE to navigate to the specified path and open the file for editing."
+          "details": "Create a new router file (e.g., 'app/server/routers/clients.ts') that will contain all client-related procedures. Initialize the router with the publicProcedure from your tRPC setup. This will serve as the foundation for implementing the getById procedure. Make sure to export the router properly so it can be merged with your main router."
         },
         {
           "id": 2,
-          "title": "Remove RbacProvider Component",
-          "description": "Delete the <RbacProvider> component from the providers.tsx file.",
-          "status": "done",
+          "title": "Define Prisma query with all required relations",
+          "description": "Implement the Prisma query that fetches a client by ID with all required relations",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Search for the <RbacProvider> component in the file and remove it entirely, ensuring no references remain."
+          "details": "In the clients router, create a helper function that constructs the Prisma query to fetch a client by ID. Include all required relations in the include object: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Initially fetch all fields for each relation to allow for refinement later. Structure the query to handle potential null values and optimize for performance."
         },
         {
           "id": 3,
-          "title": "Verify Presence of PermissionProvider",
-          "description": "Check if the <PermissionProvider> component is already present in the providers.tsx file.",
-          "status": "done",
+          "title": "Implement the getById tRPC procedure",
+          "description": "Create the tRPC procedure that accepts a clientId parameter and returns the client data",
+          "status": "pending",
           "dependencies": [
+            1,
             2
           ],
-          "details": "Look for the <PermissionProvider> component in the file. If it exists, proceed to the next step. If not, prepare to add it."
+          "details": "Implement the getById procedure using tRPC's query method. Use zod to validate the input parameter (clientId). Call the Prisma query function created in the previous subtask. Implement proper error handling for cases like invalid IDs or database errors. Return the full client object with all relations. The procedure should be defined as: publicProcedure.input(z.object({ clientId: z.string() })).query(async ({ input }) => { /* implementation */ })."
         },
         {
           "id": 4,
-          "title": "Add PermissionProvider if Necessary",
-          "description": "If the <PermissionProvider> component is not present, add it to the providers.tsx file following the pattern outlined in the technical architecture section.",
-          "status": "done",
+          "title": "Connect tRPC router to Next.js App Router",
+          "description": "Ensure the clients router is properly connected to the main tRPC router and exposed via the API route",
+          "status": "pending",
           "dependencies": [
             3
           ],
-          "details": "Refer to the technical architecture documentation for the correct implementation pattern. Ensure it wraps all children components correctly."
+          "details": "Import the clients router in your main router file and merge it with other routers. Ensure the API route handler at 'app/api/trpc/[trpc]/route.ts' is properly set up to handle the new client queries. Test the endpoint by navigating to the appropriate URL (e.g., http://localhost:3000/api/trpc/clients.getById) with the required parameters to verify it's working correctly."
         },
         {
           "id": 5,
-          "title": "Position PermissionProvider Correctly",
-          "description": "Ensure the <PermissionProvider> component is positioned correctly in the provider hierarchy.",
-          "status": "done",
+          "title": "Create client data fetching hooks",
+          "description": "Implement React hooks for fetching client data using the tRPC client",
+          "status": "pending",
           "dependencies": [
             4
           ],
-          "details": "Verify that <PermissionProvider> is placed in the correct order relative to other providers, ensuring it has access to the user context and any other necessary dependencies."
+          "details": "Create a custom hook (e.g., useClientData) that uses the tRPC client to call the getById procedure. Implement loading states, error handling, and data caching strategies. The hook should accept a clientId parameter and return an object with isLoading, isError, error, and data properties. Utilize Next.js App Router data fetching patterns as appropriate, considering both client and server components."
         },
         {
           "id": 6,
-          "title": "Verify Provider Configuration",
-          "description": "Test the application to ensure the <PermissionProvider> is functioning as expected and has access to the user context and other dependencies.",
-          "status": "done",
+          "title": "Implement UI components with loading and error states",
+          "description": "Create UI components that use the client data hooks and handle loading and error states",
+          "status": "pending",
           "dependencies": [
             5
           ],
-          "details": "Run the application and perform tests to verify that the <PermissionProvider> is correctly wrapping components and handling permissions as intended."
+          "details": "Develop UI components that consume the client data hook. Implement loading indicators for when data is being fetched. Create error handling components that display appropriate messages when errors occur. Design the components to efficiently display all the related entity data (contacts, licenses, etc.) in a user-friendly manner. Consider implementing progressive loading or virtualization for large datasets."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Refactor Hook Usage",
-      "description": "Replace all useRbac() and usePermission() hook calls with useAbility() throughout the codebase.",
-      "status": "done",
+      "title": "Develop KPI Cards and Charts",
+      "description": "Create the financial KPI cards and charts at the top of the profile page.",
+      "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "high",
-      "details": "Using the inventory from Task 1, systematically replace each hook usage following the pattern: const { role, canAccess } = useRbac(); → const { can } = useAbility();. Update all permission checks to use the new can() function with the appropriate permission strings from permissionSchema. Ensure all permission strings match those defined in the schema. Start with smaller, isolated components before moving to more complex pages.",
-      "testStrategy": "For each component refactored, manually test with different user roles to verify permission checks still work correctly. Write unit tests for critical components that use useAbility() to ensure they render correctly based on permissions.",
+      "details": "Implement the following KPI components using TailAdmin's ComponentCard and chart components: 1) Lifetime Fees Card with sparkline trend, 2) YoY Growth Chart using TailAdmin's chart component, 3) Customer Health Score with colored ribbon, 4) Client Manager Card showing assigned team member. Use the useAbility hook to gate sensitive financial data (estAnnFees) to Admin users only. Include billing commentary from activityLog entries for Admins.",
+      "testStrategy": "Verify charts render correctly with sample data. Test permission gating for sensitive fields. Check responsive design of cards at different breakpoints.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Inventory and Planning",
-          "description": "Review the inventory from Task 1 and identify all components and pages that use the useRbac() and usePermission() hooks. Plan the replacement strategy based on component complexity and usage frequency.",
-          "status": "done",
+          "title": "Create Base KPI Card Components with Data Access Control",
+          "description": "Implement the foundational KPI card components with proper data access control using the useAbility hook to gate sensitive financial information for Admin users only.",
           "dependencies": [],
-          "details": "Use the inventory to prioritize components based on their complexity and how frequently they are used. Start with smaller, isolated components to ensure a smooth transition."
+          "details": "1. Create a reusable KPICard component that extends TailAdmin's ComponentCard with the following features:\n   - Configurable title, value, and optional unit display\n   - Support for sparkline/trend visualization\n   - Color-coded indicators for positive/negative values\n   - Responsive design for all screen sizes\n\n2. Implement the useAbility hook integration to gate sensitive financial data:\n   - Create a withFinancialDataAccess HOC or custom hook that checks user permissions\n   - Apply conditional rendering for estAnnFees and other sensitive data\n   - Implement fallback UI for non-admin users (e.g., 'Restricted' message or simplified view)\n\n3. Build the specific KPI card implementations:\n   - Lifetime Fees Card with sparkline trend visualization\n   - Customer Health Score card with colored ribbon indicator\n   - Client Manager Card showing assigned team member\n\n4. Set up unit tests for the components:\n   - Test rendering with and without admin permissions\n   - Test conditional display of sensitive data\n   - Test responsive behavior\n\nUse TailAdmin's existing component structure for consistency while ensuring the cards follow best practices for KPI visualization with clear, uncluttered presentation of metrics.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 2,
-          "title": "Update Permission Schema",
-          "description": "Ensure the permissionSchema is up-to-date and includes all necessary permission strings. Verify that each permission string is correctly defined and matches the intended functionality.",
-          "status": "done",
+          "title": "Implement YoY Growth Chart Component",
+          "description": "Create the Year-over-Year Growth chart component using TailAdmin's chart components with appropriate visualizations for financial trend data.",
           "dependencies": [
             1
           ],
-          "details": "Review and update the permissionSchema to include all permissions used in the application. This step is crucial for ensuring that the new can() function works correctly."
+          "details": "1. Analyze TailAdmin's chart component capabilities and select the appropriate chart type for YoY growth visualization:\n   - Bar chart for month-by-month comparison\n   - Line chart for continuous trend visualization\n   - Consider dual-axis chart if comparing multiple metrics\n\n2. Implement the YoY Growth Chart component:\n   - Create a wrapper around TailAdmin's chart component\n   - Configure appropriate axes, legends, and tooltips\n   - Implement responsive sizing based on container width\n   - Add interactive elements (hover states, tooltips with detailed data)\n\n3. Add data transformation utilities:\n   - Create functions to format raw financial data for chart consumption\n   - Implement percentage calculation for YoY comparisons\n   - Add support for different time period comparisons (YoY, QoQ, MoM)\n\n4. Implement performance optimizations:\n   - Use React.memo to prevent unnecessary re-renders\n   - Implement data memoization for expensive calculations\n   - Consider lazy loading for the chart component\n\n5. Write tests for the chart component:\n   - Test rendering with various data scenarios\n   - Test responsiveness and resize behavior\n   - Test data transformation functions\n\nEnsure the chart follows financial data visualization best practices with clear labeling, appropriate color schemes for financial data, and tooltips that provide context for the displayed metrics.",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 3,
-          "title": "Replace Hooks in Small Components",
-          "description": "Begin replacing useRbac() and usePermission() hooks with useAbility() in smaller, isolated components. Update permission checks to use the new can() function with appropriate permission strings.",
-          "status": "done",
+          "title": "Integrate Billing Commentary and Finalize KPI Dashboard Layout",
+          "description": "Integrate billing commentary from activityLog entries for Admin users and finalize the layout of all KPI components at the top of the profile page.",
           "dependencies": [
+            1,
             2
           ],
-          "details": "Start with simple components to test the replacement process and ensure it works as expected before moving to more complex components.\n\n<info added on 2025-04-29T07:31:01.500Z>\nFor the AuditList.tsx component replacement:\n\n1. Current implementation:\n```typescript\nimport { usePermission } from '@/context/RbacContext';\n\n// Inside component\nconst canViewAudits = usePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);\nconst canCreateAudit = usePermission(AUDIT_PERMISSIONS.CREATE);\nconst canUpdateStageStatus = usePermission(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);\n```\n\n2. New implementation:\n```typescript\nimport { useAbility } from '@/hooks/useAbility';\n\n// Inside component\nconst { can } = useAbility();\nconst canViewAudits = can(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);\nconst canCreateAudit = can(AUDIT_PERMISSIONS.CREATE);\nconst canUpdateStageStatus = can(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS);\n```\n\n3. Testing approach: After making these changes, verify that:\n   - The audit list visibility behaves correctly\n   - Create audit button appears only for authorized users\n   - Stage status updates are properly restricted\n\n4. Potential issues to watch for:\n   - Ensure AUDIT_PERMISSIONS constants are correctly imported\n   - Check for any conditional rendering that depends on these permissions\n   - Verify any permission-dependent API calls still function correctly\n</info added on 2025-04-29T07:31:01.500Z>"
-        },
-        {
-          "id": 4,
-          "title": "Implement can() Function Checks",
-          "description": "Update all permission checks to use the can() function from the useAbility() hook. Ensure that each check uses the correct permission strings from the updated permissionSchema.",
-          "status": "done",
-          "dependencies": [
-            3
-          ],
-          "details": "Replace conditional statements that check permissions with calls to the can() function. For example, replace `if (role === 'admin')` with `if (can('admin:manage'))`.\n\n<info added on 2025-04-29T08:02:25.464Z>\nI've verified the permission system migration across multiple components:\n\n- **Dashboard page**: Replaced `usePermission().hasPermission('VIEW_DASHBOARD')` with `useAbility().can('dashboard:view')`\n- **Audits pages**: Updated both list and detail views to use ability-based checks\n- **Phone page**: Converted role-based checks to proper permission strings\n- **Task pages**: Implemented granular permissions for task creation, editing, and deletion\n\nAll import statements have been updated from `import { usePermission } from '@/hooks/usePermission'` to `import { useAbility } from '@/hooks/useAbility'`. The test suite passes with 100% of permission-related tests succeeding.\n\nNote: Found and fixed an edge case where nested permission checks were using AND logic instead of OR logic in the TaskActions component.\n</info added on 2025-04-29T08:02:25.464Z>"
-        },
-        {
-          "id": 5,
-          "title": "Refactor Complex Components and Pages",
-          "description": "Once the process is verified in smaller components, apply the same changes to more complex components and pages. Ensure that all useRbac() and usePermission() calls are replaced.",
-          "status": "done",
-          "dependencies": [
-            4
-          ],
-          "details": "Expand the replacement to more complex components and pages, ensuring that all hook calls are updated and permission checks are correctly implemented."
-        },
-        {
-          "id": 6,
-          "title": "Testing and Verification",
-          "description": "Conduct thorough testing of the refactored components and pages to ensure that the new hook usage works correctly and does not introduce any bugs or security vulnerabilities.",
-          "status": "done",
-          "dependencies": [
-            5
-          ],
-          "details": "Perform unit tests, integration tests, and UI tests to verify that the replacement of hooks does not affect the functionality or security of the application."
-        },
-        {
-          "id": 7,
-          "title": "Final Review and Deployment",
-          "description": "Review the entire codebase to ensure all useRbac() and usePermission() hooks have been replaced. Deploy the updated codebase to production after successful testing.",
-          "status": "done",
-          "dependencies": [
-            6
-          ],
-          "details": "Conduct a final review to confirm that all hook replacements are complete and correct. Deploy the updated application to production once verified."
+          "details": "1. Implement the billing commentary feature for Admin users:\n   - Create a BillingCommentary component that filters activityLog entries related to billing\n   - Apply the useAbility hook to ensure only Admin users can view this component\n   - Design an expandable/collapsible interface for detailed commentary\n   - Implement sorting by date with most recent comments first\n\n2. Create a responsive grid layout for the KPI dashboard:\n   - Arrange KPI cards in a responsive grid at the top of the profile page\n   - Position the YoY Growth Chart prominently\n   - Ensure proper spacing and alignment between components\n   - Implement breakpoints for different screen sizes (desktop, tablet, mobile)\n\n3. Add final integration and state management:\n   - Connect all components to their respective data sources\n   - Implement loading states and error handling\n   - Add refresh functionality for real-time data updates\n   - Ensure consistent styling across all KPI components\n\n4. Implement comprehensive testing:\n   - Create integration tests for the complete KPI dashboard\n   - Test the dashboard with different user roles and permissions\n   - Verify responsive behavior across different viewport sizes\n   - Test data refresh and error handling scenarios\n\nFinalize the implementation by ensuring all components maintain visual consistency with TailAdmin's design system, follow accessibility best practices (WCAG compliance), and provide a cohesive user experience that highlights the most important financial KPIs at a glance.",
+          "status": "pending",
+          "parentTaskId": 3
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement Authorized Component Gating",
-      "description": "Replace direct permission checks in JSX with the Authorized component wrapper for consistent UI element gating.",
-      "status": "done",
+      "title": "Build Audit Progress and Schedule Components",
+      "description": "Create the audit cycle progress bar and upcoming audit schedule components.",
+      "status": "pending",
       "dependencies": [
-        3
+        2
       ],
-      "priority": "medium",
-      "details": "Import the Authorized component from @/components/Authorized. Replace conditional rendering patterns like {canAccess('some.permission') && <Button />} with <Authorized action=\"some.permission\"><Button /></Authorized>. Focus on buttons, links, table columns, and other UI elements that should be conditionally displayed based on permissions. Ensure all action props match the permission strings in the permissionSchema.",
-      "testStrategy": "Create a test harness that allows toggling between different user roles to visually verify UI elements appear/disappear appropriately. Add component tests that verify the Authorized component correctly shows/hides children based on permissions.",
+      "priority": "high",
+      "details": "Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for date formatting as referenced in Context7.",
+      "testStrategy": "Test progress calculation logic with various date ranges. Verify schedule displays correctly with different audit statuses. Check date formatting across browsers.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Authorized Component Wrapper",
-          "description": "Create or update the Authorized component to handle permission-based UI element gating consistently across the application.",
+          "title": "Set up TailAdmin progress bar component structure",
+          "description": "Create the base structure for the Audit Cycle Progress Bar component using TailAdmin's progress-bar component",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Review the existing Authorized component in @/components/Authorized\n2. Ensure it accepts an 'action' prop that corresponds to permission strings\n3. Implement proper fallback handling (null by default)\n4. Add support for multiple permissions (array of strings)\n5. Optimize with React.memo to prevent unnecessary re-renders\n6. Add proper TypeScript typing for the component props\n7. Test the component with various permission scenarios\n8. Document usage patterns for the team",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Create a new React component file for the Audit Cycle Progress Bar. Import the necessary TailAdmin progress bar component from the component library. Set up the component's basic structure with props for current progress percentage, last audit date, and next audit due date. The progress bar should be responsive and follow the TailAdmin styling guidelines with appropriate background colors and rounded corners."
         },
         {
           "id": 2,
-          "title": "Replace Button Permission Checks",
-          "description": "Identify and replace all conditional button rendering based on permissions with the Authorized component wrapper.",
+          "title": "Implement progress calculation logic",
+          "description": "Create utility functions to calculate progress percentage between last audit's reportDueDate and next due date",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Search codebase for patterns like {canAccess('permission') && <Button />}\n2. Replace with <Authorized action=\"permission\"><Button /></Authorized>\n3. For multiple permission checks, use appropriate logic in the Authorized component\n4. Ensure action props match exactly with permissionSchema strings\n5. Test each button to verify it appears/disappears correctly based on user permissions\n6. Pay special attention to action buttons in tables, forms, and card components\n7. Update any unit tests that may be affected by this change",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Develop a utility function that takes the last audit's reportDueDate and the next audit due date as inputs and calculates the current progress as a percentage. The calculation should handle edge cases such as when the dates are invalid or when the current date is outside the expected range. Implement proper date handling using JavaScript's Date object. The function should return a value between 0-100 representing the percentage completion of the audit cycle."
         },
         {
           "id": 3,
-          "title": "Replace Link Permission Checks",
-          "description": "Identify and replace all conditional link rendering based on permissions with the Authorized component wrapper.",
+          "title": "Add date formatting with Intl.DateTimeFormat",
+          "description": "Implement date formatting utilities using Intl.DateTimeFormat for consistent date display",
+          "status": "pending",
           "dependencies": [
-            1
+            2
           ],
-          "details": "1. Search for navigation links with permission checks in menus, sidebars, and headers\n2. Replace conditional rendering with <Authorized action=\"permission\"><Link /></Authorized>\n3. For complex navigation components, ensure the Authorized wrapper doesn't break styling\n4. Check for any custom link components that might need special handling\n5. Test navigation to ensure links appear/disappear correctly based on permissions\n6. Update breadcrumb navigation if it uses permission-based rendering\n7. Verify mobile navigation components work correctly with the Authorized wrapper",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Create a utility function that uses Intl.DateTimeFormat to format dates consistently throughout the components. Configure the formatter with appropriate locale and formatting options (day, month, year, etc.). Ensure the function handles different date formats and edge cases gracefully. This utility will be used for displaying dates in both the progress bar and upcoming schedule components."
         },
         {
           "id": 4,
-          "title": "Replace Table Column Permission Checks",
-          "description": "Update table configurations to use Authorized components for permission-based column visibility.",
+          "title": "Complete Audit Cycle Progress Bar component",
+          "description": "Finalize the progress bar component with labels, tooltips, and responsive design",
+          "status": "pending",
           "dependencies": [
-            1
+            1,
+            2,
+            3
           ],
-          "details": "1. Identify tables with columns that should be conditionally displayed based on permissions\n2. For tables using column definitions, wrap column cell renderers with Authorized components\n3. For action columns with multiple buttons, wrap each button individually\n4. Update any column visibility logic that uses permissions\n5. Test tables with different user permission sets to ensure correct column visibility\n6. Ensure table responsiveness is maintained after adding Authorized wrappers\n7. Update any column customization features to respect permission boundaries",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Enhance the progress bar component with labels showing the last audit date and next due date using the date formatting utility. Add tooltips to display additional information when users hover over different parts of the progress bar. Implement responsive design to ensure the component displays correctly on different screen sizes. Add appropriate accessibility attributes (aria-* tags) and ensure the component meets accessibility standards."
         },
         {
           "id": 5,
-          "title": "Replace Form Element Permission Checks",
-          "description": "Update forms to use Authorized components for conditionally rendering form elements based on permissions.",
+          "title": "Create Upcoming Audit Schedule card structure",
+          "description": "Set up the base structure for the Upcoming Audit Schedule component based on CRM UpcomingSchedule",
+          "status": "pending",
           "dependencies": [
-            1
+            3
           ],
-          "details": "1. Identify form fields, sections, or controls that should be conditionally displayed\n2. Replace conditional rendering with Authorized component wrappers\n3. For form libraries (like Formik or React Hook Form), ensure Authorized components don't interfere with form state\n4. Consider adding disabled state for unauthorized fields instead of hiding them completely where appropriate\n5. Test form submission with different permission sets to ensure correct behavior\n6. Update form validation to account for conditionally rendered fields\n7. Ensure error messages and help text are properly handled with conditional rendering",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Create a new React component for the Upcoming Audit Schedule card, following the design pattern of the CRM UpcomingSchedule component. Set up the card container with appropriate styling, header, and content areas. Implement the component to accept an array of upcoming audit milestones as props. Use TailAdmin card components and styling guidelines to maintain consistency with the rest of the dashboard."
         },
         {
           "id": 6,
-          "title": "Replace Feature Section Permission Checks",
-          "description": "Update larger UI sections and feature areas to use Authorized components for permission-based visibility.",
+          "title": "Implement milestone listing functionality",
+          "description": "Develop the functionality to list and display upcoming audit milestones in chronological order",
+          "status": "pending",
           "dependencies": [
-            1
+            5
           ],
-          "details": "1. Identify entire sections, cards, or feature areas that should be conditionally displayed\n2. Replace section-level conditional rendering with Authorized component wrappers\n3. For complex layouts, ensure the Authorized component doesn't break grid or flexbox structures\n4. Consider adding placeholder or alternative content for unauthorized sections\n5. Test page layouts with different permission sets to ensure correct section visibility\n6. Update any responsive behavior that might be affected by conditional rendering\n7. Ensure loading states are properly handled when sections are conditionally rendered",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Implement the logic to sort and display upcoming audit milestones in chronological order. Each milestone should display the event name, date (formatted using the date formatting utility), and any additional relevant information. Add visual indicators for different types of milestones (e.g., planning meetings, fieldwork, report deadlines). Implement conditional styling to highlight imminent milestones or those requiring attention."
         },
         {
           "id": 7,
-          "title": "Implement Comprehensive Testing and Validation",
-          "description": "Create tests and validation procedures to ensure all permission-based UI gating works correctly across the application.",
+          "title": "Integrate components with data sources and test",
+          "description": "Connect the components to data sources and perform comprehensive testing",
+          "status": "pending",
           "dependencies": [
-            2,
-            3,
             4,
-            5,
             6
           ],
-          "details": "1. Create unit tests for the Authorized component with various permission scenarios\n2. Develop integration tests for key pages to verify correct element visibility\n3. Create a permission testing matrix to systematically verify all UI elements\n4. Implement visual regression tests to catch unexpected UI changes\n5. Verify that all action props exactly match the permissionSchema strings\n6. Test edge cases like loading states and permission changes while using the app\n7. Document any components that required special handling for the Authorized wrapper\n8. Create a validation checklist for developers to use when implementing new features",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Integrate both components with the appropriate data sources to fetch audit dates and milestones. Implement data fetching logic with proper error handling and loading states. Test the components with various data scenarios including edge cases (no data, past due dates, etc.). Verify that the progress calculation works correctly across different audit cycle timeframes. Ensure both components render correctly and maintain performance when integrated into the larger application."
         }
       ]
     },
     {
       "id": 5,
-      "title": "Remove Legacy RBAC Code",
-      "description": "Delete the RbacContext and related policy files after confirming all usages have been migrated.",
-      "status": "done",
+      "title": "Implement Contacts Table and Network Diagram",
+      "description": "Create the contacts table and relationship network diagram.",
+      "status": "pending",
       "dependencies": [
-        3,
-        4
+        2
       ],
-      "priority": "low",
-      "details": "After confirming all components have been migrated to the new system, delete src/context/RbacContext.tsx and any related policy files. Remove any imports of these files throughout the codebase. Check for any remaining references to the old system using grep or similar tools. Update any documentation that references the old RBAC system to point to the new PermissionContext/useAbility approach.",
-      "testStrategy": "Run the full test suite to ensure no regressions. Perform a full application smoke test with various user roles to verify all permission checks still function correctly. Check build logs for any warnings or errors related to missing imports.",
+      "priority": "medium",
+      "details": "Build the Recent Contacts Table using TailAdmin's DataTableTwo component with columns for Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact cleanly. Implement the Contact Network Diagram showing relationships between client, contacts, and trust accounts. Reference DataTableTwo APIDocs from Context7 for implementation details.",
+      "testStrategy": "Test table sorting and filtering. Verify links to contact profiles work correctly. Test network diagram with various relationship configurations.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Audit Legacy RBAC Usage",
-          "description": "Perform a comprehensive audit of the codebase to identify all components that use the legacy RbacContext and related policy files.",
+          "title": "Set up DataTableTwo component structure",
+          "description": "Initialize and configure the DataTableTwo component from TailAdmin for the Recent Contacts Table implementation",
+          "status": "pending",
           "dependencies": [],
-          "details": "Use grep or similar tools to search for all imports and references to RbacContext.tsx and related policy files. Create a detailed inventory listing all files, components, and functions that use the legacy RBAC system. Document each usage pattern and its purpose to ensure complete migration verification. Command examples: `grep -r \"import.*RbacContext\" --include=\"*.tsx\" --include=\"*.ts\" ./src`, `grep -r \"useContext.*RbacContext\" --include=\"*.tsx\" --include=\"*.ts\" ./src`. Store results in a spreadsheet or document for tracking migration status.\n\n<info added on 2025-04-29T19:49:49.909Z>\nBased on the findings from the audit, here's additional information to add to the subtask details:\n\nThe audit has revealed specific locations of legacy RBAC usage:\n\n1. **Core RBAC Components:**\n   - Main context file: `src/context/RbacContext.tsx`\n   - RbacProvider implementations:\n     - `src/app/(pages)/providers.tsx`\n     - `src/app/(tailadmin)/(admin)/layout.tsx`\n\n2. **Hook Usage Patterns:**\n   - `useRbac` hook: Used in `src/components/header/ViewAsDropdown.tsx` for role-based UI rendering\n   - `useRole` hook: Found in multiple components:\n     - `src/components/email/EmailSidebar/EmailSidebar.tsx` (likely for permission-based feature toggling)\n     - DataTableTwo component and associated tests (for conditional rendering of table actions)\n     - Dashboard pages (possibly for metric visibility control)\n     - Contacts pages (likely for CRUD operation permissions)\n\nThis mapping provides a clear picture of how RBAC hooks are distributed across the application, with particular concentration in UI components that require dynamic permission-based rendering. Focus migration efforts on these identified components, starting with the provider implementations.\n</info added on 2025-04-29T19:49:49.909Z>",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Create a new component file for the Contacts Table. Import the DataTableTwo component from TailAdmin. Set up the basic table structure with appropriate props and configuration options. Define the table container with responsive styling using Tailwind CSS classes. Reference the TailAdmin documentation for proper component initialization and configuration options."
         },
         {
           "id": 2,
-          "title": "Verify Complete Migration to New Permission System",
-          "description": "Confirm that all previously identified usages of the legacy RBAC system have been properly migrated to the new PermissionContext/useAbility approach.",
+          "title": "Define contact data schema and column configuration",
+          "description": "Create the data schema and column configuration for the Contacts Table with all required fields",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Using the inventory created in subtask 1, systematically check each component to verify it has been migrated to the new permission system. Create test cases for each permission scenario to ensure functionality is preserved. Implement unit and integration tests that verify the new permission checks work correctly. Document any edge cases or special handling required. For each migrated component, add a comment indicating the migration is complete with a reference to the relevant test case.\n\n<info added on 2025-04-29T19:50:30.522Z>\nTo address the incomplete migration issue:\n\n1. Run a comprehensive codebase scan using:\n   ```bash\n   grep -r \"useRbac\\|useRole\\|RbacProvider\" --include=\"*.{js,jsx,ts,tsx}\" ./src\n   ```\n\n2. Create a migration tracking spreadsheet with columns:\n   - Component path\n   - Legacy imports found\n   - Migration status\n   - Test coverage status\n   - Migration PR link\n\n3. For each component still using legacy RBAC:\n   - Map the existing permission checks to equivalent useAbility calls\n   - Verify permission context is properly provided in component hierarchy\n   - Test both positive and negative permission scenarios\n\n4. Common migration patterns to watch for:\n   - Replace `useRole('admin')` with `useAbility('can', 'manage', 'all')`\n   - Replace `useRbac.can('edit', 'users')` with `useAbility('can', 'edit', 'users')`\n   - Replace RbacProvider with appropriate PermissionContext providers\n\n5. Add regression tests specifically targeting permission boundaries that may have changed during migration.\n\n6. Implement a CI check that fails if legacy RBAC imports are detected in new code.\n</info added on 2025-04-29T19:50:30.522Z>",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Define the data schema for contacts with fields for Name, Email, Phone, Title, and Primary badge status. Configure columns with appropriate headers, cell renderers, and sorting options. Implement the Name column with links to individual contact pages using the '/contacts/[id]' route pattern. Set up proper data types and validation for each field. Create sample data for testing the table implementation."
         },
         {
           "id": 3,
-          "title": "Create Backup of Legacy RBAC Code",
-          "description": "Create a backup of all legacy RBAC code before deletion to ensure recovery is possible if needed.",
+          "title": "Implement multiple licenses display functionality",
+          "description": "Create a component to cleanly display multiple licenses per contact within the table",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "Create a separate branch in the version control system to preserve the legacy code. Additionally, export all relevant files (RbacContext.tsx and related policy files) to a separate archive. Document the structure and relationships between these files for future reference. Include comments about any non-obvious behaviors or implementation details that might be relevant for troubleshooting during the transition period. Store this backup in a designated location accessible to the development team.",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Design and implement a custom cell renderer component for displaying multiple licenses. Use Tailwind CSS for styling license badges or tags with appropriate colors and spacing. Implement collapsible/expandable functionality if the number of licenses exceeds a certain threshold. Ensure the display is responsive and maintains table layout integrity. Test with contacts having varying numbers of licenses."
         },
         {
           "id": 4,
-          "title": "Remove RbacContext.tsx and Policy Files",
-          "description": "Delete the RbacContext.tsx file and all related policy files from the codebase after confirming they are no longer needed.",
+          "title": "Create data fetching and state management logic",
+          "description": "Implement the data fetching and state management for the Contacts Table",
+          "status": "pending",
           "dependencies": [
-            2,
-            3
+            2
           ],
-          "details": "Identify all policy files related to the legacy RBAC system. Delete src/context/RbacContext.tsx and all identified policy files. Ensure that any test files specifically for these components are also removed. Update any build configurations or module maps that might reference these files. Commit these changes with a clear message indicating the removal of legacy RBAC code as part of the migration to the new permission system.",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Set up data fetching logic using React hooks or a state management library. Implement pagination, sorting, and filtering functionality. Create loading and error states for the table. Implement search functionality for the contacts table. Set up proper state updates when data changes. Ensure the table maintains its state during user interactions."
         },
         {
           "id": 5,
-          "title": "Clean Up Imports and References",
-          "description": "Remove all imports and references to the deleted RBAC files throughout the codebase.",
-          "dependencies": [
-            4
-          ],
-          "details": "Use IDE tools or grep to find all remaining imports of RbacContext and policy files. Remove these imports and any associated code that is no longer needed. Check for any conditional logic that might be based on the old RBAC system and refactor as needed. Run linting tools to catch any unused variables or imports that might remain after removing references. Test the application to ensure no runtime errors occur due to missing imports.",
-          "status": "done",
-          "parentTaskId": 5
+          "title": "Design the Contact Network Diagram component",
+          "description": "Create the basic structure and layout for the Contact Network Diagram",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Research and select an appropriate visualization library for network diagrams (e.g., D3.js, React Flow, or Vis.js). Create a new component for the Contact Network Diagram. Design the basic layout and container for the diagram. Implement responsive behavior for different screen sizes. Set up the component with proper props and configuration options."
         },
         {
           "id": 6,
-          "title": "Update Documentation",
-          "description": "Update all documentation that references the old RBAC system to point to the new PermissionContext/useAbility approach.",
+          "title": "Implement relationship data model and visualization",
+          "description": "Create the data model and visualization for relationships between clients, contacts, and trust accounts",
+          "status": "pending",
           "dependencies": [
-            4,
             5
           ],
-          "details": "Identify all documentation files (README.md, wiki pages, inline comments, etc.) that mention the legacy RBAC system. Update these documents to reference the new permission system instead. Include migration guides for developers who might be familiar with the old system. Add examples of how to use the new PermissionContext/useAbility approach for common permission scenarios. Create or update architecture diagrams to reflect the new permission system. Ensure API documentation is updated to reflect any changes in how permissions are checked.",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Define the data structure for representing relationships between entities (clients, contacts, trust accounts). Implement node rendering for different entity types with distinct visual representations. Create edge rendering for relationships with appropriate styling. Implement interactive features like zooming, panning, and node selection. Add tooltips or information panels to display additional details about entities and relationships."
         },
         {
           "id": 7,
-          "title": "Final Verification and Testing",
-          "description": "Perform comprehensive testing to ensure the application functions correctly after removing the legacy RBAC code.",
+          "title": "Integrate and finalize both components",
+          "description": "Integrate the Contacts Table and Network Diagram components into the main application and finalize implementation",
+          "status": "pending",
           "dependencies": [
-            5,
+            4,
             6
           ],
-          "details": "Run the full test suite to ensure no regressions have been introduced. Perform manual testing of all features that previously relied on the RBAC system. Verify that all permission checks are working as expected with the new system. Test edge cases such as users with multiple roles or special permissions. Monitor the application in a staging environment for any unexpected behaviors. Create a final report documenting the successful removal of the legacy RBAC system, including any lessons learned or recommendations for future similar migrations.",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Integrate both components into the main application layout. Implement any necessary interactions between the table and diagram (e.g., selecting a contact in the table highlights it in the diagram). Add final styling and UI polish using Tailwind CSS. Perform comprehensive testing across different browsers and screen sizes. Optimize performance for large datasets. Add documentation for component usage and maintenance. Ensure accessibility compliance for both components."
         }
       ]
     },
     {
       "id": 6,
-      "title": "Testing and Documentation",
-      "description": "Perform comprehensive testing across the application and document the migration for future reference.",
-      "status": "done",
+      "title": "Develop Trust Accounts Table and Software Links",
+      "description": "Create the trust accounts table with software integration links.",
+      "status": "pending",
       "dependencies": [
-        5
+        2
       ],
       "priority": "medium",
-      "details": "Create a test plan covering all major pages and features with different user roles. Smoke-test each page to verify permissions are enforced correctly. Add unit and integration tests specifically for useAbility checks. Create a changeset documenting the RBAC overhaul following Cursor Rules. Update any developer documentation to reflect the new permission system. Verify that the Developer role bypass works as expected but doesn't affect other roles.",
-      "testStrategy": "Execute the test plan with multiple user roles. Verify each permission-gated feature works correctly. Use automated tests where possible. Document any edge cases or special considerations for future reference. Have another developer review the changes and test independently.",
+      "details": "Implement the Trust Accounts Table using DataTableTwo with columns for Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Add 'Open in Xero' or 'Open in SharePoint' action buttons in each trust account row, linking to the account's management software or external feed.",
+      "testStrategy": "Test table with various trust account configurations. Verify external links open correctly. Test responsive behavior of the table on different screen sizes.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Comprehensive Test Plan",
-          "description": "Develop a structured test plan covering all major application pages and features across different user roles",
-          "status": "done",
+          "title": "Create DataTableTwo schema for Trust Accounts",
+          "description": "Define the data structure for the Trust Accounts table with all required columns and data types",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create a matrix-style test plan document that maps each application page/feature against all user roles. Include test scenarios for both positive testing (users with correct permissions) and negative testing (users without permissions). Define expected outcomes for each test case. Prioritize critical paths and high-risk areas. Include environment setup requirements and test data needed. The test plan should specifically address permission boundaries between roles and edge cases where permissions might overlap.\n\n<info added on 2025-04-29T21:39:23.154Z>\nHere's the additional information for the test plan:\n\n```markdown\n## Test Implementation Details\n\n### Unit Test Implementation\n- Configure Jest mocks for AbilityContext to simulate different permission scenarios\n- Create test fixtures with predefined role/permission combinations\n- Implement snapshot testing for permission-dependent UI components\n- Test coverage target: >90% for permission-related hooks and components\n\n### Integration Test Strategy\n- Use MSW (Mock Service Worker) to intercept API calls and simulate server responses\n- Create test data factories to generate consistent test fixtures\n- Implement user session simulation with different role contexts\n- Test matrix should include cross-browser verification (Chrome, Firefox, Safari)\n\n### E2E Testing Specifics\n- Implement custom Cypress commands for role-based authentication\n- Create reusable test patterns for common permission-gated workflows\n- Record videos of permission boundary tests for documentation\n- Test data reset between test runs to ensure isolation\n\n### Performance Testing\n- Measure render time differences with/without permission checks\n- Verify caching mechanisms for permission data\n- Test permission resolution under high load (many rules/roles)\n\n### Regression Test Automation\n- Automate permission boundary tests to run on PR creation\n- Implement visual regression tests for permission-dependent UI elements\n- Create CI pipeline stage specifically for RBAC testing\n\n### Test Reporting\n- Generate permission coverage reports showing tested/untested permission combinations\n- Include permission test results in CI/CD dashboard\n- Document any permission edge cases discovered during testing\n```\n</info added on 2025-04-29T21:39:23.154Z>"
+          "details": "Implement the DataTableTwo schema with the following columns: Account Name (string), Bank Name (string), BSB (string), Account Number (string), Software Access badge (boolean), Last Reconciliation Date (date), Management Software (string), and Software URL (string). Define appropriate data types, validation rules, and default values for each column. Ensure the schema supports filtering and sorting operations that will be needed for the table view."
         },
         {
           "id": 2,
-          "title": "Implement Unit and Integration Tests for useAbility",
-          "description": "Develop automated tests specifically for the useAbility permission check functionality",
-          "status": "done",
+          "title": "Implement data fetching and storage logic",
+          "description": "Create the backend services to fetch, store, and update trust account data",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Create unit tests for the useAbility hook/function that verify it correctly evaluates permissions for different user roles. Test with mock user contexts representing each role in the system. Implement integration tests that verify useAbility works correctly when integrated with actual components. Include tests for edge cases such as undefined permissions, role changes, and permission inheritance. Use Jest for unit tests and consider Cypress or React Testing Library for integration tests. Ensure tests verify that the Developer role bypass works as expected without affecting other roles."
+          "details": "Develop the data service that will handle CRUD operations for trust accounts. Implement methods to fetch trust account data from the database, create new accounts, update existing accounts, and delete accounts when needed. Include error handling and validation logic. If using SharePoint as a data source, implement the SharePoint REST API calls to interact with the SharePoint lists that store trust account data. Ensure proper authentication and authorization checks are in place."
         },
         {
           "id": 3,
-          "title": "Perform Smoke Testing Across Application",
-          "description": "Execute smoke tests on all application pages to verify correct permission enforcement",
-          "status": "done",
+          "title": "Build Trust Accounts Table UI component",
+          "description": "Create the DataTableTwo component to display trust accounts with all required columns",
+          "status": "pending",
           "dependencies": [
-            1
+            1,
+            2
           ],
-          "details": "Following the test plan from subtask 1, manually navigate through each page of the application with different user role accounts. Verify that permissions are enforced correctly - users can only access and perform actions they're authorized for. Document any discrepancies between expected and actual behavior. Pay special attention to areas where permissions might cascade or inherit. Test the Developer role bypass functionality to ensure it works as expected but doesn't affect other roles. Create a checklist of all pages tested and their pass/fail status."
+          "details": "Implement the UI component using DataTableTwo to display trust accounts. Configure the table with all columns defined in the schema. Implement sorting, filtering, and pagination features. Style the table according to design specifications, including the Software Access badge visual indicator. Ensure the table is responsive and accessible. Add empty state handling and loading indicators for better user experience."
         },
         {
           "id": 4,
-          "title": "Create RBAC Migration Changeset Documentation",
-          "description": "Document the RBAC implementation changes following Cursor Rules",
-          "status": "done",
+          "title": "Implement software integration links logic",
+          "description": "Create the logic to generate and validate external software links",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Develop the service to generate valid links to external software systems (Xero, SharePoint) based on the managementSoftware and softwareUrl fields. Implement URL validation and security checks. Create helper functions to format URLs with proper parameters and authentication tokens if needed. For SharePoint links, use the SharePoint high-trust configuration to ensure secure access. For Xero, implement the appropriate API authentication flow. Include error handling for cases where links cannot be generated."
+        },
+        {
+          "id": 5,
+          "title": "Add action buttons with software links",
+          "description": "Implement 'Open in Xero' and 'Open in SharePoint' action buttons in each table row",
+          "status": "pending",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Extend the DataTableTwo component to include action buttons in each row. Implement conditional rendering to show 'Open in Xero' or 'Open in SharePoint' buttons based on the managementSoftware field. Connect the buttons to the software integration links logic to generate the correct URLs. Add click handlers that open the links in a new tab/window. Implement visual feedback for button interactions (hover, active states). Ensure buttons are only enabled for users with appropriate permissions."
+        },
+        {
+          "id": 6,
+          "title": "Implement last reconciliation date tracking",
+          "description": "Add functionality to track and update the last reconciliation date for trust accounts",
+          "status": "pending",
           "dependencies": [
             2,
             3
           ],
-          "details": "Create a comprehensive changeset document that follows the Cursor Rules format. Include all components modified, new components created, and permission structures implemented. Document the permission model architecture, including how roles are defined and how permissions are checked. Include code examples showing the before and after implementation of permission checks. Document any database or API changes related to permissions. Create diagrams showing the permission flow and inheritance. This documentation should serve as both a record of changes and a guide for understanding the new system."
-        },
-        {
-          "id": 5,
-          "title": "Update Developer Documentation",
-          "description": "Revise existing developer documentation to reflect the new permission system",
-          "status": "done",
-          "dependencies": [
-            4
-          ],
-          "details": "Review all existing developer documentation and update it to reflect the new RBAC system. Create new documentation sections specifically for the permission system, including how to use the useAbility hook, how to define new permissions, and best practices for permission checks. Include examples of correct implementation patterns. Update any API documentation to include permission requirements for each endpoint. Create a troubleshooting guide for common permission-related issues. Ensure documentation includes information about the Developer role bypass functionality and when it should be used."
-        },
-        {
-          "id": 6,
-          "title": "Conduct Final Verification and Regression Testing",
-          "description": "Perform final verification of the RBAC implementation and regression testing",
-          "status": "done",
-          "dependencies": [
-            3,
-            4,
-            5
-          ],
-          "details": "Conduct a final verification pass to ensure all aspects of the RBAC system are working correctly. Verify that all documentation accurately reflects the implemented system. Perform regression testing to ensure the RBAC changes haven't negatively impacted existing functionality. Test critical user journeys end-to-end with different user roles. Verify edge cases such as role changes, permission inheritance, and the Developer role bypass. Document any issues found and create a final report summarizing the testing results, including test coverage metrics, issues found and resolved, and any remaining concerns or recommendations."
+          "details": "Implement the logic to track when trust accounts were last reconciled. Create a mechanism to update the last reconciliation date field when reconciliation actions are performed. Add visual indicators in the table to highlight accounts that haven't been reconciled recently (e.g., color coding or warning icons for accounts past a certain threshold). Include sorting capability to allow users to sort by reconciliation date. Add filtering options to show only accounts that need reconciliation."
         }
       ]
     },
     {
       "id": 7,
-      "title": "Implement Developer Impersonation Feature in AppHeader",
-      "description": "Add a dropdown menu in the AppHeader component that allows developers to impersonate different user roles for testing purposes without having to log out and back in.",
-      "details": "Create a role impersonation dropdown in the AppHeader that is only visible to users with developer permissions. The implementation should include:\n\n1. A dropdown component in the AppHeader that displays the current role and allows switching to other available roles\n2. A session management service update to handle temporary role switching without affecting the actual user permissions in the database\n3. Visual indication in the UI that shows when a user is in impersonation mode (e.g., a colored border or badge)\n4. The ability to revert to the original role\n5. Proper access controls to ensure only developers can access this feature\n6. Session persistence so the impersonated role remains active during page navigation\n7. Logging of role impersonation events for security auditing\n\nThe feature should not affect production data or allow unauthorized privilege escalation. All actions taken while impersonating should be clearly marked in logs and any generated data.",
-      "testStrategy": "Testing should verify both functionality and security aspects:\n\n1. Unit tests:\n   - Verify the dropdown only appears for users with developer permissions\n   - Test that the role switching logic correctly updates the session\n   - Ensure the UI correctly reflects the impersonated state\n\n2. Integration tests:\n   - Confirm that impersonated permissions correctly limit/grant access to features\n   - Verify that navigating between pages maintains the impersonated role\n   - Test that logging out clears any impersonation state\n\n3. Security tests:\n   - Verify non-developer users cannot access the impersonation feature via API or direct URL manipulation\n   - Ensure impersonation events are properly logged with original and impersonated user information\n   - Test that impersonated roles cannot perform actions that would permanently elevate privileges\n\n4. User acceptance testing:\n   - Have developers verify the feature works as expected across different roles\n   - Confirm the visual indicators are clear and intuitive\n   - Verify that reverting to original role works correctly",
-      "status": "in-progress",
+      "title": "Create Activity Card and Tabbed Activity Log",
+      "description": "Implement the activity tracking components with filtering and quick-add functionality.",
+      "status": "pending",
       "dependencies": [
-        6
+        2
       ],
       "priority": "medium",
+      "details": "Build the Activity Card using TailAdmin's ActivitiesCard to show recent notes, call logs, and status changes with icons. Implement pagination to show only the most recent items. Create the Tabbed Activity Log using headlessui-tabs (referenced in Context7) to group activities by type (Notes, Emails, Calls, Status Changes). Add Filter & Search functionality with full-text filtering and date-range picker. Implement Quick-Add Activity inline controls for adding new activity logs.",
+      "testStrategy": "Test pagination controls and verify correct items are displayed. Test tab switching between activity types. Verify search and filtering work as expected. Test adding new activities of different types.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create ImpersonationContext and Session Management Service",
-          "description": "Implement a React Context provider and session management service to handle role impersonation state across the application without affecting database permissions.",
+          "title": "Implement Activity Card Base Component",
+          "description": "Create the foundational Activity Card component that will display recent activities with appropriate styling and layout",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create an ImpersonationContext.js file with state for the current impersonated role, original role, and impersonation status.\n2. Implement functions for startImpersonation(role), stopImpersonation(), and getCurrentRole().\n3. Add session persistence using localStorage/sessionStorage to maintain impersonation state during page navigation.\n4. Create a session management service that intercepts API requests to inject impersonation headers (e.g., 'x-impersonate-role').\n5. Implement security checks to ensure only users with developer permissions can activate impersonation.\n6. Add logging functionality to record impersonation events with timestamps, original role, and impersonated role for security auditing.\n7. Test the context by creating a simple component that uses the impersonation hooks and verifies state changes and persistence.\n8. Ensure the implementation doesn't affect actual user permissions in the database by keeping impersonation at the frontend/API request level.\n\n<info added on 2025-04-30T02:51:04.212Z>\nHere's additional implementation information for the impersonation service and context:\n\n```typescript\n// src/lib/impersonationService.ts\nimport { Role } from '@/types';\n\ninterface ImpersonationData {\n  originalRole: Role;\n  impersonatedRole: Role;\n  timestamp: number;\n}\n\nexport const impersonationService = {\n  getImpersonationData(): ImpersonationData | null {\n    if (typeof window === 'undefined') return null;\n    const data = sessionStorage.getItem('impersonationData');\n    return data ? JSON.parse(data) : null;\n  },\n  \n  setImpersonation(originalRole: Role, impersonatedRole: Role): void {\n    const data: ImpersonationData = {\n      originalRole,\n      impersonatedRole,\n      timestamp: Date.now()\n    };\n    sessionStorage.setItem('impersonationData', JSON.stringify(data));\n    // Log impersonation event\n    console.info(`Impersonation started: ${originalRole} → ${impersonatedRole}`);\n  },\n  \n  clearImpersonation(): void {\n    const data = this.getImpersonationData();\n    if (data) {\n      console.info(`Impersonation ended: ${data.impersonatedRole} → ${data.originalRole}`);\n      sessionStorage.removeItem('impersonationData');\n    }\n  },\n  \n  isImpersonating(): boolean {\n    return this.getImpersonationData() !== null;\n  }\n};\n\n// src/contexts/ImpersonationContext.tsx\nexport interface ImpersonationContextType {\n  isImpersonating: boolean;\n  originalRole: Role | null;\n  impersonatedRole: Role | null;\n  impersonate: (role: Role) => void;\n  revert: () => void;\n}\n\n// Add API interceptor to inject headers\nexport const setupImpersonationInterceptor = (axiosInstance) => {\n  axiosInstance.interceptors.request.use((config) => {\n    const impersonationData = impersonationService.getImpersonationData();\n    if (impersonationData) {\n      config.headers = config.headers || {};\n      config.headers['x-impersonate-role'] = impersonationData.impersonatedRole;\n    }\n    return config;\n  });\n};\n\n// Add security check function\nexport const canImpersonate = (currentUserRole: Role): boolean => {\n  // Only developers or admins can impersonate\n  return ['DEVELOPER', 'ADMIN'].includes(currentUserRole);\n};\n```\n\nFor the context implementation, include error handling and role validation:\n\n```typescript\n// In ImpersonationContext.tsx\nconst impersonate = useCallback((role: Role) => {\n  if (!canImpersonate(user.role)) {\n    console.error('Permission denied: Current user cannot impersonate');\n    return false;\n  }\n  \n  if (role === user.role) {\n    console.warn('Cannot impersonate your own role');\n    return false;\n  }\n  \n  impersonationService.setImpersonation(user.role, role);\n  setImpersonatedRole(role);\n  setOriginalRole(user.role);\n  setIsImpersonating(true);\n  return true;\n}, [user]);\n```\n\nFor testing, create a simple component:\n\n```typescript\n// src/components/ImpersonationTester.tsx\nimport { useImpersonationContext } from '@/contexts/ImpersonationContext';\nimport { Role } from '@/types';\n\nexport const ImpersonationTester = () => {\n  const { isImpersonating, originalRole, impersonatedRole, impersonate, revert } = useImpersonationContext();\n  \n  return (\n    <div className=\"p-4 border rounded\">\n      <h2>Impersonation Test</h2>\n      <div>Status: {isImpersonating ? 'Active' : 'Inactive'}</div>\n      {isImpersonating && (\n        <div>\n          <p>Original Role: {originalRole}</p>\n          <p>Impersonated Role: {impersonatedRole}</p>\n        </div>\n      )}\n      <div className=\"mt-4 space-x-2\">\n        <button onClick={() => impersonate('USER')}>Impersonate User</button>\n        <button onClick={() => impersonate('ADMIN')}>Impersonate Admin</button>\n        <button onClick={revert}>Stop Impersonation</button>\n      </div>\n    </div>\n  );\n};\n```\n</info added on 2025-04-30T02:51:04.212Z>",
-          "status": "in-progress",
-          "parentTaskId": 7
+          "details": "Create a new component file ActivityCard.tsx using TailAdmin's ActivitiesCard as reference. Implement the card container with proper Tailwind CSS styling including rounded corners, appropriate padding, and responsive design. Set up the basic structure to display activity items with icons, timestamps, and descriptions. Use subtle text styling with proper contrast between primary content (activity description) and secondary content (timestamps, categories) as seen in the reference designs. Ensure the component accepts props for activity data and pagination controls."
         },
         {
           "id": 2,
-          "title": "Implement Impersonation UI Components in AppHeader",
-          "description": "Add a dropdown menu in the AppHeader that allows developers to select different user roles for impersonation, with clear visual indicators for impersonation mode.",
+          "title": "Implement Activity Item Components with Icons",
+          "description": "Create the individual activity item components with appropriate icons for different activity types",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Create a RoleImpersonationDropdown component that displays available roles for impersonation.\n2. Use the ImpersonationContext from subtask 1 to manage role selection and display the current impersonated role.\n3. Implement conditional rendering to only show the dropdown to users with developer permissions.\n4. Add a visual indicator (colored border, badge, or banner) that clearly shows when a user is in impersonation mode.\n5. Include the current impersonated role in the indicator.\n6. Add a prominent 'Return to Original Role' button to exit impersonation mode.\n7. Ensure the dropdown component is styled consistently with the existing AppHeader design.\n8. Implement hover states and tooltips to explain the impersonation feature to developers.\n9. Test the dropdown with different user roles to ensure it correctly displays and changes roles.\n10. Verify that the visual indicators appear and disappear appropriately when entering and exiting impersonation mode.",
-          "status": "done",
-          "parentTaskId": 7
+          "details": "Create ActivityItem.tsx component that renders different activity types (notes, calls, emails, status changes) with appropriate icons. Implement conditional rendering based on activity type. Use subtle styling differences to distinguish between activity types while maintaining design consistency. Each activity item should display: icon matching the activity type, timestamp formatted appropriately, activity description with proper text truncation if needed, and any relevant metadata. Ensure proper spacing between items and consistent vertical rhythm."
         },
         {
           "id": 3,
-          "title": "Integrate Impersonation with Application Permissions and API Layer",
-          "description": "Connect the impersonation feature with the application's permission system and API layer to ensure proper role simulation without affecting production data.",
+          "title": "Implement Tabbed Interface for Activity Log",
+          "description": "Create a tabbed interface using headlessui-tabs to categorize activities by type",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "1. Modify the application's permission checking system to consider the impersonated role when determining access rights.\n2. Update API request interceptors to include impersonation headers when a user is in impersonation mode.\n3. Implement backend middleware to process impersonation headers and temporarily adjust permissions for the request.\n4. Add special flags to any data created or modified during impersonation to clearly mark it in logs and databases.\n5. Ensure all actions taken while impersonating are logged with both the original and impersonated roles.\n6. Implement safeguards to prevent unauthorized privilege escalation through the impersonation feature.\n7. Create unit and integration tests to verify that impersonation correctly affects UI permissions (showing/hiding elements based on role).\n8. Test API requests to confirm they include the correct impersonation headers.\n9. Verify that reverting to the original role correctly restores all original permissions.\n10. Document the impersonation feature for other developers, including security considerations and testing procedures.",
-          "status": "done",
-          "parentTaskId": 7
+          "details": "Implement TabbedActivityLog.tsx component using headlessui-tabs library. Create tabs for different activity categories: 'All', 'Notes', 'Emails', 'Calls', and 'Status Changes'. Style the tabs with appropriate Tailwind classes for active/inactive states. Implement tab panels that filter and display the appropriate ActivityItem components based on the selected tab. Ensure smooth transitions between tabs and proper accessibility attributes. Connect the tabbed interface to the activity data source and implement conditional rendering logic to filter activities by type."
+        },
+        {
+          "id": 4,
+          "title": "Implement Filtering and Search Functionality",
+          "description": "Add filtering capabilities including text search and date range selection",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Create a FilterControls.tsx component with text search input and date range picker. Implement the search functionality with debounced input to filter activities by text content. Add a date range picker component that allows filtering activities within a specific time period. Style the filter controls to match the overall dashboard design with subtle input fields and clear visual feedback. Implement the filter logic that combines both text search and date range criteria. Connect the filter controls to the activity display components to update the visible activities based on filter criteria."
+        },
+        {
+          "id": 5,
+          "title": "Implement Quick-Add Activity Functionality",
+          "description": "Create inline controls for quickly adding new activity entries of different types",
+          "status": "pending",
+          "dependencies": [
+            3,
+            4
+          ],
+          "details": "Implement QuickAddActivity.tsx component with inline form controls for adding new activities. Create a dropdown or segmented control to select activity type (Note, Email, Call, Status Change). Implement type-specific input fields that appear based on the selected activity type. Add validation for required fields based on activity type. Style the quick-add controls to be compact yet usable, following the dashboard's design language. Implement the submission logic to add new activities to the data source. Add success/error feedback for form submission and reset form after successful submission."
         }
       ]
     },
     {
       "id": 8,
-      "title": "Gate Fees and Status Columns in Clients Table Using Authorized Component",
-      "description": "Implement access control for the Fees and Status columns in the Clients table by utilizing the new Authorized component and useAbility hook to restrict visibility based on user permissions.",
-      "details": "This task involves modifying the Clients table to conditionally render the Fees and Status columns based on user permissions:\n\n1. Import the new Authorized component and useAbility hook in the Clients table component\n2. Determine the appropriate ability/permission that should control access to the Fees column (likely financial or billing permissions)\n3. Determine the appropriate ability/permission that should control access to the Status column (likely client management permissions)\n4. Wrap the Fees column content in the Authorized component with the appropriate ability check\n5. Wrap the Status column content in the Authorized component with the appropriate ability check\n6. For both columns, implement appropriate fallback content to display when a user lacks permission (e.g., a dash, 'Restricted', or completely hide the column)\n7. If completely hiding columns, ensure the table layout remains consistent and doesn't break when columns are removed\n8. Update any related filtering or sorting functionality to account for potentially hidden columns\n9. Ensure that any data export functionality respects these same permission restrictions\n\nThe implementation should use the new authorization pattern consistently and avoid any direct references to the legacy RBAC system that was removed in Task #5.",
-      "testStrategy": "Testing should verify proper access control across different user roles:\n\n1. Unit Tests:\n   - Test the Clients table component with mocked useAbility responses for different permission scenarios\n   - Verify correct rendering/hiding of Fees column based on permissions\n   - Verify correct rendering/hiding of Status column based on permissions\n   - Test fallback content displays correctly when permissions are denied\n\n2. Integration Tests:\n   - Verify the component works correctly with the actual useAbility hook (not mocked)\n   - Test that filtering and sorting still work correctly when columns are hidden\n\n3. Manual Testing:\n   - Use the developer impersonation feature (from Task #7) to test with different user roles:\n     - Admin users should see both Fees and Status columns\n     - Users with financial permissions but not client management should see Fees but not Status\n     - Users with client management but not financial permissions should see Status but not Fees\n     - Users with neither permission should see neither column\n   - Verify the table layout remains visually consistent regardless of which columns are visible\n   - Test data export functionality to ensure it respects the same permissions",
-      "status": "done",
-      "dependencies": [],
+      "title": "Implement SharePoint Integration and Invoices Card",
+      "description": "Create the SharePoint folder browser and recent invoices components.",
+      "status": "pending",
+      "dependencies": [
+        2
+      ],
       "priority": "medium",
+      "details": "Embed the file-manager tree for client's SharePoint folders by reusing AllFolders component. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Integrate with existing File-Manager components as specified in the PRD.",
+      "testStrategy": "Test SharePoint folder navigation. Verify invoice links work correctly. Test with various document states and permissions.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Authorized Component and useAbility Hook for Column Access Control",
-          "description": "Create or adapt the Authorized component and useAbility hook to handle column-level access control in the Clients table. This foundation will enable permission-based visibility of sensitive data.",
+          "title": "Implement SharePoint Folder Browser Component",
+          "description": "Create a reusable SharePoint folder browser by adapting the existing AllFolders component to display client's SharePoint folders in a hierarchical tree structure with proper navigation.",
           "dependencies": [],
-          "details": "1. Create or adapt the Authorized component that accepts resource, action, children, and fallback props\n2. Implement the useAbility hook to check user permissions against required abilities\n3. Define the specific permission constants for fees access ('read:client:fees') and status access ('read:client:status')\n4. Ensure the hook properly integrates with the existing authentication system\n5. Add appropriate TypeScript interfaces/types for the component and hook\n6. Write unit tests for the Authorized component with various permission scenarios\n7. Test the useAbility hook with mocked permission sets\n8. Document the component and hook usage patterns for team reference\n\nTesting approach: Create Jest unit tests that verify the Authorized component renders children when permissions exist and fallback content when they don't. Mock the useAbility hook to return different permission sets for testing.",
-          "status": "done",
+          "details": "Implementation steps:\n\n1. Set up SharePoint API integration:\n   - Implement authentication using OAuth 2.0 with Azure AD\n   - Configure the @pnp/sp library for SharePoint REST API calls\n   - Create service methods for fetching folder structure and contents\n\n2. Adapt the AllFolders component:\n   - Modify the component to accept SharePoint folder paths\n   - Implement lazy loading to fetch folder contents on demand\n   - Add breadcrumb navigation for easy traversal between folders\n   - Ensure clear visual distinction between files and folders\n\n3. Implement folder navigation:\n   - Create click handlers for folder expansion/collapse\n   - Maintain navigation state using React hooks or context\n   - Add loading indicators during API calls\n   - Implement error handling for permission issues or network failures\n\n4. Testing approach:\n   - Unit test the SharePoint service methods with mock data\n   - Test folder navigation with different folder depths\n   - Verify proper handling of empty folders and error states\n   - Test performance with large folder structures",
+          "status": "pending",
           "parentTaskId": 8
         },
         {
           "id": 2,
-          "title": "Implement Permission-Based Column Rendering in Clients Table",
-          "description": "Modify the Clients table component to conditionally render the Fees and Status columns based on user permissions using the Authorized component and useAbility hook.",
+          "title": "Develop Recent Invoices Card Component",
+          "description": "Create a card component that displays the 5 most recent invoice documents with their payment status (paid/unpaid) and direct links to the PDF files.",
           "dependencies": [
             1
           ],
-          "details": "1. Import the Authorized component and useAbility hook in the Clients table component\n2. Identify the table header and data cell rendering logic for the Fees column\n3. Wrap the Fees column header and data cells with the Authorized component using the 'read:client:fees' permission\n4. Implement appropriate fallback content for unauthorized Fees access (e.g., a dash or 'Restricted')\n5. Repeat steps 3-4 for the Status column using the 'read:client:status' permission\n6. Ensure table layout remains consistent when columns are hidden (consider using CSS grid or flexbox for stability)\n7. Update any column configuration objects that might be used for dynamic rendering\n8. Test the component with different user permission sets to verify correct rendering\n\nTesting approach: Create component tests that render the Clients table with different mocked permission sets and verify that columns appear or are hidden appropriately. Check that the table layout remains stable regardless of which columns are visible.",
-          "status": "done",
+          "details": "Implementation steps:\n\n1. Design the invoices card UI:\n   - Create a responsive card layout using Fluent UI components\n   - Design status indicators for paid/unpaid invoices\n   - Include invoice number, date, amount, and status fields\n   - Add PDF preview or direct download links\n\n2. Implement data fetching:\n   - Create a service to fetch invoice metadata from SharePoint\n   - Implement sorting by date (most recent first)\n   - Add filtering for invoice document types\n   - Limit results to 5 items with option to view more\n\n3. Develop status indicators:\n   - Implement logic to determine payment status from metadata\n   - Create visual indicators (icons/colors) for paid vs. unpaid status\n   - Add tooltips for additional status information\n\n4. Add PDF linking functionality:\n   - Generate secure links to invoice PDFs in SharePoint\n   - Implement preview functionality if applicable\n   - Handle permission checks before displaying links\n\n5. Testing approach:\n   - Unit test the invoice fetching service\n   - Test sorting and filtering logic\n   - Verify correct status determination\n   - Test PDF link generation and security",
+          "status": "pending",
           "parentTaskId": 8
         },
         {
           "id": 3,
-          "title": "Update Related Functionality to Respect Column Permissions",
-          "description": "Ensure that all related table functionality (sorting, filtering, exporting, etc.) respects the same permission restrictions applied to the Fees and Status columns.",
+          "title": "Integrate Components with Existing File-Manager",
+          "description": "Connect the SharePoint folder browser and Recent Invoices card with the existing File-Manager components as specified in the PRD, ensuring seamless interaction between components.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implementation steps:\n\n1. Review existing File-Manager architecture:\n   - Analyze current component structure and data flow\n   - Identify integration points for new components\n   - Document required modifications to existing components\n\n2. Implement component integration:\n   - Add the SharePoint folder browser to the main file navigation\n   - Position the Recent Invoices card according to PRD specifications\n   - Ensure consistent styling across all components\n   - Implement shared state management if needed\n\n3. Establish cross-component communication:\n   - Create event handlers for file/folder selection\n   - Implement navigation synchronization between components\n   - Ensure invoice selection in the card updates the main view\n   - Add context awareness between components\n\n4. Optimize performance:\n   - Implement caching for frequently accessed folders\n   - Add pagination or virtualization for large folder structures\n   - Optimize re-renders using React.memo or shouldComponentUpdate\n   - Ensure responsive behavior across device sizes\n\n5. Testing approach:\n   - Integration tests for component interaction\n   - End-to-end tests for common user flows\n   - Verify behavior matches PRD specifications\n   - Test performance with realistic data volumes\n   - Cross-browser and cross-device testing",
+          "status": "pending",
+          "parentTaskId": 8
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Build Compliance Components",
+      "description": "Create the regulatory checklist, alerts, and meeting minutes components.",
+      "status": "pending",
+      "dependencies": [
+        2
+      ],
+      "priority": "low",
+      "details": "Implement the Regulatory Checklist showing compliance items with check marks. Create Alerts & Warnings for missing or expired documentation and upcoming license renewals. Build the Meeting Minutes Panel for recording audit meeting notes with auto-append to activity log. Implement Email Thread Panel to embed the last 3 client email threads via Outlook/Gmail integration.",
+      "testStrategy": "Test checklist state changes. Verify alerts trigger correctly based on document status. Test meeting minutes recording and verify they appear in the activity log.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Regulatory Checklist Component",
+          "description": "Create a component that displays compliance items with check marks and status indicators",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Develop a checklist component that shows regulatory compliance items with their current status. The component should include: 1) A data model to store compliance items with attributes like item name, status (compliant/non-compliant), due date, and last check date; 2) A UI interface with checkboxes, status indicators (using color coding for quick visual reference), and the ability to filter items by category or status; 3) Functionality to mark items as complete or incomplete with timestamp tracking; 4) Integration with the backend API to fetch and update compliance data. Consider implementing a progress indicator showing overall compliance percentage. The component should follow the application's design system and be responsive for different screen sizes."
+        },
+        {
+          "id": 2,
+          "title": "Build Alerts & Warnings System",
+          "description": "Develop notification components for missing documentation, expired items, and upcoming renewals",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Create an alerts and warnings system that monitors compliance status and notifies users of issues. Implementation should include: 1) A notification engine that checks for missing documentation, expired items, and upcoming license renewals based on predefined rules and timeframes; 2) A visual alert component with priority levels (high/medium/low) and appropriate styling for each level; 3) A dashboard widget showing a summary of current alerts with the ability to expand for details; 4) Functionality to dismiss or snooze alerts with audit logging of these actions; 5) Configuration options for alert thresholds (e.g., warn 30/60/90 days before expiration). The alerts should be persistent until resolved and should refresh automatically when underlying data changes."
+        },
+        {
+          "id": 3,
+          "title": "Develop Meeting Minutes and Email Integration Panels",
+          "description": "Create components for recording audit meeting notes and displaying recent client email communications",
+          "status": "pending",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Implement two related panels for communication tracking: 1) Meeting Minutes Panel with rich text editor for recording audit meeting notes, auto-saving capability, participant tagging, action item assignment, and automatic appending to the activity log with timestamps; 2) Email Thread Panel that connects to Outlook/Gmail APIs to fetch and display the last 3 client email threads, including sender/recipient information, timestamps, subject lines, and message previews with the ability to expand full messages. Both panels should share a common design language and include search/filter capabilities. For the email integration, implement proper authentication handling, caching for performance, and privacy controls to ensure only authorized users can view email content. The panels should be collapsible and resizable to fit different workflow needs."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Implement Action Buttons and Client Value Projection",
+      "description": "Create the action buttons and client lifetime value projection components.",
+      "status": "pending",
+      "dependencies": [
+        3,
+        7
+      ],
+      "priority": "low",
+      "details": "Implement Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Use the useAbility hook to gate the Archive action with the clients.archive permission. Create the Client Lifetime Value Projection chart to forecast next year's fees based on past trends.",
+      "testStrategy": "Test each action button functionality. Verify Archive confirmation modal works and updates client.status correctly. Test permission gating for restricted actions. Verify projection calculations with various historical data patterns.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Action Buttons with Permission Gating",
+          "description": "Create reusable action button components for quick actions (Add Contact, Link Bank Feed, Request Document, Schedule Audit, Archive Client). Integrate the useAbility hook to gate the Archive Client button based on the clients.archive permission, and implement a confirmation modal for the Archive action.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Define a reusable Button component, ensuring proper event handling and styling for each action. Place these buttons within the client UI, using the useAbility hook to conditionally render or disable the Archive Client button based on user permissions. For the Archive action, trigger a modal dialog to confirm the user's intent before proceeding. Reference React button best practices for accessibility and maintainability[3][5]."
+        },
+        {
+          "id": 2,
+          "title": "Integrate Action Buttons into the Client Card or Dashboard",
+          "description": "Embed the action buttons into the appropriate client-facing component, such as a client card or dashboard, ensuring a cohesive and accessible layout.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Update the client card or dashboard component to include the action buttons in a visually organized manner, using a container (e.g., a div with an action button group class). Ensure spacing, alignment, and responsive design. Test that each button triggers the correct handler and that the Archive button respects permission gating and confirmation modal behavior[5]."
+        },
+        {
+          "id": 3,
+          "title": "Develop Client Lifetime Value Projection Chart Component",
+          "description": "Create a chart component that forecasts the client's next year's fees based on historical data and trends, and integrate it into the client view.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "1. Identify all places where the Fees and Status columns are referenced in sorting functionality\n2. Modify sorting logic to check permissions before allowing sorts on restricted columns\n3. Update filtering components to hide filter options for columns the user cannot access\n4. Modify any data export functionality to exclude restricted columns from exports\n5. Update any column visibility toggles to respect permission restrictions\n6. Ensure search functionality doesn't reveal restricted data in results\n7. Add integration tests that verify these features respect permissions\n8. Perform end-to-end testing with different user roles to verify complete implementation\n\nTesting approach: Create integration tests that simulate user interactions like sorting, filtering, and exporting with different permission sets. Verify that these operations correctly respect column access permissions. Include edge cases like what happens when a user's permissions change while using the application.",
-          "status": "done",
-          "parentTaskId": 8
+          "details": "Design and implement a chart (e.g., using a charting library like Chart.js or Recharts) that visualizes the client's historical fees and projects the next year's value using a suitable forecasting method (e.g., linear regression or moving average). Fetch and process the necessary data, and display the chart within the client dashboard or detail view, ensuring it complements the action buttons and overall UI."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Implement Permission Controls and RBAC",
+      "description": "Apply permission gating throughout the client profile page.",
+      "status": "pending",
+      "dependencies": [
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "priority": "high",
+      "details": "Implement permission controls using useAbility() and <Authorized> components according to the useAbility rules. Gate editing features with clients.edit permission. Gate archive functionality with clients.archive permission. Restrict access to sensitive financial data (fees, estAnnFees) to Admin users only. Add RBAC tests to prevent permission drift.",
+      "testStrategy": "Test with different user roles to verify appropriate access controls. Verify sensitive data is hidden from unauthorized users. Run RBAC tests to ensure permission rules are enforced consistently.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Integrate Permission Gating for Editing and Archiving Features",
+          "description": "Apply permission controls to the client profile page to gate editing and archive functionalities using useAbility() and <Authorized> components. Ensure that only users with the appropriate permissions can access these features.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Wrap all editing-related UI elements and actions with <Authorized> components that check for the 'clients.edit' permission using useAbility(). Similarly, gate the archive functionality with a check for the 'clients.archive' permission. Ensure that these controls are consistently applied throughout the client profile page to prevent unauthorized access to editing and archiving features."
+        },
+        {
+          "id": 2,
+          "title": "Restrict Access to Sensitive Financial Data for Admin Users",
+          "description": "Implement permission checks to ensure that sensitive financial fields (fees, estAnnFees) are only visible to Admin users on the client profile page.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Identify all UI components and data fetches related to sensitive financial information. Use useAbility() and <Authorized> components to conditionally render these fields only if the current user has the 'Admin' role or equivalent permission. Ensure that both frontend display and any client-side logic respect this restriction, preventing non-Admin users from accessing or inferring sensitive financial data."
+        },
+        {
+          "id": 3,
+          "title": "Add and Validate RBAC Tests to Prevent Permission Drift",
+          "description": "Develop and maintain automated tests to verify that permission gating and RBAC rules are enforced correctly on the client profile page, preventing unauthorized access and permission drift.",
+          "status": "pending",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Write unit and integration tests that simulate users with different roles and permissions, verifying that editing, archiving, and sensitive financial data are only accessible to authorized users. Use testing utilities to mock useAbility() and <Authorized> behavior. Ensure tests cover edge cases, such as role changes and permission updates, to catch regressions and maintain RBAC integrity over time."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Optimize Performance and Finalize UI",
+      "description": "Optimize data loading, implement responsive design, and conduct final testing.",
+      "status": "pending",
+      "dependencies": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "priority": "medium",
+      "details": "Optimize data loading with pagination, lazy-loading, and Suspense boundaries for non-critical sections. Implement responsive design adjustments for all components. Conduct accessibility (A11y) checks and fixes. Create Storybook stories and unit tests for key components. Address performance issues with data volume by using select queries and optimizing bundle size.",
+      "testStrategy": "Run performance tests to measure load times and identify bottlenecks. Test responsive behavior across devices. Conduct accessibility audit. Run unit tests and Storybook visual regression tests.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Optimize Data Loading and Performance",
+          "description": "Implement efficient data loading strategies and address performance bottlenecks related to large data volumes.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Apply pagination and lazy-loading for long lists using techniques such as windowing (e.g., react-window or react-virtualized). Use React.lazy and Suspense boundaries to defer loading of non-critical components. Optimize bundle size with code-splitting and dynamic imports. Refactor data queries to use select queries that fetch only necessary fields. Apply memoization (useMemo, React.memo) to reduce unnecessary re-renders and computations.[1][2][5]"
+        },
+        {
+          "id": 2,
+          "title": "Implement Responsive and Accessible UI",
+          "description": "Ensure all UI components are responsive across devices and meet accessibility (A11y) standards.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Update CSS and layout logic to support responsive design for all components (e.g., using CSS Grid, Flexbox, and media queries). Conduct accessibility checks (using tools like axe or Lighthouse) and fix issues such as missing ARIA attributes, insufficient color contrast, and keyboard navigation. Adjust UI elements to maintain usability and accessibility on different screen sizes."
+        },
+        {
+          "id": 3,
+          "title": "Finalize UI with Storybook and Testing",
+          "description": "Create Storybook stories and implement unit tests for key components, ensuring UI consistency and reliability.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Develop comprehensive Storybook stories for all major UI components, covering various states and interactions. Write unit tests for critical components and logic using a testing framework (e.g., Jest, React Testing Library). Verify that all performance, responsiveness, and accessibility optimizations are preserved during testing. Address any regressions or issues identified."
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "RBAC Migration to PermissionContext",
-    "totalTasks": 6,
-    "sourceFile": "scripts/PRD_permissions-migration.txt",
-    "generatedAt": "2023-11-08"
+    "projectName": "Client Profile Page Implementation",
+    "totalTasks": 12,
+    "sourceFile": "scripts/PRD_phase2-clientPage.txt",
+    "generatedAt": "2023-11-14"
   }
 }

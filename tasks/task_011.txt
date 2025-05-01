@@ -1,0 +1,31 @@
+# Task ID: 11
+# Title: Implement Permission Controls and RBAC
+# Status: pending
+# Dependencies: 3, 5, 6, 7, 8, 9, 10
+# Priority: high
+# Description: Apply permission gating throughout the client profile page.
+# Details:
+Implement permission controls using useAbility() and <Authorized> components according to the useAbility rules. Gate editing features with clients.edit permission. Gate archive functionality with clients.archive permission. Restrict access to sensitive financial data (fees, estAnnFees) to Admin users only. Add RBAC tests to prevent permission drift.
+
+# Test Strategy:
+Test with different user roles to verify appropriate access controls. Verify sensitive data is hidden from unauthorized users. Run RBAC tests to ensure permission rules are enforced consistently.
+
+# Subtasks:
+## 1. Integrate Permission Gating for Editing and Archiving Features [pending]
+### Dependencies: None
+### Description: Apply permission controls to the client profile page to gate editing and archive functionalities using useAbility() and <Authorized> components. Ensure that only users with the appropriate permissions can access these features.
+### Details:
+Wrap all editing-related UI elements and actions with <Authorized> components that check for the 'clients.edit' permission using useAbility(). Similarly, gate the archive functionality with a check for the 'clients.archive' permission. Ensure that these controls are consistently applied throughout the client profile page to prevent unauthorized access to editing and archiving features.
+
+## 2. Restrict Access to Sensitive Financial Data for Admin Users [pending]
+### Dependencies: 11.1
+### Description: Implement permission checks to ensure that sensitive financial fields (fees, estAnnFees) are only visible to Admin users on the client profile page.
+### Details:
+Identify all UI components and data fetches related to sensitive financial information. Use useAbility() and <Authorized> components to conditionally render these fields only if the current user has the 'Admin' role or equivalent permission. Ensure that both frontend display and any client-side logic respect this restriction, preventing non-Admin users from accessing or inferring sensitive financial data.
+
+## 3. Add and Validate RBAC Tests to Prevent Permission Drift [pending]
+### Dependencies: 11.1, 11.2
+### Description: Develop and maintain automated tests to verify that permission gating and RBAC rules are enforced correctly on the client profile page, preventing unauthorized access and permission drift.
+### Details:
+Write unit and integration tests that simulate users with different roles and permissions, verifying that editing, archiving, and sensitive financial data are only accessible to authorized users. Use testing utilities to mock useAbility() and <Authorized> behavior. Ensure tests cover edge cases, such as role changes and permission updates, to catch regressions and maintain RBAC integrity over time.
+

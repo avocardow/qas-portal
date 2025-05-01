@@ -1,0 +1,43 @@
+# Task ID: 7
+# Title: Create Activity Card and Tabbed Activity Log
+# Status: pending
+# Dependencies: 2
+# Priority: medium
+# Description: Implement the activity tracking components with filtering and quick-add functionality.
+# Details:
+Build the Activity Card using TailAdmin's ActivitiesCard to show recent notes, call logs, and status changes with icons. Implement pagination to show only the most recent items. Create the Tabbed Activity Log using headlessui-tabs (referenced in Context7) to group activities by type (Notes, Emails, Calls, Status Changes). Add Filter & Search functionality with full-text filtering and date-range picker. Implement Quick-Add Activity inline controls for adding new activity logs.
+
+# Test Strategy:
+Test pagination controls and verify correct items are displayed. Test tab switching between activity types. Verify search and filtering work as expected. Test adding new activities of different types.
+
+# Subtasks:
+## 1. Implement Activity Card Base Component [pending]
+### Dependencies: None
+### Description: Create the foundational Activity Card component that will display recent activities with appropriate styling and layout
+### Details:
+Create a new component file ActivityCard.tsx using TailAdmin's ActivitiesCard as reference. Implement the card container with proper Tailwind CSS styling including rounded corners, appropriate padding, and responsive design. Set up the basic structure to display activity items with icons, timestamps, and descriptions. Use subtle text styling with proper contrast between primary content (activity description) and secondary content (timestamps, categories) as seen in the reference designs. Ensure the component accepts props for activity data and pagination controls.
+
+## 2. Implement Activity Item Components with Icons [pending]
+### Dependencies: 7.1
+### Description: Create the individual activity item components with appropriate icons for different activity types
+### Details:
+Create ActivityItem.tsx component that renders different activity types (notes, calls, emails, status changes) with appropriate icons. Implement conditional rendering based on activity type. Use subtle styling differences to distinguish between activity types while maintaining design consistency. Each activity item should display: icon matching the activity type, timestamp formatted appropriately, activity description with proper text truncation if needed, and any relevant metadata. Ensure proper spacing between items and consistent vertical rhythm.
+
+## 3. Implement Tabbed Interface for Activity Log [pending]
+### Dependencies: 7.2
+### Description: Create a tabbed interface using headlessui-tabs to categorize activities by type
+### Details:
+Implement TabbedActivityLog.tsx component using headlessui-tabs library. Create tabs for different activity categories: 'All', 'Notes', 'Emails', 'Calls', and 'Status Changes'. Style the tabs with appropriate Tailwind classes for active/inactive states. Implement tab panels that filter and display the appropriate ActivityItem components based on the selected tab. Ensure smooth transitions between tabs and proper accessibility attributes. Connect the tabbed interface to the activity data source and implement conditional rendering logic to filter activities by type.
+
+## 4. Implement Filtering and Search Functionality [pending]
+### Dependencies: 7.3
+### Description: Add filtering capabilities including text search and date range selection
+### Details:
+Create a FilterControls.tsx component with text search input and date range picker. Implement the search functionality with debounced input to filter activities by text content. Add a date range picker component that allows filtering activities within a specific time period. Style the filter controls to match the overall dashboard design with subtle input fields and clear visual feedback. Implement the filter logic that combines both text search and date range criteria. Connect the filter controls to the activity display components to update the visible activities based on filter criteria.
+
+## 5. Implement Quick-Add Activity Functionality [pending]
+### Dependencies: 7.3, 7.4
+### Description: Create inline controls for quickly adding new activity entries of different types
+### Details:
+Implement QuickAddActivity.tsx component with inline form controls for adding new activities. Create a dropdown or segmented control to select activity type (Note, Email, Call, Status Change). Implement type-specific input fields that appear based on the selected activity type. Add validation for required fields based on activity type. Style the quick-add controls to be compact yet usable, following the dashboard's design language. Implement the submission logic to add new activities to the data source. Add success/error feedback for form submission and reset form after successful submission.
+
