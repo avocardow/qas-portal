@@ -4,16 +4,18 @@ import "dotenv/config";
 const prisma = new PrismaClient();
 
 async function main() {
-  const roles: Array<{ name: string; id?: number }> = [
-    { name: "Developer", id: 0 },
-    { name: "Admin", id: 1 },
-    { name: "Manager", id: 2 },
-    { name: "Auditor", id: 3 },
-    { name: "Staff", id: 4 },
-    { name: "Client", id: 5 },
+  const roles: Array<{ name: string; id?: number; description: string }> = [
+    { name: "Developer", id: 0, description: "Internal developer with unrestricted access and bypass privileges" },
+    { name: "Admin", id: 1, description: "Full system access and user management" },
+    { name: "Manager", id: 2, description: "Oversees audits and team members" },
+    { name: "Auditor", id: 3, description: "Performs audits and manages assigned tasks" },
+    { name: "Staff", id: 4, description: "Assists with specific audit tasks" },
+    { name: "Client", id: 5, description: "External client user with portal access" },
   ];
   for (const role of roles) {
-    const createData = role.id !== undefined ? { id: role.id, name: role.name } : { name: role.name };
+    const createData = role.id !== undefined
+      ? { id: role.id, name: role.name, description: role.description }
+      : { name: role.name, description: role.description };
     await prisma.role.upsert({ where: { name: role.name }, update: {}, create: createData });
     console.log(`Seeded role: ${role.name}`);
   }
