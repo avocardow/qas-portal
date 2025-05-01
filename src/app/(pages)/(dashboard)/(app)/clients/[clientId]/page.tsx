@@ -6,6 +6,7 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/utils/api";
+import { useClientData } from "@/hooks/useClientData";
 import ComponentCard from "@/components/common/ComponentCard";
 import {
   Table,
@@ -35,11 +36,7 @@ export default function ClientDetailPage() {
   const { clientId } = useParams() as { clientId: string };
   const router = useRouter();
   const deleteClientMutation = api.clients.deleteClient.useMutation();
-  const {
-    data: client,
-    isLoading,
-    isError,
-  } = api.clients.getById.useQuery({ clientId });
+  const { data: client, isLoading, isError } = useClientData(clientId);
   const { can } = useAbility();
   const { isOpen, openModal, closeModal } = useModal();
   // Folder selection state and queries
