@@ -1,0 +1,124 @@
+<context>
+# Overview  
+This Client Profile page surfaces all relevant data about a client in QLD Audit Specialists' system, consolidating company details, contacts, licenses, trust accounts, audits, and activity into a unified dashboard for auditors. By integrating TailAdmin components and Context7 references, we ensure consistency, accessibility, and rapid access to critical audit information.
+
+# Core Features  
+0. **Full Data Dump**  
+   - Initially load *all* client and related entity fields (contacts, licenses, trustAccounts, audits, activityLogs, documentReferences) from the database API to allow refinement and gating later.
+1. **Lifetime Fees Card** (1a)  
+   - Show total historical fees billed to the client with a numeric summary and sparkline trend.  
+2. **YoY Growth Chart** (1c)  
+   - Display a small bar/line chart of annual `estAnnFees` history using TailAdmin's chart component.  
+3. **Customer Health Score** (1d)  
+   - Compute and visualize a compliance or risk score (0–100) with colored ribbon (e.g., green/yellow/red).  
+4. **Audit Cycle Progress Bar** (3a)  
+   - Progress bar from last audit's `reportDueDate` to next due date, styled with TailAdmin `/progress-bar`.  
+5. **Upcoming Audit Schedule** (3b)  
+   - List next audit milestones (e.g., due dates, stages) in a card resembling CRM `UpcomingSchedule`.  
+6. **Recent Contacts Table** (4a)  
+   - TailAdmin `RecentOrders`-style table: Name (link to `/contacts/[id]`), Email, Phone, Title, Primary badge.  
+   - **Multiple Licenses:** display the primary license and any additional licenses per contact cleanly (e.g., comma-separated or expandable cell).  
+7. **Contact Network Diagram** (4b)  
+   - Simple graph showing relationships: client → contacts → trust accounts.  
+8. **Trust Accounts Table** (5a)  
+   - Columns: Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, `managementSoftware`, and `softwareUrl`.  
+   - Include a button linking to each account's management software or external feed.  
+9. **Software Links** (5c)  
+   - "Open in Xero" or "Open in SharePoint" action buttons in each trust account row.  
+10. **Activity Card** (6a)  
+   - TailAdmin `ActivitiesCard`: recent notes, call logs, status changes with icons.  
+   - **Pagination:** show the most recent items with pagination controls to avoid loading all items at once.  
+11. **Tabbed Activity Log** (6b)  
+   - `<Tabs>` grouping "Notes", "Emails", "Calls", "Status Changes" (inspired by `/tabs`).  
+12. **Filter & Search** (6c)  
+   - Full-text filter on activity content and date-range picker in log section.  
+13. **SharePoint Folder Browser** (7a)  
+   - Embed file-manager tree for client's SharePoint folders (see File-Manager page).  
+14. **Recent Invoices Card** (7b)  
+   - List last 5 invoice docs with status (paid/unpaid), link to PDF.  
+15. **Regulatory Checklist** (8a)  
+   - Compliance items ("Trust deed," "Bank statements," etc.) with check marks.  
+16. **Alerts & Warnings** (8b)  
+   - Flags for missing or expired documentation and upcoming license renewals.  
+17. **Meeting Minutes Panel** (9b)  
+   - Inline panel to record audit meeting notes, auto-append to activity log.  
+18. **Action Buttons** (10a)  
+   - Quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, **Archive Client** (with confirmation modal).  
+   - **Archive Action:** sets `client.status` to `archived` (no physical deletion) and requires a warning confirmation modal.  
+19. **Client Lifetime Value Projection** (11c)  
+   - Forecast next year's fees based on past trends (small predictive chart).  
+20. **Email Thread Panel** (13b)  
+   - Embed last 3 client email threads via Outlook/Gmail integration.  
+
+# User Experience  
+- **Personas:** QAS Auditors, Managers, Admins (with elevated permissions).  
+- **Key Flows:**  
+  1. Landing on Client Profile → see financial KPIs at top.  
+  2. Scroll to Contacts → view and navigate to full contact details.  
+  3. Review Trust Accounts → reconcile or open external software.  
+  4. Check upcoming audit schedule and progress bar.  
+  5. Scan activity log with filters and record new meeting minutes.  
+- **UI/UX Considerations:**  
+  - Use TailAdmin grid (`xl:grid-cols-12`) and cards for layout.  
+  - Ensure responsive breakpoints (collapse sections on mobile).  
+  - **One-Page Layout:** fit all key info on a single desktop view using tabs or accordions to avoid excessive scrolling.  
+  - Follow Cursor rules ([cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc)) for code styling, component usage, and permission gating.  
+  - Use Context7 to reference official docs for DataTableTwo, ProgressBar, Intl.DateTimeFormat, and Next.js data fetching patterns.
+</context>
+<PRD>
+# Technical Architecture  
+- **Page:** `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`  
+- **Data Fetching:** tRPC call `api.clients.getById({ clientId })` with Prisma relations: contacts → licenses, trustAccounts, audits, activityLogs, documentReferences.  
+- **Components:**  
+  - KPI cards: `ComponentCard` + chart components (e.g., `GrowthChart`, custom FeeCard).  
+  - Tables: `DataTableTwo` for contacts/trust accounts.  
+  - Charts: TailAdmin chart wrappers (e.g., Chart.js via TailAdmin).  
+  - Tabs & ProgressBar: reuse `/tabs` and `/progress-bar` UI-elements.  
+  - File browser: embed `AllFolders` + `RecentFileTable` from File-Manager.  
+  - Activity: `ActivitiesCard` + custom `TabbedActivityLog`.  
+- **Permissions:** Use `useAbility()` and `<Authorized>` (see [useAbility rules](mdc:.cursor/rules/useAbility.mdc)) to gate features.  
+  - **Edit Permission:** `clients.edit` for updating client details.  
+  - **Archive Permission:** `clients.archive` for setting status to archived.  
+  - **Private Data:** fees (`estAnnFees`) and other sensitive fields are limited to Admins only.  
+- **Context7 References:**  
+  - DataTableTwo APIDocs (Context7: `vercel/nextjs#DataTableTwo`)  
+  - Intl.DateTimeFormat (MDN docs via Context7)  
+  - Next.js App Router data fetching guidelines (`nextjs/docs/app/building-your-application/data-fetching`)  
+
+# Development Roadmap  
+1. **Data Layer & API**  
+   - Extend `getById` to include all relations.  
+   - Add pagination/filter input for activity log and files.  
+2. **Layout & Scaffolding**  
+   - Create page wrapper using TailAdmin grid & `PageBreadcrumb`.  
+   - Scaffold KPI section and basic `useQuery` hook.  
+3. **Feature Implementation**  
+   - KPI cards (1,2,3).  
+   - Audit schedule & progress bar (4,5).  
+   - Contacts & network diagram (6,7).  
+   - Trust accounts + software links (8,9).  
+   - Activity log & meeting minutes (10,11,12).  
+   - File browser & invoices card (13,14).  
+   - Compliance checklist & alerts (15,16).  
+   - Action buttons & projections (17,18,19,20).  
+4. **Permissions & Polishing**  
+   - Gate content via `can()`.  
+   - Responsive breakpoints & accessibility checks.  
+   - Write Storybook stories & unit tests.  
+
+# Logical Dependency Chain  
+1. Extend API (relations) → 2. Page scaffolding → 3. KPI & audit features → 4. Tables & file browser → 5. Activity & notes → 6. Compliance & projections → 7. Permissions & tests
+
+# Risks and Mitigations  
+- **Data Volume & Performance:** fetching all relations can be heavy → use `select` to limit fields, add pagination for logs/files.  
+- **Chart & Table Complexity:** many UI modules risk slow initial load → lazy-load non-critical sections; use React Suspense.  
+- **Permission Drift:** new features may expose private data → enforce `<Authorized>` wrappers and add unit tests for permission gating.
+
+# Appendix  
+- **Cursor Rules:** adhere to [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) for edits.  
+- **Context7 IDs:**  
+  - `vercel/nextjs#app-router-data-fetching`  
+  - `vercel/nextjs#headlessui-tabs`  
+  - `radix-ui/primitives#Progress`  
+  - `prisma/prisma-client-js#relations`
+</PRD> 

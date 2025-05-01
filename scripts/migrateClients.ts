@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
 // --- Configuration ---
 const csvFilePath = path.resolve(__dirname, "../data/QASClientDatabase.csv"); // This line should now work
 // !!!!! REPLACE 'YOUR_ADMIN_USER_ID' with the actual UUID of the user running the script !!!!!
-const scriptRunnerUserId = "283ac3ae-7c54-405b-b9f8-f0fd2e39027e"; // <<<--- CONFIRM/CHANGE THIS
+const scriptRunnerUserId = "abe4ca92-8dc3-47cf-bc09-3eec0e55b3c8"; // <<<--- CONFIRM/CHANGE THIS
 const defaultAuditStatusName = "In Progress"; // Default status for initial audit
 
 // --- Helper Functions ---

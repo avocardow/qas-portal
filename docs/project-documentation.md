@@ -148,31 +148,3 @@ Below is a list of current placeholder pages (using `DashboardPlaceholderPageTem
 ## Authorization and Permissions
 
 The application enforces role-based access control (RBAC) using a centralized permission system. For detailed developer documentation on permissions, including how to use the `useAbility` hook, `<Authorized>` component, and define new permissions, see [Permissions Documentation](permissions.md).
-
-## Next Steps for Phase 1 Development
-
-Below is an outline of the immediate next steps for Phase 1 development:
-
-1. Implement Core Entity UIs and CRUD Operations
-   - Build clients list and detail pages using real data from Supabase via tRPC.
-   - Create contacts management pages with create, update, and delete functionality.
-   - Develop trust account and license management interfaces.
-2. Integrate Authentication and Authorization
-   - Finalize NextAuth Azure AD sign-in and role-based access control.
-   - Ensure protected routes in the (app) group enforce user permissions.
-3. Complete Feature Implementations
-   - Implement billing workflows: invoice creation, payment processing, and status updates.
-   - Develop audit and task management modules with server actions and real-time updates.
-   - Build calendar and chat interfaces with full functionality.
-4. Enhance Data Verification and Migration
-   - Validate migrated data in staging and production-like environments.
-   - Automate migration scripts within CI pipelines for repeatable deployments.
-5. Refine UI/UX and Accessibility
-   - Review UI components for consistency, responsiveness, and accessibility compliance.
-   - Conduct user testing sessions to gather feedback and iterate on designs.
-6. Testing and CI/CD Setup
-   - Write comprehensive unit and integration tests for both frontend and backend.
-   - Configure GitHub Actions workflows for linting, testing, and automated deployments.
-7. Documentation and Knowledge Transfer
-   - Finalize and publish documentation to the project wiki and README.
-   - Host internal walkthrough sessions to onboard the development team.
