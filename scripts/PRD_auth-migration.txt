@@ -1,0 +1,88 @@
+# Overview
+We plan to migrate our authentication and user management from NextAuth to Supabase's built-in Auth system. This migration will streamline our database schema, leverage Supabase's robust Auth features (email magic-link, OAuth, JWT, RLS), and reduce maintenance overhead.
+
+**Note:** All implementation must adhere to existing Cursor Rules and use Context7 to fetch and reference official Supabase Auth documentation.
+
+# Core Features
+- **Supabase Auth Integration**
+  - Replace NextAuth with Supabase Auth for Email/Magic-link and Microsoft/Azure OAuth flows.
+  - Simplify user, account, and session management by using Supabase's prebuilt `auth.users` and `auth.refresh_tokens` tables.
+- **Row-Level Security (RLS) Policies**
+  - Enforce per-user data access at the database level using RLS.
+  - Define policies such as `auth.uid() = owner_id` on protected tables.
+- **Client & Server SDK Setup**
+  - Use `@supabase/supabase-js` on the frontend and Supabase Next.js App Router helpers or REST endpoints on the backend.
+  - Remove `SessionProvider`, `useSession`, and all NextAuth internals.
+- **Developer Experience**
+  - Follow Cursor Rules for coding standards and best practices.
+  - Use Context7 tools (`mcp_context7_resolve-library-id` and `mcp_context7_get-library-docs`) to retrieve official Supabase Auth docs and examples.
+
+# User Experience
+- **User Personas:** New and returning users should experience seamless sign-in, passwordless magic-link, and SSO flows.
+- **Key Flows:**
+  - Email login via magic-link
+  - Microsoft/Azure OAuth sign-in
+  - Session persistence and automatic token refresh
+- **UI/UX Considerations:**
+  - Maintain the existing login interface but adapt callbacks to use Supabase SDK methods.
+  - Display error and success states using Supabase-provided messages.
+
+# Technical Architecture
+- **System Components:**
+  - Next.js frontend (App Router under `src/app/…`)
+  - Supabase Postgres database with built-in `auth` schema
+  - tRPC backend updated to verify Supabase JWTs
+- **Data Models:**
+  - Remove legacy `users`, `accounts`, and `sessions` tables
+  - Use Supabase's `auth.users`, `auth.refresh_tokens` for all user and session data
+- **APIs & Integrations:**
+  - Frontend: `supabase.auth.signIn()`, `supabase.auth.onAuthStateChange()`
+  - Backend: `createRouteHandlerClient` & `getSession()` (Next.js App Router) or direct JWT verification
+- **Infrastructure Requirements:**
+  - Supabase project with Authentication enabled
+  - Environment variables:
+    - `SUPABASE_URL`
+    - `SUPABASE_ANON_KEY`
+    - `SUPABASE_SERVICE_ROLE_KEY`
+    - Optional: `NEXT_PUBLIC_SUPABASE_*`
+- **Context7 Usage:**
+  - Resolve Supabase JS library via `mcp_context7_resolve-library-id` with "supabase-js"
+  - Fetch Supabase Auth docs (topic: "authentication") via `mcp_context7_get-library-docs`
+
+# Development Roadmap
+1. **Provision Supabase Auth**: Set up Supabase project, configure Auth settings (magic-link, Azure provider), and set environment variables.
+2. **Scaffold Supabase Client**: Create `src/lib/supabase.ts` using `createClient` from `@supabase/supabase-js`.
+3. **Migrate Login UI**: Update login components to call `supabase.auth.signIn()` for both email and Azure.
+4. **Update Backend Context**: Refactor tRPC context to verify Supabase JWT and extract `auth.uid()` for session.
+5. **Remove NextAuth Routes**: Delete `[...nextauth]` API route and associated helper functions.
+6. **Implement RLS Policies**: Define and test RLS policies in the Supabase dashboard for all user-scoped tables.
+7. **End-to-End Testing**: Smoke-test all auth flows in staging; validate permission gating.
+8. **Clean Up Legacy Code**: Remove NextAuth imports, `SessionProvider`, and legacy schema migrations.
+9. **Update Cursor Rules**: Add or refine rules under `.cursor/rules/` to capture new Supabase Auth patterns.
+10. **Production Cutover**: Roll out feature-flagged switch to Supabase Auth and retire old flows after a soak period.
+
+# Logical Dependency Chain
+- Tasks 1–2 (Provision & Scaffold) are prerequisites for UI migration (Task 3).
+- Task 3 (UI) must complete before backend context refactor (Task 4).
+- Task 4 (backend) must finish before removing NextAuth (Task 5).
+- Task 5 removal allows RLS policy definition (Task 6).
+- Testing and cleanup follow policy setup (Tasks 7–8).
+- Cursor Rules update (Task 9) and cutover (Task 10) wrap up the migration.
+
+# Risks and Mitigations
+- **Data Loss:** No existing users; risk is minimal.
+  - **Mitigation:** Test flows in staging before production.
+- **Downtime:** Switching auth providers could briefly affect logins.
+  - **Mitigation:** Use feature flags and blue/green deploy strategy.
+- **Policy Errors:** Misconfigured RLS could lock out users.
+  - **Mitigation:** Validate RLS in a safe staging environment with test accounts.
+- **Knowledge Gap:** Team unfamiliar with Supabase Auth internals.
+  - **Mitigation:** Leverage Context7 to fetch official docs and examples; hold a short knowledge-sharing session.
+
+# Appendix
+- **Context7 IDs:**
+  - `@supabase/supabase-js`: resolved via `mcp_context7_resolve-library-id`
+  - Auth docs ("authentication"): fetched via `mcp_context7_get-library-docs`
+- **Cursor Rules References:**
+  - [useAbility](mdc:.cursor/rules/useAbility) for permission checks
+  - [cursor_rules](mdc:.cursor/rules/cursor_rules.mdc) for general formatting and structure 

@@ -4,7 +4,6 @@ import {
   DOCUMENT_PERMISSIONS,
   PHONE_PERMISSIONS,
   CLIENT_PERMISSIONS,
-  ROLE_PERMISSION_PERMISSIONS,
   NAV_PERMISSIONS,
 } from '../constants/permissions.ts';
 
@@ -17,7 +16,6 @@ export type Permission =
   | (typeof DOCUMENT_PERMISSIONS)[keyof typeof DOCUMENT_PERMISSIONS]
   | (typeof PHONE_PERMISSIONS)[keyof typeof PHONE_PERMISSIONS]
   | (typeof CLIENT_PERMISSIONS)[keyof typeof CLIENT_PERMISSIONS]
-  | (typeof ROLE_PERMISSION_PERMISSIONS)[keyof typeof ROLE_PERMISSION_PERMISSIONS]
   | (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS];
 
 /**
@@ -50,7 +48,6 @@ export const permissionSchema: Record<Role, Permission[]> = {
     CLIENT_PERMISSIONS.VIEW,
     CLIENT_PERMISSIONS.VIEW_BILLING,
     CLIENT_PERMISSIONS.VIEW_STATUS,
-    ...Object.values(ROLE_PERMISSION_PERMISSIONS),
     NAV_PERMISSIONS.TEAM_DASHBOARD,
     NAV_PERMISSIONS.TEAM_CLIENTS,
   ],

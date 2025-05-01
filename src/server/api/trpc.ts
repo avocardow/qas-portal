@@ -187,18 +187,9 @@ export const enforcePermission = (permission: string) =>
       return next({ ctx: { session: ctx.session } });
     }
     // Static policy engine check
-    const staticAllowed = hasPermission(role as PolicyRole, permission as Permission);
-    if (staticAllowed) {
-      logAccessDecision(role, permission, true);
-      return next({ ctx: { session: ctx.session } });
-    }
-    // Fallback dynamic permission lookup in DB
-    const permissionRecord = await ctx.db.rolePermission.findFirst({
-      where: { role: { name: role }, permission: { name: permission } },
-    });
-    const dynamicAllowed = Boolean(permissionRecord);
-    logAccessDecision(role, permission, dynamicAllowed);
-    if (!dynamicAllowed) {
+    const allowed = hasPermission(role as PolicyRole, permission as Permission);
+    logAccessDecision(role, permission, allowed);
+    if (!allowed) {
       logger.warn("Permission denied", { userId: ctx.session.user.id, role, permission });
       throwForbiddenError(`Insufficient permissions for action '${permission}'`);
     }

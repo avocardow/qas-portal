@@ -41,16 +41,6 @@ export const PHONE_PERMISSIONS = {
 export type PhonePermission =
   (typeof PHONE_PERMISSIONS)[keyof typeof PHONE_PERMISSIONS];
 
-// Permissions for managing Role-Permission mappings
-export const ROLE_PERMISSION_PERMISSIONS = {
-  GET_ALL: "rolePermission.getAll",
-  ASSIGN: "rolePermission.assign",
-  UNASSIGN: "rolePermission.unassign",
-} as const;
-
-export type RolePermissionPermission =
-  (typeof ROLE_PERMISSION_PERMISSIONS)[keyof typeof ROLE_PERMISSION_PERMISSIONS];
-
 // Add client-specific permissions for gating table columns
 export const CLIENT_PERMISSIONS = {
   VIEW: "clients.view",

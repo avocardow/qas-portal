@@ -15,7 +15,6 @@ describe("documentRouter", () => {
 
   beforeEach(() => {
     const db = {
-      rolePermission: { findFirst: vi.fn() },
       documentReference: { findMany: vi.fn() },
       contact: { findUnique: vi.fn() },
       audit: { findUnique: vi.fn() },
@@ -30,7 +29,6 @@ describe("documentRouter", () => {
   });
 
   it("should retrieve documents by client id for Admin", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     const docs = [
       { id: validTaskId, fileName: "file1.pdf", sharepointFileUrl: "url1" },
     ];
@@ -47,7 +45,6 @@ describe("documentRouter", () => {
 
   it("should forbid retrieval by client id without permission", async () => {
     ctx.session.user.role = "User";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callDoc(ctx);
     await expect(
       caller.getByClientId({ clientId: validClientId })
@@ -55,7 +52,6 @@ describe("documentRouter", () => {
   });
 
   it("should retrieve documents by audit id for Admin", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     const docs = [
       { id: validTaskId, fileName: "auditDoc.pdf", sharepointFileUrl: "url2" },
     ];
@@ -76,7 +72,6 @@ describe("documentRouter", () => {
 
   it("should forbid retrieval by audit id without permission", async () => {
     ctx.session.user.role = "User";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callDoc(ctx);
     await expect(
       caller.getByAuditId({ auditId: validAuditId })
@@ -84,7 +79,6 @@ describe("documentRouter", () => {
   });
 
   it("should retrieve documents by task id for Admin", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     const docs = [
       { id: validTaskId, fileName: "taskDoc.pdf", sharepointFileUrl: "url3" },
     ];
@@ -105,7 +99,6 @@ describe("documentRouter", () => {
 
   it("should forbid retrieval by task id without permission", async () => {
     ctx.session.user.role = "User";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callDoc(ctx);
     await expect(
       caller.getByTaskId({ taskId: validTaskId })
@@ -114,7 +107,6 @@ describe("documentRouter", () => {
 
   it("should retrieve shared documents for Client role", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.contact.findUnique.mockResolvedValue({
       portalUserId: validUserId,
       clientId: validClientId,
@@ -138,7 +130,6 @@ describe("documentRouter", () => {
 
   it("should retrieve shared documents by audit id for Client role", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.audit.findUnique.mockResolvedValue({
       id: validAuditId,
       clientId: validClientId,
@@ -173,7 +164,6 @@ describe("documentRouter", () => {
 
   it("should forbid retrieval by audit id for Client role when not owner", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.audit.findUnique.mockResolvedValue({
       id: validAuditId,
       clientId: validClientId,
@@ -190,7 +180,6 @@ describe("documentRouter", () => {
 
   it("should retrieve shared documents by task id for Client role", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.task.findUnique.mockResolvedValue({
       id: validTaskId,
       auditId: validAuditId,
@@ -232,7 +221,6 @@ describe("documentRouter", () => {
 
   it("should forbid retrieval by task id for Client role when not owner", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.task.findUnique.mockResolvedValue({
       id: validTaskId,
       auditId: validAuditId,

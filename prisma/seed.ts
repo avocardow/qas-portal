@@ -23,18 +23,18 @@ async function main() {
 
   // Seed Audit Stages with explicit IDs
   const auditStages = [
-    { id: 1, name: 'Planning', displayOrder: 1, description: 'Initial planning and risk assessment' },
-    { id: 2, name: '1st Interim Review', displayOrder: 2, description: 'First periodic review during the year' },
-    { id: 3, name: '2nd Interim Review', displayOrder: 3, description: 'Second periodic review during the year' },
-    { id: 4, name: 'Year-End Audit', displayOrder: 4, description: 'Final audit procedures for the year end' },
-    { id: 5, name: 'Reporting', displayOrder: 5, description: 'Preparation and finalization of the audit report' },
-    { id: 6, name: 'Post-Audit', displayOrder: 6, description: 'Follow-up and completion tasks' },
+    { id: 1, name: 'Planning', description: 'Initial planning and risk assessment' },
+    { id: 2, name: '1st Interim Review', description: 'First periodic review during the year' },
+    { id: 3, name: '2nd Interim Review', description: 'Second periodic review during the year' },
+    { id: 4, name: 'Year-End Audit', description: 'Final audit procedures for the year end' },
+    { id: 5, name: 'Reporting', description: 'Preparation and finalization of the audit report' },
+    { id: 6, name: 'Post-Audit', description: 'Follow-up and completion tasks' },
   ];
   for (const stage of auditStages) {
     await prisma.auditStage.upsert({
       where: { name: stage.name },
-      update: { displayOrder: stage.displayOrder, description: stage.description },
-      create: { id: stage.id, name: stage.name, displayOrder: stage.displayOrder, description: stage.description },
+      update: { id: stage.id, description: stage.description },
+      create: { id: stage.id, name: stage.name, description: stage.description },
     });
     console.log(`Seeded audit stage: ${stage.name}`);
   }

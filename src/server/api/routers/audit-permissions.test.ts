@@ -18,7 +18,6 @@ describe("Audit RBAC Enforcement", () => {
   beforeEach(() => {
     // Mock Prisma client for DB interactions
     const db = {
-      rolePermission: { findFirst: vi.fn() },
       audit: {
         create: vi.fn(),
         update: vi.fn(),
@@ -42,7 +41,7 @@ describe("Audit RBAC Enforcement", () => {
   });
 
   test("Admin can create an audit", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
+    // static policy engine allows Admin to create
     ctx.db.audit.create.mockResolvedValue({
       id: validAuditId,
       clientId: validClientId,
@@ -62,7 +61,6 @@ describe("Audit RBAC Enforcement", () => {
 
   test("Staff cannot create an audit", async () => {
     ctx.session.user.role = "Staff";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callAudit(ctx);
     await expect(
       caller.create({ clientId: validClientId, auditYear: 2025 })
@@ -71,7 +69,6 @@ describe("Audit RBAC Enforcement", () => {
 
   test("Auditor can view audits for a client", async () => {
     ctx.session.user.role = "Auditor";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.audit.findMany.mockResolvedValue([
       { id: validAuditId, clientId: validClientId, auditYear: 2025 },
     ]);
@@ -84,7 +81,6 @@ describe("Audit RBAC Enforcement", () => {
 
   test("User without permission cannot unassign a user", async () => {
     ctx.session.user.role = "Client";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callAudit(ctx);
     await expect(
       caller.unassignUser({ auditId: validAuditId, userId: validUserId })

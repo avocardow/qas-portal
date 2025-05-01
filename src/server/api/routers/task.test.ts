@@ -22,7 +22,6 @@ describe("taskRouter", () => {
 
   beforeEach(() => {
     const db = {
-      rolePermission: { findFirst: vi.fn() },
       task: {
         create: vi.fn(),
         update: vi.fn(),
@@ -38,7 +37,6 @@ describe("taskRouter", () => {
   });
 
   it("should create a task with proper permissions", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.task.create.mockResolvedValue({ id: validTaskId, ...inputTask });
     const caller = callTask(ctx);
     const result = await caller.create(inputTask);
@@ -47,7 +45,6 @@ describe("taskRouter", () => {
   });
 
   it("should update a task with proper permissions", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     const updateInput = { taskId: validTaskId, ...inputTask, status: "Done" };
     ctx.db.task.update.mockResolvedValue({ id: validTaskId, ...updateInput });
     const caller = callTask(ctx);
@@ -70,14 +67,12 @@ describe("taskRouter", () => {
 
   it("should forbid creation without proper permissions", async () => {
     ctx.session.user.role = "User";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callTask(ctx);
     await expect(caller.create(inputTask)).rejects.toBeInstanceOf(TRPCError);
   });
 
   it("should forbid update without proper permissions", async () => {
     ctx.session.user.role = "User";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callTask(ctx);
     await expect(
       caller.update({ taskId: validTaskId, ...inputTask })
@@ -85,7 +80,6 @@ describe("taskRouter", () => {
   });
 
   it("should delete a task with proper permissions", async () => {
-    ctx.db.rolePermission.findFirst.mockResolvedValue(true);
     ctx.db.task.delete.mockResolvedValue({ id: validTaskId, ...inputTask });
     const caller = callTask(ctx);
     const result = await caller.delete({ taskId: validTaskId });
@@ -97,7 +91,6 @@ describe("taskRouter", () => {
 
   it("should forbid deletion without proper permissions", async () => {
     ctx.session.user.role = "User";
-    ctx.db.rolePermission.findFirst.mockResolvedValue(null);
     const caller = callTask(ctx);
     await expect(caller.delete({ taskId: validTaskId })).rejects.toBeInstanceOf(
       TRPCError
