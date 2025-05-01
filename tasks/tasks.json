@@ -107,7 +107,7 @@
           "id": 2,
           "title": "Define Prisma query with all required relations",
           "description": "Implement the Prisma query that fetches a client by ID with all required relations",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],

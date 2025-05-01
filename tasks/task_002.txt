@@ -17,7 +17,7 @@ Test API call with various client IDs. Verify all related entities are properly 
 ### Details:
 Create a new router file (e.g., 'app/server/routers/clients.ts') that will contain all client-related procedures. Initialize the router with the publicProcedure from your tRPC setup. This will serve as the foundation for implementing the getById procedure. Make sure to export the router properly so it can be merged with your main router.
 
-## 2. Define Prisma query with all required relations [in-progress]
+## 2. Define Prisma query with all required relations [done]
 ### Dependencies: 2.1
 ### Description: Implement the Prisma query that fetches a client by ID with all required relations
 ### Details:
