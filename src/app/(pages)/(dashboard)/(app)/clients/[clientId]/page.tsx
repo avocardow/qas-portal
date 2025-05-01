@@ -193,40 +193,47 @@ export default function ClientDetailPage() {
             </div>
             <div className="mt-4">
               {activeTab === "Summary" && (
-                <div className="grid grid-cols-1 gap-4 text-gray-900 md:grid-cols-2 dark:text-gray-100">
-                  <div>
-                    <strong>Name:</strong> {client.clientName}
+                <>
+                  <div className="grid grid-cols-1 gap-4 text-gray-900 md:grid-cols-2 dark:text-gray-100">
+                    <div>
+                      <strong>Name:</strong> {client.clientName}
+                    </div>
+                    <div>
+                      <strong>ABN:</strong> {client.abn || "-"}
+                    </div>
+                    <div>
+                      <strong>Address:</strong> {client.address || "-"}
+                    </div>
+                    <div>
+                      <strong>City:</strong> {client.city || "-"}
+                    </div>
+                    <div>
+                      <strong>Postcode:</strong> {client.postcode || "-"}
+                    </div>
+                    <div>
+                      <strong>Status:</strong>{" "}
+                      <Badge size="sm">{client.status}</Badge>
+                    </div>
+                    <div>
+                      <strong>Audit Month End:</strong> {client.auditMonthEnd ?? "-"}
+                    </div>
+                    <div>
+                      <strong>Next Contact Date:</strong>{" "}
+                      {client.nextContactDate
+                        ? new Date(client.nextContactDate).toLocaleDateString()
+                        : "-"}
+                    </div>
+                    <div>
+                      <strong>Estimated Annual Fees:</strong>{" "}
+                      {client.estAnnFees ? client.estAnnFees.toString() : "-"}
+                    </div>
                   </div>
-                  <div>
-                    <strong>ABN:</strong> {client.abn || "-"}
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="h-48 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+                    <div className="h-48 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+                    <div className="h-48 bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
                   </div>
-                  <div>
-                    <strong>Address:</strong> {client.address || "-"}
-                  </div>
-                  <div>
-                    <strong>City:</strong> {client.city || "-"}
-                  </div>
-                  <div>
-                    <strong>Postcode:</strong> {client.postcode || "-"}
-                  </div>
-                  <div>
-                    <strong>Status:</strong>{" "}
-                    <Badge size="sm">{client.status}</Badge>
-                  </div>
-                  <div>
-                    <strong>Audit Month End:</strong> {client.auditMonthEnd ?? "-"}
-                  </div>
-                  <div>
-                    <strong>Next Contact Date:</strong>{" "}
-                    {client.nextContactDate
-                      ? new Date(client.nextContactDate).toLocaleDateString()
-                      : "-"}
-                  </div>
-                  <div>
-                    <strong>Estimated Annual Fees:</strong>{" "}
-                    {client.estAnnFees ? client.estAnnFees.toString() : "-"}
-                  </div>
-                </div>
+                </>
               )}
               {activeTab === "Contacts" && (
                 <div className="overflow-x-auto">
