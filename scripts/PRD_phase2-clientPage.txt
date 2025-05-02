@@ -2,6 +2,17 @@
 # Overview  
 This Client Profile page surfaces all relevant data about a client in QLD Audit Specialists' system, consolidating company details, contacts, licenses, trust accounts, audits, and activity into a unified dashboard for auditors. By integrating TailAdmin components and Context7 references, we ensure consistency, accessibility, and rapid access to critical audit information.
 
+## Scope  
+- This PRD and implementation are strictly limited to the single page at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`.  
+- No changes should be made to any other pages or routes (e.g., Contacts, Audits, Tasks, etc.) under this project.
+
+## Out of Scope  
+- Any modifications to the `/clients` listing page or the "New Client" creation flow.  
+- Updates to Contacts, Audits, Tasks, File-Manager, or any other pages and routes.  
+- Creation or modification of API endpoints other than `api.clients.getById`.  
+- Building or altering UI components for entities beyond the Client Profile (e.g. Contacts, Audits, Tasks).  
+- Changes to global layout, navigation, or styles outside of this page.
+
 # Core Features  
 0. **Full Data Dump**  
    - Initially load *all* client and related entity fields (contacts, licenses, trustAccounts, audits, activityLogs, documentReferences) from the database API to allow refinement and gating later.
