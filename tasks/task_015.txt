@@ -1,0 +1,31 @@
+# Task ID: 15
+# Title: Implement Permission Gating
+# Status: pending
+# Dependencies: 3, 8, 13
+# Priority: high
+# Description: Apply permission controls across all components using useAbility() and <Authorized> components.
+# Details:
+Implement permission gating across all components using useAbility() and <Authorized> components following the useAbility rules. Gate editing features with clients.edit permission, archiving with clients.archive permission, and sensitive financial data (fees, estAnnFees) for Admin-only access. Ensure appropriate fallbacks or hidden elements when permissions are not granted.
+
+# Test Strategy:
+Test all permission gates with different user roles. Verify sensitive data is only visible to authorized users. Check that UI elements are appropriately hidden or disabled based on permissions. Create comprehensive permission test cases.
+
+# Subtasks:
+## 1. Set up permission infrastructure with useAbility hook [pending]
+### Dependencies: None
+### Description: Create and implement the useAbility hook to manage permission checks throughout the application
+### Details:
+Create a useAbility custom hook that will serve as the foundation for permission checks. This hook should: 1) Define the core permission logic for checking user roles against required permissions, 2) Implement methods to check specific permissions like clients.edit, clients.archive, and admin-only permissions for financial data, 3) Set up integration with your authentication system to retrieve the current user's role, 4) Include proper TypeScript typing for permissions and roles, and 5) Add appropriate error handling and fallbacks when permissions are unavailable. The hook should return boolean values indicating whether the user has specific permissions.
+
+## 2. Create the <Authorized> component for declarative permission gating [pending]
+### Dependencies: 15.1
+### Description: Develop a reusable <Authorized> component that conditionally renders UI elements based on user permissions
+### Details:
+Build an <Authorized> component that leverages the useAbility hook to conditionally render UI elements. The component should: 1) Accept permission requirements as props (e.g., permission='clients.edit'), 2) Support multiple permission checks with logical operators (AND/OR), 3) Implement fallback rendering options when permissions are denied, 4) Allow for custom error/unauthorized states, and 5) Include performance optimizations to prevent unnecessary re-renders. The component should follow this pattern: <Authorized permission='clients.edit'><EditButton /></Authorized>. Test the component with various permission scenarios to ensure it behaves correctly.
+
+## 3. Apply permission gating across application components [pending]
+### Dependencies: 15.1, 15.2
+### Description: Systematically implement permission controls across all relevant components using the created infrastructure
+### Details:
+Apply the permission gating system throughout the application by: 1) Identifying all components that require permission controls, 2) Implementing editing feature restrictions with clients.edit permission checks, 3) Gating archiving functionality with clients.archive permission, 4) Restricting access to sensitive financial data (fees, estAnnFees) to Admin-only roles, 5) Adding appropriate fallbacks or hidden elements when permissions are not granted, 6) Testing all permission combinations across different user roles to verify correct behavior, and 7) Documenting the permission requirements for each component to facilitate future maintenance. Ensure consistent implementation across the application and verify that the UI degrades gracefully when permissions are denied.
+

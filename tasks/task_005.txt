@@ -1,55 +1,55 @@
 # Task ID: 5
-# Title: Implement Contacts Table and Network Diagram
+# Title: Build Recent Contacts Table
 # Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Create the contacts table and relationship network diagram.
+# Description: Create the Recent Contacts Table with all required fields and primary badge indicators.
 # Details:
-Build the Recent Contacts Table using TailAdmin's DataTableTwo component with columns for Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact cleanly. Implement the Contact Network Diagram showing relationships between client, contacts, and trust accounts. Reference DataTableTwo APIDocs from Context7 for implementation details.
+Implement a TailAdmin RecentOrders-style table for contacts with columns: Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact in a clean format (comma-separated or expandable cell). Use DataTableTwo component as referenced in Context7. Ensure table is responsive and accessible.
 
 # Test Strategy:
-Test table sorting and filtering. Verify links to contact profiles work correctly. Test network diagram with various relationship configurations.
+Test table rendering with various data scenarios. Verify links to contact pages work correctly. Check that primary badges display properly. Test multiple licenses display format.
 
 # Subtasks:
 ## 1. Set up DataTableTwo component structure [pending]
 ### Dependencies: None
-### Description: Initialize and configure the DataTableTwo component from TailAdmin for the Recent Contacts Table implementation
+### Description: Create the foundation for the Recent Contacts table by implementing the DataTableTwo component with proper configuration
 ### Details:
-Create a new component file for the Contacts Table. Import the DataTableTwo component from TailAdmin. Set up the basic table structure with appropriate props and configuration options. Define the table container with responsive styling using Tailwind CSS classes. Reference the TailAdmin documentation for proper component initialization and configuration options.
+Import and configure the DataTableTwo component from the TailAdmin template. Create a new component file for RecentContacts that extends DataTableTwo. Set up the basic table structure with responsive design considerations and accessibility attributes (aria labels, keyboard navigation). Implement the container layout with appropriate TailAdmin styling classes.
 
-## 2. Define contact data schema and column configuration [pending]
+## 2. Define table columns and data structure [pending]
 ### Dependencies: 5.1
-### Description: Create the data schema and column configuration for the Contacts Table with all required fields
+### Description: Define the column configuration for Name, Email, Phone, Title, and Primary badge
 ### Details:
-Define the data schema for contacts with fields for Name, Email, Phone, Title, and Primary badge status. Configure columns with appropriate headers, cell renderers, and sorting options. Implement the Name column with links to individual contact pages using the '/contacts/[id]' route pattern. Set up proper data types and validation for each field. Create sample data for testing the table implementation.
+Create a columns configuration array that defines each column's properties (Name, Email, Phone, Title, Primary). For the Name column, implement linking to '/contacts/[id]' pattern. Set up proper data accessors for each field. Configure sorting capabilities for relevant columns. Define the data interface/type for contact entries to ensure type safety throughout the component.
 
-## 3. Implement multiple licenses display functionality [pending]
+## 3. Implement Primary badge indicator [pending]
 ### Dependencies: 5.2
-### Description: Create a component to cleanly display multiple licenses per contact within the table
+### Description: Create the visual indicator for Primary contacts with appropriate styling
 ### Details:
-Design and implement a custom cell renderer component for displaying multiple licenses. Use Tailwind CSS for styling license badges or tags with appropriate colors and spacing. Implement collapsible/expandable functionality if the number of licenses exceeds a certain threshold. Ensure the display is responsive and maintains table layout integrity. Test with contacts having varying numbers of licenses.
+Design and implement the Primary badge component with appropriate styling (colors, size, text). Create a cell renderer function for the Primary column that conditionally displays the badge based on the contact's primary status. Add tooltip or accessible description to explain the badge meaning. Ensure the badge has proper contrast ratios for accessibility.
 
-## 4. Create data fetching and state management logic [pending]
+## 4. Develop multiple licenses display format [pending]
 ### Dependencies: 5.2
-### Description: Implement the data fetching and state management for the Contacts Table
+### Description: Implement the display logic for showing multiple licenses per contact
 ### Details:
-Set up data fetching logic using React hooks or a state management library. Implement pagination, sorting, and filtering functionality. Create loading and error states for the table. Implement search functionality for the contacts table. Set up proper state updates when data changes. Ensure the table maintains its state during user interactions.
+Create a custom cell renderer for displaying multiple licenses. Implement either a comma-separated list for simple display or an expandable cell with a count indicator that reveals all licenses on interaction. For the expandable approach, implement the expand/collapse functionality with appropriate animations. Ensure the display remains readable even with many licenses by implementing truncation with tooltips if needed.
 
-## 5. Design the Contact Network Diagram component [pending]
-### Dependencies: None
-### Description: Create the basic structure and layout for the Contact Network Diagram
+## 5. Connect table to data source [pending]
+### Dependencies: 5.2, 5.3, 5.4
+### Description: Implement data fetching and state management for the contacts table
 ### Details:
-Research and select an appropriate visualization library for network diagrams (e.g., D3.js, React Flow, or Vis.js). Create a new component for the Contact Network Diagram. Design the basic layout and container for the diagram. Implement responsive behavior for different screen sizes. Set up the component with proper props and configuration options.
+Set up API integration to fetch contact data from the backend. Implement loading states and error handling for data fetching. Create state management for the table data using React hooks (useState, useEffect). Implement pagination logic if the data set is large. Add sorting functionality based on column headers. Ensure proper data transformation from API response to the table's expected format.
 
-## 6. Implement relationship data model and visualization [pending]
-### Dependencies: 5.5
-### Description: Create the data model and visualization for relationships between clients, contacts, and trust accounts
+## 6. Implement responsive behavior [pending]
+### Dependencies: 5.1, 5.2, 5.3, 5.4
+### Description: Ensure the table displays correctly across all device sizes
 ### Details:
-Define the data structure for representing relationships between entities (clients, contacts, trust accounts). Implement node rendering for different entity types with distinct visual representations. Create edge rendering for relationships with appropriate styling. Implement interactive features like zooming, panning, and node selection. Add tooltips or information panels to display additional details about entities and relationships.
+Test and optimize the table for various screen sizes. Implement column priority hiding for smaller screens (hide less important columns first). Add horizontal scrolling for very small screens while maintaining fixed position of key columns. Ensure touch interactions work properly on mobile devices. Test and fix any layout issues that occur at different breakpoints.
 
-## 7. Integrate and finalize both components [pending]
-### Dependencies: 5.4, 5.6
-### Description: Integrate the Contacts Table and Network Diagram components into the main application and finalize implementation
+## 7. Add accessibility features and final polish [pending]
+### Dependencies: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
+### Description: Enhance the table with proper accessibility features and final UI refinements
 ### Details:
-Integrate both components into the main application layout. Implement any necessary interactions between the table and diagram (e.g., selecting a contact in the table highlights it in the diagram). Add final styling and UI polish using Tailwind CSS. Perform comprehensive testing across different browsers and screen sizes. Optimize performance for large datasets. Add documentation for component usage and maintenance. Ensure accessibility compliance for both components.
+Implement proper keyboard navigation throughout the table. Add screen reader announcements for dynamic content changes. Ensure all interactive elements have proper focus states. Add appropriate aria attributes for complex interactions. Implement final visual polish including hover states, transitions, and consistent spacing. Add comprehensive unit and integration tests to verify functionality. Document the component API and usage patterns for other developers.
 

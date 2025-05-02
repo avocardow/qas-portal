@@ -1,49 +1,49 @@
 # Task ID: 2
 # Title: Implement Client Data Fetching
-# Status: in-progress
+# Status: pending
 # Dependencies: 1
 # Priority: high
-# Description: Set up tRPC call to fetch all client data with related entities using Prisma relations.
+# Description: Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.
 # Details:
-Implement the tRPC call `api.clients.getById({ clientId })` with all required Prisma relations: contacts → licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Use Next.js App Router data fetching patterns as referenced in Context7. Implement error handling and loading states. Initially load all client and related entity fields to allow for refinement later.
+Implement the tRPC call to api.clients.getById({ clientId }) with all necessary Prisma relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Follow Next.js App Router data fetching guidelines from Context7. Implement error handling and loading states. Ensure all client and related entity fields are loaded to allow for later refinement.
 
 # Test Strategy:
-Test API call with various client IDs. Verify all related entities are properly loaded. Check error handling for non-existent clients or server errors.
+Test with mock data to ensure all relations are properly loaded. Verify error states and loading indicators work correctly. Check that all required fields are available in the returned data.
 
 # Subtasks:
-## 1. Create tRPC router for client queries [done]
+## 1. Define Prisma client schema relations [pending]
 ### Dependencies: None
-### Description: Set up the basic tRPC router structure for client-related queries
+### Description: Set up the Prisma schema to properly define all required relations for the client entity
 ### Details:
-Create a new router file (e.g., 'app/server/routers/clients.ts') that will contain all client-related procedures. Initialize the router with the publicProcedure from your tRPC setup. This will serve as the foundation for implementing the getById procedure. Make sure to export the router properly so it can be merged with your main router.
+Review the existing Prisma schema and ensure all relations are properly defined between the client entity and its related entities: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Make sure relation fields are correctly typed and that foreign keys are properly set up. This will serve as the foundation for fetching comprehensive client data with all necessary relations.
 
-## 2. Define Prisma query with all required relations [done]
+## 2. Create tRPC procedure for client fetching [pending]
 ### Dependencies: 2.1
-### Description: Implement the Prisma query that fetches a client by ID with all required relations
+### Description: Implement the tRPC procedure that will handle fetching client data by ID with all relations
 ### Details:
-In the clients router, create a helper function that constructs the Prisma query to fetch a client by ID. Include all required relations in the include object: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Initially fetch all fields for each relation to allow for refinement later. Structure the query to handle potential null values and optimize for performance.
+Create a new tRPC procedure in the clients router called 'getById' that accepts a clientId parameter. Inside this procedure, use Prisma's findUnique or findFirst method with the include option to specify all the required relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Implement proper error handling for cases where the client doesn't exist or database errors occur. Return a properly typed response that includes the client and all its relations.
 
-## 3. Implement the getById tRPC procedure [done]
-### Dependencies: 2.1, 2.2
-### Description: Create the tRPC procedure that accepts a clientId parameter and returns the client data
+## 3. Implement server-side data fetching component [pending]
+### Dependencies: 2.2
+### Description: Create a server component that fetches client data using the tRPC procedure
 ### Details:
-Implement the getById procedure using tRPC's query method. Use zod to validate the input parameter (clientId). Call the Prisma query function created in the previous subtask. Implement proper error handling for cases like invalid IDs or database errors. Return the full client object with all relations. The procedure should be defined as: publicProcedure.input(z.object({ clientId: z.string() })).query(async ({ input }) => { /* implementation */ }).
+Following Next.js App Router patterns, create a React Server Component that will handle fetching the client data. Use the tRPC server-side calling pattern to directly invoke the api.clients.getById procedure with the clientId parameter. Implement proper error handling and ensure the component can be easily composed with other components. This approach leverages server components to keep expensive data fetches on the server, improving performance and security.
 
-## 4. Connect tRPC router to Next.js App Router [done]
+## 4. Create loading and error states [pending]
 ### Dependencies: 2.3
-### Description: Ensure the clients router is properly connected to the main tRPC router and exposed via the API route
+### Description: Implement loading states and error handling UI components
 ### Details:
-Import the clients router in your main router file and merge it with other routers. Ensure the API route handler at 'app/api/trpc/[trpc]/route.ts' is properly set up to handle the new client queries. Test the endpoint by navigating to the appropriate URL (e.g., http://localhost:3000/api/trpc/clients.getById) with the required parameters to verify it's working correctly.
+Create reusable loading and error state components that will be displayed during data fetching and when errors occur. For loading states, implement a skeleton UI that matches the layout of the client data display. For error states, create informative error messages that help users understand what went wrong (e.g., client not found, permission issues, or server errors). Use Next.js App Router's loading.js and error.js conventions to handle these states elegantly.
 
-## 5. Create client data fetching hooks [in-progress]
-### Dependencies: 2.4
-### Description: Implement React hooks for fetching client data using the tRPC client
+## 5. Implement client-side data fetching hook [pending]
+### Dependencies: 2.2
+### Description: Create a custom hook for client components that need to fetch client data
 ### Details:
-Create a custom hook (e.g., useClientData) that uses the tRPC client to call the getById procedure. Implement loading states, error handling, and data caching strategies. The hook should accept a clientId parameter and return an object with isLoading, isError, error, and data properties. Utilize Next.js App Router data fetching patterns as appropriate, considering both client and server components.
+For client components that need to fetch or refetch client data, create a custom React hook (e.g., useClientData) that uses tRPC's client-side calling pattern. Implement this using SWR or React Query for efficient caching and revalidation. The hook should accept a clientId parameter and return the client data along with loading and error states. This will complement the server-side fetching while providing a way to update data on the client when needed.
 
-## 6. Implement UI components with loading and error states [pending]
-### Dependencies: 2.5
-### Description: Create UI components that use the client data hooks and handle loading and error states
+## 6. Create data display components with progressive loading [pending]
+### Dependencies: 2.3, 2.4, 2.5
+### Description: Implement UI components that display client data with progressive loading of related entities
 ### Details:
-Develop UI components that consume the client data hook. Implement loading indicators for when data is being fetched. Create error handling components that display appropriate messages when errors occur. Design the components to efficiently display all the related entity data (contacts, licenses, etc.) in a user-friendly manner. Consider implementing progressive loading or virtualization for large datasets.
+Create UI components that display the client data and all its relations. Implement these using a progressive loading approach where the main client data loads first, followed by related entities. This improves perceived performance. Ensure all fields from the client and related entities are accessible in the UI components, even if not all are displayed initially. This will allow for later refinement of the UI without requiring changes to the data fetching logic. Use React Suspense boundaries to optimize the loading experience.
 

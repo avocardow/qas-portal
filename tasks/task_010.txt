@@ -1,31 +1,31 @@
 # Task ID: 10
-# Title: Implement Action Buttons and Client Value Projection
+# Title: Implement SharePoint Folder Browser
 # Status: pending
-# Dependencies: 3, 7
-# Priority: low
-# Description: Create the action buttons and client lifetime value projection components.
+# Dependencies: 2
+# Priority: medium
+# Description: Embed file-manager tree for client's SharePoint folders and recent invoices card.
 # Details:
-Implement Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Use the useAbility hook to gate the Archive action with the clients.archive permission. Create the Client Lifetime Value Projection chart to forecast next year's fees based on past trends.
+Embed the AllFolders and RecentFileTable components from File-Manager to create a SharePoint folder browser. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Ensure proper loading states and error handling for file access.
 
 # Test Strategy:
-Test each action button functionality. Verify Archive confirmation modal works and updates client.status correctly. Test permission gating for restricted actions. Verify projection calculations with various historical data patterns.
+Test folder browser navigation. Verify file links open correctly. Test with various folder structures and file types. Check invoice status display accuracy.
 
 # Subtasks:
-## 1. Implement Action Buttons with Permission Gating [pending]
+## 1. Implement SharePoint Folder Browser Component [pending]
 ### Dependencies: None
-### Description: Create reusable action button components for quick actions (Add Contact, Link Bank Feed, Request Document, Schedule Audit, Archive Client). Integrate the useAbility hook to gate the Archive Client button based on the clients.archive permission, and implement a confirmation modal for the Archive action.
+### Description: Integrate the AllFolders component from File-Manager to create a navigable SharePoint folder structure with proper folder creation and navigation capabilities.
 ### Details:
-Define a reusable Button component, ensuring proper event handling and styling for each action. Place these buttons within the client UI, using the useAbility hook to conditionally render or disable the Archive Client button based on user permissions. For the Archive action, trigger a modal dialog to confirm the user's intent before proceeding. Reference React button best practices for accessibility and maintainability[3][5].
+Begin by embedding the AllFolders component from the existing File-Manager into the application. Configure the component to connect to the client's SharePoint document library using the SharePoint API. Implement folder navigation functionality that allows users to browse through the folder hierarchy, open folders, and navigate back up using breadcrumb navigation. Add support for viewing folder contents and implement proper loading states while folder data is being fetched. Include error handling for cases where SharePoint access fails or folders cannot be loaded. Test the component with various folder structures to ensure proper rendering and navigation.
 
-## 2. Integrate Action Buttons into the Client Card or Dashboard [pending]
+## 2. Integrate Recent Files Table Component [pending]
 ### Dependencies: 10.1
-### Description: Embed the action buttons into the appropriate client-facing component, such as a client card or dashboard, ensuring a cohesive and accessible layout.
+### Description: Embed the RecentFileTable component from File-Manager to display SharePoint files with sorting and filtering capabilities.
 ### Details:
-Update the client card or dashboard component to include the action buttons in a visually organized manner, using a container (e.g., a div with an action button group class). Ensure spacing, alignment, and responsive design. Test that each button triggers the correct handler and that the Archive button respects permission gating and confirmation modal behavior[5].
+After the folder browser is working, integrate the RecentFileTable component from File-Manager to display files within the selected SharePoint folders. Configure the component to show file metadata including name, type, modified date, and size. Implement file opening functionality that launches files in appropriate viewers based on file type. Add loading indicators for when file lists are being retrieved. Implement error handling for file access issues, showing appropriate error messages when files cannot be accessed or displayed. Ensure the file table updates properly when users navigate between different folders in the folder browser component.
 
-## 3. Develop Client Lifetime Value Projection Chart Component [pending]
+## 3. Create Recent Invoices Card Component [pending]
 ### Dependencies: 10.2
-### Description: Create a chart component that forecasts the client's next year's fees based on historical data and trends, and integrate it into the client view.
+### Description: Develop a specialized card component that displays the 5 most recent invoice documents with their payment status and PDF links.
 ### Details:
-Design and implement a chart (e.g., using a charting library like Chart.js or Recharts) that visualizes the client's historical fees and projects the next year's value using a suitable forecasting method (e.g., linear regression or moving average). Fetch and process the necessary data, and display the chart within the client dashboard or detail view, ensuring it complements the action buttons and overall UI.
+Build a new Recent Invoices Card component that queries SharePoint for the most recent invoice documents. Implement filtering logic to identify invoice documents based on file naming conventions or metadata. Display the 5 most recent invoices in a card format, showing for each invoice: document name, creation/modification date, payment status (paid/unpaid), and a direct link to open the PDF. The payment status should be determined by querying metadata or a related data source that tracks invoice payment information. Add visual indicators (like color coding) to distinguish between paid and unpaid invoices. Implement proper loading states while invoice data is being fetched and error handling for cases where invoice documents cannot be accessed. Ensure the component refreshes automatically when new invoices are added to SharePoint.
 

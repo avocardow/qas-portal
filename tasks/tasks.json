@@ -3,550 +3,563 @@
     {
       "id": 1,
       "title": "Setup Client Profile Page Structure",
-      "description": "Create the basic page structure for the client profile at the specified path with routing and layout components.",
-      "status": "done",
+      "description": "Create the basic page structure for the Client Profile at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with TailAdmin grid layout and PageBreadcrumb.",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "Create the page file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Set up the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Include `PageBreadcrumb` component at the top. Implement the basic page structure with placeholder sections for all the required components (KPI cards, tables, charts, etc.). Follow Cursor rules for code styling and component usage.",
-      "testStrategy": "Verify page renders without errors. Test responsive breakpoints to ensure layout collapses properly on mobile. Check that routing with dynamic [clientId] parameter works correctly.",
+      "details": "Create the page.tsx file with proper Next.js App Router structure. Implement a responsive TailAdmin grid layout (xl:grid-cols-12) with appropriate breakpoints. Add PageBreadcrumb component at the top. Setup the basic sections that will contain all the client information cards and components. Follow Cursor rules for code styling and component usage.",
+      "testStrategy": "Verify page renders without errors. Check responsive layout at different breakpoints. Ensure grid layout matches TailAdmin specifications.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create basic client profile page file with routing",
-          "description": "Set up the initial page file at the specified path with proper Next.js routing configuration",
-          "status": "done",
+          "title": "Create Basic Page Structure with Next.js App Router",
+          "description": "Set up the initial page.tsx file at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with proper Next.js App Router structure and PageBreadcrumb component",
           "dependencies": [],
-          "details": "Create the file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`. Implement the basic React component structure with proper TypeScript typing for the dynamic route parameter. Set up the page component to receive and validate the clientId parameter from the URL. Include proper export default statement and implement basic error handling for invalid client IDs."
+          "details": "1. Create the page.tsx file in the specified directory structure\n2. Implement a client-side component with useParams hook to access the clientId parameter\n3. Add the PageBreadcrumb component with proper navigation hierarchy (Dashboard > Clients > Client Profile)\n4. Set up the basic page container with appropriate padding and margin\n5. Test that the page renders correctly and the breadcrumb navigation works\n6. Ensure the component follows Cursor rules for code styling\n7. Implement proper TypeScript typing for all props and parameters",
+          "status": "pending",
+          "parentTaskId": 1
         },
         {
           "id": 2,
-          "title": "Implement responsive TailAdmin grid layout",
-          "description": "Set up the responsive grid layout structure using TailAdmin components",
-          "status": "done",
+          "title": "Implement Responsive TailAdmin Grid Layout",
+          "description": "Create a responsive grid layout using TailAdmin and Tailwind CSS classes with proper breakpoints for different screen sizes",
           "dependencies": [
             1
           ],
-          "details": "Implement the TailAdmin grid layout using `xl:grid-cols-12` for responsive design. Create the main container div with appropriate TailAdmin classes. Set up responsive breakpoints for different screen sizes (sm, md, lg, xl). Ensure the layout follows the Cursor code styling rules. Add appropriate padding, margins, and gap settings for the grid layout."
+          "details": "1. Add a main container div with grid layout using Tailwind's grid utilities\n2. Implement responsive grid-cols with appropriate breakpoints: grid-cols-1 for mobile, md:grid-cols-2 for tablets, and xl:grid-cols-12 for desktops\n3. Set up proper gap spacing between grid items using gap-4 md:gap-6 2xl:gap-7.5\n4. Add container styling with rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark\n5. Ensure the layout is responsive by testing at different viewport sizes\n6. Implement dark mode support using Tailwind's dark: variant classes\n7. Test the responsive behavior across different breakpoints",
+          "status": "pending",
+          "parentTaskId": 1
         },
         {
           "id": 3,
-          "title": "Add PageBreadcrumb component",
-          "description": "Integrate the PageBreadcrumb component at the top of the page",
-          "status": "done",
+          "title": "Create Placeholder Section Components",
+          "description": "Set up empty placeholder components for all the client information sections that will be populated in future tasks",
           "dependencies": [
+            1,
             2
           ],
-          "details": "Import the `PageBreadcrumb` component from the shared components library. Configure the breadcrumb with the correct navigation path (Dashboard > Clients > Client Profile). Ensure the client name is dynamically displayed in the breadcrumb when available. Style the breadcrumb according to the design system with proper spacing above and below the component."
-        },
-        {
-          "id": 4,
-          "title": "Create placeholder sections for KPI cards",
-          "description": "Set up the structure for KPI cards section with appropriate grid positioning",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Create a section for KPI cards with appropriate grid column spans. Implement placeholder components for each KPI card with loading states. Position the KPI cards in the top section of the page. Use TailAdmin card components with proper styling. Include placeholder titles, values, and icons for each KPI card."
-        },
-        {
-          "id": 5,
-          "title": "Implement placeholder sections for tables",
-          "description": "Create the structure for data tables with proper grid positioning",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Set up placeholder table components in the appropriate grid positions. Create table headers with placeholder column names. Implement skeleton loading states for table rows. Add pagination controls as placeholders. Ensure tables are responsive and maintain proper styling on different screen sizes. Follow TailAdmin table component guidelines."
-        },
-        {
-          "id": 6,
-          "title": "Add placeholder sections for charts",
-          "description": "Create the structure for chart components with proper grid positioning",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Implement placeholder chart components in the designated grid areas. Set up chart containers with appropriate dimensions and responsive behavior. Add placeholder titles and legends for each chart. Create skeleton loading states for charts. Ensure chart containers follow the design system's styling guidelines."
-        },
-        {
-          "id": 7,
-          "title": "Integrate layout components and finalize page structure",
-          "description": "Connect all placeholder sections and ensure proper layout integration",
-          "status": "done",
-          "dependencies": [
-            3,
-            4,
-            5,
-            6
-          ],
-          "details": "Connect all previously created sections into a cohesive page layout. Ensure proper spacing between all components. Implement any necessary wrapper components for consistent styling. Add appropriate error boundaries around each section. Test the responsive behavior across all breakpoints. Verify that the layout follows the Cursor rules for code styling and component usage. Add comments for future implementation of actual data fetching and component functionality."
+          "details": "1. Create placeholder components for each major section of the client profile:\n   - ClientInfoSection (spans 2 columns on xl screens)\n   - ClientStatsSection (spans 2 columns)\n   - ClientActivitySection (spans 4 columns)\n   - ClientContactSection (spans 4 columns)\n2. Add appropriate headings and container styling to each section\n3. Include skeleton loading states for each section\n4. Add comments indicating what content will be added to each section in future tasks\n5. Ensure all components have proper TypeScript interfaces\n6. Implement consistent styling across all section components\n7. Test that all sections render correctly within the grid layout\n8. Verify dark mode compatibility for all placeholder components",
+          "status": "pending",
+          "parentTaskId": 1
         }
       ]
     },
     {
       "id": 2,
       "title": "Implement Client Data Fetching",
-      "description": "Set up tRPC call to fetch all client data with related entities using Prisma relations.",
-      "status": "in-progress",
+      "description": "Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.",
+      "status": "pending",
       "dependencies": [
         1
       ],
       "priority": "high",
-      "details": "Implement the tRPC call `api.clients.getById({ clientId })` with all required Prisma relations: contacts → licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Use Next.js App Router data fetching patterns as referenced in Context7. Implement error handling and loading states. Initially load all client and related entity fields to allow for refinement later.",
-      "testStrategy": "Test API call with various client IDs. Verify all related entities are properly loaded. Check error handling for non-existent clients or server errors.",
+      "details": "Implement the tRPC call to api.clients.getById({ clientId }) with all necessary Prisma relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Follow Next.js App Router data fetching guidelines from Context7. Implement error handling and loading states. Ensure all client and related entity fields are loaded to allow for later refinement.",
+      "testStrategy": "Test with mock data to ensure all relations are properly loaded. Verify error states and loading indicators work correctly. Check that all required fields are available in the returned data.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create tRPC router for client queries",
-          "description": "Set up the basic tRPC router structure for client-related queries",
-          "status": "done",
+          "title": "Define Prisma client schema relations",
+          "description": "Set up the Prisma schema to properly define all required relations for the client entity",
+          "status": "pending",
           "dependencies": [],
-          "details": "Create a new router file (e.g., 'app/server/routers/clients.ts') that will contain all client-related procedures. Initialize the router with the publicProcedure from your tRPC setup. This will serve as the foundation for implementing the getById procedure. Make sure to export the router properly so it can be merged with your main router."
+          "details": "Review the existing Prisma schema and ensure all relations are properly defined between the client entity and its related entities: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Make sure relation fields are correctly typed and that foreign keys are properly set up. This will serve as the foundation for fetching comprehensive client data with all necessary relations."
         },
         {
           "id": 2,
-          "title": "Define Prisma query with all required relations",
-          "description": "Implement the Prisma query that fetches a client by ID with all required relations",
-          "status": "done",
+          "title": "Create tRPC procedure for client fetching",
+          "description": "Implement the tRPC procedure that will handle fetching client data by ID with all relations",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "In the clients router, create a helper function that constructs the Prisma query to fetch a client by ID. Include all required relations in the include object: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Initially fetch all fields for each relation to allow for refinement later. Structure the query to handle potential null values and optimize for performance."
+          "details": "Create a new tRPC procedure in the clients router called 'getById' that accepts a clientId parameter. Inside this procedure, use Prisma's findUnique or findFirst method with the include option to specify all the required relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Implement proper error handling for cases where the client doesn't exist or database errors occur. Return a properly typed response that includes the client and all its relations."
         },
         {
           "id": 3,
-          "title": "Implement the getById tRPC procedure",
-          "description": "Create the tRPC procedure that accepts a clientId parameter and returns the client data",
-          "status": "done",
+          "title": "Implement server-side data fetching component",
+          "description": "Create a server component that fetches client data using the tRPC procedure",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "Implement the getById procedure using tRPC's query method. Use zod to validate the input parameter (clientId). Call the Prisma query function created in the previous subtask. Implement proper error handling for cases like invalid IDs or database errors. Return the full client object with all relations. The procedure should be defined as: publicProcedure.input(z.object({ clientId: z.string() })).query(async ({ input }) => { /* implementation */ })."
+          "details": "Following Next.js App Router patterns, create a React Server Component that will handle fetching the client data. Use the tRPC server-side calling pattern to directly invoke the api.clients.getById procedure with the clientId parameter. Implement proper error handling and ensure the component can be easily composed with other components. This approach leverages server components to keep expensive data fetches on the server, improving performance and security."
         },
         {
           "id": 4,
-          "title": "Connect tRPC router to Next.js App Router",
-          "description": "Ensure the clients router is properly connected to the main tRPC router and exposed via the API route",
-          "status": "done",
+          "title": "Create loading and error states",
+          "description": "Implement loading states and error handling UI components",
+          "status": "pending",
           "dependencies": [
             3
           ],
-          "details": "Import the clients router in your main router file and merge it with other routers. Ensure the API route handler at 'app/api/trpc/[trpc]/route.ts' is properly set up to handle the new client queries. Test the endpoint by navigating to the appropriate URL (e.g., http://localhost:3000/api/trpc/clients.getById) with the required parameters to verify it's working correctly."
+          "details": "Create reusable loading and error state components that will be displayed during data fetching and when errors occur. For loading states, implement a skeleton UI that matches the layout of the client data display. For error states, create informative error messages that help users understand what went wrong (e.g., client not found, permission issues, or server errors). Use Next.js App Router's loading.js and error.js conventions to handle these states elegantly."
         },
         {
           "id": 5,
-          "title": "Create client data fetching hooks",
-          "description": "Implement React hooks for fetching client data using the tRPC client",
-          "status": "in-progress",
+          "title": "Implement client-side data fetching hook",
+          "description": "Create a custom hook for client components that need to fetch client data",
+          "status": "pending",
           "dependencies": [
-            4
+            2
           ],
-          "details": "Create a custom hook (e.g., useClientData) that uses the tRPC client to call the getById procedure. Implement loading states, error handling, and data caching strategies. The hook should accept a clientId parameter and return an object with isLoading, isError, error, and data properties. Utilize Next.js App Router data fetching patterns as appropriate, considering both client and server components."
+          "details": "For client components that need to fetch or refetch client data, create a custom React hook (e.g., useClientData) that uses tRPC's client-side calling pattern. Implement this using SWR or React Query for efficient caching and revalidation. The hook should accept a clientId parameter and return the client data along with loading and error states. This will complement the server-side fetching while providing a way to update data on the client when needed."
         },
         {
           "id": 6,
-          "title": "Implement UI components with loading and error states",
-          "description": "Create UI components that use the client data hooks and handle loading and error states",
+          "title": "Create data display components with progressive loading",
+          "description": "Implement UI components that display client data with progressive loading of related entities",
           "status": "pending",
           "dependencies": [
+            3,
+            4,
             5
           ],
-          "details": "Develop UI components that consume the client data hook. Implement loading indicators for when data is being fetched. Create error handling components that display appropriate messages when errors occur. Design the components to efficiently display all the related entity data (contacts, licenses, etc.) in a user-friendly manner. Consider implementing progressive loading or virtualization for large datasets."
+          "details": "Create UI components that display the client data and all its relations. Implement these using a progressive loading approach where the main client data loads first, followed by related entities. This improves perceived performance. Ensure all fields from the client and related entities are accessible in the UI components, even if not all are displayed initially. This will allow for later refinement of the UI without requiring changes to the data fetching logic. Use React Suspense boundaries to optimize the loading experience."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Develop KPI Cards and Charts",
-      "description": "Create the financial KPI cards and charts at the top of the profile page.",
+      "title": "Create Client Manager and KPI Cards",
+      "description": "Implement the Client Manager card and KPI cards (Lifetime Fees, YoY Growth, Health Score) at the top of the profile page.",
       "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "high",
-      "details": "Implement the following KPI components using TailAdmin's ComponentCard and chart components: 1) Lifetime Fees Card with sparkline trend, 2) YoY Growth Chart using TailAdmin's chart component, 3) Customer Health Score with colored ribbon, 4) Client Manager Card showing assigned team member. Use the useAbility hook to gate sensitive financial data (estAnnFees) to Admin users only. Include billing commentary from activityLog entries for Admins.",
-      "testStrategy": "Verify charts render correctly with sample data. Test permission gating for sensitive fields. Check responsive design of cards at different breakpoints.",
+      "details": "Create the Client Manager card displaying assigned team member with name, role, and contact info with a link to their profile. Implement KPI cards using ComponentCard with: 1) Lifetime Fees Card with total historical fees and sparkline trend, 2) YoY Growth Chart using TailAdmin chart component, 3) Customer Health Score with colored ribbon (green/yellow/red). Use useAbility() to gate sensitive financial data for Admin-only access.",
+      "testStrategy": "Verify all cards render correctly with proper data. Test permission gating for sensitive fields. Check that charts and visualizations display accurately. Test responsiveness at different screen sizes.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Base KPI Card Components with Data Access Control",
-          "description": "Implement the foundational KPI card components with proper data access control using the useAbility hook to gate sensitive financial information for Admin users only.",
-          "dependencies": [],
-          "details": "1. Create a reusable KPICard component that extends TailAdmin's ComponentCard with the following features:\n   - Configurable title, value, and optional unit display\n   - Support for sparkline/trend visualization\n   - Color-coded indicators for positive/negative values\n   - Responsive design for all screen sizes\n\n2. Implement the useAbility hook integration to gate sensitive financial data:\n   - Create a withFinancialDataAccess HOC or custom hook that checks user permissions\n   - Apply conditional rendering for estAnnFees and other sensitive data\n   - Implement fallback UI for non-admin users (e.g., 'Restricted' message or simplified view)\n\n3. Build the specific KPI card implementations:\n   - Lifetime Fees Card with sparkline trend visualization\n   - Customer Health Score card with colored ribbon indicator\n   - Client Manager Card showing assigned team member\n\n4. Set up unit tests for the components:\n   - Test rendering with and without admin permissions\n   - Test conditional display of sensitive data\n   - Test responsive behavior\n\nUse TailAdmin's existing component structure for consistency while ensuring the cards follow best practices for KPI visualization with clear, uncluttered presentation of metrics.",
+          "title": "Create basic Card component structure",
+          "description": "Implement the reusable Card component that will serve as the foundation for both the Client Manager card and KPI cards",
           "status": "pending",
-          "parentTaskId": 3
+          "dependencies": [],
+          "details": "Create a Card.jsx component with appropriate styling in Card.css. The component should accept props for title, content, and custom styling. Use a flexible structure with box-shadow, border-radius, and padding. Implement responsive design considerations to ensure cards display properly on different screen sizes. This component will be the building block for all cards in this task."
         },
         {
           "id": 2,
-          "title": "Implement YoY Growth Chart Component",
-          "description": "Create the Year-over-Year Growth chart component using TailAdmin's chart components with appropriate visualizations for financial trend data.",
+          "title": "Implement Client Manager card component",
+          "description": "Create the Client Manager card displaying the assigned team member's information",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Analyze TailAdmin's chart component capabilities and select the appropriate chart type for YoY growth visualization:\n   - Bar chart for month-by-month comparison\n   - Line chart for continuous trend visualization\n   - Consider dual-axis chart if comparing multiple metrics\n\n2. Implement the YoY Growth Chart component:\n   - Create a wrapper around TailAdmin's chart component\n   - Configure appropriate axes, legends, and tooltips\n   - Implement responsive sizing based on container width\n   - Add interactive elements (hover states, tooltips with detailed data)\n\n3. Add data transformation utilities:\n   - Create functions to format raw financial data for chart consumption\n   - Implement percentage calculation for YoY comparisons\n   - Add support for different time period comparisons (YoY, QoQ, MoM)\n\n4. Implement performance optimizations:\n   - Use React.memo to prevent unnecessary re-renders\n   - Implement data memoization for expensive calculations\n   - Consider lazy loading for the chart component\n\n5. Write tests for the chart component:\n   - Test rendering with various data scenarios\n   - Test responsiveness and resize behavior\n   - Test data transformation functions\n\nEnsure the chart follows financial data visualization best practices with clear labeling, appropriate color schemes for financial data, and tooltips that provide context for the displayed metrics.",
-          "status": "pending",
-          "parentTaskId": 3
+          "details": "Using the Card component as a base, create a ClientManagerCard component that displays the team member's name, role, and contact information. Add a profile image placeholder. Include a link to the team member's profile page. Style according to design specifications. The component should accept props for the team member's data (name, role, email, phone, profileUrl, imageUrl)."
         },
         {
           "id": 3,
-          "title": "Integrate Billing Commentary and Finalize KPI Dashboard Layout",
-          "description": "Integrate billing commentary from activityLog entries for Admin users and finalize the layout of all KPI components at the top of the profile page.",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Implement the billing commentary feature for Admin users:\n   - Create a BillingCommentary component that filters activityLog entries related to billing\n   - Apply the useAbility hook to ensure only Admin users can view this component\n   - Design an expandable/collapsible interface for detailed commentary\n   - Implement sorting by date with most recent comments first\n\n2. Create a responsive grid layout for the KPI dashboard:\n   - Arrange KPI cards in a responsive grid at the top of the profile page\n   - Position the YoY Growth Chart prominently\n   - Ensure proper spacing and alignment between components\n   - Implement breakpoints for different screen sizes (desktop, tablet, mobile)\n\n3. Add final integration and state management:\n   - Connect all components to their respective data sources\n   - Implement loading states and error handling\n   - Add refresh functionality for real-time data updates\n   - Ensure consistent styling across all KPI components\n\n4. Implement comprehensive testing:\n   - Create integration tests for the complete KPI dashboard\n   - Test the dashboard with different user roles and permissions\n   - Verify responsive behavior across different viewport sizes\n   - Test data refresh and error handling scenarios\n\nFinalize the implementation by ensuring all components maintain visual consistency with TailAdmin's design system, follow accessibility best practices (WCAG compliance), and provide a cohesive user experience that highlights the most important financial KPIs at a glance.",
+          "title": "Implement Lifetime Fees KPI card with sparkline",
+          "description": "Create the Lifetime Fees card showing total historical fees and a sparkline trend visualization",
           "status": "pending",
-          "parentTaskId": 3
+          "dependencies": [
+            1
+          ],
+          "details": "Extend the Card component to create a LifetimeFeesCard that displays the total historical fees. Implement a sparkline visualization using a charting library (like Chart.js or D3.js) to show the trend over time. Include proper formatting for currency values. The component should accept props for the fee data (totalFees, feeHistory) where feeHistory is an array of data points for the sparkline."
+        },
+        {
+          "id": 4,
+          "title": "Implement YoY Growth KPI card with chart",
+          "description": "Create the Year-over-Year Growth card using the TailAdmin chart component",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Extend the Card component to create a YoYGrowthCard that integrates the TailAdmin chart component. Configure the chart to display year-over-year growth data. Include percentage indicators for growth/decline. The component should accept props for growth data (growthPercentage, growthHistory) where growthHistory contains the data points needed for the chart."
+        },
+        {
+          "id": 5,
+          "title": "Implement Customer Health Score KPI card",
+          "description": "Create the Customer Health Score card with colored status ribbon",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Extend the Card component to create a HealthScoreCard that displays the customer health score. Implement a colored ribbon that changes based on the score (green for good, yellow for moderate, red for poor). Include a visual indicator of the score (like a gauge or number). The component should accept props for the health data (score, status) where status determines the ribbon color."
+        },
+        {
+          "id": 6,
+          "title": "Implement permission controls using useAbility hook",
+          "description": "Add permission controls to gate sensitive financial data for Admin-only access",
+          "status": "pending",
+          "dependencies": [
+            3,
+            4,
+            5
+          ],
+          "details": "Integrate the useAbility() hook to check user permissions before displaying sensitive financial data in the KPI cards. Implement conditional rendering that shows appropriate placeholders or messages for users without sufficient permissions. Create a wrapper component or higher-order component that applies these permission checks consistently across all KPI cards."
+        },
+        {
+          "id": 7,
+          "title": "Integrate all cards into the profile page layout",
+          "description": "Assemble all card components into the profile page layout with proper spacing and responsiveness",
+          "status": "pending",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "Create a container component that arranges the Client Manager card and KPI cards at the top of the profile page. Implement responsive grid layout to ensure proper card arrangement on different screen sizes. Add loading states for when data is being fetched. Test the integration to ensure all cards display correctly and that permission controls work as expected. Finalize styling to ensure consistent appearance across all cards."
         }
       ]
     },
     {
       "id": 4,
-      "title": "Build Audit Progress and Schedule Components",
-      "description": "Create the audit cycle progress bar and upcoming audit schedule components.",
+      "title": "Implement Audit Cycle Progress and Schedule",
+      "description": "Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components.",
       "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "high",
-      "details": "Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for date formatting as referenced in Context7.",
-      "testStrategy": "Test progress calculation logic with various date ranges. Verify schedule displays correctly with different audit statuses. Check date formatting across browsers.",
+      "details": "Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for proper date formatting as referenced in Context7.",
+      "testStrategy": "Test progress bar calculations for accuracy. Verify schedule displays correct milestone dates. Check date formatting across different locales. Ensure components are responsive.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set up TailAdmin progress bar component structure",
-          "description": "Create the base structure for the Audit Cycle Progress Bar component using TailAdmin's progress-bar component",
+          "title": "Define Data Structures for Audit Cycle and Schedule",
+          "description": "Design and implement TypeScript interfaces or types to represent audit cycles, milestones, and schedule data required by the progress bar and schedule card components.",
           "status": "pending",
           "dependencies": [],
-          "details": "Create a new React component file for the Audit Cycle Progress Bar. Import the necessary TailAdmin progress bar component from the component library. Set up the component's basic structure with props for current progress percentage, last audit date, and next audit due date. The progress bar should be responsive and follow the TailAdmin styling guidelines with appropriate background colors and rounded corners."
+          "details": "Identify all necessary fields (e.g., reportDueDate, nextDueDate, milestone names, dates) and create reusable types/interfaces. Ensure these structures support both progress calculation and schedule listing."
         },
         {
           "id": 2,
-          "title": "Implement progress calculation logic",
-          "description": "Create utility functions to calculate progress percentage between last audit's reportDueDate and next due date",
+          "title": "Fetch and Prepare Audit Data",
+          "description": "Implement logic to retrieve audit cycle and schedule data from the backend or mock source, transforming it to match the defined data structures.",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Develop a utility function that takes the last audit's reportDueDate and the next audit due date as inputs and calculates the current progress as a percentage. The calculation should handle edge cases such as when the dates are invalid or when the current date is outside the expected range. Implement proper date handling using JavaScript's Date object. The function should return a value between 0-100 representing the percentage completion of the audit cycle."
+          "details": "Use API calls or mock data to obtain audit cycles and milestones. Normalize and validate the data to ensure it includes all required fields for downstream components."
         },
         {
           "id": 3,
-          "title": "Add date formatting with Intl.DateTimeFormat",
-          "description": "Implement date formatting utilities using Intl.DateTimeFormat for consistent date display",
-          "status": "pending",
-          "dependencies": [
-            2
-          ],
-          "details": "Create a utility function that uses Intl.DateTimeFormat to format dates consistently throughout the components. Configure the formatter with appropriate locale and formatting options (day, month, year, etc.). Ensure the function handles different date formats and edge cases gracefully. This utility will be used for displaying dates in both the progress bar and upcoming schedule components."
-        },
-        {
-          "id": 4,
-          "title": "Complete Audit Cycle Progress Bar component",
-          "description": "Finalize the progress bar component with labels, tooltips, and responsive design",
+          "title": "Calculate Audit Progress Percentage",
+          "description": "Develop a utility function to compute the progress percentage based on the last audit's reportDueDate and the next due date.",
           "status": "pending",
           "dependencies": [
             1,
-            2,
+            2
+          ],
+          "details": "Implement a function that takes the relevant dates and calculates the elapsed percentage of the audit cycle. Ensure edge cases (e.g., missing dates, future/past cycles) are handled gracefully."
+        },
+        {
+          "id": 4,
+          "title": "Implement Audit Cycle Progress Bar Component",
+          "description": "Create the Audit Cycle Progress Bar using TailAdmin's progress-bar component, displaying the calculated progress and relevant date labels.",
+          "status": "pending",
+          "dependencies": [
             3
           ],
-          "details": "Enhance the progress bar component with labels showing the last audit date and next due date using the date formatting utility. Add tooltips to display additional information when users hover over different parts of the progress bar. Implement responsive design to ensure the component displays correctly on different screen sizes. Add appropriate accessibility attributes (aria-* tags) and ensure the component meets accessibility standards."
+          "details": "Utilize TailAdmin's pre-built progress bar, passing in the computed percentage and customizing styles as needed. Display formatted start and end dates using Intl.DateTimeFormat."
         },
         {
           "id": 5,
-          "title": "Create Upcoming Audit Schedule card structure",
-          "description": "Set up the base structure for the Upcoming Audit Schedule component based on CRM UpcomingSchedule",
+          "title": "Design Upcoming Audit Schedule Card UI",
+          "description": "Design the Upcoming Audit Schedule card layout to match the CRM UpcomingSchedule style, including milestone names and dates.",
           "status": "pending",
-          "dependencies": [
-            3
-          ],
-          "details": "Create a new React component for the Upcoming Audit Schedule card, following the design pattern of the CRM UpcomingSchedule component. Set up the card container with appropriate styling, header, and content areas. Implement the component to accept an array of upcoming audit milestones as props. Use TailAdmin card components and styling guidelines to maintain consistency with the rest of the dashboard."
+          "dependencies": [],
+          "details": "Use Tailwind CSS and TailAdmin components to create a visually consistent card. Plan for dynamic rendering of milestones and responsive design."
         },
         {
           "id": 6,
-          "title": "Implement milestone listing functionality",
-          "description": "Develop the functionality to list and display upcoming audit milestones in chronological order",
+          "title": "Implement Upcoming Audit Schedule Card Component",
+          "description": "Build the Upcoming Audit Schedule card, listing upcoming audit milestones with properly formatted dates.",
           "status": "pending",
           "dependencies": [
+            2,
             5
           ],
-          "details": "Implement the logic to sort and display upcoming audit milestones in chronological order. Each milestone should display the event name, date (formatted using the date formatting utility), and any additional relevant information. Add visual indicators for different types of milestones (e.g., planning meetings, fieldwork, report deadlines). Implement conditional styling to highlight imminent milestones or those requiring attention."
+          "details": "Map over the schedule data to render each milestone. Use Intl.DateTimeFormat for date display. Ensure accessibility and mobile responsiveness."
         },
         {
           "id": 7,
-          "title": "Integrate components with data sources and test",
-          "description": "Connect the components to data sources and perform comprehensive testing",
+          "title": "Integrate Components and Test End-to-End",
+          "description": "Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.",
           "status": "pending",
           "dependencies": [
             4,
             6
           ],
-          "details": "Integrate both components with the appropriate data sources to fetch audit dates and milestones. Implement data fetching logic with proper error handling and loading states. Test the components with various data scenarios including edge cases (no data, past due dates, etc.). Verify that the progress calculation works correctly across different audit cycle timeframes. Ensure both components render correctly and maintain performance when integrated into the larger application."
+          "details": "Place both components in the intended layout. Test with various data scenarios to ensure correct progress calculation, date formatting, and UI responsiveness. Address any integration or edge case issues."
         }
       ]
     },
     {
       "id": 5,
-      "title": "Implement Contacts Table and Network Diagram",
-      "description": "Create the contacts table and relationship network diagram.",
+      "title": "Build Recent Contacts Table",
+      "description": "Create the Recent Contacts Table with all required fields and primary badge indicators.",
       "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "medium",
-      "details": "Build the Recent Contacts Table using TailAdmin's DataTableTwo component with columns for Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact cleanly. Implement the Contact Network Diagram showing relationships between client, contacts, and trust accounts. Reference DataTableTwo APIDocs from Context7 for implementation details.",
-      "testStrategy": "Test table sorting and filtering. Verify links to contact profiles work correctly. Test network diagram with various relationship configurations.",
+      "details": "Implement a TailAdmin RecentOrders-style table for contacts with columns: Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact in a clean format (comma-separated or expandable cell). Use DataTableTwo component as referenced in Context7. Ensure table is responsive and accessible.",
+      "testStrategy": "Test table rendering with various data scenarios. Verify links to contact pages work correctly. Check that primary badges display properly. Test multiple licenses display format.",
       "subtasks": [
         {
           "id": 1,
           "title": "Set up DataTableTwo component structure",
-          "description": "Initialize and configure the DataTableTwo component from TailAdmin for the Recent Contacts Table implementation",
+          "description": "Create the foundation for the Recent Contacts table by implementing the DataTableTwo component with proper configuration",
           "status": "pending",
           "dependencies": [],
-          "details": "Create a new component file for the Contacts Table. Import the DataTableTwo component from TailAdmin. Set up the basic table structure with appropriate props and configuration options. Define the table container with responsive styling using Tailwind CSS classes. Reference the TailAdmin documentation for proper component initialization and configuration options."
+          "details": "Import and configure the DataTableTwo component from the TailAdmin template. Create a new component file for RecentContacts that extends DataTableTwo. Set up the basic table structure with responsive design considerations and accessibility attributes (aria labels, keyboard navigation). Implement the container layout with appropriate TailAdmin styling classes."
         },
         {
           "id": 2,
-          "title": "Define contact data schema and column configuration",
-          "description": "Create the data schema and column configuration for the Contacts Table with all required fields",
+          "title": "Define table columns and data structure",
+          "description": "Define the column configuration for Name, Email, Phone, Title, and Primary badge",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Define the data schema for contacts with fields for Name, Email, Phone, Title, and Primary badge status. Configure columns with appropriate headers, cell renderers, and sorting options. Implement the Name column with links to individual contact pages using the '/contacts/[id]' route pattern. Set up proper data types and validation for each field. Create sample data for testing the table implementation."
+          "details": "Create a columns configuration array that defines each column's properties (Name, Email, Phone, Title, Primary). For the Name column, implement linking to '/contacts/[id]' pattern. Set up proper data accessors for each field. Configure sorting capabilities for relevant columns. Define the data interface/type for contact entries to ensure type safety throughout the component."
         },
         {
           "id": 3,
-          "title": "Implement multiple licenses display functionality",
-          "description": "Create a component to cleanly display multiple licenses per contact within the table",
+          "title": "Implement Primary badge indicator",
+          "description": "Create the visual indicator for Primary contacts with appropriate styling",
           "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Design and implement a custom cell renderer component for displaying multiple licenses. Use Tailwind CSS for styling license badges or tags with appropriate colors and spacing. Implement collapsible/expandable functionality if the number of licenses exceeds a certain threshold. Ensure the display is responsive and maintains table layout integrity. Test with contacts having varying numbers of licenses."
+          "details": "Design and implement the Primary badge component with appropriate styling (colors, size, text). Create a cell renderer function for the Primary column that conditionally displays the badge based on the contact's primary status. Add tooltip or accessible description to explain the badge meaning. Ensure the badge has proper contrast ratios for accessibility."
         },
         {
           "id": 4,
-          "title": "Create data fetching and state management logic",
-          "description": "Implement the data fetching and state management for the Contacts Table",
+          "title": "Develop multiple licenses display format",
+          "description": "Implement the display logic for showing multiple licenses per contact",
           "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Set up data fetching logic using React hooks or a state management library. Implement pagination, sorting, and filtering functionality. Create loading and error states for the table. Implement search functionality for the contacts table. Set up proper state updates when data changes. Ensure the table maintains its state during user interactions."
+          "details": "Create a custom cell renderer for displaying multiple licenses. Implement either a comma-separated list for simple display or an expandable cell with a count indicator that reveals all licenses on interaction. For the expandable approach, implement the expand/collapse functionality with appropriate animations. Ensure the display remains readable even with many licenses by implementing truncation with tooltips if needed."
         },
         {
           "id": 5,
-          "title": "Design the Contact Network Diagram component",
-          "description": "Create the basic structure and layout for the Contact Network Diagram",
+          "title": "Connect table to data source",
+          "description": "Implement data fetching and state management for the contacts table",
           "status": "pending",
-          "dependencies": [],
-          "details": "Research and select an appropriate visualization library for network diagrams (e.g., D3.js, React Flow, or Vis.js). Create a new component for the Contact Network Diagram. Design the basic layout and container for the diagram. Implement responsive behavior for different screen sizes. Set up the component with proper props and configuration options."
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Set up API integration to fetch contact data from the backend. Implement loading states and error handling for data fetching. Create state management for the table data using React hooks (useState, useEffect). Implement pagination logic if the data set is large. Add sorting functionality based on column headers. Ensure proper data transformation from API response to the table's expected format."
         },
         {
           "id": 6,
-          "title": "Implement relationship data model and visualization",
-          "description": "Create the data model and visualization for relationships between clients, contacts, and trust accounts",
+          "title": "Implement responsive behavior",
+          "description": "Ensure the table displays correctly across all device sizes",
           "status": "pending",
           "dependencies": [
-            5
+            1,
+            2,
+            3,
+            4
           ],
-          "details": "Define the data structure for representing relationships between entities (clients, contacts, trust accounts). Implement node rendering for different entity types with distinct visual representations. Create edge rendering for relationships with appropriate styling. Implement interactive features like zooming, panning, and node selection. Add tooltips or information panels to display additional details about entities and relationships."
+          "details": "Test and optimize the table for various screen sizes. Implement column priority hiding for smaller screens (hide less important columns first). Add horizontal scrolling for very small screens while maintaining fixed position of key columns. Ensure touch interactions work properly on mobile devices. Test and fix any layout issues that occur at different breakpoints."
         },
         {
           "id": 7,
-          "title": "Integrate and finalize both components",
-          "description": "Integrate the Contacts Table and Network Diagram components into the main application and finalize implementation",
+          "title": "Add accessibility features and final polish",
+          "description": "Enhance the table with proper accessibility features and final UI refinements",
           "status": "pending",
           "dependencies": [
+            1,
+            2,
+            3,
             4,
+            5,
             6
           ],
-          "details": "Integrate both components into the main application layout. Implement any necessary interactions between the table and diagram (e.g., selecting a contact in the table highlights it in the diagram). Add final styling and UI polish using Tailwind CSS. Perform comprehensive testing across different browsers and screen sizes. Optimize performance for large datasets. Add documentation for component usage and maintenance. Ensure accessibility compliance for both components."
+          "details": "Implement proper keyboard navigation throughout the table. Add screen reader announcements for dynamic content changes. Ensure all interactive elements have proper focus states. Add appropriate aria attributes for complex interactions. Implement final visual polish including hover states, transitions, and consistent spacing. Add comprehensive unit and integration tests to verify functionality. Document the component API and usage patterns for other developers."
         }
       ]
     },
     {
       "id": 6,
-      "title": "Develop Trust Accounts Table and Software Links",
-      "description": "Create the trust accounts table with software integration links.",
+      "title": "Create Contact Network Diagram",
+      "description": "Implement a simple graph visualization showing relationships between client, contacts, and trust accounts.",
       "status": "pending",
       "dependencies": [
-        2
+        5
       ],
-      "priority": "medium",
-      "details": "Implement the Trust Accounts Table using DataTableTwo with columns for Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Add 'Open in Xero' or 'Open in SharePoint' action buttons in each trust account row, linking to the account's management software or external feed.",
-      "testStrategy": "Test table with various trust account configurations. Verify external links open correctly. Test responsive behavior of the table on different screen sizes.",
+      "priority": "low",
+      "details": "Create a simple network diagram showing the relationships: client → contacts → trust accounts. Use an appropriate visualization library compatible with TailAdmin. Keep the diagram simple and focused on key relationships. Ensure the diagram is responsive and degrades gracefully on smaller screens.",
+      "testStrategy": "Test diagram rendering with different relationship structures. Verify visual clarity and readability. Check responsiveness and fallback on mobile devices.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create DataTableTwo schema for Trust Accounts",
-          "description": "Define the data structure for the Trust Accounts table with all required columns and data types",
+          "title": "Research and select visualization library",
+          "description": "Evaluate and select an appropriate graph visualization library compatible with TailAdmin, Next.js, and React",
           "status": "pending",
           "dependencies": [],
-          "details": "Implement the DataTableTwo schema with the following columns: Account Name (string), Bank Name (string), BSB (string), Account Number (string), Software Access badge (boolean), Last Reconciliation Date (date), Management Software (string), and Software URL (string). Define appropriate data types, validation rules, and default values for each column. Ensure the schema supports filtering and sorting operations that will be needed for the table view."
+          "details": "Research visualization libraries like D3.js, React Flow, Vis.js, or Cytoscape.js that work well with TailAdmin's React/Next.js environment. Compare features including performance, responsiveness, customization options, and documentation quality. Consider libraries that support directed graphs to show relationships between clients, contacts, and trust accounts. Test basic integration with TailAdmin to ensure compatibility. Document the selected library with justification and basic implementation examples."
         },
         {
           "id": 2,
-          "title": "Implement data fetching and storage logic",
-          "description": "Create the backend services to fetch, store, and update trust account data",
+          "title": "Define data structure for network relationships",
+          "description": "Create a standardized data structure to represent client, contact, and trust account relationships",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Develop the data service that will handle CRUD operations for trust accounts. Implement methods to fetch trust account data from the database, create new accounts, update existing accounts, and delete accounts when needed. Include error handling and validation logic. If using SharePoint as a data source, implement the SharePoint REST API calls to interact with the SharePoint lists that store trust account data. Ensure proper authentication and authorization checks are in place."
+          "details": "Design a JSON data structure that represents nodes (clients, contacts, trust accounts) and edges (relationships between them). Define node types with appropriate properties (e.g., id, name, type, status). Create edge definitions with source, target, and relationship type. Ensure the data structure is compatible with the selected visualization library. Include sample data that demonstrates various relationship scenarios. Document the schema with examples for development reference."
         },
         {
           "id": 3,
-          "title": "Build Trust Accounts Table UI component",
-          "description": "Create the DataTableTwo component to display trust accounts with all required columns",
+          "title": "Implement basic network diagram component",
+          "description": "Create a React component that renders the basic network diagram using the selected library",
           "status": "pending",
           "dependencies": [
             1,
             2
           ],
-          "details": "Implement the UI component using DataTableTwo to display trust accounts. Configure the table with all columns defined in the schema. Implement sorting, filtering, and pagination features. Style the table according to design specifications, including the Software Access badge visual indicator. Ensure the table is responsive and accessible. Add empty state handling and loading indicators for better user experience."
+          "details": "Create a new React component in the TailAdmin framework that implements the visualization library. Set up the component to accept the data structure defined in subtask 2. Implement basic node and edge rendering with default styling. Add container sizing and basic layout algorithms. Ensure the component handles empty or minimal data gracefully. Test the component with sample data to verify basic functionality. Document component props and usage examples."
         },
         {
           "id": 4,
-          "title": "Implement software integration links logic",
-          "description": "Create the logic to generate and validate external software links",
+          "title": "Add styling and visual enhancements",
+          "description": "Enhance the network diagram with appropriate styling, colors, and visual elements",
           "status": "pending",
           "dependencies": [
-            2
+            3
           ],
-          "details": "Develop the service to generate valid links to external software systems (Xero, SharePoint) based on the managementSoftware and softwareUrl fields. Implement URL validation and security checks. Create helper functions to format URLs with proper parameters and authentication tokens if needed. For SharePoint links, use the SharePoint high-trust configuration to ensure secure access. For Xero, implement the appropriate API authentication flow. Include error handling for cases where links cannot be generated."
+          "details": "Apply TailAdmin's design system to the network diagram for visual consistency. Create distinct visual styles for different node types (clients, contacts, trust accounts) using appropriate colors, shapes, and icons. Style relationship edges to indicate relationship types. Add tooltips or hover effects to display additional information. Implement visual indicators for active/inactive relationships. Ensure all styling uses Tailwind CSS classes where possible for consistency with TailAdmin. Document styling options and customization capabilities."
         },
         {
           "id": 5,
-          "title": "Add action buttons with software links",
-          "description": "Implement 'Open in Xero' and 'Open in SharePoint' action buttons in each table row",
+          "title": "Implement responsive behavior",
+          "description": "Ensure the network diagram is responsive and degrades gracefully on smaller screens",
           "status": "pending",
           "dependencies": [
             3,
             4
           ],
-          "details": "Extend the DataTableTwo component to include action buttons in each row. Implement conditional rendering to show 'Open in Xero' or 'Open in SharePoint' buttons based on the managementSoftware field. Connect the buttons to the software integration links logic to generate the correct URLs. Add click handlers that open the links in a new tab/window. Implement visual feedback for button interactions (hover, active states). Ensure buttons are only enabled for users with appropriate permissions."
+          "details": "Implement responsive sizing for the diagram container based on viewport dimensions. Add media queries or Tailwind responsive classes to adjust diagram properties on different screen sizes. Create simplified view modes for mobile devices (possibly collapsing certain nodes or showing alternative representations). Test responsive behavior across various device sizes. Implement touch interactions for mobile users. Add zoom/pan controls that work well on both desktop and mobile. Document responsive behavior and breakpoints."
         },
         {
           "id": 6,
-          "title": "Implement last reconciliation date tracking",
-          "description": "Add functionality to track and update the last reconciliation date for trust accounts",
+          "title": "Add interactive features and integration",
+          "description": "Implement user interactions and integrate the diagram with the broader application",
           "status": "pending",
           "dependencies": [
-            2,
-            3
+            3,
+            4,
+            5
           ],
-          "details": "Implement the logic to track when trust accounts were last reconciled. Create a mechanism to update the last reconciliation date field when reconciliation actions are performed. Add visual indicators in the table to highlight accounts that haven't been reconciled recently (e.g., color coding or warning icons for accounts past a certain threshold). Include sorting capability to allow users to sort by reconciliation date. Add filtering options to show only accounts that need reconciliation."
+          "details": "Add click/tap interactions to select nodes and view detailed information. Implement filtering capabilities to focus on specific relationship types or entities. Create methods for programmatically highlighting specific relationships. Add animation for state changes (e.g., when filtering or selecting). Integrate the component with TailAdmin's state management approach. Ensure the component exposes appropriate events and callbacks for parent components. Create documentation for all interactive features and integration points. Perform final testing with realistic data volumes and user scenarios."
         }
       ]
     },
     {
       "id": 7,
-      "title": "Create Activity Card and Tabbed Activity Log",
-      "description": "Implement the activity tracking components with filtering and quick-add functionality.",
+      "title": "Implement Trust Accounts Table",
+      "description": "Build the Trust Accounts Table with all required fields and software access links.",
       "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "medium",
-      "details": "Build the Activity Card using TailAdmin's ActivitiesCard to show recent notes, call logs, and status changes with icons. Implement pagination to show only the most recent items. Create the Tabbed Activity Log using headlessui-tabs (referenced in Context7) to group activities by type (Notes, Emails, Calls, Status Changes). Add Filter & Search functionality with full-text filtering and date-range picker. Implement Quick-Add Activity inline controls for adding new activity logs.",
-      "testStrategy": "Test pagination controls and verify correct items are displayed. Test tab switching between activity types. Verify search and filtering work as expected. Test adding new activities of different types.",
+      "details": "Create a DataTableTwo component for trust accounts with columns: Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Include action buttons linking to each account's management software or external feed (e.g., 'Open in Xero' or 'Open in SharePoint'). Follow DataTableTwo API docs from Context7.",
+      "testStrategy": "Test table with various trust account data. Verify external links open correctly. Check that all required fields display properly. Test responsive behavior on different screen sizes.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Activity Card Base Component",
-          "description": "Create the foundational Activity Card component that will display recent activities with appropriate styling and layout",
+          "title": "Set Up DataTableTwo Component Environment",
+          "description": "Install and configure all necessary dependencies for DataTableTwo, ensuring compatibility with the project and preparing for custom table implementation.",
           "status": "pending",
           "dependencies": [],
-          "details": "Create a new component file ActivityCard.tsx using TailAdmin's ActivitiesCard as reference. Implement the card container with proper Tailwind CSS styling including rounded corners, appropriate padding, and responsive design. Set up the basic structure to display activity items with icons, timestamps, and descriptions. Use subtle text styling with proper contrast between primary content (activity description) and secondary content (timestamps, categories) as seen in the reference designs. Ensure the component accepts props for activity data and pagination controls."
+          "details": "Install required packages (e.g., datatables.net-react, datatables.net-dt) using npm or yarn. Import DataTableTwo and its dependencies into the project. Verify that the DataTableTwo API documentation from Context7 is accessible and understood. Set up a basic DataTableTwo instance in a test component to confirm correct installation and rendering.[1][5]"
         },
         {
           "id": 2,
-          "title": "Implement Activity Item Components with Icons",
-          "description": "Create the individual activity item components with appropriate icons for different activity types",
+          "title": "Define Trust Accounts Table Schema and Columns",
+          "description": "Design the schema for the trust accounts table, specifying all required columns and their data types, and configure the DataTableTwo columns accordingly.",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Create ActivityItem.tsx component that renders different activity types (notes, calls, emails, status changes) with appropriate icons. Implement conditional rendering based on activity type. Use subtle styling differences to distinguish between activity types while maintaining design consistency. Each activity item should display: icon matching the activity type, timestamp formatted appropriately, activity description with proper text truncation if needed, and any relevant metadata. Ensure proper spacing between items and consistent vertical rhythm."
+          "details": "Create a columns configuration for DataTableTwo including: Account Name, Bank Name, BSB, Account Number, Software Access badge, Last Reconciliation Date, managementSoftware, and softwareUrl. Ensure each column has appropriate headers, data accessors, and formatting as needed (e.g., date formatting for reconciliation date, badge styling for software access)."
         },
         {
           "id": 3,
-          "title": "Implement Tabbed Interface for Activity Log",
-          "description": "Create a tabbed interface using headlessui-tabs to categorize activities by type",
+          "title": "Integrate Data Source and Populate Table",
+          "description": "Connect the DataTableTwo component to the trust accounts data source and ensure the table is populated with accurate, testable data.",
           "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Implement TabbedActivityLog.tsx component using headlessui-tabs library. Create tabs for different activity categories: 'All', 'Notes', 'Emails', 'Calls', and 'Status Changes'. Style the tabs with appropriate Tailwind classes for active/inactive states. Implement tab panels that filter and display the appropriate ActivityItem components based on the selected tab. Ensure smooth transitions between tabs and proper accessibility attributes. Connect the tabbed interface to the activity data source and implement conditional rendering logic to filter activities by type."
+          "details": "Fetch or mock trust account data containing all required fields. Map the data to the DataTableTwo schema. Ensure the table displays all records correctly and supports updates if needed. Use sample data for development if backend integration is not yet available."
         },
         {
           "id": 4,
-          "title": "Implement Filtering and Search Functionality",
-          "description": "Add filtering capabilities including text search and date range selection",
+          "title": "Implement Software Access Badge and Action Buttons",
+          "description": "Add a Software Access badge column and action buttons that link to each account's management software or external feed, such as 'Open in Xero' or 'Open in SharePoint'.",
           "status": "pending",
           "dependencies": [
             3
           ],
-          "details": "Create a FilterControls.tsx component with text search input and date range picker. Implement the search functionality with debounced input to filter activities by text content. Add a date range picker component that allows filtering activities within a specific time period. Style the filter controls to match the overall dashboard design with subtle input fields and clear visual feedback. Implement the filter logic that combines both text search and date range criteria. Connect the filter controls to the activity display components to update the visible activities based on filter criteria."
+          "details": "Render a badge in the Software Access column based on the managementSoftware field. For each row, add an action button that dynamically generates a link using the softwareUrl field and displays the appropriate label (e.g., 'Open in Xero'). Ensure buttons are accessible and open links in a new tab or as required."
         },
         {
           "id": 5,
-          "title": "Implement Quick-Add Activity Functionality",
-          "description": "Create inline controls for quickly adding new activity entries of different types",
+          "title": "Apply Styling, Test, and Document the Component",
+          "description": "Ensure the Trust Accounts Table matches design guidelines, is fully tested, and includes usage documentation.",
           "status": "pending",
           "dependencies": [
-            3,
             4
           ],
-          "details": "Implement QuickAddActivity.tsx component with inline form controls for adding new activities. Create a dropdown or segmented control to select activity type (Note, Email, Call, Status Change). Implement type-specific input fields that appear based on the selected activity type. Add validation for required fields based on activity type. Style the quick-add controls to be compact yet usable, following the dashboard's design language. Implement the submission logic to add new activities to the data source. Add success/error feedback for form submission and reset form after successful submission."
+          "details": "Apply consistent styling to match the application's theme, including badges and action buttons. Test the component for usability, accessibility, and responsiveness. Write clear documentation on how to use and extend the Trust Accounts Table, referencing the DataTableTwo API as needed."
         }
       ]
     },
     {
       "id": 8,
-      "title": "Implement SharePoint Integration and Invoices Card",
-      "description": "Create the SharePoint folder browser and recent invoices components.",
+      "title": "Develop Activity Card with Quick-Add",
+      "description": "Create the Activity Card showing recent activities with pagination and quick-add functionality.",
       "status": "pending",
       "dependencies": [
         2
       ],
-      "priority": "medium",
-      "details": "Embed the file-manager tree for client's SharePoint folders by reusing AllFolders component. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Integrate with existing File-Manager components as specified in the PRD.",
-      "testStrategy": "Test SharePoint folder navigation. Verify invoice links work correctly. Test with various document states and permissions.",
+      "priority": "high",
+      "details": "Implement TailAdmin ActivitiesCard showing recent notes, call logs, status changes with appropriate icons. Add pagination controls to show only the most recent items. Create Quick-Add Activity inline controls to add any activityLog type (Note, Email, Call, Billing Commentary, Meeting, Document), always linked to the Client, optionally a Contact, and the current team member.",
+      "testStrategy": "Test activity display with various activity types. Verify pagination works correctly. Test quick-add functionality for all activity types. Check that newly added activities appear in the list.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement SharePoint Folder Browser Component",
-          "description": "Create a reusable SharePoint folder browser by adapting the existing AllFolders component to display client's SharePoint folders in a hierarchical tree structure with proper navigation.",
+          "title": "Create Activity Card UI with Pagination",
+          "description": "Implement the base Activity Card component that displays recent activities with pagination controls using TailAdmin design patterns.",
           "dependencies": [],
-          "details": "Implementation steps:\n\n1. Set up SharePoint API integration:\n   - Implement authentication using OAuth 2.0 with Azure AD\n   - Configure the @pnp/sp library for SharePoint REST API calls\n   - Create service methods for fetching folder structure and contents\n\n2. Adapt the AllFolders component:\n   - Modify the component to accept SharePoint folder paths\n   - Implement lazy loading to fetch folder contents on demand\n   - Add breadcrumb navigation for easy traversal between folders\n   - Ensure clear visual distinction between files and folders\n\n3. Implement folder navigation:\n   - Create click handlers for folder expansion/collapse\n   - Maintain navigation state using React hooks or context\n   - Add loading indicators during API calls\n   - Implement error handling for permission issues or network failures\n\n4. Testing approach:\n   - Unit test the SharePoint service methods with mock data\n   - Test folder navigation with different folder depths\n   - Verify proper handling of empty folders and error states\n   - Test performance with large folder structures",
+          "details": "1. Create a new ActivityCard component that follows the TailAdmin design system.\n2. Implement the card layout with appropriate headers and styling.\n3. Design the activity item component to display different activity types (notes, call logs, status changes) with corresponding icons.\n4. Add a data fetching mechanism using React Query or SWR for efficient pagination and caching.\n5. Implement pagination controls that limit the display to the most recent items.\n6. Create skeleton loading states for better UX during data fetching.\n7. Ensure the component is responsive across different screen sizes.\n8. Add proper accessibility attributes (ARIA labels, keyboard navigation).\n9. Test the pagination functionality with mock data to ensure it works correctly.\n10. Implement error handling for failed data fetching scenarios.",
           "status": "pending",
           "parentTaskId": 8
         },
         {
           "id": 2,
-          "title": "Develop Recent Invoices Card Component",
-          "description": "Create a card component that displays the 5 most recent invoice documents with their payment status (paid/unpaid) and direct links to the PDF files.",
+          "title": "Develop Quick-Add Activity Form",
+          "description": "Create an inline Quick-Add form that allows users to add different types of activities (Note, Email, Call, Billing Commentary, Meeting, Document) with appropriate fields and validation.",
           "dependencies": [
             1
           ],
-          "details": "Implementation steps:\n\n1. Design the invoices card UI:\n   - Create a responsive card layout using Fluent UI components\n   - Design status indicators for paid/unpaid invoices\n   - Include invoice number, date, amount, and status fields\n   - Add PDF preview or direct download links\n\n2. Implement data fetching:\n   - Create a service to fetch invoice metadata from SharePoint\n   - Implement sorting by date (most recent first)\n   - Add filtering for invoice document types\n   - Limit results to 5 items with option to view more\n\n3. Develop status indicators:\n   - Implement logic to determine payment status from metadata\n   - Create visual indicators (icons/colors) for paid vs. unpaid status\n   - Add tooltips for additional status information\n\n4. Add PDF linking functionality:\n   - Generate secure links to invoice PDFs in SharePoint\n   - Implement preview functionality if applicable\n   - Handle permission checks before displaying links\n\n5. Testing approach:\n   - Unit test the invoice fetching service\n   - Test sorting and filtering logic\n   - Verify correct status determination\n   - Test PDF link generation and security",
+          "details": "1. Design and implement an expandable/collapsible Quick-Add form within the Activity Card.\n2. Create a dropdown or tab system to select different activity types (Note, Email, Call, Billing Commentary, Meeting, Document).\n3. Implement dynamic form fields that change based on the selected activity type.\n4. Add form validation for required fields using a form library like Formik or React Hook Form.\n5. Ensure the form always links activities to the current Client.\n6. Add an optional Contact selection field that pulls from available contacts for the client.\n7. Automatically associate the activity with the current team member.\n8. Implement optimistic UI updates to show new activities immediately after submission.\n9. Add appropriate error handling and success notifications.\n10. Ensure the form is keyboard accessible and follows accessibility best practices.",
           "status": "pending",
           "parentTaskId": 8
         },
         {
           "id": 3,
-          "title": "Integrate Components with Existing File-Manager",
-          "description": "Connect the SharePoint folder browser and Recent Invoices card with the existing File-Manager components as specified in the PRD, ensuring seamless interaction between components.",
+          "title": "Integrate Activity Management with Backend and Finalize",
+          "description": "Connect the Activity Card and Quick-Add form to backend APIs, implement real-time updates, and finalize the component with comprehensive testing.",
           "dependencies": [
             1,
             2
           ],
-          "details": "Implementation steps:\n\n1. Review existing File-Manager architecture:\n   - Analyze current component structure and data flow\n   - Identify integration points for new components\n   - Document required modifications to existing components\n\n2. Implement component integration:\n   - Add the SharePoint folder browser to the main file navigation\n   - Position the Recent Invoices card according to PRD specifications\n   - Ensure consistent styling across all components\n   - Implement shared state management if needed\n\n3. Establish cross-component communication:\n   - Create event handlers for file/folder selection\n   - Implement navigation synchronization between components\n   - Ensure invoice selection in the card updates the main view\n   - Add context awareness between components\n\n4. Optimize performance:\n   - Implement caching for frequently accessed folders\n   - Add pagination or virtualization for large folder structures\n   - Optimize re-renders using React.memo or shouldComponentUpdate\n   - Ensure responsive behavior across device sizes\n\n5. Testing approach:\n   - Integration tests for component interaction\n   - End-to-end tests for common user flows\n   - Verify behavior matches PRD specifications\n   - Test performance with realistic data volumes\n   - Cross-browser and cross-device testing",
+          "details": "1. Create or integrate with backend API endpoints for fetching paginated activities.\n2. Implement API calls for creating new activities of different types.\n3. Add real-time updates using WebSockets or polling when new activities are added by other users.\n4. Implement proper error handling for all API interactions.\n5. Add activity filtering capabilities based on type or date range.\n6. Optimize performance by implementing virtualization for long activity lists.\n7. Write unit tests for component logic and integration tests for API interactions.\n8. Perform cross-component testing to ensure the Activity Card works correctly within the larger application.\n9. Conduct accessibility testing and fix any issues.\n10. Document the component API, props, and usage examples for other developers.\n11. Perform final cross-browser and cross-device testing to ensure consistent behavior.",
           "status": "pending",
           "parentTaskId": 8
         }
@@ -554,145 +567,312 @@
     },
     {
       "id": 9,
-      "title": "Build Compliance Components",
-      "description": "Create the regulatory checklist, alerts, and meeting minutes components.",
+      "title": "Build Tabbed Activity Log",
+      "description": "Implement tabbed interface for activity logs grouped by type with filter and search functionality.",
       "status": "pending",
       "dependencies": [
-        2
+        8
       ],
-      "priority": "low",
-      "details": "Implement the Regulatory Checklist showing compliance items with check marks. Create Alerts & Warnings for missing or expired documentation and upcoming license renewals. Build the Meeting Minutes Panel for recording audit meeting notes with auto-append to activity log. Implement Email Thread Panel to embed the last 3 client email threads via Outlook/Gmail integration.",
-      "testStrategy": "Test checklist state changes. Verify alerts trigger correctly based on document status. Test meeting minutes recording and verify they appear in the activity log.",
+      "priority": "medium",
+      "details": "Create a tabbed interface using HeadlessUI Tabs (referenced in Context7) with groups for 'Notes', 'Emails', 'Calls', and 'Status Changes'. Implement full-text filter on activity content and a date-range picker in the log section. Ensure proper loading states and empty states for each tab.",
+      "testStrategy": "Test tab switching functionality. Verify filtering works correctly for text and date ranges. Test with various activity data sets. Check accessibility of the tabbed interface.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Regulatory Checklist Component",
-          "description": "Create a component that displays compliance items with check marks and status indicators",
+          "title": "Implement Tabbed Interface for Activity Log Types",
+          "description": "Set up the tabbed UI for activity logs grouped by 'Notes', 'Emails', 'Calls', and 'Status Changes' using HeadlessUI Tabs in a React project.",
           "status": "pending",
           "dependencies": [],
-          "details": "Develop a checklist component that shows regulatory compliance items with their current status. The component should include: 1) A data model to store compliance items with attributes like item name, status (compliant/non-compliant), due date, and last check date; 2) A UI interface with checkboxes, status indicators (using color coding for quick visual reference), and the ability to filter items by category or status; 3) Functionality to mark items as complete or incomplete with timestamp tracking; 4) Integration with the backend API to fetch and update compliance data. Consider implementing a progress indicator showing overall compliance percentage. The component should follow the application's design system and be responsive for different screen sizes."
+          "details": "Install @headlessui/react and Tailwind CSS if not already present. Use HeadlessUI's Tab.Group, Tab.List, Tab, Tab.Panels, and Tab.Panel components to create four tabs, each representing a log type. Ensure accessibility and keyboard navigation are supported as per HeadlessUI standards. Each Tab.Panel should render a placeholder for its respective log content. Style the tabs using Tailwind CSS for visual clarity and responsiveness.[1][2][5]"
         },
         {
           "id": 2,
-          "title": "Build Alerts & Warnings System",
-          "description": "Develop notification components for missing documentation, expired items, and upcoming renewals",
+          "title": "Add Filter, Search, and Date-Range Picker Functionality",
+          "description": "Integrate a full-text search filter and a date-range picker within the log section of each tab to allow users to filter activity logs by content and date.",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Create an alerts and warnings system that monitors compliance status and notifies users of issues. Implementation should include: 1) A notification engine that checks for missing documentation, expired items, and upcoming license renewals based on predefined rules and timeframes; 2) A visual alert component with priority levels (high/medium/low) and appropriate styling for each level; 3) A dashboard widget showing a summary of current alerts with the ability to expand for details; 4) Functionality to dismiss or snooze alerts with audit logging of these actions; 5) Configuration options for alert thresholds (e.g., warn 30/60/90 days before expiration). The alerts should be persistent until resolved and should refresh automatically when underlying data changes."
+          "details": "Within each Tab.Panel, implement a search input that filters the displayed logs based on user-entered text. Add a date-range picker component (using a suitable library or custom implementation) to filter logs by selected date range. Ensure that both filters work in combination and update the displayed logs in real-time. Place the filter controls prominently above the log list in each tab."
         },
         {
           "id": 3,
-          "title": "Develop Meeting Minutes and Email Integration Panels",
-          "description": "Create components for recording audit meeting notes and displaying recent client email communications",
+          "title": "Implement Loading and Empty States for Each Tab",
+          "description": "Ensure each tab displays appropriate loading indicators while fetching data and clear empty states when no logs match the current filters.",
           "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "Implement two related panels for communication tracking: 1) Meeting Minutes Panel with rich text editor for recording audit meeting notes, auto-saving capability, participant tagging, action item assignment, and automatic appending to the activity log with timestamps; 2) Email Thread Panel that connects to Outlook/Gmail APIs to fetch and display the last 3 client email threads, including sender/recipient information, timestamps, subject lines, and message previews with the ability to expand full messages. Both panels should share a common design language and include search/filter capabilities. For the email integration, implement proper authentication handling, caching for performance, and privacy controls to ensure only authorized users can view email content. The panels should be collapsible and resizable to fit different workflow needs."
+          "details": "For each Tab.Panel, manage loading state (e.g., show a spinner or skeleton UI) while log data is being fetched or filtered. When no logs are available after applying filters or on initial load, display a user-friendly empty state message. Ensure these states are visually distinct and accessible, and that transitions between states are smooth."
         }
       ]
     },
     {
       "id": 10,
-      "title": "Implement Action Buttons and Client Value Projection",
-      "description": "Create the action buttons and client lifetime value projection components.",
+      "title": "Implement SharePoint Folder Browser",
+      "description": "Embed file-manager tree for client's SharePoint folders and recent invoices card.",
       "status": "pending",
       "dependencies": [
-        3,
-        7
+        2
       ],
-      "priority": "low",
-      "details": "Implement Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Use the useAbility hook to gate the Archive action with the clients.archive permission. Create the Client Lifetime Value Projection chart to forecast next year's fees based on past trends.",
-      "testStrategy": "Test each action button functionality. Verify Archive confirmation modal works and updates client.status correctly. Test permission gating for restricted actions. Verify projection calculations with various historical data patterns.",
+      "priority": "medium",
+      "details": "Embed the AllFolders and RecentFileTable components from File-Manager to create a SharePoint folder browser. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Ensure proper loading states and error handling for file access.",
+      "testStrategy": "Test folder browser navigation. Verify file links open correctly. Test with various folder structures and file types. Check invoice status display accuracy.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Action Buttons with Permission Gating",
-          "description": "Create reusable action button components for quick actions (Add Contact, Link Bank Feed, Request Document, Schedule Audit, Archive Client). Integrate the useAbility hook to gate the Archive Client button based on the clients.archive permission, and implement a confirmation modal for the Archive action.",
+          "title": "Implement SharePoint Folder Browser Component",
+          "description": "Integrate the AllFolders component from File-Manager to create a navigable SharePoint folder structure with proper folder creation and navigation capabilities.",
           "status": "pending",
           "dependencies": [],
-          "details": "Define a reusable Button component, ensuring proper event handling and styling for each action. Place these buttons within the client UI, using the useAbility hook to conditionally render or disable the Archive Client button based on user permissions. For the Archive action, trigger a modal dialog to confirm the user's intent before proceeding. Reference React button best practices for accessibility and maintainability[3][5]."
+          "details": "Begin by embedding the AllFolders component from the existing File-Manager into the application. Configure the component to connect to the client's SharePoint document library using the SharePoint API. Implement folder navigation functionality that allows users to browse through the folder hierarchy, open folders, and navigate back up using breadcrumb navigation. Add support for viewing folder contents and implement proper loading states while folder data is being fetched. Include error handling for cases where SharePoint access fails or folders cannot be loaded. Test the component with various folder structures to ensure proper rendering and navigation."
         },
         {
           "id": 2,
-          "title": "Integrate Action Buttons into the Client Card or Dashboard",
-          "description": "Embed the action buttons into the appropriate client-facing component, such as a client card or dashboard, ensuring a cohesive and accessible layout.",
+          "title": "Integrate Recent Files Table Component",
+          "description": "Embed the RecentFileTable component from File-Manager to display SharePoint files with sorting and filtering capabilities.",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Update the client card or dashboard component to include the action buttons in a visually organized manner, using a container (e.g., a div with an action button group class). Ensure spacing, alignment, and responsive design. Test that each button triggers the correct handler and that the Archive button respects permission gating and confirmation modal behavior[5]."
+          "details": "After the folder browser is working, integrate the RecentFileTable component from File-Manager to display files within the selected SharePoint folders. Configure the component to show file metadata including name, type, modified date, and size. Implement file opening functionality that launches files in appropriate viewers based on file type. Add loading indicators for when file lists are being retrieved. Implement error handling for file access issues, showing appropriate error messages when files cannot be accessed or displayed. Ensure the file table updates properly when users navigate between different folders in the folder browser component."
         },
         {
           "id": 3,
-          "title": "Develop Client Lifetime Value Projection Chart Component",
-          "description": "Create a chart component that forecasts the client's next year's fees based on historical data and trends, and integrate it into the client view.",
+          "title": "Create Recent Invoices Card Component",
+          "description": "Develop a specialized card component that displays the 5 most recent invoice documents with their payment status and PDF links.",
           "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Design and implement a chart (e.g., using a charting library like Chart.js or Recharts) that visualizes the client's historical fees and projects the next year's value using a suitable forecasting method (e.g., linear regression or moving average). Fetch and process the necessary data, and display the chart within the client dashboard or detail view, ensuring it complements the action buttons and overall UI."
+          "details": "Build a new Recent Invoices Card component that queries SharePoint for the most recent invoice documents. Implement filtering logic to identify invoice documents based on file naming conventions or metadata. Display the 5 most recent invoices in a card format, showing for each invoice: document name, creation/modification date, payment status (paid/unpaid), and a direct link to open the PDF. The payment status should be determined by querying metadata or a related data source that tracks invoice payment information. Add visual indicators (like color coding) to distinguish between paid and unpaid invoices. Implement proper loading states while invoice data is being fetched and error handling for cases where invoice documents cannot be accessed. Ensure the component refreshes automatically when new invoices are added to SharePoint."
         }
       ]
     },
     {
       "id": 11,
-      "title": "Implement Permission Controls and RBAC",
-      "description": "Apply permission gating throughout the client profile page.",
+      "title": "Create Regulatory Checklist and Alerts",
+      "description": "Implement the compliance checklist and alerts/warnings for missing or expired documentation.",
       "status": "pending",
       "dependencies": [
-        3,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10
+        2
       ],
-      "priority": "high",
-      "details": "Implement permission controls using useAbility() and <Authorized> components according to the useAbility rules. Gate editing features with clients.edit permission. Gate archive functionality with clients.archive permission. Restrict access to sensitive financial data (fees, estAnnFees) to Admin users only. Add RBAC tests to prevent permission drift.",
-      "testStrategy": "Test with different user roles to verify appropriate access controls. Verify sensitive data is hidden from unauthorized users. Run RBAC tests to ensure permission rules are enforced consistently.",
+      "priority": "medium",
+      "details": "Create a Regulatory Checklist component showing compliance items ('Trust deed', 'Bank statements', etc.) with check marks. Implement Alerts & Warnings section flagging missing or expired documentation and upcoming license renewals. Use appropriate visual indicators for different alert severities.",
+      "testStrategy": "Test checklist with various compliance states. Verify alerts trigger correctly based on document status and expiration dates. Check visual clarity of warning indicators.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Integrate Permission Gating for Editing and Archiving Features",
-          "description": "Apply permission controls to the client profile page to gate editing and archive functionalities using useAbility() and <Authorized> components. Ensure that only users with the appropriate permissions can access these features.",
+          "title": "Implement Regulatory Checklist Component",
+          "description": "Create the core checklist component displaying compliance items with status indicators",
           "status": "pending",
           "dependencies": [],
-          "details": "Wrap all editing-related UI elements and actions with <Authorized> components that check for the 'clients.edit' permission using useAbility(). Similarly, gate the archive functionality with a check for the 'clients.archive' permission. Ensure that these controls are consistently applied throughout the client profile page to prevent unauthorized access to editing and archiving features."
+          "details": "Develop a reusable checklist component that displays regulatory compliance items (such as 'Trust deed', 'Bank statements', etc.) with appropriate status indicators. The component should include: 1) A list view of all compliance items, 2) Visual check marks or status icons for each item, 3) The ability to categorize items by type or importance, 4) Timestamps showing when items were last updated or verified, and 5) A responsive design that works across different screen sizes. Use a data structure that stores item name, status, expiration date, and category for each compliance item."
         },
         {
           "id": 2,
-          "title": "Restrict Access to Sensitive Financial Data for Admin Users",
-          "description": "Implement permission checks to ensure that sensitive financial fields (fees, estAnnFees) are only visible to Admin users on the client profile page.",
+          "title": "Develop Alert/Warning Detection System",
+          "description": "Create the logic to identify missing, expired, or soon-to-expire documentation",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Identify all UI components and data fetches related to sensitive financial information. Use useAbility() and <Authorized> components to conditionally render these fields only if the current user has the 'Admin' role or equivalent permission. Ensure that both frontend display and any client-side logic respect this restriction, preventing non-Admin users from accessing or inferring sensitive financial data."
+          "details": "Build the backend logic that analyzes compliance items to detect issues requiring alerts. This system should: 1) Check for completely missing documentation, 2) Identify expired documents by comparing current date with expiration dates, 3) Flag upcoming expirations within a configurable time window (e.g., 30, 60, 90 days), 4) Assign severity levels to different types of alerts (critical for expired, warning for upcoming, etc.), 5) Create a data model that captures alert type, severity, affected item, and recommended action, and 6) Implement scheduled checks that run automatically to keep alerts current."
         },
         {
           "id": 3,
-          "title": "Add and Validate RBAC Tests to Prevent Permission Drift",
-          "description": "Develop and maintain automated tests to verify that permission gating and RBAC rules are enforced correctly on the client profile page, preventing unauthorized access and permission drift.",
+          "title": "Create Alerts & Warnings Display Section",
+          "description": "Implement the visual representation of alerts with appropriate severity indicators",
           "status": "pending",
           "dependencies": [
             1,
             2
           ],
-          "details": "Write unit and integration tests that simulate users with different roles and permissions, verifying that editing, archiving, and sensitive financial data are only accessible to authorized users. Use testing utilities to mock useAbility() and <Authorized> behavior. Ensure tests cover edge cases, such as role changes and permission updates, to catch regressions and maintain RBAC integrity over time."
+          "details": "Develop the UI component that displays the alerts and warnings generated by the detection system. This should include: 1) A dedicated 'Alerts & Warnings' section in the interface, 2) Visual indicators for different severity levels (e.g., red for critical, yellow for warnings, blue for informational), 3) Grouping of alerts by type or affected documentation, 4) Clear messaging explaining the issue and recommended action, 5) Interactive elements allowing users to acknowledge alerts or mark them as 'in progress', and 6) Filtering capabilities to focus on specific types of alerts or severity levels. Ensure the component updates in real-time when new alerts are generated or existing ones are resolved."
         }
       ]
     },
     {
       "id": 12,
-      "title": "Optimize Performance and Finalize UI",
-      "description": "Optimize data loading, implement responsive design, and conduct final testing.",
+      "title": "Implement Meeting Minutes Panel",
+      "description": "Create an inline panel for recording audit meeting notes with auto-append to activity log.",
       "status": "pending",
       "dependencies": [
+        8
+      ],
+      "priority": "low",
+      "details": "Implement a Meeting Minutes Panel with rich text input for recording audit meeting notes. Add functionality to automatically append these notes to the activity log. Include fields for meeting date, attendees, and topics. Ensure proper validation and confirmation on submission.",
+      "testStrategy": "Test note creation and submission. Verify notes appear correctly in the activity log. Test validation for required fields. Check rich text formatting is preserved.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Design and Implement Meeting Minutes Panel UI",
+          "description": "Create the inline panel interface for recording audit meeting notes, including rich text input and fields for meeting date, attendees, and topics.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Develop a user interface component that appears inline within the relevant workflow. The panel should include a rich text editor for detailed notes, as well as structured input fields for meeting date, attendees, and topics. Ensure the UI is accessible and visually consistent with the application. Implement client-side validation to ensure all required fields are completed before submission."
+        },
+        {
+          "id": 2,
+          "title": "Implement Submission Validation and Confirmation",
+          "description": "Add logic to validate input fields and provide user confirmation upon successful submission of meeting minutes.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "On form submission, validate that all required fields (date, attendees, topics, notes) are filled and meet format requirements. Display clear error messages for invalid or missing input. Upon successful validation, show a confirmation dialog or notification to the user, confirming that the meeting minutes have been recorded."
+        },
+        {
+          "id": 3,
+          "title": "Auto-Append Meeting Minutes to Activity Log",
+          "description": "Develop backend and integration logic to automatically append submitted meeting minutes to the activity log.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "After successful submission and confirmation, implement logic to serialize the meeting minutes data and append it to the activity log. Ensure the activity log entry includes all relevant details (date, attendees, topics, notes) and is timestamped. Handle any errors in the append process gracefully, providing feedback to the user if necessary."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Add Action Buttons and Client Value Projection",
+      "description": "Implement quick action buttons and client lifetime value projection chart.",
+      "status": "pending",
+      "dependencies": [
+        2,
+        3
+      ],
+      "priority": "medium",
+      "details": "Create Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Implement Client Lifetime Value Projection with a small predictive chart forecasting next year's fees based on past trends. Use useAbility() to gate the Archive Client action with clients.archive permission.",
+      "testStrategy": "Test all action buttons for correct behavior. Verify Archive Client confirmation modal works properly. Test permission gating for restricted actions. Check projection chart calculations for accuracy.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement Quick Action Buttons with Permission Gating",
+          "description": "Create UI components for quick action buttons: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client. Ensure the Archive Client button is gated using useAbility() to check for the clients.archive permission, and display a confirmation modal before proceeding with the archive action.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Add each action button to the client interface, wiring up their respective handlers. For the Archive Client button, use the useAbility() hook to conditionally render the button based on the user's clients.archive permission. Implement a confirmation modal that appears when Archive Client is clicked, requiring user confirmation before executing the archive logic."
+        },
+        {
+          "id": 2,
+          "title": "Aggregate and Prepare Data for Client Lifetime Value Projection",
+          "description": "Collect and process historical client transaction data to calculate key metrics needed for lifetime value projection, such as frequency, recency, monetary value, and observation period. Prepare this data for use in the predictive model.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Extract transaction data for each client and aggregate it into an RFM (Recency, Frequency, Monetary value) summary table. Use utility functions or packages (e.g., lifetimes in Python, or equivalent in your stack) to compute these metrics. Ensure the data is formatted and accessible for the predictive chart component."
+        },
+        {
+          "id": 3,
+          "title": "Implement Client Lifetime Value Projection Chart",
+          "description": "Develop and integrate a predictive chart that forecasts next year's client fees based on historical trends and the prepared data. Visualize the projected client lifetime value in a clear, concise chart within the client interface.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Use the aggregated RFM data to feed a predictive model (such as BG/NBD and Gamma-Gamma, or a simplified ARPU/churn-based approach) to estimate next year's client fees. Render the results in a small chart (e.g., line or bar chart) using a charting library. Place the chart in the client view, ensuring it updates dynamically as new data becomes available."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Implement Email Thread Panel",
+      "description": "Embed the last 3 client email threads via Outlook/Gmail integration.",
+      "status": "pending",
+      "dependencies": [
+        2
+      ],
+      "priority": "low",
+      "details": "Create an Email Thread Panel component that embeds the last 3 client email threads via Outlook/Gmail integration. Implement proper loading states and error handling for email fetching. Display email metadata (sender, recipients, date) and content in a clean, readable format.",
+      "testStrategy": "Test email thread display with various email formats. Verify loading states and error handling. Check email content rendering for correctness. Test with different email providers.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Integrate Outlook/Gmail APIs and Fetch Last 3 Client Email Threads",
+          "description": "Set up secure integration with both Outlook and Gmail APIs to authenticate users and fetch the last 3 email threads involving the client. Ensure proper handling of API tokens and permissions.",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Implement OAuth2 authentication flows for both Outlook (Microsoft Graph API) and Gmail (Google API). After authentication, use the respective APIs to query and retrieve the most recent 3 email threads related to the client. Ensure the data includes full thread details, including message metadata and content. Handle API rate limits and errors gracefully, returning clear error messages or fallback states if fetching fails."
+        },
+        {
+          "id": 2,
+          "title": "Design and Implement Email Thread Panel UI Component",
+          "description": "Create a reusable Email Thread Panel component that displays the fetched email threads in a clean, readable format, showing sender, recipients, date, and email content.",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Design the UI to present each thread as a collapsible or expandable section, showing the sequence of emails within the thread. Display metadata (sender, recipients, date) prominently for each message, and render the email body with proper formatting. Ensure the component is responsive and accessible. Use loading indicators while data is being fetched and placeholders for empty or error states."
+        },
+        {
+          "id": 3,
+          "title": "Implement Loading States and Robust Error Handling",
+          "description": "Enhance the Email Thread Panel to provide clear feedback during data fetching and handle errors gracefully, ensuring a smooth user experience.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Add loading spinners or skeleton screens to indicate when email threads are being retrieved. Implement error boundaries to catch and display user-friendly error messages if fetching fails (e.g., network issues, authentication errors, or no threads found). Ensure the UI recovers gracefully from errors and allows retrying the fetch operation. Log errors for monitoring and debugging purposes."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Implement Permission Gating",
+      "description": "Apply permission controls across all components using useAbility() and <Authorized> components.",
+      "status": "pending",
+      "dependencies": [
+        3,
+        8,
+        13
+      ],
+      "priority": "high",
+      "details": "Implement permission gating across all components using useAbility() and <Authorized> components following the useAbility rules. Gate editing features with clients.edit permission, archiving with clients.archive permission, and sensitive financial data (fees, estAnnFees) for Admin-only access. Ensure appropriate fallbacks or hidden elements when permissions are not granted.",
+      "testStrategy": "Test all permission gates with different user roles. Verify sensitive data is only visible to authorized users. Check that UI elements are appropriately hidden or disabled based on permissions. Create comprehensive permission test cases.",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Set up permission infrastructure with useAbility hook",
+          "description": "Create and implement the useAbility hook to manage permission checks throughout the application",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Create a useAbility custom hook that will serve as the foundation for permission checks. This hook should: 1) Define the core permission logic for checking user roles against required permissions, 2) Implement methods to check specific permissions like clients.edit, clients.archive, and admin-only permissions for financial data, 3) Set up integration with your authentication system to retrieve the current user's role, 4) Include proper TypeScript typing for permissions and roles, and 5) Add appropriate error handling and fallbacks when permissions are unavailable. The hook should return boolean values indicating whether the user has specific permissions."
+        },
+        {
+          "id": 2,
+          "title": "Create the <Authorized> component for declarative permission gating",
+          "description": "Develop a reusable <Authorized> component that conditionally renders UI elements based on user permissions",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Build an <Authorized> component that leverages the useAbility hook to conditionally render UI elements. The component should: 1) Accept permission requirements as props (e.g., permission='clients.edit'), 2) Support multiple permission checks with logical operators (AND/OR), 3) Implement fallback rendering options when permissions are denied, 4) Allow for custom error/unauthorized states, and 5) Include performance optimizations to prevent unnecessary re-renders. The component should follow this pattern: <Authorized permission='clients.edit'><EditButton /></Authorized>. Test the component with various permission scenarios to ensure it behaves correctly."
+        },
+        {
+          "id": 3,
+          "title": "Apply permission gating across application components",
+          "description": "Systematically implement permission controls across all relevant components using the created infrastructure",
+          "status": "pending",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "Apply the permission gating system throughout the application by: 1) Identifying all components that require permission controls, 2) Implementing editing feature restrictions with clients.edit permission checks, 3) Gating archiving functionality with clients.archive permission, 4) Restricting access to sensitive financial data (fees, estAnnFees) to Admin-only roles, 5) Adding appropriate fallbacks or hidden elements when permissions are not granted, 6) Testing all permission combinations across different user roles to verify correct behavior, and 7) Documenting the permission requirements for each component to facilitate future maintenance. Ensure consistent implementation across the application and verify that the UI degrades gracefully when permissions are denied."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Optimize Performance and Implement Final Testing",
+      "description": "Optimize data loading, implement Suspense boundaries, and conduct comprehensive testing.",
+      "status": "pending",
+      "dependencies": [
+        1,
+        2,
+        3,
         4,
         5,
         6,
@@ -700,47 +880,51 @@
         8,
         9,
         10,
-        11
+        11,
+        12,
+        13,
+        14,
+        15
       ],
-      "priority": "medium",
-      "details": "Optimize data loading with pagination, lazy-loading, and Suspense boundaries for non-critical sections. Implement responsive design adjustments for all components. Conduct accessibility (A11y) checks and fixes. Create Storybook stories and unit tests for key components. Address performance issues with data volume by using select queries and optimizing bundle size.",
-      "testStrategy": "Run performance tests to measure load times and identify bottlenecks. Test responsive behavior across devices. Conduct accessibility audit. Run unit tests and Storybook visual regression tests.",
+      "priority": "high",
+      "details": "Optimize data loading with select queries and pagination where appropriate. Implement Suspense boundaries for non-critical sections to improve perceived performance. Add lazy-loading for heavy components. Conduct comprehensive testing including accessibility checks, responsive design verification, and performance benchmarking. Create Storybook stories and unit tests for key components. Ensure all Cursor rules are followed.",
+      "testStrategy": "Run comprehensive test suite covering all components and features. Perform accessibility audit using automated tools. Test performance with large data sets. Verify responsive behavior across all breakpoints. Conduct end-to-end testing of key user flows.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Optimize Data Loading and Performance",
-          "description": "Implement efficient data loading strategies and address performance bottlenecks related to large data volumes.",
+          "title": "Implement Data Loading Optimizations",
+          "description": "Optimize data fetching patterns with select queries and pagination to improve initial load times and reduce unnecessary network requests.",
           "status": "pending",
           "dependencies": [],
-          "details": "Apply pagination and lazy-loading for long lists using techniques such as windowing (e.g., react-window or react-virtualized). Use React.lazy and Suspense boundaries to defer loading of non-critical components. Optimize bundle size with code-splitting and dynamic imports. Refactor data queries to use select queries that fetch only necessary fields. Apply memoization (useMemo, React.memo) to reduce unnecessary re-renders and computations.[1][2][5]"
+          "details": "Analyze current data fetching patterns and implement select queries to retrieve only needed fields. Add pagination for large data sets with configurable page sizes (20-50 items per page). Implement infinite scrolling or 'load more' patterns for long lists using windowing techniques like react-window or react-virtualized to render only visible items. Add request caching for frequently accessed data. Measure performance improvements using React DevTools Profiler and network monitoring tools."
         },
         {
           "id": 2,
-          "title": "Implement Responsive and Accessible UI",
-          "description": "Ensure all UI components are responsive across devices and meet accessibility (A11y) standards.",
+          "title": "Implement Code Splitting and Suspense Boundaries",
+          "description": "Reduce initial bundle size and improve perceived performance through code splitting, lazy loading, and strategic Suspense boundary placement.",
           "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "Update CSS and layout logic to support responsive design for all components (e.g., using CSS Grid, Flexbox, and media queries). Conduct accessibility checks (using tools like axe or Lighthouse) and fix issues such as missing ARIA attributes, insufficient color contrast, and keyboard navigation. Adjust UI elements to maintain usability and accessibility on different screen sizes."
+          "details": "Use React.lazy() and dynamic imports to split the application into smaller chunks. Identify heavy components (complex forms, data visualizations, rich text editors) and configure them for lazy loading. Implement Suspense boundaries around non-critical UI sections with appropriate fallback components. Add prefetching for anticipated user paths to improve navigation experience. Consider implementing skeleton screens for content that takes longer to load. Ensure error boundaries are in place to gracefully handle loading failures."
         },
         {
           "id": 3,
-          "title": "Finalize UI with Storybook and Testing",
-          "description": "Create Storybook stories and implement unit tests for key components, ensuring UI consistency and reliability.",
+          "title": "Conduct Comprehensive Testing and Documentation",
+          "description": "Perform thorough testing across multiple dimensions and create documentation for key components.",
           "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "Develop comprehensive Storybook stories for all major UI components, covering various states and interactions. Write unit tests for critical components and logic using a testing framework (e.g., Jest, React Testing Library). Verify that all performance, responsiveness, and accessibility optimizations are preserved during testing. Address any regressions or issues identified."
+          "details": "Create Storybook stories for all key components with different states and variations. Write unit tests using Jest and React Testing Library focusing on critical user flows. Perform accessibility testing using axe or similar tools to ensure WCAG compliance. Test responsive design across multiple device sizes and orientations. Conduct performance benchmarking using Lighthouse and WebPageTest, establishing baseline metrics for First Contentful Paint, Time to Interactive, and Total Blocking Time. Document performance optimization techniques used and create guidelines for maintaining performance. Verify all Cursor rules are followed throughout the codebase."
         }
       ]
     }
   ],
   "metadata": {
     "projectName": "Client Profile Page Implementation",
-    "totalTasks": 12,
+    "totalTasks": 16,
     "sourceFile": "scripts/PRD_phase2-clientPage.txt",
-    "generatedAt": "2023-11-14"
+    "generatedAt": "2023-11-09"
   }
 }

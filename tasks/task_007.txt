@@ -1,43 +1,43 @@
 # Task ID: 7
-# Title: Create Activity Card and Tabbed Activity Log
+# Title: Implement Trust Accounts Table
 # Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Implement the activity tracking components with filtering and quick-add functionality.
+# Description: Build the Trust Accounts Table with all required fields and software access links.
 # Details:
-Build the Activity Card using TailAdmin's ActivitiesCard to show recent notes, call logs, and status changes with icons. Implement pagination to show only the most recent items. Create the Tabbed Activity Log using headlessui-tabs (referenced in Context7) to group activities by type (Notes, Emails, Calls, Status Changes). Add Filter & Search functionality with full-text filtering and date-range picker. Implement Quick-Add Activity inline controls for adding new activity logs.
+Create a DataTableTwo component for trust accounts with columns: Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Include action buttons linking to each account's management software or external feed (e.g., 'Open in Xero' or 'Open in SharePoint'). Follow DataTableTwo API docs from Context7.
 
 # Test Strategy:
-Test pagination controls and verify correct items are displayed. Test tab switching between activity types. Verify search and filtering work as expected. Test adding new activities of different types.
+Test table with various trust account data. Verify external links open correctly. Check that all required fields display properly. Test responsive behavior on different screen sizes.
 
 # Subtasks:
-## 1. Implement Activity Card Base Component [pending]
+## 1. Set Up DataTableTwo Component Environment [pending]
 ### Dependencies: None
-### Description: Create the foundational Activity Card component that will display recent activities with appropriate styling and layout
+### Description: Install and configure all necessary dependencies for DataTableTwo, ensuring compatibility with the project and preparing for custom table implementation.
 ### Details:
-Create a new component file ActivityCard.tsx using TailAdmin's ActivitiesCard as reference. Implement the card container with proper Tailwind CSS styling including rounded corners, appropriate padding, and responsive design. Set up the basic structure to display activity items with icons, timestamps, and descriptions. Use subtle text styling with proper contrast between primary content (activity description) and secondary content (timestamps, categories) as seen in the reference designs. Ensure the component accepts props for activity data and pagination controls.
+Install required packages (e.g., datatables.net-react, datatables.net-dt) using npm or yarn. Import DataTableTwo and its dependencies into the project. Verify that the DataTableTwo API documentation from Context7 is accessible and understood. Set up a basic DataTableTwo instance in a test component to confirm correct installation and rendering.[1][5]
 
-## 2. Implement Activity Item Components with Icons [pending]
+## 2. Define Trust Accounts Table Schema and Columns [pending]
 ### Dependencies: 7.1
-### Description: Create the individual activity item components with appropriate icons for different activity types
+### Description: Design the schema for the trust accounts table, specifying all required columns and their data types, and configure the DataTableTwo columns accordingly.
 ### Details:
-Create ActivityItem.tsx component that renders different activity types (notes, calls, emails, status changes) with appropriate icons. Implement conditional rendering based on activity type. Use subtle styling differences to distinguish between activity types while maintaining design consistency. Each activity item should display: icon matching the activity type, timestamp formatted appropriately, activity description with proper text truncation if needed, and any relevant metadata. Ensure proper spacing between items and consistent vertical rhythm.
+Create a columns configuration for DataTableTwo including: Account Name, Bank Name, BSB, Account Number, Software Access badge, Last Reconciliation Date, managementSoftware, and softwareUrl. Ensure each column has appropriate headers, data accessors, and formatting as needed (e.g., date formatting for reconciliation date, badge styling for software access).
 
-## 3. Implement Tabbed Interface for Activity Log [pending]
+## 3. Integrate Data Source and Populate Table [pending]
 ### Dependencies: 7.2
-### Description: Create a tabbed interface using headlessui-tabs to categorize activities by type
+### Description: Connect the DataTableTwo component to the trust accounts data source and ensure the table is populated with accurate, testable data.
 ### Details:
-Implement TabbedActivityLog.tsx component using headlessui-tabs library. Create tabs for different activity categories: 'All', 'Notes', 'Emails', 'Calls', and 'Status Changes'. Style the tabs with appropriate Tailwind classes for active/inactive states. Implement tab panels that filter and display the appropriate ActivityItem components based on the selected tab. Ensure smooth transitions between tabs and proper accessibility attributes. Connect the tabbed interface to the activity data source and implement conditional rendering logic to filter activities by type.
+Fetch or mock trust account data containing all required fields. Map the data to the DataTableTwo schema. Ensure the table displays all records correctly and supports updates if needed. Use sample data for development if backend integration is not yet available.
 
-## 4. Implement Filtering and Search Functionality [pending]
+## 4. Implement Software Access Badge and Action Buttons [pending]
 ### Dependencies: 7.3
-### Description: Add filtering capabilities including text search and date range selection
+### Description: Add a Software Access badge column and action buttons that link to each account's management software or external feed, such as 'Open in Xero' or 'Open in SharePoint'.
 ### Details:
-Create a FilterControls.tsx component with text search input and date range picker. Implement the search functionality with debounced input to filter activities by text content. Add a date range picker component that allows filtering activities within a specific time period. Style the filter controls to match the overall dashboard design with subtle input fields and clear visual feedback. Implement the filter logic that combines both text search and date range criteria. Connect the filter controls to the activity display components to update the visible activities based on filter criteria.
+Render a badge in the Software Access column based on the managementSoftware field. For each row, add an action button that dynamically generates a link using the softwareUrl field and displays the appropriate label (e.g., 'Open in Xero'). Ensure buttons are accessible and open links in a new tab or as required.
 
-## 5. Implement Quick-Add Activity Functionality [pending]
-### Dependencies: 7.3, 7.4
-### Description: Create inline controls for quickly adding new activity entries of different types
+## 5. Apply Styling, Test, and Document the Component [pending]
+### Dependencies: 7.4
+### Description: Ensure the Trust Accounts Table matches design guidelines, is fully tested, and includes usage documentation.
 ### Details:
-Implement QuickAddActivity.tsx component with inline form controls for adding new activities. Create a dropdown or segmented control to select activity type (Note, Email, Call, Status Change). Implement type-specific input fields that appear based on the selected activity type. Add validation for required fields based on activity type. Style the quick-add controls to be compact yet usable, following the dashboard's design language. Implement the submission logic to add new activities to the data source. Add success/error feedback for form submission and reset form after successful submission.
+Apply consistent styling to match the application's theme, including badges and action buttons. Test the component for usability, accessibility, and responsiveness. Write clear documentation on how to use and extend the Trust Accounts Table, referencing the DataTableTwo API as needed.
 
