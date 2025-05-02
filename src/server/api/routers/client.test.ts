@@ -72,7 +72,7 @@ describe("clientRouter getAll", () => {
       auditMonthEnd: 1,
       nextContactDate: new Date("2023-01-01"),
       estAnnFees: 100,
-      contacts: [{ name: "John", isPrimary: true }],
+      contacts: [{ id: "contact1", name: "John", isPrimary: true, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: "id1" }],
     },
     {
       id: "id2",
@@ -82,7 +82,7 @@ describe("clientRouter getAll", () => {
       auditMonthEnd: 2,
       nextContactDate: new Date("2023-02-01"),
       estAnnFees: 200,
-      contacts: [{ name: "Jane", isPrimary: false }],
+      contacts: [{ id: "contact2", name: "Jane", isPrimary: false, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: "id2" }],
     },
   ];
 
@@ -230,7 +230,7 @@ describe("clientRouter getById", () => {
     auditMonthEnd: 5,
     nextContactDate: new Date("2023-05-01"),
     estAnnFees: 500,
-    contacts: [{ name: "John Doe", isPrimary: true }],
+    contacts: [{ id: "contact3", name: "John Doe", isPrimary: true, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: dummyClientId }],
     licenses: [],
     trustAccounts: [],
     audits: [],
@@ -258,7 +258,21 @@ describe("clientRouter getById", () => {
       expect.objectContaining({
         where: { id: dummyClientId },
         include: expect.objectContaining({
-          contacts: true,
+          contacts: {
+            select: {
+              id: true,
+              name: true,
+              isPrimary: true,
+              phone: true,
+              email: true,
+              title: true,
+              canLoginToPortal: true,
+              portalUserId: true,
+              createdAt: true,
+              updatedAt: true,
+              clientId: true,
+            },
+          },
           licenses: true,
           trustAccounts: true,
           audits: true,

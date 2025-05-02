@@ -53,7 +53,21 @@ const clientByIdResponseSchema = z.object({
   auditMonthEnd: z.number().nullable().optional(),
   nextContactDate: z.date().nullable().optional(),
   estAnnFees: z.number().nullable().optional(),
-  contacts: z.array(z.object({ name: z.string(), isPrimary: z.boolean() })),
+  contacts: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string().nullable().optional(),
+      isPrimary: z.boolean(),
+      phone: z.string().nullable().optional(),
+      email: z.string().nullable().optional(),
+      title: z.string().nullable().optional(),
+      canLoginToPortal: z.boolean().optional(),
+      portalUserId: z.string().nullable().optional(),
+      createdAt: z.date().optional(),
+      updatedAt: z.date().optional(),
+      clientId: z.string().optional(),
+    })
+  ),
   licenses: z.array(z.any()).optional(),
   trustAccounts: z.array(z.any()).optional(),
   audits: z.array(z.any()).optional(),
@@ -159,7 +173,21 @@ export const clientRouter = createTRPCRouter({
             auditMonthEnd: true,
             nextContactDate: true,
             estAnnFees: true,
-            contacts: { select: { name: true, isPrimary: true } },
+            contacts: {
+              select: {
+                id: true,
+                name: true,
+                isPrimary: true,
+                phone: true,
+                email: true,
+                title: true,
+                canLoginToPortal: true,
+                portalUserId: true,
+                createdAt: true,
+                updatedAt: true,
+                clientId: true,
+              },
+            },
             audits: {
               take: 1,
               orderBy: { auditYear: "desc" },
@@ -171,6 +199,7 @@ export const clientRouter = createTRPCRouter({
       // Map audit stage name onto items for client-side sorting
       const resultItems = items.map((item) => ({
         ...item,
+        estAnnFees: item.estAnnFees != null && typeof item.estAnnFees === 'object' && 'toNumber' in item.estAnnFees ? item.estAnnFees.toNumber() : item.estAnnFees,
         auditStageName: item.audits?.[0]?.stage?.name ?? null,
       }));
       return { items: resultItems, totalCount };
@@ -189,11 +218,25 @@ export const clientRouter = createTRPCRouter({
         if (!contact || contact.clientId !== input.clientId) {
           throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
         }
-        return ctx.db.client.findUniqueOrThrow({
+        const client = await ctx.db.client.findUniqueOrThrow({
           where: { id: input.clientId },
           include: {
             assignedUser: true,
-            contacts: true,
+            contacts: {
+              select: {
+                id: true,
+                name: true,
+                isPrimary: true,
+                phone: true,
+                email: true,
+                title: true,
+                canLoginToPortal: true,
+                portalUserId: true,
+                createdAt: true,
+                updatedAt: true,
+                clientId: true,
+              },
+            },
             licenses: true,
             trustAccounts: true,
             audits: true,
@@ -202,16 +245,34 @@ export const clientRouter = createTRPCRouter({
             documents: true,
           },
         });
+        return {
+          ...client,
+          estAnnFees: client.estAnnFees != null && typeof client.estAnnFees === 'object' && 'toNumber' in client.estAnnFees ? client.estAnnFees.toNumber() : client.estAnnFees,
+        };
       }
       if (!["Admin", "Manager", "Developer"].includes(role)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
       // Admin/Manager: full details
-      return ctx.db.client.findUniqueOrThrow({
+      const client = await ctx.db.client.findUniqueOrThrow({
         where: { id: input.clientId },
         include: {
           assignedUser: true,
-          contacts: true,
+          contacts: {
+            select: {
+              id: true,
+              name: true,
+              isPrimary: true,
+              phone: true,
+              email: true,
+              title: true,
+              canLoginToPortal: true,
+              portalUserId: true,
+              createdAt: true,
+              updatedAt: true,
+              clientId: true,
+            },
+          },
           licenses: true,
           trustAccounts: true,
           audits: true,
@@ -220,6 +281,10 @@ export const clientRouter = createTRPCRouter({
           documents: true,
         },
       });
+      return {
+        ...client,
+        estAnnFees: client.estAnnFees != null && typeof client.estAnnFees === 'object' && 'toNumber' in client.estAnnFees ? client.estAnnFees.toNumber() : client.estAnnFees,
+      };
     }),
   create: adminProcedure
     .input(clientCreateSchema)

@@ -82,7 +82,7 @@ export default function ClientDetailPage() {
             </Suspense>
           )}
           <Suspense fallback={<ComponentCard title="Client Details"><p>Loading details...</p></ComponentCard>}>
-            <ClientDetailsSection client={client as Partial<ClientWithRelations>} />
+            <ClientDetailsSection client={client} />
           </Suspense>
           <Suspense fallback={<ComponentCard title="Audits"><p>Loading audits...</p></ComponentCard>}>
             <AuditList clientId={client.id} />

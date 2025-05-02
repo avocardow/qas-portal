@@ -15,7 +15,7 @@ describe("clientRouter query logic and data transformations", () => {
       auditMonthEnd: 1,
       nextContactDate: new Date("2023-01-01"),
       estAnnFees: 100,
-      contacts: [{ name: "John", isPrimary: true }],
+      contacts: [{ id: "contact1", name: "John", isPrimary: true, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: "id1" }],
     },
     {
       id: "id2",
@@ -25,7 +25,7 @@ describe("clientRouter query logic and data transformations", () => {
       auditMonthEnd: 2,
       nextContactDate: new Date("2023-02-01"),
       estAnnFees: 200,
-      contacts: [{ name: "Jane", isPrimary: false }],
+      contacts: [{ id: "contact2", name: "Jane", isPrimary: false, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: "id2" }],
     },
   ];
 
@@ -187,7 +187,19 @@ describe("clientRouter query logic and data transformations", () => {
             nextContactDate: true,
             estAnnFees: true,
             contacts: {
-              select: { name: true, isPrimary: true },
+              select: {
+                id: true,
+                name: true,
+                isPrimary: true,
+                phone: true,
+                email: true,
+                title: true,
+                canLoginToPortal: true,
+                portalUserId: true,
+                createdAt: true,
+                updatedAt: true,
+                clientId: true,
+              },
             },
             audits: expect.objectContaining({
               // Ensure the latest audit's stage name is selected
@@ -216,7 +228,21 @@ describe("clientRouter query logic and data transformations", () => {
         where: { id: clientId },
         include: {
           assignedUser: true,
-          contacts: true,
+          contacts: {
+            select: {
+              id: true,
+              name: true,
+              isPrimary: true,
+              phone: true,
+              email: true,
+              title: true,
+              canLoginToPortal: true,
+              portalUserId: true,
+              createdAt: true,
+              updatedAt: true,
+              clientId: true,
+            },
+          },
           licenses: true,
           trustAccounts: true,
           audits: true,
@@ -241,7 +267,21 @@ describe("clientRouter query logic and data transformations", () => {
         where: { id: clientId },
         include: {
           assignedUser: true,
-          contacts: true,
+          contacts: {
+            select: {
+              id: true,
+              name: true,
+              isPrimary: true,
+              phone: true,
+              email: true,
+              title: true,
+              canLoginToPortal: true,
+              portalUserId: true,
+              createdAt: true,
+              updatedAt: true,
+              clientId: true,
+            },
+          },
           licenses: true,
           trustAccounts: true,
           audits: true,

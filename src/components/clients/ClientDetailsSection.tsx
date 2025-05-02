@@ -1,14 +1,9 @@
 import React from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
-import type { RouterOutput } from '@/utils/api';
+// import type { Client } from '@prisma/client';
+import type { ClientWithRelations } from './ClientOverviewCard';
 
-// Client type including relations returned by getById tRPC output
-type ClientWithRelations = RouterOutput['clients']['getById'];
-
-export interface ClientDetailsSectionProps {
-  // Use Partial to allow missing fields matching the getById output schema
-  client: Partial<ClientWithRelations>;
-}
+export interface ClientDetailsSectionProps { client: ClientWithRelations }
 
 export default function ClientDetailsSection({ client }: ClientDetailsSectionProps) {
   return (

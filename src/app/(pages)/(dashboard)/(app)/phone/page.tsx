@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { api } from "@/utils/api";
+import type { RouterOutput } from "@/utils/api";
 import useDebounce from "@/hooks/useDebounce";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import {
@@ -13,6 +14,9 @@ import {
 import { useAbility } from "@/hooks/useAbility";
 import { PHONE_PERMISSIONS } from "@/constants/permissions";
 import Authorized from "@/components/Authorized";
+
+// Use tRPC output type for getById to infer contact type
+type ClientWithRelations = RouterOutput['clients']['getById'];
 
 export default function PhonePage() {
   // Hooks and mutations
@@ -105,7 +109,7 @@ export default function PhonePage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {clientQuery.data.contacts.map((c) => (
+                {clientQuery.data.contacts.map((c: ClientWithRelations['contacts'][number]) => (
                   <TableRow key={c.id}>
                     <TableCell>{c.name || "–"}</TableCell>
                     <TableCell>{c.phone || "–"}</TableCell>
