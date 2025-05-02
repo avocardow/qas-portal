@@ -48,7 +48,7 @@
       "id": 2,
       "title": "Implement Client Data Fetching",
       "description": "Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         1
       ],
@@ -108,7 +108,7 @@
           "id": 6,
           "title": "Create data display components with progressive loading",
           "description": "Implement UI components that display client data with progressive loading of related entities",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             3,
             4,
