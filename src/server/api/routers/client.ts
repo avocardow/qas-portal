@@ -41,6 +41,28 @@ const clientUpdateSchema = clientCreateSchema.extend({
   clientId: z.string().uuid(),
 });
 
+// Add explicit Zod schema for getById response to ensure correct output types
+const clientByIdResponseSchema = z.object({
+  id: z.string(),
+  clientName: z.string(),
+  abn: z.string().nullable().optional(),
+  address: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  postcode: z.string().nullable().optional(),
+  status: z.enum(["prospect", "active", "archived"]),
+  auditMonthEnd: z.number().nullable().optional(),
+  nextContactDate: z.date().nullable().optional(),
+  estAnnFees: z.number().nullable().optional(),
+  contacts: z.array(z.object({ name: z.string(), isPrimary: z.boolean() })),
+  licenses: z.array(z.any()).optional(),
+  trustAccounts: z.array(z.any()).optional(),
+  audits: z.array(z.any()).optional(),
+  activityLogs: z.array(z.any()).optional(),
+  notes: z.array(z.any()).optional(),
+  assignedUser: z.any().optional(),
+  documents: z.array(z.any()).optional(),
+});
+
 export const clientRouter = createTRPCRouter({
   getAll: protectedProcedure
     .use(enforceRole(["Admin", "Manager", "Client", "Developer"]))
@@ -140,6 +162,7 @@ export const clientRouter = createTRPCRouter({
   getById: protectedProcedure
     .use(enforceRole(["Admin", "Manager", "Client", "Developer"]))
     .input(clientByIdSchema)
+    .output(clientByIdResponseSchema)
     .query(async ({ ctx, input }) => {
       const role = ctx.session.user.role ?? "";
       if (role === "Client") {
