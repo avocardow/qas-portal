@@ -35,19 +35,19 @@ Implement a function that takes the relevant dates and calculates the elapsed pe
 ### Details:
 Utilize TailAdmin's pre-built progress bar, passing in the computed percentage and customizing styles as needed. Display formatted start and end dates using Intl.DateTimeFormat.
 
-## 5. Design Upcoming Audit Schedule Card UI [pending]
+## 5. Design Upcoming Audit Schedule Card UI [done]
 ### Dependencies: None
 ### Description: Design the Upcoming Audit Schedule card layout to match the CRM UpcomingSchedule style, including milestone names and dates.
 ### Details:
 Use Tailwind CSS and TailAdmin components to create a visually consistent card. Plan for dynamic rendering of milestones and responsive design.
 
-## 6. Implement Upcoming Audit Schedule Card Component [pending]
+## 6. Implement Upcoming Audit Schedule Card Component [done]
 ### Dependencies: 4.2, 4.5
 ### Description: Build the Upcoming Audit Schedule card, listing upcoming audit milestones with properly formatted dates.
 ### Details:
 Map over the schedule data to render each milestone. Use Intl.DateTimeFormat for date display. Ensure accessibility and mobile responsiveness.
 
-## 7. Integrate Components and Test End-to-End [pending]
+## 7. Integrate Components and Test End-to-End [in-progress]
 ### Dependencies: 4.4, 4.6
 ### Description: Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.
 ### Details:

@@ -261,7 +261,7 @@
           "id": 5,
           "title": "Design Upcoming Audit Schedule Card UI",
           "description": "Design the Upcoming Audit Schedule card layout to match the CRM UpcomingSchedule style, including milestone names and dates.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Use Tailwind CSS and TailAdmin components to create a visually consistent card. Plan for dynamic rendering of milestones and responsive design."
         },
@@ -269,7 +269,7 @@
           "id": 6,
           "title": "Implement Upcoming Audit Schedule Card Component",
           "description": "Build the Upcoming Audit Schedule card, listing upcoming audit milestones with properly formatted dates.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2,
             5
@@ -280,7 +280,7 @@
           "id": 7,
           "title": "Integrate Components and Test End-to-End",
           "description": "Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             4,
             6

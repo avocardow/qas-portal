@@ -35,11 +35,11 @@ export default function AuditScheduleCard() {
 
   return (
     <ComponentCard title="Upcoming Audit Schedule">
-      <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800">Upcoming Schedule</h3>
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">Upcoming Schedule</h3>
         <div className="relative h-fit">
           <button onClick={toggleDropdown} className="dropdown-toggle">
-            <MoreDotIcon className="text-gray-400 hover:text-gray-700" />
+            <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300" />
           </button>
           <Dropdown isOpen={isOpen} onClose={closeDropdown} className="w-40 p-2">
             <DropdownItem onItemClick={closeDropdown}>View More</DropdownItem>
@@ -53,7 +53,7 @@ export default function AuditScheduleCard() {
             {schedule.map((item: AuditScheduleItem) => (
               <div
                 key={item.id}
-                className="flex cursor-pointer items-center gap-4 rounded-lg p-3 hover:bg-gray-50"
+                className="flex cursor-pointer items-center gap-9 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-white/[0.03]"
               >
                 <Checkbox
                   className="size-5 rounded-md"
@@ -63,18 +63,18 @@ export default function AuditScheduleCard() {
                   }
                 />
                 <div>
-                  <span className="text-theme-xs mb-0.5 block text-gray-500">
+                  <span className="text-theme-xs mb-0.5 block text-gray-500 dark:text-gray-400">
                     {dateFormatter.format(new Date(item.dueDate))}
                   </span>
-                  <span className="text-theme-sm font-medium text-gray-700">
+                  <span className="text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                     {timeFormatter.format(new Date(item.dueDate))}
                   </span>
                 </div>
                 <div>
-                  <span className="text-theme-sm mb-1 block font-medium text-gray-700">
+                  <span className="text-theme-sm mb-1 block font-medium text-gray-700 dark:text-gray-400">
                     Audit {item.auditYear}
                   </span>
-                  <span className="text-theme-xs text-gray-500">
+                  <span className="text-theme-xs text-gray-500 dark:text-gray-400">
                     {item.stageName}
                   </span>
                 </div>
