@@ -57,6 +57,8 @@ model Client {
   xeroContactId      String?        @unique
   createdAt          DateTime       @default(now()) @db.Timestamptz
   updatedAt          DateTime       @updatedAt @db.Timestamptz
+  assignedUserId     String?        @db.Uuid
+  assignedUser       User?          @relation(name: "ClientManager", fields: [assignedUserId], references: [id], onDelete: SetNull)
 
   contacts      Contact[]
   trustAccounts TrustAccount[]
@@ -160,6 +162,7 @@ model User {
   auditAssignments  AuditAssignment[]
   assignedTasks     Task[]              @relation("AssignedTasks")
   uploadedDocuments DocumentReference[] @relation("UploadedDocuments")
+  managedClients    Client[]            @relation(name: "ClientManager")
   notifications     Notification[]
   sentMessages      Message[]           @relation("SentMessages")
   callLogs          CallLog[]
