@@ -1,9 +1,14 @@
 import React from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
-import type { Contact } from '@prisma/client';
+// Minimal contact shape for client details
+export type ClientContactItem = {
+  id?: string;
+  name?: string | null;
+  isPrimary: boolean;
+};
 
 interface ClientContactsSectionProps {
-  contacts: Contact[];
+  contacts: ClientContactItem[];
 }
 
 export default function ClientContactsSection({ contacts }: ClientContactsSectionProps) {
@@ -17,8 +22,8 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
   return (
     <ComponentCard title="Contacts">
       <ul>
-        {contacts.map(contact => (
-          <li key={contact.id}>
+        {contacts.map((contact, idx) => (
+          <li key={contact.id ?? idx}>
             {contact.name ?? '-'} {contact.isPrimary ? '(Primary)' : ''}
           </li>
         ))}
