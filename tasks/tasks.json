@@ -210,7 +210,7 @@
       "id": 4,
       "title": "Implement Audit Cycle Progress and Schedule",
       "description": "Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -222,7 +222,7 @@
           "id": 1,
           "title": "Define Data Structures for Audit Cycle and Schedule",
           "description": "Design and implement TypeScript interfaces or types to represent audit cycles, milestones, and schedule data required by the progress bar and schedule card components.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Identify all necessary fields (e.g., reportDueDate, nextDueDate, milestone names, dates) and create reusable types/interfaces. Ensure these structures support both progress calculation and schedule listing."
         },
@@ -230,7 +230,7 @@
           "id": 2,
           "title": "Fetch and Prepare Audit Data",
           "description": "Implement logic to retrieve audit cycle and schedule data from the backend or mock source, transforming it to match the defined data structures.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -240,7 +240,7 @@
           "id": 3,
           "title": "Calculate Audit Progress Percentage",
           "description": "Develop a utility function to compute the progress percentage based on the last audit's reportDueDate and the next due date.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2
@@ -251,7 +251,7 @@
           "id": 4,
           "title": "Implement Audit Cycle Progress Bar Component",
           "description": "Create the Audit Cycle Progress Bar using TailAdmin's progress-bar component, displaying the calculated progress and relevant date labels.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],

@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Audit Cycle Progress and Schedule
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: high
 # Description: Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.
@@ -11,25 +11,25 @@ Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component,
 Test progress bar calculations for accuracy. Verify schedule displays correct milestone dates. Check date formatting across different locales. Ensure components are responsive.
 
 # Subtasks:
-## 1. Define Data Structures for Audit Cycle and Schedule [pending]
+## 1. Define Data Structures for Audit Cycle and Schedule [done]
 ### Dependencies: None
 ### Description: Design and implement TypeScript interfaces or types to represent audit cycles, milestones, and schedule data required by the progress bar and schedule card components.
 ### Details:
 Identify all necessary fields (e.g., reportDueDate, nextDueDate, milestone names, dates) and create reusable types/interfaces. Ensure these structures support both progress calculation and schedule listing.
 
-## 2. Fetch and Prepare Audit Data [pending]
+## 2. Fetch and Prepare Audit Data [done]
 ### Dependencies: 4.1
 ### Description: Implement logic to retrieve audit cycle and schedule data from the backend or mock source, transforming it to match the defined data structures.
 ### Details:
 Use API calls or mock data to obtain audit cycles and milestones. Normalize and validate the data to ensure it includes all required fields for downstream components.
 
-## 3. Calculate Audit Progress Percentage [pending]
+## 3. Calculate Audit Progress Percentage [done]
 ### Dependencies: 4.1, 4.2
 ### Description: Develop a utility function to compute the progress percentage based on the last audit's reportDueDate and the next due date.
 ### Details:
 Implement a function that takes the relevant dates and calculates the elapsed percentage of the audit cycle. Ensure edge cases (e.g., missing dates, future/past cycles) are handled gracefully.
 
-## 4. Implement Audit Cycle Progress Bar Component [pending]
+## 4. Implement Audit Cycle Progress Bar Component [done]
 ### Dependencies: 4.3
 ### Description: Create the Audit Cycle Progress Bar using TailAdmin's progress-bar component, displaying the calculated progress and relevant date labels.
 ### Details:

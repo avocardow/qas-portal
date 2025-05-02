@@ -30,6 +30,10 @@ const LifetimeFeesCard = lazy(() => import("@/components/clients/LifetimeFeesCar
 const YoYGrowthCard = lazy(() => import("@/components/clients/YoYGrowthCard"));
 const HealthScoreCard = lazy(() => import("@/components/clients/HealthScoreCard"));
 
+// Lazy load audit components
+const AuditProgressBar = lazy(() => import("@/components/clients/AuditProgressBar"));
+const AuditScheduleCard = lazy(() => import("@/components/clients/AuditScheduleCard"));
+
 // Define client type including relations returned by getById tRPC output
 type ClientWithRelations = RouterOutput['clients']['getById'];
 
@@ -74,6 +78,12 @@ export default function ClientDetailPage() {
           <LifetimeFeesCard totalFees={client.estAnnFees ?? 0} feeHistory={[]} />
           <YoYGrowthCard growthPercentage={0} growthHistory={[]} />
           <HealthScoreCard score={0} />
+        </div>
+      </Suspense>
+      <Suspense fallback={null}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <AuditProgressBar />
+          <AuditScheduleCard />
         </div>
       </Suspense>
       <div className="grid grid-cols-12 gap-4 md:gap-6">
