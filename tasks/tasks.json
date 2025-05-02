@@ -142,7 +142,7 @@
           "id": 2,
           "title": "Implement Client Manager card component",
           "description": "Create the Client Manager card displaying the assigned team member's information",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],

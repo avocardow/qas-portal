@@ -17,7 +17,7 @@ Verify all cards render correctly with proper data. Test permission gating for s
 ### Details:
 Create a Card.jsx component with appropriate styling in Card.css. The component should accept props for title, content, and custom styling. Use a flexible structure with box-shadow, border-radius, and padding. Implement responsive design considerations to ensure cards display properly on different screen sizes. This component will be the building block for all cards in this task.
 
-## 2. Implement Client Manager card component [pending]
+## 2. Implement Client Manager card component [done]
 ### Dependencies: 3.1
 ### Description: Create the Client Manager card displaying the assigned team member's information
 ### Details:
