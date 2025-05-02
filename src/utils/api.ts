@@ -5,6 +5,10 @@
  * */
 import { createTRPCReact } from "@trpc/react-query";
 
-import { type AppRouter } from "@/server/api/root";
+import type { AppRouter } from "@/server/api/root";
+import type { inferRouterOutputs } from "@trpc/server";
 
 export const api = createTRPCReact<AppRouter>();
+
+// Export RouterOutput type for use in components
+export type RouterOutput = inferRouterOutputs<AppRouter>;
