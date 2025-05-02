@@ -215,6 +215,7 @@ describe("clientRouter query logic and data transformations", () => {
       expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith({
         where: { id: clientId },
         include: {
+          assignedUser: true,
           contacts: true,
           licenses: true,
           trustAccounts: true,
@@ -239,6 +240,7 @@ describe("clientRouter query logic and data transformations", () => {
       expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith({
         where: { id: clientId },
         include: {
+          assignedUser: true,
           contacts: true,
           licenses: true,
           trustAccounts: true,

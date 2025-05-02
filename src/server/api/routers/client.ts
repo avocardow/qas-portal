@@ -153,6 +153,7 @@ export const clientRouter = createTRPCRouter({
         return ctx.db.client.findUniqueOrThrow({
           where: { id: input.clientId },
           include: {
+            assignedUser: true,
             contacts: true,
             licenses: true,
             trustAccounts: true,
@@ -170,6 +171,7 @@ export const clientRouter = createTRPCRouter({
       return ctx.db.client.findUniqueOrThrow({
         where: { id: input.clientId },
         include: {
+          assignedUser: true,
           contacts: true,
           licenses: true,
           trustAccounts: true,
