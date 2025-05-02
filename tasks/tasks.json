@@ -108,7 +108,7 @@
           "id": 6,
           "title": "Create data display components with progressive loading",
           "description": "Implement UI components that display client data with progressive loading of related entities",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             3,
             4,

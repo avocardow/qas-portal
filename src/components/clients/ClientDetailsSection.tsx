@@ -5,7 +5,11 @@ import type { RouterOutput } from '@/utils/api';
 // Client type including relations returned by getById tRPC output
 type ClientWithRelations = RouterOutput['clients']['getById'];
 
-export interface ClientDetailsSectionProps { client: ClientWithRelations }
+export interface ClientDetailsSectionProps {
+  // Use Partial to allow missing fields matching the getById output schema
+  client: Partial<ClientWithRelations>;
+}
+
 export default function ClientDetailsSection({ client }: ClientDetailsSectionProps) {
   return (
     <ComponentCard title="Client Details">

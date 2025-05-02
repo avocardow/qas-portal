@@ -41,7 +41,7 @@ Create reusable loading and error state components that will be displayed during
 ### Details:
 For client components that need to fetch or refetch client data, create a custom React hook (e.g., useClientData) that uses tRPC's client-side calling pattern. Implement this using SWR or React Query for efficient caching and revalidation. The hook should accept a clientId parameter and return the client data along with loading and error states. This will complement the server-side fetching while providing a way to update data on the client when needed.
 
-## 6. Create data display components with progressive loading [pending]
+## 6. Create data display components with progressive loading [in-progress]
 ### Dependencies: 2.3, 2.4, 2.5
 ### Description: Implement UI components that display client data with progressive loading of related entities
 ### Details:

@@ -57,10 +57,26 @@ const clientByIdResponseSchema = z.object({
   licenses: z.array(z.any()).optional(),
   trustAccounts: z.array(z.any()).optional(),
   audits: z.array(z.any()).optional(),
-  activityLogs: z.array(z.any()).optional(),
+  activityLogs: z.array(
+    z.object({
+      id: z.string(),
+      content: z.string(),
+      createdAt: z.date(),
+    })
+  ).optional(),
   notes: z.array(z.any()).optional(),
   assignedUser: z.any().optional(),
-  documents: z.array(z.any()).optional(),
+  documents: z.array(
+    z.object({
+      id: z.string(),
+      fileName: z.string(),
+      sharepointFileUrl: z.string().nullable(),
+    })
+  ).optional(),
+  internalFolderId: z.string().nullable().optional(),
+  externalFolderId: z.string().nullable().optional(),
+  xeroContactId: z.string().nullable().optional(),
+  assignedUserId: z.string().nullable().optional(),
 });
 
 export const clientRouter = createTRPCRouter({

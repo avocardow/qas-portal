@@ -7,17 +7,31 @@ import ComponentCard from "@/components/common/ComponentCard";
 import { api } from "@/utils/api";
 import { useAbility } from "@/hooks/useAbility";
 import { CLIENT_PERMISSIONS } from "@/constants/permissions";
+import type { RouterOutput } from "@/utils/api";
+import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetailsSection';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
-const ClientDetailsSection = lazy(() => import("@/components/clients/ClientDetailsSection"));
 const ClientContactsSection = lazy(() => import("@/components/clients/ClientContactsSection"));
 const ClientAssignedUserSection = lazy(() => import("@/components/clients/ClientAssignedUserSection"));
+const ClientLicensesSection = lazy(() => import("@/components/clients/ClientLicensesSection"));
+const ClientTrustAccountsSection = lazy(() => import("@/components/clients/ClientTrustAccountsSection"));
+const AuditList = lazy(() => import("@/components/audit/AuditList"));
+const DocumentReferences = lazy(() => import("@/components/common/DocumentReferences"));
+
+// Lazy load ClientDetailsSection with correct prop types
+const ClientDetailsSection = lazy<React.ComponentType<ClientDetailsSectionProps>>(
+  () => import("@/components/clients/ClientDetailsSection")
+);
+
+// Define client type including relations returned by getById tRPC output
+type ClientWithRelations = RouterOutput['clients']['getById'];
 
 export default function ClientDetailPage() {
   const { clientId } = useParams<{ clientId: string }>();
   const { can } = useAbility();
-  const { data: client, isLoading, isError } = api.clients.getById.useQuery({ clientId });
+  const { data: clientData, isLoading, isError } = api.clients.getById.useQuery({ clientId });
+  const client = clientData as ClientWithRelations;
 
   // Permission gating
   if (!can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
@@ -54,6 +68,12 @@ export default function ClientDetailPage() {
           <Suspense fallback={<ComponentCard title="Contacts"><p>Loading contacts...</p></ComponentCard>}>
             <ClientContactsSection contacts={client.contacts} />
           </Suspense>
+          <Suspense fallback={<ComponentCard title="Licenses"><p>Loading licenses...</p></ComponentCard>}>
+            <ClientLicensesSection licenses={client.licenses} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Trust Accounts"><p>Loading trust accounts...</p></ComponentCard>}>
+            <ClientTrustAccountsSection trustAccounts={client.trustAccounts} />
+          </Suspense>
         </div>
         <div className="col-span-12 xl:col-span-8">
           {client.assignedUser && (
@@ -62,7 +82,24 @@ export default function ClientDetailPage() {
             </Suspense>
           )}
           <Suspense fallback={<ComponentCard title="Client Details"><p>Loading details...</p></ComponentCard>}>
-            <ClientDetailsSection client={client} />
+            <ClientDetailsSection client={client as Partial<ClientWithRelations>} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Audits"><p>Loading audits...</p></ComponentCard>}>
+            <AuditList clientId={client.id} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Activity Log"><p>Loading activity log...</p></ComponentCard>}>
+            <ComponentCard title="Activity Log">
+              <ul>
+                {(client.activityLogs ?? []).map((log) => (
+                  <li key={log.id}>
+                    {new Date(log.createdAt).toLocaleString()}: {log.content}
+                  </li>
+                ))}
+              </ul>
+            </ComponentCard>
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Documents"><p>Loading documents...</p></ComponentCard>}>
+            <DocumentReferences documents={client.documents ?? []} />
           </Suspense>
         </div>
       </div>
