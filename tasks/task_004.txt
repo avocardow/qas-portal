@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: high
-# Description: Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components.
+# Description: Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.
 # Details:
 Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for proper date formatting as referenced in Context7.
 

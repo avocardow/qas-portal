@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 # Priority: high
-# Description: Optimize data loading, implement Suspense boundaries, and conduct comprehensive testing.
+# Description: Optimize data loading, implement Suspense boundaries, and conduct comprehensive testing for the Client Profile page.
 # Details:
 Optimize data loading with select queries and pagination where appropriate. Implement Suspense boundaries for non-critical sections to improve perceived performance. Add lazy-loading for heavy components. Conduct comprehensive testing including accessibility checks, responsive design verification, and performance benchmarking. Create Storybook stories and unit tests for key components. Ensure all Cursor rules are followed.
 

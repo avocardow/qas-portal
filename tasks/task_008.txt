@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: high
-# Description: Create the Activity Card showing recent activities with pagination and quick-add functionality.
+# Description: Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.
 # Details:
 Implement TailAdmin ActivitiesCard showing recent notes, call logs, status changes with appropriate icons. Add pagination controls to show only the most recent items. Create Quick-Add Activity inline controls to add any activityLog type (Note, Email, Call, Billing Commentary, Meeting, Document), always linked to the Client, optionally a Contact, and the current team member.
 

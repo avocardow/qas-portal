@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Implement the compliance checklist and alerts/warnings for missing or expired documentation.
+# Description: Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.
 # Details:
 Create a Regulatory Checklist component showing compliance items ('Trust deed', 'Bank statements', etc.) with check marks. Implement Alerts & Warnings section flagging missing or expired documentation and upcoming license renewals. Use appropriate visual indicators for different alert severities.
 

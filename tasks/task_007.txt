@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Build the Trust Accounts Table with all required fields and software access links.
+# Description: Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.
 # Details:
 Create a DataTableTwo component for trust accounts with columns: Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Include action buttons linking to each account's management software or external feed (e.g., 'Open in Xero' or 'Open in SharePoint'). Follow DataTableTwo API docs from Context7.
 

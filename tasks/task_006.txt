@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 5
 # Priority: low
-# Description: Implement a simple graph visualization showing relationships between client, contacts, and trust accounts.
+# Description: Implement a simple graph visualization on the Client Profile page showing relationships between client, contacts, and trust accounts.
 # Details:
 Create a simple network diagram showing the relationships: client → contacts → trust accounts. Use an appropriate visualization library compatible with TailAdmin. Keep the diagram simple and focused on key relationships. Ensure the diagram is responsive and degrades gracefully on smaller screens.
 

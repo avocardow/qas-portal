@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 8
 # Priority: low
-# Description: Create an inline panel for recording audit meeting notes with auto-append to activity log.
+# Description: Create an inline panel on the Client Profile page for recording audit meeting notes with auto-append to activity log.
 # Details:
 Implement a Meeting Minutes Panel with rich text input for recording audit meeting notes. Add functionality to automatically append these notes to the activity log. Include fields for meeting date, attendees, and topics. Ensure proper validation and confirmation on submission.
 

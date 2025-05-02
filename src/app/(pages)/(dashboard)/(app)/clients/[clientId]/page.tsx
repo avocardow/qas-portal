@@ -1,13 +1,19 @@
-// Placeholder page stub for client profile page
-"use client";
+// Removed placeholder stub and DashboardPlaceholderPageTemplate
 
-import React from 'react';
-import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 
 export default function ClientDetailPage() {
   return (
-    <DashboardPlaceholderPageTemplate heading="Client Profile Page - Coming Soon">
-      <p>This page is under construction.</p>
-    </DashboardPlaceholderPageTemplate>
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <PageBreadcrumb pageTitle="Client Profile" />
+      <div className="grid grid-cols-12 gap-4 md:gap-6">
+        <div className="col-span-12 xl:col-span-4">
+          {/* TODO: Client Overview Card */}
+        </div>
+        <div className="col-span-12 xl:col-span-8">
+          {/* TODO: Client Details Section */}
+        </div>
+      </div>
+    </div>
   );
 }

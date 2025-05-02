@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Setup Client Profile Page Structure
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Create the basic page structure for the Client Profile at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with TailAdmin grid layout and PageBreadcrumb.
@@ -11,7 +11,7 @@ Create the page.tsx file with proper Next.js App Router structure. Implement a r
 Verify page renders without errors. Check responsive layout at different breakpoints. Ensure grid layout matches TailAdmin specifications.
 
 # Subtasks:
-## 1. Create Basic Page Structure with Next.js App Router [pending]
+## 1. Create Basic Page Structure with Next.js App Router [done]
 ### Dependencies: None
 ### Description: Set up the initial page.tsx file at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with proper Next.js App Router structure and PageBreadcrumb component
 ### Details:
@@ -23,7 +23,7 @@ Verify page renders without errors. Check responsive layout at different breakpo
 6. Ensure the component follows Cursor rules for code styling
 7. Implement proper TypeScript typing for all props and parameters
 
-## 2. Implement Responsive TailAdmin Grid Layout [pending]
+## 2. Implement Responsive TailAdmin Grid Layout [in-progress]
 ### Dependencies: 1.1
 ### Description: Create a responsive grid layout using TailAdmin and Tailwind CSS classes with proper breakpoints for different screen sizes
 ### Details:

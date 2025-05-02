@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 8
 # Priority: medium
-# Description: Implement tabbed interface for activity logs grouped by type with filter and search functionality.
+# Description: Implement a tabbed interface on the Client Profile page for activity logs grouped by type with filter and search functionality.
 # Details:
 Create a tabbed interface using HeadlessUI Tabs (referenced in Context7) with groups for 'Notes', 'Emails', 'Calls', and 'Status Changes'. Implement full-text filter on activity content and a date-range picker in the log section. Ensure proper loading states and empty states for each tab.
 

@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Setup Client Profile Page Structure",
       "description": "Create the basic page structure for the Client Profile at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with TailAdmin grid layout and PageBreadcrumb.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [],
       "priority": "high",
       "details": "Create the page.tsx file with proper Next.js App Router structure. Implement a responsive TailAdmin grid layout (xl:grid-cols-12) with appropriate breakpoints. Add PageBreadcrumb component at the top. Setup the basic sections that will contain all the client information cards and components. Follow Cursor rules for code styling and component usage.",
@@ -16,7 +16,7 @@
           "description": "Set up the initial page.tsx file at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with proper Next.js App Router structure and PageBreadcrumb component",
           "dependencies": [],
           "details": "1. Create the page.tsx file in the specified directory structure\n2. Implement a client-side component with useParams hook to access the clientId parameter\n3. Add the PageBreadcrumb component with proper navigation hierarchy (Dashboard > Clients > Client Profile)\n4. Set up the basic page container with appropriate padding and margin\n5. Test that the page renders correctly and the breadcrumb navigation works\n6. Ensure the component follows Cursor rules for code styling\n7. Implement proper TypeScript typing for all props and parameters",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 1
         },
         {
@@ -27,7 +27,7 @@
             1
           ],
           "details": "1. Add a main container div with grid layout using Tailwind's grid utilities\n2. Implement responsive grid-cols with appropriate breakpoints: grid-cols-1 for mobile, md:grid-cols-2 for tablets, and xl:grid-cols-12 for desktops\n3. Set up proper gap spacing between grid items using gap-4 md:gap-6 2xl:gap-7.5\n4. Add container styling with rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark\n5. Ensure the layout is responsive by testing at different viewport sizes\n6. Implement dark mode support using Tailwind's dark: variant classes\n7. Test the responsive behavior across different breakpoints",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 1
         },
         {

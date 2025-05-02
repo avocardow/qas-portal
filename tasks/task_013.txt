@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2, 3
 # Priority: medium
-# Description: Implement quick action buttons and client lifetime value projection chart.
+# Description: Implement quick action buttons and client lifetime value projection chart on the Client Profile page.
 # Details:
 Create Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Implement Client Lifetime Value Projection with a small predictive chart forecasting next year's fees based on past trends. Use useAbility() to gate the Archive Client action with clients.archive permission.
 

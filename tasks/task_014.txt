@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: low
-# Description: Embed the last 3 client email threads via Outlook/Gmail integration.
+# Description: Embed the last 3 client email threads via Outlook/Gmail integration on the Client Profile page.
 # Details:
 Create an Email Thread Panel component that embeds the last 3 client email threads via Outlook/Gmail integration. Implement proper loading states and error handling for email fetching. Display email metadata (sender, recipients, date) and content in a clean, readable format.
 

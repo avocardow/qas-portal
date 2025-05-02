@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Embed file-manager tree for client's SharePoint folders and recent invoices card.
+# Description: Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.
 # Details:
 Embed the AllFolders and RecentFileTable components from File-Manager to create a SharePoint folder browser. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Ensure proper loading states and error handling for file access.
 

@@ -3,7 +3,7 @@
 # Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Create the Recent Contacts Table with all required fields and primary badge indicators.
+# Description: Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.
 # Details:
 Implement a TailAdmin RecentOrders-style table for contacts with columns: Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact in a clean format (comma-separated or expandable cell). Use DataTableTwo component as referenced in Context7. Ensure table is responsive and accessible.
 
