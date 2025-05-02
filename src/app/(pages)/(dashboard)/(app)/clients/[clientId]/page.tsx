@@ -9,6 +9,7 @@ import { useAbility } from "@/hooks/useAbility";
 import { CLIENT_PERMISSIONS } from "@/constants/permissions";
 import type { RouterOutput } from "@/utils/api";
 import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetailsSection';
+import DocumentReferences from "@/components/common/DocumentReferences";
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -17,12 +18,17 @@ const ClientAssignedUserSection = lazy(() => import("@/components/clients/Client
 const ClientLicensesSection = lazy(() => import("@/components/clients/ClientLicensesSection"));
 const ClientTrustAccountsSection = lazy(() => import("@/components/clients/ClientTrustAccountsSection"));
 const AuditList = lazy(() => import("@/components/audit/AuditList"));
-const DocumentReferences = lazy(() => import("@/components/common/DocumentReferences"));
 
 // Lazy load ClientDetailsSection with correct prop types
 const ClientDetailsSection = lazy<React.ComponentType<ClientDetailsSectionProps>>(
   () => import("@/components/clients/ClientDetailsSection")
 );
+
+// Lazy load KPI and Manager cards
+const ClientManagerCard = lazy(() => import("@/components/clients/ClientManagerCard"));
+const LifetimeFeesCard = lazy(() => import("@/components/clients/LifetimeFeesCard"));
+const YoYGrowthCard = lazy(() => import("@/components/clients/YoYGrowthCard"));
+const HealthScoreCard = lazy(() => import("@/components/clients/HealthScoreCard"));
 
 // Define client type including relations returned by getById tRPC output
 type ClientWithRelations = RouterOutput['clients']['getById'];
@@ -60,6 +66,16 @@ export default function ClientDetailPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <PageBreadcrumb pageTitle={client.clientName} />
+      <Suspense fallback={null}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {client.assignedUser && (
+            <ClientManagerCard manager={client.assignedUser} />
+          )}
+          <LifetimeFeesCard totalFees={client.estAnnFees ?? 0} feeHistory={[]} />
+          <YoYGrowthCard growthPercentage={0} growthHistory={[]} />
+          <HealthScoreCard score={0} />
+        </div>
+      </Suspense>
       <div className="grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 xl:col-span-4">
           <Suspense fallback={<ComponentCard title="Client Overview"><p>Loading overview...</p></ComponentCard>}>

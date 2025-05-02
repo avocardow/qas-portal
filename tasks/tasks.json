@@ -122,7 +122,7 @@
       "id": 3,
       "title": "Create Client Manager and KPI Cards",
       "description": "Implement the Client Manager card and KPI cards (Lifetime Fees, YoY Growth, Health Score) at the top of the profile page.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -134,7 +134,7 @@
           "id": 1,
           "title": "Create basic Card component structure",
           "description": "Implement the reusable Card component that will serve as the foundation for both the Client Manager card and KPI cards",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [],
           "details": "Create a Card.jsx component with appropriate styling in Card.css. The component should accept props for title, content, and custom styling. Use a flexible structure with box-shadow, border-radius, and padding. Implement responsive design considerations to ensure cards display properly on different screen sizes. This component will be the building block for all cards in this task."
         },
@@ -152,7 +152,7 @@
           "id": 3,
           "title": "Implement Lifetime Fees KPI card with sparkline",
           "description": "Create the Lifetime Fees card showing total historical fees and a sparkline trend visualization",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -162,7 +162,7 @@
           "id": 4,
           "title": "Implement YoY Growth KPI card with chart",
           "description": "Create the Year-over-Year Growth card using the TailAdmin chart component",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -172,7 +172,7 @@
           "id": 5,
           "title": "Implement Customer Health Score KPI card",
           "description": "Create the Customer Health Score card with colored status ribbon",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -182,7 +182,7 @@
           "id": 6,
           "title": "Implement permission controls using useAbility hook",
           "description": "Add permission controls to gate sensitive financial data for Admin-only access",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3,
             4,
@@ -194,7 +194,7 @@
           "id": 7,
           "title": "Integrate all cards into the profile page layout",
           "description": "Assemble all card components into the profile page layout with proper spacing and responsiveness",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2,
             3,
