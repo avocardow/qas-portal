@@ -39,7 +39,7 @@
             2
           ],
           "details": "1. Create placeholder components for each major section of the client profile:\n   - ClientInfoSection (spans 2 columns on xl screens)\n   - ClientStatsSection (spans 2 columns)\n   - ClientActivitySection (spans 4 columns)\n   - ClientContactSection (spans 4 columns)\n2. Add appropriate headings and container styling to each section\n3. Include skeleton loading states for each section\n4. Add comments indicating what content will be added to each section in future tasks\n5. Ensure all components have proper TypeScript interfaces\n6. Implement consistent styling across all section components\n7. Test that all sections render correctly within the grid layout\n8. Verify dark mode compatibility for all placeholder components",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 1
         }
       ]

@@ -35,7 +35,7 @@ Verify page renders without errors. Check responsive layout at different breakpo
 6. Implement dark mode support using Tailwind's dark: variant classes
 7. Test the responsive behavior across different breakpoints
 
-## 3. Create Placeholder Section Components [pending]
+## 3. Create Placeholder Section Components [in-progress]
 ### Dependencies: 1.1, 1.2
 ### Description: Set up empty placeholder components for all the client information sections that will be populated in future tasks
 ### Details:
