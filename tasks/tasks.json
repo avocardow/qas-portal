@@ -48,7 +48,7 @@
       "id": 2,
       "title": "Implement Client Data Fetching",
       "description": "Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         1
       ],

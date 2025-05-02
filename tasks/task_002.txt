@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Client Data Fetching
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.
