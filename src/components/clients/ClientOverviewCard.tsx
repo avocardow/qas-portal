@@ -1,8 +1,11 @@
 import React from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
-import type { Client } from '@prisma/client';
+import type { RouterOutput } from '@/utils/api';
 
-export interface ClientOverviewCardProps { client: Client }
+// Use the return type from the clients.getById tRPC call to include relations
+export type ClientWithRelations = RouterOutput['clients']['getById'];
+
+export interface ClientOverviewCardProps { client: ClientWithRelations }
 const ClientOverviewCard: React.FC<ClientOverviewCardProps> = ({ client }) => {
   return (
     <ComponentCard title="Client Overview">
