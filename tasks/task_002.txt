@@ -133,7 +133,7 @@ export const trpcClient = trpc.createClient({
 });
 ```
 
-## 4. Create Custom Hook for Client Data Fetching [pending]
+## 4. Create Custom Hook for Client Data Fetching [in-progress]
 ### Dependencies: 2.1, 2.3
 ### Description: Develop a custom React hook that encapsulates the tRPC query logic for fetching client data, with proper typing and error handling.
 ### Details:

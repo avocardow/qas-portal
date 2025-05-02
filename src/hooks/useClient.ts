@@ -32,7 +32,7 @@ export function useClient(
   options: UseClientOptions = {}
 ) {
   return api.clients.getById.useQuery(
-    { id: id ?? "" },
+    { clientId: id ?? "" },
     {
       enabled: !!id && options.enabled !== false,
       onSuccess: options.onSuccess,
