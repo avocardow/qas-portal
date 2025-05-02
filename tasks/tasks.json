@@ -134,7 +134,7 @@
           "id": 1,
           "title": "Create basic Card component structure",
           "description": "Implement the reusable Card component that will serve as the foundation for both the Client Manager card and KPI cards",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [],
           "details": "Create a Card.jsx component with appropriate styling in Card.css. The component should accept props for title, content, and custom styling. Use a flexible structure with box-shadow, border-radius, and padding. Implement responsive design considerations to ensure cards display properly on different screen sizes. This component will be the building block for all cards in this task."
         },

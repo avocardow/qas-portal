@@ -11,7 +11,7 @@ Create the Client Manager card displaying assigned team member with name, role, 
 Verify all cards render correctly with proper data. Test permission gating for sensitive fields. Check that charts and visualizations display accurately. Test responsiveness at different screen sizes.
 
 # Subtasks:
-## 1. Create basic Card component structure [pending]
+## 1. Create basic Card component structure [in-progress]
 ### Dependencies: None
 ### Description: Implement the reusable Card component that will serve as the foundation for both the Client Manager card and KPI cards
 ### Details:
