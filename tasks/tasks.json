@@ -611,7 +611,7 @@
       "id": 10,
       "title": "Implement SharePoint Folder Browser",
       "description": "Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -641,7 +641,7 @@
           "id": 3,
           "title": "Create Recent Invoices Card Component",
           "description": "Develop a specialized card component that displays the 5 most recent invoice documents with their payment status and PDF links.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -653,7 +653,7 @@
       "id": 11,
       "title": "Create Regulatory Checklist and Alerts",
       "description": "Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -665,7 +665,7 @@
           "id": 1,
           "title": "Implement Regulatory Checklist Component",
           "description": "Create the core checklist component displaying compliance items with status indicators",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Develop a reusable checklist component that displays regulatory compliance items (such as 'Trust deed', 'Bank statements', etc.) with appropriate status indicators. The component should include: 1) A list view of all compliance items, 2) Visual check marks or status icons for each item, 3) The ability to categorize items by type or importance, 4) Timestamps showing when items were last updated or verified, and 5) A responsive design that works across different screen sizes. Use a data structure that stores item name, status, expiration date, and category for each compliance item."
         },

@@ -1,6 +1,6 @@
 # Task ID: 10
 # Title: Implement SharePoint Folder Browser
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.
@@ -23,7 +23,7 @@ Begin by embedding the AllFolders component from the existing File-Manager into 
 ### Details:
 After the folder browser is working, integrate the RecentFileTable component from File-Manager to display files within the selected SharePoint folders. Configure the component to show file metadata including name, type, modified date, and size. Implement file opening functionality that launches files in appropriate viewers based on file type. Add loading indicators for when file lists are being retrieved. Implement error handling for file access issues, showing appropriate error messages when files cannot be accessed or displayed. Ensure the file table updates properly when users navigate between different folders in the folder browser component.
 
-## 3. Create Recent Invoices Card Component [pending]
+## 3. Create Recent Invoices Card Component [done]
 ### Dependencies: 10.2
 ### Description: Develop a specialized card component that displays the 5 most recent invoice documents with their payment status and PDF links.
 ### Details:

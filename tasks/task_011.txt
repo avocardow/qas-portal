@@ -1,6 +1,6 @@
 # Task ID: 11
 # Title: Create Regulatory Checklist and Alerts
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: medium
 # Description: Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.
@@ -11,7 +11,7 @@ Create a Regulatory Checklist component showing compliance items ('Trust deed', 
 Test checklist with various compliance states. Verify alerts trigger correctly based on document status and expiration dates. Check visual clarity of warning indicators.
 
 # Subtasks:
-## 1. Implement Regulatory Checklist Component [pending]
+## 1. Implement Regulatory Checklist Component [done]
 ### Dependencies: None
 ### Description: Create the core checklist component displaying compliance items with status indicators
 ### Details:
