@@ -1,7 +1,6 @@
 "use client";
 import { useMemo } from 'react';
 import type { DocumentMetadata } from '@/components/common/DocumentReferences';
-import type { RouterOutput } from '@/utils/api';
 
 export interface ClientLicense {
   id: string;

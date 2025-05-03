@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import React, { forwardRef } from 'react'
 import { TouchTarget } from './button'
 import { Link } from './link'
+import Image from 'next/image'
 
 type AvatarProps = {
   src?: string | null
@@ -26,6 +27,8 @@ export function Avatar({
       {...props}
       className={clsx(
         className,
+        // Make container relative for Image fill
+        'relative',
         // Basic layout
         'inline-grid shrink-0 align-middle [--avatar-radius:20%] *:col-start-1 *:row-start-1',
         'outline -outline-offset-1 outline-black/10 dark:outline-white/10',
@@ -45,7 +48,14 @@ export function Avatar({
           </text>
         </svg>
       )}
-      {src && <img className="size-full" src={src} alt={alt} />}
+      {src && (
+        <Image
+          className="size-full"
+          src={src}
+          alt={alt}
+          fill
+        />
+      )}
     </span>
   )
 }
