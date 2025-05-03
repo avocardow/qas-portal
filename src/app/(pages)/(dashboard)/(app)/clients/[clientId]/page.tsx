@@ -91,7 +91,7 @@ export default function ClientDetailPage() {
     return keywords;
   }, [clientData?.clientName, clientData?.contacts]);
   const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError, refetch: refetchEmailThreads } =
-    api.email.filterMessages.useQuery({ contactEmails, subjectKeywords, page: 1, pageSize: 3 });
+    api.email.filterMessages.useQuery({ contactEmails, subjectKeywords, folderIds: ["Inbox"], page: 1, pageSize: 3 });
 
   const client = clientData as ClientWithRelations;
   const router = useRouter();
