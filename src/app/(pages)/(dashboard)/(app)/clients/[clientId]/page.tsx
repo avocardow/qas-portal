@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -19,7 +19,6 @@ import RecentFileTable from '@/components/file-manager/RecentFileTable';
 import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
 import ClientAlertsSection from '@/components/clients/ClientAlertsSection';
 import QuickActionButtons from '@/components/clients/QuickActionButtons';
-import ClientNetworkDiagram, { NetworkNode, NetworkEdge } from '@/components/clients/ClientNetworkDiagram';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -48,11 +47,13 @@ const AuditScheduleCard = lazy(() => import("@/components/clients/AuditScheduleC
 type ClientWithRelations = RouterOutput['clients']['getById'];
 
 export default function ClientDetailPage() {
-  const { clientId } = useParams<{ clientId: string }>();
+  // Hooks must be called at top-level
+  const params = useParams<{ clientId: string }>() ?? {};
+  const clientId = params.clientId;
   const { can } = useAbility();
   const { data: clientData, isLoading, isError } = api.clients.getById.useQuery(
     { clientId },
-    { refetchInterval: 5000, refetchOnWindowFocus: false }
+    { refetchInterval: 5000, refetchOnWindowFocus: false, enabled: !!clientId }
   );
   const utils = api.useContext();
   const addLogMutation = api.clients.addActivityLog.useMutation({
@@ -63,25 +64,20 @@ export default function ClientDetailPage() {
   const onAddActivity = async (type: ActivityLogType, content: string) => {
     await addLogMutation.mutateAsync({ clientId, type, content });
   };
+  const { data: lifetimeData } = api.clients.getLifetimeData.useQuery(
+    { clientId },
+    { enabled: !!clientId }
+  );
   const client = clientData as ClientWithRelations;
-  // Prepare network diagram data
-  const diagramNodes: NetworkNode[] = useMemo(() => [
-    { id: client.id, label: client.clientName, type: 'client' as const },
-    ...(client.contacts ?? []).map(c => ({ id: c.id || '', label: c.name || '', type: 'contact' as const } as const)),
-    ...(client.trustAccounts ?? []).map(t => ({ id: t.id, label: t.accountName, type: 'trustAccount' as const } as const)),
-  ], [client]) as NetworkNode[];
-  const diagramEdges: NetworkEdge[] = useMemo(() => {
-    const edges: NetworkEdge[] = [];
-    (client.contacts ?? []).forEach(c => {
-      if (c.id) edges.push({ id: `edge-client-contact-${c.id}`, source: client.id, target: c.id });
-    });
-    (client.trustAccounts ?? []).forEach(t => {
-      edges.push({ id: `edge-client-trust-${t.id}`, source: client.id, target: t.id });
-    });
-    return edges;
-  }, [client]) as NetworkEdge[];
-  // Fetch aggregated lifetime value data for projection
-  const { data: lifetimeData } = api.clients.getLifetimeData.useQuery({ clientId });
+
+  // Validate clientId param
+  if (!clientId) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Error">
+        <p>Invalid client ID.</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
 
   // Permission gating
   if (!can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
@@ -143,9 +139,7 @@ export default function ClientDetailPage() {
           <Suspense fallback={<ComponentCard title="Trust Accounts"><p>Loading trust accounts...</p></ComponentCard>}>
             <ClientTrustAccountsSection trustAccounts={client.trustAccounts} />
           </Suspense>
-          <Suspense fallback={<ComponentCard title="Network Diagram"><p>Loading diagram...</p></ComponentCard>}>
-            <ClientNetworkDiagram nodes={diagramNodes} edges={diagramEdges} width={350} height={300} />
-          </Suspense>
+          {/* Network diagram removed */}
         </div>
         <div className="col-span-12 xl:col-span-8">
           {client.assignedUser && (
