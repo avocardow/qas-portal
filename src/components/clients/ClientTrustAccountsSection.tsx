@@ -26,7 +26,18 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
     { key: 'managementSoftware', header: 'Management Software', sortable: false },
     { key: 'softwareUrl', header: 'Software URL', sortable: false },
   ], []);
-  useEffect(() => { setCurrentPage(1); }, [searchTerm, trustAccounts]);
+  // Filter trust accounts based on search term
+  const filteredAccounts = React.useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return (trustAccounts ?? []).filter(acc =>
+      (acc.accountName?.toLowerCase().includes(term) ||
+       acc.bankName.toLowerCase().includes(term) ||
+       acc.bsb?.toLowerCase().includes(term) ||
+       acc.accountNumber?.toLowerCase().includes(term) ||
+       acc.managementSoftware?.toLowerCase().includes(term))
+    );
+  }, [trustAccounts, searchTerm]);
+  useEffect(() => { setCurrentPage(1); }, [filteredAccounts]);
   if (!trustAccounts || trustAccounts.length === 0) {
     return (
       <ComponentCard title="Trust Accounts">
@@ -37,7 +48,7 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
   return (
     <ComponentCard title="Trust Accounts">
       <DataTableTwo
-        data={trustAccounts}
+        data={filteredAccounts}
         columns={columns}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
