@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import ReactFlow, { ReactFlowProvider, Node, Edge } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, Node, Edge, Controls, Background } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 export type NetworkNode = {
@@ -70,9 +70,19 @@ export default function ClientNetworkDiagram({
       data: { label: n.label },
       position: positions[n.id] || { x: 0, y: 0 },
       style: {
-        border: n.type === 'client' ? '2px solid #000' : '1px solid #999',
+        border: n.type === 'client'
+          ? '2px solid #856404'
+          : n.type === 'contact'
+          ? '2px solid #155724'
+          : '2px solid #004085',
         borderRadius: 4,
-        padding: 10
+        padding: 10,
+        background: n.type === 'client'
+          ? '#FFF3CD'
+          : n.type === 'contact'
+          ? '#D4EDDA'
+          : '#D1ECF1',
+        color: '#212529'
       }
     }));
 
@@ -86,12 +96,15 @@ export default function ClientNetworkDiagram({
     }));
 
     return [rfNodes, rfEdges];
-  }, [nodes, edges, width, height]);
+  }, [nodes, edges, width]);
 
   return (
     <ReactFlowProvider>
       <div data-testid="network-diagram" style={{ width, height }}>
-        <ReactFlow nodes={rfNodes} edges={rfEdges} fitView />
+        <ReactFlow nodes={rfNodes} edges={rfEdges} fitView>
+          <Controls />
+          <Background gap={20} color="#aaa" />
+        </ReactFlow>
       </div>
     </ReactFlowProvider>
   );
