@@ -21,6 +21,7 @@ import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
 import ClientAlertsSection from '@/components/clients/ClientAlertsSection';
 import QuickActionButtons from '@/components/clients/QuickActionButtons';
 import ClientNetworkDiagram, { NetworkNode, NetworkEdge } from '@/components/clients/ClientNetworkDiagram';
+import EmailThreadPanel from '@/components/clients/EmailThreadPanel';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -203,24 +204,11 @@ export default function ClientDetailPage() {
             <ComponentCard title="Activity Log">
               <MeetingMinutesPanel onAdd={onAddActivity} />
               <QuickAddActivityForm onAdd={onAddActivity} />
-              {/* Email Thread Panel */}
-              {emailThreadsLoading && <p>Loading email threads...</p>}
-              {emailThreadsError && <p className="text-red-500">Error loading email threads</p>}
-              {emailThreads && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold mb-2">Recent Email Threads</h3>
-                  <ul className="space-y-2">
-                    {emailThreads.messages.map((email) => (
-                      <li key={email.id} className="border p-2 rounded">
-                        <p className="font-medium">{email.subject}</p>
-                        <p className="text-sm text-gray-600">From: {email.from.emailAddress.name}</p>
-                        <p className="text-xs text-gray-500">{new Date(email.receivedDateTime).toLocaleString()}</p>
-                        <div className="mt-1 text-sm text-gray-700">{email.bodyPreview}</div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <EmailThreadPanel
+                emailThreads={emailThreads}
+                isLoading={emailThreadsLoading}
+                isError={emailThreadsError}
+              />
               {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
               <ActivityLogTabs logs={client.activityLogs ?? []} pageSize={5} />
             </ComponentCard>

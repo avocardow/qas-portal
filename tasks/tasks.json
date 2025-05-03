@@ -696,7 +696,7 @@
       "id": 12,
       "title": "Implement Meeting Minutes Panel",
       "description": "Create an inline panel on the Client Profile page for recording audit meeting notes with auto-append to activity log.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         8
       ],
@@ -716,7 +716,7 @@
           "id": 2,
           "title": "Implement Submission Validation and Confirmation",
           "description": "Add logic to validate input fields and provide user confirmation upon successful submission of meeting minutes.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -726,7 +726,7 @@
           "id": 3,
           "title": "Auto-Append Meeting Minutes to Activity Log",
           "description": "Develop backend and integration logic to automatically append submitted meeting minutes to the activity log.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -781,7 +781,7 @@
       "id": 14,
       "title": "Implement Email Thread Panel",
       "description": "Embed the last 3 client email threads via Outlook/Gmail integration on the Client Profile page.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -793,7 +793,7 @@
           "id": 1,
           "title": "Integrate Outlook/Gmail APIs and Fetch Last 3 Client Email Threads",
           "description": "Set up secure integration with both Outlook and Gmail APIs to authenticate users and fetch the last 3 email threads involving the client. Ensure proper handling of API tokens and permissions.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Implement OAuth2 authentication flows for both Outlook (Microsoft Graph API) and Gmail (Google API). After authentication, use the respective APIs to query and retrieve the most recent 3 email threads related to the client. Ensure the data includes full thread details, including message metadata and content. Handle API rate limits and errors gracefully, returning clear error messages or fallback states if fetching fails."
         },

@@ -1,6 +1,6 @@
 # Task ID: 14
 # Title: Implement Email Thread Panel
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: low
 # Description: Embed the last 3 client email threads via Outlook/Gmail integration on the Client Profile page.
@@ -11,7 +11,7 @@ Create an Email Thread Panel component that embeds the last 3 client email threa
 Test email thread display with various email formats. Verify loading states and error handling. Check email content rendering for correctness. Test with different email providers.
 
 # Subtasks:
-## 1. Integrate Outlook/Gmail APIs and Fetch Last 3 Client Email Threads [pending]
+## 1. Integrate Outlook/Gmail APIs and Fetch Last 3 Client Email Threads [done]
 ### Dependencies: None
 ### Description: Set up secure integration with both Outlook and Gmail APIs to authenticate users and fetch the last 3 email threads involving the client. Ensure proper handling of API tokens and permissions.
 ### Details:
