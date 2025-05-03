@@ -39,7 +39,7 @@ const QuickActionButtons: React.FC<QuickActionButtonsProps> = ({ clientId }) => 
 
   return (
     <div className="flex space-x-2 mb-6">
-      <Authorized action={CLIENT_PERMISSIONS.VIEW_STATUS}>
+      <Authorized action={CLIENT_PERMISSIONS.EDIT}>
         <Button onClick={handleAddContact}>Add Contact</Button>
       </Authorized>
       <Button onClick={handleLinkBankFeed}>Link Bank Feed</Button>

@@ -6,6 +6,7 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import { api } from "@/utils/api";
 import { useAbility } from "@/hooks/useAbility";
+import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from "@/constants/permissions";
 import type { RouterOutput } from "@/utils/api";
 import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetailsSection';
@@ -92,7 +93,9 @@ export default function ClientDetailPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <PageBreadcrumb pageTitle={client.clientName} />
-      <QuickActionButtons clientId={client.id} />
+      <Authorized action={CLIENT_PERMISSIONS.EDIT}>
+        <QuickActionButtons clientId={client.id} />
+      </Authorized>
       <Suspense fallback={null}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {client.assignedUser && (
