@@ -870,7 +870,7 @@
           "id": 2,
           "title": "Implement Code Splitting and Suspense Boundaries",
           "description": "Reduce initial bundle size and improve perceived performance through code splitting, lazy loading, and strategic Suspense boundary placement.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -880,7 +880,7 @@
           "id": 3,
           "title": "Conduct Comprehensive Testing and Documentation",
           "description": "Perform thorough testing across multiple dimensions and create documentation for key components.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2
           ],
