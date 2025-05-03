@@ -461,7 +461,7 @@
       "id": 7,
       "title": "Implement Trust Accounts Table",
       "description": "Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -473,7 +473,7 @@
           "id": 1,
           "title": "Set Up DataTableTwo Component Environment",
           "description": "Install and configure all necessary dependencies for DataTableTwo, ensuring compatibility with the project and preparing for custom table implementation.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Install required packages (e.g., datatables.net-react, datatables.net-dt) using npm or yarn. Import DataTableTwo and its dependencies into the project. Verify that the DataTableTwo API documentation from Context7 is accessible and understood. Set up a basic DataTableTwo instance in a test component to confirm correct installation and rendering.[1][5]"
         },
@@ -481,7 +481,7 @@
           "id": 2,
           "title": "Define Trust Accounts Table Schema and Columns",
           "description": "Design the schema for the trust accounts table, specifying all required columns and their data types, and configure the DataTableTwo columns accordingly.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -491,7 +491,7 @@
           "id": 3,
           "title": "Integrate Data Source and Populate Table",
           "description": "Connect the DataTableTwo component to the trust accounts data source and ensure the table is populated with accurate, testable data.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -511,7 +511,7 @@
           "id": 5,
           "title": "Apply Styling, Test, and Document the Component",
           "description": "Ensure the Trust Accounts Table matches design guidelines, is fully tested, and includes usage documentation.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],

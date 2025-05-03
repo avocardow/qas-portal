@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Implement Trust Accounts Table
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: medium
 # Description: Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.
@@ -11,19 +11,19 @@ Create a DataTableTwo component for trust accounts with columns: Account Name, B
 Test table with various trust account data. Verify external links open correctly. Check that all required fields display properly. Test responsive behavior on different screen sizes.
 
 # Subtasks:
-## 1. Set Up DataTableTwo Component Environment [pending]
+## 1. Set Up DataTableTwo Component Environment [done]
 ### Dependencies: None
 ### Description: Install and configure all necessary dependencies for DataTableTwo, ensuring compatibility with the project and preparing for custom table implementation.
 ### Details:
 Install required packages (e.g., datatables.net-react, datatables.net-dt) using npm or yarn. Import DataTableTwo and its dependencies into the project. Verify that the DataTableTwo API documentation from Context7 is accessible and understood. Set up a basic DataTableTwo instance in a test component to confirm correct installation and rendering.[1][5]
 
-## 2. Define Trust Accounts Table Schema and Columns [pending]
+## 2. Define Trust Accounts Table Schema and Columns [done]
 ### Dependencies: 7.1
 ### Description: Design the schema for the trust accounts table, specifying all required columns and their data types, and configure the DataTableTwo columns accordingly.
 ### Details:
 Create a columns configuration for DataTableTwo including: Account Name, Bank Name, BSB, Account Number, Software Access badge, Last Reconciliation Date, managementSoftware, and softwareUrl. Ensure each column has appropriate headers, data accessors, and formatting as needed (e.g., date formatting for reconciliation date, badge styling for software access).
 
-## 3. Integrate Data Source and Populate Table [pending]
+## 3. Integrate Data Source and Populate Table [done]
 ### Dependencies: 7.2
 ### Description: Connect the DataTableTwo component to the trust accounts data source and ensure the table is populated with accurate, testable data.
 ### Details:
@@ -35,7 +35,7 @@ Fetch or mock trust account data containing all required fields. Map the data to
 ### Details:
 Render a badge in the Software Access column based on the managementSoftware field. For each row, add an action button that dynamically generates a link using the softwareUrl field and displays the appropriate label (e.g., 'Open in Xero'). Ensure buttons are accessible and open links in a new tab or as required.
 
-## 5. Apply Styling, Test, and Document the Component [pending]
+## 5. Apply Styling, Test, and Document the Component [done]
 ### Dependencies: 7.4
 ### Description: Ensure the Trust Accounts Table matches design guidelines, is fully tested, and includes usage documentation.
 ### Details:

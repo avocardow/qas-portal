@@ -8,6 +8,11 @@ export interface ClientTrustAccountsSectionProps {
   trustAccounts: ClientWithRelations['trustAccounts'];
 }
 
+/**
+ * ClientTrustAccountsSection displays a paginated, filterable table of trust accounts.
+ * @param trustAccounts - Array of trust account objects with fields: accountName, bankName, bsb, accountNumber,
+ *   hasSoftwareAccess, updatedAt, managementSoftware, and softwareUrl.
+ */
 export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrustAccountsSectionProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState<number>(1);
