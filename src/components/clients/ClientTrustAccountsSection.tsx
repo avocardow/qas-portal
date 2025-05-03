@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
 import DataTableTwo, { ColumnDef } from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import type { ClientWithRelations } from './ClientOverviewCard';
+import Badge from '@/components/ui/badge/Badge';
 
 export interface ClientTrustAccountsSectionProps {
   trustAccounts: ClientWithRelations['trustAccounts'];
@@ -16,15 +17,40 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
     { key: 'bankName', header: 'Bank Name', sortable: true },
     { key: 'bsb', header: 'BSB', sortable: false },
     { key: 'accountNumber', header: 'Account Number', sortable: false },
-    { key: 'hasSoftwareAccess', header: 'Software Access', sortable: false },
+    {
+      key: 'hasSoftwareAccess',
+      header: 'Software Access',
+      sortable: false,
+      cell: (row) =>
+        row.hasSoftwareAccess ? (
+          <Badge variant="light" color="success" size="sm">Yes</Badge>
+        ) : (
+          <Badge variant="light" color="error" size="sm">No</Badge>
+        ),
+    },
     {
       key: 'updatedAt',
       header: 'Last Reconciliation',
       sortable: true,
       cell: (row) => new Date(row.updatedAt).toLocaleDateString(),
     },
-    { key: 'managementSoftware', header: 'Management Software', sortable: false },
-    { key: 'softwareUrl', header: 'Software URL', sortable: false },
+    { key: 'managementSoftware', header: 'Software', sortable: false },
+    {
+      key: 'actions',
+      header: 'Actions',
+      sortable: false,
+      cell: (row) =>
+        row.softwareUrl ? (
+          <a
+            href={row.softwareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            Open in {row.managementSoftware}
+          </a>
+        ) : null,
+    },
   ], []);
   // Filter trust accounts based on search term
   const filteredAccounts = React.useMemo(() => {
