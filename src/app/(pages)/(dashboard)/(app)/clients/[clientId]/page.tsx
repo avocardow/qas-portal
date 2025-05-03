@@ -90,8 +90,20 @@ export default function ClientDetailPage() {
     });
     return keywords;
   }, [clientData?.clientName, clientData?.contacts]);
+  console.debug("filterMessages criteria for client", clientId, { contactEmails, subjectKeywords, folderIds: ["Inbox"] });
   const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError, refetch: refetchEmailThreads } =
     api.email.filterMessages.useQuery({ contactEmails, subjectKeywords, folderIds: ["Inbox"], page: 1, pageSize: 3 });
+  // Debug: log results on change
+  React.useEffect(() => {
+    if (emailThreads !== undefined) {
+      console.debug("filterMessages success for client", clientId, emailThreads);
+    }
+  }, [clientId, emailThreads]);
+  React.useEffect(() => {
+    if (emailThreadsError) {
+      console.error("filterMessages error for client", clientId);
+    }
+  }, [clientId, emailThreadsError]);
 
   const client = clientData as ClientWithRelations;
   const router = useRouter();
