@@ -23,7 +23,7 @@ Add each action button to the client interface, wiring up their respective handl
 ### Details:
 Extract transaction data for each client and aggregate it into an RFM (Recency, Frequency, Monetary value) summary table. Use utility functions or packages (e.g., lifetimes in Python, or equivalent in your stack) to compute these metrics. Ensure the data is formatted and accessible for the predictive chart component.
 
-## 3. Implement Client Lifetime Value Projection Chart [pending]
+## 3. Implement Client Lifetime Value Projection Chart [done]
 ### Dependencies: 13.2
 ### Description: Develop and integrate a predictive chart that forecasts next year's client fees based on historical trends and the prepared data. Visualize the projected client lifetime value in a clear, concise chart within the client interface.
 ### Details:

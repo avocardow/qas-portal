@@ -769,7 +769,7 @@
           "id": 3,
           "title": "Implement Client Lifetime Value Projection Chart",
           "description": "Develop and integrate a predictive chart that forecasts next year's client fees based on historical trends and the prepared data. Visualize the projected client lifetime value in a clear, concise chart within the client interface.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
