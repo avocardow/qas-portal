@@ -836,7 +836,7 @@
       "id": 16,
       "title": "Optimize Performance and Implement Final Testing",
       "description": "Optimize data loading, implement Suspense boundaries, and conduct comprehensive testing for the Client Profile page.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         1,
         2,
@@ -880,7 +880,7 @@
           "id": 3,
           "title": "Conduct Comprehensive Testing and Documentation",
           "description": "Perform thorough testing across multiple dimensions and create documentation for key components.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             2
           ],
