@@ -17,7 +17,7 @@ Run comprehensive test suite covering all components and features. Perform acces
 ### Details:
 Analyze current data fetching patterns and implement select queries to retrieve only needed fields. Add pagination for large data sets with configurable page sizes (20-50 items per page). Implement infinite scrolling or 'load more' patterns for long lists using windowing techniques like react-window or react-virtualized to render only visible items. Add request caching for frequently accessed data. Measure performance improvements using React DevTools Profiler and network monitoring tools.
 
-## 2. Implement Code Splitting and Suspense Boundaries [pending]
+## 2. Implement Code Splitting and Suspense Boundaries [in-progress]
 ### Dependencies: 16.1
 ### Description: Reduce initial bundle size and improve perceived performance through code splitting, lazy loading, and strategic Suspense boundary placement.
 ### Details:

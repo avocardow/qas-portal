@@ -140,7 +140,9 @@ export default function ClientDetailPage() {
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <PageBreadcrumb pageTitle={client.clientName} />
       <Authorized action={CLIENT_PERMISSIONS.EDIT}>
-        <QuickActionButtons clientId={client.id} />
+        <Suspense fallback={<ComponentCard title="Actions"><p>Loading actions...</p></ComponentCard>}>
+          <QuickActionButtons clientId={client.id} />
+        </Suspense>
       </Authorized>
       <Suspense fallback={null}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

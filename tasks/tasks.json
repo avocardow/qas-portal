@@ -870,7 +870,7 @@
           "id": 2,
           "title": "Implement Code Splitting and Suspense Boundaries",
           "description": "Reduce initial bundle size and improve perceived performance through code splitting, lazy loading, and strategic Suspense boundary placement.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             1
           ],
