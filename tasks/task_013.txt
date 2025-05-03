@@ -17,7 +17,7 @@ Test all action buttons for correct behavior. Verify Archive Client confirmation
 ### Details:
 Add each action button to the client interface, wiring up their respective handlers. For the Archive Client button, use the useAbility() hook to conditionally render the button based on the user's clients.archive permission. Implement a confirmation modal that appears when Archive Client is clicked, requiring user confirmation before executing the archive logic.
 
-## 2. Aggregate and Prepare Data for Client Lifetime Value Projection [pending]
+## 2. Aggregate and Prepare Data for Client Lifetime Value Projection [in-progress]
 ### Dependencies: 13.1
 ### Description: Collect and process historical client transaction data to calculate key metrics needed for lifetime value projection, such as frequency, recency, monetary value, and observation period. Prepare this data for use in the predictive model.
 ### Details:

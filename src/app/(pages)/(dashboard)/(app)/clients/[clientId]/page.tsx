@@ -62,6 +62,8 @@ export default function ClientDetailPage() {
     await addLogMutation.mutateAsync({ clientId, type, content });
   };
   const client = clientData as ClientWithRelations;
+  // Fetch aggregated lifetime value data for projection
+  const { data: lifetimeData } = api.clients.getLifetimeData.useQuery({ clientId });
 
   // Permission gating
   if (!can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
@@ -96,7 +98,7 @@ export default function ClientDetailPage() {
           {client.assignedUser && (
             <ClientManagerCard manager={client.assignedUser} />
           )}
-          <LifetimeFeesCard totalFees={client.estAnnFees ?? 0} feeHistory={[]} />
+          <LifetimeFeesCard totalFees={lifetimeData?.totalFees ?? 0} feeHistory={lifetimeData?.feeHistory ?? []} />
           <YoYGrowthCard growthPercentage={0} growthHistory={[]} />
           <HealthScoreCard score={0} />
         </div>

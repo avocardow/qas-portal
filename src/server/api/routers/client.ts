@@ -337,4 +337,38 @@ export const clientRouter = createTRPCRouter({
         data: { clientId, contactId, userId: ctx.session.user.id, type, content },
       });
     }),
+  // Aggregate and prepare data for client lifetime value projection
+  getLifetimeData: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Developer", "Client"]))
+    .input(z.object({ clientId: z.string().uuid() }))
+    .output(
+      z.object({
+        totalFees: z.number(),
+        feeHistory: z.array(z.object({ date: z.string(), value: z.number() })),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      // Fetch client estimated annual fees
+      const client = await ctx.db.client.findUniqueOrThrow({
+        where: { id: input.clientId },
+        select: { estAnnFees: true },
+      });
+      const totalFees =
+        client.estAnnFees != null && typeof client.estAnnFees === 'object' && 'toNumber' in client.estAnnFees
+          ? client.estAnnFees.toNumber()
+          : client.estAnnFees ?? 0;
+      // Gather all document references (e.g., invoices) for this client as event points
+      const docs = await ctx.db.documentReference.findMany({
+        where: { clientId: input.clientId },
+        select: { createdAt: true },
+      });
+      // Prepare fee history points (using event dates and totalFees as placeholder value)
+      const feeHistory = docs
+        .map((doc) => ({
+          date: doc.createdAt.toISOString().split('T')[0],
+          value: totalFees,
+        }))
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      return { totalFees, feeHistory };
+    }),
 });
