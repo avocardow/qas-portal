@@ -12,7 +12,6 @@ import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetai
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { ActivityLogType } from "@prisma/client";
 import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
-import ActivityCard from "@/components/clients/ActivityCard";
 import ActivityLogTabs from "@/components/clients/ActivityLogTabs";
 
 // Lazy load client sections for progressive loading
