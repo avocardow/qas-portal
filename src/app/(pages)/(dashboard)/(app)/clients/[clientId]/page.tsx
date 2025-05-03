@@ -17,6 +17,7 @@ import AllFolders from '@/components/file-manager/AllFolders';
 import RecentFileTable from '@/components/file-manager/RecentFileTable';
 import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
 import ClientAlertsSection from '@/components/clients/ClientAlertsSection';
+import QuickActionButtons from '@/components/clients/QuickActionButtons';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -89,6 +90,7 @@ export default function ClientDetailPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <PageBreadcrumb pageTitle={client.clientName} />
+      <QuickActionButtons clientId={client.id} />
       <Suspense fallback={null}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {client.assignedUser && (

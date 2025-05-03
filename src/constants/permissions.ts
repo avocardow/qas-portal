@@ -46,6 +46,7 @@ export const CLIENT_PERMISSIONS = {
   VIEW: "clients.view",
   VIEW_BILLING: "clients.view.billing",
   VIEW_STATUS: "clients.view.status",
+  ARCHIVE: "clients.archive",
 } as const;
 
 export type ClientPermission =
