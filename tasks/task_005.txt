@@ -41,7 +41,7 @@ Create a custom cell renderer for displaying multiple licenses. Implement either
 ### Details:
 Set up API integration to fetch contact data from the backend. Implement loading states and error handling for data fetching. Create state management for the table data using React hooks (useState, useEffect). Implement pagination logic if the data set is large. Add sorting functionality based on column headers. Ensure proper data transformation from API response to the table's expected format.
 
-## 6. Implement responsive behavior [pending]
+## 6. Implement responsive behavior [done]
 ### Dependencies: 5.1, 5.2, 5.3, 5.4
 ### Description: Ensure the table displays correctly across all device sizes
 ### Details:

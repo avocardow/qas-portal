@@ -48,6 +48,8 @@ export interface DataTableTwoProps {
   isLoading?: boolean;
   searchTerm: string;
   setSearchTerm: (term: string) => void;
+  /** Accessible caption for screen readers */
+  caption?: string;
   serverSide?: boolean;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
@@ -86,6 +88,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   isLoading,
   searchTerm,
   setSearchTerm,
+  caption = "Clients table",
   serverSide = false,
   sortBy: sortByProp,
   sortOrder: sortOrderProp,
@@ -319,7 +322,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
       <div className="custom-scrollbar max-w-full overflow-x-auto">
         <div>
           <Table>
-            <caption className="sr-only" data-testid="datatable-caption">Clients table</caption>
+            <caption className="sr-only" data-testid="datatable-caption">{caption}</caption>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 {cols.map(({ key, header, sortable, permission }, idx) => {

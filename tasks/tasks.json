@@ -355,7 +355,7 @@
           "id": 6,
           "title": "Implement responsive behavior",
           "description": "Ensure the table displays correctly across all device sizes",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2,
