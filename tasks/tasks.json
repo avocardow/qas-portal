@@ -461,7 +461,7 @@
       "id": 7,
       "title": "Implement Trust Accounts Table",
       "description": "Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -501,7 +501,7 @@
           "id": 4,
           "title": "Implement Software Access Badge and Action Buttons",
           "description": "Add a Software Access badge column and action buttons that link to each account's management software or external feed, such as 'Open in Xero' or 'Open in SharePoint'.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -569,7 +569,7 @@
       "id": 9,
       "title": "Build Tabbed Activity Log",
       "description": "Implement a tabbed interface on the Client Profile page for activity logs grouped by type with filter and search functionality.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         8
       ],
@@ -581,7 +581,7 @@
           "id": 1,
           "title": "Implement Tabbed Interface for Activity Log Types",
           "description": "Set up the tabbed UI for activity logs grouped by 'Notes', 'Emails', 'Calls', and 'Status Changes' using HeadlessUI Tabs in a React project.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Install @headlessui/react and Tailwind CSS if not already present. Use HeadlessUI's Tab.Group, Tab.List, Tab, Tab.Panels, and Tab.Panel components to create four tabs, each representing a log type. Ensure accessibility and keyboard navigation are supported as per HeadlessUI standards. Each Tab.Panel should render a placeholder for its respective log content. Style the tabs using Tailwind CSS for visual clarity and responsiveness.[1][2][5]"
         },
@@ -589,7 +589,7 @@
           "id": 2,
           "title": "Add Filter, Search, and Date-Range Picker Functionality",
           "description": "Integrate a full-text search filter and a date-range picker within the log section of each tab to allow users to filter activity logs by content and date.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -599,7 +599,7 @@
           "id": 3,
           "title": "Implement Loading and Empty States for Each Tab",
           "description": "Ensure each tab displays appropriate loading indicators while fetching data and clear empty states when no logs match the current filters.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -611,7 +611,7 @@
       "id": 10,
       "title": "Implement SharePoint Folder Browser",
       "description": "Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -623,7 +623,7 @@
           "id": 1,
           "title": "Implement SharePoint Folder Browser Component",
           "description": "Integrate the AllFolders component from File-Manager to create a navigable SharePoint folder structure with proper folder creation and navigation capabilities.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Begin by embedding the AllFolders component from the existing File-Manager into the application. Configure the component to connect to the client's SharePoint document library using the SharePoint API. Implement folder navigation functionality that allows users to browse through the folder hierarchy, open folders, and navigate back up using breadcrumb navigation. Add support for viewing folder contents and implement proper loading states while folder data is being fetched. Include error handling for cases where SharePoint access fails or folders cannot be loaded. Test the component with various folder structures to ensure proper rendering and navigation."
         },

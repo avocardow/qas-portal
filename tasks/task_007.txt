@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Implement Trust Accounts Table
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.
@@ -29,7 +29,7 @@ Create a columns configuration for DataTableTwo including: Account Name, Bank Na
 ### Details:
 Fetch or mock trust account data containing all required fields. Map the data to the DataTableTwo schema. Ensure the table displays all records correctly and supports updates if needed. Use sample data for development if backend integration is not yet available.
 
-## 4. Implement Software Access Badge and Action Buttons [pending]
+## 4. Implement Software Access Badge and Action Buttons [done]
 ### Dependencies: 7.3
 ### Description: Add a Software Access badge column and action buttons that link to each account's management software or external feed, such as 'Open in Xero' or 'Open in SharePoint'.
 ### Details:

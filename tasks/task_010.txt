@@ -1,6 +1,6 @@
 # Task ID: 10
 # Title: Implement SharePoint Folder Browser
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: medium
 # Description: Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.
@@ -11,7 +11,7 @@ Embed the AllFolders and RecentFileTable components from File-Manager to create 
 Test folder browser navigation. Verify file links open correctly. Test with various folder structures and file types. Check invoice status display accuracy.
 
 # Subtasks:
-## 1. Implement SharePoint Folder Browser Component [pending]
+## 1. Implement SharePoint Folder Browser Component [done]
 ### Dependencies: None
 ### Description: Integrate the AllFolders component from File-Manager to create a navigable SharePoint folder structure with proper folder creation and navigation capabilities.
 ### Details:
