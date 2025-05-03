@@ -1,6 +1,6 @@
 # Task ID: 15
 # Title: Implement Permission Gating on Client Profile Page
-# Status: in-progress
+# Status: done
 # Dependencies: 3, 8, 13
 # Priority: high
 # Description: Apply permission controls to Client Profile page components using useAbility() and <Authorized> to avoid changing other pages.
