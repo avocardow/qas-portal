@@ -70,6 +70,10 @@ export default function ClientDetailPage() {
     { clientId },
     { enabled: !!clientId }
   );
+  // Fetch latest 3 email threads from Inbox
+  const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError } =
+    api.email.listMessages.useQuery({ folderId: "Inbox", page: 1, pageSize: 3 });
+
   const client = clientData as ClientWithRelations;
   const router = useRouter();
 
@@ -199,6 +203,24 @@ export default function ClientDetailPage() {
             <ComponentCard title="Activity Log">
               <MeetingMinutesPanel onAdd={onAddActivity} />
               <QuickAddActivityForm onAdd={onAddActivity} />
+              {/* Email Thread Panel */}
+              {emailThreadsLoading && <p>Loading email threads...</p>}
+              {emailThreadsError && <p className="text-red-500">Error loading email threads</p>}
+              {emailThreads && (
+                <div className="mt-4">
+                  <h3 className="text-lg font-semibold mb-2">Recent Email Threads</h3>
+                  <ul className="space-y-2">
+                    {emailThreads.messages.map((email) => (
+                      <li key={email.id} className="border p-2 rounded">
+                        <p className="font-medium">{email.subject}</p>
+                        <p className="text-sm text-gray-600">From: {email.from.emailAddress.name}</p>
+                        <p className="text-xs text-gray-500">{new Date(email.receivedDateTime).toLocaleString()}</p>
+                        <div className="mt-1 text-sm text-gray-700">{email.bodyPreview}</div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
               <ActivityLogTabs logs={client.activityLogs ?? []} pageSize={5} />
             </ComponentCard>
