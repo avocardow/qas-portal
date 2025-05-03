@@ -10,18 +10,8 @@ import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from "@/constants/permissions";
 import type { RouterOutput } from "@/utils/api";
 import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetailsSection';
-import DocumentReferences from "@/components/common/DocumentReferences";
-import { ActivityLogType } from "@prisma/client";
-import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
-import MeetingMinutesPanel from "@/components/clients/MeetingMinutesPanel";
-import ActivityLogTabs from "@/components/clients/ActivityLogTabs";
-import AllFolders from '@/components/file-manager/AllFolders';
-import RecentFileTable from '@/components/file-manager/RecentFileTable';
-import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
-import ClientAlertsSection from '@/components/clients/ClientAlertsSection';
-import QuickActionButtons from '@/components/clients/QuickActionButtons';
-import ClientNetworkDiagram, { NetworkNode, NetworkEdge } from '@/components/clients/ClientNetworkDiagram';
-import EmailThreadPanel from '@/components/clients/EmailThreadPanel';
+import type { NetworkNode, NetworkEdge } from '@/components/clients/ClientNetworkDiagram';
+import type { ActivityLogType } from '@prisma/client';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -45,6 +35,19 @@ const HealthScoreCard = lazy(() => import("@/components/clients/HealthScoreCard"
 // Lazy load audit components
 const AuditProgressBar = lazy(() => import("@/components/clients/AuditProgressBar"));
 const AuditScheduleCard = lazy(() => import("@/components/clients/AuditScheduleCard"));
+
+// Lazy load additional heavy components for code splitting
+const DocumentReferences = lazy(() => import("@/components/common/DocumentReferences"));
+const QuickAddActivityForm = lazy(() => import("@/components/clients/QuickAddActivityForm"));
+const MeetingMinutesPanel = lazy(() => import("@/components/clients/MeetingMinutesPanel"));
+const ActivityLogTabs = lazy(() => import("@/components/clients/ActivityLogTabs"));
+const AllFolders = lazy(() => import("@/components/file-manager/AllFolders"));
+const RecentFileTable = lazy(() => import("@/components/file-manager/RecentFileTable"));
+const RecentInvoicesCard = lazy(() => import("@/components/invoice/RecentInvoicesCard"));
+const ClientAlertsSection = lazy(() => import("@/components/clients/ClientAlertsSection"));
+const QuickActionButtons = lazy(() => import("@/components/clients/QuickActionButtons"));
+const ClientNetworkDiagram = lazy(() => import("@/components/clients/ClientNetworkDiagram"));
+const EmailThreadPanel = lazy(() => import("@/components/clients/EmailThreadPanel"));
 
 // Define client type including relations returned by getById tRPC output
 type ClientWithRelations = RouterOutput['clients']['getById'];
