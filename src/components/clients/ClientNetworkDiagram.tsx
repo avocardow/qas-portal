@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import ReactFlow, { ReactFlowProvider, Node, Edge, Controls, Background } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -32,6 +32,18 @@ export default function ClientNetworkDiagram({
   width = 800,
   onNodeClick
 }: ClientNetworkDiagramProps) {
+  // Responsive container width
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(width);
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ro = new ResizeObserver(entries => {
+      setContainerWidth(entries[0].contentRect.width);
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
   const [rfNodes, rfEdges] = useMemo(() => {
     const positions: Record<string, { x: number; y: number }> = {};
 
@@ -39,7 +51,7 @@ export default function ClientNetworkDiagram({
     const clientNode = nodes.find(n => n.type === 'client');
     if (clientNode) {
       positions[clientNode.id] = {
-        x: width / 2 - NODE_WIDTH / 2,
+        x: containerWidth / 2 - NODE_WIDTH / 2,
         y: VERTICAL_GAP
       };
     }
@@ -49,7 +61,7 @@ export default function ClientNetworkDiagram({
     contactNodes.forEach((node, idx) => {
       const totalWidth = contactNodes.length * (NODE_WIDTH + HORIZONTAL_GAP) - HORIZONTAL_GAP;
       positions[node.id] = {
-        x: width / 2 - totalWidth / 2 + idx * (NODE_WIDTH + HORIZONTAL_GAP),
+        x: containerWidth / 2 - totalWidth / 2 + idx * (NODE_WIDTH + HORIZONTAL_GAP),
         y: VERTICAL_GAP * 2 + NODE_HEIGHT
       };
     });
@@ -59,7 +71,7 @@ export default function ClientNetworkDiagram({
     trustNodes.forEach((node, idx) => {
       const totalWidth = trustNodes.length * (NODE_WIDTH + HORIZONTAL_GAP) - HORIZONTAL_GAP;
       positions[node.id] = {
-        x: width / 2 - totalWidth / 2 + idx * (NODE_WIDTH + HORIZONTAL_GAP),
+        x: containerWidth / 2 - totalWidth / 2 + idx * (NODE_WIDTH + HORIZONTAL_GAP),
         y: VERTICAL_GAP * 3 + NODE_HEIGHT * 2
       };
     });
@@ -96,11 +108,11 @@ export default function ClientNetworkDiagram({
     }));
 
     return [rfNodes, rfEdges];
-  }, [nodes, edges, width]);
+  }, [nodes, edges, containerWidth]);
 
   return (
     <ReactFlowProvider>
-      <div data-testid="network-diagram" className="w-full h-64 sm:h-80 md:h-96 lg:h-[400px]">
+      <div ref={containerRef} data-testid="network-diagram" className="w-full h-64 sm:h-80 md:h-96 lg:h-[400px]">
         <ReactFlow
           nodes={rfNodes}
           edges={rfEdges}
