@@ -43,7 +43,10 @@ type ClientWithRelations = RouterOutput['clients']['getById'];
 export default function ClientDetailPage() {
   const { clientId } = useParams<{ clientId: string }>();
   const { can } = useAbility();
-  const { data: clientData, isLoading, isError } = api.clients.getById.useQuery({ clientId });
+  const { data: clientData, isLoading, isError } = api.clients.getById.useQuery(
+    { clientId },
+    { refetchInterval: 5000, refetchOnWindowFocus: false }
+  );
   const utils = api.useContext();
   const addLogMutation = api.clients.addActivityLog.useMutation({
     onSuccess: () => {

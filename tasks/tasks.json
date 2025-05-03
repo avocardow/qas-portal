@@ -523,7 +523,7 @@
       "id": 8,
       "title": "Develop Activity Card with Quick-Add",
       "description": "Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -560,7 +560,7 @@
             2
           ],
           "details": "1. Create or integrate with backend API endpoints for fetching paginated activities.\n2. Implement API calls for creating new activities of different types.\n3. Add real-time updates using WebSockets or polling when new activities are added by other users.\n4. Implement proper error handling for all API interactions.\n5. Add activity filtering capabilities based on type or date range.\n6. Optimize performance by implementing virtualization for long activity lists.\n7. Write unit tests for component logic and integration tests for API interactions.\n8. Perform cross-component testing to ensure the Activity Card works correctly within the larger application.\n9. Conduct accessibility testing and fix any issues.\n10. Document the component API, props, and usage examples for other developers.\n11. Perform final cross-browser and cross-device testing to ensure consistent behavior.",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 8
         }
       ]

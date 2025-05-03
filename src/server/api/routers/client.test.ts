@@ -276,7 +276,7 @@ describe("clientRouter getById", () => {
           licenses: true,
           trustAccounts: true,
           audits: true,
-          activityLogs: true,
+          activityLogs: { orderBy: { createdAt: 'desc' } },
           notes: true,
           documents: true,
         }),

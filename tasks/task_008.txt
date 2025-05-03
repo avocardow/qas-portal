@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Develop Activity Card with Quick-Add
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: high
 # Description: Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.
@@ -41,7 +41,7 @@ Test activity display with various activity types. Verify pagination works corre
 9. Add appropriate error handling and success notifications.
 10. Ensure the form is keyboard accessible and follows accessibility best practices.
 
-## 3. Integrate Activity Management with Backend and Finalize [in-progress]
+## 3. Integrate Activity Management with Backend and Finalize [done]
 ### Dependencies: 8.1, 8.2
 ### Description: Connect the Activity Card and Quick-Add form to backend APIs, implement real-time updates, and finalize the component with comprehensive testing.
 ### Details:
