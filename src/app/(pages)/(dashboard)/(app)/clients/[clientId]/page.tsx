@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, lazy, useMemo } from "react";
+import React, { Suspense, lazy, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -91,8 +91,19 @@ export default function ClientDetailPage() {
     return keywords;
   }, [clientData?.clientName, clientData?.contacts]);
   console.debug("filterMessages criteria for client", clientId, { contactEmails, subjectKeywords, folderIds: ["Inbox"] });
+  // State to toggle filtering on/off
+  const [filtersActive, setFiltersActive] = useState(true);
+  // Prepare query input based on filter state
+  const filterInput = useMemo(() => ({
+    contactEmails: filtersActive ? contactEmails : [],
+    subjectKeywords: filtersActive ? subjectKeywords : [],
+    folderIds: ["Inbox"],
+    page: 1,
+    pageSize: 3
+  }), [filtersActive, contactEmails, subjectKeywords]);
+  // Fetch filtered or unfiltered email threads
   const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError, refetch: refetchEmailThreads } =
-    api.email.filterMessages.useQuery({ contactEmails, subjectKeywords, folderIds: ["Inbox"], page: 1, pageSize: 3 });
+    api.email.filterMessages.useQuery(filterInput);
   // Debug: log results on change
   React.useEffect(() => {
     if (emailThreads !== undefined) {
@@ -234,6 +245,27 @@ export default function ClientDetailPage() {
           </Suspense>
           <Suspense fallback={<ComponentCard title="Activity Log"><p>Loading activity log...</p></ComponentCard>}>
             <ComponentCard title="Activity Log">
+              {/* Filter Controls and Indicator */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setFiltersActive(prev => !prev)}
+                    className="px-2 py-1 bg-blue-600 text-white rounded"
+                  >
+                    {filtersActive ? 'Disable Filters' : 'Enable Filters'}
+                  </button>
+                  <button
+                    onClick={() => setFiltersActive(false)}
+                    disabled={!filtersActive}
+                    className={`px-2 py-1 rounded ${filtersActive ? 'bg-red-600 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+                {filtersActive && (
+                  <span className="text-sm text-green-600">Filters Active</span>
+                )}
+              </div>
               <MeetingMinutesPanel onAdd={onAddActivity} />
               <QuickAddActivityForm onAdd={onAddActivity} />
               <EmailThreadPanel
