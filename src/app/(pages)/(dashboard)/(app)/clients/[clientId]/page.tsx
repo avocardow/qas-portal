@@ -13,6 +13,7 @@ import DocumentReferences from "@/components/common/DocumentReferences";
 import { ActivityLogType } from "@prisma/client";
 import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
 import ActivityLogTabs from "@/components/clients/ActivityLogTabs";
+import AllFolders from '@/components/file-manager/AllFolders';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -137,6 +138,9 @@ export default function ClientDetailPage() {
           </Suspense>
           <Suspense fallback={<ComponentCard title="Documents"><p>Loading documents...</p></ComponentCard>}>
             <DocumentReferences documents={client.documents ?? []} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="SharePoint Folders"><p>Loading folders...</p></ComponentCard>}>
+            <AllFolders />
           </Suspense>
         </div>
       </div>
