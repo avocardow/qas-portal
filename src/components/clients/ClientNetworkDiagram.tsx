@@ -32,6 +32,10 @@ export default function ClientNetworkDiagram({
   width = 800,
   onNodeClick
 }: ClientNetworkDiagramProps) {
+  // Interactive state: selected node and filters
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [filters, setFilters] = useState<{ contact: boolean; trustAccount: boolean }>({ contact: true, trustAccount: true });
+
   // Responsive container width
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(width);
@@ -110,17 +114,47 @@ export default function ClientNetworkDiagram({
     return [rfNodes, rfEdges];
   }, [nodes, edges, containerWidth]);
 
+  // Apply filters and highlighting
+  const filteredNodes = rfNodes.filter(n => {
+    if (n.data.type === 'client') return true;
+    return filters[n.data.type as keyof typeof filters];
+  }).map(n => ({
+    ...n,
+    style: {
+      ...(n.style ?? {}),
+      border: n.id === selectedNode ? '2px solid blue' : n.style?.border,
+      opacity: selectedNode ? (n.id === selectedNode ? 1 : 0.5) : 1
+    }
+  }));
+  const visibleIds = new Set(filteredNodes.map(n => n.id));
+  const filteredEdges = rfEdges.filter(e => visibleIds.has(e.source) && visibleIds.has(e.target)).map(e => ({
+    ...e,
+    style: {
+      ...(e.style ?? {}),
+      stroke: selectedNode && (e.source === selectedNode || e.target === selectedNode) ? 'blue' : e.style?.stroke,
+      opacity: selectedNode ? ((e.source === selectedNode || e.target === selectedNode) ? 1 : 0.3) : 1
+    }
+  }));
+
   return (
     <ReactFlowProvider>
       <div ref={containerRef} data-testid="network-diagram" className="w-full h-64 sm:h-80 md:h-96 lg:h-[400px]">
+        {/* Filter controls */}
+        <div className="flex space-x-4 mb-2">
+          <label className="flex items-center space-x-1"><input type="checkbox" checked={filters.contact} onChange={() => setFilters(f => ({ ...f, contact: !f.contact }))} /><span className="text-sm">Contacts</span></label>
+          <label className="flex items-center space-x-1"><input type="checkbox" checked={filters.trustAccount} onChange={() => setFilters(f => ({ ...f, trustAccount: !f.trustAccount }))} /><span className="text-sm">Trust Accounts</span></label>
+        </div>
         <ReactFlow
-          nodes={rfNodes}
-          edges={rfEdges}
+          nodes={filteredNodes}
+          edges={filteredEdges}
           fitView
           style={{ width: '100%', height: '100%' }}
           panOnScroll
           zoomOnPinch
-          onNodeClick={onNodeClick}
+          onNodeClick={(event, node) => {
+            setSelectedNode(node.id);
+            onNodeClick?.(event, node);
+          }}
         >
           <Controls />
           <Background gap={20} color="#aaa" />
