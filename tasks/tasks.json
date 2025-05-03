@@ -801,7 +801,7 @@
           "id": 2,
           "title": "Design and Implement Email Thread Panel UI Component",
           "description": "Create a reusable Email Thread Panel component that displays the fetched email threads in a clean, readable format, showing sender, recipients, date, and email content.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -811,7 +811,7 @@
           "id": 3,
           "title": "Implement Loading States and Robust Error Handling",
           "description": "Enhance the Email Thread Panel to provide clear feedback during data fetching and handle errors gracefully, ensuring a smooth user experience.",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2
           ],

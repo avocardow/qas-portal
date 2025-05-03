@@ -17,13 +17,13 @@ Test email thread display with various email formats. Verify loading states and 
 ### Details:
 Implement OAuth2 authentication flows for both Outlook (Microsoft Graph API) and Gmail (Google API). After authentication, use the respective APIs to query and retrieve the most recent 3 email threads related to the client. Ensure the data includes full thread details, including message metadata and content. Handle API rate limits and errors gracefully, returning clear error messages or fallback states if fetching fails.
 
-## 2. Design and Implement Email Thread Panel UI Component [pending]
+## 2. Design and Implement Email Thread Panel UI Component [done]
 ### Dependencies: 14.1
 ### Description: Create a reusable Email Thread Panel component that displays the fetched email threads in a clean, readable format, showing sender, recipients, date, and email content.
 ### Details:
 Design the UI to present each thread as a collapsible or expandable section, showing the sequence of emails within the thread. Display metadata (sender, recipients, date) prominently for each message, and render the email body with proper formatting. Ensure the component is responsive and accessible. Use loading indicators while data is being fetched and placeholders for empty or error states.
 
-## 3. Implement Loading States and Robust Error Handling [pending]
+## 3. Implement Loading States and Robust Error Handling [in-progress]
 ### Dependencies: 14.2
 ### Description: Enhance the Email Thread Panel to provide clear feedback during data fetching and handle errors gracefully, ensuring a smooth user experience.
 ### Details:

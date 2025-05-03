@@ -72,7 +72,7 @@ export default function ClientDetailPage() {
     { enabled: !!clientId }
   );
   // Fetch latest 3 email threads from Inbox
-  const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError } =
+  const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError, refetch: refetchEmailThreads } =
     api.email.listMessages.useQuery({ folderId: "Inbox", page: 1, pageSize: 3 });
 
   const client = clientData as ClientWithRelations;
@@ -208,6 +208,7 @@ export default function ClientDetailPage() {
                 emailThreads={emailThreads}
                 isLoading={emailThreadsLoading}
                 isError={emailThreadsError}
+                onRetry={refetchEmailThreads}
               />
               {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
               <ActivityLogTabs logs={client.activityLogs ?? []} pageSize={5} />

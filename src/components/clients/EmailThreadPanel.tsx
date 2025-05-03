@@ -6,14 +6,28 @@ interface EmailThreadPanelProps {
   emailThreads?: { messages: EmailMessage[]; nextLink?: string };
   isLoading: boolean;
   isError: boolean;
+  onRetry?: () => void;
 }
 
-export default function EmailThreadPanel({ emailThreads, isLoading, isError }: EmailThreadPanelProps) {
+export default function EmailThreadPanel({ emailThreads, isLoading, isError, onRetry }: EmailThreadPanelProps) {
   if (isLoading) {
-    return <p>Loading email threads...</p>;
+    return (
+      <div className="flex items-center justify-center py-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
   if (isError) {
-    return <p className="text-red-500">Error loading email threads</p>;
+    return (
+      <div>
+        <p className="text-red-500">Error loading email threads</p>
+        {onRetry && (
+          <button onClick={onRetry} className="mt-2 text-blue-600 underline">
+            Retry
+          </button>
+        )}
+      </div>
+    );
   }
   if (!emailThreads || emailThreads.messages.length === 0) {
     return <p>No recent email threads to display.</p>;
