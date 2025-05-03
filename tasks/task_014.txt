@@ -1,6 +1,6 @@
 # Task ID: 14
 # Title: Implement Email Thread Panel
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: low
 # Description: Embed the last 3 client email threads via Outlook/Gmail integration on the Client Profile page.
@@ -23,7 +23,7 @@ Implement OAuth2 authentication flows for both Outlook (Microsoft Graph API) and
 ### Details:
 Design the UI to present each thread as a collapsible or expandable section, showing the sequence of emails within the thread. Display metadata (sender, recipients, date) prominently for each message, and render the email body with proper formatting. Ensure the component is responsive and accessible. Use loading indicators while data is being fetched and placeholders for empty or error states.
 
-## 3. Implement Loading States and Robust Error Handling [in-progress]
+## 3. Implement Loading States and Robust Error Handling [done]
 ### Dependencies: 14.2
 ### Description: Enhance the Email Thread Panel to provide clear feedback during data fetching and handle errors gracefully, ensuring a smooth user experience.
 ### Details:
