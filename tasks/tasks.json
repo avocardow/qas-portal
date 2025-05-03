@@ -751,7 +751,7 @@
           "id": 1,
           "title": "Implement Quick Action Buttons with Permission Gating",
           "description": "Create UI components for quick action buttons: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client. Ensure the Archive Client button is gated using useAbility() to check for the clients.archive permission, and display a confirmation modal before proceeding with the archive action.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Add each action button to the client interface, wiring up their respective handlers. For the Archive Client button, use the useAbility() hook to conditionally render the button based on the user's clients.archive permission. Implement a confirmation modal that appears when Archive Client is clicked, requiring user confirmation before executing the archive logic."
         },
@@ -759,7 +759,7 @@
           "id": 2,
           "title": "Aggregate and Prepare Data for Client Lifetime Value Projection",
           "description": "Collect and process historical client transaction data to calculate key metrics needed for lifetime value projection, such as frequency, recency, monetary value, and observation period. Prepare this data for use in the predictive model.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             1
           ],
