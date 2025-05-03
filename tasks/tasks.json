@@ -293,7 +293,7 @@
       "id": 5,
       "title": "Build Recent Contacts Table",
       "description": "Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -305,7 +305,7 @@
           "id": 1,
           "title": "Set up DataTableTwo component structure",
           "description": "Create the foundation for the Recent Contacts table by implementing the DataTableTwo component with proper configuration",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Import and configure the DataTableTwo component from the TailAdmin template. Create a new component file for RecentContacts that extends DataTableTwo. Set up the basic table structure with responsive design considerations and accessibility attributes (aria labels, keyboard navigation). Implement the container layout with appropriate TailAdmin styling classes."
         },
@@ -313,7 +313,7 @@
           "id": 2,
           "title": "Define table columns and data structure",
           "description": "Define the column configuration for Name, Email, Phone, Title, and Primary badge",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -323,7 +323,7 @@
           "id": 3,
           "title": "Implement Primary badge indicator",
           "description": "Create the visual indicator for Primary contacts with appropriate styling",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -333,7 +333,7 @@
           "id": 4,
           "title": "Develop multiple licenses display format",
           "description": "Implement the display logic for showing multiple licenses per contact",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -343,7 +343,7 @@
           "id": 5,
           "title": "Connect table to data source",
           "description": "Implement data fetching and state management for the contacts table",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             2,
             3,

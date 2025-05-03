@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
 import DataTableTwo from '@/components/tables/DataTables/TableTwo/DataTableTwo';
+import Badge from '@/components/ui/badge/Badge';
 // import type { Contact } from '@prisma/client';
 
 // Define row type for DataTableTwo to avoid using `any`
@@ -31,6 +32,16 @@ interface ClientContactsSectionProps {
 
 export default function ClientContactsSection({ contacts }: ClientContactsSectionProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  // Filter contacts based on search term for search functionality
+  const filteredContacts = React.useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return contacts.filter(contact =>
+      (contact.name?.toLowerCase().includes(term) ||
+       contact.email?.toLowerCase().includes(term) ||
+       contact.phone?.toLowerCase().includes(term) ||
+       contact.title?.toLowerCase().includes(term))
+    );
+  }, [contacts, searchTerm]);
   // Define columns for contacts table
   const columns = React.useMemo(() => [
     {
@@ -44,7 +55,7 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
     {
       key: 'isPrimary',
       header: 'Primary',
-      cell: (row: ContactRow) => (row.isPrimary ? <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Primary</span> : ''),
+      cell: (row: ContactRow) => (row.isPrimary ? <Badge variant="light" color="success" size="sm">Primary</Badge> : null),
     },
   ], []);
 
@@ -58,7 +69,7 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
   return (
     <ComponentCard title="Contacts">
       <DataTableTwo
-        data={contacts}
+        data={filteredContacts}
         columns={columns}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

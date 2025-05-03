@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Build Recent Contacts Table
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: medium
 # Description: Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.
@@ -11,31 +11,31 @@ Implement a TailAdmin RecentOrders-style table for contacts with columns: Name (
 Test table rendering with various data scenarios. Verify links to contact pages work correctly. Check that primary badges display properly. Test multiple licenses display format.
 
 # Subtasks:
-## 1. Set up DataTableTwo component structure [pending]
+## 1. Set up DataTableTwo component structure [done]
 ### Dependencies: None
 ### Description: Create the foundation for the Recent Contacts table by implementing the DataTableTwo component with proper configuration
 ### Details:
 Import and configure the DataTableTwo component from the TailAdmin template. Create a new component file for RecentContacts that extends DataTableTwo. Set up the basic table structure with responsive design considerations and accessibility attributes (aria labels, keyboard navigation). Implement the container layout with appropriate TailAdmin styling classes.
 
-## 2. Define table columns and data structure [pending]
+## 2. Define table columns and data structure [done]
 ### Dependencies: 5.1
 ### Description: Define the column configuration for Name, Email, Phone, Title, and Primary badge
 ### Details:
 Create a columns configuration array that defines each column's properties (Name, Email, Phone, Title, Primary). For the Name column, implement linking to '/contacts/[id]' pattern. Set up proper data accessors for each field. Configure sorting capabilities for relevant columns. Define the data interface/type for contact entries to ensure type safety throughout the component.
 
-## 3. Implement Primary badge indicator [pending]
+## 3. Implement Primary badge indicator [done]
 ### Dependencies: 5.2
 ### Description: Create the visual indicator for Primary contacts with appropriate styling
 ### Details:
 Design and implement the Primary badge component with appropriate styling (colors, size, text). Create a cell renderer function for the Primary column that conditionally displays the badge based on the contact's primary status. Add tooltip or accessible description to explain the badge meaning. Ensure the badge has proper contrast ratios for accessibility.
 
-## 4. Develop multiple licenses display format [pending]
+## 4. Develop multiple licenses display format [done]
 ### Dependencies: 5.2
 ### Description: Implement the display logic for showing multiple licenses per contact
 ### Details:
 Create a custom cell renderer for displaying multiple licenses. Implement either a comma-separated list for simple display or an expandable cell with a count indicator that reveals all licenses on interaction. For the expandable approach, implement the expand/collapse functionality with appropriate animations. Ensure the display remains readable even with many licenses by implementing truncation with tooltips if needed.
 
-## 5. Connect table to data source [pending]
+## 5. Connect table to data source [in-progress]
 ### Dependencies: 5.2, 5.3, 5.4
 ### Description: Implement data fetching and state management for the contacts table
 ### Details:
