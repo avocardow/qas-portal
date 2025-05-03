@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
 import DataTableTwo from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import Badge from '@/components/ui/badge/Badge';
@@ -32,6 +32,8 @@ interface ClientContactsSectionProps {
 
 export default function ClientContactsSection({ contacts }: ClientContactsSectionProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   // Filter contacts based on search term for search functionality
   const filteredContacts = React.useMemo(() => {
     const term = searchTerm.toLowerCase();
@@ -42,6 +44,10 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
        contact.title?.toLowerCase().includes(term))
     );
   }, [contacts, searchTerm]);
+  // Reset to first page when filter criteria change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredContacts]);
   // Define columns for contacts table
   const columns = React.useMemo(() => [
     {
@@ -73,6 +79,10 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
         columns={columns}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={(size) => { setPageSize(size); setCurrentPage(1); }}
       />
     </ComponentCard>
   );
