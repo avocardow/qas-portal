@@ -1,6 +1,6 @@
 # Task ID: 13
 # Title: Add Action Buttons and Client Value Projection
-# Status: in-progress
+# Status: done
 # Dependencies: 2, 3
 # Priority: medium
 # Description: Implement quick action buttons and client lifetime value projection chart on the Client Profile page.

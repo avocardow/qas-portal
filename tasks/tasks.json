@@ -738,7 +738,7 @@
       "id": 13,
       "title": "Add Action Buttons and Client Value Projection",
       "description": "Implement quick action buttons and client lifetime value projection chart on the Client Profile page.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2,
         3
@@ -823,7 +823,7 @@
       "id": 15,
       "title": "Implement Permission Gating on Client Profile Page",
       "description": "Apply permission controls to Client Profile page components using useAbility() and <Authorized> to avoid changing other pages.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         3,
         8,

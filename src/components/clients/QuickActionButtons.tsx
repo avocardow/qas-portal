@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useAbility } from '@/hooks/useAbility';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import Button from '@/components/ui/button/Button';
+import Authorized from '@/components/Authorized';
 
 interface QuickActionButtonsProps {
   clientId: string;
@@ -38,15 +39,17 @@ const QuickActionButtons: React.FC<QuickActionButtonsProps> = ({ clientId }) => 
 
   return (
     <div className="flex space-x-2 mb-6">
-      <Button onClick={handleAddContact}>Add Contact</Button>
+      <Authorized action={CLIENT_PERMISSIONS.VIEW_STATUS}>
+        <Button onClick={handleAddContact}>Add Contact</Button>
+      </Authorized>
       <Button onClick={handleLinkBankFeed}>Link Bank Feed</Button>
       <Button onClick={handleRequestDocument}>Request Document</Button>
       <Button onClick={handleScheduleAudit}>Schedule Audit</Button>
-      {can(CLIENT_PERMISSIONS.ARCHIVE) && (
+      <Authorized action={CLIENT_PERMISSIONS.ARCHIVE}>
         <Button onClick={handleArchiveClient} color="danger">
           Archive Client
         </Button>
-      )}
+      </Authorized>
     </div>
   );
 };
