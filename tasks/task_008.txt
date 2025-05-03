@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Develop Activity Card with Quick-Add
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: high
 # Description: Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.
@@ -11,7 +11,7 @@ Implement TailAdmin ActivitiesCard showing recent notes, call logs, status chang
 Test activity display with various activity types. Verify pagination works correctly. Test quick-add functionality for all activity types. Check that newly added activities appear in the list.
 
 # Subtasks:
-## 1. Create Activity Card UI with Pagination [pending]
+## 1. Create Activity Card UI with Pagination [done]
 ### Dependencies: None
 ### Description: Implement the base Activity Card component that displays recent activities with pagination controls using TailAdmin design patterns.
 ### Details:
@@ -26,7 +26,7 @@ Test activity display with various activity types. Verify pagination works corre
 9. Test the pagination functionality with mock data to ensure it works correctly.
 10. Implement error handling for failed data fetching scenarios.
 
-## 2. Develop Quick-Add Activity Form [pending]
+## 2. Develop Quick-Add Activity Form [done]
 ### Dependencies: 8.1
 ### Description: Create an inline Quick-Add form that allows users to add different types of activities (Note, Email, Call, Billing Commentary, Meeting, Document) with appropriate fields and validation.
 ### Details:

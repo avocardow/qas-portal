@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Audit Cycle Progress and Schedule
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: high
 # Description: Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.
@@ -47,7 +47,7 @@ Use Tailwind CSS and TailAdmin components to create a visually consistent card. 
 ### Details:
 Map over the schedule data to render each milestone. Use Intl.DateTimeFormat for date display. Ensure accessibility and mobile responsiveness.
 
-## 7. Integrate Components and Test End-to-End [in-progress]
+## 7. Integrate Components and Test End-to-End [done]
 ### Dependencies: 4.4, 4.6
 ### Description: Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.
 ### Details:

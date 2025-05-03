@@ -210,7 +210,7 @@
       "id": 4,
       "title": "Implement Audit Cycle Progress and Schedule",
       "description": "Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -280,7 +280,7 @@
           "id": 7,
           "title": "Integrate Components and Test End-to-End",
           "description": "Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             4,
             6
@@ -523,7 +523,7 @@
       "id": 8,
       "title": "Develop Activity Card with Quick-Add",
       "description": "Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -537,7 +537,7 @@
           "description": "Implement the base Activity Card component that displays recent activities with pagination controls using TailAdmin design patterns.",
           "dependencies": [],
           "details": "1. Create a new ActivityCard component that follows the TailAdmin design system.\n2. Implement the card layout with appropriate headers and styling.\n3. Design the activity item component to display different activity types (notes, call logs, status changes) with corresponding icons.\n4. Add a data fetching mechanism using React Query or SWR for efficient pagination and caching.\n5. Implement pagination controls that limit the display to the most recent items.\n6. Create skeleton loading states for better UX during data fetching.\n7. Ensure the component is responsive across different screen sizes.\n8. Add proper accessibility attributes (ARIA labels, keyboard navigation).\n9. Test the pagination functionality with mock data to ensure it works correctly.\n10. Implement error handling for failed data fetching scenarios.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 8
         },
         {
@@ -548,7 +548,7 @@
             1
           ],
           "details": "1. Design and implement an expandable/collapsible Quick-Add form within the Activity Card.\n2. Create a dropdown or tab system to select different activity types (Note, Email, Call, Billing Commentary, Meeting, Document).\n3. Implement dynamic form fields that change based on the selected activity type.\n4. Add form validation for required fields using a form library like Formik or React Hook Form.\n5. Ensure the form always links activities to the current Client.\n6. Add an optional Contact selection field that pulls from available contacts for the client.\n7. Automatically associate the activity with the current team member.\n8. Implement optimistic UI updates to show new activities immediately after submission.\n9. Add appropriate error handling and success notifications.\n10. Ensure the form is keyboard accessible and follows accessibility best practices.",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 8
         },
         {

@@ -6,6 +6,7 @@ import {
   enforceRole,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { ActivityLogType } from "@prisma/client";
 
 // Zod schemas for client operations
 const clientGetAllSchema = z.object({
@@ -317,6 +318,22 @@ export const clientRouter = createTRPCRouter({
       return ctx.db.client.update({
         where: { id: clientId },
         data: { internalFolderId },
+      });
+    }),
+  addActivityLog: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Developer"]))
+    .input(
+      z.object({
+        clientId: z.string().uuid(),
+        contactId: z.string().uuid().optional(),
+        type: z.nativeEnum(ActivityLogType),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { clientId, contactId, type, content } = input;
+      return ctx.db.activityLog.create({
+        data: { clientId, contactId, userId: ctx.session.user.id, type, content },
       });
     }),
 });

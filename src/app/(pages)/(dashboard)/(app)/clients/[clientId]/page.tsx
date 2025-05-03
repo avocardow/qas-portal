@@ -10,6 +10,8 @@ import { CLIENT_PERMISSIONS } from "@/constants/permissions";
 import type { RouterOutput } from "@/utils/api";
 import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetailsSection';
 import DocumentReferences from "@/components/common/DocumentReferences";
+import { ActivityLogType } from "@prisma/client";
+import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -41,6 +43,15 @@ export default function ClientDetailPage() {
   const { clientId } = useParams<{ clientId: string }>();
   const { can } = useAbility();
   const { data: clientData, isLoading, isError } = api.clients.getById.useQuery({ clientId });
+  const utils = api.useContext();
+  const addLogMutation = api.clients.addActivityLog.useMutation({
+    onSuccess: () => {
+      utils.clients.getById.invalidate({ clientId });
+    },
+  });
+  const onAddActivity = async (type: ActivityLogType, content: string) => {
+    await addLogMutation.mutateAsync({ clientId, type, content });
+  };
   const client = clientData as ClientWithRelations;
 
   // Permission gating
@@ -115,9 +126,11 @@ export default function ClientDetailPage() {
           </Suspense>
           <Suspense fallback={<ComponentCard title="Activity Log"><p>Loading activity log...</p></ComponentCard>}>
             <ComponentCard title="Activity Log">
+              <QuickAddActivityForm onAdd={onAddActivity} />
+              {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
               <ul>
                 {(client.activityLogs ?? []).map((log) => (
-                  <li key={log.id}>
+                  <li key={log.id} className="text-theme-sm text-gray-800">
                     {new Date(log.createdAt).toLocaleString()}: {log.content}
                   </li>
                 ))}
