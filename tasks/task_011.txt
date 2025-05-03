@@ -23,7 +23,7 @@ Develop a reusable checklist component that displays regulatory compliance items
 ### Details:
 Build the backend logic that analyzes compliance items to detect issues requiring alerts. This system should: 1) Check for completely missing documentation, 2) Identify expired documents by comparing current date with expiration dates, 3) Flag upcoming expirations within a configurable time window (e.g., 30, 60, 90 days), 4) Assign severity levels to different types of alerts (critical for expired, warning for upcoming, etc.), 5) Create a data model that captures alert type, severity, affected item, and recommended action, and 6) Implement scheduled checks that run automatically to keep alerts current.
 
-## 3. Create Alerts & Warnings Display Section [in-progress]
+## 3. Create Alerts & Warnings Display Section [done]
 ### Dependencies: 11.1, 11.2
 ### Description: Implement the visual representation of alerts with appropriate severity indicators
 ### Details:
