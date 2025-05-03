@@ -18,6 +18,7 @@ interface ClientNetworkDiagramProps {
   nodes: NetworkNode[];
   edges: NetworkEdge[];
   width?: number;
+  onNodeClick?: (event: React.MouseEvent, node: Node) => void;
 }
 
 const NODE_WIDTH = 150;
@@ -28,7 +29,8 @@ const VERTICAL_GAP = 100;
 export default function ClientNetworkDiagram({
   nodes,
   edges,
-  width = 800
+  width = 800,
+  onNodeClick
 }: ClientNetworkDiagramProps) {
   const [rfNodes, rfEdges] = useMemo(() => {
     const positions: Record<string, { x: number; y: number }> = {};
@@ -65,7 +67,7 @@ export default function ClientNetworkDiagram({
     // Map to React Flow nodes
     const rfNodes: Node[] = nodes.map(n => ({
       id: n.id,
-      data: { label: n.label },
+      data: { label: n.label, type: n.type },
       position: positions[n.id] || { x: 0, y: 0 },
       style: {
         border: n.type === 'client'
@@ -99,7 +101,15 @@ export default function ClientNetworkDiagram({
   return (
     <ReactFlowProvider>
       <div data-testid="network-diagram" className="w-full h-64 sm:h-80 md:h-96 lg:h-[400px]">
-        <ReactFlow nodes={rfNodes} edges={rfEdges} fitView style={{ width: '100%', height: '100%' }} panOnScroll zoomOnPinch>
+        <ReactFlow
+          nodes={rfNodes}
+          edges={rfEdges}
+          fitView
+          style={{ width: '100%', height: '100%' }}
+          panOnScroll
+          zoomOnPinch
+          onNodeClick={onNodeClick}
+        >
           <Controls />
           <Background gap={20} color="#aaa" />
         </ReactFlow>

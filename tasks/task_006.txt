@@ -44,19 +44,19 @@ Initial proof-of-concept code has been committed to the development branch.
 ### Details:
 Design a JSON data structure that represents nodes (clients, contacts, trust accounts) and edges (relationships between them). Define node types with appropriate properties (e.g., id, name, type, status). Create edge definitions with source, target, and relationship type. Ensure the data structure is compatible with the selected visualization library. Include sample data that demonstrates various relationship scenarios. Document the schema with examples for development reference.
 
-## 3. Implement basic network diagram component [pending]
+## 3. Implement basic network diagram component [done]
 ### Dependencies: 6.1, 6.2
 ### Description: Create a React component that renders the basic network diagram using the selected library
 ### Details:
 Create a new React component in the TailAdmin framework that implements the visualization library. Set up the component to accept the data structure defined in subtask 2. Implement basic node and edge rendering with default styling. Add container sizing and basic layout algorithms. Ensure the component handles empty or minimal data gracefully. Test the component with sample data to verify basic functionality. Document component props and usage examples.
 
-## 4. Add styling and visual enhancements [pending]
+## 4. Add styling and visual enhancements [done]
 ### Dependencies: 6.3
 ### Description: Enhance the network diagram with appropriate styling, colors, and visual elements
 ### Details:
 Apply TailAdmin's design system to the network diagram for visual consistency. Create distinct visual styles for different node types (clients, contacts, trust accounts) using appropriate colors, shapes, and icons. Style relationship edges to indicate relationship types. Add tooltips or hover effects to display additional information. Implement visual indicators for active/inactive relationships. Ensure all styling uses Tailwind CSS classes where possible for consistency with TailAdmin. Document styling options and customization capabilities.
 
-## 5. Implement responsive behavior [pending]
+## 5. Implement responsive behavior [in-progress]
 ### Dependencies: 6.3, 6.4
 ### Description: Ensure the network diagram is responsive and degrades gracefully on smaller screens
 ### Details:

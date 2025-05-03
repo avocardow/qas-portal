@@ -1,6 +1,6 @@
 "use client";
-import React, { Suspense, lazy } from "react";
-import { useParams } from "next/navigation";
+import React, { Suspense, lazy, useMemo } from "react";
+import { useParams, useRouter } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
@@ -19,6 +19,7 @@ import RecentFileTable from '@/components/file-manager/RecentFileTable';
 import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
 import ClientAlertsSection from '@/components/clients/ClientAlertsSection';
 import QuickActionButtons from '@/components/clients/QuickActionButtons';
+import ClientNetworkDiagram, { NetworkNode, NetworkEdge } from '@/components/clients/ClientNetworkDiagram';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -69,6 +70,32 @@ export default function ClientDetailPage() {
     { enabled: !!clientId }
   );
   const client = clientData as ClientWithRelations;
+  const router = useRouter();
+
+  // Prepare network diagram data with safe defaults before any early returns
+   
+  const diagramNodes = useMemo((): NetworkNode[] => {
+    if (!clientData) return [];
+    const contacts = clientData.contacts ?? [];
+    const trustAccounts = clientData.trustAccounts ?? [];
+    const nodes: NetworkNode[] = [
+      { id: clientData.id, label: clientData.clientName, type: 'client' },
+      ...contacts.map(c => ({ id: c.id, label: c.name ?? 'Unnamed Contact', type: 'contact' } as NetworkNode)),
+      ...trustAccounts.map(t => ({ id: t.id, label: t.accountName ?? 'Unnamed Account', type: 'trustAccount' } as NetworkNode)),
+    ];
+    return nodes;
+  }, [clientData]);
+   
+  const diagramEdges = useMemo((): NetworkEdge[] => {
+    if (!clientData) return [];
+    const contacts = clientData.contacts ?? [];
+    const trustAccounts = clientData.trustAccounts ?? [];
+    const edges: NetworkEdge[] = [
+      ...contacts.map(c => ({ id: `edge-client-contact-${c.id}`, source: clientData.id, target: c.id } as NetworkEdge)),
+      ...trustAccounts.map(t => ({ id: `edge-client-trust-${t.id}`, source: clientData.id, target: t.id } as NetworkEdge)),
+    ];
+    return edges;
+  }, [clientData]);
 
   // Validate clientId param
   if (!clientId) {
@@ -139,7 +166,21 @@ export default function ClientDetailPage() {
           <Suspense fallback={<ComponentCard title="Trust Accounts"><p>Loading trust accounts...</p></ComponentCard>}>
             <ClientTrustAccountsSection trustAccounts={client.trustAccounts} />
           </Suspense>
-          {/* Network diagram removed */}
+          <Suspense fallback={<ComponentCard title="Network Diagram"><p>Loading diagram...</p></ComponentCard>}>
+            <ComponentCard title="Network Diagram">
+              <ClientNetworkDiagram
+                nodes={diagramNodes}
+                edges={diagramEdges}
+                onNodeClick={(event, node) => {
+                  if (node.data.type === 'contact') {
+                    router.push(`/clients/${clientId}/contacts/${node.id}`);
+                  } else if (node.data.type === 'trustAccount') {
+                    router.push(`/clients/${clientId}/trustAccounts/${node.id}`);
+                  }
+                }}
+              />
+            </ComponentCard>
+          </Suspense>
         </div>
         <div className="col-span-12 xl:col-span-8">
           {client.assignedUser && (

@@ -415,7 +415,7 @@
           "id": 3,
           "title": "Implement basic network diagram component",
           "description": "Create a React component that renders the basic network diagram using the selected library",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2
@@ -426,7 +426,7 @@
           "id": 4,
           "title": "Add styling and visual enhancements",
           "description": "Enhance the network diagram with appropriate styling, colors, and visual elements",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -436,7 +436,7 @@
           "id": 5,
           "title": "Implement responsive behavior",
           "description": "Ensure the network diagram is responsive and degrades gracefully on smaller screens",
-          "status": "pending",
+          "status": "in-progress",
           "dependencies": [
             3,
             4

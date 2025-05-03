@@ -14,4 +14,14 @@ Object.defineProperty(globalThis.navigator, 'clipboard', {
     writeText: vi.fn(),
     readText: vi.fn(),
   },
-}); 
+});
+
+// Polyfill window.requestAnimationFrame/cancelAnimationFrame for libraries like ApexCharts
+if (typeof window !== 'undefined') {
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = globalThis.requestAnimationFrame;
+  }
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = (id: number) => clearTimeout(id);
+  }
+} 
