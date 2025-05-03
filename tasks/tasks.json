@@ -293,7 +293,7 @@
       "id": 5,
       "title": "Build Recent Contacts Table",
       "description": "Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -343,7 +343,7 @@
           "id": 5,
           "title": "Connect table to data source",
           "description": "Implement data fetching and state management for the contacts table",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             2,
             3,
@@ -368,7 +368,7 @@
           "id": 7,
           "title": "Add accessibility features and final polish",
           "description": "Enhance the table with proper accessibility features and final UI refinements",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2,

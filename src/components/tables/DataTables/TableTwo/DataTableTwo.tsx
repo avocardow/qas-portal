@@ -435,9 +435,16 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                     <TableRow
                       key={item.id ?? i}
                       onClick={() => onRowClick?.(item)}
+                      tabIndex={onRowClick ? 0 : undefined}
+                      onKeyDown={(e) => {
+                        if (onRowClick && (e.key === 'Enter' || e.key === ' ')) {
+                          e.preventDefault();
+                          onRowClick(item);
+                        }
+                      }}
                       className={
                         onRowClick
-                          ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]"
+                          ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] focus:outline-none focus:bg-gray-50 dark:focus:bg-white/[0.05]"
                           : undefined
                       }
                     >
@@ -506,7 +513,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
             onPageChange={onPageChange}
           />
           <div className="pt-3 xl:pt-0">
-            <p className="border-t border-gray-100 pt-3 text-center text-sm font-medium text-gray-500 xl:border-t-0 xl:pt-0 xl:text-left dark:border-gray-800 dark:text-gray-400">
+            <p aria-live="polite" className="border-t border-gray-100 pt-3 text-center text-sm font-medium text-gray-500 xl:border-t-0 xl:pt-0 xl:text-left dark:border-gray-800 dark:text-gray-400">
               Showing {totalItems > 0 ? startIndex + 1 : 0} to {endIndex} of{" "}
               {totalItems} entries
             </p>

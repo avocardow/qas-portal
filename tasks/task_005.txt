@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Build Recent Contacts Table
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.
@@ -35,7 +35,7 @@ Design and implement the Primary badge component with appropriate styling (color
 ### Details:
 Create a custom cell renderer for displaying multiple licenses. Implement either a comma-separated list for simple display or an expandable cell with a count indicator that reveals all licenses on interaction. For the expandable approach, implement the expand/collapse functionality with appropriate animations. Ensure the display remains readable even with many licenses by implementing truncation with tooltips if needed.
 
-## 5. Connect table to data source [in-progress]
+## 5. Connect table to data source [done]
 ### Dependencies: 5.2, 5.3, 5.4
 ### Description: Implement data fetching and state management for the contacts table
 ### Details:
@@ -47,7 +47,7 @@ Set up API integration to fetch contact data from the backend. Implement loading
 ### Details:
 Test and optimize the table for various screen sizes. Implement column priority hiding for smaller screens (hide less important columns first). Add horizontal scrolling for very small screens while maintaining fixed position of key columns. Ensure touch interactions work properly on mobile devices. Test and fix any layout issues that occur at different breakpoints.
 
-## 7. Add accessibility features and final polish [pending]
+## 7. Add accessibility features and final polish [done]
 ### Dependencies: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
 ### Description: Enhance the table with proper accessibility features and final UI refinements
 ### Details:

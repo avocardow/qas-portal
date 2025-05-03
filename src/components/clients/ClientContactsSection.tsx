@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ComponentCard from '@/components/common/ComponentCard';
 import DataTableTwo from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import Badge from '@/components/ui/badge/Badge';
@@ -34,6 +35,7 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const router = useRouter();
   // Filter contacts based on search term for search functionality
   const filteredContacts = React.useMemo(() => {
     const term = searchTerm.toLowerCase();
@@ -83,6 +85,8 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
         pageSize={pageSize}
         onPageChange={setCurrentPage}
         onItemsPerPageChange={(size) => { setPageSize(size); setCurrentPage(1); }}
+        caption="Recent Contacts Table"
+        onRowClick={(row) => router.push(`/contacts/${row.id}`)}
       />
     </ComponentCard>
   );
