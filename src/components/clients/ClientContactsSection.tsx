@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
+import DataTableTwo from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 // import type { Contact } from '@prisma/client';
 
 interface ClientContactsSectionProps {
@@ -19,6 +20,7 @@ interface ClientContactsSectionProps {
 }
 
 export default function ClientContactsSection({ contacts }: ClientContactsSectionProps) {
+  const [searchTerm, setSearchTerm] = useState('');
   if (!contacts || contacts.length === 0) {
     return (
       <ComponentCard title="Contacts">
@@ -28,13 +30,11 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
   }
   return (
     <ComponentCard title="Contacts">
-      <ul>
-        {contacts.map((contact, idx) => (
-          <li key={contact.id ?? idx}>
-            {contact.name ?? '-'} {contact.isPrimary ? '(Primary)' : ''}
-          </li>
-        ))}
-      </ul>
+      <DataTableTwo
+        data={contacts}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
     </ComponentCard>
   );
 } 
