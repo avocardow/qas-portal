@@ -17,7 +17,7 @@ Test folder browser navigation. Verify file links open correctly. Test with vari
 ### Details:
 Begin by embedding the AllFolders component from the existing File-Manager into the application. Configure the component to connect to the client's SharePoint document library using the SharePoint API. Implement folder navigation functionality that allows users to browse through the folder hierarchy, open folders, and navigate back up using breadcrumb navigation. Add support for viewing folder contents and implement proper loading states while folder data is being fetched. Include error handling for cases where SharePoint access fails or folders cannot be loaded. Test the component with various folder structures to ensure proper rendering and navigation.
 
-## 2. Integrate Recent Files Table Component [pending]
+## 2. Integrate Recent Files Table Component [done]
 ### Dependencies: 10.1
 ### Description: Embed the RecentFileTable component from File-Manager to display SharePoint files with sorting and filtering capabilities.
 ### Details:

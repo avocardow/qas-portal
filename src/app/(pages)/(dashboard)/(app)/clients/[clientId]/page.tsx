@@ -15,6 +15,7 @@ import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
 import ActivityLogTabs from "@/components/clients/ActivityLogTabs";
 import AllFolders from '@/components/file-manager/AllFolders';
 import RecentFileTable from '@/components/file-manager/RecentFileTable';
+import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -148,6 +149,11 @@ export default function ClientDetailPage() {
           <Suspense fallback={<ComponentCard title="Recent Files"><p>Loading files...</p></ComponentCard>}>
             <ComponentCard title="Recent Files">
               <RecentFileTable />
+            </ComponentCard>
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Recent Invoices"><p>Loading invoices...</p></ComponentCard>}>
+            <ComponentCard title="Recent Invoices">
+              <RecentInvoicesCard clientId={client.id} />
             </ComponentCard>
           </Suspense>
         </div>

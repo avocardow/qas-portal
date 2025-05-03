@@ -631,7 +631,7 @@
           "id": 2,
           "title": "Integrate Recent Files Table Component",
           "description": "Embed the RecentFileTable component from File-Manager to display SharePoint files with sorting and filtering capabilities.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
