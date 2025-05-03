@@ -11,7 +11,21 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
-  const columns = React.useMemo<ColumnDef[]>(() => [], []);
+  const columns = React.useMemo<ColumnDef[]>(() => [
+    { key: 'accountName', header: 'Account Name', sortable: true },
+    { key: 'bankName', header: 'Bank Name', sortable: true },
+    { key: 'bsb', header: 'BSB', sortable: false },
+    { key: 'accountNumber', header: 'Account Number', sortable: false },
+    { key: 'hasSoftwareAccess', header: 'Software Access', sortable: false },
+    {
+      key: 'updatedAt',
+      header: 'Last Reconciliation',
+      sortable: true,
+      cell: (row) => new Date(row.updatedAt).toLocaleDateString(),
+    },
+    { key: 'managementSoftware', header: 'Management Software', sortable: false },
+    { key: 'softwareUrl', header: 'Software URL', sortable: false },
+  ], []);
   useEffect(() => { setCurrentPage(1); }, [searchTerm, trustAccounts]);
   if (!trustAccounts || trustAccounts.length === 0) {
     return (
