@@ -10,13 +10,41 @@ import {
   EmailMessage,
 } from "@/server/services/emailService";
 import { env } from "@/env.mjs";
+import { EmailFilterCriteria, DefaultEmailFilteringService } from "@/server/services/emailFilterService";
 
 const emailService = new EmailService();
+const defaultFilterService = new DefaultEmailFilteringService();
 
 export const emailRouter = createTRPCRouter({
   listFolders: protectedProcedure.query(async (): Promise<MailFolder[]> => {
     return await emailService.listFolders();
   }),
+
+  /**
+   * Filter messages based on criteria with pagination support
+   */
+  filterMessages: protectedProcedure
+    .input(
+      z.object({
+        contactEmails: z.array(z.string().email()),
+        subjectKeywords: z.array(z.string()),
+        folderIds: z.array(z.string()).optional(),
+        page: z.number().int().min(1).default(1),
+        pageSize: z.number().int().min(1).max(100).default(20),
+      })
+    )
+    .query(async ({ input }): Promise<{ messages: EmailMessage[]; nextLink?: string }> => {
+      const criteria: EmailFilterCriteria = {
+        contactEmails: input.contactEmails,
+        subjectKeywords: input.subjectKeywords,
+        folderIds: input.folderIds,
+      };
+      return await defaultFilterService.getFilteredMessages(
+        criteria,
+        input.page,
+        input.pageSize
+      );
+    }),
 
   listMessages: protectedProcedure
     .input(

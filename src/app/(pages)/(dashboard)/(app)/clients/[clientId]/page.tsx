@@ -74,9 +74,24 @@ export default function ClientDetailPage() {
     { clientId },
     { enabled: !!clientId }
   );
-  // Fetch latest 3 email threads from Inbox
+  // Fetch filtered email threads for the client
+  const contactEmails = useMemo((): string[] => {
+    return (clientData?.contacts?.map(c => c.email).filter((email): email is string => Boolean(email)) ?? []);
+  }, [clientData?.contacts]);
+  const subjectKeywords = useMemo((): string[] => {
+    const keywords: string[] = [];
+    if (clientData?.clientName) {
+      keywords.push(clientData.clientName);
+    }
+    clientData?.contacts?.forEach(c => {
+      if (c.name) {
+        keywords.push(c.name);
+      }
+    });
+    return keywords;
+  }, [clientData?.clientName, clientData?.contacts]);
   const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError, refetch: refetchEmailThreads } =
-    api.email.listMessages.useQuery({ folderId: "Inbox", page: 1, pageSize: 3 });
+    api.email.filterMessages.useQuery({ contactEmails, subjectKeywords, page: 1, pageSize: 3 });
 
   const client = clientData as ClientWithRelations;
   const router = useRouter();
