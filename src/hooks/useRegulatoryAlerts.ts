@@ -3,7 +3,11 @@ import { useMemo } from 'react';
 import type { DocumentMetadata } from '@/components/common/DocumentReferences';
 import type { RouterOutput } from '@/utils/api';
 
-export type ClientLicense = RouterOutput['clients']['getById']['licenses'][number];
+export interface ClientLicense {
+  id: string;
+  licenseNumber: string;
+  renewalMonth?: number | null;
+}
 
 export interface RegulatoryAlert {
   id: string;
