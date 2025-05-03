@@ -12,6 +12,7 @@ import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetai
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { ActivityLogType } from "@prisma/client";
 import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
+import ActivityCard from "@/components/clients/ActivityCard";
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -128,13 +129,7 @@ export default function ClientDetailPage() {
             <ComponentCard title="Activity Log">
               <QuickAddActivityForm onAdd={onAddActivity} />
               {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
-              <ul>
-                {(client.activityLogs ?? []).map((log) => (
-                  <li key={log.id} className="text-theme-sm text-gray-800">
-                    {new Date(log.createdAt).toLocaleString()}: {log.content}
-                  </li>
-                ))}
-              </ul>
+              <ActivityCard logs={client.activityLogs ?? []} pageSize={5} />
             </ComponentCard>
           </Suspense>
           <Suspense fallback={<ComponentCard title="Documents"><p>Loading documents...</p></ComponentCard>}>
