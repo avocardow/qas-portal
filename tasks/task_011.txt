@@ -17,13 +17,13 @@ Test checklist with various compliance states. Verify alerts trigger correctly b
 ### Details:
 Develop a reusable checklist component that displays regulatory compliance items (such as 'Trust deed', 'Bank statements', etc.) with appropriate status indicators. The component should include: 1) A list view of all compliance items, 2) Visual check marks or status icons for each item, 3) The ability to categorize items by type or importance, 4) Timestamps showing when items were last updated or verified, and 5) A responsive design that works across different screen sizes. Use a data structure that stores item name, status, expiration date, and category for each compliance item.
 
-## 2. Develop Alert/Warning Detection System [pending]
+## 2. Develop Alert/Warning Detection System [done]
 ### Dependencies: 11.1
 ### Description: Create the logic to identify missing, expired, or soon-to-expire documentation
 ### Details:
 Build the backend logic that analyzes compliance items to detect issues requiring alerts. This system should: 1) Check for completely missing documentation, 2) Identify expired documents by comparing current date with expiration dates, 3) Flag upcoming expirations within a configurable time window (e.g., 30, 60, 90 days), 4) Assign severity levels to different types of alerts (critical for expired, warning for upcoming, etc.), 5) Create a data model that captures alert type, severity, affected item, and recommended action, and 6) Implement scheduled checks that run automatically to keep alerts current.
 
-## 3. Create Alerts & Warnings Display Section [pending]
+## 3. Create Alerts & Warnings Display Section [in-progress]
 ### Dependencies: 11.1, 11.2
 ### Description: Implement the visual representation of alerts with appropriate severity indicators
 ### Details:

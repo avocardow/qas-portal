@@ -16,6 +16,7 @@ import ActivityLogTabs from "@/components/clients/ActivityLogTabs";
 import AllFolders from '@/components/file-manager/AllFolders';
 import RecentFileTable from '@/components/file-manager/RecentFileTable';
 import RecentInvoicesCard from '@/components/invoice/RecentInvoicesCard';
+import ClientAlertsSection from '@/components/clients/ClientAlertsSection';
 
 // Lazy load client sections for progressive loading
 const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
@@ -140,6 +141,9 @@ export default function ClientDetailPage() {
           </Suspense>
           <Suspense fallback={<ComponentCard title="Documents"><p>Loading documents...</p></ComponentCard>}>
             <DocumentReferences documents={client.documents ?? []} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Alerts & Warnings"><p>Loading alerts...</p></ComponentCard>}>
+            <ClientAlertsSection documents={client.documents ?? []} licenses={client.licenses ?? []} />
           </Suspense>
           <Suspense fallback={<ComponentCard title="SharePoint Folders"><p>Loading folders...</p></ComponentCard>}>
             <ComponentCard title="SharePoint Folders">
