@@ -11,7 +11,7 @@ Implement a Meeting Minutes Panel with rich text input for recording audit meeti
 Test note creation and submission. Verify notes appear correctly in the activity log. Test validation for required fields. Check rich text formatting is preserved.
 
 # Subtasks:
-## 1. Design and Implement Meeting Minutes Panel UI [pending]
+## 1. Design and Implement Meeting Minutes Panel UI [done]
 ### Dependencies: None
 ### Description: Create the inline panel interface for recording audit meeting notes, including rich text input and fields for meeting date, attendees, and topics.
 ### Details:

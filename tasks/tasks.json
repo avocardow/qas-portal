@@ -385,7 +385,7 @@
       "id": 6,
       "title": "Create Contact Network Diagram",
       "description": "Implement a simple graph visualization on the Client Profile page showing relationships between client, contacts, and trust accounts.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         5
       ],
@@ -436,7 +436,7 @@
           "id": 5,
           "title": "Implement responsive behavior",
           "description": "Ensure the network diagram is responsive and degrades gracefully on smaller screens",
-          "status": "in-progress",
+          "status": "done",
           "dependencies": [
             3,
             4
@@ -447,7 +447,7 @@
           "id": 6,
           "title": "Add interactive features and integration",
           "description": "Implement user interactions and integrate the diagram with the broader application",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3,
             4,
@@ -708,7 +708,7 @@
           "id": 1,
           "title": "Design and Implement Meeting Minutes Panel UI",
           "description": "Create the inline panel interface for recording audit meeting notes, including rich text input and fields for meeting date, attendees, and topics.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Develop a user interface component that appears inline within the relevant workflow. The panel should include a rich text editor for detailed notes, as well as structured input fields for meeting date, attendees, and topics. Ensure the UI is accessible and visually consistent with the application. Implement client-side validation to ensure all required fields are completed before submission."
         },
