@@ -13,6 +13,7 @@ import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetai
 import DocumentReferences from "@/components/common/DocumentReferences";
 import { ActivityLogType } from "@prisma/client";
 import QuickAddActivityForm from "@/components/clients/QuickAddActivityForm";
+import MeetingMinutesPanel from "@/components/clients/MeetingMinutesPanel";
 import ActivityLogTabs from "@/components/clients/ActivityLogTabs";
 import AllFolders from '@/components/file-manager/AllFolders';
 import RecentFileTable from '@/components/file-manager/RecentFileTable';
@@ -196,6 +197,7 @@ export default function ClientDetailPage() {
           </Suspense>
           <Suspense fallback={<ComponentCard title="Activity Log"><p>Loading activity log...</p></ComponentCard>}>
             <ComponentCard title="Activity Log">
+              <MeetingMinutesPanel onAdd={onAddActivity} />
               <QuickAddActivityForm onAdd={onAddActivity} />
               {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
               <ActivityLogTabs logs={client.activityLogs ?? []} pageSize={5} />
