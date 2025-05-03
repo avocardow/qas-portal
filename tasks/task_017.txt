@@ -1,0 +1,129 @@
+# Task ID: 17
+# Title: Implement Client-Specific Email Filtering System
+# Status: in-progress
+# Dependencies: 14, 2
+# Priority: high
+# Description: Create a filtering system on the client detail page that displays only emails from client contacts or containing client/contact names in the subject line, with pagination support.
+# Details:
+Build a filtering mechanism that works across all mailbox folders (Inbox, Sent, Drafts, etc.) to show only client-relevant emails. The system should:
+
+1. Filter emails based on two criteria:
+   - Sender/recipient matches any email address from the client's contact list
+   - Email subject contains the client name or any contact name associated with the client
+
+2. Implement pagination with 5 emails per page initially displayed
+
+3. Add a 'Load More' button that fetches the next 5 emails when clicked
+
+4. Create a filtering service that interfaces with the existing email integration (Task #14)
+
+5. Ensure the UI updates dynamically when new filters are applied
+
+6. Add a visual indicator when filtering is active
+
+7. Include the ability to clear filters and return to the standard email view
+
+8. Optimize the filtering algorithm to handle large email volumes efficiently
+
+9. Ensure the filtered view maintains all existing email functionality (reply, forward, etc.)
+
+The implementation should extend the existing email thread panel from Task #14, applying these filters to the already-fetched client data from Task #2.
+
+# Test Strategy:
+Testing should verify both the filtering logic and the pagination functionality:
+
+1. Unit Tests:
+   - Test the filtering algorithm with various email datasets to ensure it correctly identifies client-related emails
+   - Verify pagination calculations work correctly with different dataset sizes
+   - Test edge cases: no matching emails, exactly 5 matching emails, etc.
+
+2. Integration Tests:
+   - Verify the filter works across all mailbox folders
+   - Confirm the 'Load More' functionality fetches the correct next set of emails
+   - Test that clearing filters restores the complete email view
+
+3. UI Tests:
+   - Verify the initial load shows exactly 5 emails (or fewer if less are available)
+   - Confirm the 'Load More' button appears only when more emails exist
+   - Test that the visual filter indicator appears/disappears appropriately
+   - Verify the UI remains responsive when applying filters to large email sets
+
+4. Manual Testing Scenarios:
+   - Test with a client that has multiple contacts with different email domains
+   - Verify emails with client name in subject but from non-contacts are correctly included
+   - Test performance with a client that has hundreds of associated emails
+
+# Subtasks:
+## 1. Create Email Filtering Service Interface [done]
+### Dependencies: None
+### Description: Design and implement a service that will handle the filtering logic for client-specific emails
+### Details:
+1. Create a new EmailFilterService class that will interface with the existing email integration
+2. Define methods for filtering emails based on sender/recipient and subject content
+3. Implement the core filtering algorithm that checks if an email is from/to a client contact or contains client/contact names in the subject
+4. Add utility methods to extract and normalize email addresses and names for comparison
+5. Include performance optimizations for handling large email volumes
+6. Test the service with mock email data to ensure filtering accuracy
+7. Document the service API for team reference
+
+## 2. Implement Backend Pagination Support [in-progress]
+### Dependencies: 17.1
+### Description: Add server-side pagination capabilities to support the email filtering system
+### Details:
+1. Extend the EmailFilterService to support paginated results
+2. Implement methods to fetch emails in batches of 5
+3. Create a caching mechanism to store filtered results to improve performance
+4. Add support for cursor-based pagination to track the last loaded email
+5. Implement the 'Load More' functionality on the service layer
+6. Create unit tests to verify pagination works correctly with different filter combinations
+7. Ensure the pagination system handles edge cases (e.g., when fewer than 5 emails remain)
+
+## 3. Integrate Filtering with Email Thread Panel [done]
+### Dependencies: 17.1, 17.2
+### Description: Connect the filtering service to the existing email thread panel UI
+### Details:
+1. Modify the existing email thread panel component to use the EmailFilterService
+2. Update the component to fetch and display filtered emails based on client context
+3. Implement the initial load of 5 filtered emails when the client detail page loads
+4. Ensure all existing email functionality (reply, forward, etc.) works with filtered emails
+5. Add error handling for cases where filtering or email fetching fails
+6. Test the integration with real client data to verify filtering accuracy
+7. Optimize component rendering to handle dynamic updates when filters change
+
+## 4. Create Filter UI Controls and Indicators [pending]
+### Dependencies: 17.3
+### Description: Build the user interface elements for controlling and displaying the filter status
+### Details:
+1. Design and implement a filter control panel in the email thread UI
+2. Add visual indicators that show when filtering is active
+3. Create a 'Clear Filters' button that returns to the standard email view
+4. Implement filter toggle controls for each filter type (sender/recipient and subject)
+5. Add tooltips explaining the filtering functionality
+6. Ensure the UI is responsive and maintains consistency with the application design
+7. Test the UI controls across different screen sizes and browsers
+
+## 5. Implement 'Load More' Functionality [pending]
+### Dependencies: 17.2, 17.3
+### Description: Add the UI and logic for loading additional filtered emails
+### Details:
+1. Create a 'Load More' button component at the bottom of the email list
+2. Connect the button to the pagination functionality in the EmailFilterService
+3. Implement loading state indicators when fetching more emails
+4. Add logic to hide the button when no more emails are available
+5. Ensure smooth rendering when new emails are added to the list
+6. Implement scroll position management to prevent page jumping when new content loads
+7. Test the functionality with various email volumes to ensure consistent behavior
+
+## 6. Cross-Mailbox Folder Support and Performance Optimization [pending]
+### Dependencies: 17.1, 17.2, 17.3, 17.4, 17.5
+### Description: Extend filtering to work across all mailbox folders and optimize for performance
+### Details:
+1. Extend the EmailFilterService to support filtering across different mailbox folders (Inbox, Sent, Drafts, etc.)
+2. Implement folder selection UI in the filter controls
+3. Add batch processing for large mailboxes to prevent UI freezing
+4. Implement background filtering for improved user experience
+5. Add performance metrics tracking to identify bottlenecks
+6. Optimize the filtering algorithm for speed with large datasets
+7. Conduct comprehensive testing across different mailbox sizes and folder structures
+8. Ensure all existing functionality works correctly with the complete filtering system
+

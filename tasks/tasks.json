@@ -887,6 +887,91 @@
           "details": "Create Storybook stories for all key components with different states and variations. Write unit tests using Jest and React Testing Library focusing on critical user flows. Perform accessibility testing using axe or similar tools to ensure WCAG compliance. Test responsive design across multiple device sizes and orientations. Conduct performance benchmarking using Lighthouse and WebPageTest, establishing baseline metrics for First Contentful Paint, Time to Interactive, and Total Blocking Time. Document performance optimization techniques used and create guidelines for maintaining performance. Verify all Cursor rules are followed throughout the codebase."
         }
       ]
+    },
+    {
+      "id": 17,
+      "title": "Implement Client-Specific Email Filtering System",
+      "description": "Create a filtering system on the client detail page that displays only emails from client contacts or containing client/contact names in the subject line, with pagination support.",
+      "details": "Build a filtering mechanism that works across all mailbox folders (Inbox, Sent, Drafts, etc.) to show only client-relevant emails. The system should:\n\n1. Filter emails based on two criteria:\n   - Sender/recipient matches any email address from the client's contact list\n   - Email subject contains the client name or any contact name associated with the client\n\n2. Implement pagination with 5 emails per page initially displayed\n\n3. Add a 'Load More' button that fetches the next 5 emails when clicked\n\n4. Create a filtering service that interfaces with the existing email integration (Task #14)\n\n5. Ensure the UI updates dynamically when new filters are applied\n\n6. Add a visual indicator when filtering is active\n\n7. Include the ability to clear filters and return to the standard email view\n\n8. Optimize the filtering algorithm to handle large email volumes efficiently\n\n9. Ensure the filtered view maintains all existing email functionality (reply, forward, etc.)\n\nThe implementation should extend the existing email thread panel from Task #14, applying these filters to the already-fetched client data from Task #2.",
+      "testStrategy": "Testing should verify both the filtering logic and the pagination functionality:\n\n1. Unit Tests:\n   - Test the filtering algorithm with various email datasets to ensure it correctly identifies client-related emails\n   - Verify pagination calculations work correctly with different dataset sizes\n   - Test edge cases: no matching emails, exactly 5 matching emails, etc.\n\n2. Integration Tests:\n   - Verify the filter works across all mailbox folders\n   - Confirm the 'Load More' functionality fetches the correct next set of emails\n   - Test that clearing filters restores the complete email view\n\n3. UI Tests:\n   - Verify the initial load shows exactly 5 emails (or fewer if less are available)\n   - Confirm the 'Load More' button appears only when more emails exist\n   - Test that the visual filter indicator appears/disappears appropriately\n   - Verify the UI remains responsive when applying filters to large email sets\n\n4. Manual Testing Scenarios:\n   - Test with a client that has multiple contacts with different email domains\n   - Verify emails with client name in subject but from non-contacts are correctly included\n   - Test performance with a client that has hundreds of associated emails",
+      "status": "in-progress",
+      "dependencies": [
+        14,
+        2
+      ],
+      "priority": "high",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Create Email Filtering Service Interface",
+          "description": "Design and implement a service that will handle the filtering logic for client-specific emails",
+          "dependencies": [],
+          "details": "1. Create a new EmailFilterService class that will interface with the existing email integration\n2. Define methods for filtering emails based on sender/recipient and subject content\n3. Implement the core filtering algorithm that checks if an email is from/to a client contact or contains client/contact names in the subject\n4. Add utility methods to extract and normalize email addresses and names for comparison\n5. Include performance optimizations for handling large email volumes\n6. Test the service with mock email data to ensure filtering accuracy\n7. Document the service API for team reference",
+          "status": "done",
+          "parentTaskId": 17
+        },
+        {
+          "id": 2,
+          "title": "Implement Backend Pagination Support",
+          "description": "Add server-side pagination capabilities to support the email filtering system",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Extend the EmailFilterService to support paginated results\n2. Implement methods to fetch emails in batches of 5\n3. Create a caching mechanism to store filtered results to improve performance\n4. Add support for cursor-based pagination to track the last loaded email\n5. Implement the 'Load More' functionality on the service layer\n6. Create unit tests to verify pagination works correctly with different filter combinations\n7. Ensure the pagination system handles edge cases (e.g., when fewer than 5 emails remain)",
+          "status": "in-progress",
+          "parentTaskId": 17
+        },
+        {
+          "id": 3,
+          "title": "Integrate Filtering with Email Thread Panel",
+          "description": "Connect the filtering service to the existing email thread panel UI",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Modify the existing email thread panel component to use the EmailFilterService\n2. Update the component to fetch and display filtered emails based on client context\n3. Implement the initial load of 5 filtered emails when the client detail page loads\n4. Ensure all existing email functionality (reply, forward, etc.) works with filtered emails\n5. Add error handling for cases where filtering or email fetching fails\n6. Test the integration with real client data to verify filtering accuracy\n7. Optimize component rendering to handle dynamic updates when filters change",
+          "status": "done",
+          "parentTaskId": 17
+        },
+        {
+          "id": 4,
+          "title": "Create Filter UI Controls and Indicators",
+          "description": "Build the user interface elements for controlling and displaying the filter status",
+          "dependencies": [
+            3
+          ],
+          "details": "1. Design and implement a filter control panel in the email thread UI\n2. Add visual indicators that show when filtering is active\n3. Create a 'Clear Filters' button that returns to the standard email view\n4. Implement filter toggle controls for each filter type (sender/recipient and subject)\n5. Add tooltips explaining the filtering functionality\n6. Ensure the UI is responsive and maintains consistency with the application design\n7. Test the UI controls across different screen sizes and browsers",
+          "status": "pending",
+          "parentTaskId": 17
+        },
+        {
+          "id": 5,
+          "title": "Implement 'Load More' Functionality",
+          "description": "Add the UI and logic for loading additional filtered emails",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "1. Create a 'Load More' button component at the bottom of the email list\n2. Connect the button to the pagination functionality in the EmailFilterService\n3. Implement loading state indicators when fetching more emails\n4. Add logic to hide the button when no more emails are available\n5. Ensure smooth rendering when new emails are added to the list\n6. Implement scroll position management to prevent page jumping when new content loads\n7. Test the functionality with various email volumes to ensure consistent behavior",
+          "status": "pending",
+          "parentTaskId": 17
+        },
+        {
+          "id": 6,
+          "title": "Cross-Mailbox Folder Support and Performance Optimization",
+          "description": "Extend filtering to work across all mailbox folders and optimize for performance",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "1. Extend the EmailFilterService to support filtering across different mailbox folders (Inbox, Sent, Drafts, etc.)\n2. Implement folder selection UI in the filter controls\n3. Add batch processing for large mailboxes to prevent UI freezing\n4. Implement background filtering for improved user experience\n5. Add performance metrics tracking to identify bottlenecks\n6. Optimize the filtering algorithm for speed with large datasets\n7. Conduct comprehensive testing across different mailbox sizes and folder structures\n8. Ensure all existing functionality works correctly with the complete filtering system",
+          "status": "pending",
+          "parentTaskId": 17
+        }
+      ]
     }
   ],
   "metadata": {
