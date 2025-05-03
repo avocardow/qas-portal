@@ -653,7 +653,7 @@
       "id": 11,
       "title": "Create Regulatory Checklist and Alerts",
       "description": "Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],

@@ -1,6 +1,6 @@
 # Task ID: 11
 # Title: Create Regulatory Checklist and Alerts
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.
