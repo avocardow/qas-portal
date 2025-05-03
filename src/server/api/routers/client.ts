@@ -75,6 +75,7 @@ const clientByIdResponseSchema = z.object({
   activityLogs: z.array(
     z.object({
       id: z.string(),
+      type: z.nativeEnum(ActivityLogType),
       content: z.string(),
       createdAt: z.date(),
     })
