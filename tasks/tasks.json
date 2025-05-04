@@ -972,6 +972,45 @@
           "parentTaskId": 17
         }
       ]
+    },
+    {
+      "id": 18,
+      "title": "Implement Graph OData searchMessages Helper in EmailService",
+      "description": "Create a helper method in EmailService that utilizes Microsoft Graph API's OData query capabilities to search for email messages based on various criteria.",
+      "details": "Implement a new helper method called `searchMessages` in the EmailService class that will leverage Microsoft Graph API's OData query functionality. This method should:\n\n1. Accept parameters for search criteria such as:\n   - keywords/search text\n   - date range (from/to)\n   - sender email\n   - folder ID (optional)\n   - pagination parameters (skip/top)\n\n2. Construct the appropriate OData query string using the provided parameters\n\n3. Make the API call to Microsoft Graph endpoint using the existing authentication mechanism\n\n4. Parse and transform the response into a consistent format that matches our application's data models\n\n5. Handle error cases appropriately, including authentication errors, rate limiting, and malformed responses\n\n6. Implement caching where appropriate to improve performance\n\nThe implementation should follow our existing patterns for Graph API integration and ensure proper error handling and logging. Documentation should be added explaining the parameters and return format.",
+      "testStrategy": "Testing should include:\n\n1. Unit tests:\n   - Verify correct OData query construction for different parameter combinations\n   - Test error handling for various error scenarios (401, 429, etc.)\n   - Validate response parsing logic with mock data\n\n2. Integration tests:\n   - Test actual API calls with test account credentials\n   - Verify pagination works correctly with large result sets\n   - Test search with various criteria combinations\n\n3. Performance tests:\n   - Measure response times for typical queries\n   - Verify caching behavior improves performance for repeated queries\n\n4. Manual testing:\n   - Verify the helper can be used in the email filtering system (Task #17)\n   - Test with real-world search scenarios to ensure results match expectations\n   - Verify correct handling of special characters in search terms",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "medium",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Implement searchMessages in EmailService",
+          "description": "Add a server-side helper method in EmailService to search messages using OData , , ,  parameters",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 18
+        },
+        {
+          "id": 2,
+          "title": "Update EmailFilteringService to use searchMessages",
+          "description": "Modify getFilteredMessages to call searchMessages instead of listMessages and handle pagination from Graph nextLink",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 18
+        },
+        {
+          "id": 3,
+          "title": "Update EmailFilteringService tests to mock searchMessages",
+          "description": "Modify existing tests to stub searchMessages instead of listMessages and validate pagination behavior",
+          "details": "",
+          "status": "pending",
+          "dependencies": [],
+          "parentTaskId": 18
+        }
+      ]
     }
   ],
   "metadata": {
