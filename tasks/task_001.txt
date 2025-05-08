@@ -29,7 +29,7 @@ Verify page renders without errors and breadcrumbs display correctly. Check resp
 7. Test the basic page rendering with different viewport sizes to ensure responsive behavior
 8. Ensure the page follows the application's established design patterns and styling conventions
 
-## 2. Implement Breadcrumb Navigation and Sidebar Link [pending]
+## 2. Implement Breadcrumb Navigation and Sidebar Link [in-progress]
 ### Dependencies: 1.1
 ### Description: Add the breadcrumb navigation component showing the hierarchical path and update the sidebar navigation to include a link to the client profile page.
 ### Details:

@@ -50,7 +50,7 @@ export default function NewClientPage() {
   };
   return (
     <DashboardPlaceholderPageTemplate heading="New Client">
-      <PageBreadcrumb pageTitle="New Client" />
+      <PageBreadcrumb pageTitle="New Client" items={[{ label: "Clients", href: "/clients" }]} />
       <ComponentCard title="Create Client">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>

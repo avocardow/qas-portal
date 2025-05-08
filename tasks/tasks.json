@@ -27,7 +27,7 @@
             1
           ],
           "details": "1. Import the PageBreadcrumb component from TailAdmin\n2. Configure the breadcrumb with the Home > Clients > [Client Name] structure\n3. Implement dynamic client name fetching for the breadcrumb based on the clientId parameter\n4. Add proper linking to each breadcrumb segment (Home and Clients list)\n5. Update the sidebar navigation configuration to include a link to the clients section\n6. Ensure the sidebar highlights the current page when on the client profile\n7. Test breadcrumb navigation to verify all links work correctly\n8. Implement proper accessibility attributes for the breadcrumb navigation (aria-current, etc.)\n9. Add hover states and visual indicators for interactive breadcrumb elements",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 1
         },
         {

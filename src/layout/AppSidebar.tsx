@@ -21,6 +21,7 @@ const teamPages: { name: string; path: string }[] = [
   { name: "Files", path: "/files" },
   { name: "Dashboard", path: "/dashboard" },
   { name: "Clients", path: "/clients" },
+  { name: "New Client", path: "/clients/new" },
   { name: "Contacts", path: "/contacts" },
   { name: "Chat", path: "/chat" },
   { name: "Calendar", path: "/calendar" },
