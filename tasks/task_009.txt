@@ -58,7 +58,7 @@ Test all CRUD operations for contacts. Verify data displays correctly and update
 8. Test the integration by adding new contacts and verifying they appear in the table
 9. Verify that validation works correctly for all required fields
 
-## 4. Implement Edit Contact Modal [in-progress]
+## 4. Implement Edit Contact Modal [done]
 ### Dependencies: 9.1, 9.2, 9.3
 ### Description: Create an edit modal for updating existing contacts, pre-populated with the contact's current data and connected to the contacts.update mutation.
 ### Details:

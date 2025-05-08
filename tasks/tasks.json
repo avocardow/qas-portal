@@ -615,7 +615,7 @@
             3
           ],
           "details": "1. Create an EditContactModal component based on the AddContactModal structure\n2. Add functionality to pre-populate the form with existing contact data\n3. Connect form submission to the contacts.update mutation\n4. Implement proper validation for all fields\n5. Add loading state during submission\n6. Provide clear success and error messages\n7. Ensure the contacts table refreshes after successful updates\n8. Add an edit button/icon in each table row that opens the edit modal\n9. Test editing various fields and verify changes are reflected in the table after submission",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 9
         },
         {
