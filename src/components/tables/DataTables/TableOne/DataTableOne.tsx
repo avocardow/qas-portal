@@ -63,9 +63,11 @@ export default function DataTableOne({ data, columns, onRowClick, caption = "Tab
       )
       .sort((a, b) => {
         if (sortKey === "name") {
+          const nameA = String((a as any).name ?? "");
+          const nameB = String((b as any).name ?? "");
           return sortOrder === "asc"
-            ? a.user.name.localeCompare(b.user.name)
-            : b.user.name.localeCompare(a.user.name);
+            ? nameA.localeCompare(nameB)
+            : nameB.localeCompare(nameA);
         }
         if (sortKey === "salary") {
           const salaryA = Number.parseInt(a[sortKey].replace(/\$|,/g, ""));
