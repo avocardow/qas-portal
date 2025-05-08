@@ -299,7 +299,7 @@
             1
           ],
           "details": "1. Implement a modal dialog using Headless UI Dialog component\n2. Create a clear title and explanation of what archiving means for the client data\n3. Add a text field for archive description with appropriate validation\n4. Include warning about the consequences of archiving\n5. Add Cancel and Confirm buttons with appropriate styling\n6. Implement state management for the modal visibility and form inputs\n7. Add loading state for the Confirm button during the archiving process\n8. Ensure the modal is keyboard accessible and follows WAI-ARIA best practices\n9. Test the modal with screen readers and keyboard navigation\n10. Add appropriate animations for modal opening/closing",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 5
         },
         {
