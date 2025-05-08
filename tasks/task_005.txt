@@ -44,7 +44,7 @@ Test permission gating to ensure only authorized users see the button. Verify co
 9. Test the modal with screen readers and keyboard navigation
 10. Add appropriate animations for modal opening/closing
 
-## 3. Implement Archive Mutation and Success/Error Handling [pending]
+## 3. Implement Archive Mutation and Success/Error Handling [done]
 ### Dependencies: 5.1, 5.2
 ### Description: Connect the confirmation flow to the backend using the useMutation hook, handle success and error states, and update the UI after successful archiving.
 ### Details:

@@ -370,7 +370,7 @@
             2
           ],
           "details": "1. Implement `useMutation('clients.update')` hook to connect to the backend API\n2. Create a mutation function that sends the client ID and archive description to the API\n3. Set the client status to 'Archived' in the mutation payload\n4. Implement comprehensive error handling with specific error messages for different failure scenarios\n5. Add success feedback with a toast notification or inline message\n6. Update the client list UI after successful archiving (remove from list or update status)\n7. Implement optimistic updates for better user experience\n8. Add logging for successful archiving and failures for audit purposes\n9. Implement retry logic for transient failures\n10. Test the full flow from button click to UI update with various scenarios (success, network error, permission error, etc.)",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 5
         }
       ]
