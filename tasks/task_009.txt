@@ -44,7 +44,7 @@ Test all CRUD operations for contacts. Verify data displays correctly and update
 8. Style the table according to application design guidelines
 9. Test the component with various data scenarios (empty, few items, many items)
 
-## 3. Integrate Add Contact Modal from Task 4 [in-progress]
+## 3. Integrate Add Contact Modal from Task 4 [done]
 ### Dependencies: 9.1, 9.2
 ### Description: Reuse and integrate the existing Add Contact modal from Task 4, connecting it to the contacts.create mutation.
 ### Details:
