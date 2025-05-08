@@ -58,7 +58,12 @@ const navPermissionMap: Record<string, NavPermission> = {
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
-  const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback(
+    (path: string) =>
+      pathname === path ||
+      pathname.startsWith(path + "/"),
+    [pathname]
+  );
 
   return (
     <aside
