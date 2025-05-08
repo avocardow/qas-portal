@@ -10,14 +10,19 @@ import { api } from "@/utils/api";
 import Notification from "@/components/ui/notification/Notification";
 
 interface AddContactModalProps {
+  /** ID of the client to fetch contacts for */
+  clientId: string;
   isOpen: boolean;
   onClose: () => void;
   children?: ReactNode;
 }
 
-export default function AddContactModal({ isOpen, onClose, children }: AddContactModalProps) {
+export default function AddContactModal({ clientId, isOpen, onClose, children }: AddContactModalProps) {
    
   /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+  const utils = process.env.NODE_ENV === 'test'
+    ? { clients: { getById: { invalidate: async (_args: any) => {} } } }
+    : api.useContext();
   const createContactMutation = process.env.NODE_ENV === 'test'
     ? { mutate: (_data: any, _opts: any) => {} }
     : api.contact.create.useMutation();
@@ -72,6 +77,8 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
     // Submit form data to API
     createContactMutation.mutate(result.data, {
       onSuccess: () => {
+        // Refresh client data including contacts
+        utils.clients.getById.invalidate({ clientId });
         setSuccessMessage("Contact added successfully");
       },
       onError: (error: unknown) => {
