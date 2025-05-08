@@ -565,7 +565,7 @@
       "id": 9,
       "title": "Implement Client Contacts Table and CRUD",
       "description": "Create the Client Contacts table with add, edit, and delete functionality.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         4
       ],
@@ -641,7 +641,7 @@
             5
           ],
           "details": "1. Create a FilterPanel component with options for filtering by contact type, date added, etc.\n2. Implement client-side filtering for quick responses\n3. Add server-side filtering for large datasets by extending the contacts.list endpoint\n4. Create a centralized table refresh mechanism that can be triggered by all CRUD operations\n5. Implement optimistic updates where appropriate to improve perceived performance\n6. Add a manual refresh button for users\n7. Implement proper loading states during refresh operations\n8. Consider adding export functionality (CSV/Excel) for the filtered data\n9. Test all filtering options and verify the table refreshes correctly after all CRUD operations",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 9
         }
       ]

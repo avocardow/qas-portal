@@ -1,6 +1,6 @@
 # Task ID: 9
 # Title: Implement Client Contacts Table and CRUD
-# Status: in-progress
+# Status: done
 # Dependencies: 4
 # Priority: high
 # Description: Create the Client Contacts table with add, edit, and delete functionality.
@@ -86,7 +86,7 @@ Test all CRUD operations for contacts. Verify data displays correctly and update
 8. Add role-based access control to restrict deletion to authorized users
 9. Test the delete functionality and verify contacts are removed from the table
 
-## 6. Implement Advanced Filtering and Table Refresh Logic [pending]
+## 6. Implement Advanced Filtering and Table Refresh Logic [done]
 ### Dependencies: 9.2, 9.3, 9.4, 9.5
 ### Description: Enhance the contacts table with advanced filtering options and implement a robust table refresh mechanism that updates after all CRUD operations.
 ### Details:
