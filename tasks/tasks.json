@@ -1,6 +1,23 @@
 {
   "tasks": [
     {
+      "id": 0,
+      "title": "Refactor DataTableOne to dynamic, prop-driven component using DataTableTwo functionality",
+      "description": "Convert `DataTableOne` to accept `data`, `columns`, `onRowClick`, and `caption` props, derive columns from `data` when not provided, and reuse filtering, sorting, pagination, and search logic modeled after `DataTableTwo`.",
+      "status": "pending",
+      "dependencies": [],
+      "priority": "high",
+      "subtasks": [
+        { "id": 0.1, "title": "Define DataTableOneProps and import ColumnDef", "status": "pending" },
+        { "id": 0.2, "title": "Remove static tableRowData and fixed SortKey/SortOrder types", "status": "pending" },
+        { "id": 0.3, "title": "Implement dynamic props handling (data, columns, onRowClick, caption)", "status": "pending" },
+        { "id": 0.4, "title": "Derive defaultColumns from props.data when no columns provided", "status": "pending" },
+        { "id": 0.5, "title": "Wire up filtering, sorting, search and pagination based on props.data", "status": "pending" },
+        { "id": 0.6, "title": "Update header/body loops to use dynamic cols and data", "status": "pending" },
+        { "id": 0.7, "title": "Update ClientContactsSection to use DataTableOne and remove DataTableThree", "status": "pending" }
+      ]
+    },
+    {
       "id": 1,
       "title": "Setup Page Scaffolding",
       "description": "Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.",
