@@ -5,6 +5,7 @@ import ComponentCard from '@/components/common/ComponentCard';
 import ContactsTable from './ContactsTable';
 import AddContactButton from '@/components/clients/AddContactButton';
 import AddContactModal from '@/components/clients/AddContactModal';
+import { api } from '@/utils/api';
 import Authorized from '@/components/Authorized';
 import { AUDIT_PERMISSIONS } from '@/constants/permissions';
 // import type { Contact } from '@prisma/client';
@@ -30,6 +31,12 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
   const params = useParams<{ clientId: string }>();
   const clientId = params.clientId;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const utils = api.useContext();
+  const deleteMutation = api.contact.deleteContact.useMutation({
+    onSuccess: () => {
+      utils.clients.getById.invalidate({ clientId });
+    },
+  });
 
   if (!contacts || contacts.length === 0) {
     return (
@@ -51,6 +58,11 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
         <ContactsTable
           data={contacts.map((c) => ({ ...c, licenseNumber: null }))}
           onRowClick={(row) => router.push(`/contacts/${row.id}`)}
+          onDelete={(row) => {
+            if (window.confirm('Are you sure you want to delete this contact?')) {
+              deleteMutation.mutate({ contactId: row.id! });
+            }
+          }}
         />
       </ComponentCard>
       <AddContactModal
