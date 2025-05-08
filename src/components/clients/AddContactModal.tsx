@@ -98,7 +98,7 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
                           id="name"
                           name="name"
                           placeholder="Full Name"
-                          value={formData.name}
+                          defaultValue={formData.name}
                           onChange={e => { setFormData({ ...formData, name: e.target.value }); validateField('name', e.target.value); }}
                           error={!!formErrors.name}
                           hint={formErrors.name}
@@ -122,7 +122,7 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
                           id="phone"
                           name="phone"
                           placeholder="Phone Number"
-                          value={formData.phone}
+                          defaultValue={formData.phone}
                           onChange={e => { setFormData({ ...formData, phone: e.target.value }); validateField('phone', e.target.value); }}
                           error={!!formErrors.phone}
                           hint={formErrors.phone}
@@ -135,7 +135,7 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
                           id="email"
                           name="email"
                           placeholder="Email Address"
-                          value={formData.email}
+                          defaultValue={formData.email}
                           onChange={e => { setFormData({ ...formData, email: e.target.value }); validateField('email', e.target.value); }}
                           error={!!formErrors.email}
                           hint={formErrors.email}
@@ -147,7 +147,7 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
                           id="licenseNumber"
                           name="licenseNumber"
                           placeholder="License Number"
-                          value={formData.licenseNumber}
+                          defaultValue={formData.licenseNumber}
                           onChange={e => { setFormData({ ...formData, licenseNumber: e.target.value }); validateField('licenseNumber', e.target.value); }}
                           error={!!formErrors.licenseNumber}
                           hint={formErrors.licenseNumber}
