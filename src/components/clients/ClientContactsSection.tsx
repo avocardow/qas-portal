@@ -1,8 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import ComponentCard from '@/components/common/ComponentCard';
 import DataTableTwo from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import Badge from '@/components/ui/badge/Badge';
+import AddContactButton from '@/components/clients/AddContactButton';
+import AddContactModal from '@/components/clients/AddContactModal';
 // import type { Contact } from '@prisma/client';
 
 // Define row type for DataTableTwo to avoid using `any`
@@ -32,6 +35,9 @@ interface ClientContactsSectionProps {
 }
 
 export default function ClientContactsSection({ contacts }: ClientContactsSectionProps) {
+  const params = useParams<{ clientId: string }>() || {};
+  const clientId = params.clientId;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -75,19 +81,26 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
     );
   }
   return (
-    <ComponentCard title="Contacts">
-      <DataTableTwo
-        data={filteredContacts}
-        columns={columns}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        onPageChange={setCurrentPage}
-        onItemsPerPageChange={(size) => { setPageSize(size); setCurrentPage(1); }}
-        caption="Recent Contacts Table"
-        onRowClick={(row) => router.push(`/contacts/${row.id}`)}
+    <>
+      <ComponentCard title="Contacts" actions={<AddContactButton onClick={() => setIsModalOpen(true)} />}>
+        <DataTableTwo
+          data={filteredContacts}
+          columns={columns}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={(size) => { setPageSize(size); setCurrentPage(1); }}
+          caption="Recent Contacts Table"
+          onRowClick={(row) => router.push(`/contacts/${row.id}`)}
+        />
+      </ComponentCard>
+      <AddContactModal
+        clientId={clientId}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
-    </ComponentCard>
+    </>
   );
 } 
