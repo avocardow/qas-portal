@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { api } from "@/utils/api";
 import type { RouterOutput } from "@/utils/api";
 
@@ -19,12 +20,22 @@ export function useCurrentAudit(
   clientId: string,
   options: UseCurrentAuditOptions = {}
 ) {
-  return api.audit.getCurrent.useQuery(
+  const query = api.audit.getCurrent.useQuery(
     { clientId },
-    {
-      enabled: !!clientId && options.enabled !== false,
-      onSuccess: options.onSuccess,
-      onError: options.onError,
-    }
+    { enabled: !!clientId && options.enabled !== false }
   );
+
+  React.useEffect(() => {
+    if (query.data && options.onSuccess) {
+      options.onSuccess(query.data);
+    }
+  }, [query.data, options.onSuccess]);
+
+  React.useEffect(() => {
+    if (query.error && options.onError) {
+      options.onError(query.error);
+    }
+  }, [query.error, options.onError]);
+
+  return query;
 } 
