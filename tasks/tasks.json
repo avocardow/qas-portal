@@ -404,7 +404,7 @@
             1
           ],
           "details": "1. Design and implement a TailAdmin card component to display audit information\n2. Create formatted displays for each audit field (Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned)\n3. Implement proper date formatting using a library like date-fns\n4. Add conditional rendering for different audit statuses with appropriate visual indicators\n5. Implement a placeholder state for when no current audit exists\n6. Ensure the component is fully responsive across device sizes\n7. Add accessibility attributes (aria-labels, proper heading hierarchy)\n8. Include an edit button that will trigger the edit modal\n9. Write unit tests to verify the component renders correctly with different data scenarios",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 6
         },
         {
