@@ -39,7 +39,7 @@
             2
           ],
           "details": "1. Use TailAdmin's grid system to create a responsive layout with appropriate breakpoints\n2. Implement a two-column layout for desktop that collapses to a single column on mobile\n3. Create placeholder Card components for each section: Client Overview, Current Audit, Client History, etc.\n4. Add appropriate headings and skeleton UI elements in each placeholder section\n5. Implement proper spacing between sections using TailAdmin's spacing utilities\n6. Add comments in the code indicating where future components will be integrated\n7. Ensure the grid layout maintains proper alignment and spacing across all viewport sizes\n8. Test the layout with various screen sizes to verify responsive behavior\n9. Add subtle visual indicators (like borders or background colors) to distinguish different sections\n10. Implement container queries if needed for more complex responsive behaviors within sections",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 1
         }
       ]
@@ -62,7 +62,7 @@
           "description": "Create TypeScript interfaces and Zod schemas for the client data model to ensure type safety across the application.",
           "dependencies": [],
           "details": "1. Create a `types/client.ts` file with TypeScript interfaces for the Client model\n2. Define Zod schemas for validation that match the TypeScript interfaces\n3. Export type definitions to be used by both server and client\n4. Include all necessary client fields (id, name, email, etc.)\n5. Add documentation comments for each field\n6. Test the type definitions by validating sample data\n\nExample implementation:\n```typescript\n// types/client.ts\nimport { z } from 'zod';\n\nexport const clientSchema = z.object({\n  id: z.string(),\n  name: z.string(),\n  email: z.string().email(),\n  phone: z.string().optional(),\n  company: z.string(),\n  status: z.enum(['active', 'inactive', 'prospect']),\n  createdAt: z.date(),\n  updatedAt: z.date()\n});\n\nexport type Client = z.infer<typeof clientSchema>;\n```",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 2
         },
         {
