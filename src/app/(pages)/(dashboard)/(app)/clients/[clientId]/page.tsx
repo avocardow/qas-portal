@@ -1,157 +1,306 @@
 "use client";
-import React from "react";
+import React, { Suspense, lazy, useMemo, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { api } from "@/utils/api";
-import { useRouter } from "next/navigation";
+import { useAbility } from "@/hooks/useAbility";
+import Authorized from '@/components/Authorized';
+import { CLIENT_PERMISSIONS } from "@/constants/permissions";
+import type { RouterOutput } from "@/utils/api";
+import type { ClientDetailsSectionProps } from '@/components/clients/ClientDetailsSection';
+import type { NetworkNode, NetworkEdge } from '@/components/clients/ClientNetworkDiagram';
+import type { ActivityLogType } from '@prisma/client';
 
-// Define form schema
-const formSchema = z.object({
-  clientName: z.string().min(1, "Client name is required"),
-  abn: z.string().optional(),
-  address: z.string().optional(),
-  city: z.string().optional(),
-  postcode: z.string().optional(),
-  status: z.enum(["prospect", "active", "archived"]),
-  auditMonthEnd: z.number().int().optional(),
-  nextContactDate: z.string().optional(), // date input returns string
-  estAnnFees: z.number().optional(),
-});
+// Lazy load client sections for progressive loading
+const ClientOverviewCard = lazy(() => import("@/components/clients/ClientOverviewCard"));
+const ClientContactsSection = lazy(() => import("@/components/clients/ClientContactsSection"));
+const ClientAssignedUserSection = lazy(() => import("@/components/clients/ClientAssignedUserSection"));
+const ClientLicensesSection = lazy(() => import("@/components/clients/ClientLicensesSection"));
+const ClientTrustAccountsSection = lazy(() => import("@/components/clients/ClientTrustAccountsSection"));
+const AuditList = lazy(() => import("@/components/audit/AuditList"));
 
-type FormData = z.infer<typeof formSchema>;
+// Lazy load ClientDetailsSection with correct prop types
+const ClientDetailsSection = lazy<React.ComponentType<ClientDetailsSectionProps>>(
+  () => import("@/components/clients/ClientDetailsSection")
+);
 
-export default function NewClientPage() {
-  // Hooks must run unconditionally
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { status: "prospect" },
+// Lazy load KPI and Manager cards
+const ClientManagerCard = lazy(() => import("@/components/clients/ClientManagerCard"));
+const LifetimeFeesCard = lazy(() => import("@/components/clients/LifetimeFeesCard"));
+const YoYGrowthCard = lazy(() => import("@/components/clients/YoYGrowthCard"));
+const HealthScoreCard = lazy(() => import("@/components/clients/HealthScoreCard"));
+
+// Lazy load audit components
+const AuditProgressBar = lazy(() => import("@/components/clients/AuditProgressBar"));
+const AuditScheduleCard = lazy(() => import("@/components/clients/AuditScheduleCard"));
+
+// Lazy load additional heavy components for code splitting
+const DocumentReferences = lazy(() => import("@/components/common/DocumentReferences"));
+const QuickAddActivityForm = lazy(() => import("@/components/clients/QuickAddActivityForm"));
+const MeetingMinutesPanel = lazy(() => import("@/components/clients/MeetingMinutesPanel"));
+const ActivityLogTabs = lazy(() => import("@/components/clients/ActivityLogTabs"));
+const AllFolders = lazy(() => import("@/components/file-manager/AllFolders"));
+const RecentFileTable = lazy(() => import("@/components/file-manager/RecentFileTable"));
+const RecentInvoicesCard = lazy(() => import("@/components/invoice/RecentInvoicesCard"));
+const ClientAlertsSection = lazy(() => import("@/components/clients/ClientAlertsSection"));
+const QuickActionButtons = lazy(() => import("@/components/clients/QuickActionButtons"));
+const ClientNetworkDiagram = lazy(() => import("@/components/clients/ClientNetworkDiagram"));
+const EmailThreadPanel = lazy(() => import("@/components/clients/EmailThreadPanel"));
+
+// Define client type including relations returned by getById tRPC output
+type ClientWithRelations = RouterOutput['clients']['getById'];
+
+export default function ClientDetailPage() {
+  // Hooks must be called at top-level
+  const params = useParams<{ clientId: string }>() ?? {};
+  const clientId = params.clientId;
+  const { can } = useAbility();
+  const { data: clientData, isLoading, isError } = api.clients.getById.useQuery(
+    { clientId },
+    { refetchInterval: 5000, refetchOnWindowFocus: false, enabled: !!clientId }
+  );
+  const utils = api.useContext();
+  const addLogMutation = api.clients.addActivityLog.useMutation({
+    onSuccess: () => {
+      utils.clients.getById.invalidate({ clientId });
+    },
   });
-  const createClientMutation = api.clients.create.useMutation();
-  const onSubmit = (data: FormData) => {
-    const input = {
-      ...data,
-      nextContactDate: data.nextContactDate
-        ? new Date(data.nextContactDate)
-        : undefined,
-    };
-    createClientMutation.mutate(input, {
-      onSuccess: (created) => router.push(`/clients/${created.id}`),
-      onError: (err) => console.error(err),
-    });
+  const onAddActivity = async (type: ActivityLogType, content: string) => {
+    await addLogMutation.mutateAsync({ clientId, type, content });
   };
+  const { data: lifetimeData } = api.clients.getLifetimeData.useQuery(
+    { clientId },
+    { enabled: !!clientId }
+  );
+  // Fetch filtered email threads for the client
+  const contactEmails = useMemo((): string[] => {
+    return (clientData?.contacts?.map(c => c.email).filter((email): email is string => Boolean(email)) ?? []);
+  }, [clientData?.contacts]);
+  const subjectKeywords = useMemo((): string[] => {
+    const keywords: string[] = [];
+    if (clientData?.clientName) {
+      keywords.push(clientData.clientName);
+    }
+    clientData?.contacts?.forEach(c => {
+      if (c.name) {
+        keywords.push(c.name);
+      }
+    });
+    return keywords;
+  }, [clientData?.clientName, clientData?.contacts]);
+  console.debug("filterMessages criteria for client", clientId, { contactEmails, subjectKeywords, folderIds: ["Inbox"] });
+  // State to toggle filtering on/off
+  const [filtersActive, setFiltersActive] = useState(true);
+  // Prepare query input based on filter state
+  const filterInput = useMemo(() => ({
+    contactEmails: filtersActive ? contactEmails : [],
+    subjectKeywords: filtersActive ? subjectKeywords : [],
+    folderIds: ["Inbox"],
+    page: 1,
+    pageSize: 3
+  }), [filtersActive, contactEmails, subjectKeywords]);
+  // Fetch filtered or unfiltered email threads
+  const { data: emailThreads, isLoading: emailThreadsLoading, isError: emailThreadsError, refetch: refetchEmailThreads } =
+    api.email.filterMessages.useQuery(filterInput);
+  // Debug: log results on change
+  React.useEffect(() => {
+    if (emailThreads !== undefined) {
+      console.debug("filterMessages success for client", clientId, emailThreads);
+    }
+  }, [clientId, emailThreads]);
+  React.useEffect(() => {
+    if (emailThreadsError) {
+      console.error("filterMessages error for client", clientId);
+    }
+  }, [clientId, emailThreadsError]);
+
+  const client = clientData as ClientWithRelations;
+  const router = useRouter();
+
+  // Prepare network diagram data with safe defaults before any early returns
+   
+  const diagramNodes = useMemo((): NetworkNode[] => {
+    if (!clientData) return [];
+    const contacts = clientData.contacts ?? [];
+    const trustAccounts = clientData.trustAccounts ?? [];
+    const nodes: NetworkNode[] = [
+      { id: clientData.id, label: clientData.clientName, type: 'client' },
+      ...contacts.map(c => ({ id: c.id, label: c.name ?? 'Unnamed Contact', type: 'contact' } as NetworkNode)),
+      ...trustAccounts.map(t => ({ id: t.id, label: t.accountName ?? 'Unnamed Account', type: 'trustAccount' } as NetworkNode)),
+    ];
+    return nodes;
+  }, [clientData]);
+   
+  const diagramEdges = useMemo((): NetworkEdge[] => {
+    if (!clientData) return [];
+    const contacts = clientData.contacts ?? [];
+    const trustAccounts = clientData.trustAccounts ?? [];
+    const edges: NetworkEdge[] = [
+      ...contacts.map(c => ({ id: `edge-client-contact-${c.id}`, source: clientData.id, target: c.id } as NetworkEdge)),
+      ...trustAccounts.map(t => ({ id: `edge-client-trust-${t.id}`, source: clientData.id, target: t.id } as NetworkEdge)),
+    ];
+    return edges;
+  }, [clientData]);
+
+  // Validate clientId param
+  if (!clientId) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Error">
+        <p>Invalid client ID.</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
+  // Permission gating
+  if (!can(CLIENT_PERMISSIONS.VIEW_STATUS)) {
+    return <p>You are not authorized to view client details.</p>;
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Loading...">
+        <p>Loading client...</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
+  // Error state
+  if (isError || !client) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Error">
+        <p>Error loading client details.</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
+  // Render client data
   return (
-    <DashboardPlaceholderPageTemplate heading="New Client">
-      <PageBreadcrumb pageTitle="New Client" />
-      <ComponentCard title="Create Client">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Client Name
-            </label>
-            <input
-              {...register("clientName")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-            {errors.clientName && (
-              <p className="text-sm text-red-600 dark:text-red-400">
-                {errors.clientName.message}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              ABN
-            </label>
-            <input
-              {...register("abn")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Address
-            </label>
-            <input
-              {...register("address")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              City
-            </label>
-            <input
-              {...register("city")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Postcode
-            </label>
-            <input
-              {...register("postcode")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Status
-            </label>
-            <select
-              {...register("status")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            >
-              <option value="prospect">Prospect</option>
-              <option value="active">Active</option>
-              <option value="archived">Archived</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Audit Month End
-            </label>
-            <input
-              type="number"
-              {...register("auditMonthEnd", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Next Contact Date
-            </label>
-            <input
-              type="date"
-              {...register("nextContactDate")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Estimated Annual Fees
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              {...register("estAnnFees", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
-            />
-          </div>
-          <button type="submit" disabled={isSubmitting} className="btn">
-            {isSubmitting ? "Creating..." : "Create Client"}
-          </button>
-        </form>
-      </ComponentCard>
-    </DashboardPlaceholderPageTemplate>
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <PageBreadcrumb pageTitle={client.clientName} />
+      <Authorized action={CLIENT_PERMISSIONS.EDIT}>
+        <Suspense fallback={<ComponentCard title="Actions"><p>Loading actions...</p></ComponentCard>}>
+          <QuickActionButtons clientId={client.id} />
+        </Suspense>
+      </Authorized>
+      <Suspense fallback={null}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {client.assignedUser && (
+            <ClientManagerCard manager={client.assignedUser} />
+          )}
+          <LifetimeFeesCard totalFees={lifetimeData?.totalFees ?? 0} feeHistory={lifetimeData?.feeHistory ?? []} />
+          <YoYGrowthCard growthPercentage={0} growthHistory={[]} />
+          <HealthScoreCard score={0} />
+        </div>
+      </Suspense>
+      <Suspense fallback={null}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <AuditProgressBar />
+          <AuditScheduleCard />
+        </div>
+      </Suspense>
+      <div className="grid grid-cols-12 gap-4 md:gap-6">
+        <div className="col-span-12 xl:col-span-4">
+          <Suspense fallback={<ComponentCard title="Client Overview"><p>Loading overview...</p></ComponentCard>}>
+            <ClientOverviewCard client={client} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Contacts"><p>Loading contacts...</p></ComponentCard>}>
+            <ClientContactsSection contacts={client.contacts} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Licenses"><p>Loading licenses...</p></ComponentCard>}>
+            <ClientLicensesSection licenses={client.licenses} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Trust Accounts"><p>Loading trust accounts...</p></ComponentCard>}>
+            <ClientTrustAccountsSection trustAccounts={client.trustAccounts} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Network Diagram"><p>Loading diagram...</p></ComponentCard>}>
+            <ComponentCard title="Network Diagram">
+              <ClientNetworkDiagram
+                nodes={diagramNodes}
+                edges={diagramEdges}
+                onNodeClick={(event, node) => {
+                  if (node.data.type === 'contact') {
+                    router.push(`/clients/${clientId}/contacts/${node.id}`);
+                  } else if (node.data.type === 'trustAccount') {
+                    router.push(`/clients/${clientId}/trustAccounts/${node.id}`);
+                  }
+                }}
+              />
+            </ComponentCard>
+          </Suspense>
+        </div>
+        <div className="col-span-12 xl:col-span-8">
+          {client.assignedUser && (
+            <Suspense fallback={<ComponentCard title="Assigned User"><p>Loading assigned user...</p></ComponentCard>}>
+              <ClientAssignedUserSection assignedUser={client.assignedUser} />
+            </Suspense>
+          )}
+          <Suspense fallback={<ComponentCard title="Client Details"><p>Loading details...</p></ComponentCard>}>
+            <ClientDetailsSection client={client} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Audits"><p>Loading audits...</p></ComponentCard>}>
+            <AuditList clientId={client.id} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Activity Log"><p>Loading activity log...</p></ComponentCard>}>
+            <ComponentCard title="Activity Log">
+              {/* Filter Controls and Indicator */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setFiltersActive(prev => !prev)}
+                    className="px-2 py-1 bg-blue-600 text-white rounded"
+                  >
+                    {filtersActive ? 'Disable Filters' : 'Enable Filters'}
+                  </button>
+                  <button
+                    onClick={() => setFiltersActive(false)}
+                    disabled={!filtersActive}
+                    className={`px-2 py-1 rounded ${filtersActive ? 'bg-red-600 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+                {filtersActive && (
+                  <span className="text-sm text-green-600">Filters Active</span>
+                )}
+              </div>
+              <MeetingMinutesPanel onAdd={onAddActivity} />
+              <QuickAddActivityForm onAdd={onAddActivity} />
+              <EmailThreadPanel
+                emailThreads={emailThreads}
+                isLoading={emailThreadsLoading}
+                isError={emailThreadsError}
+                onRetry={refetchEmailThreads}
+              />
+              {addLogMutation.status === 'pending' && <p className="text-theme-sm text-gray-500">Adding activity...</p>}
+              <ActivityLogTabs logs={client.activityLogs ?? []} pageSize={5} />
+            </ComponentCard>
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Documents"><p>Loading documents...</p></ComponentCard>}>
+            <DocumentReferences documents={client.documents ?? []} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Alerts & Warnings"><p>Loading alerts...</p></ComponentCard>}>
+            <ClientAlertsSection documents={client.documents ?? []} licenses={client.licenses ?? []} />
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="SharePoint Folders"><p>Loading folders...</p></ComponentCard>}>
+            <ComponentCard title="SharePoint Folders">
+              <AllFolders />
+            </ComponentCard>
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Recent Files"><p>Loading files...</p></ComponentCard>}>
+            <ComponentCard title="Recent Files">
+              <RecentFileTable />
+            </ComponentCard>
+          </Suspense>
+          <Suspense fallback={<ComponentCard title="Recent Invoices"><p>Loading invoices...</p></ComponentCard>}>
+            <ComponentCard title="Recent Invoices">
+              <RecentInvoicesCard clientId={client.id} />
+            </ComponentCard>
+          </Suspense>
+        </div>
+      </div>
+    </div>
   );
 }
