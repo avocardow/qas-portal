@@ -13,7 +13,7 @@
           "title": "Define DataTableOneProps and import ColumnDef",
           "description": "Define the interface for DataTableOneProps and import the ColumnDef type.",
           "details": "Add DataTableOneProps interface and import ColumnDef type.",
-          "status": "in-progress"
+          "status": "done"
         },
         {
           "id": 2,
