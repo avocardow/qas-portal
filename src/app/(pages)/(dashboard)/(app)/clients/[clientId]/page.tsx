@@ -5,6 +5,8 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import { useClientData } from "@/hooks/useClientData";
+import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
+import ErrorFallback from "@/components/common/ErrorFallback";
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -18,18 +20,14 @@ export default function ClientDetailPage() {
   if (isLoading) {
     return (
       <DashboardPlaceholderPageTemplate heading="Loading...">
-        <p>Loading client data...</p>
+        <SpinnerOne />
       </DashboardPlaceholderPageTemplate>
     );
   }
   
   // Handle error state
   if (isError) {
-    return (
-      <DashboardPlaceholderPageTemplate heading="Error">
-        <p>{error?.message}</p>
-      </DashboardPlaceholderPageTemplate>
-    );
+    return <ErrorFallback message={error?.message} />;
   }
 
   // Validate clientId param
