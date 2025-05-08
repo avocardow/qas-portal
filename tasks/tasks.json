@@ -27,7 +27,7 @@
           "title": "Implement dynamic props handling (data, columns, onRowClick, caption)",
           "description": "Update component to accept props for data, columns, onRowClick, and caption.",
           "details": "Use props to replace static values in DataTableOne.",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": 4,
