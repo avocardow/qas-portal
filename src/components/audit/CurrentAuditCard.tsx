@@ -37,8 +37,8 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
   }
 
   const {
-    nextContactDate,
-    auditPeriodEndDate,
+    auditYear,
+    reportDueDate,
     stage,
     status,
     assignments,
@@ -55,12 +55,11 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <span className="font-semibold">Next Contact Date:</span>{" "}
-          {format(new Date(nextContactDate), "PPP")}
+          <span className="font-semibold">Audit Year:</span> {auditYear}
         </div>
         <div>
-          <span className="font-semibold">Audit Period-End Date:</span>{" "}
-          {format(new Date(auditPeriodEndDate), "PPP")}
+          <span className="font-semibold">Report Due Date:</span>{" "}
+          {reportDueDate ? format(new Date(reportDueDate), "PPP") : "N/A"}
         </div>
         <div>
           <span className="font-semibold">Audit Stage:</span>{" "}
