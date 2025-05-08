@@ -1,9 +1,16 @@
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import ComponentCard from '@/components/common/ComponentCard';
 import DataTableOne from '@/components/tables/DataTables/TableOne/DataTableOne';
 import type { ColumnDef } from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import type { ClientWithRelations } from './ClientOverviewCard';
 import Badge from '@/components/ui/badge/Badge';
+import Authorized from '@/components/Authorized';
+import AddTrustAccountButton from './AddTrustAccountButton';
+import AddTrustAccountModal from './AddTrustAccountModal';
+import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 
 export interface ClientTrustAccountsSectionProps {
   trustAccounts: ClientWithRelations['trustAccounts'];
@@ -15,6 +22,8 @@ export interface ClientTrustAccountsSectionProps {
  *   hasSoftwareAccess, updatedAt, managementSoftware, and softwareUrl.
  */
 export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrustAccountsSectionProps) {
+  const { clientId } = useParams<{ clientId: string }>() || { clientId: '' };
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const columns = React.useMemo<ColumnDef[]>(() => [
     { key: 'accountName', header: 'Account Name', sortable: true },
     { key: 'bankName', header: 'Bank Name', sortable: true },
@@ -57,18 +66,44 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
   ], []);
   if (!trustAccounts || trustAccounts.length === 0) {
     return (
-      <ComponentCard title="Trust Accounts">
+      <ComponentCard
+        title="Trust Accounts"
+        actions={
+          <Authorized action={CLIENT_PERMISSIONS.EDIT}>
+            <AddTrustAccountButton onClick={() => setIsModalOpen(true)} />
+          </Authorized>
+        }
+      >
         <p>No trust accounts available.</p>
+        <AddTrustAccountModal
+          clientId={clientId!}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </ComponentCard>
     );
   }
   return (
-    <ComponentCard title="Trust Accounts">
-      <DataTableOne
-        data={trustAccounts}
-        columns={columns}
-        caption="Trust Accounts Table"
+    <>
+      <ComponentCard
+        title="Trust Accounts"
+        actions={
+          <Authorized action={CLIENT_PERMISSIONS.EDIT}>
+            <AddTrustAccountButton onClick={() => setIsModalOpen(true)} />
+          </Authorized>
+        }
+      >
+        <DataTableOne
+          data={trustAccounts}
+          columns={columns}
+          caption="Trust Accounts Table"
+        />
+      </ComponentCard>
+      <AddTrustAccountModal
+        clientId={clientId!}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
-    </ComponentCard>
+    </>
   );
 } 
