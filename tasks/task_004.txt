@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Add Contact Button and Modal
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: high
 # Description: Create the Add Contact button and modal form for adding new client contacts.
@@ -17,7 +17,7 @@
 Test form validation, submission process, and verify new contacts appear in the list after adding. Test error handling for failed submissions.
 
 # Subtasks:
-## 1. Create Add Contact Button Component [pending]
+## 1. Create Add Contact Button Component [done]
 ### Dependencies: None
 ### Description: Implement a visually prominent Add Contact button that will trigger the contact modal. The button should be positioned appropriately in the contacts section and follow accessibility best practices.
 ### Details:
@@ -28,7 +28,7 @@ Test form validation, submission process, and verify new contacts appear in the 
 5. Test the button's visual appearance and focus states
 6. Ensure the button has a clear, explicit label ('Add Contact') that matches the modal title
 
-## 2. Implement Modal Dialog Structure using Headless UI [pending]
+## 2. Implement Modal Dialog Structure using Headless UI [done]
 ### Dependencies: 4.1
 ### Description: Create the modal dialog structure using Headless UI Dialog component with proper accessibility attributes and focus management.
 ### Details:
@@ -41,7 +41,7 @@ Test form validation, submission process, and verify new contacts appear in the 
 7. Test keyboard navigation (Tab, Escape to close)
 8. Verify focus returns to the Add Contact button when modal closes
 
-## 3. Build Contact Form Layout with TailAdmin Components [pending]
+## 3. Build Contact Form Layout with TailAdmin Components [done]
 ### Dependencies: 4.2
 ### Description: Create the form structure inside the modal using TailAdmin form components with all required fields for contact information.
 ### Details:

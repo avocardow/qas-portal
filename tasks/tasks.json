@@ -185,7 +185,7 @@
       "id": 4,
       "title": "Implement Add Contact Button and Modal",
       "description": "Create the Add Contact button and modal form for adding new client contacts.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -199,7 +199,7 @@
           "description": "Implement a visually prominent Add Contact button that will trigger the contact modal. The button should be positioned appropriately in the contacts section and follow accessibility best practices.",
           "dependencies": [],
           "details": "1. Create a new component `AddContactButton.jsx` in the appropriate directory\n2. Style the button using TailAdmin design system classes for consistency\n3. Add appropriate aria-label for accessibility\n4. Implement onClick handler that will control modal visibility state\n5. Test the button's visual appearance and focus states\n6. Ensure the button has a clear, explicit label ('Add Contact') that matches the modal title",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -210,7 +210,7 @@
             1
           ],
           "details": "1. Import Dialog components from Headless UI\n2. Create a new component `AddContactModal.jsx`\n3. Implement modal open/close state management\n4. Set up proper focus trapping within the modal\n5. Ensure the modal has proper ARIA attributes (role='dialog', aria-modal='true')\n6. Add overlay with appropriate styling and backdrop click handling\n7. Test keyboard navigation (Tab, Escape to close)\n8. Verify focus returns to the Add Contact button when modal closes",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -221,7 +221,7 @@
             2
           ],
           "details": "1. Import form components from `src/components/form`\n2. Create form layout with fields for name, type, phone, email, and license number\n3. Use appropriate input types (text, email, tel) for each field\n4. Add proper labels and placeholder text for each field\n5. Implement form reset functionality when modal closes\n6. Style the form according to TailAdmin design system\n7. Test the form layout on different screen sizes\n8. Ensure the first input field receives focus when modal opens",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
