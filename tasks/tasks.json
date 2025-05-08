@@ -232,7 +232,7 @@
             3
           ],
           "details": "1. Create form state using React state or a form library\n2. Implement validation rules for each field:\n   - Name: Required\n   - Email: Required, valid email format\n   - Phone: Required, valid phone format\n   - Type: Required selection\n   - License number: Optional but validate format if provided\n3. Add visual feedback for validation errors\n4. Implement inline validation as user types\n5. Disable submit button until form is valid\n6. Test validation with various input scenarios\n7. Ensure validation errors are accessible to screen readers",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -243,7 +243,7 @@
             4
           ],
           "details": "1. Import and set up useMutation hook with 'clients.createContact' endpoint\n2. Create form submission handler that calls the mutation\n3. Transform form data into the format expected by the API\n4. Implement loading state during submission\n5. Add error handling for failed submissions\n6. Test the API integration with valid and invalid data\n7. Verify that the correct data is being sent to the API\n8. Implement retry logic for network failures",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -254,7 +254,7 @@
             5
           ],
           "details": "1. Create success notification or toast message\n2. Implement error message display within the form\n3. Add specific error handling for common errors (duplicate contact, validation failures)\n4. Close modal on successful submission\n5. Keep modal open with error messages on failed submission\n6. Reset form state after successful submission\n7. Test error scenarios by mocking API failures\n8. Ensure error messages are clear and actionable",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         },
         {
@@ -265,7 +265,7 @@
             6
           ],
           "details": "1. Implement a callback function to refresh the contact list data\n2. Call the refresh function after successful contact creation\n3. Use optimistic updates to immediately show the new contact\n4. Handle any discrepancies between optimistic update and server response\n5. Add subtle animation or highlight for newly added contacts\n6. Test that the contact list updates correctly after submission\n7. Ensure the list maintains proper sorting/filtering after updates\n8. Verify that focus management works correctly after list refresh",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 4
         }
       ]
