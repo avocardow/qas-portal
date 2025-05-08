@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Setup Page Scaffolding
-# Status: pending
+# Status: in-progress
 # Dependencies: None
 # Priority: high
 # Description: Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.
@@ -16,7 +16,7 @@ Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the 
 Verify page renders without errors and breadcrumbs display correctly. Check responsive layout at different screen sizes.
 
 # Subtasks:
-## 1. Create Basic Page Structure with Layout Components [pending]
+## 1. Create Basic Page Structure with Layout Components [in-progress]
 ### Dependencies: None
 ### Description: Set up the client profile page file with the basic structure, imports, and TailAdmin layout components to establish the foundation for the page.
 ### Details:
