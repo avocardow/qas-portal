@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import ComponentCard from '@/components/common/ComponentCard';
-import DataTableThree from '@/components/tables/DataTables/TableThree/DataTableThree';
+import DataTableOne from '@/components/tables/DataTables/TableOne/DataTableOne';
 import AddContactButton from '@/components/clients/AddContactButton';
 import AddContactModal from '@/components/clients/AddContactModal';
 import Authorized from '@/components/Authorized';
@@ -26,7 +26,8 @@ interface ClientContactsSectionProps {
 }
 
 export default function ClientContactsSection({ contacts }: ClientContactsSectionProps) {
-  const params = useParams<{ clientId: string }>() || {};
+  const router = useRouter();
+  const params = useParams<{ clientId: string }>();
   const clientId = params.clientId;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,7 +48,11 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
           </Authorized>
         }
       >
-        <DataTableThree />
+        <DataTableOne
+          data={contacts}
+          onRowClick={(row) => router.push(`/contacts/${row.id}`)}
+          caption="Recent Contacts Table"
+        />
       </ComponentCard>
       <AddContactModal
         clientId={clientId}
