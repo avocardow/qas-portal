@@ -41,7 +41,7 @@
           "title": "Wire up filtering, sorting, search and pagination based on props.data",
           "description": "Implement filtering, sorting, search, and pagination behaviors.",
           "details": "Add state and memoized logic for table behaviors.",
-          "status": "pending"
+          "status": "in-progress"
         },
         {
           "id": 6,
