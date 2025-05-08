@@ -3,6 +3,7 @@
 
 import { api } from "@/utils/api";
 import type { RouterOutput } from "@/utils/api";
+import React from "react";
 
 /**
  * ClientData type inferred from tRPC router output for getById.
@@ -31,12 +32,25 @@ export function useClient(
   id: string | undefined,
   options: UseClientOptions = {}
 ) {
-  return api.clients.getById.useQuery(
+  // Execute the tRPC query
+  const query = api.clients.getById.useQuery(
     { clientId: id ?? "" },
-    {
-      enabled: !!id && options.enabled !== false,
-      onSuccess: options.onSuccess,
-      onError: options.onError,
-    }
+    { enabled: !!id && options.enabled !== false }
   );
+
+  // Invoke onSuccess callback when data is fetched
+  React.useEffect(() => {
+    if (query.data && options.onSuccess) {
+      options.onSuccess(query.data);
+    }
+  }, [query.data, options.onSuccess]);
+
+  // Invoke onError callback on error
+  React.useEffect(() => {
+    if (query.error && options.onError) {
+      options.onError(query.error);
+    }
+  }, [query.error, options.onError]);
+
+  return query;
 } 
