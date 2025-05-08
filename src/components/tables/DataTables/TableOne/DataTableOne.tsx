@@ -85,6 +85,13 @@ export default function DataTableOne({ data, columns, onRowClick, caption = "Tab
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
   const currentData = filteredAndSortedData.slice(startIndex, endIndex);
 
+  // Helper to format cell values, handling Date and null/undefined
+  const formatCellValue = (value: any) => {
+    if (value instanceof Date) return value.toLocaleString();
+    if (value === null || value === undefined) return "-";
+    return value;
+  };
+
   return (
     <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
       <div className="flex flex-col gap-2 rounded-t-xl border border-b-0 border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/[0.05]">
@@ -188,7 +195,7 @@ export default function DataTableOne({ data, columns, onRowClick, caption = "Tab
                 <TableRow key={i} onClick={() => onRowClick?.(item)} className={onRowClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" : undefined}>
                   {cols.map(({ key, cell }, idx) => (
                     <TableCell key={key} className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
-                      {cell ? cell(item) : (item as any)[key] ?? "-"}
+                      {cell ? cell(item) : formatCellValue((item as any)[key])}
                     </TableCell>
                   ))}
                 </TableRow>
