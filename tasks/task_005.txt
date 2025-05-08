@@ -1,6 +1,6 @@
 # Task ID: 5
 # Title: Implement Archive Client Button
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Create the Archive Client button with permission checking and confirmation flow.
@@ -29,7 +29,7 @@ Test permission gating to ensure only authorized users see the button. Verify co
 7. Test the component with different permission scenarios using mock data
 8. Ensure the button follows accessibility guidelines with proper ARIA attributes and keyboard navigation
 
-## 2. Build Confirmation Modal with Description Field [in-progress]
+## 2. Build Confirmation Modal with Description Field [done]
 ### Dependencies: 5.1
 ### Description: Create a confirmation dialog using Headless UI that explains the archiving process, requests confirmation, and allows users to add an optional description for the archive.
 ### Details:
