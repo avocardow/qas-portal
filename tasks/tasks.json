@@ -452,7 +452,7 @@
           "description": "Implement the foundational card component that displays the estimated annual fees with proper loading and empty states. This component will handle the core display logic without permissions yet.",
           "dependencies": [],
           "details": "1. Create a new React component called `CurrentFeesCard` that accepts client data as props\n2. Implement the card layout using your UI library (likely Material-UI based on research)\n3. Display the estimated annual fees (`clients.estAnnFees`) with proper currency formatting\n4. Add a skeleton loader for the loading state\n5. Implement empty state handling with appropriate messaging\n6. Set up basic styling for the card with responsive design considerations\n7. Test the component with various data states (loading, empty, populated)\n8. Ensure the component follows the application's design system for consistency",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 7
         },
         {

@@ -15,7 +15,7 @@
 Test permission gating to ensure only Admin and Developer roles can see the fees. Verify tooltip displays correctly with billing commentary.
 
 # Subtasks:
-## 1. Create base Current Fees Card component with loading states [in-progress]
+## 1. Create base Current Fees Card component with loading states [done]
 ### Dependencies: None
 ### Description: Implement the foundational card component that displays the estimated annual fees with proper loading and empty states. This component will handle the core display logic without permissions yet.
 ### Details:
