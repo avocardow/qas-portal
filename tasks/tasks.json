@@ -185,7 +185,7 @@
       "id": 4,
       "title": "Implement Add Contact Button and Modal",
       "description": "Create the Add Contact button and modal form for adding new client contacts.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
