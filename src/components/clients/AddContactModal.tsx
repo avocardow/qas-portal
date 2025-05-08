@@ -1,10 +1,11 @@
-import React, { Fragment, ReactNode } from "react";
+import React, { Fragment, ReactNode, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Form from "@/components/form/Form";
 import Label from "@/components/form/Label";
 import InputField from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
+import { z } from "zod";
 
 interface AddContactModalProps {
   isOpen: boolean;
@@ -18,9 +19,43 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
     { value: "secondary", label: "Secondary" },
   ];
   
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // prevent default form submission
-    // TODO: wire up form submission
+  // Validation schema for contact form
+  const contactSchema = z.object({
+    name: z.string().nonempty("Name is required"),
+    type: z.string().nonempty("Type is required"),
+    phone: z.string().nonempty("Phone is required").regex(/^[0-9-+() ]+$/, "Invalid phone number"),
+    email: z.string().nonempty("Email is required").email("Invalid email address"),
+    licenseNumber: z.string().regex(/^[A-Za-z0-9-]*$/, "Invalid license number").optional(),
+  });
+  type ContactFormData = z.infer<typeof contactSchema>;
+  // Form state and errors
+  const [formData, setFormData] = useState<ContactFormData>({ name: "", type: "", phone: "", email: "", licenseNumber: "" });
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
+  // Validate individual field
+  const validateField = (field: keyof ContactFormData, value: unknown) => {
+    try {
+      contactSchema.pick({ [field]: true }).parse({ [field]: value });
+      setFormErrors(prev => ({ ...prev, [field]: undefined }));
+    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = (err as any).errors?.[0]?.message ?? "Invalid";
+      setFormErrors(prev => ({ ...prev, [field]: message }));
+    }
+  };
+  // Handle full form submission
+  const handleSubmitInternal = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const result = contactSchema.safeParse(formData);
+    if (!result.success) {
+      const fieldErrors = result.error.formErrors.fieldErrors as Record<string, string[]>;
+      const newErrors: Partial<Record<keyof ContactFormData, string>> = {};
+      for (const key in fieldErrors) {
+        if (fieldErrors[key]?.length) newErrors[key as keyof ContactFormData] = fieldErrors[key]![0];
+      }
+      setFormErrors(newErrors);
+      return;
+    }
+    // TODO: wire up form submission with result.data
   };
   
   return (
@@ -55,33 +90,75 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
                 </Dialog.Title>
                 <div className="mt-2">
                   {children ?? (
-                    <Form onSubmit={handleSubmit} className="space-y-4">
+                    <Form onSubmit={handleSubmitInternal} className="space-y-4">
                       <div>
                         <Label htmlFor="name">Name</Label>
-                        <InputField id="name" name="name" placeholder="Full Name" />
+                        <InputField
+                          id="name"
+                          name="name"
+                          placeholder="Full Name"
+                          value={formData.name}
+                          onChange={e => { setFormData({ ...formData, name: e.target.value }); validateField('name', e.target.value); }}
+                          error={!!formErrors.name}
+                          hint={formErrors.name}
+                        />
                       </div>
                       <div>
                         <Label htmlFor="type">Type</Label>
                         <Select
                           options={contactTypes}
                           placeholder="Select Contact Type"
-                          onChange={() => {}}
+                          value={formData.type}
+                          onChange={val => { setFormData({ ...formData, type: val }); validateField('type', val); }}
+                          className={formErrors.type ? 'border-error-500' : ''}
                         />
+                        {formErrors.type && <p className="text-error-500 text-sm mt-1">{formErrors.type}</p>}
                       </div>
                       <div>
                         <Label htmlFor="phone">Phone</Label>
-                        <InputField type="tel" id="phone" name="phone" placeholder="Phone Number" />
+                        <InputField
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          placeholder="Phone Number"
+                          value={formData.phone}
+                          onChange={e => { setFormData({ ...formData, phone: e.target.value }); validateField('phone', e.target.value); }}
+                          error={!!formErrors.phone}
+                          hint={formErrors.phone}
+                        />
                       </div>
                       <div>
                         <Label htmlFor="email">Email</Label>
-                        <InputField type="email" id="email" name="email" placeholder="Email Address" />
+                        <InputField
+                          type="email"
+                          id="email"
+                          name="email"
+                          placeholder="Email Address"
+                          value={formData.email}
+                          onChange={e => { setFormData({ ...formData, email: e.target.value }); validateField('email', e.target.value); }}
+                          error={!!formErrors.email}
+                          hint={formErrors.email}
+                        />
                       </div>
                       <div>
                         <Label htmlFor="licenseNumber">License Number</Label>
-                        <InputField id="licenseNumber" name="licenseNumber" placeholder="License Number" />
+                        <InputField
+                          id="licenseNumber"
+                          name="licenseNumber"
+                          placeholder="License Number"
+                          value={formData.licenseNumber}
+                          onChange={e => { setFormData({ ...formData, licenseNumber: e.target.value }); validateField('licenseNumber', e.target.value); }}
+                          error={!!formErrors.licenseNumber}
+                          hint={formErrors.licenseNumber}
+                        />
                       </div>
                       <div className="mt-6 flex justify-end">
-                        <Button type="submit">Add Contact</Button>
+                        <Button type="submit" disabled={
+                          !formData.name || !formData.type || !formData.phone || !formData.email ||
+                          Object.values(formErrors).some(Boolean)
+                        }>
+                          Add Contact
+                        </Button>
                       </div>
                     </Form>
                   )}

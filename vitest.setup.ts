@@ -5,14 +5,13 @@ if (typeof window === 'undefined') {
   (globalThis as any).window = globalThis;
 }
 
-// Polyfill for requestAnimationFrame in test environment
-if (!globalThis.requestAnimationFrame) {
-  globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => setTimeout(callback, 0);
-  globalThis.cancelAnimationFrame = (id: number): void => clearTimeout(id);
-}
-
-// Ensure requestAnimationFrame is available on the window object
-if (typeof window !== 'undefined' && !window.requestAnimationFrame) {
-  window.requestAnimationFrame = globalThis.requestAnimationFrame;
-  window.cancelAnimationFrame = globalThis.cancelAnimationFrame;
+// Override requestAnimationFrame to synchronous execution to prevent timers from lingering
+if (typeof window !== 'undefined') {
+  window.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+    callback(0);
+    return 0;
+  };
+  window.cancelAnimationFrame = (_id: number): void => {};
+  globalThis.requestAnimationFrame = window.requestAnimationFrame;
+  globalThis.cancelAnimationFrame = window.cancelAnimationFrame;
 }
