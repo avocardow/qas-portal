@@ -4,7 +4,7 @@
       "id": 0,
       "title": "Refactor DataTableOne to dynamic, prop-driven component using DataTableTwo functionality",
       "description": "Convert `DataTableOne` to accept `data`, `columns`, `onRowClick`, and `caption` props, derive columns from `data` when not provided, and reuse filtering, sorting, pagination, and search logic modeled after `DataTableTwo`.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "subtasks": [
