@@ -9,6 +9,8 @@ import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
 import ClientProfile from "@/components/clients/ClientProfile";
+import Authorized from '@/components/Authorized';
+import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -42,55 +44,61 @@ export default function ClientDetailPage() {
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <PageBreadcrumb
-        pageTitle={title}
-        items={[{ label: "Clients", href: "/clients" }]}
-      />
+    <Authorized action={CLIENT_PERMISSIONS.VIEW} fallback={
+      <DashboardPlaceholderPageTemplate heading="Access Denied">
+        <p>You do not have permission to view this page.</p>
+      </DashboardPlaceholderPageTemplate>
+    }>
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <PageBreadcrumb
+          pageTitle={title}
+          items={[{ label: "Clients", href: "/clients" }]}
+        />
 
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Client Overview */}
-        <ComponentCard title="Client Overview">
-          <ClientProfile clientId={clientId} />
-        </ComponentCard>
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Client Overview */}
+          <ComponentCard title="Client Overview">
+            <ClientProfile clientId={clientId} />
+          </ComponentCard>
 
-        {/* Placeholder for Current Audit */}
-        <ComponentCard title="Current Audit">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          {/* Placeholder for Current Audit */}
+          <ComponentCard title="Current Audit">
+            <div className="animate-pulse space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </ComponentCard>
+
+          {/* Placeholder for Client History */}
+          <ComponentCard title="Client History">
+            <div className="animate-pulse space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </ComponentCard>
+
+          {/* Placeholder for Activity Log */}
+          <ComponentCard title="Activity Log">
+            <div className="animate-pulse space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </ComponentCard>
+
+          {/* Placeholder for Contacts */}
+          <div className="lg:col-span-2">
+            <ClientContactsSection contacts={clientData!.contacts} />
           </div>
-        </ComponentCard>
 
-        {/* Placeholder for Client History */}
-        <ComponentCard title="Client History">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </ComponentCard>
-
-        {/* Placeholder for Activity Log */}
-        <ComponentCard title="Activity Log">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </ComponentCard>
-
-        {/* Placeholder for Contacts */}
-        <div className="lg:col-span-2">
-          <ClientContactsSection contacts={clientData!.contacts} />
+          {/* Placeholder for Files */}
+          <ComponentCard title="Files">
+            <div className="animate-pulse space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          </ComponentCard>
         </div>
-
-        {/* Placeholder for Files */}
-        <ComponentCard title="Files">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </ComponentCard>
       </div>
-    </div>
+    </Authorized>
   );
 }
