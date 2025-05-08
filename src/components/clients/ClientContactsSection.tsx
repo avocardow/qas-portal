@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ComponentCard from '@/components/common/ComponentCard';
-import DataTableOne from '@/components/tables/DataTables/TableOne/DataTableOne';
+import ContactsTable from './ContactsTable';
 import AddContactButton from '@/components/clients/AddContactButton';
 import AddContactModal from '@/components/clients/AddContactModal';
 import Authorized from '@/components/Authorized';
@@ -48,10 +48,9 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
           </Authorized>
         }
       >
-        <DataTableOne
-          data={contacts}
+        <ContactsTable
+          data={contacts.map((c) => ({ ...c, licenseNumber: null }))}
           onRowClick={(row) => router.push(`/contacts/${row.id}`)}
-          caption="Recent Contacts Table"
         />
       </ComponentCard>
       <AddContactModal
