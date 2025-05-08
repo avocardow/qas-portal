@@ -10,3 +10,9 @@ if (!globalThis.requestAnimationFrame) {
   globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => setTimeout(callback, 0);
   globalThis.cancelAnimationFrame = (id: number): void => clearTimeout(id);
 }
+
+// Ensure requestAnimationFrame is available on the window object
+if (typeof window !== 'undefined' && !window.requestAnimationFrame) {
+  window.requestAnimationFrame = globalThis.requestAnimationFrame;
+  window.cancelAnimationFrame = globalThis.cancelAnimationFrame;
+}
