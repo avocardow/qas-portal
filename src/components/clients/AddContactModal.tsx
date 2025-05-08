@@ -34,6 +34,7 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
   // Validate individual field
   const validateField = (field: keyof ContactFormData, value: unknown) => {
     try {
+      // @ts-ignore: dynamic key pick typing for zod
       contactSchema.pick({ [field]: true }).parse({ [field]: value });
       setFormErrors(prev => ({ ...prev, [field]: undefined }));
     } catch (err) {
