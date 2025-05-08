@@ -274,7 +274,7 @@
       "id": 5,
       "title": "Implement Archive Client Button",
       "description": "Create the Archive Client button with permission checking and confirmation flow.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
