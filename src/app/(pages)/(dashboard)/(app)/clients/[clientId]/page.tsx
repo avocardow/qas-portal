@@ -11,6 +11,7 @@ import ErrorFallback from "@/components/common/ErrorFallback";
 import ClientProfile from "@/components/clients/ClientProfile";
 import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
+import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -62,12 +63,7 @@ export default function ClientDetailPage() {
           </ComponentCard>
 
           {/* Placeholder for Current Audit */}
-          <ComponentCard title="Current Audit">
-            <div className="animate-pulse space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </ComponentCard>
+          <CurrentAuditCard clientId={clientId} />
 
           {/* Placeholder for Client History */}
           <ComponentCard title="Client History">
