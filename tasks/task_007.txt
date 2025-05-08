@@ -1,43 +1,58 @@
 # Task ID: 7
-# Title: Implement Trust Accounts Table
-# Status: done
+# Title: Implement Current Fees Card
+# Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.
+# Description: Create the Current Fees card with permission restrictions for Admin and Developer roles.
 # Details:
-Create a DataTableTwo component for trust accounts with columns: Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Include action buttons linking to each account's management software or external feed (e.g., 'Open in Xero' or 'Open in SharePoint'). Follow DataTableTwo API docs from Context7.
+1. Create a small card to display estimated annual fees (`clients.estAnnFees`)
+2. Wrap the component in `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>` to restrict visibility
+3. Add tooltip for 'Billing Commentary' that shows the commentary note
+4. Style as a small, simple card with appropriate formatting for currency values
+5. Handle loading and empty states
 
 # Test Strategy:
-Test table with various trust account data. Verify external links open correctly. Check that all required fields display properly. Test responsive behavior on different screen sizes.
+Test permission gating to ensure only Admin and Developer roles can see the fees. Verify tooltip displays correctly with billing commentary.
 
 # Subtasks:
-## 1. Set Up DataTableTwo Component Environment [done]
+## 1. Create base Current Fees Card component with loading states [pending]
 ### Dependencies: None
-### Description: Install and configure all necessary dependencies for DataTableTwo, ensuring compatibility with the project and preparing for custom table implementation.
+### Description: Implement the foundational card component that displays the estimated annual fees with proper loading and empty states. This component will handle the core display logic without permissions yet.
 ### Details:
-Install required packages (e.g., datatables.net-react, datatables.net-dt) using npm or yarn. Import DataTableTwo and its dependencies into the project. Verify that the DataTableTwo API documentation from Context7 is accessible and understood. Set up a basic DataTableTwo instance in a test component to confirm correct installation and rendering.[1][5]
+1. Create a new React component called `CurrentFeesCard` that accepts client data as props
+2. Implement the card layout using your UI library (likely Material-UI based on research)
+3. Display the estimated annual fees (`clients.estAnnFees`) with proper currency formatting
+4. Add a skeleton loader for the loading state
+5. Implement empty state handling with appropriate messaging
+6. Set up basic styling for the card with responsive design considerations
+7. Test the component with various data states (loading, empty, populated)
+8. Ensure the component follows the application's design system for consistency
 
-## 2. Define Trust Accounts Table Schema and Columns [done]
+## 2. Add Billing Commentary tooltip and enhance styling [pending]
 ### Dependencies: 7.1
-### Description: Design the schema for the trust accounts table, specifying all required columns and their data types, and configure the DataTableTwo columns accordingly.
+### Description: Enhance the Current Fees Card by adding the tooltip functionality for Billing Commentary and refining the card's visual presentation.
 ### Details:
-Create a columns configuration for DataTableTwo including: Account Name, Bank Name, BSB, Account Number, Software Access badge, Last Reconciliation Date, managementSoftware, and softwareUrl. Ensure each column has appropriate headers, data accessors, and formatting as needed (e.g., date formatting for reconciliation date, badge styling for software access).
+1. Add a tooltip component that displays the billing commentary note
+2. Position the tooltip trigger (icon or text) appropriately within the card layout
+3. Implement hover/focus interactions for the tooltip
+4. Ensure the tooltip is accessible (keyboard navigable and screen-reader friendly)
+5. Refine the card styling to be compact yet informative
+6. Format currency values using appropriate number formatting utilities
+7. Add subtle visual indicators for fee amounts (e.g., color coding based on amount thresholds)
+8. Test tooltip functionality across different browsers and devices
+9. Ensure the component maintains responsive behavior on all screen sizes
 
-## 3. Integrate Data Source and Populate Table [done]
-### Dependencies: 7.2
-### Description: Connect the DataTableTwo component to the trust accounts data source and ensure the table is populated with accurate, testable data.
+## 3. Implement permission restrictions with Authorized wrapper [pending]
+### Dependencies: 7.1, 7.2
+### Description: Wrap the Current Fees Card component with permission restrictions to ensure only users with Admin and Developer roles can view the fee information.
 ### Details:
-Fetch or mock trust account data containing all required fields. Map the data to the DataTableTwo schema. Ensure the table displays all records correctly and supports updates if needed. Use sample data for development if backend integration is not yet available.
-
-## 4. Implement Software Access Badge and Action Buttons [done]
-### Dependencies: 7.3
-### Description: Add a Software Access badge column and action buttons that link to each account's management software or external feed, such as 'Open in Xero' or 'Open in SharePoint'.
-### Details:
-Render a badge in the Software Access column based on the managementSoftware field. For each row, add an action button that dynamically generates a link using the softwareUrl field and displays the appropriate label (e.g., 'Open in Xero'). Ensure buttons are accessible and open links in a new tab or as required.
-
-## 5. Apply Styling, Test, and Document the Component [done]
-### Dependencies: 7.4
-### Description: Ensure the Trust Accounts Table matches design guidelines, is fully tested, and includes usage documentation.
-### Details:
-Apply consistent styling to match the application's theme, including badges and action buttons. Test the component for usability, accessibility, and responsiveness. Write clear documentation on how to use and extend the Trust Accounts Table, referencing the DataTableTwo API as needed.
+1. Import the `Authorized` component from your permissions system
+2. Wrap the CurrentFeesCard component with `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>`
+3. Ensure the component correctly handles unauthorized states (either hiding completely or showing an appropriate message)
+4. Test the component with different user roles to verify permission restrictions work correctly
+5. Implement any necessary fallback UI for users without proper permissions
+6. Add unit tests to verify the permission logic works as expected
+7. Document the permission requirements in component comments
+8. Verify that the component integrates properly with the application's authentication context
+9. Test edge cases such as role changes while the component is mounted
 

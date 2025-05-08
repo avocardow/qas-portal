@@ -1,54 +1,60 @@
 # Task ID: 1
-# Title: Setup Client Profile Page Structure
-# Status: done
+# Title: Setup Page Scaffolding
+# Status: pending
 # Dependencies: None
 # Priority: high
-# Description: Create the basic page structure for the Client Profile at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with TailAdmin grid layout and PageBreadcrumb.
+# Description: Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.
 # Details:
-Create the page.tsx file with proper Next.js App Router structure. Implement a responsive TailAdmin grid layout (xl:grid-cols-12) with appropriate breakpoints. Add PageBreadcrumb component at the top. Setup the basic sections that will contain all the client information cards and components. Follow Cursor rules for code styling and component usage.
+Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the following:
+1. Import necessary components from TailAdmin
+2. Setup page layout with responsive grid using TailAdmin components
+3. Implement PageBreadcrumb component with Home > Clients > [Client Name] structure
+4. Add sidebar navigation link to this page
+5. Create placeholder sections for all required components (Client Overview, Current Audit, etc.)
 
 # Test Strategy:
-Verify page renders without errors. Check responsive layout at different breakpoints. Ensure grid layout matches TailAdmin specifications.
+Verify page renders without errors and breadcrumbs display correctly. Check responsive layout at different screen sizes.
 
 # Subtasks:
-## 1. Create Basic Page Structure with Next.js App Router [done]
+## 1. Create Basic Page Structure with Layout Components [pending]
 ### Dependencies: None
-### Description: Set up the initial page.tsx file at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with proper Next.js App Router structure and PageBreadcrumb component
+### Description: Set up the client profile page file with the basic structure, imports, and TailAdmin layout components to establish the foundation for the page.
 ### Details:
-1. Create the page.tsx file in the specified directory structure
-2. Implement a client-side component with useParams hook to access the clientId parameter
-3. Add the PageBreadcrumb component with proper navigation hierarchy (Dashboard > Clients > Client Profile)
-4. Set up the basic page container with appropriate padding and margin
-5. Test that the page renders correctly and the breadcrumb navigation works
-6. Ensure the component follows Cursor rules for code styling
-7. Implement proper TypeScript typing for all props and parameters
+1. Create the file `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`
+2. Import necessary components from TailAdmin such as Breadcrumb, Card, and Grid components
+3. Create a functional component that uses Next.js dynamic routing to access the clientId parameter
+4. Implement a responsive container using TailAdmin's layout system with appropriate padding and margin
+5. Add basic error handling for invalid client IDs
+6. Set up the page title and metadata using Next.js head components
+7. Test the basic page rendering with different viewport sizes to ensure responsive behavior
+8. Ensure the page follows the application's established design patterns and styling conventions
 
-## 2. Implement Responsive TailAdmin Grid Layout [done]
+## 2. Implement Breadcrumb Navigation and Sidebar Link [pending]
 ### Dependencies: 1.1
-### Description: Create a responsive grid layout using TailAdmin and Tailwind CSS classes with proper breakpoints for different screen sizes
+### Description: Add the breadcrumb navigation component showing the hierarchical path and update the sidebar navigation to include a link to the client profile page.
 ### Details:
-1. Add a main container div with grid layout using Tailwind's grid utilities
-2. Implement responsive grid-cols with appropriate breakpoints: grid-cols-1 for mobile, md:grid-cols-2 for tablets, and xl:grid-cols-12 for desktops
-3. Set up proper gap spacing between grid items using gap-4 md:gap-6 2xl:gap-7.5
-4. Add container styling with rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark
-5. Ensure the layout is responsive by testing at different viewport sizes
-6. Implement dark mode support using Tailwind's dark: variant classes
-7. Test the responsive behavior across different breakpoints
+1. Import the PageBreadcrumb component from TailAdmin
+2. Configure the breadcrumb with the Home > Clients > [Client Name] structure
+3. Implement dynamic client name fetching for the breadcrumb based on the clientId parameter
+4. Add proper linking to each breadcrumb segment (Home and Clients list)
+5. Update the sidebar navigation configuration to include a link to the clients section
+6. Ensure the sidebar highlights the current page when on the client profile
+7. Test breadcrumb navigation to verify all links work correctly
+8. Implement proper accessibility attributes for the breadcrumb navigation (aria-current, etc.)
+9. Add hover states and visual indicators for interactive breadcrumb elements
 
-## 3. Create Placeholder Section Components [done]
+## 3. Create Content Section Placeholders with Grid Layout [pending]
 ### Dependencies: 1.1, 1.2
-### Description: Set up empty placeholder components for all the client information sections that will be populated in future tasks
+### Description: Implement the responsive grid layout for the client profile page and add placeholder sections for all required components that will be developed in future tasks.
 ### Details:
-1. Create placeholder components for each major section of the client profile:
-   - ClientInfoSection (spans 2 columns on xl screens)
-   - ClientStatsSection (spans 2 columns)
-   - ClientActivitySection (spans 4 columns)
-   - ClientContactSection (spans 4 columns)
-2. Add appropriate headings and container styling to each section
-3. Include skeleton loading states for each section
-4. Add comments indicating what content will be added to each section in future tasks
-5. Ensure all components have proper TypeScript interfaces
-6. Implement consistent styling across all section components
-7. Test that all sections render correctly within the grid layout
-8. Verify dark mode compatibility for all placeholder components
+1. Use TailAdmin's grid system to create a responsive layout with appropriate breakpoints
+2. Implement a two-column layout for desktop that collapses to a single column on mobile
+3. Create placeholder Card components for each section: Client Overview, Current Audit, Client History, etc.
+4. Add appropriate headings and skeleton UI elements in each placeholder section
+5. Implement proper spacing between sections using TailAdmin's spacing utilities
+6. Add comments in the code indicating where future components will be integrated
+7. Ensure the grid layout maintains proper alignment and spacing across all viewport sizes
+8. Test the layout with various screen sizes to verify responsive behavior
+9. Add subtle visual indicators (like borders or background colors) to distinguish different sections
+10. Implement container queries if needed for more complex responsive behaviors within sections
 

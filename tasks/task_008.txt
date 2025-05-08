@@ -1,59 +1,100 @@
 # Task ID: 8
-# Title: Develop Activity Card with Quick-Add
-# Status: done
+# Title: Build Trust Accounts Table and CRUD
+# Status: pending
 # Dependencies: 2
-# Priority: high
-# Description: Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.
+# Priority: medium
+# Description: Implement the Trust Accounts table with add, edit, and remove functionality.
 # Details:
-Implement TailAdmin ActivitiesCard showing recent notes, call logs, status changes with appropriate icons. Add pagination controls to show only the most recent items. Create Quick-Add Activity inline controls to add any activityLog type (Note, Email, Call, Billing Commentary, Meeting, Document), always linked to the Client, optionally a Contact, and the current team member.
+1. Fetch trust accounts data using appropriate tRPC query
+2. Create a table layout showing Account Name, Account Number, BSB, and Software
+3. Add tooltip for Software field with access instructions
+4. Implement add/edit modals using TailAdmin form components
+5. Connect to `trustAccounts.*` mutations for CRUD operations
+6. Add confirmation dialog for delete operations
+7. Refresh table after successful operations
 
 # Test Strategy:
-Test activity display with various activity types. Verify pagination works correctly. Test quick-add functionality for all activity types. Check that newly added activities appear in the list.
+Test all CRUD operations for trust accounts. Verify data displays correctly in the table and updates after operations. Test tooltips and confirm dialogs.
 
 # Subtasks:
-## 1. Create Activity Card UI with Pagination [done]
+## 1. Set up Trust Accounts data fetching with tRPC [pending]
 ### Dependencies: None
-### Description: Implement the base Activity Card component that displays recent activities with pagination controls using TailAdmin design patterns.
+### Description: Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.
 ### Details:
-1. Create a new ActivityCard component that follows the TailAdmin design system.
-2. Implement the card layout with appropriate headers and styling.
-3. Design the activity item component to display different activity types (notes, call logs, status changes) with corresponding icons.
-4. Add a data fetching mechanism using React Query or SWR for efficient pagination and caching.
-5. Implement pagination controls that limit the display to the most recent items.
-6. Create skeleton loading states for better UX during data fetching.
-7. Ensure the component is responsive across different screen sizes.
-8. Add proper accessibility attributes (ARIA labels, keyboard navigation).
-9. Test the pagination functionality with mock data to ensure it works correctly.
-10. Implement error handling for failed data fetching scenarios.
+1. Create a tRPC query endpoint for fetching trust accounts data
+2. Implement proper error handling and loading states
+3. Set up React state to store and manage the fetched data
+4. Add pagination support for large datasets
+5. Implement sorting functionality for table columns
+6. Test the query with mock data to ensure proper data retrieval
+7. Add type definitions for trust account data structure
 
-## 2. Develop Quick-Add Activity Form [done]
+## 2. Build Trust Accounts table UI with required fields [pending]
 ### Dependencies: 8.1
-### Description: Create an inline Quick-Add form that allows users to add different types of activities (Note, Email, Call, Billing Commentary, Meeting, Document) with appropriate fields and validation.
+### Description: Create a responsive table component that displays trust account information with all required fields and tooltips.
 ### Details:
-1. Design and implement an expandable/collapsible Quick-Add form within the Activity Card.
-2. Create a dropdown or tab system to select different activity types (Note, Email, Call, Billing Commentary, Meeting, Document).
-3. Implement dynamic form fields that change based on the selected activity type.
-4. Add form validation for required fields using a form library like Formik or React Hook Form.
-5. Ensure the form always links activities to the current Client.
-6. Add an optional Contact selection field that pulls from available contacts for the client.
-7. Automatically associate the activity with the current team member.
-8. Implement optimistic UI updates to show new activities immediately after submission.
-9. Add appropriate error handling and success notifications.
-10. Ensure the form is keyboard accessible and follows accessibility best practices.
+1. Create a table layout using TailAdmin components
+2. Implement columns for Account Name, Account Number, BSB, and Software
+3. Add tooltip for Software field with access instructions
+4. Implement row selection functionality
+5. Add responsive design for different screen sizes
+6. Implement loading states and empty state handling
+7. Test the table rendering with sample data
+8. Ensure accessibility compliance with proper ARIA attributes
 
-## 3. Integrate Activity Management with Backend and Finalize [done]
-### Dependencies: 8.1, 8.2
-### Description: Connect the Activity Card and Quick-Add form to backend APIs, implement real-time updates, and finalize the component with comprehensive testing.
+## 3. Implement Add Trust Account functionality [pending]
+### Dependencies: 8.1
+### Description: Create an Add Trust Account modal with form validation and integration with the backend mutation.
 ### Details:
-1. Create or integrate with backend API endpoints for fetching paginated activities.
-2. Implement API calls for creating new activities of different types.
-3. Add real-time updates using WebSockets or polling when new activities are added by other users.
-4. Implement proper error handling for all API interactions.
-5. Add activity filtering capabilities based on type or date range.
-6. Optimize performance by implementing virtualization for long activity lists.
-7. Write unit tests for component logic and integration tests for API interactions.
-8. Perform cross-component testing to ensure the Activity Card works correctly within the larger application.
-9. Conduct accessibility testing and fix any issues.
-10. Document the component API, props, and usage examples for other developers.
-11. Perform final cross-browser and cross-device testing to ensure consistent behavior.
+1. Create a modal component using TailAdmin form components
+2. Implement form fields for Account Name, Account Number, BSB, and Software
+3. Add client-side validation for all fields
+4. Connect the form to the trustAccounts.create mutation
+5. Handle success and error states
+6. Implement form reset functionality
+7. Add loading state during submission
+8. Test the form submission with valid and invalid data
+9. Refresh the table after successful creation
+
+## 4. Implement Edit Trust Account functionality [pending]
+### Dependencies: 8.2, 8.3
+### Description: Create an Edit Trust Account modal that pre-populates with existing data and connects to the update mutation.
+### Details:
+1. Create an edit modal component reusing TailAdmin form components
+2. Pre-populate form fields with existing trust account data
+3. Implement form validation for all fields
+4. Connect the form to the trustAccounts.update mutation
+5. Handle success and error states
+6. Add loading state during submission
+7. Test the form submission with valid and invalid data
+8. Refresh the table after successful update
+9. Ensure proper state management between add and edit modes
+
+## 5. Implement Delete Trust Account functionality [pending]
+### Dependencies: 8.2
+### Description: Add delete functionality with confirmation dialog and integration with the delete mutation.
+### Details:
+1. Create a confirmation dialog component
+2. Display account details in the confirmation to prevent accidental deletion
+3. Connect to the trustAccounts.delete mutation
+4. Handle success and error states
+5. Add loading state during deletion process
+6. Implement proper error handling for failed deletions
+7. Refresh the table after successful deletion
+8. Test the deletion flow with various scenarios
+9. Add audit logging for deletion operations
+
+## 6. Implement data refresh and error handling [pending]
+### Dependencies: 8.3, 8.4, 8.5
+### Description: Add comprehensive error handling, success notifications, and automatic table refresh after CRUD operations.
+### Details:
+1. Implement a consistent notification system for success and error messages
+2. Add automatic table refresh after successful CRUD operations
+3. Implement optimistic updates for better UX
+4. Add retry mechanisms for failed operations
+5. Create comprehensive error handling for all API calls
+6. Implement proper loading states during operations
+7. Add data validation before submission
+8. Test all error scenarios and edge cases
+9. Ensure proper state synchronization between operations
 

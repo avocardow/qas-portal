@@ -1,55 +1,112 @@
 # Task ID: 4
-# Title: Implement Audit Cycle Progress and Schedule
-# Status: done
+# Title: Implement Add Contact Button and Modal
+# Status: pending
 # Dependencies: 2
 # Priority: high
-# Description: Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.
+# Description: Create the Add Contact button and modal form for adding new client contacts.
 # Details:
-Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for proper date formatting as referenced in Context7.
+1. Create an Add Contact button in the appropriate section
+2. Implement a modal using Headless UI Dialog
+3. Build form using TailAdmin form components from `src/components/form`
+4. Include fields for name, type, phone, email, and license number
+5. Implement form validation
+6. Connect to `useMutation('clients.createContact')` for saving
+7. Refresh contact list on successful submission
 
 # Test Strategy:
-Test progress bar calculations for accuracy. Verify schedule displays correct milestone dates. Check date formatting across different locales. Ensure components are responsive.
+Test form validation, submission process, and verify new contacts appear in the list after adding. Test error handling for failed submissions.
 
 # Subtasks:
-## 1. Define Data Structures for Audit Cycle and Schedule [done]
+## 1. Create Add Contact Button Component [pending]
 ### Dependencies: None
-### Description: Design and implement TypeScript interfaces or types to represent audit cycles, milestones, and schedule data required by the progress bar and schedule card components.
+### Description: Implement a visually prominent Add Contact button that will trigger the contact modal. The button should be positioned appropriately in the contacts section and follow accessibility best practices.
 ### Details:
-Identify all necessary fields (e.g., reportDueDate, nextDueDate, milestone names, dates) and create reusable types/interfaces. Ensure these structures support both progress calculation and schedule listing.
+1. Create a new component `AddContactButton.jsx` in the appropriate directory
+2. Style the button using TailAdmin design system classes for consistency
+3. Add appropriate aria-label for accessibility
+4. Implement onClick handler that will control modal visibility state
+5. Test the button's visual appearance and focus states
+6. Ensure the button has a clear, explicit label ('Add Contact') that matches the modal title
 
-## 2. Fetch and Prepare Audit Data [done]
+## 2. Implement Modal Dialog Structure using Headless UI [pending]
 ### Dependencies: 4.1
-### Description: Implement logic to retrieve audit cycle and schedule data from the backend or mock source, transforming it to match the defined data structures.
+### Description: Create the modal dialog structure using Headless UI Dialog component with proper accessibility attributes and focus management.
 ### Details:
-Use API calls or mock data to obtain audit cycles and milestones. Normalize and validate the data to ensure it includes all required fields for downstream components.
+1. Import Dialog components from Headless UI
+2. Create a new component `AddContactModal.jsx`
+3. Implement modal open/close state management
+4. Set up proper focus trapping within the modal
+5. Ensure the modal has proper ARIA attributes (role='dialog', aria-modal='true')
+6. Add overlay with appropriate styling and backdrop click handling
+7. Test keyboard navigation (Tab, Escape to close)
+8. Verify focus returns to the Add Contact button when modal closes
 
-## 3. Calculate Audit Progress Percentage [done]
-### Dependencies: 4.1, 4.2
-### Description: Develop a utility function to compute the progress percentage based on the last audit's reportDueDate and the next due date.
+## 3. Build Contact Form Layout with TailAdmin Components [pending]
+### Dependencies: 4.2
+### Description: Create the form structure inside the modal using TailAdmin form components with all required fields for contact information.
 ### Details:
-Implement a function that takes the relevant dates and calculates the elapsed percentage of the audit cycle. Ensure edge cases (e.g., missing dates, future/past cycles) are handled gracefully.
+1. Import form components from `src/components/form`
+2. Create form layout with fields for name, type, phone, email, and license number
+3. Use appropriate input types (text, email, tel) for each field
+4. Add proper labels and placeholder text for each field
+5. Implement form reset functionality when modal closes
+6. Style the form according to TailAdmin design system
+7. Test the form layout on different screen sizes
+8. Ensure the first input field receives focus when modal opens
 
-## 4. Implement Audit Cycle Progress Bar Component [done]
+## 4. Implement Form State Management and Validation [pending]
 ### Dependencies: 4.3
-### Description: Create the Audit Cycle Progress Bar using TailAdmin's progress-bar component, displaying the calculated progress and relevant date labels.
+### Description: Set up form state management and implement client-side validation for all contact form fields.
 ### Details:
-Utilize TailAdmin's pre-built progress bar, passing in the computed percentage and customizing styles as needed. Display formatted start and end dates using Intl.DateTimeFormat.
+1. Create form state using React state or a form library
+2. Implement validation rules for each field:
+   - Name: Required
+   - Email: Required, valid email format
+   - Phone: Required, valid phone format
+   - Type: Required selection
+   - License number: Optional but validate format if provided
+3. Add visual feedback for validation errors
+4. Implement inline validation as user types
+5. Disable submit button until form is valid
+6. Test validation with various input scenarios
+7. Ensure validation errors are accessible to screen readers
 
-## 5. Design Upcoming Audit Schedule Card UI [done]
-### Dependencies: None
-### Description: Design the Upcoming Audit Schedule card layout to match the CRM UpcomingSchedule style, including milestone names and dates.
+## 5. Connect Form to API using useMutation Hook [pending]
+### Dependencies: 4.4
+### Description: Integrate the form with the API using the useMutation hook to save new contacts to the backend.
 ### Details:
-Use Tailwind CSS and TailAdmin components to create a visually consistent card. Plan for dynamic rendering of milestones and responsive design.
+1. Import and set up useMutation hook with 'clients.createContact' endpoint
+2. Create form submission handler that calls the mutation
+3. Transform form data into the format expected by the API
+4. Implement loading state during submission
+5. Add error handling for failed submissions
+6. Test the API integration with valid and invalid data
+7. Verify that the correct data is being sent to the API
+8. Implement retry logic for network failures
 
-## 6. Implement Upcoming Audit Schedule Card Component [done]
-### Dependencies: 4.2, 4.5
-### Description: Build the Upcoming Audit Schedule card, listing upcoming audit milestones with properly formatted dates.
+## 6. Implement Success and Error Handling [pending]
+### Dependencies: 4.5
+### Description: Add proper success and error handling for the contact creation process, including user feedback and error messages.
 ### Details:
-Map over the schedule data to render each milestone. Use Intl.DateTimeFormat for date display. Ensure accessibility and mobile responsiveness.
+1. Create success notification or toast message
+2. Implement error message display within the form
+3. Add specific error handling for common errors (duplicate contact, validation failures)
+4. Close modal on successful submission
+5. Keep modal open with error messages on failed submission
+6. Reset form state after successful submission
+7. Test error scenarios by mocking API failures
+8. Ensure error messages are clear and actionable
 
-## 7. Integrate Components and Test End-to-End [done]
-### Dependencies: 4.4, 4.6
-### Description: Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.
+## 7. Implement Contact List Refresh After Submission [pending]
+### Dependencies: 4.6
+### Description: Update the contacts list to reflect newly added contacts without requiring a full page refresh.
 ### Details:
-Place both components in the intended layout. Test with various data scenarios to ensure correct progress calculation, date formatting, and UI responsiveness. Address any integration or edge case issues.
+1. Implement a callback function to refresh the contact list data
+2. Call the refresh function after successful contact creation
+3. Use optimistic updates to immediately show the new contact
+4. Handle any discrepancies between optimistic update and server response
+5. Add subtle animation or highlight for newly added contacts
+6. Test that the contact list updates correctly after submission
+7. Ensure the list maintains proper sorting/filtering after updates
+8. Verify that focus management works correctly after list refresh
 

@@ -1,70 +1,77 @@
 # Task ID: 6
-# Title: Create Contact Network Diagram
-# Status: done
-# Dependencies: 5
-# Priority: low
-# Description: Implement a simple graph visualization on the Client Profile page showing relationships between client, contacts, and trust accounts.
+# Title: Build Current Audit Section
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: Create the Current Audit section showing audit details with edit functionality.
 # Details:
-Create a simple network diagram showing the relationships: client → contacts → trust accounts. Use an appropriate visualization library compatible with TailAdmin. Keep the diagram simple and focused on key relationships. Ensure the diagram is responsive and degrades gracefully on smaller screens.
+1. Implement `useQuery('audits.getCurrent')` to fetch latest audit data
+2. Create a card to display Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned
+3. Add edit button to open a modal form
+4. Build form using TailAdmin components
+5. Connect to `useMutation('audits.createOrUpdate')` for saving changes
+6. Handle case where no current audit exists with option to create one
 
 # Test Strategy:
-Test diagram rendering with different relationship structures. Verify visual clarity and readability. Check responsiveness and fallback on mobile devices.
+Verify audit data displays correctly. Test edit functionality and confirm data updates after edits. Test creating a new audit when none exists.
 
 # Subtasks:
-## 1. Research and select visualization library [done]
+## 1. Implement Current Audit Data Fetching and State Management [pending]
 ### Dependencies: None
-### Description: Evaluate and select an appropriate graph visualization library compatible with TailAdmin, Next.js, and React
+### Description: Set up the data fetching logic using React Query to retrieve the current audit information and implement the state management structure to handle audit data, loading states, and error handling.
 ### Details:
-Research visualization libraries like D3.js, React Flow, Vis.js, or Cytoscape.js that work well with TailAdmin's React/Next.js environment. Compare features including performance, responsiveness, customization options, and documentation quality. Consider libraries that support directed graphs to show relationships between clients, contacts, and trust accounts. Test basic integration with TailAdmin to ensure compatibility. Document the selected library with justification and basic implementation examples.
+1. Create a custom hook `useCurrentAudit` that implements `useQuery('audits.getCurrent')` to fetch the latest audit data
+2. Handle loading, error, and empty states within the hook
+3. Implement proper TypeScript interfaces for audit data structure (including Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned fields)
+4. Add a function to check if an audit exists and provide appropriate default values
+5. Set up proper caching and refetching strategies in React Query
+6. Implement test cases using React Testing Library to verify data fetching behavior
+7. Add error boundaries to gracefully handle API failures
 
-<info added on 2025-05-03T08:59:23.443Z>
-Based on the evaluation, React Flow is the recommended choice for these reasons:
-
-- React-first API provides seamless integration with our existing React/Next.js codebase
-- Built-in TypeScript support aligns with our development stack
-- Demonstrated good performance for our expected graph size (up to 100 nodes)
-- Active maintenance with regular updates (last release within past month)
-- Straightforward customization of nodes/edges to match TailAdmin design system
-- Native support for directed graphs showing client-contact-account relationships
-- Built-in interactive features (zooming, panning, selection)
-
-Implementation plan:
-1. Install with `npm install reactflow`
-2. Define data structure for nodes (clients, contacts, accounts) and edges (relationships)
-3. Create a custom node renderer to match TailAdmin UI components
-4. Implement the graph component in the Client Profile page
-5. Add interaction handlers for node selection and edge creation
-
-Initial proof-of-concept code has been committed to the development branch.
-</info added on 2025-05-03T08:59:23.443Z>
-
-## 2. Define data structure for network relationships [done]
+## 2. Build Current Audit Display Card Component [pending]
 ### Dependencies: 6.1
-### Description: Create a standardized data structure to represent client, contact, and trust account relationships
+### Description: Create a responsive card component that displays the current audit information in a clear, organized manner following best practices for data presentation and accessibility.
 ### Details:
-Design a JSON data structure that represents nodes (clients, contacts, trust accounts) and edges (relationships between them). Define node types with appropriate properties (e.g., id, name, type, status). Create edge definitions with source, target, and relationship type. Ensure the data structure is compatible with the selected visualization library. Include sample data that demonstrates various relationship scenarios. Document the schema with examples for development reference.
+1. Design and implement a TailAdmin card component to display audit information
+2. Create formatted displays for each audit field (Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned)
+3. Implement proper date formatting using a library like date-fns
+4. Add conditional rendering for different audit statuses with appropriate visual indicators
+5. Implement a placeholder state for when no current audit exists
+6. Ensure the component is fully responsive across device sizes
+7. Add accessibility attributes (aria-labels, proper heading hierarchy)
+8. Include an edit button that will trigger the edit modal
+9. Write unit tests to verify the component renders correctly with different data scenarios
 
-## 3. Implement basic network diagram component [done]
+## 3. Develop Edit Audit Modal Form [pending]
 ### Dependencies: 6.1, 6.2
-### Description: Create a React component that renders the basic network diagram using the selected library
+### Description: Create a modal form component that allows users to edit the current audit details or create a new audit if none exists, with proper validation and user feedback.
 ### Details:
-Create a new React component in the TailAdmin framework that implements the visualization library. Set up the component to accept the data structure defined in subtask 2. Implement basic node and edge rendering with default styling. Add container sizing and basic layout algorithms. Ensure the component handles empty or minimal data gracefully. Test the component with sample data to verify basic functionality. Document component props and usage examples.
+1. Build a modal component using TailAdmin components that opens when the edit button is clicked
+2. Implement form fields for all audit properties with appropriate input types
+3. Add form validation using a form library (React Hook Form recommended based on research)
+4. Create date picker components for date fields with proper formatting
+5. Implement dropdown selectors for Audit Stage and Status with predefined options
+6. Add staff assignment field with user search/selection capability
+7. Include proper error messaging and field validation
+8. Implement conditional logic to show different form fields based on audit stage
+9. Add cancel and save buttons with appropriate confirmation dialogs
+10. Ensure the form is accessible with keyboard navigation and screen reader support
+11. Write tests for form validation and submission behavior
 
-## 4. Add styling and visual enhancements [done]
-### Dependencies: 6.3
-### Description: Enhance the network diagram with appropriate styling, colors, and visual elements
+## 4. Implement Audit Creation/Update Functionality with Error Handling [pending]
+### Dependencies: 6.1, 6.2, 6.3
+### Description: Connect the edit form to the backend API using React Query mutations, implement proper error handling, success notifications, and handle the special case of creating a new audit when none exists.
 ### Details:
-Apply TailAdmin's design system to the network diagram for visual consistency. Create distinct visual styles for different node types (clients, contacts, trust accounts) using appropriate colors, shapes, and icons. Style relationship edges to indicate relationship types. Add tooltips or hover effects to display additional information. Implement visual indicators for active/inactive relationships. Ensure all styling uses Tailwind CSS classes where possible for consistency with TailAdmin. Document styling options and customization capabilities.
-
-## 5. Implement responsive behavior [done]
-### Dependencies: 6.3, 6.4
-### Description: Ensure the network diagram is responsive and degrades gracefully on smaller screens
-### Details:
-Implement responsive sizing for the diagram container based on viewport dimensions. Add media queries or Tailwind responsive classes to adjust diagram properties on different screen sizes. Create simplified view modes for mobile devices (possibly collapsing certain nodes or showing alternative representations). Test responsive behavior across various device sizes. Implement touch interactions for mobile users. Add zoom/pan controls that work well on both desktop and mobile. Document responsive behavior and breakpoints.
-
-## 6. Add interactive features and integration [done]
-### Dependencies: 6.3, 6.4, 6.5
-### Description: Implement user interactions and integrate the diagram with the broader application
-### Details:
-Add click/tap interactions to select nodes and view detailed information. Implement filtering capabilities to focus on specific relationship types or entities. Create methods for programmatically highlighting specific relationships. Add animation for state changes (e.g., when filtering or selecting). Integrate the component with TailAdmin's state management approach. Ensure the component exposes appropriate events and callbacks for parent components. Create documentation for all interactive features and integration points. Perform final testing with realistic data volumes and user scenarios.
+1. Implement `useMutation('audits.createOrUpdate')` hook to handle saving changes to the server
+2. Add optimistic updates to immediately reflect changes in the UI
+3. Implement proper error handling with user-friendly error messages
+4. Add success notifications when an audit is successfully created or updated
+5. Create a special flow for when no current audit exists, with a button to create a new one
+6. Implement audit history tracking to maintain a record of changes
+7. Add confirmation dialogs for important actions
+8. Ensure proper RBAC (Role-Based Access Control) is respected for edit permissions
+9. Implement form state persistence in case of accidental navigation
+10. Add loading indicators during submission
+11. Write integration tests to verify the complete create/update flow
+12. Implement proper invalidation of queries to ensure data consistency
 

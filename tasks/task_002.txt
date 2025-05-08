@@ -1,49 +1,300 @@
 # Task ID: 2
 # Title: Implement Client Data Fetching
-# Status: done
+# Status: pending
 # Dependencies: 1
 # Priority: high
-# Description: Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.
+# Description: Set up tRPC query hooks to fetch client data and implement loading states.
 # Details:
-Implement the tRPC call to api.clients.getById({ clientId }) with all necessary Prisma relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Follow Next.js App Router data fetching guidelines from Context7. Implement error handling and loading states. Ensure all client and related entity fields are loaded to allow for later refinement.
+1. Implement `useQuery('clients.getById')` to fetch client data
+2. Create loading and error states for data fetching
+3. Setup React Query caching configuration
+4. Create type definitions based on the Client data model
+5. Implement fallback UI for when data is loading or errors occur
 
 # Test Strategy:
-Test with mock data to ensure all relations are properly loaded. Verify error states and loading indicators work correctly. Check that all required fields are available in the returned data.
+Test data fetching with mock API responses. Verify loading states display correctly and error handling works as expected.
 
 # Subtasks:
-## 1. Define Prisma client schema relations [done]
+## 1. Define Client Data Model and Type Definitions [pending]
 ### Dependencies: None
-### Description: Set up the Prisma schema to properly define all required relations for the client entity
+### Description: Create TypeScript interfaces and Zod schemas for the client data model to ensure type safety across the application.
 ### Details:
-Review the existing Prisma schema and ensure all relations are properly defined between the client entity and its related entities: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Make sure relation fields are correctly typed and that foreign keys are properly set up. This will serve as the foundation for fetching comprehensive client data with all necessary relations.
+1. Create a `types/client.ts` file with TypeScript interfaces for the Client model
+2. Define Zod schemas for validation that match the TypeScript interfaces
+3. Export type definitions to be used by both server and client
+4. Include all necessary client fields (id, name, email, etc.)
+5. Add documentation comments for each field
+6. Test the type definitions by validating sample data
 
-## 2. Create tRPC procedure for client fetching [done]
+Example implementation:
+```typescript
+// types/client.ts
+import { z } from 'zod';
+
+export const clientSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  company: z.string(),
+  status: z.enum(['active', 'inactive', 'prospect']),
+  createdAt: z.date(),
+  updatedAt: z.date()
+});
+
+export type Client = z.infer<typeof clientSchema>;
+```
+
+## 2. Implement tRPC Server Procedures for Client Data [pending]
 ### Dependencies: 2.1
-### Description: Implement the tRPC procedure that will handle fetching client data by ID with all relations
+### Description: Create type-safe tRPC procedures on the server side to fetch client data by ID and handle other client-related queries.
 ### Details:
-Create a new tRPC procedure in the clients router called 'getById' that accepts a clientId parameter. Inside this procedure, use Prisma's findUnique or findFirst method with the include option to specify all the required relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Implement proper error handling for cases where the client doesn't exist or database errors occur. Return a properly typed response that includes the client and all its relations.
+1. Create a `server/routers/client.ts` file to define client-related procedures
+2. Implement the `getById` procedure with proper input validation using Zod
+3. Add error handling for cases like client not found
+4. Implement any additional client data procedures needed (getAll, search, etc.)
+5. Export and include the client router in the main app router
+6. Test the procedures with sample data
 
-## 3. Implement server-side data fetching component [done]
+Example implementation:
+```typescript
+// server/routers/client.ts
+import { z } from 'zod';
+import { procedure, router } from '../trpc';
+import { clientSchema } from '../../types/client';
+
+export const clientRouter = router({
+  getById: procedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      try {
+        const client = await ctx.db.client.findUnique({
+          where: { id: input.id }
+        });
+        
+        if (!client) {
+          throw new Error('Client not found');
+        }
+        
+        return clientSchema.parse(client);
+      } catch (error) {
+        throw new Error(`Failed to fetch client: ${error.message}`);
+      }
+    }),
+  // Add other client procedures as needed
+});
+```
+
+## 3. Configure tRPC Client with React Query Integration [pending]
 ### Dependencies: 2.2
-### Description: Create a server component that fetches client data using the tRPC procedure
+### Description: Set up the tRPC client with React Query integration, including optimal caching configuration for client data.
 ### Details:
-Following Next.js App Router patterns, create a React Server Component that will handle fetching the client data. Use the tRPC server-side calling pattern to directly invoke the api.clients.getById procedure with the clientId parameter. Implement proper error handling and ensure the component can be easily composed with other components. This approach leverages server components to keep expensive data fetches on the server, improving performance and security.
+1. Create a `utils/trpc.ts` file to set up the tRPC client
+2. Configure httpBatchLink for efficient network requests
+3. Set up React Query with appropriate caching settings
+4. Configure error handling and retry logic
+5. Export the tRPC hooks for use in components
+6. Test the configuration by making a simple query
 
-## 4. Create loading and error states [done]
-### Dependencies: 2.3
-### Description: Implement loading states and error handling UI components
-### Details:
-Create reusable loading and error state components that will be displayed during data fetching and when errors occur. For loading states, implement a skeleton UI that matches the layout of the client data display. For error states, create informative error messages that help users understand what went wrong (e.g., client not found, permission issues, or server errors). Use Next.js App Router's loading.js and error.js conventions to handle these states elegantly.
+Example implementation:
+```typescript
+// utils/trpc.ts
+import { createTRPCReact } from '@trpc/react-query';
+import { httpBatchLink } from '@trpc/client';
+import { QueryClient } from '@tanstack/react-query';
+import type { AppRouter } from '../server/routers/_app';
 
-## 5. Implement client-side data fetching hook [done]
-### Dependencies: 2.2
-### Description: Create a custom hook for client components that need to fetch client data
-### Details:
-For client components that need to fetch or refetch client data, create a custom React hook (e.g., useClientData) that uses tRPC's client-side calling pattern. Implement this using SWR or React Query for efficient caching and revalidation. The hook should accept a clientId parameter and return the client data along with loading and error states. This will complement the server-side fetching while providing a way to update data on the client when needed.
+export const trpc = createTRPCReact<AppRouter>();
 
-## 6. Create data display components with progressive loading [done]
-### Dependencies: 2.3, 2.4, 2.5
-### Description: Implement UI components that display client data with progressive loading of related entities
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      cacheTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+export const trpcClient = trpc.createClient({
+  links: [
+    httpBatchLink({
+      url: '/api/trpc',
+      // Include credentials for cookie-based auth if needed
+      fetch(url, options) {
+        return fetch(url, {
+          ...options,
+          credentials: 'include',
+        });
+      },
+    }),
+  ],
+});
+```
+
+## 4. Create Custom Hook for Client Data Fetching [pending]
+### Dependencies: 2.1, 2.3
+### Description: Develop a custom React hook that encapsulates the tRPC query logic for fetching client data, with proper typing and error handling.
 ### Details:
-Create UI components that display the client data and all its relations. Implement these using a progressive loading approach where the main client data loads first, followed by related entities. This improves perceived performance. Ensure all fields from the client and related entities are accessible in the UI components, even if not all are displayed initially. This will allow for later refinement of the UI without requiring changes to the data fetching logic. Use React Suspense boundaries to optimize the loading experience.
+1. Create a `hooks/useClient.ts` file to implement the custom hook
+2. Use the tRPC hook to fetch client data by ID
+3. Add proper TypeScript typing for the hook parameters and return values
+4. Include error handling and data transformation if needed
+5. Add documentation for the hook usage
+6. Test the hook in isolation
+
+Example implementation:
+```typescript
+// hooks/useClient.ts
+import { trpc } from '../utils/trpc';
+import type { Client } from '../types/client';
+
+interface UseClientOptions {
+  enabled?: boolean;
+  onSuccess?: (data: Client) => void;
+  onError?: (error: Error) => void;
+}
+
+/**
+ * Hook to fetch client data by ID
+ * @param id The client ID to fetch
+ * @param options Additional query options
+ * @returns Query result with client data, loading state, and error
+ */
+export function useClient(id: string | undefined, options: UseClientOptions = {}) {
+  return trpc.client.getById.useQuery(
+    { id: id || '' },
+    {
+      enabled: !!id && (options.enabled !== false),
+      onSuccess: options.onSuccess,
+      onError: options.onError,
+    }
+  );
+}
+```
+
+## 5. Implement Loading and Error UI Components [pending]
+### Dependencies: None
+### Description: Create reusable UI components for handling loading states, errors, and empty states when fetching client data.
+### Details:
+1. Create `components/ui/LoadingState.tsx` for showing loading indicators
+2. Create `components/ui/ErrorState.tsx` for displaying error messages
+3. Create `components/ui/EmptyState.tsx` for when no data is available
+4. Ensure components are accessible and provide clear feedback
+5. Make components customizable with props for different contexts
+6. Test components with various states and screen sizes
+
+Example implementation:
+```typescript
+// components/ui/LoadingState.tsx
+import React from 'react';
+
+interface LoadingStateProps {
+  message?: string;
+  size?: 'small' | 'medium' | 'large';
+}
+
+export function LoadingState({ message = 'Loading...', size = 'medium' }: LoadingStateProps) {
+  return (
+    <div className="loading-container" aria-live="polite" role="status">
+      <div className={`spinner spinner-${size}`} />
+      <p className="loading-text">{message}</p>
+    </div>
+  );
+}
+
+// components/ui/ErrorState.tsx
+interface ErrorStateProps {
+  error: Error | null;
+  onRetry?: () => void;
+}
+
+export function ErrorState({ error, onRetry }: ErrorStateProps) {
+  return (
+    <div className="error-container" role="alert">
+      <h3>Something went wrong</h3>
+      <p>{error?.message || 'An unknown error occurred'}</p>
+      {onRetry && (
+        <button onClick={onRetry} className="retry-button">
+          Try Again
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+## 6. Integrate Client Data Fetching in Client Profile Component [pending]
+### Dependencies: 2.4, 2.5
+### Description: Create a ClientProfile component that uses the custom hook to fetch and display client data with proper loading, error, and empty states.
+### Details:
+1. Create `components/ClientProfile.tsx` component
+2. Use the `useClient` hook to fetch data based on client ID
+3. Implement conditional rendering for loading, error, and data states
+4. Add a refetch capability for error recovery
+5. Implement proper data display with all client fields
+6. Test the component with various data scenarios
+
+Example implementation:
+```typescript
+// components/ClientProfile.tsx
+import React from 'react';
+import { useClient } from '../hooks/useClient';
+import { LoadingState } from './ui/LoadingState';
+import { ErrorState } from './ui/ErrorState';
+
+interface ClientProfileProps {
+  clientId: string;
+}
+
+export function ClientProfile({ clientId }: ClientProfileProps) {
+  const { data: client, isLoading, error, refetch } = useClient(clientId);
+
+  if (isLoading) {
+    return <LoadingState message="Loading client data..." />;
+  }
+
+  if (error) {
+    return <ErrorState error={error} onRetry={() => refetch()} />;
+  }
+
+  if (!client) {
+    return (
+      <div className="empty-state">
+        <h3>Client Not Found</h3>
+        <p>The requested client could not be found or may have been deleted.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="client-profile">
+      <h2>{client.name}</h2>
+      <div className="client-details">
+        <div className="detail-row">
+          <span className="label">Email:</span>
+          <span className="value">{client.email}</span>
+        </div>
+        <div className="detail-row">
+          <span className="label">Phone:</span>
+          <span className="value">{client.phone || 'N/A'}</span>
+        </div>
+        <div className="detail-row">
+          <span className="label">Company:</span>
+          <span className="value">{client.company}</span>
+        </div>
+        <div className="detail-row">
+          <span className="label">Status:</span>
+          <span className={`value status-${client.status}`}>{client.status}</span>
+        </div>
+        <div className="detail-row">
+          <span className="label">Client since:</span>
+          <span className="value">{new Date(client.createdAt).toLocaleDateString()}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
 

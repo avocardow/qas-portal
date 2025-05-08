@@ -2,44 +2,44 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Setup Client Profile Page Structure",
-      "description": "Create the basic page structure for the Client Profile at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with TailAdmin grid layout and PageBreadcrumb.",
-      "status": "done",
+      "title": "Setup Page Scaffolding",
+      "description": "Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "Create the page.tsx file with proper Next.js App Router structure. Implement a responsive TailAdmin grid layout (xl:grid-cols-12) with appropriate breakpoints. Add PageBreadcrumb component at the top. Setup the basic sections that will contain all the client information cards and components. Follow Cursor rules for code styling and component usage.",
-      "testStrategy": "Verify page renders without errors. Check responsive layout at different breakpoints. Ensure grid layout matches TailAdmin specifications.",
+      "details": "Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the following:\n1. Import necessary components from TailAdmin\n2. Setup page layout with responsive grid using TailAdmin components\n3. Implement PageBreadcrumb component with Home > Clients > [Client Name] structure\n4. Add sidebar navigation link to this page\n5. Create placeholder sections for all required components (Client Overview, Current Audit, etc.)",
+      "testStrategy": "Verify page renders without errors and breadcrumbs display correctly. Check responsive layout at different screen sizes.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Basic Page Structure with Next.js App Router",
-          "description": "Set up the initial page.tsx file at src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx with proper Next.js App Router structure and PageBreadcrumb component",
+          "title": "Create Basic Page Structure with Layout Components",
+          "description": "Set up the client profile page file with the basic structure, imports, and TailAdmin layout components to establish the foundation for the page.",
           "dependencies": [],
-          "details": "1. Create the page.tsx file in the specified directory structure\n2. Implement a client-side component with useParams hook to access the clientId parameter\n3. Add the PageBreadcrumb component with proper navigation hierarchy (Dashboard > Clients > Client Profile)\n4. Set up the basic page container with appropriate padding and margin\n5. Test that the page renders correctly and the breadcrumb navigation works\n6. Ensure the component follows Cursor rules for code styling\n7. Implement proper TypeScript typing for all props and parameters",
-          "status": "done",
+          "details": "1. Create the file `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`\n2. Import necessary components from TailAdmin such as Breadcrumb, Card, and Grid components\n3. Create a functional component that uses Next.js dynamic routing to access the clientId parameter\n4. Implement a responsive container using TailAdmin's layout system with appropriate padding and margin\n5. Add basic error handling for invalid client IDs\n6. Set up the page title and metadata using Next.js head components\n7. Test the basic page rendering with different viewport sizes to ensure responsive behavior\n8. Ensure the page follows the application's established design patterns and styling conventions",
+          "status": "pending",
           "parentTaskId": 1
         },
         {
           "id": 2,
-          "title": "Implement Responsive TailAdmin Grid Layout",
-          "description": "Create a responsive grid layout using TailAdmin and Tailwind CSS classes with proper breakpoints for different screen sizes",
+          "title": "Implement Breadcrumb Navigation and Sidebar Link",
+          "description": "Add the breadcrumb navigation component showing the hierarchical path and update the sidebar navigation to include a link to the client profile page.",
           "dependencies": [
             1
           ],
-          "details": "1. Add a main container div with grid layout using Tailwind's grid utilities\n2. Implement responsive grid-cols with appropriate breakpoints: grid-cols-1 for mobile, md:grid-cols-2 for tablets, and xl:grid-cols-12 for desktops\n3. Set up proper gap spacing between grid items using gap-4 md:gap-6 2xl:gap-7.5\n4. Add container styling with rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark\n5. Ensure the layout is responsive by testing at different viewport sizes\n6. Implement dark mode support using Tailwind's dark: variant classes\n7. Test the responsive behavior across different breakpoints",
-          "status": "done",
+          "details": "1. Import the PageBreadcrumb component from TailAdmin\n2. Configure the breadcrumb with the Home > Clients > [Client Name] structure\n3. Implement dynamic client name fetching for the breadcrumb based on the clientId parameter\n4. Add proper linking to each breadcrumb segment (Home and Clients list)\n5. Update the sidebar navigation configuration to include a link to the clients section\n6. Ensure the sidebar highlights the current page when on the client profile\n7. Test breadcrumb navigation to verify all links work correctly\n8. Implement proper accessibility attributes for the breadcrumb navigation (aria-current, etc.)\n9. Add hover states and visual indicators for interactive breadcrumb elements",
+          "status": "pending",
           "parentTaskId": 1
         },
         {
           "id": 3,
-          "title": "Create Placeholder Section Components",
-          "description": "Set up empty placeholder components for all the client information sections that will be populated in future tasks",
+          "title": "Create Content Section Placeholders with Grid Layout",
+          "description": "Implement the responsive grid layout for the client profile page and add placeholder sections for all required components that will be developed in future tasks.",
           "dependencies": [
             1,
             2
           ],
-          "details": "1. Create placeholder components for each major section of the client profile:\n   - ClientInfoSection (spans 2 columns on xl screens)\n   - ClientStatsSection (spans 2 columns)\n   - ClientActivitySection (spans 4 columns)\n   - ClientContactSection (spans 4 columns)\n2. Add appropriate headings and container styling to each section\n3. Include skeleton loading states for each section\n4. Add comments indicating what content will be added to each section in future tasks\n5. Ensure all components have proper TypeScript interfaces\n6. Implement consistent styling across all section components\n7. Test that all sections render correctly within the grid layout\n8. Verify dark mode compatibility for all placeholder components",
-          "status": "done",
+          "details": "1. Use TailAdmin's grid system to create a responsive layout with appropriate breakpoints\n2. Implement a two-column layout for desktop that collapses to a single column on mobile\n3. Create placeholder Card components for each section: Client Overview, Current Audit, Client History, etc.\n4. Add appropriate headings and skeleton UI elements in each placeholder section\n5. Implement proper spacing between sections using TailAdmin's spacing utilities\n6. Add comments in the code indicating where future components will be integrated\n7. Ensure the grid layout maintains proper alignment and spacing across all viewport sizes\n8. Test the layout with various screen sizes to verify responsive behavior\n9. Add subtle visual indicators (like borders or background colors) to distinguish different sections\n10. Implement container queries if needed for more complex responsive behaviors within sections",
+          "status": "pending",
           "parentTaskId": 1
         }
       ]
@@ -47,919 +47,743 @@
     {
       "id": 2,
       "title": "Implement Client Data Fetching",
-      "description": "Set up tRPC call to api.clients.getById with all required Prisma relations to fetch comprehensive client data.",
-      "status": "done",
+      "description": "Set up tRPC query hooks to fetch client data and implement loading states.",
+      "status": "pending",
       "dependencies": [
         1
       ],
       "priority": "high",
-      "details": "Implement the tRPC call to api.clients.getById({ clientId }) with all necessary Prisma relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser (client manager). Follow Next.js App Router data fetching guidelines from Context7. Implement error handling and loading states. Ensure all client and related entity fields are loaded to allow for later refinement.",
-      "testStrategy": "Test with mock data to ensure all relations are properly loaded. Verify error states and loading indicators work correctly. Check that all required fields are available in the returned data.",
+      "details": "1. Implement `useQuery('clients.getById')` to fetch client data\n2. Create loading and error states for data fetching\n3. Setup React Query caching configuration\n4. Create type definitions based on the Client data model\n5. Implement fallback UI for when data is loading or errors occur",
+      "testStrategy": "Test data fetching with mock API responses. Verify loading states display correctly and error handling works as expected.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define Prisma client schema relations",
-          "description": "Set up the Prisma schema to properly define all required relations for the client entity",
-          "status": "done",
+          "title": "Define Client Data Model and Type Definitions",
+          "description": "Create TypeScript interfaces and Zod schemas for the client data model to ensure type safety across the application.",
           "dependencies": [],
-          "details": "Review the existing Prisma schema and ensure all relations are properly defined between the client entity and its related entities: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Make sure relation fields are correctly typed and that foreign keys are properly set up. This will serve as the foundation for fetching comprehensive client data with all necessary relations."
+          "details": "1. Create a `types/client.ts` file with TypeScript interfaces for the Client model\n2. Define Zod schemas for validation that match the TypeScript interfaces\n3. Export type definitions to be used by both server and client\n4. Include all necessary client fields (id, name, email, etc.)\n5. Add documentation comments for each field\n6. Test the type definitions by validating sample data\n\nExample implementation:\n```typescript\n// types/client.ts\nimport { z } from 'zod';\n\nexport const clientSchema = z.object({\n  id: z.string(),\n  name: z.string(),\n  email: z.string().email(),\n  phone: z.string().optional(),\n  company: z.string(),\n  status: z.enum(['active', 'inactive', 'prospect']),\n  createdAt: z.date(),\n  updatedAt: z.date()\n});\n\nexport type Client = z.infer<typeof clientSchema>;\n```",
+          "status": "pending",
+          "parentTaskId": 2
         },
         {
           "id": 2,
-          "title": "Create tRPC procedure for client fetching",
-          "description": "Implement the tRPC procedure that will handle fetching client data by ID with all relations",
-          "status": "done",
+          "title": "Implement tRPC Server Procedures for Client Data",
+          "description": "Create type-safe tRPC procedures on the server side to fetch client data by ID and handle other client-related queries.",
           "dependencies": [
             1
           ],
-          "details": "Create a new tRPC procedure in the clients router called 'getById' that accepts a clientId parameter. Inside this procedure, use Prisma's findUnique or findFirst method with the include option to specify all the required relations: contacts, licenses, trustAccounts, audits, activityLogs, documentReferences, and assignedUser. Implement proper error handling for cases where the client doesn't exist or database errors occur. Return a properly typed response that includes the client and all its relations."
+          "details": "1. Create a `server/routers/client.ts` file to define client-related procedures\n2. Implement the `getById` procedure with proper input validation using Zod\n3. Add error handling for cases like client not found\n4. Implement any additional client data procedures needed (getAll, search, etc.)\n5. Export and include the client router in the main app router\n6. Test the procedures with sample data\n\nExample implementation:\n```typescript\n// server/routers/client.ts\nimport { z } from 'zod';\nimport { procedure, router } from '../trpc';\nimport { clientSchema } from '../../types/client';\n\nexport const clientRouter = router({\n  getById: procedure\n    .input(z.object({ id: z.string() }))\n    .query(async ({ input, ctx }) => {\n      try {\n        const client = await ctx.db.client.findUnique({\n          where: { id: input.id }\n        });\n        \n        if (!client) {\n          throw new Error('Client not found');\n        }\n        \n        return clientSchema.parse(client);\n      } catch (error) {\n        throw new Error(`Failed to fetch client: ${error.message}`);\n      }\n    }),\n  // Add other client procedures as needed\n});\n```",
+          "status": "pending",
+          "parentTaskId": 2
         },
         {
           "id": 3,
-          "title": "Implement server-side data fetching component",
-          "description": "Create a server component that fetches client data using the tRPC procedure",
-          "status": "done",
+          "title": "Configure tRPC Client with React Query Integration",
+          "description": "Set up the tRPC client with React Query integration, including optimal caching configuration for client data.",
           "dependencies": [
             2
           ],
-          "details": "Following Next.js App Router patterns, create a React Server Component that will handle fetching the client data. Use the tRPC server-side calling pattern to directly invoke the api.clients.getById procedure with the clientId parameter. Implement proper error handling and ensure the component can be easily composed with other components. This approach leverages server components to keep expensive data fetches on the server, improving performance and security."
+          "details": "1. Create a `utils/trpc.ts` file to set up the tRPC client\n2. Configure httpBatchLink for efficient network requests\n3. Set up React Query with appropriate caching settings\n4. Configure error handling and retry logic\n5. Export the tRPC hooks for use in components\n6. Test the configuration by making a simple query\n\nExample implementation:\n```typescript\n// utils/trpc.ts\nimport { createTRPCReact } from '@trpc/react-query';\nimport { httpBatchLink } from '@trpc/client';\nimport { QueryClient } from '@tanstack/react-query';\nimport type { AppRouter } from '../server/routers/_app';\n\nexport const trpc = createTRPCReact<AppRouter>();\n\nexport const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      staleTime: 5 * 60 * 1000, // 5 minutes\n      cacheTime: 10 * 60 * 1000, // 10 minutes\n      retry: 1,\n      refetchOnWindowFocus: false,\n    },\n  },\n});\n\nexport const trpcClient = trpc.createClient({\n  links: [\n    httpBatchLink({\n      url: '/api/trpc',\n      // Include credentials for cookie-based auth if needed\n      fetch(url, options) {\n        return fetch(url, {\n          ...options,\n          credentials: 'include',\n        });\n      },\n    }),\n  ],\n});\n```",
+          "status": "pending",
+          "parentTaskId": 2
         },
         {
           "id": 4,
-          "title": "Create loading and error states",
-          "description": "Implement loading states and error handling UI components",
-          "status": "done",
+          "title": "Create Custom Hook for Client Data Fetching",
+          "description": "Develop a custom React hook that encapsulates the tRPC query logic for fetching client data, with proper typing and error handling.",
           "dependencies": [
+            1,
             3
           ],
-          "details": "Create reusable loading and error state components that will be displayed during data fetching and when errors occur. For loading states, implement a skeleton UI that matches the layout of the client data display. For error states, create informative error messages that help users understand what went wrong (e.g., client not found, permission issues, or server errors). Use Next.js App Router's loading.js and error.js conventions to handle these states elegantly."
+          "details": "1. Create a `hooks/useClient.ts` file to implement the custom hook\n2. Use the tRPC hook to fetch client data by ID\n3. Add proper TypeScript typing for the hook parameters and return values\n4. Include error handling and data transformation if needed\n5. Add documentation for the hook usage\n6. Test the hook in isolation\n\nExample implementation:\n```typescript\n// hooks/useClient.ts\nimport { trpc } from '../utils/trpc';\nimport type { Client } from '../types/client';\n\ninterface UseClientOptions {\n  enabled?: boolean;\n  onSuccess?: (data: Client) => void;\n  onError?: (error: Error) => void;\n}\n\n/**\n * Hook to fetch client data by ID\n * @param id The client ID to fetch\n * @param options Additional query options\n * @returns Query result with client data, loading state, and error\n */\nexport function useClient(id: string | undefined, options: UseClientOptions = {}) {\n  return trpc.client.getById.useQuery(\n    { id: id || '' },\n    {\n      enabled: !!id && (options.enabled !== false),\n      onSuccess: options.onSuccess,\n      onError: options.onError,\n    }\n  );\n}\n```",
+          "status": "pending",
+          "parentTaskId": 2
         },
         {
           "id": 5,
-          "title": "Implement client-side data fetching hook",
-          "description": "Create a custom hook for client components that need to fetch client data",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "For client components that need to fetch or refetch client data, create a custom React hook (e.g., useClientData) that uses tRPC's client-side calling pattern. Implement this using SWR or React Query for efficient caching and revalidation. The hook should accept a clientId parameter and return the client data along with loading and error states. This will complement the server-side fetching while providing a way to update data on the client when needed."
+          "title": "Implement Loading and Error UI Components",
+          "description": "Create reusable UI components for handling loading states, errors, and empty states when fetching client data.",
+          "dependencies": [],
+          "details": "1. Create `components/ui/LoadingState.tsx` for showing loading indicators\n2. Create `components/ui/ErrorState.tsx` for displaying error messages\n3. Create `components/ui/EmptyState.tsx` for when no data is available\n4. Ensure components are accessible and provide clear feedback\n5. Make components customizable with props for different contexts\n6. Test components with various states and screen sizes\n\nExample implementation:\n```typescript\n// components/ui/LoadingState.tsx\nimport React from 'react';\n\ninterface LoadingStateProps {\n  message?: string;\n  size?: 'small' | 'medium' | 'large';\n}\n\nexport function LoadingState({ message = 'Loading...', size = 'medium' }: LoadingStateProps) {\n  return (\n    <div className=\"loading-container\" aria-live=\"polite\" role=\"status\">\n      <div className={`spinner spinner-${size}`} />\n      <p className=\"loading-text\">{message}</p>\n    </div>\n  );\n}\n\n// components/ui/ErrorState.tsx\ninterface ErrorStateProps {\n  error: Error | null;\n  onRetry?: () => void;\n}\n\nexport function ErrorState({ error, onRetry }: ErrorStateProps) {\n  return (\n    <div className=\"error-container\" role=\"alert\">\n      <h3>Something went wrong</h3>\n      <p>{error?.message || 'An unknown error occurred'}</p>\n      {onRetry && (\n        <button onClick={onRetry} className=\"retry-button\">\n          Try Again\n        </button>\n      )}\n    </div>\n  );\n}\n```",
+          "status": "pending",
+          "parentTaskId": 2
         },
         {
           "id": 6,
-          "title": "Create data display components with progressive loading",
-          "description": "Implement UI components that display client data with progressive loading of related entities",
-          "status": "done",
+          "title": "Integrate Client Data Fetching in Client Profile Component",
+          "description": "Create a ClientProfile component that uses the custom hook to fetch and display client data with proper loading, error, and empty states.",
           "dependencies": [
-            3,
             4,
             5
           ],
-          "details": "Create UI components that display the client data and all its relations. Implement these using a progressive loading approach where the main client data loads first, followed by related entities. This improves perceived performance. Ensure all fields from the client and related entities are accessible in the UI components, even if not all are displayed initially. This will allow for later refinement of the UI without requiring changes to the data fetching logic. Use React Suspense boundaries to optimize the loading experience."
+          "details": "1. Create `components/ClientProfile.tsx` component\n2. Use the `useClient` hook to fetch data based on client ID\n3. Implement conditional rendering for loading, error, and data states\n4. Add a refetch capability for error recovery\n5. Implement proper data display with all client fields\n6. Test the component with various data scenarios\n\nExample implementation:\n```typescript\n// components/ClientProfile.tsx\nimport React from 'react';\nimport { useClient } from '../hooks/useClient';\nimport { LoadingState } from './ui/LoadingState';\nimport { ErrorState } from './ui/ErrorState';\n\ninterface ClientProfileProps {\n  clientId: string;\n}\n\nexport function ClientProfile({ clientId }: ClientProfileProps) {\n  const { data: client, isLoading, error, refetch } = useClient(clientId);\n\n  if (isLoading) {\n    return <LoadingState message=\"Loading client data...\" />;\n  }\n\n  if (error) {\n    return <ErrorState error={error} onRetry={() => refetch()} />;\n  }\n\n  if (!client) {\n    return (\n      <div className=\"empty-state\">\n        <h3>Client Not Found</h3>\n        <p>The requested client could not be found or may have been deleted.</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"client-profile\">\n      <h2>{client.name}</h2>\n      <div className=\"client-details\">\n        <div className=\"detail-row\">\n          <span className=\"label\">Email:</span>\n          <span className=\"value\">{client.email}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Phone:</span>\n          <span className=\"value\">{client.phone || 'N/A'}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Company:</span>\n          <span className=\"value\">{client.company}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Status:</span>\n          <span className={`value status-${client.status}`}>{client.status}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Client since:</span>\n          <span className=\"value\">{new Date(client.createdAt).toLocaleDateString()}</span>\n        </div>\n      </div>\n    </div>\n  );\n}\n```",
+          "status": "pending",
+          "parentTaskId": 2
         }
       ]
     },
     {
       "id": 3,
-      "title": "Create Client Manager and KPI Cards",
-      "description": "Implement the Client Manager card and KPI cards (Lifetime Fees, YoY Growth, Health Score) at the top of the profile page.",
-      "status": "done",
+      "title": "Build Client Overview Card",
+      "description": "Create the client overview card displaying essential client metadata with inline edit controls.",
+      "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "high",
-      "details": "Create the Client Manager card displaying assigned team member with name, role, and contact info with a link to their profile. Implement KPI cards using ComponentCard with: 1) Lifetime Fees Card with total historical fees and sparkline trend, 2) YoY Growth Chart using TailAdmin chart component, 3) Customer Health Score with colored ribbon (green/yellow/red). Use useAbility() to gate sensitive financial data for Admin-only access.",
-      "testStrategy": "Verify all cards render correctly with proper data. Test permission gating for sensitive fields. Check that charts and visualizations display accurately. Test responsiveness at different screen sizes.",
+      "details": "1. Create a TailAdmin card component to display client details\n2. Display Client Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager\n3. Add tooltip for External Folder Link with instructions\n4. Implement inline edit controls for editable fields\n5. Connect edit functionality to `useMutation('clients.update')` for saving changes",
+      "testStrategy": "Verify all client fields display correctly. Test inline editing functionality and confirm data updates correctly after edits.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create basic Card component structure",
-          "description": "Implement the reusable Card component that will serve as the foundation for both the Client Manager card and KPI cards",
-          "status": "done",
+          "title": "Create Base Card Component with Client Metadata Display",
+          "description": "Develop the foundational card component that displays all required client metadata fields in read-only mode using TailAdmin styling. This component will serve as the container for all client information and inline edit functionality.",
           "dependencies": [],
-          "details": "Create a Card.jsx component with appropriate styling in Card.css. The component should accept props for title, content, and custom styling. Use a flexible structure with box-shadow, border-radius, and padding. Implement responsive design considerations to ensure cards display properly on different screen sizes. This component will be the building block for all cards in this task."
+          "details": "1. Create a new `ClientOverviewCard` component using TailAdmin card styling\n2. Implement the layout to display all required client fields: Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager\n3. Add a tooltip for External Folder Link with instructions using TailAdmin tooltip component\n4. Ensure proper spacing and typography following TailAdmin design system\n5. Make the component responsive for different screen sizes\n6. Add appropriate ARIA attributes for accessibility\n7. Test the component with mock data to ensure proper display\n8. Implement proper error states if client data is missing or undefined",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 2,
-          "title": "Implement Client Manager card component",
-          "description": "Create the Client Manager card displaying the assigned team member's information",
-          "status": "done",
+          "title": "Implement Editable Field Component with Toggle Controls",
+          "description": "Create a reusable EditableField component that can switch between display and edit modes, handling the UI state transitions and providing clear visual cues for editable fields.",
           "dependencies": [
             1
           ],
-          "details": "Using the Card component as a base, create a ClientManagerCard component that displays the team member's name, role, and contact information. Add a profile image placeholder. Include a link to the team member's profile page. Style according to design specifications. The component should accept props for the team member's data (name, role, email, phone, profileUrl, imageUrl)."
+          "details": "1. Create an `EditableField` component that accepts field label, value, and onChange handlers\n2. Implement toggle functionality between read-only and edit modes\n3. Add visual indicators (pencil icon, hover effects) to show which fields are editable\n4. Include appropriate form controls based on field type (text input, select dropdown, etc.)\n5. Support keyboard navigation (Tab, Enter, Escape) for accessibility\n6. Add inline validation to prevent invalid data entry\n7. Implement focus management to automatically focus the input when entering edit mode\n8. Test the component in isolation with various field types\n9. Ensure the component maintains TailAdmin styling consistency",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 3,
-          "title": "Implement Lifetime Fees KPI card with sparkline",
-          "description": "Create the Lifetime Fees card showing total historical fees and a sparkline trend visualization",
-          "status": "done",
+          "title": "Connect Edit Functionality to Client Mutation API",
+          "description": "Integrate the editable fields with the client update mutation API, implementing proper state management, optimistic updates, and error handling for a seamless editing experience.",
           "dependencies": [
-            1
+            1,
+            2
           ],
-          "details": "Extend the Card component to create a LifetimeFeesCard that displays the total historical fees. Implement a sparkline visualization using a charting library (like Chart.js or D3.js) to show the trend over time. Include proper formatting for currency values. The component should accept props for the fee data (totalFees, feeHistory) where feeHistory is an array of data points for the sparkline."
+          "details": "1. Set up state management for tracking original and edited values\n2. Implement the useMutation('clients.update') hook for saving changes\n3. Add save and cancel buttons for edit operations\n4. Implement optimistic UI updates to immediately reflect changes while saving\n5. Add loading indicators during save operations\n6. Implement error handling with user-friendly error messages\n7. Add rollback functionality if server-side validation fails\n8. Ensure all user inputs are properly sanitized and validated\n9. Test the complete edit-save flow with various scenarios (success, network error, validation error)\n10. Implement debouncing for rapid consecutive edits",
+          "status": "pending",
+          "parentTaskId": 3
         },
         {
           "id": 4,
-          "title": "Implement YoY Growth KPI card with chart",
-          "description": "Create the Year-over-Year Growth card using the TailAdmin chart component",
-          "status": "done",
+          "title": "Enhance UX with Feedback and Accessibility Features",
+          "description": "Improve the overall user experience by adding success/error feedback, keyboard shortcuts, and ensuring full accessibility compliance for the client overview card.",
           "dependencies": [
-            1
-          ],
-          "details": "Extend the Card component to create a YoYGrowthCard that integrates the TailAdmin chart component. Configure the chart to display year-over-year growth data. Include percentage indicators for growth/decline. The component should accept props for growth data (growthPercentage, growthHistory) where growthHistory contains the data points needed for the chart."
-        },
-        {
-          "id": 5,
-          "title": "Implement Customer Health Score KPI card",
-          "description": "Create the Customer Health Score card with colored status ribbon",
-          "status": "done",
-          "dependencies": [
-            1
-          ],
-          "details": "Extend the Card component to create a HealthScoreCard that displays the customer health score. Implement a colored ribbon that changes based on the score (green for good, yellow for moderate, red for poor). Include a visual indicator of the score (like a gauge or number). The component should accept props for the health data (score, status) where status determines the ribbon color."
-        },
-        {
-          "id": 6,
-          "title": "Implement permission controls using useAbility hook",
-          "description": "Add permission controls to gate sensitive financial data for Admin-only access",
-          "status": "done",
-          "dependencies": [
-            3,
-            4,
-            5
-          ],
-          "details": "Integrate the useAbility() hook to check user permissions before displaying sensitive financial data in the KPI cards. Implement conditional rendering that shows appropriate placeholders or messages for users without sufficient permissions. Create a wrapper component or higher-order component that applies these permission checks consistently across all KPI cards."
-        },
-        {
-          "id": 7,
-          "title": "Integrate all cards into the profile page layout",
-          "description": "Assemble all card components into the profile page layout with proper spacing and responsiveness",
-          "status": "done",
-          "dependencies": [
+            1,
             2,
-            3,
-            4,
-            5,
-            6
+            3
           ],
-          "details": "Create a container component that arranges the Client Manager card and KPI cards at the top of the profile page. Implement responsive grid layout to ensure proper card arrangement on different screen sizes. Add loading states for when data is being fetched. Test the integration to ensure all cards display correctly and that permission controls work as expected. Finalize styling to ensure consistent appearance across all cards."
+          "details": "1. Add toast notifications for successful updates and errors\n2. Implement keyboard shortcuts for common actions (Esc to cancel, Ctrl+Enter to save)\n3. Add confirmation dialogs for potentially destructive actions\n4. Enhance tooltip content with keyboard shortcut information\n5. Conduct thorough accessibility testing (screen reader compatibility, keyboard navigation)\n6. Add ARIA live regions for dynamic content changes\n7. Implement focus trapping within the edit mode to improve keyboard navigation\n8. Add visual indicators for required fields\n9. Create comprehensive unit and integration tests\n10. Document the component API and usage patterns for other developers",
+          "status": "pending",
+          "parentTaskId": 3
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement Audit Cycle Progress and Schedule",
-      "description": "Create the Audit Cycle Progress Bar and Upcoming Audit Schedule components on the Client Profile page at `/clients/[clientId]/page.tsx`.",
-      "status": "done",
+      "title": "Implement Add Contact Button and Modal",
+      "description": "Create the Add Contact button and modal form for adding new client contacts.",
+      "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "high",
-      "details": "Implement the Audit Cycle Progress Bar using TailAdmin's progress-bar component, showing progress from last audit's reportDueDate to next due date. Create the Upcoming Audit Schedule card resembling CRM UpcomingSchedule, listing next audit milestones. Use Intl.DateTimeFormat for proper date formatting as referenced in Context7.",
-      "testStrategy": "Test progress bar calculations for accuracy. Verify schedule displays correct milestone dates. Check date formatting across different locales. Ensure components are responsive.",
+      "details": "1. Create an Add Contact button in the appropriate section\n2. Implement a modal using Headless UI Dialog\n3. Build form using TailAdmin form components from `src/components/form`\n4. Include fields for name, type, phone, email, and license number\n5. Implement form validation\n6. Connect to `useMutation('clients.createContact')` for saving\n7. Refresh contact list on successful submission",
+      "testStrategy": "Test form validation, submission process, and verify new contacts appear in the list after adding. Test error handling for failed submissions.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define Data Structures for Audit Cycle and Schedule",
-          "description": "Design and implement TypeScript interfaces or types to represent audit cycles, milestones, and schedule data required by the progress bar and schedule card components.",
-          "status": "done",
+          "title": "Create Add Contact Button Component",
+          "description": "Implement a visually prominent Add Contact button that will trigger the contact modal. The button should be positioned appropriately in the contacts section and follow accessibility best practices.",
           "dependencies": [],
-          "details": "Identify all necessary fields (e.g., reportDueDate, nextDueDate, milestone names, dates) and create reusable types/interfaces. Ensure these structures support both progress calculation and schedule listing."
+          "details": "1. Create a new component `AddContactButton.jsx` in the appropriate directory\n2. Style the button using TailAdmin design system classes for consistency\n3. Add appropriate aria-label for accessibility\n4. Implement onClick handler that will control modal visibility state\n5. Test the button's visual appearance and focus states\n6. Ensure the button has a clear, explicit label ('Add Contact') that matches the modal title",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 2,
-          "title": "Fetch and Prepare Audit Data",
-          "description": "Implement logic to retrieve audit cycle and schedule data from the backend or mock source, transforming it to match the defined data structures.",
-          "status": "done",
+          "title": "Implement Modal Dialog Structure using Headless UI",
+          "description": "Create the modal dialog structure using Headless UI Dialog component with proper accessibility attributes and focus management.",
           "dependencies": [
             1
           ],
-          "details": "Use API calls or mock data to obtain audit cycles and milestones. Normalize and validate the data to ensure it includes all required fields for downstream components."
+          "details": "1. Import Dialog components from Headless UI\n2. Create a new component `AddContactModal.jsx`\n3. Implement modal open/close state management\n4. Set up proper focus trapping within the modal\n5. Ensure the modal has proper ARIA attributes (role='dialog', aria-modal='true')\n6. Add overlay with appropriate styling and backdrop click handling\n7. Test keyboard navigation (Tab, Escape to close)\n8. Verify focus returns to the Add Contact button when modal closes",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 3,
-          "title": "Calculate Audit Progress Percentage",
-          "description": "Develop a utility function to compute the progress percentage based on the last audit's reportDueDate and the next due date.",
-          "status": "done",
+          "title": "Build Contact Form Layout with TailAdmin Components",
+          "description": "Create the form structure inside the modal using TailAdmin form components with all required fields for contact information.",
           "dependencies": [
-            1,
             2
           ],
-          "details": "Implement a function that takes the relevant dates and calculates the elapsed percentage of the audit cycle. Ensure edge cases (e.g., missing dates, future/past cycles) are handled gracefully."
+          "details": "1. Import form components from `src/components/form`\n2. Create form layout with fields for name, type, phone, email, and license number\n3. Use appropriate input types (text, email, tel) for each field\n4. Add proper labels and placeholder text for each field\n5. Implement form reset functionality when modal closes\n6. Style the form according to TailAdmin design system\n7. Test the form layout on different screen sizes\n8. Ensure the first input field receives focus when modal opens",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 4,
-          "title": "Implement Audit Cycle Progress Bar Component",
-          "description": "Create the Audit Cycle Progress Bar using TailAdmin's progress-bar component, displaying the calculated progress and relevant date labels.",
-          "status": "done",
+          "title": "Implement Form State Management and Validation",
+          "description": "Set up form state management and implement client-side validation for all contact form fields.",
           "dependencies": [
             3
           ],
-          "details": "Utilize TailAdmin's pre-built progress bar, passing in the computed percentage and customizing styles as needed. Display formatted start and end dates using Intl.DateTimeFormat."
+          "details": "1. Create form state using React state or a form library\n2. Implement validation rules for each field:\n   - Name: Required\n   - Email: Required, valid email format\n   - Phone: Required, valid phone format\n   - Type: Required selection\n   - License number: Optional but validate format if provided\n3. Add visual feedback for validation errors\n4. Implement inline validation as user types\n5. Disable submit button until form is valid\n6. Test validation with various input scenarios\n7. Ensure validation errors are accessible to screen readers",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 5,
-          "title": "Design Upcoming Audit Schedule Card UI",
-          "description": "Design the Upcoming Audit Schedule card layout to match the CRM UpcomingSchedule style, including milestone names and dates.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Use Tailwind CSS and TailAdmin components to create a visually consistent card. Plan for dynamic rendering of milestones and responsive design."
+          "title": "Connect Form to API using useMutation Hook",
+          "description": "Integrate the form with the API using the useMutation hook to save new contacts to the backend.",
+          "dependencies": [
+            4
+          ],
+          "details": "1. Import and set up useMutation hook with 'clients.createContact' endpoint\n2. Create form submission handler that calls the mutation\n3. Transform form data into the format expected by the API\n4. Implement loading state during submission\n5. Add error handling for failed submissions\n6. Test the API integration with valid and invalid data\n7. Verify that the correct data is being sent to the API\n8. Implement retry logic for network failures",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 6,
-          "title": "Implement Upcoming Audit Schedule Card Component",
-          "description": "Build the Upcoming Audit Schedule card, listing upcoming audit milestones with properly formatted dates.",
-          "status": "done",
+          "title": "Implement Success and Error Handling",
+          "description": "Add proper success and error handling for the contact creation process, including user feedback and error messages.",
           "dependencies": [
-            2,
             5
           ],
-          "details": "Map over the schedule data to render each milestone. Use Intl.DateTimeFormat for date display. Ensure accessibility and mobile responsiveness."
+          "details": "1. Create success notification or toast message\n2. Implement error message display within the form\n3. Add specific error handling for common errors (duplicate contact, validation failures)\n4. Close modal on successful submission\n5. Keep modal open with error messages on failed submission\n6. Reset form state after successful submission\n7. Test error scenarios by mocking API failures\n8. Ensure error messages are clear and actionable",
+          "status": "pending",
+          "parentTaskId": 4
         },
         {
           "id": 7,
-          "title": "Integrate Components and Test End-to-End",
-          "description": "Integrate the progress bar and schedule card into the parent dashboard or page, and perform comprehensive testing.",
-          "status": "done",
+          "title": "Implement Contact List Refresh After Submission",
+          "description": "Update the contacts list to reflect newly added contacts without requiring a full page refresh.",
           "dependencies": [
-            4,
             6
           ],
-          "details": "Place both components in the intended layout. Test with various data scenarios to ensure correct progress calculation, date formatting, and UI responsiveness. Address any integration or edge case issues."
+          "details": "1. Implement a callback function to refresh the contact list data\n2. Call the refresh function after successful contact creation\n3. Use optimistic updates to immediately show the new contact\n4. Handle any discrepancies between optimistic update and server response\n5. Add subtle animation or highlight for newly added contacts\n6. Test that the contact list updates correctly after submission\n7. Ensure the list maintains proper sorting/filtering after updates\n8. Verify that focus management works correctly after list refresh",
+          "status": "pending",
+          "parentTaskId": 4
         }
       ]
     },
     {
       "id": 5,
-      "title": "Build Recent Contacts Table",
-      "description": "Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.",
-      "status": "done",
+      "title": "Implement Archive Client Button",
+      "description": "Create the Archive Client button with permission checking and confirmation flow.",
+      "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "medium",
-      "details": "Implement a TailAdmin RecentOrders-style table for contacts with columns: Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact in a clean format (comma-separated or expandable cell). Use DataTableTwo component as referenced in Context7. Ensure table is responsive and accessible.",
-      "testStrategy": "Test table rendering with various data scenarios. Verify links to contact pages work correctly. Check that primary badges display properly. Test multiple licenses display format.",
+      "details": "1. Add Archive Client button with tertiary styling (low visual hierarchy)\n2. Implement permission gating using `useAbility()` hook\n3. Create confirmation modal using Headless UI Dialog\n4. Connect to `useMutation('clients.update')` to set status to 'Archived'\n5. Handle success and error states\n6. Update UI after successful archiving",
+      "testStrategy": "Test permission gating to ensure only authorized users see the button. Verify confirmation flow works and client status updates correctly after archiving.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set up DataTableTwo component structure",
-          "description": "Create the foundation for the Recent Contacts table by implementing the DataTableTwo component with proper configuration",
-          "status": "done",
+          "title": "Implement Permission-Gated Archive Button UI Component",
+          "description": "Create a tertiary-styled Archive Client button component that is only visible to users with appropriate permissions. This component will be the entry point for the archiving flow.",
           "dependencies": [],
-          "details": "Import and configure the DataTableTwo component from the TailAdmin template. Create a new component file for RecentContacts that extends DataTableTwo. Set up the basic table structure with responsive design considerations and accessibility attributes (aria labels, keyboard navigation). Implement the container layout with appropriate TailAdmin styling classes."
+          "details": "1. Create a new React component `ArchiveClientButton.tsx` with tertiary styling for low visual hierarchy\n2. Implement permission checking using the `useAbility()` hook to verify the user has 'archive:client' permissions\n3. Add conditional rendering logic to hide the button completely when permissions are missing\n4. Include a disabled state with tooltip for cases where archiving might be temporarily unavailable\n5. Add appropriate icon (archive/box) and label\n6. Implement click handler that will trigger the confirmation modal\n7. Test the component with different permission scenarios using mock data\n8. Ensure the button follows accessibility guidelines with proper ARIA attributes and keyboard navigation",
+          "status": "pending",
+          "parentTaskId": 5
         },
         {
           "id": 2,
-          "title": "Define table columns and data structure",
-          "description": "Define the column configuration for Name, Email, Phone, Title, and Primary badge",
-          "status": "done",
+          "title": "Build Confirmation Modal with Description Field",
+          "description": "Create a confirmation dialog using Headless UI that explains the archiving process, requests confirmation, and allows users to add an optional description for the archive.",
           "dependencies": [
             1
           ],
-          "details": "Create a columns configuration array that defines each column's properties (Name, Email, Phone, Title, Primary). For the Name column, implement linking to '/contacts/[id]' pattern. Set up proper data accessors for each field. Configure sorting capabilities for relevant columns. Define the data interface/type for contact entries to ensure type safety throughout the component."
+          "details": "1. Implement a modal dialog using Headless UI Dialog component\n2. Create a clear title and explanation of what archiving means for the client data\n3. Add a text field for archive description with appropriate validation\n4. Include warning about the consequences of archiving\n5. Add Cancel and Confirm buttons with appropriate styling\n6. Implement state management for the modal visibility and form inputs\n7. Add loading state for the Confirm button during the archiving process\n8. Ensure the modal is keyboard accessible and follows WAI-ARIA best practices\n9. Test the modal with screen readers and keyboard navigation\n10. Add appropriate animations for modal opening/closing",
+          "status": "pending",
+          "parentTaskId": 5
         },
         {
           "id": 3,
-          "title": "Implement Primary badge indicator",
-          "description": "Create the visual indicator for Primary contacts with appropriate styling",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Design and implement the Primary badge component with appropriate styling (colors, size, text). Create a cell renderer function for the Primary column that conditionally displays the badge based on the contact's primary status. Add tooltip or accessible description to explain the badge meaning. Ensure the badge has proper contrast ratios for accessibility."
-        },
-        {
-          "id": 4,
-          "title": "Develop multiple licenses display format",
-          "description": "Implement the display logic for showing multiple licenses per contact",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Create a custom cell renderer for displaying multiple licenses. Implement either a comma-separated list for simple display or an expandable cell with a count indicator that reveals all licenses on interaction. For the expandable approach, implement the expand/collapse functionality with appropriate animations. Ensure the display remains readable even with many licenses by implementing truncation with tooltips if needed."
-        },
-        {
-          "id": 5,
-          "title": "Connect table to data source",
-          "description": "Implement data fetching and state management for the contacts table",
-          "status": "done",
-          "dependencies": [
-            2,
-            3,
-            4
-          ],
-          "details": "Set up API integration to fetch contact data from the backend. Implement loading states and error handling for data fetching. Create state management for the table data using React hooks (useState, useEffect). Implement pagination logic if the data set is large. Add sorting functionality based on column headers. Ensure proper data transformation from API response to the table's expected format."
-        },
-        {
-          "id": 6,
-          "title": "Implement responsive behavior",
-          "description": "Ensure the table displays correctly across all device sizes",
-          "status": "done",
+          "title": "Implement Archive Mutation and Success/Error Handling",
+          "description": "Connect the confirmation flow to the backend using the useMutation hook, handle success and error states, and update the UI after successful archiving.",
           "dependencies": [
             1,
-            2,
-            3,
-            4
+            2
           ],
-          "details": "Test and optimize the table for various screen sizes. Implement column priority hiding for smaller screens (hide less important columns first). Add horizontal scrolling for very small screens while maintaining fixed position of key columns. Ensure touch interactions work properly on mobile devices. Test and fix any layout issues that occur at different breakpoints."
-        },
-        {
-          "id": 7,
-          "title": "Add accessibility features and final polish",
-          "description": "Enhance the table with proper accessibility features and final UI refinements",
-          "status": "done",
-          "dependencies": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
-          "details": "Implement proper keyboard navigation throughout the table. Add screen reader announcements for dynamic content changes. Ensure all interactive elements have proper focus states. Add appropriate aria attributes for complex interactions. Implement final visual polish including hover states, transitions, and consistent spacing. Add comprehensive unit and integration tests to verify functionality. Document the component API and usage patterns for other developers."
+          "details": "1. Implement `useMutation('clients.update')` hook to connect to the backend API\n2. Create a mutation function that sends the client ID and archive description to the API\n3. Set the client status to 'Archived' in the mutation payload\n4. Implement comprehensive error handling with specific error messages for different failure scenarios\n5. Add success feedback with a toast notification or inline message\n6. Update the client list UI after successful archiving (remove from list or update status)\n7. Implement optimistic updates for better user experience\n8. Add logging for successful archiving and failures for audit purposes\n9. Implement retry logic for transient failures\n10. Test the full flow from button click to UI update with various scenarios (success, network error, permission error, etc.)",
+          "status": "pending",
+          "parentTaskId": 5
         }
       ]
     },
     {
       "id": 6,
-      "title": "Create Contact Network Diagram",
-      "description": "Implement a simple graph visualization on the Client Profile page showing relationships between client, contacts, and trust accounts.",
-      "status": "done",
+      "title": "Build Current Audit Section",
+      "description": "Create the Current Audit section showing audit details with edit functionality.",
+      "status": "pending",
       "dependencies": [
-        5
+        2
       ],
-      "priority": "low",
-      "details": "Create a simple network diagram showing the relationships: client → contacts → trust accounts. Use an appropriate visualization library compatible with TailAdmin. Keep the diagram simple and focused on key relationships. Ensure the diagram is responsive and degrades gracefully on smaller screens.",
-      "testStrategy": "Test diagram rendering with different relationship structures. Verify visual clarity and readability. Check responsiveness and fallback on mobile devices.",
+      "priority": "high",
+      "details": "1. Implement `useQuery('audits.getCurrent')` to fetch latest audit data\n2. Create a card to display Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned\n3. Add edit button to open a modal form\n4. Build form using TailAdmin components\n5. Connect to `useMutation('audits.createOrUpdate')` for saving changes\n6. Handle case where no current audit exists with option to create one",
+      "testStrategy": "Verify audit data displays correctly. Test edit functionality and confirm data updates after edits. Test creating a new audit when none exists.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Research and select visualization library",
-          "description": "Evaluate and select an appropriate graph visualization library compatible with TailAdmin, Next.js, and React",
-          "status": "done",
+          "title": "Implement Current Audit Data Fetching and State Management",
+          "description": "Set up the data fetching logic using React Query to retrieve the current audit information and implement the state management structure to handle audit data, loading states, and error handling.",
           "dependencies": [],
-          "details": "Research visualization libraries like D3.js, React Flow, Vis.js, or Cytoscape.js that work well with TailAdmin's React/Next.js environment. Compare features including performance, responsiveness, customization options, and documentation quality. Consider libraries that support directed graphs to show relationships between clients, contacts, and trust accounts. Test basic integration with TailAdmin to ensure compatibility. Document the selected library with justification and basic implementation examples.\n\n<info added on 2025-05-03T08:59:23.443Z>\nBased on the evaluation, React Flow is the recommended choice for these reasons:\n\n- React-first API provides seamless integration with our existing React/Next.js codebase\n- Built-in TypeScript support aligns with our development stack\n- Demonstrated good performance for our expected graph size (up to 100 nodes)\n- Active maintenance with regular updates (last release within past month)\n- Straightforward customization of nodes/edges to match TailAdmin design system\n- Native support for directed graphs showing client-contact-account relationships\n- Built-in interactive features (zooming, panning, selection)\n\nImplementation plan:\n1. Install with `npm install reactflow`\n2. Define data structure for nodes (clients, contacts, accounts) and edges (relationships)\n3. Create a custom node renderer to match TailAdmin UI components\n4. Implement the graph component in the Client Profile page\n5. Add interaction handlers for node selection and edge creation\n\nInitial proof-of-concept code has been committed to the development branch.\n</info added on 2025-05-03T08:59:23.443Z>"
+          "details": "1. Create a custom hook `useCurrentAudit` that implements `useQuery('audits.getCurrent')` to fetch the latest audit data\n2. Handle loading, error, and empty states within the hook\n3. Implement proper TypeScript interfaces for audit data structure (including Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned fields)\n4. Add a function to check if an audit exists and provide appropriate default values\n5. Set up proper caching and refetching strategies in React Query\n6. Implement test cases using React Testing Library to verify data fetching behavior\n7. Add error boundaries to gracefully handle API failures",
+          "status": "pending",
+          "parentTaskId": 6
         },
         {
           "id": 2,
-          "title": "Define data structure for network relationships",
-          "description": "Create a standardized data structure to represent client, contact, and trust account relationships",
-          "status": "done",
+          "title": "Build Current Audit Display Card Component",
+          "description": "Create a responsive card component that displays the current audit information in a clear, organized manner following best practices for data presentation and accessibility.",
           "dependencies": [
             1
           ],
-          "details": "Design a JSON data structure that represents nodes (clients, contacts, trust accounts) and edges (relationships between them). Define node types with appropriate properties (e.g., id, name, type, status). Create edge definitions with source, target, and relationship type. Ensure the data structure is compatible with the selected visualization library. Include sample data that demonstrates various relationship scenarios. Document the schema with examples for development reference."
+          "details": "1. Design and implement a TailAdmin card component to display audit information\n2. Create formatted displays for each audit field (Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned)\n3. Implement proper date formatting using a library like date-fns\n4. Add conditional rendering for different audit statuses with appropriate visual indicators\n5. Implement a placeholder state for when no current audit exists\n6. Ensure the component is fully responsive across device sizes\n7. Add accessibility attributes (aria-labels, proper heading hierarchy)\n8. Include an edit button that will trigger the edit modal\n9. Write unit tests to verify the component renders correctly with different data scenarios",
+          "status": "pending",
+          "parentTaskId": 6
         },
         {
           "id": 3,
-          "title": "Implement basic network diagram component",
-          "description": "Create a React component that renders the basic network diagram using the selected library",
-          "status": "done",
+          "title": "Develop Edit Audit Modal Form",
+          "description": "Create a modal form component that allows users to edit the current audit details or create a new audit if none exists, with proper validation and user feedback.",
           "dependencies": [
             1,
             2
           ],
-          "details": "Create a new React component in the TailAdmin framework that implements the visualization library. Set up the component to accept the data structure defined in subtask 2. Implement basic node and edge rendering with default styling. Add container sizing and basic layout algorithms. Ensure the component handles empty or minimal data gracefully. Test the component with sample data to verify basic functionality. Document component props and usage examples."
+          "details": "1. Build a modal component using TailAdmin components that opens when the edit button is clicked\n2. Implement form fields for all audit properties with appropriate input types\n3. Add form validation using a form library (React Hook Form recommended based on research)\n4. Create date picker components for date fields with proper formatting\n5. Implement dropdown selectors for Audit Stage and Status with predefined options\n6. Add staff assignment field with user search/selection capability\n7. Include proper error messaging and field validation\n8. Implement conditional logic to show different form fields based on audit stage\n9. Add cancel and save buttons with appropriate confirmation dialogs\n10. Ensure the form is accessible with keyboard navigation and screen reader support\n11. Write tests for form validation and submission behavior",
+          "status": "pending",
+          "parentTaskId": 6
         },
         {
           "id": 4,
-          "title": "Add styling and visual enhancements",
-          "description": "Enhance the network diagram with appropriate styling, colors, and visual elements",
-          "status": "done",
+          "title": "Implement Audit Creation/Update Functionality with Error Handling",
+          "description": "Connect the edit form to the backend API using React Query mutations, implement proper error handling, success notifications, and handle the special case of creating a new audit when none exists.",
           "dependencies": [
+            1,
+            2,
             3
           ],
-          "details": "Apply TailAdmin's design system to the network diagram for visual consistency. Create distinct visual styles for different node types (clients, contacts, trust accounts) using appropriate colors, shapes, and icons. Style relationship edges to indicate relationship types. Add tooltips or hover effects to display additional information. Implement visual indicators for active/inactive relationships. Ensure all styling uses Tailwind CSS classes where possible for consistency with TailAdmin. Document styling options and customization capabilities."
-        },
-        {
-          "id": 5,
-          "title": "Implement responsive behavior",
-          "description": "Ensure the network diagram is responsive and degrades gracefully on smaller screens",
-          "status": "done",
-          "dependencies": [
-            3,
-            4
-          ],
-          "details": "Implement responsive sizing for the diagram container based on viewport dimensions. Add media queries or Tailwind responsive classes to adjust diagram properties on different screen sizes. Create simplified view modes for mobile devices (possibly collapsing certain nodes or showing alternative representations). Test responsive behavior across various device sizes. Implement touch interactions for mobile users. Add zoom/pan controls that work well on both desktop and mobile. Document responsive behavior and breakpoints."
-        },
-        {
-          "id": 6,
-          "title": "Add interactive features and integration",
-          "description": "Implement user interactions and integrate the diagram with the broader application",
-          "status": "done",
-          "dependencies": [
-            3,
-            4,
-            5
-          ],
-          "details": "Add click/tap interactions to select nodes and view detailed information. Implement filtering capabilities to focus on specific relationship types or entities. Create methods for programmatically highlighting specific relationships. Add animation for state changes (e.g., when filtering or selecting). Integrate the component with TailAdmin's state management approach. Ensure the component exposes appropriate events and callbacks for parent components. Create documentation for all interactive features and integration points. Perform final testing with realistic data volumes and user scenarios."
+          "details": "1. Implement `useMutation('audits.createOrUpdate')` hook to handle saving changes to the server\n2. Add optimistic updates to immediately reflect changes in the UI\n3. Implement proper error handling with user-friendly error messages\n4. Add success notifications when an audit is successfully created or updated\n5. Create a special flow for when no current audit exists, with a button to create a new one\n6. Implement audit history tracking to maintain a record of changes\n7. Add confirmation dialogs for important actions\n8. Ensure proper RBAC (Role-Based Access Control) is respected for edit permissions\n9. Implement form state persistence in case of accidental navigation\n10. Add loading indicators during submission\n11. Write integration tests to verify the complete create/update flow\n12. Implement proper invalidation of queries to ensure data consistency",
+          "status": "pending",
+          "parentTaskId": 6
         }
       ]
     },
     {
       "id": 7,
-      "title": "Implement Trust Accounts Table",
-      "description": "Build the Trust Accounts Table on the Client Profile page with all required fields and software access links.",
-      "status": "done",
+      "title": "Implement Current Fees Card",
+      "description": "Create the Current Fees card with permission restrictions for Admin and Developer roles.",
+      "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "medium",
-      "details": "Create a DataTableTwo component for trust accounts with columns: Account Name, Bank Name, BSB, Account Number, Software Access badge, last reconciliation date, managementSoftware, and softwareUrl. Include action buttons linking to each account's management software or external feed (e.g., 'Open in Xero' or 'Open in SharePoint'). Follow DataTableTwo API docs from Context7.",
-      "testStrategy": "Test table with various trust account data. Verify external links open correctly. Check that all required fields display properly. Test responsive behavior on different screen sizes.",
+      "details": "1. Create a small card to display estimated annual fees (`clients.estAnnFees`)\n2. Wrap the component in `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>` to restrict visibility\n3. Add tooltip for 'Billing Commentary' that shows the commentary note\n4. Style as a small, simple card with appropriate formatting for currency values\n5. Handle loading and empty states",
+      "testStrategy": "Test permission gating to ensure only Admin and Developer roles can see the fees. Verify tooltip displays correctly with billing commentary.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set Up DataTableTwo Component Environment",
-          "description": "Install and configure all necessary dependencies for DataTableTwo, ensuring compatibility with the project and preparing for custom table implementation.",
-          "status": "done",
+          "title": "Create base Current Fees Card component with loading states",
+          "description": "Implement the foundational card component that displays the estimated annual fees with proper loading and empty states. This component will handle the core display logic without permissions yet.",
           "dependencies": [],
-          "details": "Install required packages (e.g., datatables.net-react, datatables.net-dt) using npm or yarn. Import DataTableTwo and its dependencies into the project. Verify that the DataTableTwo API documentation from Context7 is accessible and understood. Set up a basic DataTableTwo instance in a test component to confirm correct installation and rendering.[1][5]"
+          "details": "1. Create a new React component called `CurrentFeesCard` that accepts client data as props\n2. Implement the card layout using your UI library (likely Material-UI based on research)\n3. Display the estimated annual fees (`clients.estAnnFees`) with proper currency formatting\n4. Add a skeleton loader for the loading state\n5. Implement empty state handling with appropriate messaging\n6. Set up basic styling for the card with responsive design considerations\n7. Test the component with various data states (loading, empty, populated)\n8. Ensure the component follows the application's design system for consistency",
+          "status": "pending",
+          "parentTaskId": 7
         },
         {
           "id": 2,
-          "title": "Define Trust Accounts Table Schema and Columns",
-          "description": "Design the schema for the trust accounts table, specifying all required columns and their data types, and configure the DataTableTwo columns accordingly.",
-          "status": "done",
+          "title": "Add Billing Commentary tooltip and enhance styling",
+          "description": "Enhance the Current Fees Card by adding the tooltip functionality for Billing Commentary and refining the card's visual presentation.",
           "dependencies": [
             1
           ],
-          "details": "Create a columns configuration for DataTableTwo including: Account Name, Bank Name, BSB, Account Number, Software Access badge, Last Reconciliation Date, managementSoftware, and softwareUrl. Ensure each column has appropriate headers, data accessors, and formatting as needed (e.g., date formatting for reconciliation date, badge styling for software access)."
+          "details": "1. Add a tooltip component that displays the billing commentary note\n2. Position the tooltip trigger (icon or text) appropriately within the card layout\n3. Implement hover/focus interactions for the tooltip\n4. Ensure the tooltip is accessible (keyboard navigable and screen-reader friendly)\n5. Refine the card styling to be compact yet informative\n6. Format currency values using appropriate number formatting utilities\n7. Add subtle visual indicators for fee amounts (e.g., color coding based on amount thresholds)\n8. Test tooltip functionality across different browsers and devices\n9. Ensure the component maintains responsive behavior on all screen sizes",
+          "status": "pending",
+          "parentTaskId": 7
         },
         {
           "id": 3,
-          "title": "Integrate Data Source and Populate Table",
-          "description": "Connect the DataTableTwo component to the trust accounts data source and ensure the table is populated with accurate, testable data.",
-          "status": "done",
+          "title": "Implement permission restrictions with Authorized wrapper",
+          "description": "Wrap the Current Fees Card component with permission restrictions to ensure only users with Admin and Developer roles can view the fee information.",
           "dependencies": [
+            1,
             2
           ],
-          "details": "Fetch or mock trust account data containing all required fields. Map the data to the DataTableTwo schema. Ensure the table displays all records correctly and supports updates if needed. Use sample data for development if backend integration is not yet available."
-        },
-        {
-          "id": 4,
-          "title": "Implement Software Access Badge and Action Buttons",
-          "description": "Add a Software Access badge column and action buttons that link to each account's management software or external feed, such as 'Open in Xero' or 'Open in SharePoint'.",
-          "status": "done",
-          "dependencies": [
-            3
-          ],
-          "details": "Render a badge in the Software Access column based on the managementSoftware field. For each row, add an action button that dynamically generates a link using the softwareUrl field and displays the appropriate label (e.g., 'Open in Xero'). Ensure buttons are accessible and open links in a new tab or as required."
-        },
-        {
-          "id": 5,
-          "title": "Apply Styling, Test, and Document the Component",
-          "description": "Ensure the Trust Accounts Table matches design guidelines, is fully tested, and includes usage documentation.",
-          "status": "done",
-          "dependencies": [
-            4
-          ],
-          "details": "Apply consistent styling to match the application's theme, including badges and action buttons. Test the component for usability, accessibility, and responsiveness. Write clear documentation on how to use and extend the Trust Accounts Table, referencing the DataTableTwo API as needed."
+          "details": "1. Import the `Authorized` component from your permissions system\n2. Wrap the CurrentFeesCard component with `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>`\n3. Ensure the component correctly handles unauthorized states (either hiding completely or showing an appropriate message)\n4. Test the component with different user roles to verify permission restrictions work correctly\n5. Implement any necessary fallback UI for users without proper permissions\n6. Add unit tests to verify the permission logic works as expected\n7. Document the permission requirements in component comments\n8. Verify that the component integrates properly with the application's authentication context\n9. Test edge cases such as role changes while the component is mounted",
+          "status": "pending",
+          "parentTaskId": 7
         }
       ]
     },
     {
       "id": 8,
-      "title": "Develop Activity Card with Quick-Add",
-      "description": "Create the Activity Card showing recent activities with pagination and quick-add functionality on the Client Profile page.",
-      "status": "done",
+      "title": "Build Trust Accounts Table and CRUD",
+      "description": "Implement the Trust Accounts table with add, edit, and remove functionality.",
+      "status": "pending",
       "dependencies": [
         2
       ],
-      "priority": "high",
-      "details": "Implement TailAdmin ActivitiesCard showing recent notes, call logs, status changes with appropriate icons. Add pagination controls to show only the most recent items. Create Quick-Add Activity inline controls to add any activityLog type (Note, Email, Call, Billing Commentary, Meeting, Document), always linked to the Client, optionally a Contact, and the current team member.",
-      "testStrategy": "Test activity display with various activity types. Verify pagination works correctly. Test quick-add functionality for all activity types. Check that newly added activities appear in the list.",
+      "priority": "medium",
+      "details": "1. Fetch trust accounts data using appropriate tRPC query\n2. Create a table layout showing Account Name, Account Number, BSB, and Software\n3. Add tooltip for Software field with access instructions\n4. Implement add/edit modals using TailAdmin form components\n5. Connect to `trustAccounts.*` mutations for CRUD operations\n6. Add confirmation dialog for delete operations\n7. Refresh table after successful operations",
+      "testStrategy": "Test all CRUD operations for trust accounts. Verify data displays correctly in the table and updates after operations. Test tooltips and confirm dialogs.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Activity Card UI with Pagination",
-          "description": "Implement the base Activity Card component that displays recent activities with pagination controls using TailAdmin design patterns.",
+          "title": "Set up Trust Accounts data fetching with tRPC",
+          "description": "Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.",
           "dependencies": [],
-          "details": "1. Create a new ActivityCard component that follows the TailAdmin design system.\n2. Implement the card layout with appropriate headers and styling.\n3. Design the activity item component to display different activity types (notes, call logs, status changes) with corresponding icons.\n4. Add a data fetching mechanism using React Query or SWR for efficient pagination and caching.\n5. Implement pagination controls that limit the display to the most recent items.\n6. Create skeleton loading states for better UX during data fetching.\n7. Ensure the component is responsive across different screen sizes.\n8. Add proper accessibility attributes (ARIA labels, keyboard navigation).\n9. Test the pagination functionality with mock data to ensure it works correctly.\n10. Implement error handling for failed data fetching scenarios.",
-          "status": "done",
+          "details": "1. Create a tRPC query endpoint for fetching trust accounts data\n2. Implement proper error handling and loading states\n3. Set up React state to store and manage the fetched data\n4. Add pagination support for large datasets\n5. Implement sorting functionality for table columns\n6. Test the query with mock data to ensure proper data retrieval\n7. Add type definitions for trust account data structure",
+          "status": "pending",
           "parentTaskId": 8
         },
         {
           "id": 2,
-          "title": "Develop Quick-Add Activity Form",
-          "description": "Create an inline Quick-Add form that allows users to add different types of activities (Note, Email, Call, Billing Commentary, Meeting, Document) with appropriate fields and validation.",
+          "title": "Build Trust Accounts table UI with required fields",
+          "description": "Create a responsive table component that displays trust account information with all required fields and tooltips.",
           "dependencies": [
             1
           ],
-          "details": "1. Design and implement an expandable/collapsible Quick-Add form within the Activity Card.\n2. Create a dropdown or tab system to select different activity types (Note, Email, Call, Billing Commentary, Meeting, Document).\n3. Implement dynamic form fields that change based on the selected activity type.\n4. Add form validation for required fields using a form library like Formik or React Hook Form.\n5. Ensure the form always links activities to the current Client.\n6. Add an optional Contact selection field that pulls from available contacts for the client.\n7. Automatically associate the activity with the current team member.\n8. Implement optimistic UI updates to show new activities immediately after submission.\n9. Add appropriate error handling and success notifications.\n10. Ensure the form is keyboard accessible and follows accessibility best practices.",
-          "status": "done",
+          "details": "1. Create a table layout using TailAdmin components\n2. Implement columns for Account Name, Account Number, BSB, and Software\n3. Add tooltip for Software field with access instructions\n4. Implement row selection functionality\n5. Add responsive design for different screen sizes\n6. Implement loading states and empty state handling\n7. Test the table rendering with sample data\n8. Ensure accessibility compliance with proper ARIA attributes",
+          "status": "pending",
           "parentTaskId": 8
         },
         {
           "id": 3,
-          "title": "Integrate Activity Management with Backend and Finalize",
-          "description": "Connect the Activity Card and Quick-Add form to backend APIs, implement real-time updates, and finalize the component with comprehensive testing.",
+          "title": "Implement Add Trust Account functionality",
+          "description": "Create an Add Trust Account modal with form validation and integration with the backend mutation.",
           "dependencies": [
-            1,
+            1
+          ],
+          "details": "1. Create a modal component using TailAdmin form components\n2. Implement form fields for Account Name, Account Number, BSB, and Software\n3. Add client-side validation for all fields\n4. Connect the form to the trustAccounts.create mutation\n5. Handle success and error states\n6. Implement form reset functionality\n7. Add loading state during submission\n8. Test the form submission with valid and invalid data\n9. Refresh the table after successful creation",
+          "status": "pending",
+          "parentTaskId": 8
+        },
+        {
+          "id": 4,
+          "title": "Implement Edit Trust Account functionality",
+          "description": "Create an Edit Trust Account modal that pre-populates with existing data and connects to the update mutation.",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "1. Create an edit modal component reusing TailAdmin form components\n2. Pre-populate form fields with existing trust account data\n3. Implement form validation for all fields\n4. Connect the form to the trustAccounts.update mutation\n5. Handle success and error states\n6. Add loading state during submission\n7. Test the form submission with valid and invalid data\n8. Refresh the table after successful update\n9. Ensure proper state management between add and edit modes",
+          "status": "pending",
+          "parentTaskId": 8
+        },
+        {
+          "id": 5,
+          "title": "Implement Delete Trust Account functionality",
+          "description": "Add delete functionality with confirmation dialog and integration with the delete mutation.",
+          "dependencies": [
             2
           ],
-          "details": "1. Create or integrate with backend API endpoints for fetching paginated activities.\n2. Implement API calls for creating new activities of different types.\n3. Add real-time updates using WebSockets or polling when new activities are added by other users.\n4. Implement proper error handling for all API interactions.\n5. Add activity filtering capabilities based on type or date range.\n6. Optimize performance by implementing virtualization for long activity lists.\n7. Write unit tests for component logic and integration tests for API interactions.\n8. Perform cross-component testing to ensure the Activity Card works correctly within the larger application.\n9. Conduct accessibility testing and fix any issues.\n10. Document the component API, props, and usage examples for other developers.\n11. Perform final cross-browser and cross-device testing to ensure consistent behavior.",
-          "status": "done",
+          "details": "1. Create a confirmation dialog component\n2. Display account details in the confirmation to prevent accidental deletion\n3. Connect to the trustAccounts.delete mutation\n4. Handle success and error states\n5. Add loading state during deletion process\n6. Implement proper error handling for failed deletions\n7. Refresh the table after successful deletion\n8. Test the deletion flow with various scenarios\n9. Add audit logging for deletion operations",
+          "status": "pending",
+          "parentTaskId": 8
+        },
+        {
+          "id": 6,
+          "title": "Implement data refresh and error handling",
+          "description": "Add comprehensive error handling, success notifications, and automatic table refresh after CRUD operations.",
+          "dependencies": [
+            3,
+            4,
+            5
+          ],
+          "details": "1. Implement a consistent notification system for success and error messages\n2. Add automatic table refresh after successful CRUD operations\n3. Implement optimistic updates for better UX\n4. Add retry mechanisms for failed operations\n5. Create comprehensive error handling for all API calls\n6. Implement proper loading states during operations\n7. Add data validation before submission\n8. Test all error scenarios and edge cases\n9. Ensure proper state synchronization between operations",
+          "status": "pending",
           "parentTaskId": 8
         }
       ]
     },
     {
       "id": 9,
-      "title": "Build Tabbed Activity Log",
-      "description": "Implement a tabbed interface on the Client Profile page for activity logs grouped by type with filter and search functionality.",
-      "status": "done",
+      "title": "Implement Client Contacts Table and CRUD",
+      "description": "Create the Client Contacts table with add, edit, and delete functionality.",
+      "status": "pending",
       "dependencies": [
-        8
+        4
       ],
-      "priority": "medium",
-      "details": "Create a tabbed interface using HeadlessUI Tabs (referenced in Context7) with groups for 'Notes', 'Emails', 'Calls', and 'Status Changes'. Implement full-text filter on activity content and a date-range picker in the log section. Ensure proper loading states and empty states for each tab.",
-      "testStrategy": "Test tab switching functionality. Verify filtering works correctly for text and date ranges. Test with various activity data sets. Check accessibility of the tabbed interface.",
+      "priority": "high",
+      "details": "1. Create a data table to display contacts showing Name, Phone, Email, Contact Type, and License Number\n2. Reuse the Add Contact modal from Task 4 for adding new contacts\n3. Implement edit modal for updating existing contacts\n4. Add delete functionality with confirmation dialog\n5. Connect to `contacts.*` mutations for CRUD operations\n6. Implement sorting and basic filtering if needed\n7. Refresh table after successful operations",
+      "testStrategy": "Test all CRUD operations for contacts. Verify data displays correctly and updates after operations. Test sorting and filtering if implemented.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Tabbed Interface for Activity Log Types",
-          "description": "Set up the tabbed UI for activity logs grouped by 'Notes', 'Emails', 'Calls', and 'Status Changes' using HeadlessUI Tabs in a React project.",
-          "status": "done",
+          "title": "Create Client Contacts Database Schema and API Endpoints",
+          "description": "Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.",
           "dependencies": [],
-          "details": "Install @headlessui/react and Tailwind CSS if not already present. Use HeadlessUI's Tab.Group, Tab.List, Tab, Tab.Panels, and Tab.Panel components to create four tabs, each representing a log type. Ensure accessibility and keyboard navigation are supported as per HeadlessUI standards. Each Tab.Panel should render a placeholder for its respective log content. Style the tabs using Tailwind CSS for visual clarity and responsiveness.[1][2][5]"
+          "details": "1. Create a database migration for the client_contacts table with fields: id, client_id, name, email, phone, contact_type, license_number, created_at, updated_at\n2. Add appropriate constraints (NOT NULL, UNIQUE for email)\n3. Create indexes on client_id and other frequently queried fields\n4. Implement API endpoints for CRUD operations (/contacts.create, /contacts.update, /contacts.delete, /contacts.list)\n5. Add comprehensive input validation on all endpoints\n6. Implement proper error handling with descriptive messages\n7. Add audit logging for all operations\n8. Test endpoints with Postman or similar tool to verify functionality",
+          "status": "pending",
+          "parentTaskId": 9
         },
         {
           "id": 2,
-          "title": "Add Filter, Search, and Date-Range Picker Functionality",
-          "description": "Integrate a full-text search filter and a date-range picker within the log section of each tab to allow users to filter activity logs by content and date.",
-          "status": "done",
+          "title": "Implement Client Contacts Data Table Component",
+          "description": "Create a reusable data table component to display client contacts with sorting, pagination, and basic filtering capabilities.",
           "dependencies": [
             1
           ],
-          "details": "Within each Tab.Panel, implement a search input that filters the displayed logs based on user-entered text. Add a date-range picker component (using a suitable library or custom implementation) to filter logs by selected date range. Ensure that both filters work in combination and update the displayed logs in real-time. Place the filter controls prominently above the log list in each tab."
+          "details": "1. Create a new ContactsTable component that accepts a clientId prop\n2. Implement data fetching from the contacts.list API endpoint with proper loading states\n3. Configure table columns for Name, Phone, Email, Contact Type, and License Number\n4. Add sorting functionality for all columns\n5. Implement pagination with configurable page size\n6. Add basic filtering capability (search by name/email)\n7. Include empty state handling and error state handling\n8. Style the table according to application design guidelines\n9. Test the component with various data scenarios (empty, few items, many items)",
+          "status": "pending",
+          "parentTaskId": 9
         },
         {
           "id": 3,
-          "title": "Implement Loading and Empty States for Each Tab",
-          "description": "Ensure each tab displays appropriate loading indicators while fetching data and clear empty states when no logs match the current filters.",
-          "status": "done",
+          "title": "Integrate Add Contact Modal from Task 4",
+          "description": "Reuse and integrate the existing Add Contact modal from Task 4, connecting it to the contacts.create mutation.",
           "dependencies": [
+            1,
             2
           ],
-          "details": "For each Tab.Panel, manage loading state (e.g., show a spinner or skeleton UI) while log data is being fetched or filtered. When no logs are available after applying filters or on initial load, display a user-friendly empty state message. Ensure these states are visually distinct and accessible, and that transitions between states are smooth."
+          "details": "1. Import the existing AddContactModal component from Task 4\n2. Create a wrapper component that manages the modal's open/close state\n3. Connect the form submission to the contacts.create mutation\n4. Add proper validation for all form fields\n5. Implement loading state during submission\n6. Add success and error handling with user feedback\n7. Ensure the contacts table refreshes after successful creation\n8. Test the integration by adding new contacts and verifying they appear in the table\n9. Verify that validation works correctly for all required fields",
+          "status": "pending",
+          "parentTaskId": 9
+        },
+        {
+          "id": 4,
+          "title": "Implement Edit Contact Modal",
+          "description": "Create an edit modal for updating existing contacts, pre-populated with the contact's current data and connected to the contacts.update mutation.",
+          "dependencies": [
+            1,
+            2,
+            3
+          ],
+          "details": "1. Create an EditContactModal component based on the AddContactModal structure\n2. Add functionality to pre-populate the form with existing contact data\n3. Connect form submission to the contacts.update mutation\n4. Implement proper validation for all fields\n5. Add loading state during submission\n6. Provide clear success and error messages\n7. Ensure the contacts table refreshes after successful updates\n8. Add an edit button/icon in each table row that opens the edit modal\n9. Test editing various fields and verify changes are reflected in the table after submission",
+          "status": "pending",
+          "parentTaskId": 9
+        },
+        {
+          "id": 5,
+          "title": "Implement Delete Contact Functionality with Confirmation",
+          "description": "Add the ability to delete contacts with a confirmation dialog to prevent accidental deletions, connected to the contacts.delete mutation.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create a DeleteConfirmationDialog component with clear messaging\n2. Add a delete button/icon in each table row\n3. Connect the confirmation dialog to the contacts.delete mutation\n4. Implement loading state during deletion\n5. Add success and error handling with user feedback\n6. Ensure the contacts table refreshes after successful deletion\n7. Consider implementing soft delete if appropriate for the application\n8. Add role-based access control to restrict deletion to authorized users\n9. Test the delete functionality and verify contacts are removed from the table",
+          "status": "pending",
+          "parentTaskId": 9
+        },
+        {
+          "id": 6,
+          "title": "Implement Advanced Filtering and Table Refresh Logic",
+          "description": "Enhance the contacts table with advanced filtering options and implement a robust table refresh mechanism that updates after all CRUD operations.",
+          "dependencies": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "details": "1. Create a FilterPanel component with options for filtering by contact type, date added, etc.\n2. Implement client-side filtering for quick responses\n3. Add server-side filtering for large datasets by extending the contacts.list endpoint\n4. Create a centralized table refresh mechanism that can be triggered by all CRUD operations\n5. Implement optimistic updates where appropriate to improve perceived performance\n6. Add a manual refresh button for users\n7. Implement proper loading states during refresh operations\n8. Consider adding export functionality (CSV/Excel) for the filtered data\n9. Test all filtering options and verify the table refreshes correctly after all CRUD operations",
+          "status": "pending",
+          "parentTaskId": 9
         }
       ]
     },
     {
       "id": 10,
-      "title": "Implement SharePoint Folder Browser",
-      "description": "Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.",
-      "status": "done",
+      "title": "Create Upcoming Schedule Section",
+      "description": "Implement the Upcoming Schedule section showing next contact date and report due date.",
+      "status": "pending",
       "dependencies": [
-        2
+        2,
+        6
       ],
-      "priority": "medium",
-      "details": "Embed the AllFolders and RecentFileTable components from File-Manager to create a SharePoint folder browser. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Ensure proper loading states and error handling for file access.",
-      "testStrategy": "Test folder browser navigation. Verify file links open correctly. Test with various folder structures and file types. Check invoice status display accuracy.",
+      "priority": "low",
+      "details": "1. Extract Next Contact Date from client and audit records\n2. Extract Report Due Date from relevant data sources\n3. Create a simple, read-only list to display these dates\n4. Format dates appropriately\n5. Handle empty or null date values\n6. Style as a small summary section",
+      "testStrategy": "Verify dates display correctly and format properly. Test handling of missing or null date values.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement SharePoint Folder Browser Component",
-          "description": "Integrate the AllFolders component from File-Manager to create a navigable SharePoint folder structure with proper folder creation and navigation capabilities.",
-          "status": "done",
+          "title": "Implement Data Retrieval and Processing for Schedule Dates",
+          "description": "Create the backend functionality to extract, process, and format the Next Contact Date and Report Due Date from client records and audit data sources.",
           "dependencies": [],
-          "details": "Begin by embedding the AllFolders component from the existing File-Manager into the application. Configure the component to connect to the client's SharePoint document library using the SharePoint API. Implement folder navigation functionality that allows users to browse through the folder hierarchy, open folders, and navigate back up using breadcrumb navigation. Add support for viewing folder contents and implement proper loading states while folder data is being fetched. Include error handling for cases where SharePoint access fails or folders cannot be loaded. Test the component with various folder structures to ensure proper rendering and navigation."
+          "details": "1. Create a ScheduleService class to handle data retrieval:\n   - Implement methods to extract Next Contact Date from client records\n   - Implement methods to extract Report Due Date from audit records\n   - Add logic to handle null/empty date values with appropriate fallbacks\n   - Implement date formatting using date-fns library for consistent display\n\n2. Create API endpoints to serve schedule data:\n   - Develop a GET endpoint that returns both contact and report dates\n   - Implement proper error handling and response formatting\n   - Add sorting to ensure dates are returned in chronological order\n   - Include pagination support if multiple dates exist\n\n3. Add data processing logic:\n   - Implement status categorization (overdue, today, upcoming)\n   - Add buffer time calculation for approaching deadlines\n   - Create utility functions for date comparison and validation\n\n4. Testing approach:\n   - Write unit tests for the ScheduleService methods\n   - Create integration tests for the API endpoints\n   - Test edge cases like missing dates, past dates, and future dates",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 2,
-          "title": "Integrate Recent Files Table Component",
-          "description": "Embed the RecentFileTable component from File-Manager to display SharePoint files with sorting and filtering capabilities.",
-          "status": "done",
+          "title": "Build UI Component for Upcoming Schedule Display",
+          "description": "Develop a responsive React component to display the schedule information in a clean, user-friendly format that highlights important dates and their status.",
           "dependencies": [
             1
           ],
-          "details": "After the folder browser is working, integrate the RecentFileTable component from File-Manager to display files within the selected SharePoint folders. Configure the component to show file metadata including name, type, modified date, and size. Implement file opening functionality that launches files in appropriate viewers based on file type. Add loading indicators for when file lists are being retrieved. Implement error handling for file access issues, showing appropriate error messages when files cannot be accessed or displayed. Ensure the file table updates properly when users navigate between different folders in the folder browser component."
-        },
-        {
-          "id": 3,
-          "title": "Create Recent Invoices Card Component",
-          "description": "Develop a specialized card component that displays the 5 most recent invoice documents with their payment status and PDF links.",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Build a new Recent Invoices Card component that queries SharePoint for the most recent invoice documents. Implement filtering logic to identify invoice documents based on file naming conventions or metadata. Display the 5 most recent invoices in a card format, showing for each invoice: document name, creation/modification date, payment status (paid/unpaid), and a direct link to open the PDF. The payment status should be determined by querying metadata or a related data source that tracks invoice payment information. Add visual indicators (like color coding) to distinguish between paid and unpaid invoices. Implement proper loading states while invoice data is being fetched and error handling for cases where invoice documents cannot be accessed. Ensure the component refreshes automatically when new invoices are added to SharePoint."
+          "details": "1. Create the UpcomingSchedule React component:\n   - Implement useState and useEffect hooks to manage schedule data\n   - Add axios API call to fetch data from endpoints created in subtask 1\n   - Implement loading states and error handling\n   - Create conditional rendering for empty states\n\n2. Design the schedule item display:\n   - Create styled components for each schedule item\n   - Implement visual indicators for different status types (overdue, today, upcoming)\n   - Use date-fns to format dates consistently (e.g., 'MMM dd, yyyy')\n   - Add tooltips for additional context on hover\n\n3. Implement responsive design:\n   - Ensure the component works well on both desktop and mobile\n   - Use CSS Grid or Flexbox for layout\n   - Add appropriate spacing and typography\n   - Implement collapsible sections if needed\n\n4. Add accessibility features:\n   - Include proper ARIA attributes\n   - Ensure keyboard navigation works correctly\n   - Add screen reader-friendly text alternatives\n   - Test with accessibility tools\n\n5. Testing approach:\n   - Write unit tests using React Testing Library\n   - Test rendering with various data scenarios\n   - Verify responsive behavior with different viewport sizes\n   - Test accessibility compliance",
+          "status": "pending",
+          "parentTaskId": 10
         }
       ]
     },
     {
       "id": 11,
-      "title": "Create Regulatory Checklist and Alerts",
-      "description": "Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.",
-      "status": "done",
+      "title": "Implement Activity Log Timeline",
+      "description": "Create the Client Activity Log with infinite scroll, filtering, and form for new entries.",
+      "status": "pending",
       "dependencies": [
         2
       ],
       "priority": "medium",
-      "details": "Create a Regulatory Checklist component showing compliance items ('Trust deed', 'Bank statements', etc.) with check marks. Implement Alerts & Warnings section flagging missing or expired documentation and upcoming license renewals. Use appropriate visual indicators for different alert severities.",
-      "testStrategy": "Test checklist with various compliance states. Verify alerts trigger correctly based on document status and expiration dates. Check visual clarity of warning indicators.",
+      "details": "1. Implement query to fetch activity logs with pagination\n2. Create infinite scroll functionality with \"Load More\" button\n3. Implement tabs for filtering (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)\n4. Build timeline UI showing activity entries with appropriate icons and formatting\n5. Create form for adding new activity logs\n6. Connect to `activityLogs.*` mutations for creating new entries\n7. Implement optimistic updates for better UX",
+      "testStrategy": "Test infinite scroll and pagination. Verify filtering tabs work correctly. Test adding new activity logs and confirm they appear in the timeline.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Regulatory Checklist Component",
-          "description": "Create the core checklist component displaying compliance items with status indicators",
-          "status": "done",
+          "title": "Set up Activity Log Data Fetching with Cursor-based Pagination",
+          "description": "Implement the API query to fetch activity logs with cursor-based pagination for efficient data loading and better performance with large datasets.",
           "dependencies": [],
-          "details": "Develop a reusable checklist component that displays regulatory compliance items (such as 'Trust deed', 'Bank statements', etc.) with appropriate status indicators. The component should include: 1) A list view of all compliance items, 2) Visual check marks or status icons for each item, 3) The ability to categorize items by type or importance, 4) Timestamps showing when items were last updated or verified, and 5) A responsive design that works across different screen sizes. Use a data structure that stores item name, status, expiration date, and category for each compliance item."
+          "details": "1. Create a GraphQL query for fetching activity logs with parameters for cursor, limit, and filters\n2. Implement cursor-based pagination instead of offset-based for better performance\n3. Include fields for id, type, timestamp, description, user, and any type-specific data\n4. Add proper indexing in the database for timestamp and activity type fields\n5. Implement error handling for failed queries\n6. Test the query with various cursor positions and filter combinations\n7. Document the API interface for team reference",
+          "status": "pending",
+          "parentTaskId": 11
         },
         {
           "id": 2,
-          "title": "Develop Alert/Warning Detection System",
-          "description": "Create the logic to identify missing, expired, or soon-to-expire documentation",
-          "status": "done",
+          "title": "Build Timeline UI Component with Appropriate Styling",
+          "description": "Create a visually appealing timeline component that displays activity entries with appropriate icons, formatting, and visual hierarchy.",
           "dependencies": [
             1
           ],
-          "details": "Build the backend logic that analyzes compliance items to detect issues requiring alerts. This system should: 1) Check for completely missing documentation, 2) Identify expired documents by comparing current date with expiration dates, 3) Flag upcoming expirations within a configurable time window (e.g., 30, 60, 90 days), 4) Assign severity levels to different types of alerts (critical for expired, warning for upcoming, etc.), 5) Create a data model that captures alert type, severity, affected item, and recommended action, and 6) Implement scheduled checks that run automatically to keep alerts current."
+          "details": "1. Design a responsive timeline layout with clear visual separation between entries\n2. Implement activity type-specific icons (email, call, note, etc.) using a consistent icon library\n3. Format timestamps in a user-friendly way using date-fns library\n4. Style different activity types with distinct visual cues (colors, borders)\n5. Ensure proper spacing and alignment for readability\n6. Make the timeline accessible with proper ARIA attributes and keyboard navigation\n7. Test the UI across different screen sizes and with various activity types\n8. Implement skeleton loading states for better UX during data fetching",
+          "status": "pending",
+          "parentTaskId": 11
         },
         {
           "id": 3,
-          "title": "Create Alerts & Warnings Display Section",
-          "description": "Implement the visual representation of alerts with appropriate severity indicators",
-          "status": "done",
+          "title": "Implement Infinite Scroll with Load More Button",
+          "description": "Create an infinite scroll mechanism with a fallback 'Load More' button to efficiently load and display large sets of activity log entries.",
           "dependencies": [
             1,
             2
           ],
-          "details": "Develop the UI component that displays the alerts and warnings generated by the detection system. This should include: 1) A dedicated 'Alerts & Warnings' section in the interface, 2) Visual indicators for different severity levels (e.g., red for critical, yellow for warnings, blue for informational), 3) Grouping of alerts by type or affected documentation, 4) Clear messaging explaining the issue and recommended action, 5) Interactive elements allowing users to acknowledge alerts or mark them as 'in progress', and 6) Filtering capabilities to focus on specific types of alerts or severity levels. Ensure the component updates in real-time when new alerts are generated or existing ones are resolved."
+          "details": "1. Integrate react-infinite-scroll-component or similar library for efficient rendering\n2. Implement scroll detection to trigger loading of more items when user approaches bottom\n3. Add a 'Load More' button as an alternative to automatic loading\n4. Maintain scroll position when new items are loaded to prevent jumps\n5. Implement virtualization for rendering only visible items to improve performance\n6. Add loading indicators during data fetching\n7. Handle edge cases like empty results or end of data\n8. Test with various network conditions and large datasets",
+          "status": "pending",
+          "parentTaskId": 11
+        },
+        {
+          "id": 4,
+          "title": "Create Filtering System with Tabs and Advanced Filters",
+          "description": "Implement a filtering system with tabs for quick filtering by activity type and additional filters for more granular control.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Create tab components for filtering by activity type (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)\n2. Implement state management for selected filters using React context or a state management library\n3. Add debounced filter application to prevent excessive API calls\n4. Create additional filter options for date ranges and other metadata\n5. Ensure filters are reflected in the URL for shareable filtered views\n6. Implement filter reset functionality\n7. Add visual indicators for active filters\n8. Test filter combinations for correctness and performance",
+          "status": "pending",
+          "parentTaskId": 11
+        },
+        {
+          "id": 5,
+          "title": "Develop Form for Adding New Activity Entries",
+          "description": "Create a user-friendly form with validation for adding new activity log entries of different types.",
+          "dependencies": [
+            2
+          ],
+          "details": "1. Implement a form using Formik or React Hook Form for robust validation\n2. Create dynamic form fields that change based on selected activity type\n3. Add client-side validation with helpful error messages\n4. Implement auto-save functionality for drafts\n5. Add rich text editing for description fields where appropriate\n6. Include file upload capabilities for document-type activities\n7. Ensure the form is fully accessible with keyboard navigation and screen reader support\n8. Test form submission with various input combinations and edge cases",
+          "status": "pending",
+          "parentTaskId": 11
+        },
+        {
+          "id": 6,
+          "title": "Connect Activity Log Form to Mutation APIs",
+          "description": "Integrate the new activity form with backend mutation APIs to create and update activity log entries.",
+          "dependencies": [
+            5
+          ],
+          "details": "1. Implement GraphQL mutations for creating new activity logs of each type\n2. Add proper error handling for failed submissions\n3. Implement loading states during submission\n4. Add success notifications after successful submissions\n5. Create retry mechanisms for failed submissions\n6. Implement validation on both client and server sides\n7. Add security measures to prevent unauthorized submissions\n8. Test mutations with various activity types and edge cases",
+          "status": "pending",
+          "parentTaskId": 11
+        },
+        {
+          "id": 7,
+          "title": "Implement Optimistic Updates for Improved UX",
+          "description": "Add optimistic updates to immediately reflect new entries in the timeline before server confirmation, providing a more responsive user experience.",
+          "dependencies": [
+            3,
+            6
+          ],
+          "details": "1. Implement client-side state updates that immediately show new entries in the timeline\n2. Create temporary IDs for new entries until server confirmation\n3. Add visual indicators for entries that are pending server confirmation\n4. Implement rollback functionality for failed submissions\n5. Ensure proper ordering of optimistically added entries in the timeline\n6. Handle conflicts between optimistic updates and subsequent data fetches\n7. Test various network conditions including slow connections and failures\n8. Measure and optimize performance impact of optimistic updates",
+          "status": "pending",
+          "parentTaskId": 11
         }
       ]
     },
     {
       "id": 12,
-      "title": "Implement Meeting Minutes Panel",
-      "description": "Create an inline panel on the Client Profile page for recording audit meeting notes with auto-append to activity log.",
-      "status": "done",
+      "title": "Implement Form Validation and Error Handling",
+      "description": "Add comprehensive form validation and error handling across all forms and API interactions.",
+      "status": "pending",
       "dependencies": [
-        8
-      ],
-      "priority": "low",
-      "details": "Implement a Meeting Minutes Panel with rich text input for recording audit meeting notes. Add functionality to automatically append these notes to the activity log. Include fields for meeting date, attendees, and topics. Ensure proper validation and confirmation on submission.",
-      "testStrategy": "Test note creation and submission. Verify notes appear correctly in the activity log. Test validation for required fields. Check rich text formatting is preserved.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Design and Implement Meeting Minutes Panel UI",
-          "description": "Create the inline panel interface for recording audit meeting notes, including rich text input and fields for meeting date, attendees, and topics.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Develop a user interface component that appears inline within the relevant workflow. The panel should include a rich text editor for detailed notes, as well as structured input fields for meeting date, attendees, and topics. Ensure the UI is accessible and visually consistent with the application. Implement client-side validation to ensure all required fields are completed before submission."
-        },
-        {
-          "id": 2,
-          "title": "Implement Submission Validation and Confirmation",
-          "description": "Add logic to validate input fields and provide user confirmation upon successful submission of meeting minutes.",
-          "status": "done",
-          "dependencies": [
-            1
-          ],
-          "details": "On form submission, validate that all required fields (date, attendees, topics, notes) are filled and meet format requirements. Display clear error messages for invalid or missing input. Upon successful validation, show a confirmation dialog or notification to the user, confirming that the meeting minutes have been recorded."
-        },
-        {
-          "id": 3,
-          "title": "Auto-Append Meeting Minutes to Activity Log",
-          "description": "Develop backend and integration logic to automatically append submitted meeting minutes to the activity log.",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "After successful submission and confirmation, implement logic to serialize the meeting minutes data and append it to the activity log. Ensure the activity log entry includes all relevant details (date, attendees, topics, notes) and is timestamped. Handle any errors in the append process gracefully, providing feedback to the user if necessary."
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "title": "Add Action Buttons and Client Value Projection",
-      "description": "Implement quick action buttons and client lifetime value projection chart on the Client Profile page.",
-      "status": "done",
-      "dependencies": [
-        2,
-        3
-      ],
-      "priority": "medium",
-      "details": "Create Action Buttons for quick actions: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client (with confirmation modal). Implement Client Lifetime Value Projection with a small predictive chart forecasting next year's fees based on past trends. Use useAbility() to gate the Archive Client action with clients.archive permission.",
-      "testStrategy": "Test all action buttons for correct behavior. Verify Archive Client confirmation modal works properly. Test permission gating for restricted actions. Check projection chart calculations for accuracy.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Implement Quick Action Buttons with Permission Gating",
-          "description": "Create UI components for quick action buttons: Add Contact, Link Bank Feed, Request Document, Schedule Audit, and Archive Client. Ensure the Archive Client button is gated using useAbility() to check for the clients.archive permission, and display a confirmation modal before proceeding with the archive action.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Add each action button to the client interface, wiring up their respective handlers. For the Archive Client button, use the useAbility() hook to conditionally render the button based on the user's clients.archive permission. Implement a confirmation modal that appears when Archive Client is clicked, requiring user confirmation before executing the archive logic."
-        },
-        {
-          "id": 2,
-          "title": "Aggregate and Prepare Data for Client Lifetime Value Projection",
-          "description": "Collect and process historical client transaction data to calculate key metrics needed for lifetime value projection, such as frequency, recency, monetary value, and observation period. Prepare this data for use in the predictive model.",
-          "status": "done",
-          "dependencies": [
-            1
-          ],
-          "details": "Extract transaction data for each client and aggregate it into an RFM (Recency, Frequency, Monetary value) summary table. Use utility functions or packages (e.g., lifetimes in Python, or equivalent in your stack) to compute these metrics. Ensure the data is formatted and accessible for the predictive chart component."
-        },
-        {
-          "id": 3,
-          "title": "Implement Client Lifetime Value Projection Chart",
-          "description": "Develop and integrate a predictive chart that forecasts next year's client fees based on historical trends and the prepared data. Visualize the projected client lifetime value in a clear, concise chart within the client interface.",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Use the aggregated RFM data to feed a predictive model (such as BG/NBD and Gamma-Gamma, or a simplified ARPU/churn-based approach) to estimate next year's client fees. Render the results in a small chart (e.g., line or bar chart) using a charting library. Place the chart in the client view, ensuring it updates dynamically as new data becomes available."
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "title": "Implement Email Thread Panel",
-      "description": "Embed the last 3 client email threads via Outlook/Gmail integration on the Client Profile page.",
-      "status": "done",
-      "dependencies": [
-        2
-      ],
-      "priority": "low",
-      "details": "Create an Email Thread Panel component that embeds the last 3 client email threads via Outlook/Gmail integration. Implement proper loading states and error handling for email fetching. Display email metadata (sender, recipients, date) and content in a clean, readable format.",
-      "testStrategy": "Test email thread display with various email formats. Verify loading states and error handling. Check email content rendering for correctness. Test with different email providers.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Integrate Outlook/Gmail APIs and Fetch Last 3 Client Email Threads",
-          "description": "Set up secure integration with both Outlook and Gmail APIs to authenticate users and fetch the last 3 email threads involving the client. Ensure proper handling of API tokens and permissions.",
-          "status": "done",
-          "dependencies": [],
-          "details": "Implement OAuth2 authentication flows for both Outlook (Microsoft Graph API) and Gmail (Google API). After authentication, use the respective APIs to query and retrieve the most recent 3 email threads related to the client. Ensure the data includes full thread details, including message metadata and content. Handle API rate limits and errors gracefully, returning clear error messages or fallback states if fetching fails."
-        },
-        {
-          "id": 2,
-          "title": "Design and Implement Email Thread Panel UI Component",
-          "description": "Create a reusable Email Thread Panel component that displays the fetched email threads in a clean, readable format, showing sender, recipients, date, and email content.",
-          "status": "done",
-          "dependencies": [
-            1
-          ],
-          "details": "Design the UI to present each thread as a collapsible or expandable section, showing the sequence of emails within the thread. Display metadata (sender, recipients, date) prominently for each message, and render the email body with proper formatting. Ensure the component is responsive and accessible. Use loading indicators while data is being fetched and placeholders for empty or error states."
-        },
-        {
-          "id": 3,
-          "title": "Implement Loading States and Robust Error Handling",
-          "description": "Enhance the Email Thread Panel to provide clear feedback during data fetching and handle errors gracefully, ensuring a smooth user experience.",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Add loading spinners or skeleton screens to indicate when email threads are being retrieved. Implement error boundaries to catch and display user-friendly error messages if fetching fails (e.g., network issues, authentication errors, or no threads found). Ensure the UI recovers gracefully from errors and allows retrying the fetch operation. Log errors for monitoring and debugging purposes."
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "title": "Implement Permission Gating on Client Profile Page",
-      "description": "Apply permission controls to Client Profile page components using useAbility() and <Authorized> to avoid changing other pages.",
-      "status": "done",
-      "dependencies": [
-        3,
-        8,
-        13
-      ],
-      "priority": "high",
-      "details": "Scope: Only implement permission gating within src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx and its child components. Use useAbility() and <Authorized> components per the useAbility rule to gate features on this page. Gate editing with clients.edit, archiving with clients.archive, and sensitive fees data (fees, estAnnFees) for Admin-only. Provide appropriate fallbacks or hidden elements when permissions are not granted."
-    },
-    {
-      "id": 16,
-      "title": "Optimize Performance and Implement Final Testing",
-      "description": "Optimize data loading, implement Suspense boundaries, and conduct comprehensive testing for the Client Profile page.",
-      "status": "done",
-      "dependencies": [
-        1,
-        2,
-        3,
         4,
         5,
         6,
-        7,
         8,
         9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15
+        11
       ],
-      "priority": "high",
-      "details": "Optimize data loading with select queries and pagination where appropriate. Implement Suspense boundaries for non-critical sections to improve perceived performance. Add lazy-loading for heavy components. Conduct comprehensive testing including accessibility checks, responsive design verification, and performance benchmarking. Create Storybook stories and unit tests for key components. Ensure all Cursor rules are followed.",
-      "testStrategy": "Run comprehensive test suite covering all components and features. Perform accessibility audit using automated tools. Test performance with large data sets. Verify responsive behavior across all breakpoints. Conduct end-to-end testing of key user flows.",
+      "priority": "medium",
+      "details": "1. Implement client-side validation for all forms using a validation library or custom logic\n2. Add appropriate error messages for validation failures\n3. Handle API errors gracefully with user-friendly messages\n4. Implement toast notifications for success and error states\n5. Add loading indicators during API calls\n6. Ensure all forms maintain state during validation errors",
+      "testStrategy": "Test validation by submitting invalid data in all forms. Verify error messages display correctly. Test API error handling by simulating API failures.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Data Loading Optimizations",
-          "description": "Optimize data fetching patterns with select queries and pagination to improve initial load times and reduce unnecessary network requests.",
-          "status": "done",
+          "title": "Set up validation library and create validation schemas",
+          "description": "Select and integrate a validation library (Yup or Zod recommended) and define reusable validation schemas for all form types in the application.",
           "dependencies": [],
-          "details": "Analyze current data fetching patterns and implement select queries to retrieve only needed fields. Add pagination for large data sets with configurable page sizes (20-50 items per page). Implement infinite scrolling or 'load more' patterns for long lists using windowing techniques like react-window or react-virtualized to render only visible items. Add request caching for frequently accessed data. Measure performance improvements using React DevTools Profiler and network monitoring tools."
+          "details": "1. Install the chosen validation library (e.g., `npm install yup` or `npm install zod`)\n2. Create a dedicated `/validation` directory to house all validation schemas\n3. Define base validation schemas for common fields (email, password, names, etc.) with appropriate rules and error messages\n4. Create form-specific schemas by composing base schemas\n5. Ensure schemas enforce standardized data formats\n6. Add TypeScript types that align with validation schemas\n7. Test schemas with various inputs to verify validation rules work as expected",
+          "status": "pending",
+          "parentTaskId": 12
         },
         {
           "id": 2,
-          "title": "Implement Code Splitting and Suspense Boundaries",
-          "description": "Reduce initial bundle size and improve perceived performance through code splitting, lazy loading, and strategic Suspense boundary placement.",
-          "status": "done",
+          "title": "Implement client-side form validation with real-time feedback",
+          "description": "Integrate the validation schemas with form components to provide real-time, inline validation feedback as users interact with form fields.",
           "dependencies": [
             1
           ],
-          "details": "Use React.lazy() and dynamic imports to split the application into smaller chunks. Identify heavy components (complex forms, data visualizations, rich text editors) and configure them for lazy loading. Implement Suspense boundaries around non-critical UI sections with appropriate fallback components. Add prefetching for anticipated user paths to improve navigation experience. Consider implementing skeleton screens for content that takes longer to load. Ensure error boundaries are in place to gracefully handle loading failures."
+          "details": "1. Integrate validation schemas with React Hook Form or Formik\n2. Implement field-level validation that triggers on blur and input events\n3. Add debouncing for real-time validation to prevent excessive validation calls\n4. Display inline error messages adjacent to form fields\n5. Style error states for form inputs (red borders, error icons, etc.)\n6. Ensure validation maintains form state when errors occur\n7. Add accessibility attributes (aria-invalid, aria-describedby) for screen readers\n8. Test validation with keyboard navigation and screen readers",
+          "status": "pending",
+          "parentTaskId": 12
         },
         {
           "id": 3,
-          "title": "Conduct Comprehensive Testing and Documentation",
-          "description": "Perform thorough testing across multiple dimensions and create documentation for key components.",
-          "status": "done",
-          "dependencies": [
-            2
-          ],
-          "details": "Create Storybook stories for all key components with different states and variations. Write unit tests using Jest and React Testing Library focusing on critical user flows. Perform accessibility testing using axe or similar tools to ensure WCAG compliance. Test responsive design across multiple device sizes and orientations. Conduct performance benchmarking using Lighthouse and WebPageTest, establishing baseline metrics for First Contentful Paint, Time to Interactive, and Total Blocking Time. Document performance optimization techniques used and create guidelines for maintaining performance. Verify all Cursor rules are followed throughout the codebase."
-        }
-      ]
-    },
-    {
-      "id": 17,
-      "title": "Implement Client-Specific Email Filtering System",
-      "description": "Create a filtering system on the client detail page that displays only emails from client contacts or containing client/contact names in the subject line, with pagination support.",
-      "details": "Build a filtering mechanism that works across all mailbox folders (Inbox, Sent, Drafts, etc.) to show only client-relevant emails. The system should:\n\n1. Filter emails based on two criteria:\n   - Sender/recipient matches any email address from the client's contact list\n   - Email subject contains the client name or any contact name associated with the client\n\n2. Implement pagination with 5 emails per page initially displayed\n\n3. Add a 'Load More' button that fetches the next 5 emails when clicked\n\n4. Create a filtering service that interfaces with the existing email integration (Task #14)\n\n5. Ensure the UI updates dynamically when new filters are applied\n\n6. Add a visual indicator when filtering is active\n\n7. Include the ability to clear filters and return to the standard email view\n\n8. Optimize the filtering algorithm to handle large email volumes efficiently\n\n9. Ensure the filtered view maintains all existing email functionality (reply, forward, etc.)\n\nThe implementation should extend the existing email thread panel from Task #14, applying these filters to the already-fetched client data from Task #2.",
-      "testStrategy": "Testing should verify both the filtering logic and the pagination functionality:\n\n1. Unit Tests:\n   - Test the filtering algorithm with various email datasets to ensure it correctly identifies client-related emails\n   - Verify pagination calculations work correctly with different dataset sizes\n   - Test edge cases: no matching emails, exactly 5 matching emails, etc.\n\n2. Integration Tests:\n   - Verify the filter works across all mailbox folders\n   - Confirm the 'Load More' functionality fetches the correct next set of emails\n   - Test that clearing filters restores the complete email view\n\n3. UI Tests:\n   - Verify the initial load shows exactly 5 emails (or fewer if less are available)\n   - Confirm the 'Load More' button appears only when more emails exist\n   - Test that the visual filter indicator appears/disappears appropriately\n   - Verify the UI remains responsive when applying filters to large email sets\n\n4. Manual Testing Scenarios:\n   - Test with a client that has multiple contacts with different email domains\n   - Verify emails with client name in subject but from non-contacts are correctly included\n   - Test performance with a client that has hundreds of associated emails",
-      "status": "in-progress",
-      "dependencies": [
-        14,
-        2
-      ],
-      "priority": "high",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Create Email Filtering Service Interface",
-          "description": "Design and implement a service that will handle the filtering logic for client-specific emails",
+          "title": "Create error handling utilities for API interactions",
+          "description": "Develop utility functions to standardize API error handling across the application, mapping server errors to user-friendly messages.",
           "dependencies": [],
-          "details": "1. Create a new EmailFilterService class that will interface with the existing email integration\n2. Define methods for filtering emails based on sender/recipient and subject content\n3. Implement the core filtering algorithm that checks if an email is from/to a client contact or contains client/contact names in the subject\n4. Add utility methods to extract and normalize email addresses and names for comparison\n5. Include performance optimizations for handling large email volumes\n6. Test the service with mock email data to ensure filtering accuracy\n7. Document the service API for team reference",
-          "status": "done",
-          "parentTaskId": 17
-        },
-        {
-          "id": 2,
-          "title": "Implement Backend Pagination Support",
-          "description": "Add server-side pagination capabilities to support the email filtering system",
-          "dependencies": [
-            1
-          ],
-          "details": "1. Extend the EmailFilterService to support paginated results\n2. Implement methods to fetch emails in batches of 5\n3. Create a caching mechanism to store filtered results to improve performance\n4. Add support for cursor-based pagination to track the last loaded email\n5. Implement the 'Load More' functionality on the service layer\n6. Create unit tests to verify pagination works correctly with different filter combinations\n7. Ensure the pagination system handles edge cases (e.g., when fewer than 5 emails remain)",
-          "status": "in-progress",
-          "parentTaskId": 17
-        },
-        {
-          "id": 3,
-          "title": "Integrate Filtering with Email Thread Panel",
-          "description": "Connect the filtering service to the existing email thread panel UI",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Modify the existing email thread panel component to use the EmailFilterService\n2. Update the component to fetch and display filtered emails based on client context\n3. Implement the initial load of 5 filtered emails when the client detail page loads\n4. Ensure all existing email functionality (reply, forward, etc.) works with filtered emails\n5. Add error handling for cases where filtering or email fetching fails\n6. Test the integration with real client data to verify filtering accuracy\n7. Optimize component rendering to handle dynamic updates when filters change",
-          "status": "done",
-          "parentTaskId": 17
+          "details": "1. Create an `apiErrorHandler.ts` utility\n2. Implement functions to parse and normalize error responses from different API endpoints\n3. Define a standard error response format\n4. Create a mapping of error codes/types to user-friendly messages\n5. Add support for field-specific errors returned from the server\n6. Implement retry logic for transient errors when appropriate\n7. Add logging for errors to aid debugging\n8. Test with mocked API responses to verify correct error handling",
+          "status": "pending",
+          "parentTaskId": 12
         },
         {
           "id": 4,
-          "title": "Create Filter UI Controls and Indicators",
-          "description": "Build the user interface elements for controlling and displaying the filter status",
-          "dependencies": [
-            3
-          ],
-          "details": "1. Design and implement a filter control panel in the email thread UI\n2. Add visual indicators that show when filtering is active\n3. Create a 'Clear Filters' button that returns to the standard email view\n4. Implement filter toggle controls for each filter type (sender/recipient and subject)\n5. Add tooltips explaining the filtering functionality\n6. Ensure the UI is responsive and maintains consistency with the application design\n7. Test the UI controls across different screen sizes and browsers",
+          "title": "Implement toast notification system",
+          "description": "Create a toast notification system to display success and error messages across the application.",
+          "dependencies": [],
+          "details": "1. Select a toast library (e.g., react-toastify, react-hot-toast) or implement a custom solution\n2. Create a Toast context/provider to manage toast state\n3. Implement different toast types (success, error, warning, info)\n4. Add customizable duration, position, and dismissal options\n5. Ensure toasts are accessible (can be dismissed with keyboard, readable by screen readers)\n6. Style toasts to match application design system\n7. Create utility functions for common toast operations\n8. Test toast functionality across different screen sizes",
           "status": "pending",
-          "parentTaskId": 17
+          "parentTaskId": 12
         },
         {
           "id": 5,
-          "title": "Implement 'Load More' Functionality",
-          "description": "Add the UI and logic for loading additional filtered emails",
+          "title": "Add loading indicators and API request state management",
+          "description": "Implement loading indicators and state management for API requests to provide visual feedback during form submissions and data fetching.",
           "dependencies": [
-            2,
             3
           ],
-          "details": "1. Create a 'Load More' button component at the bottom of the email list\n2. Connect the button to the pagination functionality in the EmailFilterService\n3. Implement loading state indicators when fetching more emails\n4. Add logic to hide the button when no more emails are available\n5. Ensure smooth rendering when new emails are added to the list\n6. Implement scroll position management to prevent page jumping when new content loads\n7. Test the functionality with various email volumes to ensure consistent behavior",
+          "details": "1. Create reusable loading components (spinners, skeleton loaders, etc.)\n2. Implement a request state management system (loading, success, error states)\n3. Add loading indicators to form submit buttons that disable during submission\n4. Implement full-page or section loading states for initial data fetching\n5. Add progress indicators for multi-step forms or file uploads\n6. Ensure loading states preserve form data to prevent data loss\n7. Add appropriate aria attributes for accessibility during loading states\n8. Test loading indicators with simulated slow network connections",
           "status": "pending",
-          "parentTaskId": 17
+          "parentTaskId": 12
         },
         {
           "id": 6,
-          "title": "Cross-Mailbox Folder Support and Performance Optimization",
-          "description": "Extend filtering to work across all mailbox folders and optimize for performance",
+          "title": "Integrate all components into a complete form validation system",
+          "description": "Connect all previously built components into a cohesive system and apply it across all application forms with server-side validation.",
           "dependencies": [
             1,
             2,
@@ -967,56 +791,93 @@
             4,
             5
           ],
-          "details": "1. Extend the EmailFilterService to support filtering across different mailbox folders (Inbox, Sent, Drafts, etc.)\n2. Implement folder selection UI in the filter controls\n3. Add batch processing for large mailboxes to prevent UI freezing\n4. Implement background filtering for improved user experience\n5. Add performance metrics tracking to identify bottlenecks\n6. Optimize the filtering algorithm for speed with large datasets\n7. Conduct comprehensive testing across different mailbox sizes and folder structures\n8. Ensure all existing functionality works correctly with the complete filtering system",
+          "details": "1. Create a FormWrapper component that combines validation, error handling, loading states, and toast notifications\n2. Implement server-side validation that mirrors client-side schemas\n3. Synchronize error messages between client and server validation\n4. Add form submission handlers that properly manage the entire submission lifecycle\n5. Implement form state persistence during validation errors\n6. Create comprehensive documentation for the validation system\n7. Apply the complete system to all forms in the application\n8. Write integration tests that verify the entire form submission flow from validation to success/error handling",
           "status": "pending",
-          "parentTaskId": 17
+          "parentTaskId": 12
         }
       ]
     },
     {
-      "id": 18,
-      "title": "Implement Graph OData searchMessages Helper in EmailService",
-      "description": "Create a helper method in EmailService that utilizes Microsoft Graph API's OData query capabilities to search for email messages based on various criteria.",
-      "details": "Implement a new helper method called `searchMessages` in the EmailService class that will leverage Microsoft Graph API's OData query functionality. This method should:\n\n1. Accept parameters for search criteria such as:\n   - keywords/search text\n   - date range (from/to)\n   - sender email\n   - folder ID (optional)\n   - pagination parameters (skip/top)\n\n2. Construct the appropriate OData query string using the provided parameters\n\n3. Make the API call to Microsoft Graph endpoint using the existing authentication mechanism\n\n4. Parse and transform the response into a consistent format that matches our application's data models\n\n5. Handle error cases appropriately, including authentication errors, rate limiting, and malformed responses\n\n6. Implement caching where appropriate to improve performance\n\nThe implementation should follow our existing patterns for Graph API integration and ensure proper error handling and logging. Documentation should be added explaining the parameters and return format.",
-      "testStrategy": "Testing should include:\n\n1. Unit tests:\n   - Verify correct OData query construction for different parameter combinations\n   - Test error handling for various error scenarios (401, 429, etc.)\n   - Validate response parsing logic with mock data\n\n2. Integration tests:\n   - Test actual API calls with test account credentials\n   - Verify pagination works correctly with large result sets\n   - Test search with various criteria combinations\n\n3. Performance tests:\n   - Measure response times for typical queries\n   - Verify caching behavior improves performance for repeated queries\n\n4. Manual testing:\n   - Verify the helper can be used in the email filtering system (Task #17)\n   - Test with real-world search scenarios to ensure results match expectations\n   - Verify correct handling of special characters in search terms",
+      "id": 13,
+      "title": "Finalize Page Integration and Testing",
+      "description": "Complete final integration, perform comprehensive testing, and add documentation.",
       "status": "pending",
-      "dependencies": [],
-      "priority": "medium",
+      "dependencies": [
+        3,
+        7,
+        10,
+        11,
+        12
+      ],
+      "priority": "high",
+      "details": "1. Ensure all components are properly integrated on the page\n2. Optimize component rendering and data fetching\n3. Test all interactions and flows end-to-end\n4. Verify responsive behavior across different screen sizes\n5. Check accessibility compliance\n6. Write unit tests for key components and hooks\n7. Add integration tests for critical user flows\n8. Update README and internal documentation\n9. Perform final code review and cleanup",
+      "testStrategy": "Conduct end-to-end testing of all features. Verify all components work together correctly. Test on different devices and screen sizes. Run automated tests and fix any issues.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement searchMessages in EmailService",
-          "description": "Add a server-side helper method in EmailService to search messages using OData , , ,  parameters",
-          "details": "",
-          "status": "pending",
+          "title": "Implement Component Integration and Data Flow",
+          "description": "Ensure all components are properly integrated on the page with correct data flow between them. Focus on component hierarchy, props passing, and state management.",
           "dependencies": [],
-          "parentTaskId": 18
+          "details": "1. Implement component-based integration following the hierarchy pattern identified in research\n2. Verify parent-child relationships between components\n3. Ensure proper data flow using props and context where appropriate\n4. Implement lazy loading for heavy components using React.lazy() and Suspense\n5. Test component integration by verifying all components render without console errors\n6. Verify that state changes in one component correctly propagate to dependent components\n7. Testing approach: Create a simple smoke test that renders the full page and checks for major rendering issues",
+          "status": "pending",
+          "parentTaskId": 13
         },
         {
           "id": 2,
-          "title": "Update EmailFilteringService to use searchMessages",
-          "description": "Modify getFilteredMessages to call searchMessages instead of listMessages and handle pagination from Graph nextLink",
-          "details": "",
+          "title": "Optimize Performance and API Integration",
+          "description": "Optimize component rendering, implement efficient data fetching patterns, and ensure proper API integration with error handling.",
+          "dependencies": [
+            1
+          ],
+          "details": "1. Implement API integration using modern async/await patterns with proper error handling\n2. Add loading states for asynchronous operations\n3. Implement data caching strategies to minimize redundant API calls\n4. Optimize rendering performance by memoizing expensive components with React.memo()\n5. Implement code splitting for route-based components\n6. Use performance monitoring tools to identify and fix bottlenecks\n7. Testing approach: Create performance tests that measure initial load time, time to interactive, and API response handling",
           "status": "pending",
-          "dependencies": [],
-          "parentTaskId": 18
+          "parentTaskId": 13
         },
         {
           "id": 3,
-          "title": "Update EmailFilteringService tests to mock searchMessages",
-          "description": "Modify existing tests to stub searchMessages instead of listMessages and validate pagination behavior",
-          "details": "",
+          "title": "Implement Comprehensive Testing Suite",
+          "description": "Create a robust testing suite including unit tests for key components and hooks, integration tests for critical user flows, and end-to-end tests for complete user journeys.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Write unit tests for individual components using Jest and React Testing Library\n2. Create integration tests for component interactions\n3. Implement end-to-end tests for critical user flows using Selenium or Cypress\n4. Test form submissions and API interactions with mock data\n5. Verify that error states and edge cases are handled correctly\n6. Implement continuous integration to run tests automatically\n7. Testing approach: Follow the testing pyramid with more unit tests than integration tests, and fewer end-to-end tests focused on critical paths",
           "status": "pending",
-          "dependencies": [],
-          "parentTaskId": 18
+          "parentTaskId": 13
+        },
+        {
+          "id": 4,
+          "title": "Ensure Responsive Design and Accessibility Compliance",
+          "description": "Verify responsive behavior across different screen sizes and ensure the application meets accessibility standards.",
+          "dependencies": [
+            1,
+            2
+          ],
+          "details": "1. Test responsive layouts across mobile, tablet, and desktop viewports\n2. Implement media queries for breakpoints identified during design\n3. Verify touch interactions work correctly on mobile devices\n4. Run accessibility audits using tools like axe or Lighthouse\n5. Ensure proper semantic HTML structure throughout the application\n6. Add appropriate ARIA attributes where needed\n7. Verify keyboard navigation works for all interactive elements\n8. Test with screen readers to ensure compatibility\n9. Testing approach: Create a checklist of WCAG 2.1 AA requirements and verify compliance for each item",
+          "status": "pending",
+          "parentTaskId": 13
+        },
+        {
+          "id": 5,
+          "title": "Finalize Documentation and Code Cleanup",
+          "description": "Complete all documentation requirements and perform final code review and cleanup to ensure maintainability.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "details": "1. Update README with project overview, setup instructions, and usage guidelines\n2. Document component structure and integration points as shown in research\n3. Add JSDoc comments to key functions and components\n4. Create API documentation for all data fetching functions\n5. Document known limitations and browser compatibility\n6. Perform code cleanup by removing unused code and console logs\n7. Standardize code formatting using ESLint and Prettier\n8. Conduct final code review focusing on maintainability and readability\n9. Testing approach: Have team members review documentation for clarity and completeness",
+          "status": "pending",
+          "parentTaskId": 13
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "Client Profile Page Implementation",
-    "totalTasks": 16,
-    "sourceFile": "scripts/PRD_phase2-clientPage.txt",
+    "projectName": "Simplified Client Profile Page",
+    "totalTasks": 13,
+    "sourceFile": "scripts/PRD_phase2-clientPage2.txt",
     "generatedAt": "2023-11-09"
   }
 }

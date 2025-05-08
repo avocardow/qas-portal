@@ -1,0 +1,132 @@
+<context>
+# Overview
+The Simplified Client Profile Page provides an interim, streamlined interface for managing client information and activities without full design polish. It focuses on core actions and data visibility to enable efficient client operations while the complete TailAdmin page remains in place.
+- **Target Page**: `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` (only this file will be modified)
+
+# Core Features
+1. **Add Contact Button**
+   - What: Button to open a modal/form using TailAdmin form components (`src/components/form`) to add a new client contact.
+   - Why: Quickly capture contact details (name, type, phone, email, license number).
+   - How: Client-side modal with `useMutation('clients.createContact')`, refresh list on success.
+
+2. **Archive Client Button** *(tertiary style, low visual hierarchy)*
+   - What: Button to archive the client by setting status to `Archived`, no deletion.
+   - Why: Move inactive clients out of active workflows.
+   - How: Permission gated via `useAbility()`, confirmation modal, `useMutation('clients.update')` to set status.
+
+3. **Client Overview & Details**
+   - What: Displays Client Name, Address, External Folder Link (tooltip for instructions), Primary License, Business Phone, Business Email, Assigned Client Manager.
+   - Why: Essential client metadata for quick reference.
+   - How: Fetch via `useQuery('clients.getById')`, simple card layout with inline edit controls.
+
+4. **Current Audit**
+   - What: Shows Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, Staff Assigned to the audit job.
+   - Why: Immediate visibility into the ongoing audit process.
+   - How: Fetch latest audit via `useQuery('audits.getCurrent')`, edit/add via modal form.
+
+5. **Current Fees** *(Admin & Developer only)*
+   - What: Displays current estimated annual fees (`clients.estAnnFees`) with a tooltip for 'Billing Commentary'.
+   - Why: Quick view of client financials.
+   - How: Wrapped in `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>`, tooltip shows commentary note, small card.
+
+6. **Trust Accounts**
+   - What: Lists Account Name, Account Number, BSB, Software (tooltip for access instructions) with CRUD controls.
+   - Why: Manage financial account links and details.
+   - How: Table layout, add/edit/remove via modals and `trustAccounts.*` mutations.
+
+7. **Client Contacts**
+   - What: Table of contacts showing Name, Phone, Email, Contact Type, License Number with CRUD controls.
+   - Why: Manage client stakeholders and their roles.
+   - How: Data table, inline add/edit/delete modals using `contacts.*` mutations.
+
+8. **Upcoming Schedule**
+   - What: Quick summary of upcoming audit items: Next Contact Date and Report Due Date.
+   - Why: Highlight immediate dates needing action.
+   - How: Read-only list fetched from client and audit records, no checkboxes.
+
+9. **Client Activity Log**
+   - What: Timeline of manually logged events (Note, Email Sent/Received, Call In/Out, Stage Change, Status Change, Document Request/Received/Signed, Task Created/Assigned/Completed, Meeting Summary).
+   - Why: Track key interactions.
+   - How: Infinite scroll with "Load More", tabs (All, Notes, Emails, Calls, Status Updates, Documents, Tasks), form to add new logs.
+
+10. **Page Breadcrumbs**
+   - What: Navigation path Home > Clients > [Client Name].
+   - Why: Contextual navigation.
+   - How: Uses `PageBreadcrumb` component.
+</context>
+
+<PRD>
+# Technical Architecture
+- Framework: Next.js App Router with React Server and Client Components.
+- UI: TailAdmin card, table, and form templates from `src/app/(tailadmin)` and `src/components`.
+- Data Layer: tRPC procedures (`clients.getById`, `clients.createContact`, `clients.update`, `audits.getCurrent`, `audits.createOrUpdate`, `trustAccounts.*`, `contacts.*`, `activityLogs.*`).
+- State Management: React Query (`useQuery`, `useMutation`).
+- Permissions: `useAbility()` hook and `<Authorized>` wrapper.
+- Routing: New page at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`.
+- Modals & Forms: TailAdmin form elements (`src/components/form`) within Headless UI Dialogs.
+- Tooltips: Headless UI Tooltip or Tailwind popovers for instruction notes.
+
+# Development Roadmap
+1. **Setup & Scaffolding**
+   - Create `page.tsx` file at `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with breadcrumbs and TailAdmin grid.
+   - Define route and navigation link in sidebar.
+2. **Contact & Archive Actions**
+   - Implement Add Contact modal and API mutation.
+   - Implement Archive Client button with permission check and confirmation flow.
+3. **Client Overview & Details**
+   - Fetch client data; render detail card with inline edit controls.
+   - Add External Folder link with tooltip.
+4. **Current Audit Section**
+   - Fetch current audit; display audit fields.
+   - Add/edit audit via modal form.
+5. **Current Fees Card**
+   - Scaffold and render a small "Current Fees" card showing `clients.estAnnFees`.
+   - Wrap in `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>` to limit to Admin/Developer.
+   - Add tooltip for "Billing Commentary" note type.
+6. **Trust Accounts CRUD**
+   - Render trust accounts table; add/edit/remove via modals.
+7. **Client Contacts CRUD**
+   - Render contacts table; add/edit/remove via modals.
+8. **Upcoming Schedule List**
+   - Display next contact and report due dates in a read-only summary.
+9. **Activity Log Timeline**
+   - Implement timeline with infinite scroll and filters.
+   - Build form for new activity entries.
+10. **Testing & Documentation**
+   - Unit tests for hooks and components.
+   - Integration tests for API flows.
+   - Update README and internal docs.
+
+# Logical Dependency Chain
+1. Scaffold page & breadcrumbs
+2. API stubs & tRPC endpoints
+3. Actions (Contact, Archive)
+4. Client data card
+5. Audit section
+6. Trust accounts
+7. Contacts table
+8. Upcoming schedule
+9. Activity log
+10. Testing & polish
+
+# Risks and Mitigations
+- **Missing or unstable API endpoints**: Develop against mock data; coordinate backend deliverables.
+- **Performance issues with infinite scroll**: Use paginated queries with controlled page size and cache.
+- **Complexity of filters and timeline rendering**: Leverage existing TailAdmin timeline component or minimal custom implementation.
+- **Permission misconfiguration**: Write unit tests for gating logic; manual QA.
+
+# Appendix
+- **Data Models**:
+  - `Client`: id, name, address, folderUrl, primaryLicense, phone, email, managerId.
+  - `Audit`: id, clientId, nextContactDate, periodEndDate, stage, status, staffId.
+  - `TrustAccount`: id, clientId, name, bsb, accountNumber, softwareName.
+  - `Contact`: id, clientId, name, phone, email, type, licenseNumber.
+  - `ActivityLog`: id, clientId, type, timestamp, contactId?, details, createdBy.
+- **API Contracts**: Refer to `src/server/api/routers/clients.ts` and related audit, contacts, trustAccounts, activityLogs routers.
+
+# Out of Scope
+- Modifying the proof-of-concept `page_backup2.tsx` file.
+- Advanced styling or full TailAdmin template integration beyond simple layouts.
+- Other sections and cards present in the backup page (e.g., network diagram, audit list, folder browser).
+- Performance optimizations outside basic pagination/infinite scroll.
+</PRD> 

@@ -1,31 +1,78 @@
 # Task ID: 10
-# Title: Implement SharePoint Folder Browser
-# Status: done
-# Dependencies: 2
-# Priority: medium
-# Description: Embed file-manager tree for client's SharePoint folders and recent invoices card on the Client Profile page.
+# Title: Create Upcoming Schedule Section
+# Status: pending
+# Dependencies: 2, 6
+# Priority: low
+# Description: Implement the Upcoming Schedule section showing next contact date and report due date.
 # Details:
-Embed the AllFolders and RecentFileTable components from File-Manager to create a SharePoint folder browser. Implement the Recent Invoices Card listing the last 5 invoice documents with status (paid/unpaid) and links to PDFs. Ensure proper loading states and error handling for file access.
+1. Extract Next Contact Date from client and audit records
+2. Extract Report Due Date from relevant data sources
+3. Create a simple, read-only list to display these dates
+4. Format dates appropriately
+5. Handle empty or null date values
+6. Style as a small summary section
 
 # Test Strategy:
-Test folder browser navigation. Verify file links open correctly. Test with various folder structures and file types. Check invoice status display accuracy.
+Verify dates display correctly and format properly. Test handling of missing or null date values.
 
 # Subtasks:
-## 1. Implement SharePoint Folder Browser Component [done]
+## 1. Implement Data Retrieval and Processing for Schedule Dates [pending]
 ### Dependencies: None
-### Description: Integrate the AllFolders component from File-Manager to create a navigable SharePoint folder structure with proper folder creation and navigation capabilities.
+### Description: Create the backend functionality to extract, process, and format the Next Contact Date and Report Due Date from client records and audit data sources.
 ### Details:
-Begin by embedding the AllFolders component from the existing File-Manager into the application. Configure the component to connect to the client's SharePoint document library using the SharePoint API. Implement folder navigation functionality that allows users to browse through the folder hierarchy, open folders, and navigate back up using breadcrumb navigation. Add support for viewing folder contents and implement proper loading states while folder data is being fetched. Include error handling for cases where SharePoint access fails or folders cannot be loaded. Test the component with various folder structures to ensure proper rendering and navigation.
+1. Create a ScheduleService class to handle data retrieval:
+   - Implement methods to extract Next Contact Date from client records
+   - Implement methods to extract Report Due Date from audit records
+   - Add logic to handle null/empty date values with appropriate fallbacks
+   - Implement date formatting using date-fns library for consistent display
 
-## 2. Integrate Recent Files Table Component [done]
+2. Create API endpoints to serve schedule data:
+   - Develop a GET endpoint that returns both contact and report dates
+   - Implement proper error handling and response formatting
+   - Add sorting to ensure dates are returned in chronological order
+   - Include pagination support if multiple dates exist
+
+3. Add data processing logic:
+   - Implement status categorization (overdue, today, upcoming)
+   - Add buffer time calculation for approaching deadlines
+   - Create utility functions for date comparison and validation
+
+4. Testing approach:
+   - Write unit tests for the ScheduleService methods
+   - Create integration tests for the API endpoints
+   - Test edge cases like missing dates, past dates, and future dates
+
+## 2. Build UI Component for Upcoming Schedule Display [pending]
 ### Dependencies: 10.1
-### Description: Embed the RecentFileTable component from File-Manager to display SharePoint files with sorting and filtering capabilities.
+### Description: Develop a responsive React component to display the schedule information in a clean, user-friendly format that highlights important dates and their status.
 ### Details:
-After the folder browser is working, integrate the RecentFileTable component from File-Manager to display files within the selected SharePoint folders. Configure the component to show file metadata including name, type, modified date, and size. Implement file opening functionality that launches files in appropriate viewers based on file type. Add loading indicators for when file lists are being retrieved. Implement error handling for file access issues, showing appropriate error messages when files cannot be accessed or displayed. Ensure the file table updates properly when users navigate between different folders in the folder browser component.
+1. Create the UpcomingSchedule React component:
+   - Implement useState and useEffect hooks to manage schedule data
+   - Add axios API call to fetch data from endpoints created in subtask 1
+   - Implement loading states and error handling
+   - Create conditional rendering for empty states
 
-## 3. Create Recent Invoices Card Component [done]
-### Dependencies: 10.2
-### Description: Develop a specialized card component that displays the 5 most recent invoice documents with their payment status and PDF links.
-### Details:
-Build a new Recent Invoices Card component that queries SharePoint for the most recent invoice documents. Implement filtering logic to identify invoice documents based on file naming conventions or metadata. Display the 5 most recent invoices in a card format, showing for each invoice: document name, creation/modification date, payment status (paid/unpaid), and a direct link to open the PDF. The payment status should be determined by querying metadata or a related data source that tracks invoice payment information. Add visual indicators (like color coding) to distinguish between paid and unpaid invoices. Implement proper loading states while invoice data is being fetched and error handling for cases where invoice documents cannot be accessed. Ensure the component refreshes automatically when new invoices are added to SharePoint.
+2. Design the schedule item display:
+   - Create styled components for each schedule item
+   - Implement visual indicators for different status types (overdue, today, upcoming)
+   - Use date-fns to format dates consistently (e.g., 'MMM dd, yyyy')
+   - Add tooltips for additional context on hover
+
+3. Implement responsive design:
+   - Ensure the component works well on both desktop and mobile
+   - Use CSS Grid or Flexbox for layout
+   - Add appropriate spacing and typography
+   - Implement collapsible sections if needed
+
+4. Add accessibility features:
+   - Include proper ARIA attributes
+   - Ensure keyboard navigation works correctly
+   - Add screen reader-friendly text alternatives
+   - Test with accessibility tools
+
+5. Testing approach:
+   - Write unit tests using React Testing Library
+   - Test rendering with various data scenarios
+   - Verify responsive behavior with different viewport sizes
+   - Test accessibility compliance
 

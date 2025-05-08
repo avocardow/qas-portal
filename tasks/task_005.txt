@@ -1,55 +1,61 @@
 # Task ID: 5
-# Title: Build Recent Contacts Table
-# Status: done
+# Title: Implement Archive Client Button
+# Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Create the Recent Contacts Table on the Client Profile page with all required fields and primary badge indicators.
+# Description: Create the Archive Client button with permission checking and confirmation flow.
 # Details:
-Implement a TailAdmin RecentOrders-style table for contacts with columns: Name (linked to /contacts/[id]), Email, Phone, Title, and Primary badge. Display multiple licenses per contact in a clean format (comma-separated or expandable cell). Use DataTableTwo component as referenced in Context7. Ensure table is responsive and accessible.
+1. Add Archive Client button with tertiary styling (low visual hierarchy)
+2. Implement permission gating using `useAbility()` hook
+3. Create confirmation modal using Headless UI Dialog
+4. Connect to `useMutation('clients.update')` to set status to 'Archived'
+5. Handle success and error states
+6. Update UI after successful archiving
 
 # Test Strategy:
-Test table rendering with various data scenarios. Verify links to contact pages work correctly. Check that primary badges display properly. Test multiple licenses display format.
+Test permission gating to ensure only authorized users see the button. Verify confirmation flow works and client status updates correctly after archiving.
 
 # Subtasks:
-## 1. Set up DataTableTwo component structure [done]
+## 1. Implement Permission-Gated Archive Button UI Component [pending]
 ### Dependencies: None
-### Description: Create the foundation for the Recent Contacts table by implementing the DataTableTwo component with proper configuration
+### Description: Create a tertiary-styled Archive Client button component that is only visible to users with appropriate permissions. This component will be the entry point for the archiving flow.
 ### Details:
-Import and configure the DataTableTwo component from the TailAdmin template. Create a new component file for RecentContacts that extends DataTableTwo. Set up the basic table structure with responsive design considerations and accessibility attributes (aria labels, keyboard navigation). Implement the container layout with appropriate TailAdmin styling classes.
+1. Create a new React component `ArchiveClientButton.tsx` with tertiary styling for low visual hierarchy
+2. Implement permission checking using the `useAbility()` hook to verify the user has 'archive:client' permissions
+3. Add conditional rendering logic to hide the button completely when permissions are missing
+4. Include a disabled state with tooltip for cases where archiving might be temporarily unavailable
+5. Add appropriate icon (archive/box) and label
+6. Implement click handler that will trigger the confirmation modal
+7. Test the component with different permission scenarios using mock data
+8. Ensure the button follows accessibility guidelines with proper ARIA attributes and keyboard navigation
 
-## 2. Define table columns and data structure [done]
+## 2. Build Confirmation Modal with Description Field [pending]
 ### Dependencies: 5.1
-### Description: Define the column configuration for Name, Email, Phone, Title, and Primary badge
+### Description: Create a confirmation dialog using Headless UI that explains the archiving process, requests confirmation, and allows users to add an optional description for the archive.
 ### Details:
-Create a columns configuration array that defines each column's properties (Name, Email, Phone, Title, Primary). For the Name column, implement linking to '/contacts/[id]' pattern. Set up proper data accessors for each field. Configure sorting capabilities for relevant columns. Define the data interface/type for contact entries to ensure type safety throughout the component.
+1. Implement a modal dialog using Headless UI Dialog component
+2. Create a clear title and explanation of what archiving means for the client data
+3. Add a text field for archive description with appropriate validation
+4. Include warning about the consequences of archiving
+5. Add Cancel and Confirm buttons with appropriate styling
+6. Implement state management for the modal visibility and form inputs
+7. Add loading state for the Confirm button during the archiving process
+8. Ensure the modal is keyboard accessible and follows WAI-ARIA best practices
+9. Test the modal with screen readers and keyboard navigation
+10. Add appropriate animations for modal opening/closing
 
-## 3. Implement Primary badge indicator [done]
-### Dependencies: 5.2
-### Description: Create the visual indicator for Primary contacts with appropriate styling
+## 3. Implement Archive Mutation and Success/Error Handling [pending]
+### Dependencies: 5.1, 5.2
+### Description: Connect the confirmation flow to the backend using the useMutation hook, handle success and error states, and update the UI after successful archiving.
 ### Details:
-Design and implement the Primary badge component with appropriate styling (colors, size, text). Create a cell renderer function for the Primary column that conditionally displays the badge based on the contact's primary status. Add tooltip or accessible description to explain the badge meaning. Ensure the badge has proper contrast ratios for accessibility.
-
-## 4. Develop multiple licenses display format [done]
-### Dependencies: 5.2
-### Description: Implement the display logic for showing multiple licenses per contact
-### Details:
-Create a custom cell renderer for displaying multiple licenses. Implement either a comma-separated list for simple display or an expandable cell with a count indicator that reveals all licenses on interaction. For the expandable approach, implement the expand/collapse functionality with appropriate animations. Ensure the display remains readable even with many licenses by implementing truncation with tooltips if needed.
-
-## 5. Connect table to data source [done]
-### Dependencies: 5.2, 5.3, 5.4
-### Description: Implement data fetching and state management for the contacts table
-### Details:
-Set up API integration to fetch contact data from the backend. Implement loading states and error handling for data fetching. Create state management for the table data using React hooks (useState, useEffect). Implement pagination logic if the data set is large. Add sorting functionality based on column headers. Ensure proper data transformation from API response to the table's expected format.
-
-## 6. Implement responsive behavior [done]
-### Dependencies: 5.1, 5.2, 5.3, 5.4
-### Description: Ensure the table displays correctly across all device sizes
-### Details:
-Test and optimize the table for various screen sizes. Implement column priority hiding for smaller screens (hide less important columns first). Add horizontal scrolling for very small screens while maintaining fixed position of key columns. Ensure touch interactions work properly on mobile devices. Test and fix any layout issues that occur at different breakpoints.
-
-## 7. Add accessibility features and final polish [done]
-### Dependencies: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
-### Description: Enhance the table with proper accessibility features and final UI refinements
-### Details:
-Implement proper keyboard navigation throughout the table. Add screen reader announcements for dynamic content changes. Ensure all interactive elements have proper focus states. Add appropriate aria attributes for complex interactions. Implement final visual polish including hover states, transitions, and consistent spacing. Add comprehensive unit and integration tests to verify functionality. Document the component API and usage patterns for other developers.
+1. Implement `useMutation('clients.update')` hook to connect to the backend API
+2. Create a mutation function that sends the client ID and archive description to the API
+3. Set the client status to 'Archived' in the mutation payload
+4. Implement comprehensive error handling with specific error messages for different failure scenarios
+5. Add success feedback with a toast notification or inline message
+6. Update the client list UI after successful archiving (remove from list or update status)
+7. Implement optimistic updates for better user experience
+8. Add logging for successful archiving and failures for audit purposes
+9. Implement retry logic for transient failures
+10. Test the full flow from button click to UI update with various scenarios (success, network error, permission error, etc.)
 

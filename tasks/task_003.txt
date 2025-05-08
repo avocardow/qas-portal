@@ -1,55 +1,74 @@
 # Task ID: 3
-# Title: Create Client Manager and KPI Cards
-# Status: done
+# Title: Build Client Overview Card
+# Status: pending
 # Dependencies: 2
 # Priority: high
-# Description: Implement the Client Manager card and KPI cards (Lifetime Fees, YoY Growth, Health Score) at the top of the profile page.
+# Description: Create the client overview card displaying essential client metadata with inline edit controls.
 # Details:
-Create the Client Manager card displaying assigned team member with name, role, and contact info with a link to their profile. Implement KPI cards using ComponentCard with: 1) Lifetime Fees Card with total historical fees and sparkline trend, 2) YoY Growth Chart using TailAdmin chart component, 3) Customer Health Score with colored ribbon (green/yellow/red). Use useAbility() to gate sensitive financial data for Admin-only access.
+1. Create a TailAdmin card component to display client details
+2. Display Client Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager
+3. Add tooltip for External Folder Link with instructions
+4. Implement inline edit controls for editable fields
+5. Connect edit functionality to `useMutation('clients.update')` for saving changes
 
 # Test Strategy:
-Verify all cards render correctly with proper data. Test permission gating for sensitive fields. Check that charts and visualizations display accurately. Test responsiveness at different screen sizes.
+Verify all client fields display correctly. Test inline editing functionality and confirm data updates correctly after edits.
 
 # Subtasks:
-## 1. Create basic Card component structure [done]
+## 1. Create Base Card Component with Client Metadata Display [pending]
 ### Dependencies: None
-### Description: Implement the reusable Card component that will serve as the foundation for both the Client Manager card and KPI cards
+### Description: Develop the foundational card component that displays all required client metadata fields in read-only mode using TailAdmin styling. This component will serve as the container for all client information and inline edit functionality.
 ### Details:
-Create a Card.jsx component with appropriate styling in Card.css. The component should accept props for title, content, and custom styling. Use a flexible structure with box-shadow, border-radius, and padding. Implement responsive design considerations to ensure cards display properly on different screen sizes. This component will be the building block for all cards in this task.
+1. Create a new `ClientOverviewCard` component using TailAdmin card styling
+2. Implement the layout to display all required client fields: Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager
+3. Add a tooltip for External Folder Link with instructions using TailAdmin tooltip component
+4. Ensure proper spacing and typography following TailAdmin design system
+5. Make the component responsive for different screen sizes
+6. Add appropriate ARIA attributes for accessibility
+7. Test the component with mock data to ensure proper display
+8. Implement proper error states if client data is missing or undefined
 
-## 2. Implement Client Manager card component [done]
+## 2. Implement Editable Field Component with Toggle Controls [pending]
 ### Dependencies: 3.1
-### Description: Create the Client Manager card displaying the assigned team member's information
+### Description: Create a reusable EditableField component that can switch between display and edit modes, handling the UI state transitions and providing clear visual cues for editable fields.
 ### Details:
-Using the Card component as a base, create a ClientManagerCard component that displays the team member's name, role, and contact information. Add a profile image placeholder. Include a link to the team member's profile page. Style according to design specifications. The component should accept props for the team member's data (name, role, email, phone, profileUrl, imageUrl).
+1. Create an `EditableField` component that accepts field label, value, and onChange handlers
+2. Implement toggle functionality between read-only and edit modes
+3. Add visual indicators (pencil icon, hover effects) to show which fields are editable
+4. Include appropriate form controls based on field type (text input, select dropdown, etc.)
+5. Support keyboard navigation (Tab, Enter, Escape) for accessibility
+6. Add inline validation to prevent invalid data entry
+7. Implement focus management to automatically focus the input when entering edit mode
+8. Test the component in isolation with various field types
+9. Ensure the component maintains TailAdmin styling consistency
 
-## 3. Implement Lifetime Fees KPI card with sparkline [done]
-### Dependencies: 3.1
-### Description: Create the Lifetime Fees card showing total historical fees and a sparkline trend visualization
+## 3. Connect Edit Functionality to Client Mutation API [pending]
+### Dependencies: 3.1, 3.2
+### Description: Integrate the editable fields with the client update mutation API, implementing proper state management, optimistic updates, and error handling for a seamless editing experience.
 ### Details:
-Extend the Card component to create a LifetimeFeesCard that displays the total historical fees. Implement a sparkline visualization using a charting library (like Chart.js or D3.js) to show the trend over time. Include proper formatting for currency values. The component should accept props for the fee data (totalFees, feeHistory) where feeHistory is an array of data points for the sparkline.
+1. Set up state management for tracking original and edited values
+2. Implement the useMutation('clients.update') hook for saving changes
+3. Add save and cancel buttons for edit operations
+4. Implement optimistic UI updates to immediately reflect changes while saving
+5. Add loading indicators during save operations
+6. Implement error handling with user-friendly error messages
+7. Add rollback functionality if server-side validation fails
+8. Ensure all user inputs are properly sanitized and validated
+9. Test the complete edit-save flow with various scenarios (success, network error, validation error)
+10. Implement debouncing for rapid consecutive edits
 
-## 4. Implement YoY Growth KPI card with chart [done]
-### Dependencies: 3.1
-### Description: Create the Year-over-Year Growth card using the TailAdmin chart component
+## 4. Enhance UX with Feedback and Accessibility Features [pending]
+### Dependencies: 3.1, 3.2, 3.3
+### Description: Improve the overall user experience by adding success/error feedback, keyboard shortcuts, and ensuring full accessibility compliance for the client overview card.
 ### Details:
-Extend the Card component to create a YoYGrowthCard that integrates the TailAdmin chart component. Configure the chart to display year-over-year growth data. Include percentage indicators for growth/decline. The component should accept props for growth data (growthPercentage, growthHistory) where growthHistory contains the data points needed for the chart.
-
-## 5. Implement Customer Health Score KPI card [done]
-### Dependencies: 3.1
-### Description: Create the Customer Health Score card with colored status ribbon
-### Details:
-Extend the Card component to create a HealthScoreCard that displays the customer health score. Implement a colored ribbon that changes based on the score (green for good, yellow for moderate, red for poor). Include a visual indicator of the score (like a gauge or number). The component should accept props for the health data (score, status) where status determines the ribbon color.
-
-## 6. Implement permission controls using useAbility hook [done]
-### Dependencies: 3.3, 3.4, 3.5
-### Description: Add permission controls to gate sensitive financial data for Admin-only access
-### Details:
-Integrate the useAbility() hook to check user permissions before displaying sensitive financial data in the KPI cards. Implement conditional rendering that shows appropriate placeholders or messages for users without sufficient permissions. Create a wrapper component or higher-order component that applies these permission checks consistently across all KPI cards.
-
-## 7. Integrate all cards into the profile page layout [done]
-### Dependencies: 3.2, 3.3, 3.4, 3.5, 3.6
-### Description: Assemble all card components into the profile page layout with proper spacing and responsiveness
-### Details:
-Create a container component that arranges the Client Manager card and KPI cards at the top of the profile page. Implement responsive grid layout to ensure proper card arrangement on different screen sizes. Add loading states for when data is being fetched. Test the integration to ensure all cards display correctly and that permission controls work as expected. Finalize styling to ensure consistent appearance across all cards.
+1. Add toast notifications for successful updates and errors
+2. Implement keyboard shortcuts for common actions (Esc to cancel, Ctrl+Enter to save)
+3. Add confirmation dialogs for potentially destructive actions
+4. Enhance tooltip content with keyboard shortcut information
+5. Conduct thorough accessibility testing (screen reader compatibility, keyboard navigation)
+6. Add ARIA live regions for dynamic content changes
+7. Implement focus trapping within the edit mode to improve keyboard navigation
+8. Add visual indicators for required fields
+9. Create comprehensive unit and integration tests
+10. Document the component API and usage patterns for other developers
 

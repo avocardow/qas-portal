@@ -1,31 +1,102 @@
 # Task ID: 9
-# Title: Build Tabbed Activity Log
-# Status: done
-# Dependencies: 8
-# Priority: medium
-# Description: Implement a tabbed interface on the Client Profile page for activity logs grouped by type with filter and search functionality.
+# Title: Implement Client Contacts Table and CRUD
+# Status: pending
+# Dependencies: 4
+# Priority: high
+# Description: Create the Client Contacts table with add, edit, and delete functionality.
 # Details:
-Create a tabbed interface using HeadlessUI Tabs (referenced in Context7) with groups for 'Notes', 'Emails', 'Calls', and 'Status Changes'. Implement full-text filter on activity content and a date-range picker in the log section. Ensure proper loading states and empty states for each tab.
+1. Create a data table to display contacts showing Name, Phone, Email, Contact Type, and License Number
+2. Reuse the Add Contact modal from Task 4 for adding new contacts
+3. Implement edit modal for updating existing contacts
+4. Add delete functionality with confirmation dialog
+5. Connect to `contacts.*` mutations for CRUD operations
+6. Implement sorting and basic filtering if needed
+7. Refresh table after successful operations
 
 # Test Strategy:
-Test tab switching functionality. Verify filtering works correctly for text and date ranges. Test with various activity data sets. Check accessibility of the tabbed interface.
+Test all CRUD operations for contacts. Verify data displays correctly and updates after operations. Test sorting and filtering if implemented.
 
 # Subtasks:
-## 1. Implement Tabbed Interface for Activity Log Types [done]
+## 1. Create Client Contacts Database Schema and API Endpoints [pending]
 ### Dependencies: None
-### Description: Set up the tabbed UI for activity logs grouped by 'Notes', 'Emails', 'Calls', and 'Status Changes' using HeadlessUI Tabs in a React project.
+### Description: Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.
 ### Details:
-Install @headlessui/react and Tailwind CSS if not already present. Use HeadlessUI's Tab.Group, Tab.List, Tab, Tab.Panels, and Tab.Panel components to create four tabs, each representing a log type. Ensure accessibility and keyboard navigation are supported as per HeadlessUI standards. Each Tab.Panel should render a placeholder for its respective log content. Style the tabs using Tailwind CSS for visual clarity and responsiveness.[1][2][5]
+1. Create a database migration for the client_contacts table with fields: id, client_id, name, email, phone, contact_type, license_number, created_at, updated_at
+2. Add appropriate constraints (NOT NULL, UNIQUE for email)
+3. Create indexes on client_id and other frequently queried fields
+4. Implement API endpoints for CRUD operations (/contacts.create, /contacts.update, /contacts.delete, /contacts.list)
+5. Add comprehensive input validation on all endpoints
+6. Implement proper error handling with descriptive messages
+7. Add audit logging for all operations
+8. Test endpoints with Postman or similar tool to verify functionality
 
-## 2. Add Filter, Search, and Date-Range Picker Functionality [done]
+## 2. Implement Client Contacts Data Table Component [pending]
 ### Dependencies: 9.1
-### Description: Integrate a full-text search filter and a date-range picker within the log section of each tab to allow users to filter activity logs by content and date.
+### Description: Create a reusable data table component to display client contacts with sorting, pagination, and basic filtering capabilities.
 ### Details:
-Within each Tab.Panel, implement a search input that filters the displayed logs based on user-entered text. Add a date-range picker component (using a suitable library or custom implementation) to filter logs by selected date range. Ensure that both filters work in combination and update the displayed logs in real-time. Place the filter controls prominently above the log list in each tab.
+1. Create a new ContactsTable component that accepts a clientId prop
+2. Implement data fetching from the contacts.list API endpoint with proper loading states
+3. Configure table columns for Name, Phone, Email, Contact Type, and License Number
+4. Add sorting functionality for all columns
+5. Implement pagination with configurable page size
+6. Add basic filtering capability (search by name/email)
+7. Include empty state handling and error state handling
+8. Style the table according to application design guidelines
+9. Test the component with various data scenarios (empty, few items, many items)
 
-## 3. Implement Loading and Empty States for Each Tab [done]
-### Dependencies: 9.2
-### Description: Ensure each tab displays appropriate loading indicators while fetching data and clear empty states when no logs match the current filters.
+## 3. Integrate Add Contact Modal from Task 4 [pending]
+### Dependencies: 9.1, 9.2
+### Description: Reuse and integrate the existing Add Contact modal from Task 4, connecting it to the contacts.create mutation.
 ### Details:
-For each Tab.Panel, manage loading state (e.g., show a spinner or skeleton UI) while log data is being fetched or filtered. When no logs are available after applying filters or on initial load, display a user-friendly empty state message. Ensure these states are visually distinct and accessible, and that transitions between states are smooth.
+1. Import the existing AddContactModal component from Task 4
+2. Create a wrapper component that manages the modal's open/close state
+3. Connect the form submission to the contacts.create mutation
+4. Add proper validation for all form fields
+5. Implement loading state during submission
+6. Add success and error handling with user feedback
+7. Ensure the contacts table refreshes after successful creation
+8. Test the integration by adding new contacts and verifying they appear in the table
+9. Verify that validation works correctly for all required fields
+
+## 4. Implement Edit Contact Modal [pending]
+### Dependencies: 9.1, 9.2, 9.3
+### Description: Create an edit modal for updating existing contacts, pre-populated with the contact's current data and connected to the contacts.update mutation.
+### Details:
+1. Create an EditContactModal component based on the AddContactModal structure
+2. Add functionality to pre-populate the form with existing contact data
+3. Connect form submission to the contacts.update mutation
+4. Implement proper validation for all fields
+5. Add loading state during submission
+6. Provide clear success and error messages
+7. Ensure the contacts table refreshes after successful updates
+8. Add an edit button/icon in each table row that opens the edit modal
+9. Test editing various fields and verify changes are reflected in the table after submission
+
+## 5. Implement Delete Contact Functionality with Confirmation [pending]
+### Dependencies: 9.1, 9.2
+### Description: Add the ability to delete contacts with a confirmation dialog to prevent accidental deletions, connected to the contacts.delete mutation.
+### Details:
+1. Create a DeleteConfirmationDialog component with clear messaging
+2. Add a delete button/icon in each table row
+3. Connect the confirmation dialog to the contacts.delete mutation
+4. Implement loading state during deletion
+5. Add success and error handling with user feedback
+6. Ensure the contacts table refreshes after successful deletion
+7. Consider implementing soft delete if appropriate for the application
+8. Add role-based access control to restrict deletion to authorized users
+9. Test the delete functionality and verify contacts are removed from the table
+
+## 6. Implement Advanced Filtering and Table Refresh Logic [pending]
+### Dependencies: 9.2, 9.3, 9.4, 9.5
+### Description: Enhance the contacts table with advanced filtering options and implement a robust table refresh mechanism that updates after all CRUD operations.
+### Details:
+1. Create a FilterPanel component with options for filtering by contact type, date added, etc.
+2. Implement client-side filtering for quick responses
+3. Add server-side filtering for large datasets by extending the contacts.list endpoint
+4. Create a centralized table refresh mechanism that can be triggered by all CRUD operations
+5. Implement optimistic updates where appropriate to improve perceived performance
+6. Add a manual refresh button for users
+7. Implement proper loading states during refresh operations
+8. Consider adding export functionality (CSV/Excel) for the filtered data
+9. Test all filtering options and verify the table refreshes correctly after all CRUD operations
 

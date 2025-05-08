@@ -1,31 +1,109 @@
 # Task ID: 11
-# Title: Create Regulatory Checklist and Alerts
-# Status: done
+# Title: Implement Activity Log Timeline
+# Status: pending
 # Dependencies: 2
 # Priority: medium
-# Description: Implement the compliance checklist and alerts/warnings for missing or expired documentation on the Client Profile page.
+# Description: Create the Client Activity Log with infinite scroll, filtering, and form for new entries.
 # Details:
-Create a Regulatory Checklist component showing compliance items ('Trust deed', 'Bank statements', etc.) with check marks. Implement Alerts & Warnings section flagging missing or expired documentation and upcoming license renewals. Use appropriate visual indicators for different alert severities.
+1. Implement query to fetch activity logs with pagination
+2. Create infinite scroll functionality with "Load More" button
+3. Implement tabs for filtering (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)
+4. Build timeline UI showing activity entries with appropriate icons and formatting
+5. Create form for adding new activity logs
+6. Connect to `activityLogs.*` mutations for creating new entries
+7. Implement optimistic updates for better UX
 
 # Test Strategy:
-Test checklist with various compliance states. Verify alerts trigger correctly based on document status and expiration dates. Check visual clarity of warning indicators.
+Test infinite scroll and pagination. Verify filtering tabs work correctly. Test adding new activity logs and confirm they appear in the timeline.
 
 # Subtasks:
-## 1. Implement Regulatory Checklist Component [done]
+## 1. Set up Activity Log Data Fetching with Cursor-based Pagination [pending]
 ### Dependencies: None
-### Description: Create the core checklist component displaying compliance items with status indicators
+### Description: Implement the API query to fetch activity logs with cursor-based pagination for efficient data loading and better performance with large datasets.
 ### Details:
-Develop a reusable checklist component that displays regulatory compliance items (such as 'Trust deed', 'Bank statements', etc.) with appropriate status indicators. The component should include: 1) A list view of all compliance items, 2) Visual check marks or status icons for each item, 3) The ability to categorize items by type or importance, 4) Timestamps showing when items were last updated or verified, and 5) A responsive design that works across different screen sizes. Use a data structure that stores item name, status, expiration date, and category for each compliance item.
+1. Create a GraphQL query for fetching activity logs with parameters for cursor, limit, and filters
+2. Implement cursor-based pagination instead of offset-based for better performance
+3. Include fields for id, type, timestamp, description, user, and any type-specific data
+4. Add proper indexing in the database for timestamp and activity type fields
+5. Implement error handling for failed queries
+6. Test the query with various cursor positions and filter combinations
+7. Document the API interface for team reference
 
-## 2. Develop Alert/Warning Detection System [done]
+## 2. Build Timeline UI Component with Appropriate Styling [pending]
 ### Dependencies: 11.1
-### Description: Create the logic to identify missing, expired, or soon-to-expire documentation
+### Description: Create a visually appealing timeline component that displays activity entries with appropriate icons, formatting, and visual hierarchy.
 ### Details:
-Build the backend logic that analyzes compliance items to detect issues requiring alerts. This system should: 1) Check for completely missing documentation, 2) Identify expired documents by comparing current date with expiration dates, 3) Flag upcoming expirations within a configurable time window (e.g., 30, 60, 90 days), 4) Assign severity levels to different types of alerts (critical for expired, warning for upcoming, etc.), 5) Create a data model that captures alert type, severity, affected item, and recommended action, and 6) Implement scheduled checks that run automatically to keep alerts current.
+1. Design a responsive timeline layout with clear visual separation between entries
+2. Implement activity type-specific icons (email, call, note, etc.) using a consistent icon library
+3. Format timestamps in a user-friendly way using date-fns library
+4. Style different activity types with distinct visual cues (colors, borders)
+5. Ensure proper spacing and alignment for readability
+6. Make the timeline accessible with proper ARIA attributes and keyboard navigation
+7. Test the UI across different screen sizes and with various activity types
+8. Implement skeleton loading states for better UX during data fetching
 
-## 3. Create Alerts & Warnings Display Section [done]
+## 3. Implement Infinite Scroll with Load More Button [pending]
 ### Dependencies: 11.1, 11.2
-### Description: Implement the visual representation of alerts with appropriate severity indicators
+### Description: Create an infinite scroll mechanism with a fallback 'Load More' button to efficiently load and display large sets of activity log entries.
 ### Details:
-Develop the UI component that displays the alerts and warnings generated by the detection system. This should include: 1) A dedicated 'Alerts & Warnings' section in the interface, 2) Visual indicators for different severity levels (e.g., red for critical, yellow for warnings, blue for informational), 3) Grouping of alerts by type or affected documentation, 4) Clear messaging explaining the issue and recommended action, 5) Interactive elements allowing users to acknowledge alerts or mark them as 'in progress', and 6) Filtering capabilities to focus on specific types of alerts or severity levels. Ensure the component updates in real-time when new alerts are generated or existing ones are resolved.
+1. Integrate react-infinite-scroll-component or similar library for efficient rendering
+2. Implement scroll detection to trigger loading of more items when user approaches bottom
+3. Add a 'Load More' button as an alternative to automatic loading
+4. Maintain scroll position when new items are loaded to prevent jumps
+5. Implement virtualization for rendering only visible items to improve performance
+6. Add loading indicators during data fetching
+7. Handle edge cases like empty results or end of data
+8. Test with various network conditions and large datasets
+
+## 4. Create Filtering System with Tabs and Advanced Filters [pending]
+### Dependencies: 11.1, 11.2
+### Description: Implement a filtering system with tabs for quick filtering by activity type and additional filters for more granular control.
+### Details:
+1. Create tab components for filtering by activity type (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)
+2. Implement state management for selected filters using React context or a state management library
+3. Add debounced filter application to prevent excessive API calls
+4. Create additional filter options for date ranges and other metadata
+5. Ensure filters are reflected in the URL for shareable filtered views
+6. Implement filter reset functionality
+7. Add visual indicators for active filters
+8. Test filter combinations for correctness and performance
+
+## 5. Develop Form for Adding New Activity Entries [pending]
+### Dependencies: 11.2
+### Description: Create a user-friendly form with validation for adding new activity log entries of different types.
+### Details:
+1. Implement a form using Formik or React Hook Form for robust validation
+2. Create dynamic form fields that change based on selected activity type
+3. Add client-side validation with helpful error messages
+4. Implement auto-save functionality for drafts
+5. Add rich text editing for description fields where appropriate
+6. Include file upload capabilities for document-type activities
+7. Ensure the form is fully accessible with keyboard navigation and screen reader support
+8. Test form submission with various input combinations and edge cases
+
+## 6. Connect Activity Log Form to Mutation APIs [pending]
+### Dependencies: 11.5
+### Description: Integrate the new activity form with backend mutation APIs to create and update activity log entries.
+### Details:
+1. Implement GraphQL mutations for creating new activity logs of each type
+2. Add proper error handling for failed submissions
+3. Implement loading states during submission
+4. Add success notifications after successful submissions
+5. Create retry mechanisms for failed submissions
+6. Implement validation on both client and server sides
+7. Add security measures to prevent unauthorized submissions
+8. Test mutations with various activity types and edge cases
+
+## 7. Implement Optimistic Updates for Improved UX [pending]
+### Dependencies: 11.3, 11.6
+### Description: Add optimistic updates to immediately reflect new entries in the timeline before server confirmation, providing a more responsive user experience.
+### Details:
+1. Implement client-side state updates that immediately show new entries in the timeline
+2. Create temporary IDs for new entries until server confirmation
+3. Add visual indicators for entries that are pending server confirmation
+4. Implement rollback functionality for failed submissions
+5. Ensure proper ordering of optimistically added entries in the timeline
+6. Handle conflicts between optimistic updates and subsequent data fetches
+7. Test various network conditions including slow connections and failures
+8. Measure and optimize performance impact of optimistic updates
 
