@@ -79,7 +79,9 @@ export default function ClientDetailPage() {
         </ComponentCard>
 
         {/* Placeholder for Contacts */}
-        <ClientContactsSection contacts={clientData!.contacts} />
+        <div className="lg:col-span-2">
+          <ClientContactsSection contacts={clientData!.contacts} />
+        </div>
 
         {/* Placeholder for Files */}
         <ComponentCard title="Files">
