@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Implement Current Fees Card
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Create the Current Fees card with permission restrictions for Admin and Developer roles.
@@ -28,7 +28,7 @@ Test permission gating to ensure only Admin and Developer roles can see the fees
 7. Test the component with various data states (loading, empty, populated)
 8. Ensure the component follows the application's design system for consistency
 
-## 2. Add Billing Commentary tooltip and enhance styling [pending]
+## 2. Add Billing Commentary tooltip and enhance styling [done]
 ### Dependencies: 7.1
 ### Description: Enhance the Current Fees Card by adding the tooltip functionality for Billing Commentary and refining the card's visual presentation.
 ### Details:
@@ -42,7 +42,7 @@ Test permission gating to ensure only Admin and Developer roles can see the fees
 8. Test tooltip functionality across different browsers and devices
 9. Ensure the component maintains responsive behavior on all screen sizes
 
-## 3. Implement permission restrictions with Authorized wrapper [pending]
+## 3. Implement permission restrictions with Authorized wrapper [done]
 ### Dependencies: 7.1, 7.2
 ### Description: Wrap the Current Fees Card component with permission restrictions to ensure only users with Admin and Developer roles can view the fee information.
 ### Details:

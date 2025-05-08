@@ -438,7 +438,7 @@
       "id": 7,
       "title": "Implement Current Fees Card",
       "description": "Create the Current Fees card with permission restrictions for Admin and Developer roles.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -463,7 +463,7 @@
             1
           ],
           "details": "1. Add a tooltip component that displays the billing commentary note\n2. Position the tooltip trigger (icon or text) appropriately within the card layout\n3. Implement hover/focus interactions for the tooltip\n4. Ensure the tooltip is accessible (keyboard navigable and screen-reader friendly)\n5. Refine the card styling to be compact yet informative\n6. Format currency values using appropriate number formatting utilities\n7. Add subtle visual indicators for fee amounts (e.g., color coding based on amount thresholds)\n8. Test tooltip functionality across different browsers and devices\n9. Ensure the component maintains responsive behavior on all screen sizes",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 7
         },
         {
@@ -475,7 +475,7 @@
             2
           ],
           "details": "1. Import the `Authorized` component from your permissions system\n2. Wrap the CurrentFeesCard component with `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>`\n3. Ensure the component correctly handles unauthorized states (either hiding completely or showing an appropriate message)\n4. Test the component with different user roles to verify permission restrictions work correctly\n5. Implement any necessary fallback UI for users without proper permissions\n6. Add unit tests to verify the permission logic works as expected\n7. Document the permission requirements in component comments\n8. Verify that the component integrates properly with the application's authentication context\n9. Test edge cases such as role changes while the component is mounted",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 7
         }
       ]
