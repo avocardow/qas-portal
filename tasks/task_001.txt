@@ -16,7 +16,7 @@ Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the 
 Verify page renders without errors and breadcrumbs display correctly. Check responsive layout at different screen sizes.
 
 # Subtasks:
-## 1. Create Basic Page Structure with Layout Components [in-progress]
+## 1. Create Basic Page Structure with Layout Components [done]
 ### Dependencies: None
 ### Description: Set up the client profile page file with the basic structure, imports, and TailAdmin layout components to establish the foundation for the page.
 ### Details:
