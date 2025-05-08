@@ -35,10 +35,6 @@ export default function ClientProfile({ clientId }: ClientProfileProps) {
           <span className="font-medium">Status:</span>{" "}
           <span className="text-sm uppercase">{client.status}</span>
         </div>
-        <div>
-          <span className="font-medium">Client since:</span>{" "}
-          <span>{new Date(client.createdAt).toLocaleDateString()}</span>
-        </div>
       </div>
     </div>
   );
