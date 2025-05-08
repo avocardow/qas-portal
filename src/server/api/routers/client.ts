@@ -54,6 +54,8 @@ const clientByIdResponseSchema = z.object({
   auditMonthEnd: z.number().nullable().optional(),
   nextContactDate: z.date().nullable().optional(),
   estAnnFees: z.number().nullable().optional(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
   contacts: z.array(
     z.object({
       id: z.string(),

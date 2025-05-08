@@ -225,7 +225,7 @@ export function ErrorState({ error, onRetry }: ErrorStateProps) {
 }
 ```
 
-## 6. Integrate Client Data Fetching in Client Profile Component [pending]
+## 6. Integrate Client Data Fetching in Client Profile Component [done]
 ### Dependencies: 2.4, 2.5
 ### Description: Create a ClientProfile component that uses the custom hook to fetch and display client data with proper loading, error, and empty states.
 ### Details:

@@ -230,6 +230,8 @@ describe("clientRouter getById", () => {
     auditMonthEnd: 5,
     nextContactDate: new Date("2023-05-01"),
     estAnnFees: 500,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     contacts: [{ id: "contact3", name: "John Doe", isPrimary: true, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: dummyClientId }],
     licenses: [],
     trustAccounts: [],

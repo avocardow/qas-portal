@@ -15,6 +15,8 @@ describe("clientRouter query logic and data transformations", () => {
       auditMonthEnd: 1,
       nextContactDate: new Date("2023-01-01"),
       estAnnFees: 100,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       contacts: [{ id: "contact1", name: "John", isPrimary: true, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: "id1" }],
     },
     {
@@ -25,6 +27,8 @@ describe("clientRouter query logic and data transformations", () => {
       auditMonthEnd: 2,
       nextContactDate: new Date("2023-02-01"),
       estAnnFees: 200,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       contacts: [{ id: "contact2", name: "Jane", isPrimary: false, phone: null, email: null, title: null, canLoginToPortal: false, portalUserId: null, createdAt: new Date(), updatedAt: new Date(), clientId: "id2" }],
     },
   ];
