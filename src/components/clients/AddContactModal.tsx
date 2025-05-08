@@ -7,6 +7,7 @@ import Select from "@/components/form/Select";
 import Button from "@/components/ui/button/Button";
 import { z } from "zod";
 import { api } from "@/utils/api";
+import Notification from "@/components/ui/notification/Notification";
 
 interface AddContactModalProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
     ? { mutate: (_data: any, _opts: any) => {} }
     : api.contact.create.useMutation();
   /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const contactTypes = [
     { value: "primary", label: "Primary" },
     { value: "secondary", label: "Secondary" },
@@ -53,6 +56,9 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
   // Handle full form submission
   const handleSubmitInternal = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Clear previous messages
+    setSuccessMessage(null);
+    setErrorMessage(null);
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors = result.error.formErrors.fieldErrors as Record<string, string[]>;
@@ -66,11 +72,11 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
     // Submit form data to API
     createContactMutation.mutate(result.data, {
       onSuccess: () => {
-        // Close modal on success
-        onClose();
+        setSuccessMessage("Contact added successfully");
       },
       onError: (error: unknown) => {
-        console.error("Create contact failed", error);
+        const msg = error instanceof Error ? error.message : "Failed to add contact";
+        setErrorMessage(msg);
       },
     });
   };
@@ -105,6 +111,8 @@ export default function AddContactModal({ isOpen, onClose, children }: AddContac
                 <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                   Add Contact
                 </Dialog.Title>
+                {successMessage && <Notification variant="success" title={successMessage} />}
+                {errorMessage && <Notification variant="error" title={errorMessage} />}
                 <div className="mt-2">
                   {children ?? (
                     <Form onSubmit={handleSubmitInternal} className="space-y-4">
