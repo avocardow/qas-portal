@@ -590,7 +590,7 @@
             1
           ],
           "details": "1. Create a new ContactsTable component that accepts a clientId prop\n2. Implement data fetching from the contacts.list API endpoint with proper loading states\n3. Configure table columns for Name, Phone, Email, Contact Type, and License Number\n4. Add sorting functionality for all columns\n5. Implement pagination with configurable page size\n6. Add basic filtering capability (search by name/email)\n7. Include empty state handling and error state handling\n8. Style the table according to application design guidelines\n9. Test the component with various data scenarios (empty, few items, many items)",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 9
         },
         {
