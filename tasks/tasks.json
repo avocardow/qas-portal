@@ -288,7 +288,7 @@
           "description": "Create a tertiary-styled Archive Client button component that is only visible to users with appropriate permissions. This component will be the entry point for the archiving flow.",
           "dependencies": [],
           "details": "1. Create a new React component `ArchiveClientButton.tsx` with tertiary styling for low visual hierarchy\n2. Implement permission checking using the `useAbility()` hook to verify the user has 'archive:client' permissions\n3. Add conditional rendering logic to hide the button completely when permissions are missing\n4. Include a disabled state with tooltip for cases where archiving might be temporarily unavailable\n5. Add appropriate icon (archive/box) and label\n6. Implement click handler that will trigger the confirmation modal\n7. Test the component with different permission scenarios using mock data\n8. Ensure the button follows accessibility guidelines with proper ARIA attributes and keyboard navigation",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 5
         },
         {
