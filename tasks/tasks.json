@@ -8,13 +8,55 @@
       "dependencies": [],
       "priority": "high",
       "subtasks": [
-        { "id": 0.1, "title": "Define DataTableOneProps and import ColumnDef", "description": "Define the interface for DataTableOneProps and import the ColumnDef type.", "details": "Add DataTableOneProps interface and import ColumnDef type.", "status": "pending" },
-        { "id": 0.2, "title": "Remove static tableRowData and fixed SortKey/SortOrder types", "description": "Remove hard-coded sample data and static sort type definitions.", "details": "Delete static data and remove sort type definitions.", "status": "pending" },
-        { "id": 0.3, "title": "Implement dynamic props handling (data, columns, onRowClick, caption)", "description": "Update component to accept props for data, columns, onRowClick, and caption.", "details": "Use props to replace static values in DataTableOne.", "status": "pending" },
-        { "id": 0.4, "title": "Derive defaultColumns from props.data when no columns provided", "description": "Compute table columns from data keys when no columns prop is provided.", "details": "Generate defaultColumns from data structure.", "status": "pending" },
-        { "id": 0.5, "title": "Wire up filtering, sorting, search and pagination based on props.data", "description": "Implement filtering, sorting, search, and pagination behaviors.", "details": "Add state and memoized logic for table behaviors.", "status": "pending" },
-        { "id": 0.6, "title": "Update header/body loops to use dynamic cols and data", "description": "Replace static rows with dynamic rendering loops over columns and data.", "details": "Use cols and current data to render table.", "status": "pending" },
-        { "id": 0.7, "title": "Update ClientContactsSection to use DataTableOne and remove DataTableThree", "description": "Swap DataTableThree for DataTableOne and pass appropriate props.", "details": "Update imports and props in ClientContactsSection.", "status": "pending" }
+        {
+          "id": 1,
+          "title": "Define DataTableOneProps and import ColumnDef",
+          "description": "Define the interface for DataTableOneProps and import the ColumnDef type.",
+          "details": "Add DataTableOneProps interface and import ColumnDef type.",
+          "status": "pending"
+        },
+        {
+          "id": 2,
+          "title": "Remove static tableRowData and fixed SortKey/SortOrder types",
+          "description": "Remove hard-coded sample data and static sort type definitions.",
+          "details": "Delete static data and remove sort type definitions.",
+          "status": "pending"
+        },
+        {
+          "id": 3,
+          "title": "Implement dynamic props handling (data, columns, onRowClick, caption)",
+          "description": "Update component to accept props for data, columns, onRowClick, and caption.",
+          "details": "Use props to replace static values in DataTableOne.",
+          "status": "pending"
+        },
+        {
+          "id": 4,
+          "title": "Derive defaultColumns from props.data when no columns provided",
+          "description": "Compute table columns from data keys when no columns prop is provided.",
+          "details": "Generate defaultColumns from data structure.",
+          "status": "pending"
+        },
+        {
+          "id": 5,
+          "title": "Wire up filtering, sorting, search and pagination based on props.data",
+          "description": "Implement filtering, sorting, search, and pagination behaviors.",
+          "details": "Add state and memoized logic for table behaviors.",
+          "status": "pending"
+        },
+        {
+          "id": 6,
+          "title": "Update header/body loops to use dynamic cols and data",
+          "description": "Replace static rows with dynamic rendering loops over columns and data.",
+          "details": "Use cols and current data to render table.",
+          "status": "pending"
+        },
+        {
+          "id": 7,
+          "title": "Update ClientContactsSection to use DataTableOne and remove DataTableThree",
+          "description": "Swap DataTableThree for DataTableOne and pass appropriate props.",
+          "details": "Update imports and props in ClientContactsSection.",
+          "status": "done"
+        }
       ]
     },
     {
