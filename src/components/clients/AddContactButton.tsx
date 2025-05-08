@@ -11,6 +11,7 @@ export default function AddContactButton({ onClick, className = "" }: AddContact
   return (
     <Button
       onClick={onClick}
+      variant="link"
       className={className}
       startIcon={<PlusIcon className="h-4 w-4" />}
     >
