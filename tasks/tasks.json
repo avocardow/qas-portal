@@ -48,7 +48,7 @@
       "id": 2,
       "title": "Implement Client Data Fetching",
       "description": "Set up tRPC query hooks to fetch client data and implement loading states.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         1
       ],

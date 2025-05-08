@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Client Data Fetching
-# Status: in-progress
+# Status: done
 # Dependencies: 1
 # Priority: high
 # Description: Set up tRPC query hooks to fetch client data and implement loading states.
