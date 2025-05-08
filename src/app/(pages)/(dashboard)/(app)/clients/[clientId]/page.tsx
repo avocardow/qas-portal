@@ -12,13 +12,22 @@ import ClientProfile from "@/components/clients/ClientProfile";
 import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
+import CurrentFeesCard from '@/components/clients/CurrentFeesCard';
+import ArchiveClientButton from '@/components/clients/ArchiveClientButton';
+import ArchiveClientModal from '@/components/clients/ArchiveClientModal';
+import { useModal } from '@/hooks/useModal';
+import { useLifetimeData } from '@/hooks/useLifetimeData';
+import LifetimeFeesCard from '@/components/clients/LifetimeFeesCard';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
   const clientId = params.clientId;
+  const { isOpen, openModal, closeModal } = useModal();
 
   // Fetch client data using custom hook
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
+  // Fetch lifetime fees data
+  const { data: lifetimeData, isLoading: lifetimeLoading, isError: lifetimeError, error: lifetimeErrorObj } = useLifetimeData(clientId);
   const title = clientData?.clientName ?? ("Client " + clientId);
   
   // Handle loading state
@@ -51,6 +60,10 @@ export default function ClientDetailPage() {
       </DashboardPlaceholderPageTemplate>
     }>
       <div className="px-4 sm:px-6 lg:px-8 py-8">
+        {/* Archive client button */}
+        <div className="flex justify-end mb-4">
+          <ArchiveClientButton onClick={openModal} />
+        </div>
         <PageBreadcrumb
           pageTitle={title}
           items={[{ label: "Clients", href: "/clients" }]}
@@ -64,6 +77,17 @@ export default function ClientDetailPage() {
 
           {/* Placeholder for Current Audit */}
           <CurrentAuditCard clientId={clientId} />
+          <CurrentFeesCard clientId={clientId} />
+          {/* Lifetime Fees Card */}
+          {lifetimeLoading ? (
+            <ComponentCard title="Lifetime Fees">Loading...</ComponentCard>
+          ) : lifetimeError ? (
+            <ComponentCard title="Lifetime Fees">
+              <p>Error loading lifetime data: {lifetimeErrorObj instanceof Error ? lifetimeErrorObj.message : String(lifetimeErrorObj)}</p>
+            </ComponentCard>
+          ) : (
+            <LifetimeFeesCard totalFees={lifetimeData?.totalFees ?? 0} feeHistory={lifetimeData?.feeHistory ?? []} />
+          )}
 
           {/* Placeholder for Client History */}
           <ComponentCard title="Client History">
@@ -95,6 +119,7 @@ export default function ClientDetailPage() {
           </ComponentCard>
         </div>
       </div>
+      <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
     </Authorized>
   );
 }
