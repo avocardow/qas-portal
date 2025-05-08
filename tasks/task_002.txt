@@ -45,7 +45,7 @@ export const clientSchema = z.object({
 export type Client = z.infer<typeof clientSchema>;
 ```
 
-## 2. Implement tRPC Server Procedures for Client Data [in-progress]
+## 2. Implement tRPC Server Procedures for Client Data [done]
 ### Dependencies: 2.1
 ### Description: Create type-safe tRPC procedures on the server side to fetch client data by ID and handle other client-related queries.
 ### Details:

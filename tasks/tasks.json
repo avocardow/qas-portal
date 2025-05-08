@@ -73,7 +73,7 @@
             1
           ],
           "details": "1. Create a `server/routers/client.ts` file to define client-related procedures\n2. Implement the `getById` procedure with proper input validation using Zod\n3. Add error handling for cases like client not found\n4. Implement any additional client data procedures needed (getAll, search, etc.)\n5. Export and include the client router in the main app router\n6. Test the procedures with sample data\n\nExample implementation:\n```typescript\n// server/routers/client.ts\nimport { z } from 'zod';\nimport { procedure, router } from '../trpc';\nimport { clientSchema } from '../../types/client';\n\nexport const clientRouter = router({\n  getById: procedure\n    .input(z.object({ id: z.string() }))\n    .query(async ({ input, ctx }) => {\n      try {\n        const client = await ctx.db.client.findUnique({\n          where: { id: input.id }\n        });\n        \n        if (!client) {\n          throw new Error('Client not found');\n        }\n        \n        return clientSchema.parse(client);\n      } catch (error) {\n        throw new Error(`Failed to fetch client: ${error.message}`);\n      }\n    }),\n  // Add other client procedures as needed\n});\n```",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 2
         },
         {
