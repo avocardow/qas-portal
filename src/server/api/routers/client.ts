@@ -301,6 +301,13 @@ export const clientRouter = createTRPCRouter({
       const { clientId, ...data } = input;
       return ctx.db.client.update({ where: { id: clientId }, data });
     }),
+  archive: protectedProcedure
+    .use(enforceRole(["Admin", "Manager"]))
+    .input(z.object({ clientId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const { clientId } = input;
+      return ctx.db.client.update({ where: { id: clientId }, data: { status: "archived" } });
+    }),
   deleteClient: adminProcedure
     .input(clientByIdSchema)
     .mutation(async ({ ctx, input }) => {

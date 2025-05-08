@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
-const path = require('path');
+import path from "path";
 // Integrate bundle analyzer plugin
-const withBundleAnalyzer: any = require('@next/bundle-analyzer')({ enabled: process.env.ANALYZE === 'true' });
+import bundleAnalyzer from "@next/bundle-analyzer";
+const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === 'true' });
 
 const nextConfig: NextConfig = {
   /* config options here */

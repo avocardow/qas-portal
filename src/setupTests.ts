@@ -18,10 +18,6 @@ Object.defineProperty(globalThis.navigator, 'clipboard', {
 
 // Polyfill window.requestAnimationFrame/cancelAnimationFrame for libraries like ApexCharts
 if (typeof window !== 'undefined') {
-  if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame = globalThis.requestAnimationFrame;
-  }
-  if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = (id: number) => clearTimeout(id);
-  }
+  window.requestAnimationFrame = globalThis.requestAnimationFrame;
+  window.cancelAnimationFrame = (id: number) => clearTimeout(id);
 } 

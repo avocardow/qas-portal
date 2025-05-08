@@ -17,7 +17,7 @@
 Test all CRUD operations for trust accounts. Verify data displays correctly in the table and updates after operations. Test tooltips and confirm dialogs.
 
 # Subtasks:
-## 1. Set up Trust Accounts data fetching with tRPC [in-progress]
+## 1. Set up Trust Accounts data fetching with tRPC [done]
 ### Dependencies: None
 ### Description: Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.
 ### Details:
@@ -29,7 +29,7 @@ Test all CRUD operations for trust accounts. Verify data displays correctly in t
 6. Test the query with mock data to ensure proper data retrieval
 7. Add type definitions for trust account data structure
 
-## 2. Build Trust Accounts table UI with required fields [pending]
+## 2. Build Trust Accounts table UI with required fields [in-progress]
 ### Dependencies: 8.1
 ### Description: Create a responsive table component that displays trust account information with all required fields and tooltips.
 ### Details:

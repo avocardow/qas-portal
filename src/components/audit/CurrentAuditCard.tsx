@@ -5,6 +5,8 @@ import { useCurrentAudit } from "@/hooks/useCurrentAudit";
 import { format } from "date-fns";
 import Authorized from "@/components/Authorized";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
+import { useModal } from "@/hooks/useModal";
+import EditAuditModal from "./EditAuditModal";
 
 interface CurrentAuditCardProps {
   clientId: string;
@@ -14,6 +16,7 @@ interface CurrentAuditCardProps {
  * Displays the current audit details for a client in a card layout.
  */
 export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
+  const { isOpen, openModal, closeModal } = useModal();
   const { data: audit, isLoading, isError, error } = useCurrentAudit(clientId);
 
   if (isLoading) {
@@ -45,33 +48,41 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
   } = audit;
 
   return (
-    <ComponentCard
-      title="Current Audit"
-      actions={
-        <Authorized action={AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS}>
-          <button className="btn btn-sm">Edit</button>
-        </Authorized>
-      }
-    >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <span className="font-semibold">Audit Year:</span> {auditYear}
+    <>
+      <ComponentCard
+        title="Current Audit"
+        actions={
+          <Authorized action={AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS}>
+            <button className="btn btn-sm" onClick={openModal}>Edit</button>
+          </Authorized>
+        }
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <span className="font-semibold">Audit Year:</span> {auditYear}
+          </div>
+          <div>
+            <span className="font-semibold">Report Due Date:</span>{" "}
+            {reportDueDate ? format(new Date(reportDueDate), "PPP") : "N/A"}
+          </div>
+          <div>
+            <span className="font-semibold">Audit Stage:</span> {stage?.name ?? "N/A"}
+          </div>
+          <div>
+            <span className="font-semibold">Audit Status:</span> {status?.name ?? "N/A"}
+          </div>
+          <div className="col-span-full">
+            <span className="font-semibold">Staff Assigned:</span>{" "}
+            {assignments.map((a) => a.user.name).join(", ")}
+          </div>
         </div>
-        <div>
-          <span className="font-semibold">Report Due Date:</span>{" "}
-          {reportDueDate ? format(new Date(reportDueDate), "PPP") : "N/A"}
-        </div>
-        <div>
-          <span className="font-semibold">Audit Stage:</span> {stage?.name ?? "N/A"}
-        </div>
-        <div>
-          <span className="font-semibold">Audit Status:</span> {status?.name ?? "N/A"}
-        </div>
-        <div className="col-span-full">
-          <span className="font-semibold">Staff Assigned:</span>{" "}
-          {assignments.map((a) => a.user.name).join(", ")}
-        </div>
-      </div>
-    </ComponentCard>
+      </ComponentCard>
+      <EditAuditModal
+        clientId={clientId}
+        existingAudit={audit ?? null}
+        isOpen={isOpen}
+        onClose={closeModal}
+      />
+    </>
   );
 } 
