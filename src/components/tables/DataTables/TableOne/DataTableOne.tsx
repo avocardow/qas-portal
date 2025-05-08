@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 
 import { useState, useMemo } from "react";
 import {
@@ -11,142 +12,35 @@ import {
 import { AngleDownIcon, AngleUpIcon } from "@/icons";
 import Image from "next/image";
 import PaginationWithIcon from "./PaginationWithIcon";
+import type { ColumnDef } from "../TableTwo/DataTableTwo";
 
-const tableRowData = [
-  {
-    id: 1,
-    user: {
-      image: "/images/user/user-20.jpg",
-      name: "Abram Schleifer",
-    },
-    position: "Sales Assistant",
-    location: "Edinburgh",
-    age: 57,
-    date: "25 Apr, 2027",
-    salary: "$89,500",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/images/user/user-21.jpg",
-      name: "Charlotte Anderson",
-    },
-    position: "Marketing Manager",
-    location: "London",
-    age: 42,
-    date: "12 Mar, 2025",
-    salary: "$105,000",
-  },
-  {
-    id: 3,
-    user: {
-      image: "/images/user/user-22.jpg",
-      name: "Ethan Brown",
-    },
-    position: "Software Engineer",
-    location: "San Francisco",
-    age: 30,
-    date: "01 Jan, 2024",
-    salary: "$120,000",
-  },
-  {
-    id: 4,
-    user: {
-      image: "/images/user/user-23.jpg",
-      name: "Sophia Martinez",
-    },
-    position: "Product Manager",
-    location: "New York",
-    age: 35,
-    date: "15 Jun, 2026",
-    salary: "$95,000",
-  },
-  {
-    id: 5,
-    user: {
-      image: "/images/user/user-24.jpg",
-      name: "James Wilson",
-    },
-    position: "Data Analyst",
-    location: "Chicago",
-    age: 28,
-    date: "20 Sep, 2025",
-    salary: "$80,000",
-  },
-  {
-    id: 6,
-    user: {
-      image: "/images/user/user-25.jpg",
-      name: "Olivia Johnson",
-    },
-    position: "HR Specialist",
-    location: "Los Angeles",
-    age: 40,
-    date: "08 Nov, 2026",
-    salary: "$75,000",
-  },
-  {
-    id: 7,
-    user: {
-      image: "/images/user/user-26.jpg",
-      name: "William Smith",
-    },
-    position: "Financial Analyst",
-    location: "Seattle",
-    age: 38,
-    date: "03 Feb, 2026",
-    salary: "$88,000",
-  },
-  {
-    id: 8,
-    user: {
-      image: "/images/user/user-27.jpg",
-      name: "Isabella Davis",
-    },
-    position: "UI/UX Designer",
-    location: "Austin",
-    age: 29,
-    date: "18 Jul, 2025",
-    salary: "$92,000",
-  },
-  {
-    id: 9,
-    user: {
-      image: "/images/user/user-28.jpg",
-      name: "Liam Moore",
-    },
-    position: "DevOps Engineer",
-    location: "Boston",
-    age: 33,
-    date: "30 Oct, 2024",
-    salary: "$115,000",
-  },
-  {
-    id: 10,
-    user: {
-      image: "/images/user/user-29.jpg",
-      name: "Mia Garcia",
-    },
-    position: "Content Strategist",
-    location: "Denver",
-    age: 27,
-    date: "12 Dec, 2027",
-    salary: "$70,000",
-  },
-];
+// Props for dynamic DataTableOne
+interface DataTableOneProps {
+  data: any[];
+  columns?: ColumnDef[];
+  onRowClick?: (row: any) => void;
+  caption?: string;
+}
 
-type SortKey = "name" | "position" | "location" | "age" | "date" | "salary";
-type SortOrder = "asc" | "desc";
-
-export default function DataTableOne() {
+export default function DataTableOne({ data, columns, onRowClick, caption = "Table" }: DataTableOneProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [sortKey, setSortKey] = useState<SortKey>("name");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortKey, setSortKey] = useState<string>(columns?.[0]?.key ?? "");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Derive default columns from data if no columns prop
+  const defaultColumns: ColumnDef[] = useMemo(() => {
+    if (!data || data.length === 0) return [];
+    return Object.keys(data[0]).map((key) => ({
+      key,
+      header: key.charAt(0).toUpperCase() + key.slice(1),
+      sortable: true,
+    }));
+  }, [data]);
+  const cols = columns ?? defaultColumns;
   const filteredAndSortedData = useMemo(() => {
-    return tableRowData
+    return data
       .filter((item) =>
         Object.values(item).some(
           (value) =>
@@ -169,7 +63,7 @@ export default function DataTableOne() {
           ? String(a[sortKey]).localeCompare(String(b[sortKey]))
           : String(b[sortKey]).localeCompare(String(a[sortKey]));
       });
-  }, [sortKey, sortOrder, searchTerm]);
+  }, [data, sortKey, sortOrder, searchTerm]);
 
   const totalItems = filteredAndSortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -178,7 +72,7 @@ export default function DataTableOne() {
     setCurrentPage(page);
   };
 
-  const handleSort = (key: SortKey) => {
+  const handleSort = (key: string) => {
     if (sortKey === key) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
@@ -268,82 +162,35 @@ export default function DataTableOne() {
           <Table>
             <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                {[
-                  { key: "name", label: "User" },
-                  { key: "position", label: "Position" },
-                  { key: "location", label: "Office" },
-                  { key: "age", label: "Age" },
-                  { key: "date", label: "Start Date" },
-                  { key: "salary", label: "Salary" },
-                ].map(({ key, label }) => (
+                {cols.map(({ key, header, sortable }) => (
                   <TableCell
                     key={key}
                     isHeader
                     className="border border-gray-100 px-4 py-3 dark:border-white/[0.05]"
                   >
-                    <div
-                      className="flex cursor-pointer items-center justify-between"
-                      onClick={() => handleSort(key as SortKey)}
-                    >
-                      <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                        {label}
-                      </p>
-                      <button className="flex flex-col gap-0.5">
-                        <AngleUpIcon
-                          className={`text-gray-300 dark:text-gray-700 ${
-                            sortKey === key && sortOrder === "asc"
-                              ? "text-brand-500"
-                              : ""
-                          }`}
-                        />
-                        <AngleDownIcon
-                          className={`text-gray-300 dark:text-gray-700 ${
-                            sortKey === key && sortOrder === "desc"
-                              ? "text-brand-500"
-                              : ""
-                          }`}
-                        />
+                    {sortable ? (
+                      <button type="button" className="w-full flex items-center justify-between" onClick={() => handleSort(key)}>
+                        <span className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">{header}</span>
+                        <span aria-hidden="true" className="flex flex-col gap-0.5">
+                          <AngleUpIcon className={`text-gray-300 dark:text-gray-700 ${sortKey === key && sortOrder === "asc" ? "text-brand-500" : ""}`} />
+                          <AngleDownIcon className={`text-gray-300 dark:text-gray-700 ${sortKey === key && sortOrder === "desc" ? "text-brand-500" : ""}`} />
+                        </span>
                       </button>
-                    </div>
+                    ) : (
+                      <span className="block w-full text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">{header}</span>
+                    )}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHeader>
             <TableBody>
               {currentData.map((item, i) => (
-                <TableRow key={i + 1}>
-                  <TableCell className="whitespace-nowrap border border-gray-100 px-4 py-3 dark:border-white/[0.05]">
-                    <div className="flex items-center gap-3">
-                      <div className="size-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={item.user.image || "/placeholder.svg"}
-                          alt="user"
-                        />
-                      </div>
-                      <div>
-                        <span className="text-theme-sm block font-medium text-gray-800 dark:text-white/90">
-                          {item.user.name}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 px-4 py-3 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400/90">
-                    {item.position}
-                  </TableCell>
-                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 px-4 py-3 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400/90">
-                    {item.location}
-                  </TableCell>
-                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 px-4 py-3 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400/90">
-                    {item.age}
-                  </TableCell>
-                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 px-4 py-3 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400/90">
-                    {item.date}
-                  </TableCell>
-                  <TableCell className="text-theme-sm whitespace-nowrap border border-gray-100 px-4 py-3 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400/90">
-                    {item.salary}
-                  </TableCell>
+                <TableRow key={i} onClick={() => onRowClick?.(item)} className={onRowClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" : undefined}>
+                  {cols.map(({ key, cell }, idx) => (
+                    <TableCell key={key} className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
+                      {cell ? cell(item) : (item as any)[key] ?? "-"}
+                    </TableCell>
+                  ))}
                 </TableRow>
               ))}
             </TableBody>
