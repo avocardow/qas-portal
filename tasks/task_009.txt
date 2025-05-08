@@ -1,6 +1,6 @@
 # Task ID: 9
 # Title: Implement Client Contacts Table and CRUD
-# Status: pending
+# Status: in-progress
 # Dependencies: 4
 # Priority: high
 # Description: Create the Client Contacts table with add, edit, and delete functionality.
@@ -17,7 +17,7 @@
 Test all CRUD operations for contacts. Verify data displays correctly and updates after operations. Test sorting and filtering if implemented.
 
 # Subtasks:
-## 1. Create Client Contacts Database Schema and API Endpoints [pending]
+## 1. Create Client Contacts Database Schema and API Endpoints [in-progress]
 ### Dependencies: None
 ### Description: Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.
 ### Details:
