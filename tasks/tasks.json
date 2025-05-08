@@ -602,7 +602,7 @@
             2
           ],
           "details": "1. Import the existing AddContactModal component from Task 4\n2. Create a wrapper component that manages the modal's open/close state\n3. Connect the form submission to the contacts.create mutation\n4. Add proper validation for all form fields\n5. Implement loading state during submission\n6. Add success and error handling with user feedback\n7. Ensure the contacts table refreshes after successful creation\n8. Test the integration by adding new contacts and verifying they appear in the table\n9. Verify that validation works correctly for all required fields",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 9
         },
         {
