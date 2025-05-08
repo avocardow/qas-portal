@@ -627,7 +627,7 @@
             2
           ],
           "details": "1. Create a DeleteConfirmationDialog component with clear messaging\n2. Add a delete button/icon in each table row\n3. Connect the confirmation dialog to the contacts.delete mutation\n4. Implement loading state during deletion\n5. Add success and error handling with user feedback\n6. Ensure the contacts table refreshes after successful deletion\n7. Consider implementing soft delete if appropriate for the application\n8. Add role-based access control to restrict deletion to authorized users\n9. Test the delete functionality and verify contacts are removed from the table",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 9
         },
         {
