@@ -105,7 +105,7 @@
           "description": "Create reusable UI components for handling loading states, errors, and empty states when fetching client data.",
           "dependencies": [],
           "details": "1. Create `components/ui/LoadingState.tsx` for showing loading indicators\n2. Create `components/ui/ErrorState.tsx` for displaying error messages\n3. Create `components/ui/EmptyState.tsx` for when no data is available\n4. Ensure components are accessible and provide clear feedback\n5. Make components customizable with props for different contexts\n6. Test components with various states and screen sizes\n\nExample implementation:\n```typescript\n// components/ui/LoadingState.tsx\nimport React from 'react';\n\ninterface LoadingStateProps {\n  message?: string;\n  size?: 'small' | 'medium' | 'large';\n}\n\nexport function LoadingState({ message = 'Loading...', size = 'medium' }: LoadingStateProps) {\n  return (\n    <div className=\"loading-container\" aria-live=\"polite\" role=\"status\">\n      <div className={`spinner spinner-${size}`} />\n      <p className=\"loading-text\">{message}</p>\n    </div>\n  );\n}\n\n// components/ui/ErrorState.tsx\ninterface ErrorStateProps {\n  error: Error | null;\n  onRetry?: () => void;\n}\n\nexport function ErrorState({ error, onRetry }: ErrorStateProps) {\n  return (\n    <div className=\"error-container\" role=\"alert\">\n      <h3>Something went wrong</h3>\n      <p>{error?.message || 'An unknown error occurred'}</p>\n      {onRetry && (\n        <button onClick={onRetry} className=\"retry-button\">\n          Try Again\n        </button>\n      )}\n    </div>\n  );\n}\n```",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 2
         },
         {

@@ -7,6 +7,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
+import ClientProfile from "@/components/clients/ClientProfile";
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -47,12 +48,9 @@ export default function ClientDetailPage() {
       />
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Placeholder for Client Overview */}
+        {/* Client Overview */}
         <ComponentCard title="Client Overview">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
+          <ClientProfile clientId={clientId} />
         </ComponentCard>
 
         {/* Placeholder for Current Audit */}
