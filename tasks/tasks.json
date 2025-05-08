@@ -48,7 +48,7 @@
           "title": "Update header/body loops to use dynamic cols and data",
           "description": "Replace static rows with dynamic rendering loops over columns and data.",
           "details": "Use cols and current data to render table.",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": 7,
