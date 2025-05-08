@@ -20,7 +20,7 @@
           "title": "Remove static tableRowData and fixed SortKey/SortOrder types",
           "description": "Remove hard-coded sample data and static sort type definitions.",
           "details": "Delete static data and remove sort type definitions.",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": 3,
