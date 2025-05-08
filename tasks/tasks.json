@@ -579,7 +579,7 @@
           "description": "Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.",
           "dependencies": [],
           "details": "1. Create a database migration for the client_contacts table with fields: id, client_id, name, email, phone, contact_type, license_number, created_at, updated_at\n2. Add appropriate constraints (NOT NULL, UNIQUE for email)\n3. Create indexes on client_id and other frequently queried fields\n4. Implement API endpoints for CRUD operations (/contacts.create, /contacts.update, /contacts.delete, /contacts.list)\n5. Add comprehensive input validation on all endpoints\n6. Implement proper error handling with descriptive messages\n7. Add audit logging for all operations\n8. Test endpoints with Postman or similar tool to verify functionality",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 9
         },
         {

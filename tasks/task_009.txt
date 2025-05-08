@@ -17,7 +17,7 @@
 Test all CRUD operations for contacts. Verify data displays correctly and updates after operations. Test sorting and filtering if implemented.
 
 # Subtasks:
-## 1. Create Client Contacts Database Schema and API Endpoints [in-progress]
+## 1. Create Client Contacts Database Schema and API Endpoints [done]
 ### Dependencies: None
 ### Description: Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.
 ### Details:
