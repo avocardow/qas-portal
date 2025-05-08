@@ -204,4 +204,17 @@ export const auditRouter = createTRPCRouter({
       }
       return removal;
     }),
+
+  // Get current/latest audit for a client
+  getCurrent: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID))
+    .input(getByClientIdSchema)
+    .query(async ({ ctx, input }) => {
+      const audit = await ctx.db.audit.findFirst({
+        where: { clientId: input.clientId },
+        orderBy: { auditYear: "desc" },
+        include: { stage: true, status: true, assignments: { include: { user: true } } },
+      });
+      return audit;
+    }),
 });
