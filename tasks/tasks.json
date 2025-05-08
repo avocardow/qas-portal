@@ -379,7 +379,7 @@
       "id": 6,
       "title": "Build Current Audit Section",
       "description": "Create the Current Audit section showing audit details with edit functionality.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -393,7 +393,7 @@
           "description": "Set up the data fetching logic using React Query to retrieve the current audit information and implement the state management structure to handle audit data, loading states, and error handling.",
           "dependencies": [],
           "details": "1. Create a custom hook `useCurrentAudit` that implements `useQuery('audits.getCurrent')` to fetch the latest audit data\n2. Handle loading, error, and empty states within the hook\n3. Implement proper TypeScript interfaces for audit data structure (including Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned fields)\n4. Add a function to check if an audit exists and provide appropriate default values\n5. Set up proper caching and refetching strategies in React Query\n6. Implement test cases using React Testing Library to verify data fetching behavior\n7. Add error boundaries to gracefully handle API failures",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 6
         },
         {
