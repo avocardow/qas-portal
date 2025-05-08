@@ -4,10 +4,18 @@ import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
+import { api } from "@/utils/api";
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
   const clientId = params.clientId;
+
+  // Fetch client name for breadcrumb title
+  const { data: clientData } = api.clients.getById.useQuery(
+    { clientId },
+    { enabled: !!clientId }
+  );
+  const title = clientData?.clientName ?? ("Client " + clientId);
 
   // Validate clientId param
   if (!clientId) {
@@ -21,7 +29,7 @@ export default function ClientDetailPage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <PageBreadcrumb
-        pageTitle={`Client ${clientId}`}
+        pageTitle={title}
         items={[{ label: "Clients", href: "/clients" }]}
       />
 
