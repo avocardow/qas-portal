@@ -4,7 +4,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import { useCurrentAudit } from "@/hooks/useCurrentAudit";
 import { format } from "date-fns";
 import Authorized from "@/components/Authorized";
-import { AUDIT_PERMISSIONS } from "@/constants/permissions";
+import { AUDIT_PERMISSIONS, CLIENT_PERMISSIONS } from "@/constants/permissions";
 import { useModal } from "@/hooks/useModal";
 import EditAuditModal from "./EditAuditModal";
 import { useClientData } from "@/hooks/useClientData";
@@ -59,16 +59,18 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
           </Authorized>
         }
       >
-        {feesLoading ? (
-          <div>Loading current fees...</div>
-        ) : feesError ? (
-          <div>Error loading current fees: {feesErrorObj instanceof Error ? feesErrorObj.message : String(feesErrorObj)}</div>
-        ) : (
-          <div className="mb-4">
-            <span className="font-semibold">Current Fees:</span>{" "}
-            {clientData?.estAnnFees?.toLocaleString(undefined, { style: "currency", currency: "USD" })}
-          </div>
-        )}
+        <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING}>
+          {feesLoading ? (
+            <div>Loading current fees...</div>
+          ) : feesError ? (
+            <div>Error loading current fees: {feesErrorObj instanceof Error ? feesErrorObj.message : String(feesErrorObj)}</div>
+          ) : (
+            <div className="mb-4">
+              <span className="font-semibold">Current Fees:</span>{" "}
+              {clientData?.estAnnFees?.toLocaleString(undefined, { style: "currency", currency: "USD" })}
+            </div>
+          )}
+        </Authorized>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <span className="font-semibold">Audit Year:</span> {auditYear}

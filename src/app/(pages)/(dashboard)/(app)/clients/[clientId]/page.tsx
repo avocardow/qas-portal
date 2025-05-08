@@ -12,7 +12,6 @@ import ClientProfile from "@/components/clients/ClientProfile";
 import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
-import CurrentFeesCard from '@/components/clients/CurrentFeesCard';
 import ArchiveClientButton from '@/components/clients/ArchiveClientButton';
 import ArchiveClientModal from '@/components/clients/ArchiveClientModal';
 import { useModal } from '@/hooks/useModal';
@@ -73,7 +72,6 @@ export default function ClientDetailPage() {
 
           {/* Placeholder for Current Audit */}
           <CurrentAuditCard clientId={clientId} />
-          <CurrentFeesCard clientId={clientId} />
 
           {/* Placeholder for Client History */}
           <ComponentCard title="Client History">
@@ -95,14 +93,6 @@ export default function ClientDetailPage() {
           <div className="lg:col-span-2">
             <ClientContactsSection contacts={clientData!.contacts} />
           </div>
-
-          {/* Placeholder for Files */}
-          <ComponentCard title="Files">
-            <div className="animate-pulse space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </ComponentCard>
         </div>
       </div>
       <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
