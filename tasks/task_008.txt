@@ -29,7 +29,7 @@ Test all CRUD operations for trust accounts. Verify data displays correctly in t
 6. Test the query with mock data to ensure proper data retrieval
 7. Add type definitions for trust account data structure
 
-## 2. Build Trust Accounts table UI with required fields [in-progress]
+## 2. Build Trust Accounts table UI with required fields [done]
 ### Dependencies: 8.1
 ### Description: Create a responsive table component that displays trust account information with all required fields and tooltips.
 ### Details:

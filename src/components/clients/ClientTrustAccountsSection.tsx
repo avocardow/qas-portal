@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ComponentCard from '@/components/common/ComponentCard';
-import DataTableTwo, { ColumnDef } from '@/components/tables/DataTables/TableTwo/DataTableTwo';
+import DataTableOne from '@/components/tables/DataTables/TableOne/DataTableOne';
+import type { ColumnDef } from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import type { ClientWithRelations } from './ClientOverviewCard';
 import Badge from '@/components/ui/badge/Badge';
 
@@ -14,9 +15,6 @@ export interface ClientTrustAccountsSectionProps {
  *   hasSoftwareAccess, updatedAt, managementSoftware, and softwareUrl.
  */
 export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrustAccountsSectionProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
   const columns = React.useMemo<ColumnDef[]>(() => [
     { key: 'accountName', header: 'Account Name', sortable: true },
     { key: 'bankName', header: 'Bank Name', sortable: true },
@@ -57,18 +55,6 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
         ) : null,
     },
   ], []);
-  // Filter trust accounts based on search term
-  const filteredAccounts = React.useMemo(() => {
-    const term = searchTerm.toLowerCase();
-    return (trustAccounts ?? []).filter(acc =>
-      (acc.accountName?.toLowerCase().includes(term) ||
-       acc.bankName.toLowerCase().includes(term) ||
-       acc.bsb?.toLowerCase().includes(term) ||
-       acc.accountNumber?.toLowerCase().includes(term) ||
-       acc.managementSoftware?.toLowerCase().includes(term))
-    );
-  }, [trustAccounts, searchTerm]);
-  useEffect(() => { setCurrentPage(1); }, [filteredAccounts]);
   if (!trustAccounts || trustAccounts.length === 0) {
     return (
       <ComponentCard title="Trust Accounts">
@@ -78,15 +64,9 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
   }
   return (
     <ComponentCard title="Trust Accounts">
-      <DataTableTwo
-        data={filteredAccounts}
+      <DataTableOne
+        data={trustAccounts}
         columns={columns}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        onPageChange={setCurrentPage}
-        onItemsPerPageChange={(size) => { setPageSize(size); setCurrentPage(1); }}
         caption="Trust Accounts Table"
       />
     </ComponentCard>

@@ -5,8 +5,8 @@ import { SessionProvider } from 'next-auth/react';
 import { PermissionProvider } from '@/contexts/PermissionContext';
 import { vi } from 'vitest';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Mock DataTableTwo to avoid rendering complex SVGs and CSS that break tests
-vi.mock('@/components/tables/DataTables/TableTwo/DataTableTwo', () => ({
+// Mock DataTableOne to avoid rendering complex SVGs and CSS that break tests
+vi.mock('@/components/tables/DataTables/TableOne/DataTableOne', () => ({
   __esModule: true,
   default: ({ data, columns }: { data: any[]; columns: any[] }) => (
     <table>

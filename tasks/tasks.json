@@ -509,7 +509,7 @@
             1
           ],
           "details": "1. Create a table layout using TailAdmin components\n2. Implement columns for Account Name, Account Number, BSB, and Software\n3. Add tooltip for Software field with access instructions\n4. Implement row selection functionality\n5. Add responsive design for different screen sizes\n6. Implement loading states and empty state handling\n7. Test the table rendering with sample data\n8. Ensure accessibility compliance with proper ARIA attributes",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 8
         },
         {
