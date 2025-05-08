@@ -484,7 +484,7 @@
       "id": 8,
       "title": "Build Trust Accounts Table and CRUD",
       "description": "Implement the Trust Accounts table with add, edit, and remove functionality.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         2
       ],
@@ -498,7 +498,7 @@
           "description": "Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.",
           "dependencies": [],
           "details": "1. Create a tRPC query endpoint for fetching trust accounts data\n2. Implement proper error handling and loading states\n3. Set up React state to store and manage the fetched data\n4. Add pagination support for large datasets\n5. Implement sorting functionality for table columns\n6. Test the query with mock data to ensure proper data retrieval\n7. Add type definitions for trust account data structure",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 8
         },
         {

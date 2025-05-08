@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Build Trust Accounts Table and CRUD
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: medium
 # Description: Implement the Trust Accounts table with add, edit, and remove functionality.
@@ -17,7 +17,7 @@
 Test all CRUD operations for trust accounts. Verify data displays correctly in the table and updates after operations. Test tooltips and confirm dialogs.
 
 # Subtasks:
-## 1. Set up Trust Accounts data fetching with tRPC [pending]
+## 1. Set up Trust Accounts data fetching with tRPC [in-progress]
 ### Dependencies: None
 ### Description: Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.
 ### Details:
