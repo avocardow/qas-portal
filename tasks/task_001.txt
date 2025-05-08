@@ -1,6 +1,6 @@
 # Task ID: 1
 # Title: Setup Page Scaffolding
-# Status: in-progress
+# Status: done
 # Dependencies: None
 # Priority: high
 # Description: Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.

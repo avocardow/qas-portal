@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Setup Page Scaffolding",
       "description": "Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the following:\n1. Import necessary components from TailAdmin\n2. Setup page layout with responsive grid using TailAdmin components\n3. Implement PageBreadcrumb component with Home > Clients > [Client Name] structure\n4. Add sidebar navigation link to this page\n5. Create placeholder sections for all required components (Client Overview, Current Audit, etc.)",
