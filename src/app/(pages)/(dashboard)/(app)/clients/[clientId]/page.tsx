@@ -4,18 +4,33 @@ import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import { api } from "@/utils/api";
+import { useClientData } from "@/hooks/useClientData";
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
   const clientId = params.clientId;
 
-  // Fetch client name for breadcrumb title
-  const { data: clientData } = api.clients.getById.useQuery(
-    { clientId },
-    { enabled: !!clientId }
-  );
+  // Fetch client data using custom hook
+  const { data: clientData, isLoading, isError, error } = useClientData(clientId);
   const title = clientData?.clientName ?? ("Client " + clientId);
+  
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Loading...">
+        <p>Loading client data...</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+  
+  // Handle error state
+  if (isError) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Error">
+        <p>{error?.message}</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
 
   // Validate clientId param
   if (!clientId) {

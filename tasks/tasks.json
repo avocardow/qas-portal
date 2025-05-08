@@ -48,7 +48,7 @@
       "id": 2,
       "title": "Implement Client Data Fetching",
       "description": "Set up tRPC query hooks to fetch client data and implement loading states.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         1
       ],
@@ -96,7 +96,7 @@
             3
           ],
           "details": "1. Create a `hooks/useClient.ts` file to implement the custom hook\n2. Use the tRPC hook to fetch client data by ID\n3. Add proper TypeScript typing for the hook parameters and return values\n4. Include error handling and data transformation if needed\n5. Add documentation for the hook usage\n6. Test the hook in isolation\n\nExample implementation:\n```typescript\n// hooks/useClient.ts\nimport { trpc } from '../utils/trpc';\nimport type { Client } from '../types/client';\n\ninterface UseClientOptions {\n  enabled?: boolean;\n  onSuccess?: (data: Client) => void;\n  onError?: (error: Error) => void;\n}\n\n/**\n * Hook to fetch client data by ID\n * @param id The client ID to fetch\n * @param options Additional query options\n * @returns Query result with client data, loading state, and error\n */\nexport function useClient(id: string | undefined, options: UseClientOptions = {}) {\n  return trpc.client.getById.useQuery(\n    { id: id || '' },\n    {\n      enabled: !!id && (options.enabled !== false),\n      onSuccess: options.onSuccess,\n      onError: options.onError,\n    }\n  );\n}\n```",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 2
         },
         {

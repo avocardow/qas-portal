@@ -1,6 +1,6 @@
 # Task ID: 2
 # Title: Implement Client Data Fetching
-# Status: pending
+# Status: in-progress
 # Dependencies: 1
 # Priority: high
 # Description: Set up tRPC query hooks to fetch client data and implement loading states.
@@ -133,7 +133,7 @@ export const trpcClient = trpc.createClient({
 });
 ```
 
-## 4. Create Custom Hook for Client Data Fetching [in-progress]
+## 4. Create Custom Hook for Client Data Fetching [done]
 ### Dependencies: 2.1, 2.3
 ### Description: Develop a custom React hook that encapsulates the tRPC query logic for fetching client data, with proper typing and error handling.
 ### Details:
