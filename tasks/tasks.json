@@ -429,7 +429,7 @@
             3
           ],
           "details": "1. Implement `useMutation('audits.createOrUpdate')` hook to handle saving changes to the server\n2. Add optimistic updates to immediately reflect changes in the UI\n3. Implement proper error handling with user-friendly error messages\n4. Add success notifications when an audit is successfully created or updated\n5. Create a special flow for when no current audit exists, with a button to create a new one\n6. Implement audit history tracking to maintain a record of changes\n7. Add confirmation dialogs for important actions\n8. Ensure proper RBAC (Role-Based Access Control) is respected for edit permissions\n9. Implement form state persistence in case of accidental navigation\n10. Add loading indicators during submission\n11. Write integration tests to verify the complete create/update flow\n12. Implement proper invalidation of queries to ensure data consistency",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 6
         }
       ]

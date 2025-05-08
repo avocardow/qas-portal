@@ -58,7 +58,7 @@ Verify audit data displays correctly. Test edit functionality and confirm data u
 10. Ensure the form is accessible with keyboard navigation and screen reader support
 11. Write tests for form validation and submission behavior
 
-## 4. Implement Audit Creation/Update Functionality with Error Handling [pending]
+## 4. Implement Audit Creation/Update Functionality with Error Handling [done]
 ### Dependencies: 6.1, 6.2, 6.3
 ### Description: Connect the edit form to the backend API using React Query mutations, implement proper error handling, success notifications, and handle the special case of creating a new audit when none exists.
 ### Details:
