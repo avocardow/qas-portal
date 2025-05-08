@@ -34,7 +34,7 @@
           "title": "Derive defaultColumns from props.data when no columns provided",
           "description": "Compute table columns from data keys when no columns prop is provided.",
           "details": "Generate defaultColumns from data structure.",
-          "status": "pending"
+          "status": "done"
         },
         {
           "id": 5,
