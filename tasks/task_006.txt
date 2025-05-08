@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Build Current Audit Section
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: high
 # Description: Create the Current Audit section showing audit details with edit functionality.

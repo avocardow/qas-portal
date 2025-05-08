@@ -379,7 +379,7 @@
       "id": 6,
       "title": "Build Current Audit Section",
       "description": "Create the Current Audit section showing audit details with edit functionality.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
