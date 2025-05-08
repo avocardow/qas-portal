@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Implement Add Contact Button and Modal
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: high
 # Description: Create the Add Contact button and modal form for adding new client contacts.
@@ -54,7 +54,7 @@ Test form validation, submission process, and verify new contacts appear in the 
 7. Test the form layout on different screen sizes
 8. Ensure the first input field receives focus when modal opens
 
-## 4. Implement Form State Management and Validation [pending]
+## 4. Implement Form State Management and Validation [done]
 ### Dependencies: 4.3
 ### Description: Set up form state management and implement client-side validation for all contact form fields.
 ### Details:
@@ -71,7 +71,7 @@ Test form validation, submission process, and verify new contacts appear in the 
 6. Test validation with various input scenarios
 7. Ensure validation errors are accessible to screen readers
 
-## 5. Connect Form to API using useMutation Hook [pending]
+## 5. Connect Form to API using useMutation Hook [done]
 ### Dependencies: 4.4
 ### Description: Integrate the form with the API using the useMutation hook to save new contacts to the backend.
 ### Details:
@@ -84,7 +84,7 @@ Test form validation, submission process, and verify new contacts appear in the 
 7. Verify that the correct data is being sent to the API
 8. Implement retry logic for network failures
 
-## 6. Implement Success and Error Handling [pending]
+## 6. Implement Success and Error Handling [done]
 ### Dependencies: 4.5
 ### Description: Add proper success and error handling for the contact creation process, including user feedback and error messages.
 ### Details:
@@ -97,7 +97,7 @@ Test form validation, submission process, and verify new contacts appear in the 
 7. Test error scenarios by mocking API failures
 8. Ensure error messages are clear and actionable
 
-## 7. Implement Contact List Refresh After Submission [pending]
+## 7. Implement Contact List Refresh After Submission [done]
 ### Dependencies: 4.6
 ### Description: Update the contacts list to reflect newly added contacts without requiring a full page refresh.
 ### Details:

@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
+import ClientContactsSection from '@/components/clients/ClientContactsSection';
 import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
@@ -78,12 +79,7 @@ export default function ClientDetailPage() {
         </ComponentCard>
 
         {/* Placeholder for Contacts */}
-        <ComponentCard title="Contacts">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </ComponentCard>
+        <ClientContactsSection contacts={clientData!.contacts} />
 
         {/* Placeholder for Files */}
         <ComponentCard title="Files">

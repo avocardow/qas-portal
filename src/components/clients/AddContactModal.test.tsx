@@ -7,7 +7,7 @@ describe("AddContactModal", () => {
   it("renders children when open", () => {
     const handleClose = vi.fn();
     render(
-      <AddContactModal isOpen={true} onClose={handleClose}>
+      <AddContactModal clientId="test-client" isOpen={true} onClose={handleClose}>
         <div>Modal Content</div>
       </AddContactModal>
     );
@@ -17,7 +17,7 @@ describe("AddContactModal", () => {
   it("does not render children when closed", () => {
     const handleClose = vi.fn();
     render(
-      <AddContactModal isOpen={false} onClose={handleClose}>
+      <AddContactModal clientId="test-client" isOpen={false} onClose={handleClose}>
         <div>Hidden Content</div>
       </AddContactModal>
     );
@@ -27,7 +27,7 @@ describe("AddContactModal", () => {
   it("calls onClose when Escape key is pressed", () => {
     const handleClose = vi.fn();
     render(
-      <AddContactModal isOpen={true} onClose={handleClose}>
+      <AddContactModal clientId="test-client" isOpen={true} onClose={handleClose}>
         <div>Content</div>
       </AddContactModal>
     );
