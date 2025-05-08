@@ -6,6 +6,8 @@ import DataTableTwo from '@/components/tables/DataTables/TableTwo/DataTableTwo';
 import Badge from '@/components/ui/badge/Badge';
 import AddContactButton from '@/components/clients/AddContactButton';
 import AddContactModal from '@/components/clients/AddContactModal';
+import Authorized from '@/components/Authorized';
+import { AUDIT_PERMISSIONS } from '@/constants/permissions';
 // import type { Contact } from '@prisma/client';
 
 // Define row type for DataTableTwo to avoid using `any`
@@ -82,7 +84,14 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
   }
   return (
     <>
-      <ComponentCard title="Contacts" actions={<AddContactButton onClick={() => setIsModalOpen(true)} />}>
+      <ComponentCard
+        title="Contacts"
+        actions={
+          <Authorized action={AUDIT_PERMISSIONS.GET_BY_CLIENT_ID}>
+            <AddContactButton onClick={() => setIsModalOpen(true)} />
+          </Authorized>
+        }
+      >
         <DataTableTwo
           data={filteredContacts}
           columns={columns}
