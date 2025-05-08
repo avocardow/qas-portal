@@ -62,12 +62,10 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
           {reportDueDate ? format(new Date(reportDueDate), "PPP") : "N/A"}
         </div>
         <div>
-          <span className="font-semibold">Audit Stage:</span>{" "}
-          {stage.name}
+          <span className="font-semibold">Audit Stage:</span> {stage?.name ?? "N/A"}
         </div>
         <div>
-          <span className="font-semibold">Audit Status:</span>{" "}
-          {status.name}
+          <span className="font-semibold">Audit Status:</span> {status?.name ?? "N/A"}
         </div>
         <div className="col-span-full">
           <span className="font-semibold">Staff Assigned:</span>{" "}
