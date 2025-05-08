@@ -23,7 +23,7 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
   if (isError) {
     return (
       <ComponentCard title="Current Audit">
-        <p>Error loading audit: {(error as any).message}</p>
+        <p>Error loading audit: {error instanceof Error ? error.message : String(error)}</p>
       </ComponentCard>
     );
   }

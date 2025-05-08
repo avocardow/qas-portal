@@ -1,6 +1,6 @@
 # Task ID: 6
 # Title: Build Current Audit Section
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: high
 # Description: Create the Current Audit section showing audit details with edit functionality.
@@ -16,7 +16,7 @@
 Verify audit data displays correctly. Test edit functionality and confirm data updates after edits. Test creating a new audit when none exists.
 
 # Subtasks:
-## 1. Implement Current Audit Data Fetching and State Management [pending]
+## 1. Implement Current Audit Data Fetching and State Management [done]
 ### Dependencies: None
 ### Description: Set up the data fetching logic using React Query to retrieve the current audit information and implement the state management structure to handle audit data, loading states, and error handling.
 ### Details:
@@ -28,7 +28,7 @@ Verify audit data displays correctly. Test edit functionality and confirm data u
 6. Implement test cases using React Testing Library to verify data fetching behavior
 7. Add error boundaries to gracefully handle API failures
 
-## 2. Build Current Audit Display Card Component [pending]
+## 2. Build Current Audit Display Card Component [done]
 ### Dependencies: 6.1
 ### Description: Create a responsive card component that displays the current audit information in a clear, organized manner following best practices for data presentation and accessibility.
 ### Details:
@@ -42,7 +42,7 @@ Verify audit data displays correctly. Test edit functionality and confirm data u
 8. Include an edit button that will trigger the edit modal
 9. Write unit tests to verify the component renders correctly with different data scenarios
 
-## 3. Develop Edit Audit Modal Form [pending]
+## 3. Develop Edit Audit Modal Form [done]
 ### Dependencies: 6.1, 6.2
 ### Description: Create a modal form component that allows users to edit the current audit details or create a new audit if none exists, with proper validation and user feedback.
 ### Details:
