@@ -32,7 +32,20 @@ export default function DataTableOne({ data, columns, onRowClick, caption = "Tab
   // Derive default columns from data if no columns prop
   const defaultColumns: ColumnDef[] = useMemo(() => {
     if (!data || data.length === 0) return [];
-    return Object.keys(data[0]).map((key) => ({
+    // Exclude certain keys from columns
+    const excludedKeys = [
+      'id',
+      'isprimary',
+      'canlogintoprortal',
+      'portaluserid',
+      'createdat',
+      'updatedat',
+      'clientid',
+    ];
+    const keys = Object.keys(data[0]).filter(
+      (key) => !excludedKeys.includes(key.toLowerCase())
+    );
+    return keys.map((key) => ({
       key,
       header: key.charAt(0).toUpperCase() + key.slice(1),
       sortable: true,
