@@ -84,7 +84,7 @@
             2
           ],
           "details": "1. Create a `utils/trpc.ts` file to set up the tRPC client\n2. Configure httpBatchLink for efficient network requests\n3. Set up React Query with appropriate caching settings\n4. Configure error handling and retry logic\n5. Export the tRPC hooks for use in components\n6. Test the configuration by making a simple query\n\nExample implementation:\n```typescript\n// utils/trpc.ts\nimport { createTRPCReact } from '@trpc/react-query';\nimport { httpBatchLink } from '@trpc/client';\nimport { QueryClient } from '@tanstack/react-query';\nimport type { AppRouter } from '../server/routers/_app';\n\nexport const trpc = createTRPCReact<AppRouter>();\n\nexport const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      staleTime: 5 * 60 * 1000, // 5 minutes\n      cacheTime: 10 * 60 * 1000, // 10 minutes\n      retry: 1,\n      refetchOnWindowFocus: false,\n    },\n  },\n});\n\nexport const trpcClient = trpc.createClient({\n  links: [\n    httpBatchLink({\n      url: '/api/trpc',\n      // Include credentials for cookie-based auth if needed\n      fetch(url, options) {\n        return fetch(url, {\n          ...options,\n          credentials: 'include',\n        });\n      },\n    }),\n  ],\n});\n```",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 2
         },
         {
