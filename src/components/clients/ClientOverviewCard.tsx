@@ -2,6 +2,8 @@ import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { Tooltip } from "@/components/ui/tooltip/Tooltip";
 import type { RouterOutput } from "@/utils/api";
+import { api } from "@/utils/api";
+import EditableField from "@/components/common/EditableField";
 
 // Use the return type from the clients.getById tRPC call
 export type ClientWithRelations = RouterOutput["clients"]["getById"];
@@ -15,15 +17,35 @@ export default function ClientOverviewCard({ client }: ClientOverviewCardProps) 
   const folderLink = client.externalFolderId
     ? `https://sharepoint.com/sites/${client.externalFolderId}`
     : null;
+  const utils = api.useContext();
+  const updateClient = api.clients.update.useMutation({
+    onSuccess: () => {
+      utils.clients.getById.invalidate({ clientId: client.id });
+    },
+  });
 
   return (
     <ComponentCard title="Client Overview">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <span className="font-medium">Name:</span> {client.clientName}
+          <EditableField
+            label="Name"
+            value={client.clientName}
+            onSave={(value) => updateClient.mutate({ clientId: client.id, clientName: value })}
+          />
         </div>
         <div>
-          <span className="font-medium">Address:</span> {client.address || "—"}
+          <EditableField
+            label="Address"
+            value={client.address || ""}
+            onSave={(value) =>
+              updateClient.mutate({
+                clientId: client.id,
+                clientName: client.clientName,
+                address: value,
+              })
+            }
+          />
         </div>
         <div>
           <span className="font-medium">Folder Link:</span>{" "}
