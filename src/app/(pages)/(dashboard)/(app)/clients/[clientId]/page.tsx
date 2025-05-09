@@ -64,11 +64,11 @@ export default function ClientDetailPage() {
   const activityLogs = clientData?.activityLogs ?? [];
 
   // Calculate next contact and report due dates
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const nextContactDate = useMemo(() => {
     return clientData?.nextContactDate ?? null;
   }, [clientData?.nextContactDate]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const nextReportDueDate = useMemo(() => {
     if (!clientData?.audits) return null;
     const now = new Date();
@@ -178,6 +178,19 @@ export default function ClientDetailPage() {
 
         {/* Placeholder for Current Audit */}
           <CurrentAuditCard clientId={clientId} />
+
+        <ComponentCard title="Upcoming Schedule">
+          <div className="grid grid-cols-1 gap-2">
+            <div>
+              <span className="font-medium">Next Contact Date:</span>{" "}
+              {nextContactDate ? nextContactDate.toLocaleDateString() : "-"}
+            </div>
+            <div>
+              <span className="font-medium">Next Report Due Date:</span>{" "}
+              {nextReportDueDate ? nextReportDueDate.toLocaleDateString() : "-"}
+            </div>
+          </div>
+        </ComponentCard>
 
         {/* Placeholder for Client History */}
         <ComponentCard title="Client History">
