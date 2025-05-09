@@ -182,7 +182,25 @@ export default function ClientDetailPage() {
                   <button onClick={toggleActionsDropdown} className="dropdown-toggle">
                     <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </button>
-                  <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-40 p-2">
+                  <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-56 p-2">
+                    <div className="mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={e => setStartDate(e.target.value)}
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={e => setEndDate(e.target.value)}
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
+                      />
+                    </div>
                     <DropdownItem onItemClick={handleAdjustFilter}>
                       Adjust Filter
                     </DropdownItem>
@@ -211,27 +229,6 @@ export default function ClientDetailPage() {
                    </button>
                 ))}
               </nav>
-            </div>
-            {/* Date Filters */}
-            <div className="flex space-x-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={e => setStartDate(e.target.value)}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={e => setEndDate(e.target.value)}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
-                />
-              </div>
             </div>
             {/* Paginated Activity Log */}
             <ActivityLogTimeline entries={pagedLogs} />
