@@ -24,6 +24,7 @@ import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 import AddActivityModal from '@/components/clients/AddActivityModal';
 import { api } from '@/utils/api';
+import DatePicker from "@/components/form/date-picker";
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
@@ -185,20 +186,22 @@ export default function ClientDetailPage() {
                   <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-56 p-2">
                     <div className="mb-2">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                      <input
-                        type="date"
-                        value={startDate}
-                        onChange={e => setStartDate(e.target.value)}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
+                      <DatePicker
+                        id="startDatePicker"
+                        label="Start Date"
+                        placeholder="Start Date"
+                        defaultDate={startDate || undefined}
+                        onChange={dates => setStartDate((dates as Date[])[0].toISOString().split('T')[0])}
                       />
                     </div>
                     <div className="mb-2">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
-                      <input
-                        type="date"
-                        value={endDate}
-                        onChange={e => setEndDate(e.target.value)}
-                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
+                      <DatePicker
+                        id="endDatePicker"
+                        label="End Date"
+                        placeholder="End Date"
+                        defaultDate={endDate || undefined}
+                        onChange={dates => setEndDate((dates as Date[])[0].toISOString().split('T')[0])}
                       />
                     </div>
                     <DropdownItem onItemClick={handleAdjustFilter}>
