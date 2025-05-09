@@ -23,7 +23,7 @@ import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 
 export default function ClientDetailPage() {
-  const params = useParams<{ clientId: string }>() || {};
+  const params = (useParams() as { clientId: string }) || {};
   const clientId = params.clientId;
   const { isOpen, openModal, closeModal } = useModal();
 
