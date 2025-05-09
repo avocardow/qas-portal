@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -60,7 +60,7 @@ export default function ClientDetailPage() {
   });
 
   // Fetch client data using custom hook
-  const { data: clientData, isLoading, isError, error } = useClientData(clientId);
+  const { data: clientData, isLoading, isError, error } = useClientData(clientId, { staleTime: 5 * 60 * 1000 });
   const activityLogs = clientData?.activityLogs ?? [];
 
   // Calculate next contact and report due dates
@@ -88,18 +88,18 @@ export default function ClientDetailPage() {
   const [logPage, setLogPage] = useState(1);
   const [isActionsDropdownOpen, setIsActionsDropdownOpen] = useState(false);
 
-  function toggleActionsDropdown() {
+  const toggleActionsDropdown = useCallback(() => {
     setIsActionsDropdownOpen(prev => !prev);
-  }
+  }, []);
 
-  function closeActionsDropdown() {
+  const closeActionsDropdown = useCallback(() => {
     setIsActionsDropdownOpen(false);
-  }
+  }, []);
 
-  function handleNewActivityItem() {
+  const handleNewActivityItem = useCallback(() => {
     closeActionsDropdown();
     openAddActivityModal();
-  }
+  }, [closeActionsDropdown, openAddActivityModal]);
 
   // Default date range for filters: oldest log to today
   useEffect(() => {
@@ -124,16 +124,19 @@ export default function ClientDetailPage() {
     { label: 'Documents', type: 'document' },
     { label: 'Tasks', type: 'task' },
   ];
-  const filteredLogs = (() => {
+  const filteredLogs = useMemo(() => {
     let logs = activityLogs;
     if (filterType !== 'all') logs = logs.filter((entry) => entry.type === filterType);
     if (startDate) logs = logs.filter((entry) => new Date(entry.createdAt) >= new Date(startDate));
     if (endDate) logs = logs.filter((entry) => new Date(entry.createdAt) <= new Date(endDate));
     return logs;
-  })();
+  }, [activityLogs, filterType, startDate, endDate]);
   const logsPerPage = 5;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
-  const pagedLogs = filteredLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
+  const pagedLogs = useMemo(
+    () => filteredLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage),
+    [filteredLogs, logPage, logsPerPage]
+  );
   
   // Handle loading state
   if (isLoading) {
