@@ -10,6 +10,6 @@ export default defineConfig({
     env: {
       SKIP_ENV_VALIDATION: "1",
     },
-    setupFiles: ["src/setupTests.ts"],
+    setupFiles: ["vitest.setup.ts"],
   },
 });
