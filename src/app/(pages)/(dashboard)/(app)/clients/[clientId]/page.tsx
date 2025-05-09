@@ -195,14 +195,6 @@ export default function ClientDetailPage() {
           </div>
         </ComponentCard>
 
-        {/* Placeholder for Client History */}
-        <ComponentCard title="Client History">
-          <div className="animate-pulse space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </ComponentCard>
-
           {/* Activity Log Section styled as Activities card */}
           <ComponentCard
             title="Activities"
