@@ -181,13 +181,7 @@ export default function ClientDetailPage() {
         {/* Client Overview */}
         <ComponentCard title="Client Overview">
           <ClientProfile clientId={clientId} />
-        </ComponentCard>
-
-        {/* Placeholder for Current Audit */}
-          <CurrentAuditCard clientId={clientId} />
-
-        <ComponentCard title="Upcoming Schedule">
-          <div className="grid grid-cols-1 gap-2">
+          <div className="mt-4 grid grid-cols-1 gap-2">
             <div>
               <span className="font-medium">Next Contact Date:</span>{" "}
               {nextContactDate ? nextContactDate.toLocaleDateString() : "-"}
@@ -199,96 +193,100 @@ export default function ClientDetailPage() {
           </div>
         </ComponentCard>
 
-          {/* Activity Log Section styled as Activities card */}
-          <ComponentCard
-            title="Activities"
-            actions={
-              <div className="flex items-center">
-                <div className="relative">
-                  <button onClick={toggleActionsDropdown} className="dropdown-toggle">
-                    <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                  </button>
-                  <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-56 p-2">
-                    <div className="mb-2">
-                      <DatePicker
-                        id="startDatePicker"
-                        label="Start Date"
-                        placeholder="Start Date"
-                        defaultDate={startDate || undefined}
-                        onChange={dates => setStartDate((dates as Date[])[0].toISOString().split('T')[0])}
-                      />
-                    </div>
-                    <div className="mb-2">
-                      <DatePicker
-                        id="endDatePicker"
-                        label="End Date"
-                        placeholder="End Date"
-                        defaultDate={endDate || undefined}
-                        onChange={dates => setEndDate((dates as Date[])[0].toISOString().split('T')[0])}
-                      />
-                    </div>
-                    <DropdownItem onItemClick={handleNewActivityItem} className="font-medium text-theme">
-                      Add New Activity Item
-                    </DropdownItem>
-                  </Dropdown>
-                </div>
+        {/* Activity Log Section styled as Activities card */}
+        <ComponentCard
+          title="Activities"
+          className="lg:row-span-2"
+          actions={
+            <div className="flex items-center">
+              <div className="relative">
+                <button onClick={toggleActionsDropdown} className="dropdown-toggle">
+                  <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                </button>
+                <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-56 p-2">
+                  <div className="mb-2">
+                    <DatePicker
+                      id="startDatePicker"
+                      label="Start Date"
+                      placeholder="Start Date"
+                      defaultDate={startDate || undefined}
+                      onChange={dates => setStartDate((dates as Date[])[0].toISOString().split('T')[0])}
+                    />
+                  </div>
+                  <div className="mb-2">
+                    <DatePicker
+                      id="endDatePicker"
+                      label="End Date"
+                      placeholder="End Date"
+                      defaultDate={endDate || undefined}
+                      onChange={dates => setEndDate((dates as Date[])[0].toISOString().split('T')[0])}
+                    />
+                  </div>
+                  <DropdownItem onItemClick={handleNewActivityItem} className="font-medium text-theme">
+                    Add New Activity Item
+                  </DropdownItem>
+                </Dropdown>
               </div>
-            }
-          >
-            {/* Filter Tabs */}
-            <div className="mb-4 overflow-x-auto">
-              <nav className="inline-flex whitespace-nowrap rounded-lg bg-gray-100 p-1 dark:bg-gray-900 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
-                {tabs.map((tab) => (
-                   <button
-                     key={tab.type}
-                     onClick={() => { setFilterType(tab.type); setLogPage(1); }}
-                     className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ease-in-out ${
-                       filterType === tab.type
-                         ? "shadow-theme-xs bg-white text-gray-900 dark:bg-white/[0.03] dark:text-white"
-                         : "bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                     }`}
-                   >
-                     {tab.label}
-                   </button>
-                ))}
-              </nav>
             </div>
-            {/* Paginated Activity Log */}
-            <ActivityLogTimeline entries={pagedLogs} />
-            {totalLogPages > 1 && (
-              <div className="mt-4 overflow-x-auto">
-                <PaginationWithIcon
-                  totalPages={totalLogPages}
-                  initialPage={1}
-                  onPageChange={setLogPage}
-                />
-              </div>
-            )}
+          }
+        >
+          {/* Filter Tabs */}
+          <div className="mb-4 overflow-x-auto">
+            <nav className="inline-flex whitespace-nowrap rounded-lg bg-gray-100 p-1 dark:bg-gray-900 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
+              {tabs.map((tab) => (
+                 <button
+                   key={tab.type}
+                   onClick={() => { setFilterType(tab.type); setLogPage(1); }}
+                   className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ease-in-out ${
+                     filterType === tab.type
+                       ? "shadow-theme-xs bg-white text-gray-900 dark:bg-white/[0.03] dark:text-white"
+                       : "bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                   }`}
+                 >
+                   {tab.label}
+                 </button>
+              ))}
+            </nav>
+          </div>
+          {/* Paginated Activity Log */}
+          <ActivityLogTimeline entries={pagedLogs} />
+          {totalLogPages > 1 && (
+            <div className="mt-4 overflow-x-auto">
+              <PaginationWithIcon
+                totalPages={totalLogPages}
+                initialPage={1}
+                onPageChange={setLogPage}
+              />
+            </div>
+          )}
         </ComponentCard>
 
-        {/* Placeholder for Contacts */}
-          <div className="lg:col-span-2">
-        <ClientContactsSection contacts={clientData!.contacts} />
-          </div>
+        {/* Current Audit moved below Activities */}
+        <CurrentAuditCard clientId={clientId} />
 
-          {/* Trust Accounts Section */}
-          <div className="lg:col-span-2">
-            <ClientTrustAccountsSection trustAccounts={clientData!.trustAccounts} />
-          </div>
+        {/* Placeholder for Contacts */}
+        <div className="lg:col-span-2">
+          <ClientContactsSection contacts={clientData!.contacts} />
         </div>
-        {/* Archive client button */}
-        <div className="flex justify-end mb-4">
-          <ArchiveClientButton onClick={openModal} />
+
+        {/* Trust Accounts Section */}
+        <div className="lg:col-span-2">
+          <ClientTrustAccountsSection trustAccounts={clientData!.trustAccounts} />
         </div>
       </div>
-      <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
-      <AddActivityModal
-        isOpen={isAddActivityOpen}
-        onClose={closeAddActivityModal}
-        onSubmit={(data) => {
-          addActivityMutation.mutate({ clientId, type: data.type as ActivityLogType, content: data.description });
-        }}
-      />
-    </Authorized>
-  );
+      {/* Archive client button */}
+      <div className="flex justify-end mb-4">
+        <ArchiveClientButton onClick={openModal} />
+      </div>
+    </div>
+    <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
+    <AddActivityModal
+      isOpen={isAddActivityOpen}
+      onClose={closeAddActivityModal}
+      onSubmit={(data) => {
+        addActivityMutation.mutate({ clientId, type: data.type as ActivityLogType, content: data.description });
+      }}
+    />
+  </Authorized>
+);
 }
