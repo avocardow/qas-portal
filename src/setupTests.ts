@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
+import '../vitest.setup';
 
 // Polyfill requestAnimationFrame for fake timers
 Object.defineProperty(globalThis, 'requestAnimationFrame', {

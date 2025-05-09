@@ -54,4 +54,9 @@ export const trustAccountRouter = createTRPCRouter({
       );
       return ctx.db.$transaction(updates);
     }),
+  delete: adminOrManagerProcedure
+    .input(z.object({ trustAccountId: z.string().uuid() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.trustAccount.delete({ where: { id: input.trustAccountId } });
+    }),
 });

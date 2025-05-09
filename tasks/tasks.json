@@ -520,7 +520,7 @@
             1
           ],
           "details": "1. Create a modal component using TailAdmin form components\n2. Implement form fields for Account Name, Account Number, BSB, and Software\n3. Add client-side validation for all fields\n4. Connect the form to the trustAccounts.create mutation\n5. Handle success and error states\n6. Implement form reset functionality\n7. Add loading state during submission\n8. Test the form submission with valid and invalid data\n9. Refresh the table after successful creation",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 8
         },
         {
@@ -532,7 +532,7 @@
             3
           ],
           "details": "1. Create an edit modal component reusing TailAdmin form components\n2. Pre-populate form fields with existing trust account data\n3. Implement form validation for all fields\n4. Connect the form to the trustAccounts.update mutation\n5. Handle success and error states\n6. Add loading state during submission\n7. Test the form submission with valid and invalid data\n8. Refresh the table after successful update\n9. Ensure proper state management between add and edit modes",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 8
         },
         {
@@ -543,7 +543,7 @@
             2
           ],
           "details": "1. Create a confirmation dialog component\n2. Display account details in the confirmation to prevent accidental deletion\n3. Connect to the trustAccounts.delete mutation\n4. Handle success and error states\n5. Add loading state during deletion process\n6. Implement proper error handling for failed deletions\n7. Refresh the table after successful deletion\n8. Test the deletion flow with various scenarios\n9. Add audit logging for deletion operations",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 8
         },
         {
@@ -556,7 +556,7 @@
             5
           ],
           "details": "1. Implement a consistent notification system for success and error messages\n2. Add automatic table refresh after successful CRUD operations\n3. Implement optimistic updates for better UX\n4. Add retry mechanisms for failed operations\n5. Create comprehensive error handling for all API calls\n6. Implement proper loading states during operations\n7. Add data validation before submission\n8. Test all error scenarios and edge cases\n9. Ensure proper state synchronization between operations",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 8
         }
       ]

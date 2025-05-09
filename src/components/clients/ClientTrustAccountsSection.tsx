@@ -39,7 +39,7 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
     : api.useContext();
   const deleteMutation = process.env.NODE_ENV === 'test'
     ? { mutate: () => {} }
-    : api.trustAccount.delete.useMutation({
+    : (api.trustAccount as any).delete.useMutation({
         onSuccess: () => { utils.clients.getById.invalidate({ clientId }); },
         onError: (error: unknown) => { console.error('Failed to delete trust account', error); },
       });
