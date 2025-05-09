@@ -19,7 +19,6 @@ import { useModal } from '@/hooks/useModal';
 import ActivityLogTimeline from '@/components/clients/ActivityLogTimeline';
 import { MoreDotIcon } from '@/icons';
 import PaginationWithIcon from '@/components/ui/pagination/PaginationWitIcon';
-import DatePicker from '@/components/form/date-picker';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 
@@ -151,30 +150,7 @@ export default function ClientDetailPage() {
           <ComponentCard
             title="Activities"
             actions={
-              <div className="flex items-center space-x-2">
-                <div className="w-28">
-                  <DatePicker
-                    id="startDatePicker"
-                    defaultDate={startDate}
-                    placeholder=""
-                    onChange={(dates) => {
-                      if (dates.length) setStartDate((dates[0] as Date).toISOString().split('T')[0]);
-                      setLogPage(1);
-                    }}
-                  />
-                </div>
-                <span className="text-gray-500">-</span>
-                <div className="w-28">
-                  <DatePicker
-                    id="endDatePicker"
-                    defaultDate={endDate}
-                    placeholder=""
-                    onChange={(dates) => {
-                      if (dates.length) setEndDate((dates[0] as Date).toISOString().split('T')[0]);
-                      setLogPage(1);
-                    }}
-                  />
-                </div>
+              <div className="flex items-center">
                 <div className="relative">
                   <button onClick={toggleActionsDropdown} className="dropdown-toggle">
                     <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
