@@ -32,6 +32,8 @@ export default function ClientDetailPage() {
   // Activity log filtering and pagination setup
   const activityLogs = clientData?.activityLogs ?? [];
   const [filterType, setFilterType] = useState('all');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
   const tabs = [
     { label: 'All', type: 'all' },
     { label: 'Notes', type: 'note' },
@@ -41,9 +43,13 @@ export default function ClientDetailPage() {
     { label: 'Documents', type: 'document' },
     { label: 'Tasks', type: 'task' },
   ];
-  const filteredLogs = filterType === 'all'
-    ? activityLogs
-    : activityLogs.filter((entry) => entry.type === filterType);
+  const filteredLogs = (() => {
+    let logs = activityLogs;
+    if (filterType !== 'all') logs = logs.filter((entry) => entry.type === filterType);
+    if (startDate) logs = logs.filter((entry) => new Date(entry.createdAt) >= new Date(startDate));
+    if (endDate) logs = logs.filter((entry) => new Date(entry.createdAt) <= new Date(endDate));
+    return logs;
+  })();
   const [logPage, setLogPage] = useState(1);
   const logsPerPage = 5;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
@@ -129,6 +135,35 @@ export default function ClientDetailPage() {
                    </button>
                 ))}
               </nav>
+            </div>
+            {/* Advanced Filters: Date Range */}
+            <div className="mb-4 flex space-x-4 items-end">
+              <div>
+                <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">From</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  value={startDate}
+                  onChange={(e) => { setStartDate(e.target.value); setLogPage(1); }}
+                  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">To</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  value={endDate}
+                  onChange={(e) => { setEndDate(e.target.value); setLogPage(1); }}
+                  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                />
+              </div>
+              <button
+                onClick={() => { setFilterType('all'); setStartDate(''); setEndDate(''); setLogPage(1); }}
+                className="mt-6 inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
+                Reset Filters
+              </button>
             </div>
             {/* Paginated Activity Log */}
             <ActivityLogTimeline entries={pagedLogs} />
