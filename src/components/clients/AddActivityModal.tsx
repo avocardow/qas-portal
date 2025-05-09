@@ -38,11 +38,19 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit }: AddActiv
                 className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
               >
                 <option value="note">Note</option>
-                <option value="email">Email</option>
-                <option value="call">Call</option>
-                <option value="statusUpdate">Update</option>
-                <option value="document">Document</option>
-                <option value="task">Task</option>
+                <option value="email_sent">Email Sent</option>
+                <option value="email_received">Email Received</option>
+                <option value="call_in">Call In</option>
+                <option value="call_out">Call Out</option>
+                <option value="status_change">Status Change</option>
+                <option value="stage_change">Stage Change</option>
+                <option value="document_request">Document Request</option>
+                <option value="document_received">Document Received</option>
+                <option value="document_signed">Document Signed</option>
+                <option value="task_created">Task Created</option>
+                <option value="task_completed">Task Completed</option>
+                <option value="meeting_summary">Meeting Summary</option>
+                <option value="billing_commentary">Billing Commentary</option>
               </select>
             </div>
             <div>

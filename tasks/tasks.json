@@ -685,7 +685,7 @@
       "id": 11,
       "title": "Implement Activity Log Timeline",
       "description": "Create the Client Activity Log with infinite scroll, filtering, and form for new entries.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2
       ],
@@ -734,7 +734,7 @@
             2
           ],
           "details": "1. Create tab components for filtering by activity type (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)\n2. Implement state management for selected filters using React context or a state management library\n3. Add debounced filter application to prevent excessive API calls\n4. Create additional filter options for date ranges and other metadata\n5. Ensure filters are reflected in the URL for shareable filtered views\n6. Implement filter reset functionality\n7. Add visual indicators for active filters\n8. Test filter combinations for correctness and performance",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 11
         },
         {
@@ -745,7 +745,7 @@
             2
           ],
           "details": "1. Implement a form using Formik or React Hook Form for robust validation\n2. Create dynamic form fields that change based on selected activity type\n3. Add client-side validation with helpful error messages\n4. Implement auto-save functionality for drafts\n5. Add rich text editing for description fields where appropriate\n6. Include file upload capabilities for document-type activities\n7. Ensure the form is fully accessible with keyboard navigation and screen reader support\n8. Test form submission with various input combinations and edge cases\n\n<info added on 2025-05-09T02:00:37.813Z>\nHere's additional implementation information for the activity log form:\n\n```typescript\n// Suggested schema structure in src/utils/validation/activityLogSchema.ts\nexport const activityLogSchema = z.object({\n  type: z.enum(['call', 'email', 'meeting', 'note', 'document']),\n  title: z.string().min(3, \"Title must be at least 3 characters\"),\n  description: z.string().optional(),\n  contactId: z.string().uuid(),\n  timestamp: z.date(),\n  // Dynamic fields based on type\n  callDuration: z.number().optional(),\n  meetingAttendees: z.array(z.string()).optional(),\n  documentUrl: z.string().url().optional(),\n});\n\n// Form component structure with conditional fields\nconst ActivityLogForm = ({ contactId, onSuccess }) => {\n  const { register, handleSubmit, watch, formState: { errors } } = useForm({\n    resolver: zodResolver(activityLogSchema),\n    defaultValues: { contactId, timestamp: new Date() }\n  });\n  \n  const selectedType = watch(\"type\");\n  const utils = api.useContext();\n  const addActivity = api.activityLogs.create.useMutation({\n    onSuccess: () => {\n      utils.activityLogs.getAll.invalidate();\n      toast.success(\"Activity added successfully\");\n      onSuccess?.();\n    },\n    onError: (error) => toast.error(`Error: ${error.message}`)\n  });\n\n  // Implement auto-save with useEffect and localStorage\n  useEffect(() => {\n    const subscription = watch((value) => {\n      localStorage.setItem(`activityDraft_${contactId}`, JSON.stringify(value));\n    });\n    return () => subscription.unsubscribe();\n  }, [watch, contactId]);\n\n  // Load draft on initial render\n  useEffect(() => {\n    const draft = localStorage.getItem(`activityDraft_${contactId}`);\n    if (draft) {\n      // Logic to restore form state from draft\n    }\n  }, []);\n  \n  return (\n    <form onSubmit={handleSubmit(data => addActivity.mutate(data))}>\n      {/* Common fields */}\n      \n      {/* Conditional fields based on type */}\n      {selectedType === 'call' && (\n        <div className=\"mt-4\">\n          <label htmlFor=\"callDuration\">Duration (minutes)</label>\n          <input \n            type=\"number\" \n            id=\"callDuration\"\n            {...register(\"callDuration\")}\n          />\n          {errors.callDuration && <p className=\"text-red-500\">{errors.callDuration.message}</p>}\n        </div>\n      )}\n      \n      {/* Similar conditional blocks for other activity types */}\n      \n      {/* File upload for document type */}\n      {selectedType === 'document' && (\n        <FileUpload \n          onUploadComplete={(url) => setValue(\"documentUrl\", url)} \n        />\n      )}\n    </form>\n  );\n};\n```\n\nIntegration with the timeline component should include:\n- Modal trigger button with proper positioning in the timeline header\n- Optimistic UI updates after form submission\n- Keyboard shortcuts (Alt+N) for quick entry creation\n- Form state persistence between modal open/close events\n- Accessibility features including focus management and ARIA attributes\n</info added on 2025-05-09T02:00:37.813Z>",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 11
         },
         {
@@ -756,7 +756,7 @@
             5
           ],
           "details": "1. Implement GraphQL mutations for creating new activity logs of each type\n2. Add proper error handling for failed submissions\n3. Implement loading states during submission\n4. Add success notifications after successful submissions\n5. Create retry mechanisms for failed submissions\n6. Implement validation on both client and server sides\n7. Add security measures to prevent unauthorized submissions\n8. Test mutations with various activity types and edge cases",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 11
         },
         {
@@ -768,7 +768,7 @@
             6
           ],
           "details": "1. Implement client-side state updates that immediately show new entries in the timeline\n2. Create temporary IDs for new entries until server confirmation\n3. Add visual indicators for entries that are pending server confirmation\n4. Implement rollback functionality for failed submissions\n5. Ensure proper ordering of optimistically added entries in the timeline\n6. Handle conflicts between optimistic updates and subsequent data fetches\n7. Test various network conditions including slow connections and failures\n8. Measure and optimize performance impact of optimistic updates",
-          "status": "pending",
+          "status": "done",
           "parentTaskId": 11
         }
       ]
