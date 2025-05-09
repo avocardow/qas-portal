@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -62,6 +62,24 @@ export default function ClientDetailPage() {
   // Fetch client data using custom hook
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
   const activityLogs = clientData?.activityLogs ?? [];
+
+  // Calculate next contact and report due dates
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const nextContactDate = useMemo(() => {
+    return clientData?.nextContactDate ?? null;
+  }, [clientData?.nextContactDate]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const nextReportDueDate = useMemo(() => {
+    if (!clientData?.audits) return null;
+    const now = new Date();
+    const futureDates: Date[] = clientData.audits
+      .map((audit) => audit.reportDueDate)
+      .filter((d): d is Date => d instanceof Date)
+      .filter((d) => d.getTime() >= now.getTime());
+    if (futureDates.length === 0) return null;
+    futureDates.sort((a, b) => a.getTime() - b.getTime());
+    return futureDates[0];
+  }, [clientData?.audits]);
 
   // State for filters and pagination
   const [filterType, setFilterType] = useState('all');
