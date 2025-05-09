@@ -77,13 +77,6 @@ export default function PaginationWithIcon({
       </span>
     </li>
   );
-  const renderEllipsisTwo = () => (
-    <li key="ellipsisTwo">
-      <span className="flex size-10 items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-400">
-        ...
-      </span>
-    </li>
-  );
 
   return (
     <div className="flex items-center justify-between gap-8 px-6 py-4 sm:justify-normal">
