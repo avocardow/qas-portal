@@ -16,6 +16,7 @@ import { emailRouter } from "@/server/api/routers/email";
 import { sharepointRouter } from "@/server/api/routers/sharepoint";
 import { chatRouter } from "@/server/api/routers/chat";
 import { phoneRouter } from "@/server/api/routers/phone";
+import { activityLogRouter } from "@/server/api/routers/activityLog";
 
 /**
  * This is the primary router for your server.
@@ -36,6 +37,7 @@ export const appRouter = createTRPCRouter({
   sharepoint: sharepointRouter,
   phone: phoneRouter,
   chat: chatRouter,
+  activityLog: activityLogRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });
