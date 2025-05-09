@@ -6,7 +6,7 @@ export interface ActivityLogEntry {
   id: string;
   type: string;
   content: string;
-  createdAt: string;
+  createdAt: string | Date;
   userId: string;
 }
 
