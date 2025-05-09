@@ -8,6 +8,8 @@ import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
+import { useToast } from "@/context/ToastContext";
+import { getErrorMessage } from "@/utils/error";
 
 // Define form schema
 const formSchema = z.object({
@@ -33,6 +35,7 @@ export default function NewClientPage() {
     formState: { errors, isSubmitting },
   } = useZodForm(formSchema, { defaultValues: { status: "prospect" } });
   const createClientMutation = api.clients.create.useMutation();
+  const toast = useToast();
   const onSubmit = (data: FormData) => {
     const input = {
       ...data,
@@ -41,8 +44,14 @@ export default function NewClientPage() {
         : undefined,
     };
     createClientMutation.mutate(input, {
-      onSuccess: (created) => router.push(`/clients/${created.id}`),
-      onError: (err) => console.error(err),
+      onSuccess: (created) => {
+        toast({ variant: "success", title: "Client created successfully" });
+        router.push(`/clients/${created.id}`);
+      },
+      onError: (err) => {
+        const message = getErrorMessage(err);
+        toast({ variant: "error", title: "Failed to create client", description: message });
+      },
     });
   };
   return (
