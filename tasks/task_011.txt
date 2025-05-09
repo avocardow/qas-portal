@@ -170,22 +170,18 @@ Integration with the timeline component should include:
 - Accessibility features including focus management and ARIA attributes
 </info added on 2025-05-09T02:00:37.813Z>
 
-## 6. Connect Activity Log Form to Mutation APIs [pending]
+## 6. Connect Activity Log Form to Mutation APIs [in-progress]
 ### Dependencies: 11.5
-### Description: Integrate the new activity form with backend mutation APIs to create and update activity log entries and wire UI trigger for opening the form.
+### Description: Integrate the new activity form with backend mutation APIs to create and update activity log entries.
 ### Details:
-1. **UI Trigger**: Replace the three-dot MoreDotIcon in the Activities card header with the TailAdmin `PlusIcon` from `@/icons`.
-   - Clicking the `PlusIcon` directly opens the `ActivityLogForm` modal, eliminating the dropdown menu step.
-2. Ensure modal uses `HeadlessUI Dialog` or the existing TailAdmin modal wrapper with proper open/close handlers.
-3. Implement GraphQL mutations for creating new activity logs of each type using TRPC or appropriate APIs.
-4. Add proper error handling for failed submissions within the mutation callbacks.
-5. Implement loading states during submission for user feedback.
-6. Invalidate or refetch activity logs query to refresh the timeline upon success.
-7. Add success notifications after successful submissions.
-8. Create retry mechanisms for failed submissions.
-9. Implement validation on both client and server sides.
-10. Add security measures to prevent unauthorized submissions.
-11. Test the modal trigger, form submission, and timeline refresh with various activity types and edge cases.
+1. Implement GraphQL mutations for creating new activity logs of each type
+2. Add proper error handling for failed submissions
+3. Implement loading states during submission
+4. Add success notifications after successful submissions
+5. Create retry mechanisms for failed submissions
+6. Implement validation on both client and server sides
+7. Add security measures to prevent unauthorized submissions
+8. Test mutations with various activity types and edge cases
 
 ## 7. Implement Optimistic Updates for Improved UX [pending]
 ### Dependencies: 11.3, 11.6

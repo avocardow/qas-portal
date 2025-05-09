@@ -131,7 +131,7 @@ export default function ClientDetailPage() {
             title="Activities"
             actions={
               <div className="flex items-center space-x-2">
-                <div className="w-24">
+                <div className="w-28">
                   <DatePicker
                     id="startDatePicker"
                     defaultDate={startDate}
@@ -142,7 +142,8 @@ export default function ClientDetailPage() {
                     }}
                   />
                 </div>
-                <div className="w-24">
+                <span className="text-gray-500">-</span>
+                <div className="w-28">
                   <DatePicker
                     id="endDatePicker"
                     defaultDate={endDate}
