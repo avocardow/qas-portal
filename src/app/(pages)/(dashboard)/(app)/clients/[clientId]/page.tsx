@@ -35,7 +35,7 @@ export default function ClientDetailPage() {
   const logsPerPage = 5;
   const totalLogPages = Math.ceil(activityLogs.length / logsPerPage);
   const pagedLogs = activityLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
-
+  
   // Handle loading state
   if (isLoading) {
     return (
@@ -65,32 +65,32 @@ export default function ClientDetailPage() {
         <p>You do not have permission to view this page.</p>
       </DashboardPlaceholderPageTemplate>
     }>
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
         {/* Archive client button */}
         <div className="flex justify-end mb-4">
           <ArchiveClientButton onClick={openModal} />
         </div>
-        <PageBreadcrumb
-          pageTitle={title}
-          items={[{ label: "Clients", href: "/clients" }]}
-        />
+      <PageBreadcrumb
+        pageTitle={title}
+        items={[{ label: "Clients", href: "/clients" }]}
+      />
 
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Client Overview */}
-          <ComponentCard title="Client Overview">
-            <ClientProfile clientId={clientId} />
-          </ComponentCard>
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Client Overview */}
+        <ComponentCard title="Client Overview">
+          <ClientProfile clientId={clientId} />
+        </ComponentCard>
 
-          {/* Placeholder for Current Audit */}
+        {/* Placeholder for Current Audit */}
           <CurrentAuditCard clientId={clientId} />
 
-          {/* Placeholder for Client History */}
-          <ComponentCard title="Client History">
-            <div className="animate-pulse space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </ComponentCard>
+        {/* Placeholder for Client History */}
+        <ComponentCard title="Client History">
+          <div className="animate-pulse space-y-2">
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </ComponentCard>
 
           {/* Activity Log Section styled as Activities card */}
           <ComponentCard
@@ -108,11 +108,11 @@ export default function ClientDetailPage() {
                 onPageChange={setLogPage}
               />
             )}
-          </ComponentCard>
+        </ComponentCard>
 
-          {/* Placeholder for Contacts */}
+        {/* Placeholder for Contacts */}
           <div className="lg:col-span-2">
-            <ClientContactsSection contacts={clientData!.contacts} />
+        <ClientContactsSection contacts={clientData!.contacts} />
           </div>
 
           {/* Trust Accounts Section */}

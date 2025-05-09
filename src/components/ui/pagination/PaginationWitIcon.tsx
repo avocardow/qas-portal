@@ -21,30 +21,33 @@ export default function PaginationWithIcon({
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    const maxVisiblePages = 7;
-
-    if (totalPages <= maxVisiblePages) {
+    // If few pages, show all
+    if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(renderPageButton(i));
       }
     } else {
-      pageNumbers.push(renderPageButton(1));
-      if (currentPage > 3) pageNumbers.push(renderEllipsis());
-
-      let start = Math.max(2, currentPage - 1);
-      let end = Math.min(totalPages - 1, currentPage + 1);
-
-      if (currentPage <= 3) end = 5;
-      if (currentPage >= totalPages - 2) start = totalPages - 4;
-
-      for (let i = start; i <= end; i++) {
-        pageNumbers.push(renderPageButton(i));
+      if (currentPage === 1) {
+        // First page: [1] 2 3 ... N
+        [1, 2, 3].forEach((i) => pageNumbers.push(renderPageButton(i)));
+        pageNumbers.push(renderEllipsis());
+        pageNumbers.push(renderPageButton(totalPages));
+      } else if (currentPage === totalPages) {
+        // Last page: 1 ... N-2 N-1 [N]
+        pageNumbers.push(renderPageButton(1));
+        pageNumbers.push(renderEllipsis());
+        [totalPages - 2, totalPages - 1, totalPages].forEach((i) =>
+          pageNumbers.push(renderPageButton(i))
+        );
+      } else {
+        // Middle pages: 1 ... [current] ... N
+        pageNumbers.push(renderPageButton(1));
+        pageNumbers.push(renderEllipsis());
+        pageNumbers.push(renderPageButton(currentPage));
+        pageNumbers.push(renderEllipsis());
+        pageNumbers.push(renderPageButton(totalPages));
       }
-
-      if (currentPage < totalPages - 2) pageNumbers.push(renderEllipsisTwo());
-      pageNumbers.push(renderPageButton(totalPages));
     }
-
     return pageNumbers;
   };
 

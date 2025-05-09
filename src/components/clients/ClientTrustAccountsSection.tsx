@@ -83,14 +83,14 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
             <EditTrustAccountButton onClick={(e) => { e.stopPropagation(); setSelectedAccount(row); setEditModalOpen(true); }} />
           </Authorized>
           {row.softwareUrl && (
-            <a
-              href={row.softwareUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              Open in {row.managementSoftware}
-            </a>
+          <a
+            href={row.softwareUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
+          >
+            Open in {row.managementSoftware}
+          </a>
           )}
           <Authorized action={CLIENT_PERMISSIONS.EDIT}>
             <button
@@ -158,6 +158,7 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
           data={accounts}
           columns={columns}
           caption="Trust Accounts Table"
+          showControls={false}
         />
       </ComponentCard>
       <AddTrustAccountModal

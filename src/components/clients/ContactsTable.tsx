@@ -45,6 +45,7 @@ export default function ContactsTable({ data, onRowClick, onDelete }: ContactsTa
       columns={columns}
       onRowClick={(row) => onRowClick?.(row)}
       caption="Contacts"
+      showControls={false}
     />
   );
 } 
