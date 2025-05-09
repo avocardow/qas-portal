@@ -78,11 +78,6 @@ export default function ClientDetailPage() {
     setIsActionsDropdownOpen(false);
   }
 
-  function handleAdjustFilter() {
-    closeActionsDropdown();
-    // TODO: implement adjust filter logic
-  }
-
   function handleNewActivityItem() {
     closeActionsDropdown();
     openAddActivityModal();
@@ -185,7 +180,6 @@ export default function ClientDetailPage() {
                   </button>
                   <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-56 p-2">
                     <div className="mb-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
                       <DatePicker
                         id="startDatePicker"
                         label="Start Date"
@@ -195,7 +189,6 @@ export default function ClientDetailPage() {
                       />
                     </div>
                     <div className="mb-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
                       <DatePicker
                         id="endDatePicker"
                         label="End Date"
@@ -204,11 +197,8 @@ export default function ClientDetailPage() {
                         onChange={dates => setEndDate((dates as Date[])[0].toISOString().split('T')[0])}
                       />
                     </div>
-                    <DropdownItem onItemClick={handleAdjustFilter}>
-                      Adjust Filter
-                    </DropdownItem>
-                    <DropdownItem onItemClick={handleNewActivityItem}>
-                      New Activity Item
+                    <DropdownItem onItemClick={handleNewActivityItem} className="font-medium text-theme">
+                      Add New Activity Item
                     </DropdownItem>
                   </Dropdown>
                 </div>
