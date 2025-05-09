@@ -520,7 +520,7 @@
             1
           ],
           "details": "1. Create a modal component using TailAdmin form components\n2. Implement form fields for Account Name, Account Number, BSB, and Software\n3. Add client-side validation for all fields\n4. Connect the form to the trustAccounts.create mutation\n5. Handle success and error states\n6. Implement form reset functionality\n7. Add loading state during submission\n8. Test the form submission with valid and invalid data\n9. Refresh the table after successful creation",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 8
         },
         {
