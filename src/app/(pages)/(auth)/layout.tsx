@@ -15,7 +15,7 @@ export default function AuthLayout({
       <ThemeProvider>
         <div className="relative flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
           {children}
-          <div className="bg-brand-950 hidden size-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
+          <div className="bg-brand-50 hidden size-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
             <div className="relative z-1 flex items-center justify-center">
               {/* <!-- ===== Common Grid Shape Start ===== --> */}
               <GridShape />
@@ -29,13 +29,10 @@ export default function AuthLayout({
                   />
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                  Free and Open-Source Tailwind CSS Admin Dashboard Template
-                </p>
+                QLD Audit Specialists Portal
+               </p>
               </div>
             </div>
-          </div>
-          <div className="fixed right-6 bottom-6 z-50 hidden sm:block">
-            <ThemeTogglerTwo />
           </div>
         </div>
       </ThemeProvider>
