@@ -1,6 +1,6 @@
 # Task ID: 10
 # Title: Create Upcoming Schedule Section
-# Status: pending
+# Status: in-progress
 # Dependencies: 2, 6
 # Priority: low
 # Description: Implement the Upcoming Schedule section showing next contact date and report due date.
@@ -16,7 +16,7 @@
 Verify dates display correctly and format properly. Test handling of missing or null date values.
 
 # Subtasks:
-## 1. Implement Data Retrieval and Processing for Schedule Dates [pending]
+## 1. Implement Data Retrieval and Processing for Schedule Dates [done]
 ### Dependencies: None
 ### Description: Create the backend functionality to extract, process, and format the Next Contact Date and Report Due Date from client records and audit data sources.
 ### Details:
@@ -42,7 +42,7 @@ Verify dates display correctly and format properly. Test handling of missing or 
    - Create integration tests for the API endpoints
    - Test edge cases like missing dates, past dates, and future dates
 
-## 2. Build UI Component for Upcoming Schedule Display [pending]
+## 2. Build UI Component for Upcoming Schedule Display [in-progress]
 ### Dependencies: 10.1
 ### Description: Develop a responsive React component to display the schedule information in a clean, user-friendly format that highlights important dates and their status.
 ### Details:
