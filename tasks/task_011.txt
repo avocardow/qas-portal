@@ -55,7 +55,7 @@ Test infinite scroll and pagination. Verify filtering tabs work correctly. Test 
 7. Handle edge cases like empty results or end of data
 8. Test with various network conditions and large datasets
 
-## 4. Create Filtering System with Tabs and Advanced Filters [pending]
+## 4. Create Filtering System with Tabs and Advanced Filters [in-progress]
 ### Dependencies: 11.1, 11.2
 ### Description: Implement a filtering system with tabs for quick filtering by activity type and additional filters for more granular control.
 ### Details:
@@ -68,7 +68,7 @@ Test infinite scroll and pagination. Verify filtering tabs work correctly. Test 
 7. Add visual indicators for active filters
 8. Test filter combinations for correctness and performance
 
-## 5. Develop Form for Adding New Activity Entries [pending]
+## 5. Develop Form for Adding New Activity Entries [in-progress]
 ### Dependencies: 11.2
 ### Description: Create a user-friendly form with validation for adding new activity log entries of different types.
 ### Details:
@@ -80,6 +80,95 @@ Test infinite scroll and pagination. Verify filtering tabs work correctly. Test 
 6. Include file upload capabilities for document-type activities
 7. Ensure the form is fully accessible with keyboard navigation and screen reader support
 8. Test form submission with various input combinations and edge cases
+
+<info added on 2025-05-09T02:00:37.813Z>
+Here's additional implementation information for the activity log form:
+
+```typescript
+// Suggested schema structure in src/utils/validation/activityLogSchema.ts
+export const activityLogSchema = z.object({
+  type: z.enum(['call', 'email', 'meeting', 'note', 'document']),
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  description: z.string().optional(),
+  contactId: z.string().uuid(),
+  timestamp: z.date(),
+  // Dynamic fields based on type
+  callDuration: z.number().optional(),
+  meetingAttendees: z.array(z.string()).optional(),
+  documentUrl: z.string().url().optional(),
+});
+
+// Form component structure with conditional fields
+const ActivityLogForm = ({ contactId, onSuccess }) => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    resolver: zodResolver(activityLogSchema),
+    defaultValues: { contactId, timestamp: new Date() }
+  });
+  
+  const selectedType = watch("type");
+  const utils = api.useContext();
+  const addActivity = api.activityLogs.create.useMutation({
+    onSuccess: () => {
+      utils.activityLogs.getAll.invalidate();
+      toast.success("Activity added successfully");
+      onSuccess?.();
+    },
+    onError: (error) => toast.error(`Error: ${error.message}`)
+  });
+
+  // Implement auto-save with useEffect and localStorage
+  useEffect(() => {
+    const subscription = watch((value) => {
+      localStorage.setItem(`activityDraft_${contactId}`, JSON.stringify(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, contactId]);
+
+  // Load draft on initial render
+  useEffect(() => {
+    const draft = localStorage.getItem(`activityDraft_${contactId}`);
+    if (draft) {
+      // Logic to restore form state from draft
+    }
+  }, []);
+  
+  return (
+    <form onSubmit={handleSubmit(data => addActivity.mutate(data))}>
+      {/* Common fields */}
+      
+      {/* Conditional fields based on type */}
+      {selectedType === 'call' && (
+        <div className="mt-4">
+          <label htmlFor="callDuration">Duration (minutes)</label>
+          <input 
+            type="number" 
+            id="callDuration"
+            {...register("callDuration")}
+          />
+          {errors.callDuration && <p className="text-red-500">{errors.callDuration.message}</p>}
+        </div>
+      )}
+      
+      {/* Similar conditional blocks for other activity types */}
+      
+      {/* File upload for document type */}
+      {selectedType === 'document' && (
+        <FileUpload 
+          onUploadComplete={(url) => setValue("documentUrl", url)} 
+        />
+      )}
+    </form>
+  );
+};
+```
+
+Integration with the timeline component should include:
+- Modal trigger button with proper positioning in the timeline header
+- Optimistic UI updates after form submission
+- Keyboard shortcuts (Alt+N) for quick entry creation
+- Form state persistence between modal open/close events
+- Accessibility features including focus management and ARIA attributes
+</info added on 2025-05-09T02:00:37.813Z>
 
 ## 6. Connect Activity Log Form to Mutation APIs [pending]
 ### Dependencies: 11.5

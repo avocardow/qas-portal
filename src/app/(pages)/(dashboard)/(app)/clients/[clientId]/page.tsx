@@ -29,12 +29,25 @@ export default function ClientDetailPage() {
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
   const title = clientData?.clientName ?? ("Client " + clientId);
   
-  // Pagination setup for activity logs
+  // Activity log filtering and pagination setup
   const activityLogs = clientData?.activityLogs ?? [];
+  const [filterType, setFilterType] = useState('all');
+  const tabs = [
+    { label: 'All', type: 'all' },
+    { label: 'Notes', type: 'note' },
+    { label: 'Emails', type: 'email' },
+    { label: 'Calls', type: 'call' },
+    { label: 'Status Updates', type: 'statusUpdate' },
+    { label: 'Documents', type: 'document' },
+    { label: 'Tasks', type: 'task' },
+  ];
+  const filteredLogs = filterType === 'all'
+    ? activityLogs
+    : activityLogs.filter((entry) => entry.type === filterType);
   const [logPage, setLogPage] = useState(1);
   const logsPerPage = 5;
-  const totalLogPages = Math.ceil(activityLogs.length / logsPerPage);
-  const pagedLogs = activityLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
+  const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
+  const pagedLogs = filteredLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
   
   // Handle loading state
   if (isLoading) {
@@ -99,6 +112,22 @@ export default function ClientDetailPage() {
               <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 cursor-pointer" />
             }
           >
+            {/* Filter Tabs */}
+            <div className="mb-4 flex space-x-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.type}
+                  onClick={() => { setFilterType(tab.type); setLogPage(1); }}
+                  className={`px-3 py-1 text-sm font-medium focus:outline-none ${
+                    filterType === tab.type
+                      ? 'text-brand-500 border-b-2 border-brand-500'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
             {/* Paginated Activity Log */}
             <ActivityLogTimeline entries={pagedLogs} />
             {totalLogPages > 1 && (
