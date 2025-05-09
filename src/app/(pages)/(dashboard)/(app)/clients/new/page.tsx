@@ -146,10 +146,10 @@ export default function NewClientPage() {
           </div>
           <button
             type="submit"
-            disabled={isSubmitting || createClientMutation.isLoading}
+            disabled={isSubmitting || createClientMutation.status === 'loading'}
             className="btn flex items-center space-x-2"
           >
-            {isSubmitting || createClientMutation.isLoading ? (
+            {isSubmitting || createClientMutation.status === 'loading' ? (
               <SpinnerOne />
             ) : (
               "Create Client"
