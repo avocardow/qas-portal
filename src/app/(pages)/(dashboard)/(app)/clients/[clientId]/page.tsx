@@ -10,7 +10,7 @@ import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
 import ClientProfile from "@/components/clients/ClientProfile";
-import Authorized from '@/components/Authorized';
+import { useAbility } from '@/hooks/useAbility';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
 import ArchiveClientButton from '@/components/clients/ArchiveClientButton';
@@ -24,6 +24,7 @@ import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 
 export default function ClientDetailPage() {
   const { clientId } = useParams() as { clientId: string };
+  const { can } = useAbility();
   const { isOpen, openModal, closeModal } = useModal();
 
   // Fetch client data using custom hook
@@ -112,15 +113,16 @@ export default function ClientDetailPage() {
     );
   }
 
+  if (!can(CLIENT_PERMISSIONS.VIEW)) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Access Denied">
+        <p>You do not have permission to view this page.</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
   return (
-    <Authorized
-      action={CLIENT_PERMISSIONS.VIEW}
-      fallback={
-        <DashboardPlaceholderPageTemplate heading="Access Denied">
-          <p>You do not have permission to view this page.</p>
-        </DashboardPlaceholderPageTemplate>
-      }
-    >
+    <>
       <div className="px-4 sm:px-6 lg:px-8 py-8">
         <PageBreadcrumb
           pageTitle={title}
@@ -212,7 +214,7 @@ export default function ClientDetailPage() {
           </div>
         </div>
       </div>
-      {<ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />}
-    </Authorized>
+      <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
+    </>
   );
 }
