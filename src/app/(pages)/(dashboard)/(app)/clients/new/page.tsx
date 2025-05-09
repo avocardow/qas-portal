@@ -7,6 +7,7 @@ import { useZodForm } from "@/utils/validation";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
+import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 
 // Define form schema
 const formSchema = z.object({
@@ -143,8 +144,16 @@ export default function NewClientPage() {
               className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
             />
           </div>
-          <button type="submit" disabled={isSubmitting} className="btn">
-            {isSubmitting ? "Creating..." : "Create Client"}
+          <button
+            type="submit"
+            disabled={isSubmitting || createClientMutation.isLoading}
+            className="btn flex items-center space-x-2"
+          >
+            {isSubmitting || createClientMutation.isLoading ? (
+              <SpinnerOne />
+            ) : (
+              "Create Client"
+            )}
           </button>
         </form>
       </ComponentCard>
