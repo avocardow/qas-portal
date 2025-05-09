@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -19,6 +19,7 @@ import { useModal } from '@/hooks/useModal';
 import ActivityLogTimeline from '@/components/clients/ActivityLogTimeline';
 import { MoreDotIcon } from '@/icons';
 import PaginationWithIcon from '@/components/ui/pagination/PaginationWitIcon';
+import DatePicker from '@/components/form/date-picker';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -27,13 +28,28 @@ export default function ClientDetailPage() {
 
   // Fetch client data using custom hook
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
-  const title = clientData?.clientName ?? ("Client " + clientId);
-  
-  // Activity log filtering and pagination setup
   const activityLogs = clientData?.activityLogs ?? [];
+
+  // State for filters and pagination
   const [filterType, setFilterType] = useState('all');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [logPage, setLogPage] = useState(1);
+
+  // Default date range for filters: oldest log to today
+  useEffect(() => {
+    if (activityLogs.length > 0) {
+      const times = activityLogs.map((entry) => new Date(entry.createdAt).getTime());
+      const oldest = new Date(Math.min(...times));
+      setStartDate(oldest.toISOString().split('T')[0]);
+      setEndDate(new Date().toISOString().split('T')[0]);
+      setLogPage(1);
+    }
+  }, [activityLogs]);
+
+  const title = clientData?.clientName ?? ("Client " + clientId);
+  
+  // Activity log filtering setup
   const tabs = [
     { label: 'All', type: 'all' },
     { label: 'Notes', type: 'note' },
@@ -50,7 +66,6 @@ export default function ClientDetailPage() {
     if (endDate) logs = logs.filter((entry) => new Date(entry.createdAt) <= new Date(endDate));
     return logs;
   })();
-  const [logPage, setLogPage] = useState(1);
   const logsPerPage = 5;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
   const pagedLogs = filteredLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
@@ -115,7 +130,31 @@ export default function ClientDetailPage() {
           <ComponentCard
             title="Activities"
             actions={
-              <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 cursor-pointer" />
+              <div className="flex items-center space-x-2">
+                <div className="w-24">
+                  <DatePicker
+                    id="startDatePicker"
+                    defaultDate={startDate}
+                    placeholder=""
+                    onChange={(dates) => {
+                      if (dates.length) setStartDate((dates[0] as Date).toISOString().split('T')[0]);
+                      setLogPage(1);
+                    }}
+                  />
+                </div>
+                <div className="w-24">
+                  <DatePicker
+                    id="endDatePicker"
+                    defaultDate={endDate}
+                    placeholder=""
+                    onChange={(dates) => {
+                      if (dates.length) setEndDate((dates[0] as Date).toISOString().split('T')[0]);
+                      setLogPage(1);
+                    }}
+                  />
+                </div>
+                <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 cursor-pointer" />
+              </div>
             }
           >
             {/* Filter Tabs */}
@@ -135,35 +174,6 @@ export default function ClientDetailPage() {
                    </button>
                 ))}
               </nav>
-            </div>
-            {/* Advanced Filters: Date Range */}
-            <div className="mb-4 flex space-x-4 items-end">
-              <div>
-                <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">From</label>
-                <input
-                  type="date"
-                  id="startDate"
-                  value={startDate}
-                  onChange={(e) => { setStartDate(e.target.value); setLogPage(1); }}
-                  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300">To</label>
-                <input
-                  type="date"
-                  id="endDate"
-                  value={endDate}
-                  onChange={(e) => { setEndDate(e.target.value); setLogPage(1); }}
-                  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-              </div>
-              <button
-                onClick={() => { setFilterType('all'); setStartDate(''); setEndDate(''); setLogPage(1); }}
-                className="mt-6 inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-              >
-                Reset Filters
-              </button>
             </div>
             {/* Paginated Activity Log */}
             <ActivityLogTimeline entries={pagedLogs} />
