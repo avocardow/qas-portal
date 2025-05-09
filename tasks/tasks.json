@@ -756,7 +756,7 @@
             5
           ],
           "details": "1. Implement GraphQL mutations for creating new activity logs of each type\n2. Add proper error handling for failed submissions\n3. Implement loading states during submission\n4. Add success notifications after successful submissions\n5. Create retry mechanisms for failed submissions\n6. Implement validation on both client and server sides\n7. Add security measures to prevent unauthorized submissions\n8. Test mutations with various activity types and edge cases",
-          "status": "pending",
+          "status": "in-progress",
           "parentTaskId": 11
         },
         {

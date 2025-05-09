@@ -37,7 +37,7 @@ export default function ClientDetailPage() {
     { label: 'Notes', type: 'note' },
     { label: 'Emails', type: 'email' },
     { label: 'Calls', type: 'call' },
-    { label: 'Status Updates', type: 'statusUpdate' },
+    { label: 'Updates', type: 'statusUpdate' },
     { label: 'Documents', type: 'document' },
     { label: 'Tasks', type: 'task' },
   ];
@@ -113,29 +113,33 @@ export default function ClientDetailPage() {
             }
           >
             {/* Filter Tabs */}
-            <div className="mb-4 flex space-x-4">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.type}
-                  onClick={() => { setFilterType(tab.type); setLogPage(1); }}
-                  className={`px-3 py-1 text-sm font-medium focus:outline-none ${
-                    filterType === tab.type
-                      ? 'text-brand-500 border-b-2 border-brand-500'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+            <div className="mb-4 overflow-x-auto">
+              <nav className="inline-flex whitespace-nowrap rounded-lg bg-gray-100 p-1 dark:bg-gray-900 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 [&::-webkit-scrollbar-track]:bg-white dark:[&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5">
+                {tabs.map((tab) => (
+                   <button
+                     key={tab.type}
+                     onClick={() => { setFilterType(tab.type); setLogPage(1); }}
+                     className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ease-in-out ${
+                       filterType === tab.type
+                         ? "shadow-theme-xs bg-white text-gray-900 dark:bg-white/[0.03] dark:text-white"
+                         : "bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                     }`}
+                   >
+                     {tab.label}
+                   </button>
+                ))}
+              </nav>
             </div>
             {/* Paginated Activity Log */}
             <ActivityLogTimeline entries={pagedLogs} />
             {totalLogPages > 1 && (
-              <PaginationWithIcon
-                totalPages={totalLogPages}
-                initialPage={1}
-                onPageChange={setLogPage}
-              />
+              <div className="mt-4 overflow-x-auto">
+                <PaginationWithIcon
+                  totalPages={totalLogPages}
+                  initialPage={1}
+                  onPageChange={setLogPage}
+                />
+              </div>
             )}
         </ComponentCard>
 

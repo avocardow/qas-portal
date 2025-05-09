@@ -156,11 +156,11 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
       >
         <DataTableOne
           data={accounts}
-          columns={columns}
-          caption="Trust Accounts Table"
+        columns={columns}
+        caption="Trust Accounts Table"
           showControls={false}
-        />
-      </ComponentCard>
+      />
+    </ComponentCard>
       <AddTrustAccountModal
         clientId={clientId!}
         isOpen={isModalOpen}

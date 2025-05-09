@@ -41,12 +41,12 @@ export default function PaginationWithIcon({
         );
       } else {
         // Middle pages: 1 ... [current] ... N
-        pageNumbers.push(renderPageButton(1));
+      pageNumbers.push(renderPageButton(1));
         pageNumbers.push(renderEllipsis());
         pageNumbers.push(renderPageButton(currentPage));
         pageNumbers.push(renderEllipsis());
-        pageNumbers.push(renderPageButton(totalPages));
-      }
+      pageNumbers.push(renderPageButton(totalPages));
+    }
     }
     return pageNumbers;
   };
