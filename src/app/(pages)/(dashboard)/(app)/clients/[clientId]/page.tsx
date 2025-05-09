@@ -23,8 +23,7 @@ import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 
 export default function ClientDetailPage() {
-  const params = (useParams() as { clientId: string }) || {};
-  const clientId = params.clientId;
+  const { clientId } = useParams() as { clientId: string };
   const { isOpen, openModal, closeModal } = useModal();
 
   // Fetch client data using custom hook
@@ -33,8 +32,8 @@ export default function ClientDetailPage() {
 
   // State for filters and pagination
   const [filterType, setFilterType] = useState('all');
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [logPage, setLogPage] = useState(1);
   const [isActionsDropdownOpen, setIsActionsDropdownOpen] = useState(false);
 
