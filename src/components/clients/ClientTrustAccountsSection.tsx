@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
@@ -10,6 +11,8 @@ import Badge from '@/components/ui/badge/Badge';
 import Authorized from '@/components/Authorized';
 import AddTrustAccountButton from './AddTrustAccountButton';
 import AddTrustAccountModal from './AddTrustAccountModal';
+import EditTrustAccountButton from './EditTrustAccountButton';
+import EditTrustAccountModal from './EditTrustAccountModal';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 
 export interface ClientTrustAccountsSectionProps {
@@ -24,6 +27,8 @@ export interface ClientTrustAccountsSectionProps {
 export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrustAccountsSectionProps) {
   const { clientId } = useParams<{ clientId: string }>() || { clientId: '' };
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<any>(null);
   const columns = React.useMemo<ColumnDef[]>(() => [
     { key: 'accountName', header: 'Account Name', sortable: true },
     { key: 'bankName', header: 'Bank Name', sortable: true },
@@ -51,17 +56,23 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
       key: 'actions',
       header: 'Actions',
       sortable: false,
-      cell: (row) =>
-        row.softwareUrl ? (
-          <a
-            href={row.softwareUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
-          >
-            Open in {row.managementSoftware}
-          </a>
-        ) : null,
+      cell: (row) => (
+        <div className="flex items-center gap-2">
+          <Authorized action={CLIENT_PERMISSIONS.EDIT}>
+            <EditTrustAccountButton onClick={(e) => { e.stopPropagation(); setSelectedAccount(row); setEditModalOpen(true); }} />
+          </Authorized>
+          {row.softwareUrl && (
+            <a
+              href={row.softwareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              Open in {row.managementSoftware}
+            </a>
+          )}
+        </div>
+      ),
     },
   ], []);
   if (!trustAccounts || trustAccounts.length === 0) {
@@ -103,6 +114,12 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
         clientId={clientId!}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+      <EditTrustAccountModal
+        clientId={clientId!}
+        existingTrustAccount={selectedAccount!}
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
       />
     </>
   );
