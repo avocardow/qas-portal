@@ -20,6 +20,8 @@ import ActivityLogTimeline from '@/components/clients/ActivityLogTimeline';
 import { MoreDotIcon } from '@/icons';
 import PaginationWithIcon from '@/components/ui/pagination/PaginationWitIcon';
 import DatePicker from '@/components/form/date-picker';
+import { Dropdown } from '@/components/ui/dropdown/Dropdown';
+import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -35,6 +37,25 @@ export default function ClientDetailPage() {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [logPage, setLogPage] = useState(1);
+  const [isActionsDropdownOpen, setIsActionsDropdownOpen] = useState(false);
+
+  function toggleActionsDropdown() {
+    setIsActionsDropdownOpen(prev => !prev);
+  }
+
+  function closeActionsDropdown() {
+    setIsActionsDropdownOpen(false);
+  }
+
+  function handleAdjustFilter() {
+    closeActionsDropdown();
+    // TODO: implement adjust filter logic
+  }
+
+  function handleNewActivityItem() {
+    closeActionsDropdown();
+    // TODO: implement new activity item creation
+  }
 
   // Default date range for filters: oldest log to today
   useEffect(() => {
@@ -154,7 +175,19 @@ export default function ClientDetailPage() {
                     }}
                   />
                 </div>
-                <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 cursor-pointer" />
+                <div className="relative">
+                  <button onClick={toggleActionsDropdown} className="dropdown-toggle">
+                    <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                  </button>
+                  <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-40 p-2">
+                    <DropdownItem onItemClick={handleAdjustFilter}>
+                      Adjust Filter
+                    </DropdownItem>
+                    <DropdownItem onItemClick={handleNewActivityItem}>
+                      New Activity Item
+                    </DropdownItem>
+                  </Dropdown>
+                </div>
               </div>
             }
           >
