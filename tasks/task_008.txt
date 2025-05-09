@@ -1,6 +1,6 @@
 # Task ID: 8
 # Title: Build Trust Accounts Table and CRUD
-# Status: in-progress
+# Status: done
 # Dependencies: 2
 # Priority: medium
 # Description: Implement the Trust Accounts table with add, edit, and remove functionality.
@@ -42,7 +42,7 @@ Test all CRUD operations for trust accounts. Verify data displays correctly in t
 7. Test the table rendering with sample data
 8. Ensure accessibility compliance with proper ARIA attributes
 
-## 3. Implement Add Trust Account functionality [in-progress]
+## 3. Implement Add Trust Account functionality [done]
 ### Dependencies: 8.1
 ### Description: Create an Add Trust Account modal with form validation and integration with the backend mutation.
 ### Details:
@@ -70,7 +70,7 @@ Test all CRUD operations for trust accounts. Verify data displays correctly in t
 8. Refresh the table after successful update
 9. Ensure proper state management between add and edit modes
 
-## 5. Implement Delete Trust Account functionality [in-progress]
+## 5. Implement Delete Trust Account functionality [done]
 ### Dependencies: 8.2
 ### Description: Add delete functionality with confirmation dialog and integration with the delete mutation.
 ### Details:
@@ -84,7 +84,7 @@ Test all CRUD operations for trust accounts. Verify data displays correctly in t
 8. Test the deletion flow with various scenarios
 9. Add audit logging for deletion operations
 
-## 6. Implement data refresh and error handling [in-progress]
+## 6. Implement data refresh and error handling [done]
 ### Dependencies: 8.3, 8.4, 8.5
 ### Description: Add comprehensive error handling, success notifications, and automatic table refresh after CRUD operations.
 ### Details:

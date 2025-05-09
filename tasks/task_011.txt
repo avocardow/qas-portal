@@ -1,6 +1,6 @@
 # Task ID: 11
 # Title: Implement Activity Log Timeline
-# Status: pending
+# Status: in-progress
 # Dependencies: 2
 # Priority: medium
 # Description: Create the Client Activity Log with infinite scroll, filtering, and form for new entries.
@@ -17,7 +17,7 @@
 Test infinite scroll and pagination. Verify filtering tabs work correctly. Test adding new activity logs and confirm they appear in the timeline.
 
 # Subtasks:
-## 1. Set up Activity Log Data Fetching with Cursor-based Pagination [pending]
+## 1. Set up Activity Log Data Fetching with Cursor-based Pagination [done]
 ### Dependencies: None
 ### Description: Implement the API query to fetch activity logs with cursor-based pagination for efficient data loading and better performance with large datasets.
 ### Details:
@@ -29,7 +29,7 @@ Test infinite scroll and pagination. Verify filtering tabs work correctly. Test 
 6. Test the query with various cursor positions and filter combinations
 7. Document the API interface for team reference
 
-## 2. Build Timeline UI Component with Appropriate Styling [pending]
+## 2. Build Timeline UI Component with Appropriate Styling [in-progress]
 ### Dependencies: 11.1
 ### Description: Create a visually appealing timeline component that displays activity entries with appropriate icons, formatting, and visual hierarchy.
 ### Details:
@@ -42,7 +42,7 @@ Test infinite scroll and pagination. Verify filtering tabs work correctly. Test 
 7. Test the UI across different screen sizes and with various activity types
 8. Implement skeleton loading states for better UX during data fetching
 
-## 3. Implement Infinite Scroll with Load More Button [pending]
+## 3. Implement Infinite Scroll with Load More Button [done]
 ### Dependencies: 11.1, 11.2
 ### Description: Create an infinite scroll mechanism with a fallback 'Load More' button to efficiently load and display large sets of activity log entries.
 ### Details:

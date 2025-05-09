@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
@@ -17,7 +17,8 @@ import ArchiveClientButton from '@/components/clients/ArchiveClientButton';
 import ArchiveClientModal from '@/components/clients/ArchiveClientModal';
 import { useModal } from '@/hooks/useModal';
 import ActivityLogTimeline from '@/components/clients/ActivityLogTimeline';
-import { api } from '@/utils/api';
+import { MoreDotIcon } from '@/icons';
+import PaginationWithIcon from '@/components/ui/pagination/PaginationWitIcon';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -28,20 +29,13 @@ export default function ClientDetailPage() {
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
   const title = clientData?.clientName ?? ("Client " + clientId);
   
-  // Fetch activity logs with infinite pagination
-  const {
-    data: logsData,
-    isLoading: logsLoading,
-    isError: logsError,
-    error: logsErrorObj,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = api.activityLog.getByClient.useInfiniteQuery(
-    { clientId },
-    { getNextPageParam: (lastPage) => lastPage.nextCursor }
-  );
-  
+  // Pagination setup for activity logs
+  const activityLogs = clientData?.activityLogs ?? [];
+  const [logPage, setLogPage] = useState(1);
+  const logsPerPage = 5;
+  const totalLogPages = Math.ceil(activityLogs.length / logsPerPage);
+  const pagedLogs = activityLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
+
   // Handle loading state
   if (isLoading) {
     return (
@@ -98,27 +92,21 @@ export default function ClientDetailPage() {
             </div>
           </ComponentCard>
 
-          {/* Placeholder for Activity Log */}
-          <ComponentCard title="Activity Log">
-            {logsLoading ? (
-              <SpinnerOne />
-            ) : logsError ? (
-              <ErrorFallback message={logsErrorObj?.message} />
-            ) : (
-              <>
-                <ActivityLogTimeline
-                  entries={logsData?.pages.flatMap((page) => page.items) ?? []}
-                />
-                {hasNextPage && (
-                  <button
-                    className="mt-4 text-blue-600"
-                    onClick={() => fetchNextPage()}
-                    disabled={isFetchingNextPage}
-                  >
-                    {isFetchingNextPage ? 'Loading...' : 'Load More'}
-                  </button>
-                )}
-              </>
+          {/* Activity Log Section styled as Activities card */}
+          <ComponentCard
+            title="Activities"
+            actions={
+              <MoreDotIcon className="h-5 w-5 text-gray-400 dark:text-gray-500 cursor-pointer" />
+            }
+          >
+            {/* Paginated Activity Log */}
+            <ActivityLogTimeline entries={pagedLogs} />
+            {totalLogPages > 1 && (
+              <PaginationWithIcon
+                totalPages={totalLogPages}
+                initialPage={1}
+                onPageChange={setLogPage}
+              />
             )}
           </ComponentCard>
 
