@@ -3,8 +3,7 @@ import React from "react";
 import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlaceholderPageTemplate";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useZodForm } from "@/utils/validation";
 import * as z from "zod";
 import { api } from "@/utils/api";
 import { useRouter } from "next/navigation";
@@ -31,10 +30,7 @@ export default function NewClientPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { status: "prospect" },
-  });
+  } = useZodForm(formSchema, { defaultValues: { status: "prospect" } });
   const createClientMutation = api.clients.create.useMutation();
   const onSubmit = (data: FormData) => {
     const input = {
