@@ -25,6 +25,7 @@ import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 import AddActivityModal from '@/components/clients/AddActivityModal';
 import { api } from '@/utils/api';
 import DatePicker from "@/components/form/date-picker";
+import type { RouterOutput } from "@/utils/api";
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
@@ -60,7 +61,10 @@ export default function ClientDetailPage() {
   });
 
   // Fetch client data using custom hook
-  const { data: clientData, isLoading, isError, error } = useClientData(clientId, { staleTime: 5 * 60 * 1000 });
+  const { data: _clientData, isLoading, isError, error } = useClientData(clientId, { staleTime: 5 * 60 * 1000 });
+  // Cast raw data to typed ClientById for proper property inference
+  type ClientById = RouterOutput["clients"]["getById"];
+  const clientData = _clientData as ClientById | undefined;
   const activityLogs = clientData?.activityLogs ?? [];
 
   // Calculate next contact and report due dates
