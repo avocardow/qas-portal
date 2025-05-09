@@ -21,11 +21,13 @@ import { MoreDotIcon } from '@/icons';
 import PaginationWithIcon from '@/components/ui/pagination/PaginationWitIcon';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
+import AddActivityModal from '@/components/clients/AddActivityModal';
 
 export default function ClientDetailPage() {
-  const params = useParams<{ clientId: string }>() || {};
+  const params = (useParams() as { clientId: string }) || {};
   const clientId = params.clientId;
   const { isOpen, openModal, closeModal } = useModal();
+  const { isOpen: isAddActivityOpen, openModal: openAddActivityModal, closeModal: closeAddActivityModal } = useModal();
 
   // Fetch client data using custom hook
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
@@ -53,7 +55,7 @@ export default function ClientDetailPage() {
 
   function handleNewActivityItem() {
     closeActionsDropdown();
-    // TODO: implement new activity item creation
+    openAddActivityModal();
   }
 
   // Default date range for filters: oldest log to today
@@ -120,10 +122,6 @@ export default function ClientDetailPage() {
       </DashboardPlaceholderPageTemplate>
     }>
     <div className="px-4 sm:px-6 lg:px-8 py-8">
-        {/* Archive client button */}
-        <div className="flex justify-end mb-4">
-          <ArchiveClientButton onClick={openModal} />
-        </div>
       <PageBreadcrumb
         pageTitle={title}
         items={[{ label: "Clients", href: "/clients" }]}
@@ -185,6 +183,27 @@ export default function ClientDetailPage() {
                 ))}
               </nav>
             </div>
+            {/* Date Filters */}
+            <div className="flex space-x-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={e => setStartDate(e.target.value)}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">End Date</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={e => setEndDate(e.target.value)}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
+                />
+              </div>
+            </div>
             {/* Paginated Activity Log */}
             <ActivityLogTimeline entries={pagedLogs} />
             {totalLogPages > 1 && (
@@ -208,8 +227,20 @@ export default function ClientDetailPage() {
             <ClientTrustAccountsSection trustAccounts={clientData!.trustAccounts} />
           </div>
         </div>
+        {/* Archive client button */}
+        <div className="flex justify-end mb-4">
+          <ArchiveClientButton onClick={openModal} />
+        </div>
       </div>
       <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
+      <AddActivityModal
+        isOpen={isAddActivityOpen}
+        onClose={closeAddActivityModal}
+        onSubmit={(data) => {
+          // TODO: integrate API call or update state with new activity
+          console.log('New activity data:', data);
+        }}
+      />
     </Authorized>
   );
 }
