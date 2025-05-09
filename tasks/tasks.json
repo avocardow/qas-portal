@@ -650,7 +650,7 @@
       "id": 10,
       "title": "Create Upcoming Schedule Section",
       "description": "Implement the Upcoming Schedule section showing next contact date and report due date.",
-      "status": "in-progress",
+      "status": "done",
       "dependencies": [
         2,
         6
@@ -676,7 +676,7 @@
             1
           ],
           "details": "1. Create the UpcomingSchedule React component:\n   - Implement useState and useEffect hooks to manage schedule data\n   - Add axios API call to fetch data from endpoints created in subtask 1\n   - Implement loading states and error handling\n   - Create conditional rendering for empty states\n\n2. Design the schedule item display:\n   - Create styled components for each schedule item\n   - Implement visual indicators for different status types (overdue, today, upcoming)\n   - Use date-fns to format dates consistently (e.g., 'MMM dd, yyyy')\n   - Add tooltips for additional context on hover\n\n3. Implement responsive design:\n   - Ensure the component works well on both desktop and mobile\n   - Use CSS Grid or Flexbox for layout\n   - Add appropriate spacing and typography\n   - Implement collapsible sections if needed\n\n4. Add accessibility features:\n   - Include proper ARIA attributes\n   - Ensure keyboard navigation works correctly\n   - Add screen reader-friendly text alternatives\n   - Test with accessibility tools\n\n5. Testing approach:\n   - Write unit tests using React Testing Library\n   - Test rendering with various data scenarios\n   - Verify responsive behavior with different viewport sizes\n   - Test accessibility compliance",
-          "status": "in-progress",
+          "status": "done",
           "parentTaskId": 10
         }
       ]
@@ -860,7 +860,7 @@
       "id": 13,
       "title": "Finalize Page Integration and Testing",
       "description": "Complete final integration, perform comprehensive testing, and add documentation.",
-      "status": "pending",
+      "status": "in-progress",
       "dependencies": [
         3,
         7,
