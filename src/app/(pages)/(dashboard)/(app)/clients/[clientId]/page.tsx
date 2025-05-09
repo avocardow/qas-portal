@@ -7,6 +7,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import ClientContactsSection from '@/components/clients/ClientContactsSection';
 import ClientTrustAccountsSection from '@/components/clients/ClientTrustAccountsSection';
 import { useClientData } from "@/hooks/useClientData";
+import { type ActivityLogType } from '@prisma/client';
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
 import ClientProfile from "@/components/clients/ClientProfile";
@@ -22,12 +23,40 @@ import PaginationWithIcon from '@/components/ui/pagination/PaginationWitIcon';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import { DropdownItem } from '@/components/ui/dropdown/DropdownItem';
 import AddActivityModal from '@/components/clients/AddActivityModal';
+import { api } from '@/utils/api';
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
   const clientId = params.clientId;
   const { isOpen, openModal, closeModal } = useModal();
   const { isOpen: isAddActivityOpen, openModal: openAddActivityModal, closeModal: closeAddActivityModal } = useModal();
+  const utils = api.useContext();
+  const addActivityMutation = api.clients.addActivityLog.useMutation({
+    onMutate: async (newLog) => {
+      await utils.clients.getById.cancel({ clientId });
+      const previousData = utils.clients.getById.getData({ clientId });
+      utils.clients.getById.setData({ clientId }, (old) => {
+        if (!old) return old;
+        const optimisticEntry = {
+          id: 'temp-' + Date.now(),
+          type: newLog.type as ActivityLogType,
+          content: newLog.content,
+          createdAt: new Date(),
+        };
+        return { ...old, activityLogs: [optimisticEntry, ...(old.activityLogs ?? [])] };
+      });
+      return { previousData };
+    },
+    onError: (err, newLog, context) => {
+      if (context?.previousData) {
+        utils.clients.getById.setData({ clientId }, context.previousData);
+      }
+    },
+    onSuccess: () => {
+      void utils.clients.getById.invalidate({ clientId });
+      closeAddActivityModal();
+    }
+  });
 
   // Fetch client data using custom hook
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
@@ -237,8 +266,7 @@ export default function ClientDetailPage() {
         isOpen={isAddActivityOpen}
         onClose={closeAddActivityModal}
         onSubmit={(data) => {
-          // TODO: integrate API call or update state with new activity
-          console.log('New activity data:', data);
+          addActivityMutation.mutate({ clientId, type: data.type as ActivityLogType, content: data.description });
         }}
       />
     </Authorized>
