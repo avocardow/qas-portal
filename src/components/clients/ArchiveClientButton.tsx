@@ -17,8 +17,8 @@ export default function ArchiveClientButton({ onClick, className = '' }: Archive
   return (
     <Button
       onClick={onClick}
-      className={className}
-      color="danger"
+      variant="link"
+      className={`text-red-600 hover:underline ${className}`}
       startIcon={<ArchiveIcon className="h-4 w-4" />}
       aria-label="Archive Client"
     >

@@ -128,7 +128,7 @@ const AppHeader: React.FC = () => {
               />
             </svg>
           </button>
-
+          {/*
           <div className="hidden lg:block">
             <form>
               <div className="relative">
@@ -162,6 +162,7 @@ const AppHeader: React.FC = () => {
               </div>
             </form>
           </div>
+          */}
         </div>
         <div
           className={`${
@@ -192,7 +193,7 @@ const AppHeader: React.FC = () => {
               </div>
             )}
             {/* <!-- Dark Mode Toggler --> */}
-            <ThemeToggleButton />
+            {/* <ThemeToggleButton /> */}
             {/* <!-- Notification Menu Area --> */}
             <NotificationDropdown />
           </div>
