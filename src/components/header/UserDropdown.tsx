@@ -97,7 +97,7 @@ export default function UserDropdown() {
         </svg>
       </button>
 
-      <Dropdown
+      {false && (<Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
         className="shadow-theme-lg dark:bg-gray-dark absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800"
@@ -210,7 +210,7 @@ export default function UserDropdown() {
           </svg>
           Sign out
         </DropdownItem>
-      </Dropdown>
+      </Dropdown>)}
     </div>
   );
 }
