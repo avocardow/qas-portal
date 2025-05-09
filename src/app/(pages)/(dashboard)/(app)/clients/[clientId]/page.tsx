@@ -213,7 +213,7 @@ export default function ClientDetailPage() {
           </div>
         </div>
       </div>
-      <ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />
+      {<ArchiveClientModal clientId={clientId} isOpen={isOpen} onClose={closeModal} />}
     </Authorized>
   );
 }
