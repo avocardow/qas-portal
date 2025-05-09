@@ -3,13 +3,17 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
+import type { RouterOutput } from "@/utils/api";
 
 interface ClientProfileProps {
   clientId: string;
 }
 
 export default function ClientProfile({ clientId }: ClientProfileProps) {
-  const { data: client, isLoading, isError, error } = useClientData(clientId);
+  const { data: _clientData, isLoading, isError, error } = useClientData(clientId);
+  // Cast raw data to typed ClientById for proper property inference
+  type ClientById = RouterOutput["clients"]["getById"];
+  const client = _clientData as ClientById | undefined;
 
   if (isLoading) {
     return <SpinnerOne />;
