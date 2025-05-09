@@ -8,6 +8,7 @@ import { AUDIT_PERMISSIONS, CLIENT_PERMISSIONS } from "@/constants/permissions";
 import { useModal } from "@/hooks/useModal";
 import EditAuditModal from "./EditAuditModal";
 import { useClientData } from "@/hooks/useClientData";
+import type { RouterOutput } from "@/utils/api";
 
 interface CurrentAuditCardProps {
   clientId: string;
@@ -19,7 +20,11 @@ interface CurrentAuditCardProps {
 export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
   const { isOpen, openModal, closeModal } = useModal();
   const { data: audit, isLoading, isError, error } = useCurrentAudit(clientId);
-  const { data: clientData, isLoading: feesLoading, isError: feesError, error: feesErrorObj } = useClientData(clientId);
+  const { data: _clientData, isLoading: feesLoading, isError: feesError, error: feesErrorObj } = useClientData(clientId);
+
+  // Cast to typed client data for billing fields
+  type ClientById = RouterOutput["clients"]["getById"];
+  const clientData = _clientData as ClientById | undefined;
 
   if (isLoading) {
     return <ComponentCard title="Current Audit">Loading...</ComponentCard>;
@@ -67,7 +72,8 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
           ) : (
             <div className="mb-4">
               <span className="font-semibold">Current Fees:</span>{" "}
-              {clientData?.estAnnFees?.toLocaleString(undefined, { style: "currency", currency: "USD" })}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {(clientData as any)?.estAnnFees?.toLocaleString(undefined, { style: "currency", currency: "USD" })}
             </div>
           )}
         </Authorized>
