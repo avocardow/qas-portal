@@ -29,7 +29,7 @@ Test infinite scroll and pagination. Verify filtering tabs work correctly. Test 
 6. Test the query with various cursor positions and filter combinations
 7. Document the API interface for team reference
 
-## 2. Build Timeline UI Component with Appropriate Styling [in-progress]
+## 2. Build Timeline UI Component with Appropriate Styling [done]
 ### Dependencies: 11.1
 ### Description: Create a visually appealing timeline component that displays activity entries with appropriate icons, formatting, and visual hierarchy.
 ### Details:
