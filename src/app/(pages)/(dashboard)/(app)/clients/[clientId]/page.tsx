@@ -5,6 +5,7 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import ClientContactsSection from '@/components/clients/ClientContactsSection';
+import ClientTrustAccountsSection from '@/components/clients/ClientTrustAccountsSection';
 import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
@@ -15,6 +16,8 @@ import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
 import ArchiveClientButton from '@/components/clients/ArchiveClientButton';
 import ArchiveClientModal from '@/components/clients/ArchiveClientModal';
 import { useModal } from '@/hooks/useModal';
+import ActivityLogTimeline from '@/components/clients/ActivityLogTimeline';
+import { api } from '@/utils/api';
 
 export default function ClientDetailPage() {
   const params = useParams<{ clientId: string }>() || {};
@@ -24,6 +27,20 @@ export default function ClientDetailPage() {
   // Fetch client data using custom hook
   const { data: clientData, isLoading, isError, error } = useClientData(clientId);
   const title = clientData?.clientName ?? ("Client " + clientId);
+  
+  // Fetch activity logs with infinite pagination
+  const {
+    data: logsData,
+    isLoading: logsLoading,
+    isError: logsError,
+    error: logsErrorObj,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = api.activityLog.getByClient.useInfiniteQuery(
+    { clientId },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  );
   
   // Handle loading state
   if (isLoading) {
@@ -83,15 +100,36 @@ export default function ClientDetailPage() {
 
           {/* Placeholder for Activity Log */}
           <ComponentCard title="Activity Log">
-            <div className="animate-pulse space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
+            {logsLoading ? (
+              <SpinnerOne />
+            ) : logsError ? (
+              <ErrorFallback message={logsErrorObj?.message} />
+            ) : (
+              <>
+                <ActivityLogTimeline
+                  entries={logsData?.pages.flatMap((page) => page.items) ?? []}
+                />
+                {hasNextPage && (
+                  <button
+                    className="mt-4 text-blue-600"
+                    onClick={() => fetchNextPage()}
+                    disabled={isFetchingNextPage}
+                  >
+                    {isFetchingNextPage ? 'Loading...' : 'Load More'}
+                  </button>
+                )}
+              </>
+            )}
           </ComponentCard>
 
           {/* Placeholder for Contacts */}
           <div className="lg:col-span-2">
             <ClientContactsSection contacts={clientData!.contacts} />
+          </div>
+
+          {/* Trust Accounts Section */}
+          <div className="lg:col-span-2">
+            <ClientTrustAccountsSection trustAccounts={clientData!.trustAccounts} />
           </div>
         </div>
       </div>
