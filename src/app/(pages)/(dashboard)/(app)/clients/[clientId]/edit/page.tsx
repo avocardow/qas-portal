@@ -19,7 +19,7 @@ const formSchema = z.object({
   city: z.string().optional(),
   postcode: z.string().optional(),
   status: z.enum(["prospect", "active", "archived"]),
-  auditMonthEnd: z.number().int().optional(),
+  auditPeriodEndDate: z.string().optional(),
   nextContactDate: z.string().optional(),
   estAnnFees: z.number().optional(),
 });
@@ -56,7 +56,7 @@ export default function EditClientPage() {
         city: c.city || "",
         postcode: c.postcode || "",
         status: c.status as "prospect" | "active" | "archived",
-        auditMonthEnd: c.auditMonthEnd || undefined,
+        auditPeriodEndDate: c.auditPeriodEndDate ? new Date(c.auditPeriodEndDate).toISOString().slice(0,10) : undefined,
         nextContactDate: c.nextContactDate
           ? new Date(c.nextContactDate).toISOString().slice(0, 10)
           : "",
@@ -168,28 +168,28 @@ export default function EditClientPage() {
             </label>
             <Controller
               control={control}
-              name="auditMonthEnd"
+              name="auditPeriodEndDate"
               render={({ field }) => (
                 <DatePicker
                   id="auditPeriodMonthEndPicker"
                   defaultDate={
-                    clientQuery.data?.auditMonthEnd
-                      ? new Date(2000, (clientQuery.data.auditMonthEnd as number) - 1)
+                    clientQuery.data?.auditPeriodEndDate
+                      ? new Date(clientQuery.data.auditPeriodEndDate)
                       : undefined
                   }
                   placeholder="DD/MM/YYYY"
                   onChange={(dates) => {
                     if (dates.length) {
                       const date = dates[0] as Date;
-                      field.onChange(date.getMonth() + 1);
+                      field.onChange(date.toISOString().slice(0,10));
                     }
                   }}
                 />
               )}
             />
-            {errors.auditMonthEnd && (
+            {errors.auditPeriodEndDate && (
               <p className="text-sm text-red-600 dark:text-red-400">
-                {errors.auditMonthEnd.message}
+                {errors.auditPeriodEndDate.message}
               </p>
             )}
           </div>
