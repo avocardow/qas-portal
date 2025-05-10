@@ -16,6 +16,7 @@ interface EditAuditModalProps {
 export default function EditAuditModal({ clientId, isOpen, onClose, existingAudit }: EditAuditModalProps) {
   const ability = useAbility();
   const utils = api.useContext();
+  const { data: managers = [] } = api.user.getAssignableManagers.useQuery();
   const stagesQuery = api.audit.getStages.useQuery();
   const statusesQuery = api.audit.getStatuses.useQuery();
   const createMutation = api.audit.create.useMutation({
@@ -30,21 +31,38 @@ export default function EditAuditModal({ clientId, isOpen, onClose, existingAudi
       onClose();
     },
   });
+  const assignMutation = api.audit.assignUser.useMutation();
+  const unassignMutation = api.audit.unassignUser.useMutation();
 
   const [auditYear, setAuditYear] = useState(existingAudit?.auditYear ?? new Date().getFullYear());
   const [stageId, setStageId] = useState<number | undefined>(existingAudit?.stage?.id);
   const [statusId, setStatusId] = useState<number | undefined>(existingAudit?.status?.id);
+  const initAssign = existingAudit?.assignments?.[0]?.userId ?? null;
+  const [assignedUserId, setAssignedUserId] = useState<string | null>(initAssign);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     try {
+      let auditId: string;
       if (existingAudit) {
         await updateMutation.mutateAsync({ auditId: existingAudit.id, stageId: stageId!, statusId: statusId! });
+        auditId = existingAudit.id;
       } else {
-        await createMutation.mutateAsync({ clientId, auditYear, stageId, statusId });
+        const created = await createMutation.mutateAsync({ clientId, auditYear, stageId, statusId });
+        auditId = created.id;
       }
+      if (assignedUserId !== initAssign) {
+        if (initAssign) {
+          await unassignMutation.mutateAsync({ auditId, userId: initAssign });
+        }
+        if (assignedUserId) {
+          await assignMutation.mutateAsync({ auditId, userId: assignedUserId });
+        }
+      }
+      utils.audit.getCurrent.invalidate();
+      onClose();
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : String(err));
     }
@@ -95,6 +113,21 @@ export default function EditAuditModal({ clientId, isOpen, onClose, existingAudi
             {statusesQuery.data?.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium">Staff</label>
+          <select
+            value={assignedUserId ?? ""}
+            onChange={(e) => setAssignedUserId(e.target.value || null)}
+            className="mt-1 block w-full"
+          >
+            <option value="">Unassigned</option>
+            {managers.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name || m.email}
               </option>
             ))}
           </select>

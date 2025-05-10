@@ -26,6 +26,8 @@ import AddActivityModal from '@/components/clients/AddActivityModal';
 import { api } from '@/utils/api';
 import DatePicker from "@/components/form/date-picker";
 import type { RouterOutput } from "@/utils/api";
+import Link from "next/link";
+import Button from "@/components/ui/button/Button";
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
@@ -72,18 +74,6 @@ export default function ClientDetailPage() {
   const nextContactDate = useMemo(() => {
     return clientData?.nextContactDate ?? null;
   }, [clientData?.nextContactDate]);
-   
-  const nextReportDueDate = useMemo(() => {
-    if (!clientData?.audits) return null;
-    const now = new Date();
-    const futureDates: Date[] = clientData.audits
-      .map((audit) => audit.reportDueDate)
-      .filter((d): d is Date => d instanceof Date)
-      .filter((d) => d.getTime() >= now.getTime());
-    if (futureDates.length === 0) return null;
-    futureDates.sort((a, b) => a.getTime() - b.getTime());
-    return futureDates[0];
-  }, [clientData?.audits]);
 
   // State for filters and pagination
   const [filterType, setFilterType] = useState('all');
@@ -179,16 +169,29 @@ export default function ClientDetailPage() {
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Client Overview */}
-        <ComponentCard title="Client Overview">
+        <ComponentCard
+          title="Client Overview"
+          actions={
+            <Authorized action={CLIENT_PERMISSIONS.EDIT} fallback={null}>
+              <Link href={`/clients/${clientId}/edit`}>
+                <Button size="sm" variant="outline">Edit</Button>
+              </Link>
+            </Authorized>
+          }
+        >
           <ClientProfile clientId={clientId} />
           <div className="mt-4 grid grid-cols-1 gap-2">
             <div>
               <span className="font-medium">Next Contact Date:</span>{" "}
-              {nextContactDate ? nextContactDate.toLocaleDateString() : "-"}
+              {nextContactDate
+                ? nextContactDate.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })
+                : "-"}
             </div>
             <div>
-              <span className="font-medium">Next Report Due Date:</span>{" "}
-              {nextReportDueDate ? nextReportDueDate.toLocaleDateString() : "-"}
+              <span className="font-medium">Audit Period End Date:</span>{" "}
+              {clientData?.auditPeriodEndDate
+                ? new Date(clientData.auditPeriodEndDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long' })
+                : "-"}
             </div>
           </div>
         </ComponentCard>

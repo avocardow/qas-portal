@@ -24,6 +24,11 @@ export default function ClientsPage() {
   } | null>(null);
   const { can } = useAbility();
   const router = useRouter();
+  // Assigned user filter state
+  const [assignedFilter, setAssignedFilter] = useState<string>('all');
+  // Fetch staff members for filter dropdown (fallback to empty list if undefined)
+  const managersQuery = api.user?.getAssignableManagers?.useQuery?.() ?? { data: [] };
+  const managers = managersQuery.data ?? [];
   // --- Pagination and Filter State ---
   const [selectedStatus, setSelectedStatus] = useState<'active' | 'prospect' | 'archived' | 'all'>('active');
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,10 +38,11 @@ export default function ClientsPage() {
   const [sortBy, setSortBy] = useState<
     "clientName" |
     "nextContactDate" |
-    "auditMonthEnd" |
+    "auditPeriodEndDate" |
     "estAnnFees" |
     "status" |
-    "auditStageName"
+    "auditStageName" |
+    "assignedUser"
   >("clientName");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   // --- End Pagination and Filter State ---
@@ -47,6 +53,12 @@ export default function ClientsPage() {
   const showAll = selectedStatus === 'all';
   const statusFilter: "active" | "prospect" | "archived" | undefined =
     showAll ? undefined : (selectedStatus as "active" | "prospect" | "archived");
+  // Map assignedFilter to API param: undefined = all, null = unassigned, or uuid
+  const assignedUserIdFilter = assignedFilter === 'all'
+    ? undefined
+    : assignedFilter === 'unassigned'
+      ? null
+      : assignedFilter;
   const clientsQuery = api.clients.getAll.useQuery(
     {
       page: currentPage,
@@ -56,6 +68,7 @@ export default function ClientsPage() {
       filter: debouncedSearchTerm,
       sortBy,
       sortOrder,
+      assignedUserId: assignedUserIdFilter,
     },
     {
       refetchOnWindowFocus: false,
@@ -154,6 +167,12 @@ export default function ClientsPage() {
           row.contacts?.find((c: any) => c.isPrimary)?.name ?? "-",
       },
       {
+        key: "assignedUser",
+        header: "Staff Assigned",
+        sortable: true,
+        cell: (row: any) => row.assignedUser?.name ?? "Unassigned",
+      },
+      {
         key: "auditStageName",
         header: "Audit Stage",
         sortable: true,
@@ -174,14 +193,15 @@ export default function ClientsPage() {
             : "-",
       },
       {
-        key: "auditMonthEnd",
-        header: "Audit End",
+        key: "auditPeriodEndDate",
+        header: "Audit Period End",
         sortable: true,
         cell: (row: any) =>
-          row.auditMonthEnd
-            ? new Intl.DateTimeFormat("default", { month: "long" }).format(
-                new Date(2000, row.auditMonthEnd - 1)
-              )
+          row.auditPeriodEndDate
+            ? new Date(row.auditPeriodEndDate).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "long",
+              })
             : "-",
       },
     ],
@@ -191,24 +211,6 @@ export default function ClientsPage() {
   // Permission-based admin columns
   const adminColumns = React.useMemo<ColumnDef[]>(
     () => [
-      {
-        key: "estAnnFees",
-        header: "Fees",
-        sortable: true,
-        cell: (row: any) => (
-          <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING} fallback="-">
-            {row.estAnnFees != null
-              ? new Intl.NumberFormat("en-AU", {
-                  style: "currency",
-                  currency: "AUD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                }).format(row.estAnnFees)
-              : "-"}
-          </Authorized>
-        ),
-        permission: CLIENT_PERMISSIONS.VIEW_BILLING,
-      },
       {
         key: "status",
         header: "Status",
@@ -348,10 +350,11 @@ export default function ClientsPage() {
                     key as
                       | "clientName"
                       | "nextContactDate"
-                      | "auditMonthEnd"
+                      | "auditPeriodEndDate"
                       | "estAnnFees"
                       | "status"
                       | "auditStageName"
+                      | "assignedUser"
                   );
                   setSortOrder(order);
                   setCurrentPage(1);
@@ -374,6 +377,21 @@ export default function ClientsPage() {
                         <option value="all">All Clients</option>
                       </select>
                     )}
+                    {/* Assigned user filter dropdown */}
+                    <select
+                      id="client-assigned-filter"
+                      value={assignedFilter}
+                      onChange={(e) => { setAssignedFilter(e.target.value); setCurrentPage(1); }}
+                      className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-9 rounded-lg border border-gray-300 bg-transparent py-2 pr-8 pl-3 text-sm text-gray-800"
+                    >
+                      <option value="all">All Assignments</option>
+                      <option value="unassigned">Unassigned</option>
+                      {managers.map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.name ?? u.email}
+                        </option>
+                      ))}
+                    </select>
                   </>
                 }
               />

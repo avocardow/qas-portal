@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { api } from "@/utils/api";
@@ -9,6 +9,7 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import { useAbility } from "@/hooks/useAbility";
+import DatePicker from "@/components/form/date-picker";
 
 // Zod schema for validation
 const formSchema = z.object({
@@ -38,6 +39,7 @@ export default function EditClientPage() {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -162,23 +164,65 @@ export default function EditClientPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Audit Month End
+              Audit Period Month End
             </label>
-            <input
-              type="number"
-              {...register("auditMonthEnd", { valueAsNumber: true })}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            <Controller
+              control={control}
+              name="auditMonthEnd"
+              render={({ field }) => (
+                <DatePicker
+                  id="auditPeriodMonthEndPicker"
+                  defaultDate={
+                    clientQuery.data?.auditMonthEnd
+                      ? new Date(2000, (clientQuery.data.auditMonthEnd as number) - 1)
+                      : undefined
+                  }
+                  placeholder="DD/MM/YYYY"
+                  onChange={(dates) => {
+                    if (dates.length) {
+                      const date = dates[0] as Date;
+                      field.onChange(date.getMonth() + 1);
+                    }
+                  }}
+                />
+              )}
             />
+            {errors.auditMonthEnd && (
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {errors.auditMonthEnd.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Next Contact Date
             </label>
-            <input
-              type="date"
-              {...register("nextContactDate")}
-              className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
+            <Controller
+              control={control}
+              name="nextContactDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="nextContactDatePicker"
+                  defaultDate={
+                    clientQuery.data?.nextContactDate
+                      ? new Date(clientQuery.data.nextContactDate as string)
+                      : undefined
+                  }
+                  placeholder="DD/MM/YYYY"
+                  onChange={(dates) => {
+                    if (dates.length) {
+                      const date = dates[0] as Date;
+                      field.onChange(date.toISOString().split('T')[0]);
+                    }
+                  }}
+                />
+              )}
             />
+            {errors.nextContactDate && (
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {errors.nextContactDate.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">

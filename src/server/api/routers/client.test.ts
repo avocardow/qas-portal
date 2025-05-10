@@ -227,7 +227,7 @@ describe("clientRouter getById", () => {
     city: "Test City",
     postcode: "12345",
     status: "active",
-    auditMonthEnd: 5,
+    auditPeriodEndDate: null,
     nextContactDate: new Date("2023-05-01"),
     estAnnFees: 500,
     createdAt: new Date(),
@@ -278,7 +278,17 @@ describe("clientRouter getById", () => {
           licenses: true,
           trustAccounts: true,
           audits: true,
-          activityLogs: { orderBy: { createdAt: 'desc' } },
+          activityLogs: {
+            orderBy: { createdAt: 'desc' },
+            select: {
+              id: true,
+              type: true,
+              content: true,
+              createdAt: true,
+              createdBy: true,
+              modifiedBy: true,
+            },
+          },
           notes: true,
           documents: true,
         }),
@@ -300,6 +310,28 @@ describe("clientRouter getById", () => {
     const result = await caller.getById({ clientId: dummyClientId });
     expect(ctx.db.contact.findUnique).toHaveBeenCalledWith({
       where: { portalUserId: ctx.session.user.id },
+    });
+    expect(ctx.db.client.findUniqueOrThrow).toHaveBeenCalledWith({
+      where: { id: dummyClientId },
+      include: expect.objectContaining({
+        contacts: { select: expect.any(Object) },
+        licenses: true,
+        trustAccounts: true,
+        audits: true,
+        activityLogs: {
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            type: true,
+            content: true,
+            createdAt: true,
+            createdBy: true,
+            modifiedBy: true,
+          },
+        },
+        notes: true,
+        documents: true,
+      }),
     });
     expect(result).toEqual(dummyClientData);
   });

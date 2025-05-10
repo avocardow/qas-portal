@@ -49,7 +49,7 @@ model Client {
   city               String?
   postcode           String?
   status             ClientStatus   @default(active)
-  auditMonthEnd      Int?
+  auditPeriodEndDate DateTime?      @db.Timestamptz
   nextContactDate    DateTime?      @db.Timestamptz
   estAnnFees         Decimal?       @db.Decimal(10, 2)
   internalFolderId   String?        // internal SharePoint folder ID (was sharepointFolderId)
@@ -324,6 +324,8 @@ model ActivityLog {
   taskId    String?         @db.Uuid
   contactId String?         @db.Uuid
   userId    String          @db.Uuid
+  createdBy String?         @db.Uuid
+  modifiedBy String?        @db.Uuid
   type      ActivityLogType @default(note)
   content   String          @db.Text
   createdAt DateTime        @default(now()) @db.Timestamptz

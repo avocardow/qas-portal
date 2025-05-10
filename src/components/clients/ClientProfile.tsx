@@ -3,6 +3,7 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import { useClientData } from "@/hooks/useClientData";
 import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
+import Badge from "@/components/ui/badge/Badge";
 import type { RouterOutput } from "@/utils/api";
 
 interface ClientProfileProps {
@@ -31,15 +32,28 @@ export default function ClientProfile({ clientId }: ClientProfileProps) {
     );
   }
 
+  // Determine badge color based on status
+  const status = String(client.status).toLowerCase();
+  let color: "success" | "warning" | "error" | "info" | "primary" | "dark" | "light" = "info";
+  switch (status) {
+    case "active":
+      color = "success";
+      break;
+    case "archived":
+      color = "light";
+      break;
+    case "prospect":
+      color = "primary";
+      break;
+    default:
+      color = "info";
+  }
   return (
     <div className="space-y-4">
+      <Badge size="sm" variant="light" color={color}>
+        {client.status}
+      </Badge>
       <h2 className="text-2xl font-semibold">{client.clientName}</h2>
-      <div className="grid grid-cols-1 gap-2">
-        <div>
-          <span className="font-medium">Status:</span>{" "}
-          <span className="text-sm uppercase">{client.status}</span>
-        </div>
-      </div>
     </div>
   );
 } 

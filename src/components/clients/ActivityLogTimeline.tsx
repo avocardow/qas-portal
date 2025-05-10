@@ -7,7 +7,8 @@ export interface ActivityLogEntry {
   type: string;
   content: string;
   createdAt: string | Date;
-  userId?: string;
+  createdBy?: string | null;
+  modifiedBy?: string | null;
 }
 
 interface ActivityLogTimelineProps {
@@ -41,6 +42,16 @@ export default function ActivityLogTimeline({ entries }: ActivityLogTimelineProp
             <p className="text-base text-gray-900 dark:text-white/90 mt-1">
               {entry.content}
             </p>
+            {entry.createdBy && (
+              <p className="text-xs text-gray-600 dark:text-gray-500 mt-1">
+                Created by: {entry.createdBy}
+              </p>
+            )}
+            {entry.modifiedBy && (
+              <p className="text-xs text-gray-600 dark:text-gray-500">
+                Modified by: {entry.modifiedBy}
+              </p>
+            )}
           </div>
         </div>
       ))}

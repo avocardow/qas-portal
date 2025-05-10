@@ -16,15 +16,17 @@ const clientGetAllSchema = z.object({
   sortBy: z.enum([
     "clientName",        // Client Name column
     "nextContactDate",   // Next Contact Date column
-    "auditMonthEnd",     // Audit Month End column
+    "auditPeriodEndDate",
     "estAnnFees",        // Fees column
     "status",            // Status column
     "auditStageName",    // Audit Stage (by stage.name)
     "city",              // City column
+    "assignedUser",      // Assigned User column
   ]).optional(),
   sortOrder: z.enum(["asc", "desc"]).optional(),
   statusFilter: z.enum(["prospect", "active", "archived"]).optional(),
   showAll: z.boolean().optional(),
+  assignedUserId: z.string().uuid().nullable().optional(),
 });
 const clientByIdSchema = z.object({ clientId: z.string().uuid() });
 const clientCreateSchema = z.object({
@@ -51,7 +53,7 @@ const clientByIdResponseSchema = z.object({
   city: z.string().nullable().optional(),
   postcode: z.string().nullable().optional(),
   status: z.enum(["prospect", "active", "archived"]),
-  auditMonthEnd: z.number().nullable().optional(),
+  auditPeriodEndDate: z.date().nullable().optional(),
   nextContactDate: z.date().nullable().optional(),
   estAnnFees: z.number().nullable().optional(),
   createdAt: z.date(),
@@ -80,6 +82,8 @@ const clientByIdResponseSchema = z.object({
       type: z.nativeEnum(ActivityLogType),
       content: z.string(),
       createdAt: z.date(),
+      createdBy: z.string().nullable().optional(),
+      modifiedBy: z.string().nullable().optional(),
     })
   ).optional(),
   notes: z.array(z.any()).optional(),
@@ -132,6 +136,7 @@ export const clientRouter = createTRPCRouter({
         sortOrder = "asc",
         statusFilter,
         showAll = false,
+        assignedUserId,
       } = input;
       // If sorting by auditStageName, fallback to clientName for DB ordering
       const orderField = sortBy === "auditStageName" ? "clientName" : sortBy;
@@ -139,25 +144,16 @@ export const clientRouter = createTRPCRouter({
       // Determine which statuses to include
       const statuses = showAll ? undefined : [statusFilter ?? "active"];
 
-      // Define the base where clause for filtering
-      const whereClause = {
-        ...(statuses ? { status: { in: statuses } } : {}),
-        OR: [
-          {
-            clientName: {
-              contains: filter || "",
-              mode: "insensitive" as const,
-            },
-          },
-          {
-            contacts: {
-              some: {
-                name: { contains: filter || "", mode: "insensitive" as const },
-              },
-            },
-          },
-        ],
-      };
+      // Build where clause with status, assigned user filter, and search OR
+      const whereClause: any = {};
+      if (statuses) whereClause.status = { in: statuses };
+      if (assignedUserId !== undefined) {
+        whereClause.assignedUserId = assignedUserId === null ? null : assignedUserId;
+      }
+      whereClause.OR = [
+        { clientName: { contains: filter || "", mode: "insensitive" as const } },
+        { contacts: { some: { name: { contains: filter || "", mode: "insensitive" as const } } } },
+      ];
 
       // Calculate skip value for pagination
       const skip = (page - 1) * pageSize;
@@ -169,12 +165,14 @@ export const clientRouter = createTRPCRouter({
           take: pageSize,
           skip: skip,
           where: whereClause,
-          orderBy: { [orderField]: sortOrder },
+          orderBy: sortBy === 'assignedUser'
+            ? { assignedUser: { name: sortOrder } }
+            : { [orderField]: sortOrder },
           select: {
             id: true,
             clientName: true,
             status: true,
-            auditMonthEnd: true,
+            auditPeriodEndDate: true,
             nextContactDate: true,
             estAnnFees: true,
             contacts: {
@@ -197,6 +195,7 @@ export const clientRouter = createTRPCRouter({
               orderBy: { auditYear: "desc" },
               select: { stage: { select: { name: true } } },
             },
+            assignedUser: { select: { id: true, name: true } },
           },
         }),
       ]);
@@ -244,7 +243,17 @@ export const clientRouter = createTRPCRouter({
             licenses: true,
             trustAccounts: true,
             audits: true,
-            activityLogs: { orderBy: { createdAt: 'desc' } },
+            activityLogs: {
+              orderBy: { createdAt: 'desc' },
+              select: {
+                id: true,
+                type: true,
+                content: true,
+                createdAt: true,
+                createdBy: true,
+                modifiedBy: true,
+              },
+            },
             notes: true,
             documents: true,
           },
@@ -280,7 +289,17 @@ export const clientRouter = createTRPCRouter({
           licenses: true,
           trustAccounts: true,
           audits: true,
-          activityLogs: { orderBy: { createdAt: 'desc' } },
+          activityLogs: {
+            orderBy: { createdAt: 'desc' },
+            select: {
+              id: true,
+              type: true,
+              content: true,
+              createdAt: true,
+              createdBy: true,
+              modifiedBy: true,
+            },
+          },
           notes: true,
           documents: true,
         },
@@ -343,7 +362,14 @@ export const clientRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { clientId, contactId, type, content } = input;
       return ctx.db.activityLog.create({
-        data: { clientId, contactId, userId: ctx.session.user.id, type, content },
+        data: {
+          clientId,
+          contactId,
+          userId: ctx.session.user.id,
+          createdBy: ctx.session.user.id,
+          type,
+          content,
+        },
       });
     }),
   // Aggregate and prepare data for client lifetime value projection

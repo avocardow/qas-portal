@@ -4,6 +4,8 @@ import {
   createTRPCRouter,
   publicProcedure,
   adminProcedure,
+  protectedProcedure,
+  enforceRole,
 } from "@/server/api/trpc";
 import { randomBytes } from "crypto";
 import { sendEmail } from "@/server/utils/msGraphEmail";
@@ -169,5 +171,14 @@ export const userRouter = createTRPCRouter({
         htmlBody: `<p>Hello ${contact.name},</p><p>Please complete your account setup by clicking <a href="${activationLink}">here</a>. This link will expire in 24 hours.</p>`,
       });
       return { success: true };
+    }),
+  // List users that can be assigned to clients (roleId 1-4)
+  getAssignableManagers: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Developer"]))
+    .query(async ({ ctx }) => {
+      return ctx.db.user.findMany({
+        where: { roleId: { in: [1, 2, 3, 4] } },
+        select: { id: true, name: true, email: true },
+      });
     }),
 });

@@ -51,7 +51,6 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
     reportDueDate,
     stage,
     status,
-    assignments,
   } = audit;
 
   return (
@@ -93,7 +92,7 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
           </div>
           <div className="col-span-full">
             <span className="font-semibold">Staff Assigned:</span>{" "}
-            {assignments.map((a) => a.user.name).join(", ")}
+            {clientData?.assignedUser?.name ?? "Unassigned"}
           </div>
         </div>
       </ComponentCard>
