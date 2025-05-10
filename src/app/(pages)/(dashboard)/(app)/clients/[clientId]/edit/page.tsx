@@ -203,11 +203,7 @@ export default function EditClientPage() {
               render={({ field }) => (
                 <DatePicker
                   id="nextContactDatePicker"
-                  defaultDate={
-                    clientQuery.data?.nextContactDate
-                      ? new Date(clientQuery.data.nextContactDate as string)
-                      : undefined
-                  }
+                  defaultDate={clientQuery.data?.nextContactDate ?? undefined}
                   placeholder="DD/MM/YYYY"
                   onChange={(dates) => {
                     if (dates.length) {
