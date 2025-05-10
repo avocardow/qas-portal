@@ -6,7 +6,7 @@ import {
   enforceRole,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { ActivityLogType } from "@prisma/client";
+import { ActivityLogType, Prisma } from "@prisma/client";
 
 // Zod schemas for client operations
 const clientGetAllSchema = z.object({
@@ -145,7 +145,7 @@ export const clientRouter = createTRPCRouter({
       const statuses = showAll ? undefined : [statusFilter ?? "active"];
 
       // Build where clause with status, assigned user filter, and search OR
-      const whereClause: any = {};
+      const whereClause: Prisma.ClientWhereInput = {};
       if (statuses) whereClause.status = { in: statuses };
       if (assignedUserId !== undefined) {
         whereClause.assignedUserId = assignedUserId === null ? null : assignedUserId;
