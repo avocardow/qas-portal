@@ -9,7 +9,6 @@ import ClientContactsSection from '@/components/clients/ClientContactsSection';
 import ClientTrustAccountsSection from '@/components/clients/ClientTrustAccountsSection';
 import { useClientData } from "@/hooks/useClientData";
 import { ActivityLogType } from '@prisma/client';
-import SpinnerOne from "@/components/ui/spinners/SpinnerOne";
 import ErrorFallback from "@/components/common/ErrorFallback";
 import ClientProfile from "@/components/clients/ClientProfile";
 import Authorized from '@/components/Authorized';
@@ -186,7 +185,9 @@ export default function ClientDetailPage() {
   if (isLoading) {
     return (
       <DashboardPlaceholderPageTemplate heading="Loading...">
-        <SpinnerOne />
+        <div className="flex justify-center py-8">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-brand-500 border-gray-200" />
+        </div>
       </DashboardPlaceholderPageTemplate>
     );
   }
