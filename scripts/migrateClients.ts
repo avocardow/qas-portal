@@ -26,7 +26,7 @@ process.on('unhandledRejection', (reason) => {
 // --- Configuration ---
 const csvFilePath = path.resolve(__dirname, "../data/client-database-11may2025.csv");
 // !!!!! REPLACE 'YOUR_ADMIN_USER_ID' with the actual UUID of the user running the script !!!!!
-const scriptRunnerUserId = "ad68638e-cad1-4340-9f38-8ab72e082433"; // <<<--- CONFIRM/CHANGE THIS
+const scriptRunnerUserId = "521d8e57-7a65-4f3c-9b12-8d3e4f6a7b1c"; // <<<--- CONFIRM/CHANGE THIS
 const defaultAuditStatusName = "In Progress"; // Default status for initial audit
 
 // --- Helper Functions ---
@@ -52,79 +52,27 @@ function monthToNumber(monthStr: string | undefined | null): number | null {
   return index !== -1 ? index + 1 : null;
 }
 
+// Replace parseCsvDate to enforce Australian DD/MM/YYYY or DD/MM/YY formats
 function parseCsvDate(dateStr: string | undefined | null): Date | null {
   if (!dateStr?.trim()) return null;
-  dateStr = dateStr.trim();
-  const formats = [
-    "dd/MM/yyyy",
-    "dd/MM/yy",
-    "MM/dd/yy",
-    "M/d/yy",
-    "yyyy-MM-dd",
-    "MM/dd/yyyy",
-    "M/d/yyyy",
-  ];
-  for (const format of formats) {
-    try {
-      let parts;
-      let year!: number;
-      let month!: number;
-      let day!: number;
-      if (format === "dd/MM/yyyy")
-        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-      else if (format === "dd/MM/yy")
-        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
-      else if (format === "MM/dd/yy")
-        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
-      else if (format === "M/d/yy")
-        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/);
-      else if (format === "yyyy-MM-dd")
-        parts = dateStr.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-      else if (format === "MM/dd/yyyy")
-        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-      else if (format === "M/d/yyyy")
-        parts = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-
-      if (!parts) continue;
-
-      if (format === "dd/MM/yyyy") {
-        [, day, month, year] = parts.map(Number);
-      } else if (format === "dd/MM/yy") {
-        [, day, month, year] = parts.map(Number);
-        if (year < 100) year += 2000;
-      } else if (format === "MM/dd/yy" || format === "M/d/yy") {
-        [, month, day, year] = parts.map(Number);
-        if (year < 100) year += 2000;
-      } else if (format === "yyyy-MM-dd") {
-        [, year, month, day] = parts.map(Number);
-      } else if (format === "MM/dd/yyyy" || format === "M/d/yyyy") {
-        [, month, day, year] = parts.map(Number);
-      }
-
-      if (
-        year &&
-        month &&
-        day &&
-        !isNaN(year) &&
-        !isNaN(month) &&
-        !isNaN(day)
-      ) {
-        if (day <= 0 || month <= 0 || month > 12) continue;
-        const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        if (day > daysInMonth[month - 1]!) continue;
-        const date = new Date(Date.UTC(year, month - 1, day));
-        if (!isNaN(date.getTime())) {
-          if (date.getUTCMonth() === month - 1 && date.getUTCDate() === day) {
-            return date;
-          }
-        }
-      }
-    } catch {
-      /* ignore parse error */
-    }
+  const trimmed = dateStr.trim();
+  const m = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
+  if (!m) {
+    console.warn(`Date "${dateStr}" not in DD/MM/YYYY or DD/MM/YY format`);
+    return null;
   }
-  console.warn(`Could not parse date: "${dateStr}"`);
-  return null;
+  const [, dayStr, monthStr, yearStr] = m;
+  const day = parseInt(dayStr, 10);
+  const month = parseInt(monthStr, 10);
+  let year = parseInt(yearStr, 10);
+  if (yearStr.length === 2) year += 2000;
+  // Validate day/month
+  const daysInMonth = [31, ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month - 1]!) {
+    console.warn(`Invalid date "${dateStr}"`);
+    return null;
+  }
+  return new Date(Date.UTC(year, month - 1, day));
 }
 
 /**
@@ -234,18 +182,14 @@ async function main() {
     try {
       await prisma.$transaction(async (tx) => {
         // Prepare client-status mapping from CSV (Active, Archived, Prospect)
-        const clientStatusRaw = record["Status"]?.trim().toLowerCase();
+        const statusKey = Object.keys(record).find((k) => k.trim().toLowerCase() === "status");
+        if (!statusKey) {
+          console.warn(`  Status column not found for client ${clientName}, defaulting to active`);
+        }
+        const clientStatusRaw = statusKey ? record[statusKey]?.trim().toLowerCase() : undefined;
         const clientStatus = ["active", "archived", "prospect"].includes(clientStatusRaw)
           ? (clientStatusRaw as ClientStatus)
           : "active";
-        // Determine actual CSV 'Fees' header key, trimming whitespace
-        const feesKey = Object.keys(record).find((k) =>
-          k.trim().toLowerCase().includes("est ann fees")
-        );
-        const feesValue = feesKey ? record[feesKey]?.trim() : undefined;
-        const estAnnFeesVal = feesValue
-          ? parseFloat(feesValue.replace(/[",\s]/g, ""))
-          : null;
         // Prepare External Folder field: extract URL if present, else keep raw value
         const rawExternalFolder = record["External Folder"]?.trim() || null;
         let externalFolderVal: string | null = null;
@@ -253,6 +197,33 @@ async function main() {
           const urlMatch = rawExternalFolder.match(/https?:\/\/\S+/);
           externalFolderVal = urlMatch ? urlMatch[0] : rawExternalFolder;
         }
+        // Prepare user map and assign manager to client.assignedUserId
+        const managerKey = Object.keys(record).find((k) => k.trim().toLowerCase() === "manager");
+        let assignedUserId: string | undefined;
+        if (managerKey) {
+          const mgrCode = record[managerKey]?.split(/[;,\/]+/)[0]?.trim();
+          const userMapForManager: Record<string, string> = {
+            DC: "6f2b3c4d-5e6f-4a7b-8c9d-0a1b2c3d4e5f",
+            AC: "0a1b2c3d-4e5f-4a6b-8c9d-1e2f3a4b5c6d",
+            KP: "7e8f9a0b-1c2d-4e3f-5a6b-7c8d9e0f1a2b",
+          };
+          if (mgrCode && userMapForManager[mgrCode]) {
+            assignedUserId = userMapForManager[mgrCode];
+          } else if (mgrCode) {
+            console.warn(`  Unknown manager code: ${mgrCode} for client ${clientName}`);
+          }
+        } else {
+          console.warn(`  Manager column not found for client ${clientName}`);
+        }
+        // Determine actual CSV 'Fees' header key, trimming whitespace
+        const feesKey = Object.keys(record).find((k) =>
+          k.trim().toLowerCase().includes("est ann fees")
+        );
+        const feesValue = feesKey ? record[feesKey]?.trim() : undefined;
+        // Parse Estimated Annual Fees, stripping non-numeric characters; assume AUD
+        const estAnnFeesVal = feesValue
+          ? parseFloat(feesValue.replace(/[^0-9.\-]/g, ""))
+          : null;
 
         const client = await tx.client.create({
           data: {
@@ -264,6 +235,7 @@ async function main() {
             phone: record["Phone 1"] || null,
             email: record["Email"]?.split(/[,;]/).map((e: string) => e.trim())[0] || null,
             status: clientStatus,
+            assignedUserId: assignedUserId || undefined,
             // Map Audit Period End Date using Next Audit Year End (DD/MM/YYYY)
             auditPeriodEndDate: parseCsvDate(record["Next Audit Year End"]),
             nextContactDate: parseCsvDate(record["Next Contact Date"]),
@@ -271,7 +243,8 @@ async function main() {
             externalFolder: externalFolderVal,
           },
         });
-        console.log(`  Created client ${client.id}`);
+        const feeDisplay = estAnnFeesVal != null ? estAnnFeesVal.toFixed(2) : "N/A";
+        console.log(`  Created client ${client.id} (EstAnnFees: AUD ${feeDisplay})`);
 
         // 2. Create Contacts
         const createdContacts: {
@@ -491,6 +464,30 @@ async function main() {
             createdAt: new Date(),
           },
         });
+        // 5.b Create Audit Assignments for Staff Assigned and Manager
+        const userMap: Record<string, string> = {
+          // TODO: Populate mapping of staff codes to actual user IDs
+          DC: "6f2b3c4d-5e6f-4a7b-8c9d-0a1b2c3d4e5f",
+          AC: "0a1b2c3d-4e5f-4a6b-8c9d-1e2f3a4b5c6d",
+          KP: "7e8f9a0b-1c2d-4e3f-5a6b-7c8d9e0f1a2b",
+        };
+
+        const assignRole = async (codes: string | undefined | null, role: string) => {
+          (codes || "")
+            .split(/[;,\/]+/)
+            .map((c) => c.trim())
+            .filter(Boolean)
+            .forEach(async (code) => {
+              const userId = userMap[code];
+              if (userId) {
+                await tx.auditAssignment.create({ data: { auditId: initialAudit!.id, userId, role } });
+                console.log(`    Created ${role} assignment for ${code}`);
+              } else {
+                console.warn(`  Unknown ${role} code: ${code} for client ${clientName}`);
+              }
+            });
+        };
+        await assignRole(record["Staff Assigned"], "staff");
         console.log(`    Created initial audit record for year ${auditYear}`);
 
         // 6. Create Activity Log Entries from "Notes" column

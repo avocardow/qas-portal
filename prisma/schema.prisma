@@ -55,8 +55,11 @@ model Client {
   phone              String?        // Business contact phone number
   email              String?        // Business contact email address
   status             ClientStatus   @default(active)
-  auditPeriodEndDate DateTime?      @db.Timestamptz
-  nextContactDate    DateTime?      @db.Timestamptz
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  auditPeriodEndDate DateTime?      @db.Date
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  nextContactDate    DateTime?      @db.Date
+  /// Estimated annual fees (excl. GST) in AUD
   estAnnFees         Decimal?       @db.Decimal(10, 2)
   internalFolder     String?        @db.Text   // URL to internal SharePoint folder
   externalFolder     String?        @db.Text   // URL to external folder (Dropbox, etc.)
@@ -257,9 +260,12 @@ model Audit {
   auditYear         Int
   stageId           Int?
   statusId          Int?
-  reportDueDate     DateTime? @db.Timestamptz
-  lodgedWithOFTDate DateTime? @db.Timestamptz
-  invoiceIssueDate  DateTime? @db.Timestamptz
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  reportDueDate     DateTime? @db.Date
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  lodgedWithOFTDate DateTime? @db.Date
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  invoiceIssueDate  DateTime? @db.Date
   invoicePaid       Boolean   @default(false)
   createdAt         DateTime  @default(now()) @db.Timestamptz
   updatedAt         DateTime  @updatedAt @db.Timestamptz
@@ -304,10 +310,12 @@ model Task {
   description          String?   @db.Text
   assignedUserId       String?   @db.Uuid
   status               String    @default("To Do")
-  dueDate              DateTime? @db.Timestamptz
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  dueDate              DateTime? @db.Date
   priority             String?
   requiresClientAction Boolean   @default(false)
-  completedAt          DateTime? @db.Timestamptz
+  /// Stored as DATE (Australian format: DD/MM/YYYY)
+  completedAt          DateTime? @db.Date
   createdAt            DateTime  @default(now()) @db.Timestamptz
   updatedAt            DateTime  @updatedAt @db.Timestamptz
 
@@ -451,7 +459,9 @@ model CallLog {
   clientId      String?   @db.Uuid
   contactId     String?   @db.Uuid
   dialedNumber  String
+  /// Timestamp (with timezone) for call start
   startTime     DateTime  @db.Timestamptz
+  /// Timestamp (with timezone) for call end
   endTime       DateTime? @db.Timestamptz
   durationSeconds Int?
   teamsCallId   String?

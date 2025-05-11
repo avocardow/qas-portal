@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "audits" ALTER COLUMN "reportDueDate" SET DATA TYPE DATE,
+ALTER COLUMN "lodgedWithOFTDate" SET DATA TYPE DATE,
+ALTER COLUMN "invoiceIssueDate" SET DATA TYPE DATE;
+
+-- AlterTable
+ALTER TABLE "tasks" ALTER COLUMN "dueDate" SET DATA TYPE DATE,
+ALTER COLUMN "completedAt" SET DATA TYPE DATE;
