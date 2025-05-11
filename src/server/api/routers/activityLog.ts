@@ -24,7 +24,7 @@ export const activityLogRouter = createTRPCRouter({
           type: true,
           content: true,
           createdAt: true,
-          userId: true,
+          createdBy: true,
         },
       });
       let nextCursor: string | undefined = undefined;

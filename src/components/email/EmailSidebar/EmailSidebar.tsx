@@ -5,8 +5,9 @@ import FilterList from "./FilterList";
 import SimpleBar from "simplebar-react";
 import { useModal } from "@/hooks/useModal";
 import ComposeMail from "@/components/email/EmailCompose/ComposeMail";
-import { usePermissionContext } from '@/contexts/PermissionContext';
+import { useAbility } from '@/hooks/useAbility';
 import { useState, useEffect } from "react";
+import { NAV_PERMISSIONS } from '@/constants/permissions';
 
 interface EmailSidebarProps {
   onSelect?: (folderId: string) => void;
@@ -22,7 +23,7 @@ export default function EmailSidebar({
     openModal: openComposeModal,
     closeModal: closeComposeModal,
   } = useModal();
-  const { roles } = usePermissionContext();
+  const { can } = useAbility();
   const [mailboxType, setMailboxType] = useState<"personal" | "shared">(
     "personal"
   );
@@ -33,7 +34,7 @@ export default function EmailSidebar({
 
   return (
     <div className="flex flex-col rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
-      {roles.includes("Admin") && (
+      {can(NAV_PERMISSIONS.TEAM_EMAIL) && (
         <div className="mb-4 flex space-x-2">
           <button
             onClick={() => setMailboxType("personal")}

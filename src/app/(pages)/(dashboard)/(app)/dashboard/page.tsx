@@ -4,15 +4,13 @@ import DashboardPlaceholderPageTemplate from "@/components/common/DashboardPlace
 import ComponentCard from "@/components/common/ComponentCard";
 import Link from "next/link";
 import { useAbility } from "@/hooks/useAbility";
-import { usePermissionContext } from '@/contexts/PermissionContext';
+import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import { TASK_PERMISSIONS, AUDIT_PERMISSIONS } from "@/constants/permissions";
 import Authorized from "@/components/Authorized";
 
 export default function DashboardPage() {
-  const { roles } = usePermissionContext();
   const { can } = useAbility();
-  const canViewClients =
-    roles.includes("Admin") || roles.includes("Manager") || roles.includes("Client");
+  const canViewClients = can(CLIENT_PERMISSIONS.VIEW);
   const canViewAudits = can(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID);
   const canViewTasks = can(TASK_PERMISSIONS.GET_ALL);
 

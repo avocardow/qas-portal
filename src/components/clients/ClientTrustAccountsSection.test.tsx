@@ -1,14 +1,23 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import ClientTrustAccountsSection from './ClientTrustAccountsSection';
-import { SessionProvider } from 'next-auth/react';
-import { PermissionProvider } from '@/contexts/PermissionContext';
 import { vi } from 'vitest';
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// Stub TRPC api to avoid context errors
+vi.mock('@/utils/api', () => ({
+  api: {
+    useContext: () => ({ clients: { getById: { invalidate: () => {} } } }),
+    clients: { getById: { useQuery: () => ({ data: { trustAccounts: [], licenses: [], activityLogs: [] }, isLoading: false, isError: false, error: undefined }) } },
+    trustAccount: { delete: { useMutation: () => ({ mutate: () => {}, status: 'idle' }) },
+                    update: { useMutation: () => ({ mutate: () => {}, status: 'idle' }) },
+                    create: { useMutation: () => ({ mutate: () => {}, status: 'idle' }) },
+                  },
+    license: {
+      getByLicenseNumber: { useQuery: () => ({ data: undefined }) },
+      create: { useMutation: () => ({ mutate: () => {} }) },
+    },
+  },
+}));
 // Mock DataTableOne to avoid rendering complex SVGs and CSS that break tests
 vi.mock('@/components/tables/DataTables/TableOne/DataTableOne', () => ({
   __esModule: true,
-  default: ({ data, columns }: { data: any[]; columns: any[] }) => (
+  default: ({ data, columns }: { data: unknown[]; columns: unknown[] }) => (
     <table>
       <thead>
         <tr>{columns.map(col => <th key={col.key}>{col.header}</th>)}</tr>
@@ -23,6 +32,19 @@ vi.mock('@/components/tables/DataTables/TableOne/DataTableOne', () => ({
     </table>
   ),
 }));
+// Stub useParams from next/navigation
+vi.mock('next/navigation', () => ({ useParams: () => ({ clientId: 'test-client' }) }));
+// Stub Popover to render children directly
+vi.mock('@/components/ui/popover/Popover', () => ({ __esModule: true, default: ({ children }) => <>{children}</> }));
+// Stub icon components including PlusIcon
+vi.mock('@/icons', () => ({ __esModule: true, InfoIcon: () => <span>InfoIcon</span>, PencilIcon: () => <span>PencilIcon</span>, TrashBinIcon: () => <span>TrashBinIcon</span>, PlusIcon: () => <span>PlusIcon</span> }));
+// Stub AddContactButton to avoid icon import
+vi.mock('@/components/clients/AddContactButton', () => ({ __esModule: true, default: ({ onClick }) => <button onClick={onClick}>AddContact</button> }));
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import ClientTrustAccountsSection from './ClientTrustAccountsSection';
+import { SessionProvider } from 'next-auth/react';
+import { PermissionProvider } from '@/contexts/PermissionContext';
 
 describe('ClientTrustAccountsSection', () => {
   it('shows no trust accounts message when list is empty', () => {
@@ -63,17 +85,19 @@ describe('ClientTrustAccountsSection', () => {
     expect(screen.getByText('Bank Name')).toBeInTheDocument();
     expect(screen.getByText('BSB')).toBeInTheDocument();
     expect(screen.getByText('Account Number')).toBeInTheDocument();
-    expect(screen.getByText('Software Access')).toBeInTheDocument();
+    expect(screen.getByText('Management Software')).toBeInTheDocument();
+    expect(screen.getByText('License Number')).toBeInTheDocument();
     expect(screen.getByText('Actions')).toBeInTheDocument();
 
     // Check row content
     expect(screen.getByText('Test Account')).toBeInTheDocument();
     expect(screen.getByText('Test Bank')).toBeInTheDocument();
     expect(screen.getByText('123-456')).toBeInTheDocument();
-    expect(screen.getByText('000111')).toBeInTheDocument();
+    expect(screen.getByText('*****000111')).toBeInTheDocument();
 
-    // Badge
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    // Management Software link should be 'Open in Xero'
+    const softwareLink = screen.getByText('Open in Xero');
+    expect(softwareLink).toHaveAttribute('href', 'https://app.xero.com');
 
     // Action Link
     const actionLink = screen.getByText('Open in Xero');

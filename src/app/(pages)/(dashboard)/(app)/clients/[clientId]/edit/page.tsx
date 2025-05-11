@@ -56,7 +56,9 @@ export default function EditClientPage() {
         city: c.city || "",
         postcode: c.postcode || "",
         status: c.status as "prospect" | "active" | "archived",
-        auditPeriodEndDate: c.auditPeriodEndDate ? new Date(c.auditPeriodEndDate).toISOString().slice(0,10) : undefined,
+        auditPeriodEndDate: c.auditPeriodEndDate
+          ? String(new Date(c.auditPeriodEndDate).getMonth() + 1).padStart(2, '0')
+          : undefined,
         nextContactDate: c.nextContactDate
           ? new Date(c.nextContactDate).toISOString().slice(0, 10)
           : "",
@@ -67,16 +69,34 @@ export default function EditClientPage() {
 
   // tRPC mutation for update
   const updateMutation = api.clients.update.useMutation();
+  // TRPC utils for cache invalidation
+  const utils = api.useContext();
 
   const onSubmit = async (data: FormData) => {
     try {
+      // Compute next future last day of selected month for auditPeriodEndDate
+      const auditDate = data.auditPeriodEndDate
+        ? (() => {
+            const month = Number(data.auditPeriodEndDate);
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            // Last day of this month in current year
+            const lastDayThisYear = new Date(currentYear, month, 0);
+            // If that date is in the past, use next year
+            const year = lastDayThisYear > today ? currentYear : currentYear + 1;
+            return new Date(year, month, 0);
+          })()
+        : undefined;
       await updateMutation.mutateAsync({
         clientId,
         ...data,
+        auditPeriodEndDate: auditDate,
         nextContactDate: data.nextContactDate
           ? new Date(data.nextContactDate)
           : undefined,
       });
+      // Invalidate client detail cache so fresh data is fetched
+      await utils.clients.getById.invalidate({ clientId });
       router.push(`/clients/${clientId}`);
     } catch (err) {
       console.error(err);
@@ -170,21 +190,22 @@ export default function EditClientPage() {
               control={control}
               name="auditPeriodEndDate"
               render={({ field }) => (
-                <DatePicker
-                  id="auditPeriodMonthEndPicker"
-                  defaultDate={
-                    clientQuery.data?.auditPeriodEndDate
-                      ? new Date(clientQuery.data.auditPeriodEndDate)
-                      : undefined
-                  }
-                  placeholder="DD/MM/YYYY"
-                  onChange={(dates) => {
-                    if (dates.length) {
-                      const date = dates[0] as Date;
-                      field.onChange(date.toISOString().slice(0,10));
-                    }
-                  }}
-                />
+                <select
+                  {...field}
+                  className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                >
+                  <option value="">Select month</option>
+                  {Array.from({ length: 12 }).map((_, idx) => {
+                    const monthNumber = idx + 1;
+                    const monthValue = String(monthNumber).padStart(2, '0');
+                    const monthName = new Date(0, idx).toLocaleString('en-GB', { month: 'long' });
+                    return (
+                      <option key={monthValue} value={monthValue}>
+                        {monthName}
+                      </option>
+                    );
+                  })}
+                </select>
               )}
             />
             {errors.auditPeriodEndDate && (
@@ -205,6 +226,7 @@ export default function EditClientPage() {
                   id="nextContactDatePicker"
                   defaultDate={clientQuery.data?.nextContactDate ?? undefined}
                   placeholder="DD/MM/YYYY"
+                  minDate={new Date()}
                   onChange={(dates) => {
                     if (dates.length) {
                       const date = dates[0] as Date;

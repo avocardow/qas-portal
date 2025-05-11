@@ -8,6 +8,7 @@ interface ModalProps {
   children: React.ReactNode;
   showCloseButton?: boolean; // New prop to control close button visibility
   isFullscreen?: boolean; // Default to false for backwards compatibility
+  overlayClassName?: string;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -17,6 +18,7 @@ export const Modal: React.FC<ModalProps> = ({
   className,
   showCloseButton = true, // Default to true for backwards compatibility
   isFullscreen = false,
+  overlayClassName = "bg-gray-400/50 backdrop-blur-[32px]",
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
     <div className="modal z-99999 fixed inset-0 flex items-center justify-center overflow-y-auto">
       {!isFullscreen && (
         <div
-          className="fixed inset-0 size-full bg-gray-400/50 backdrop-blur-[32px]"
+          className={`fixed inset-0 ${overlayClassName}`}
           onClick={onClose}
         ></div>
       )}
@@ -70,7 +72,7 @@ export const Modal: React.FC<ModalProps> = ({
         {showCloseButton && (
           <button
             onClick={onClose}
-            className="z-999 h-9.5 w-9.5 absolute right-3 top-3 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 sm:right-6 sm:top-6 sm:size-11 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="z-999 h-9.5 w-9.5 fixed right-3 top-3 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 sm:right-6 sm:top-6 sm:size-11 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             <svg
               width="24"

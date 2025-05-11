@@ -15,6 +15,8 @@ type PropsType = {
   defaultDate?: DateOption;
   label?: string;
   placeholder?: string;
+  /** Minimum selectable date */
+  minDate?: DateOption;
 };
 
 export default function DatePicker({
@@ -24,14 +26,17 @@ export default function DatePicker({
   label,
   defaultDate,
   placeholder,
+  minDate,
 }: PropsType) {
   useEffect(() => {
     const flatPickr = flatpickr(`#${id}`, {
       mode: mode || "single",
-      static: true,
       monthSelectorType: "static",
-      dateFormat: "d/m/Y",
+      enableTime: true,
+      time_24hr: true,
+      dateFormat: "d/m/Y H:i",
       defaultDate,
+      minDate,
       onChange,
     });
 
@@ -40,7 +45,7 @@ export default function DatePicker({
         flatPickr.destroy();
       }
     };
-  }, [mode, onChange, id, defaultDate]);
+  }, [mode, onChange, id, defaultDate, minDate]);
 
   return (
     <div>

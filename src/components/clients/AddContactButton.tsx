@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "@/components/ui/button/Button";
 import { PlusIcon } from "@/icons";
 
 interface AddContactButtonProps {
@@ -9,13 +8,13 @@ interface AddContactButtonProps {
 
 export default function AddContactButton({ onClick, className = "" }: AddContactButtonProps) {
   return (
-    <Button
+    <button
+      type="button"
       onClick={onClick}
-      variant="link"
-      className={className}
-      startIcon={<PlusIcon className="h-4 w-4" />}
+      className={`p-2 text-gray-500 opacity-75 hover:text-gray-600 hover:opacity-100 ${className}`}
+      aria-label="Add Contact"
     >
-      Add Contact
-    </Button>
+      <PlusIcon className="h-5 w-5" />
+    </button>
   );
 } 

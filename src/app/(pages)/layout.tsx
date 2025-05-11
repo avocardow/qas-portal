@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -28,6 +29,11 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* FontAwesome Pro Kit Script */}
+        <script
+          src="https://kit.fontawesome.com/15ae4c7e2f.js"
+          crossOrigin="anonymous"
+        ></script>
         {/* Prevent flash by applying stored theme before React mounts */}
         <script
           dangerouslySetInnerHTML={{

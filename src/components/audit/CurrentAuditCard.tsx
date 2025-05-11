@@ -3,12 +3,11 @@ import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { useCurrentAudit } from "@/hooks/useCurrentAudit";
 import { format } from "date-fns";
-import Authorized from "@/components/Authorized";
-import { AUDIT_PERMISSIONS, CLIENT_PERMISSIONS } from "@/constants/permissions";
-import { useModal } from "@/hooks/useModal";
 import EditAuditModal from "./EditAuditModal";
 import { useClientData } from "@/hooks/useClientData";
 import type { RouterOutput } from "@/utils/api";
+import { useAbility } from '@/hooks/useAbility';
+import { AUDIT_PERMISSIONS, CLIENT_PERMISSIONS } from "@/constants/permissions";
 
 interface CurrentAuditCardProps {
   clientId: string;
@@ -18,9 +17,10 @@ interface CurrentAuditCardProps {
  * Displays the current audit details for a client in a card layout.
  */
 export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
-  const { isOpen, openModal, closeModal } = useModal();
+  const { can } = useAbility();
+  const canEditAudit = can(AUDIT_PERMISSIONS.EDIT) || can(CLIENT_PERMISSIONS.EDIT);
   const { data: audit, isLoading, isError, error } = useCurrentAudit(clientId);
-  const { data: _clientData, isLoading: feesLoading, isError: feesError, error: feesErrorObj } = useClientData(clientId);
+  const { data: _clientData } = useClientData(clientId);
 
   // Cast to typed client data for billing fields
   type ClientById = RouterOutput["clients"]["getById"];
@@ -47,7 +47,6 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
   }
 
   const {
-    auditYear,
     reportDueDate,
     stage,
     status,
@@ -58,27 +57,23 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
       <ComponentCard
         title="Current Audit"
         actions={
-          <Authorized action={AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS}>
-            <button className="btn btn-sm" onClick={openModal}>Edit</button>
-          </Authorized>
+          canEditAudit && (
+            <EditAuditModal clientId={clientId} existingAudit={audit ?? null} />
+          )
         }
       >
-        <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING}>
-          {feesLoading ? (
-            <div>Loading current fees...</div>
-          ) : feesError ? (
-            <div>Error loading current fees: {feesErrorObj instanceof Error ? feesErrorObj.message : String(feesErrorObj)}</div>
-          ) : (
-            <div className="mb-4">
-              <span className="font-semibold">Current Fees:</span>{" "}
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(clientData as any)?.estAnnFees?.toLocaleString(undefined, { style: "currency", currency: "USD" })}
-            </div>
-          )}
-        </Authorized>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
           <div>
-            <span className="font-semibold">Audit Year:</span> {auditYear}
+            <span className="font-medium">Next Contact Date:</span>{" "}
+            {clientData?.nextContactDate
+              ? clientData.nextContactDate.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })
+              : "-"}
+          </div>
+          <div>
+            <span className="font-medium">Audit Period End Date:</span>{" "}
+            {clientData?.auditPeriodEndDate
+              ? new Date(clientData.auditPeriodEndDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long' })
+              : "-"}
           </div>
           <div>
             <span className="font-semibold">Report Due Date:</span>{" "}
@@ -96,12 +91,6 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
           </div>
         </div>
       </ComponentCard>
-      <EditAuditModal
-        clientId={clientId}
-        existingAudit={audit ?? null}
-        isOpen={isOpen}
-        onClose={closeModal}
-      />
     </>
   );
 } 

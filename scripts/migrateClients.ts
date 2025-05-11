@@ -13,10 +13,20 @@ const __dirname = dirname(__filename);
 // Initialize Prisma Client
 const prisma = new PrismaClient();
 
+// --- Add global error handlers ---
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception in migration script:', error);
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection in migration script:', reason);
+  process.exit(1);
+});
+
 // --- Configuration ---
 const csvFilePath = path.resolve(__dirname, "../data/QASClientDatabase.csv"); // This line should now work
 // !!!!! REPLACE 'YOUR_ADMIN_USER_ID' with the actual UUID of the user running the script !!!!!
-const scriptRunnerUserId = "abe4ca92-8dc3-47cf-bc09-3eec0e55b3c8"; // <<<--- CONFIRM/CHANGE THIS
+const scriptRunnerUserId = "149e554e-16ec-47b6-b3b2-8be18eadb5b1"; // <<<--- CONFIRM/CHANGE THIS
 const defaultAuditStatusName = "In Progress"; // Default status for initial audit
 
 // --- Helper Functions ---
@@ -232,7 +242,7 @@ async function main() {
             city: record["City"] || null,
             postcode: record["Postcode"] || null,
             status: clientStatus,
-            auditMonthEnd: monthToNumber(record["Audit End"]),
+            auditPeriodEndDate: parseCsvDate(record["Audit End"]),
             nextContactDate: parseCsvDate(record["Next Contact"]),
             estAnnFees: estAnnFeesVal,
             // softwareAccess field removed from Client model
@@ -506,7 +516,7 @@ async function main() {
           const logData = activityLogEntries.map((entry) => ({
             auditId: initialAudit!.id,
             clientId: client.id,
-            userId: scriptRunnerUserId,
+            createdBy: scriptRunnerUserId,
             type: "note" as const,
             content: entry.content,
             createdAt: entry.date || initialAudit!.createdAt,

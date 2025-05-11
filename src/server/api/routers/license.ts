@@ -46,4 +46,16 @@ export const licenseRouter = createTRPCRouter({
       );
       return ctx.db.$transaction(updates);
     }),
+  // Fetch all licenses for a given contact
+  getByContactId: adminOrManagerProcedure
+    .input(z.object({ contactId: z.string().uuid() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.license.findMany({ where: { contactId: input.contactId } });
+    }),
+  // Fetch a single license by its licenseNumber
+  getByLicenseNumber: adminOrManagerProcedure
+    .input(z.object({ licenseNumber: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.license.findUnique({ where: { licenseNumber: input.licenseNumber } });
+    }),
 });

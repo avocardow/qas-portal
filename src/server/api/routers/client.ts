@@ -36,7 +36,7 @@ const clientCreateSchema = z.object({
   city: z.string().optional(),
   postcode: z.string().optional(),
   status: z.enum(["prospect", "active", "archived"]).optional(),
-  auditMonthEnd: z.number().optional(),
+  auditPeriodEndDate: z.date().optional(),
   nextContactDate: z.date().optional(),
   estAnnFees: z.number().optional(),
 });
@@ -52,6 +52,8 @@ const clientByIdResponseSchema = z.object({
   address: z.string().nullable().optional(),
   city: z.string().nullable().optional(),
   postcode: z.string().nullable().optional(),
+  phone: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
   status: z.enum(["prospect", "active", "archived"]),
   auditPeriodEndDate: z.date().nullable().optional(),
   nextContactDate: z.date().nullable().optional(),
@@ -84,6 +86,8 @@ const clientByIdResponseSchema = z.object({
       createdAt: z.date(),
       createdBy: z.string().nullable().optional(),
       modifiedBy: z.string().nullable().optional(),
+      creator: z.object({ name: z.string().nullable().optional() }).nullable().optional(),
+      modifier: z.object({ name: z.string().nullable().optional() }).nullable().optional(),
     })
   ).optional(),
   notes: z.array(z.any()).optional(),
@@ -95,15 +99,15 @@ const clientByIdResponseSchema = z.object({
       sharepointFileUrl: z.string().nullable(),
     })
   ).optional(),
-  internalFolderId: z.string().nullable().optional(),
-  externalFolderId: z.string().nullable().optional(),
+  internalFolder: z.string().nullable().optional(),
+  externalFolder: z.string().nullable().optional(),
   xeroContactId: z.string().nullable().optional(),
   assignedUserId: z.string().nullable().optional(),
 });
 
 export const clientRouter = createTRPCRouter({
   getAll: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Client", "Developer"]))
+    .use(enforceRole(["Admin", "Manager", "Client", "Developer", "Auditor", "Staff"]))
     .input(clientGetAllSchema)
     .query(async ({ ctx, input }) => {
       const role = ctx.session.user.role ?? "";
@@ -124,7 +128,7 @@ export const clientRouter = createTRPCRouter({
         });
         return { items: [client], nextCursor: undefined };
       }
-      if (!["Admin", "Manager", "Developer"].includes(role)) {
+      if (!["Admin", "Manager", "Developer", "Auditor", "Staff"].includes(role)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
       // Admin/Manager: full list with pagination
@@ -208,7 +212,7 @@ export const clientRouter = createTRPCRouter({
       return { items: resultItems, totalCount };
     }),
   getById: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Client", "Developer"]))
+    .use(enforceRole(["Admin", "Manager", "Client", "Developer", "Auditor", "Staff"]))
     .input(clientByIdSchema)
     .output(clientByIdResponseSchema)
     .query(async ({ ctx, input }) => {
@@ -252,6 +256,8 @@ export const clientRouter = createTRPCRouter({
                 createdAt: true,
                 createdBy: true,
                 modifiedBy: true,
+                creator: { select: { name: true } },
+                modifier: { select: { name: true } },
               },
             },
             notes: true,
@@ -263,7 +269,7 @@ export const clientRouter = createTRPCRouter({
           estAnnFees: client.estAnnFees != null && typeof client.estAnnFees === 'object' && 'toNumber' in client.estAnnFees ? client.estAnnFees.toNumber() : client.estAnnFees,
         };
       }
-      if (!["Admin", "Manager", "Developer"].includes(role)) {
+      if (!["Admin", "Manager", "Developer", "Auditor", "Staff"].includes(role)) {
         throw new TRPCError({ code: "FORBIDDEN", message: "Access denied" });
       }
       // Admin/Manager: full details
@@ -298,6 +304,8 @@ export const clientRouter = createTRPCRouter({
               createdAt: true,
               createdBy: true,
               modifiedBy: true,
+              creator: { select: { name: true } },
+              modifier: { select: { name: true } },
             },
           },
           notes: true,
@@ -346,7 +354,7 @@ export const clientRouter = createTRPCRouter({
       const { clientId, internalFolderId } = input;
       return ctx.db.client.update({
         where: { id: clientId },
-        data: { internalFolderId },
+        data: { internalFolder: internalFolderId },
       });
     }),
   addActivityLog: protectedProcedure
@@ -365,12 +373,46 @@ export const clientRouter = createTRPCRouter({
         data: {
           clientId,
           contactId,
-          userId: ctx.session.user.id,
           createdBy: ctx.session.user.id,
           type,
           content,
         },
       });
+    }),
+  updateActivityLog: protectedProcedure
+    .use(enforceRole(["Admin", "Manager", "Developer"]))
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        clientId: z.string().uuid(),
+        type: z.nativeEnum(ActivityLogType),
+        content: z.string(),
+        date: z.date().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, type, content, date } = input;
+      const updateData: Prisma.ActivityLogUpdateInput = {
+        type,
+        content,
+        modifier: { connect: { id: ctx.session.user.id } },
+        ...(date ? { createdAt: date } : {}),
+      };
+      const updated = await ctx.db.activityLog.update({
+        where: { id },
+        data: updateData,
+        select: {
+          id: true,
+          type: true,
+          content: true,
+          createdAt: true,
+          createdBy: true,
+          modifiedBy: true,
+          creator: { select: { name: true } },
+          modifier: { select: { name: true } },
+        },
+      });
+      return updated;
     }),
   // Aggregate and prepare data for client lifetime value projection
   getLifetimeData: protectedProcedure

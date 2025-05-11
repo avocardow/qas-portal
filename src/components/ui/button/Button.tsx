@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode; // Button text or content
   size?: "sm" | "md"; // Button size
-  variant?: "primary" | "outline" | "link"; // Button variant, added "link"
+  variant?: "primary" | "outline" | "link" | "danger"; // Button variant, added "link" and "danger"
   startIcon?: ReactNode; // Icon before the text
   endIcon?: ReactNode; // Icon after the text
 }
@@ -32,7 +32,9 @@ const Button: React.FC<ButtonProps> = ({
     outline:
       "bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300",
     link:
-      "bg-transparent text-blue-600 hover:underline p-0" // Link-style variant with no background or border
+      "bg-transparent text-blue-600 hover:underline p-0", // Link-style variant with no background or border
+    danger:
+      "bg-error-600 text-white shadow-theme-xs hover:bg-error-700 disabled:bg-error-300",
   };
 
   return (

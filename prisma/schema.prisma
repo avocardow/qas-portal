@@ -37,6 +37,8 @@ enum ActivityLogType {
   task_completed
   meeting_summary
   billing_commentary
+  external_folder_instructions
+  software_access_instructions
 }
 
 // ========== Core Entities ==========
@@ -48,12 +50,14 @@ model Client {
   address            String?
   city               String?
   postcode           String?
+  phone              String?        // Business contact phone number
+  email              String?        // Business contact email address
   status             ClientStatus   @default(active)
   auditPeriodEndDate DateTime?      @db.Timestamptz
   nextContactDate    DateTime?      @db.Timestamptz
   estAnnFees         Decimal?       @db.Decimal(10, 2)
-  internalFolderId   String?        // internal SharePoint folder ID (was sharepointFolderId)
-  externalFolderId   String?        // external URL (Dropbox or other supplied by client)
+  internalFolder     String?        @db.Text   // URL to internal SharePoint folder
+  externalFolder     String?        @db.Text   // URL to external folder (Dropbox, etc.)
   xeroContactId      String?        @unique
   createdAt          DateTime       @default(now()) @db.Timestamptz
   updatedAt          DateTime       @updatedAt @db.Timestamptz
@@ -168,6 +172,7 @@ model User {
   callLogs          CallLog[]
   activityLogs      ActivityLog[]       @relation("UserLogs")
   notes             Note[]              @relation("UserNotes")
+  modifiedActivityLogs ActivityLog[]    @relation("ActivityLogModifier")
 
   @@map("users")
 }
@@ -323,7 +328,6 @@ model ActivityLog {
   clientId  String          @db.Uuid
   taskId    String?         @db.Uuid
   contactId String?         @db.Uuid
-  userId    String          @db.Uuid
   createdBy String?         @db.Uuid
   modifiedBy String?        @db.Uuid
   type      ActivityLogType @default(note)
@@ -334,12 +338,13 @@ model ActivityLog {
   client  Client   @relation(name: "ClientLogs", fields: [clientId], references: [id], onDelete: Cascade)
   task    Task?    @relation(name: "TaskLogs", fields: [taskId], references: [id], onDelete: SetNull)
   contact Contact? @relation(name: "ContactLogs", fields: [contactId], references: [id], onDelete: SetNull)
-  user    User     @relation(name: "UserLogs", fields: [userId], references: [id], onDelete: Restrict)
+  creator User?    @relation(name: "UserLogs", fields: [createdBy], references: [id], onDelete: Restrict)
+  modifier User?   @relation("ActivityLogModifier", fields: [modifiedBy], references: [id], onDelete: SetNull)
 
   @@index([auditId])
   @@index([clientId])
   @@index([taskId])
-  @@index([userId])
+  @@index([createdBy])
   @@index([type])
   @@index([createdAt(sort: Desc)])
   @@map("activityLogs")

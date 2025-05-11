@@ -27,7 +27,7 @@ export default async function DashboardLayout({
           {/* Header */}
           <AppHeader />
           {/* Page Content */}
-          <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6 overflow-x-hidden">
+          <div className="mx-auto max-w-[var(--breakpoint-2xl)] p-4 md:p-6 overflow-x-hidden">
             {children}
           </div>
         </ContentWrapper>

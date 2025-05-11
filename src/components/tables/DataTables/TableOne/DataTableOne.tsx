@@ -211,7 +211,7 @@ export default function DataTableOne({ data, columns, onRowClick, caption = "Tab
             </TableHeader>
             <TableBody>
               {currentData.map((item, i) => (
-                <TableRow key={i} onClick={() => onRowClick?.(item)} className={onRowClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" : undefined}>
+                <TableRow key={i}>
                   {cols.map(({ key, cell }, idx) => (
                     <TableCell key={key} className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                       {cell ? cell(item) : formatCellValue((item as any)[key])}

@@ -2,7 +2,8 @@
 // @ts-nocheck
 "use client";
 import React, { useState } from "react";
-import { usePermissionContext } from '@/contexts/PermissionContext';
+import { useAbility } from '@/hooks/useAbility';
+import { NAV_PERMISSIONS, CONTACT_PERMISSIONS } from '@/constants/permissions';
 import { useRouter } from "next/navigation";
 import { api } from "@/utils/api";
 import Link from "next/link";
@@ -21,8 +22,7 @@ import useDebounce from "@/hooks/useDebounce";
 type SortField = "name" | "city" | "status";
 
 export default function ContactsPage() {
-  // RBAC context
-  const { roles } = usePermissionContext();
+  const { can } = useAbility();
   // Pagination, sorting, filtering state
   const [filter, setFilter] = useState("");
   // Debounce filter input to optimize queries
@@ -51,8 +51,8 @@ export default function ContactsPage() {
   const isLoading = contactsQuery.isLoading;
   const error = contactsQuery.error;
 
-  // Protect view based on role (Admins, Managers, Clients, Developers)
-  if (!roles.includes("Admin") && !roles.includes("Manager") && !roles.includes("Client") && !roles.includes("Developer")) {
+  // Protect view based on permission
+  if (!can(NAV_PERMISSIONS.TEAM_CONTACTS)) {
     return <p>You are not authorized to view contacts.</p>;
   }
 
@@ -101,8 +101,8 @@ export default function ContactsPage() {
             className="rounded border border-gray-300 bg-white px-2 py-1 text-gray-900 placeholder-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400"
           />
           {/* Conditional Add New Contact button */}
-          {/* Only Admin or Developer can create contacts */}
-          {(roles.includes("Admin") || roles.includes("Developer")) && (
+          {/* Only users with edit contacts permission can create contacts */}
+          {can(CONTACT_PERMISSIONS.EDIT) && (
             <Link href="/contacts/new">
               <button className="btn bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:text-white dark:hover:bg-blue-500">
                 Add New Contact
@@ -214,7 +214,7 @@ export default function ContactsPage() {
                         {contact.status}
                       </TableCell>
                       {/* Only Admin or Developer can edit or delete contacts */}
-                      {(roles.includes("Admin") || roles.includes("Developer")) && (
+                      {can(CONTACT_PERMISSIONS.EDIT) && (
                         <TableCell className="space-x-2 text-gray-700 dark:text-gray-200">
                           <Link href={`/contacts/${contact.id}/edit`}>
                             <button className="btn bg-blue-500 text-white hover:bg-blue-600">

@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { PencilIcon, CheckLineIcon, CloseLineIcon } from "@/icons";
+import Authorized from '@/components/Authorized';
+import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 
 interface EditableFieldProps {
   label: string;
@@ -66,6 +68,7 @@ export default function EditableField({ label, value, onSave }: EditableFieldPro
       ) : (
         <div className="flex items-center space-x-2">
           <span>{value}</span>
+          <Authorized action={CLIENT_PERMISSIONS.EDIT} fallback={null}>
           <button
             onClick={() => setEditing(true)}
             className="text-gray-400 hover:text-gray-600"
@@ -73,6 +76,7 @@ export default function EditableField({ label, value, onSave }: EditableFieldPro
           >
             <PencilIcon />
           </button>
+          </Authorized>
         </div>
       )}
     </div>

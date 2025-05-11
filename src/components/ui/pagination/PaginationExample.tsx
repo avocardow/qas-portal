@@ -2,7 +2,7 @@
 import React from "react";
 import PaginationWithText from "@/components/ui/pagination/PaginationWithText";
 import PaginationWithTextWithIcon from "@/components/ui/pagination/PaginationWithTextWitIcon";
-import PaginationWithIcon from "@/components/ui/pagination/PaginationWitIcon";
+import PaginationWithIcon from "@/components/ui/pagination/PaginationWithIcon";
 import ComponentCard from "@/components/common/ComponentCard";
 
 export default function PaginationExample() {

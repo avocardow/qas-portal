@@ -6,6 +6,7 @@ export const AUDIT_PERMISSIONS = {
   GET_BY_ID: "audit.getById",
   ASSIGN_USER: "audit.assignUser",
   UNASSIGN_USER: "audit.unassignUser",
+  EDIT: "audits.edit",
 } as const;
 
 export type AuditPermission =
@@ -52,6 +53,30 @@ export const CLIENT_PERMISSIONS = {
 
 export type ClientPermission =
   (typeof CLIENT_PERMISSIONS)[keyof typeof CLIENT_PERMISSIONS];
+
+export const CONTACT_PERMISSIONS = {
+  EDIT: "contacts.edit",
+} as const;
+
+export type ContactPermission =
+  (typeof CONTACT_PERMISSIONS)[keyof typeof CONTACT_PERMISSIONS];
+
+export const TRUST_ACCOUNTS_PERMISSIONS = {
+  EDIT: "trust_accounts.edit",
+} as const;
+
+export type TrustAccountPermission =
+  (typeof TRUST_ACCOUNTS_PERMISSIONS)[keyof typeof TRUST_ACCOUNTS_PERMISSIONS];
+
+// Permissions for activity log operations
+export const ACTIVITY_PERMISSIONS = {
+  ADD_BILLING_COMMENTARY: 'activity.add.billing_commentary',
+  ADD_EXTERNAL_FOLDER_INSTRUCTIONS: 'activity.add.external_folder_instructions',
+  ADD_SOFTWARE_ACCESS_INSTRUCTIONS: 'activity.add.software_access_instructions',
+} as const;
+
+export type ActivityPermission =
+  (typeof ACTIVITY_PERMISSIONS)[keyof typeof ACTIVITY_PERMISSIONS];
 
 // Permissions for navigation menu items
 export const NAV_PERMISSIONS = {

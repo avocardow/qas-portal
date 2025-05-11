@@ -5,7 +5,7 @@ import { createTRPCRouter, adminOrManagerProcedure } from "@/server/api/trpc";
 export const trustAccountCreateSchema = z.object({
   clientId: z.string().uuid(),
   accountName: z.string().optional(),
-  bankName: z.string(),
+  bankName: z.string().optional(),
   bsb: z.string().optional(),
   accountNumber: z.string().optional(),
   primaryLicenseId: z.string().uuid().optional(),

@@ -8,9 +8,10 @@ interface PopoverProps {
   position: Position;
   trigger: React.ReactNode;
   children: ReactNode;
+  triggerOnHover?: boolean;
 }
 
-export default function Popover({ position, trigger, children }: PopoverProps) {
+export default function Popover({ position, trigger, children, triggerOnHover }: PopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -52,7 +53,11 @@ export default function Popover({ position, trigger, children }: PopoverProps) {
   };
 
   return (
-    <div className="relative inline-block">
+    <div
+      className="relative inline-block"
+      onMouseEnter={triggerOnHover ? () => setIsOpen(true) : undefined}
+      onMouseLeave={triggerOnHover ? () => setIsOpen(false) : undefined}
+    >
       <div ref={triggerRef} onClick={togglePopover}>
         {trigger}
       </div>

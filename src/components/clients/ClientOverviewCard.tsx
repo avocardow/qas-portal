@@ -15,8 +15,8 @@ interface ClientOverviewCardProps {
 
 export default function ClientOverviewCard({ client }: ClientOverviewCardProps) {
   const primaryContact = client.contacts?.find((c) => c.isPrimary);
-  const folderLink = client.externalFolderId
-    ? `https://sharepoint.com/sites/${client.externalFolderId}`
+  const folderLink = client.externalFolder
+    ? `https://sharepoint.com/sites/${client.externalFolder}`
     : null;
   const utils = api.useContext();
   const [successMessage, setSuccessMessage] = useState("");

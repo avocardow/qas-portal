@@ -38,6 +38,20 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
     },
   });
 
+  // Fetch licenses for each contact
+  const licenseQueries = contacts.map((contact) =>
+    contact.id ? api.license.getByContactId.useQuery({ contactId: contact.id }) : { data: [] }
+  );
+
+  // Map contacts to include licenseNumber from the first license (if any)
+  const contactsWithLicense = contacts.map((contact, idx) => {
+    const licenses = licenseQueries[idx].data || [];
+    return {
+      ...contact,
+      licenseNumber: licenses.length > 0 ? licenses[0].licenseNumber : null,
+    };
+  });
+
   if (!contacts || contacts.length === 0) {
     return (
       <ComponentCard title="Contacts">
@@ -56,7 +70,8 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
         }
       >
         <ContactsTable
-          data={contacts.map((c) => ({ ...c, licenseNumber: null }))}
+          data={contactsWithLicense}
+          clientId={clientId}
           onRowClick={(row) => router.push(`/contacts/${row.id}`)}
           onDelete={(row) => {
             if (window.confirm('Are you sure you want to delete this contact?')) {

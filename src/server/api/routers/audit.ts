@@ -82,6 +82,33 @@ export const auditRouter = createTRPCRouter({
       return audit;
     }),
 
+  // Update multiple audit fields (year, stage, status, dates)
+  updateAudit: loggedProcedure()
+    .use(enforcePermission(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS))
+    .input(
+      z.object({
+        auditId: z.string().uuid(),
+        auditYear: z.number().int().optional(),
+        stageId: z.number().int().optional(),
+        statusId: z.number().int().optional(),
+        reportDueDate: z.date().optional(),
+        lodgedWithOFTDate: z.date().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { auditId, auditYear, stageId, statusId, reportDueDate, lodgedWithOFTDate } = input;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data: any = {};
+      if (auditYear !== undefined) data.auditYear = auditYear;
+      if (stageId !== undefined) data.stageId = stageId;
+      if (statusId !== undefined) data.statusId = statusId;
+      if (reportDueDate !== undefined) data.reportDueDate = reportDueDate;
+      if (lodgedWithOFTDate !== undefined) data.lodgedWithOFTDate = lodgedWithOFTDate;
+      const audit = await ctx.db.audit.update({ where: { id: auditId }, data });
+      // No activityLog here; reuse existing logs if needed
+      return audit;
+    }),
+
   // Get all audits for a specific client with logging
   getByClientId: loggedProcedure()
     .use(enforcePermission(AUDIT_PERMISSIONS.GET_BY_CLIENT_ID))

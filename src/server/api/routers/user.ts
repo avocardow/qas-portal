@@ -174,7 +174,7 @@ export const userRouter = createTRPCRouter({
     }),
   // List users that can be assigned to clients (roleId 1-4)
   getAssignableManagers: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Developer"]))
+    .use(enforceRole(["Admin", "Manager", "Developer", "Auditor", "Staff"]))
     .query(async ({ ctx }) => {
       return ctx.db.user.findMany({
         where: { roleId: { in: [1, 2, 3, 4] } },

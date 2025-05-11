@@ -9,6 +9,7 @@ import {
   TASK_PERMISSIONS,
   DOCUMENT_PERMISSIONS,
   PHONE_PERMISSIONS,
+  ACTIVITY_PERMISSIONS,
 } from "@/constants/permissions";
 
 describe("permissionSchema", () => {
@@ -19,6 +20,7 @@ describe("permissionSchema", () => {
       ...Object.values(TASK_PERMISSIONS),
       ...Object.values(DOCUMENT_PERMISSIONS),
       ...Object.values(PHONE_PERMISSIONS),
+      ...Object.values(ACTIVITY_PERMISSIONS),
     ];
     expect(permissions).toEqual(expect.arrayContaining(expected));
     expect(permissions).toHaveLength(expected.length);

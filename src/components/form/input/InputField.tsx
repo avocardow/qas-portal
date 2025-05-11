@@ -1,5 +1,4 @@
-import type React from "react";
-import type { FC } from "react";
+import React, { type FC } from "react";
 
 interface InputProps {
   type?: "text" | "number" | "email" | "password" | "date" | "time" | string;

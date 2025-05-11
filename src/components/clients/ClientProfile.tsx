@@ -8,9 +8,10 @@ import type { RouterOutput } from "@/utils/api";
 
 interface ClientProfileProps {
   clientId: string;
+  showStatus?: boolean;
 }
 
-export default function ClientProfile({ clientId }: ClientProfileProps) {
+export default function ClientProfile({ clientId, showStatus = true }: ClientProfileProps) {
   const { data: _clientData, isLoading, isError, error } = useClientData(clientId);
   // Cast raw data to typed ClientById for proper property inference
   type ClientById = RouterOutput["clients"]["getById"];
@@ -50,9 +51,11 @@ export default function ClientProfile({ clientId }: ClientProfileProps) {
   }
   return (
     <div className="space-y-4">
-      <Badge size="sm" variant="light" color={color}>
-        {client.status}
-      </Badge>
+      {showStatus && (
+        <Badge size="sm" variant="light" color={color}>
+          {client.status}
+        </Badge>
+      )}
       <h2 className="text-2xl font-semibold">{client.clientName}</h2>
     </div>
   );

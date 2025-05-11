@@ -1,94 +1,132 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import React, { useState, useEffect } from 'react';
+import { Modal } from '@/components/ui/modal';
+import ComponentCard from '@/components/common/ComponentCard';
+import Label from '@/components/form/Label';
+import Button from '@/components/ui/button/Button';
+import Notification from '@/components/ui/notification/Notification';
+import Select from '@/components/form/Select';
+import TextArea from '@/components/form/input/TextArea';
+import DatePicker from '@/components/form/date-picker';
+import { useAbility } from '@/hooks/useAbility';
+import { ACTIVITY_PERMISSIONS } from '@/constants/permissions';
 
 export interface AddActivityModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { type: string; description: string; date: string }) => void;
+  onSubmit: (data: { type: string; description: string; date: string; contactId?: string }) => void;
+  contacts: { id: string; name?: string | null }[];
+  serverError?: string | null;
 }
 
-export default function AddActivityModal({ isOpen, onClose, onSubmit }: AddActivityModalProps) {
+export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, serverError }: AddActivityModalProps) {
+  const { can } = useAbility();
   const [type, setType] = useState('note');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const now = new Date();
+  const initialDate = now;
+  const [date, setDate] = useState<string>(initialDate.toISOString().split('T')[0]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [contactId, setContactId] = useState<string | undefined>(undefined);
+
+  const typeOptions = [
+    { value: 'note', label: 'Note' },
+    { value: 'email_sent', label: 'Email Sent' },
+    { value: 'email_received', label: 'Email Received' },
+    { value: 'call_in', label: 'Call In' },
+    { value: 'call_out', label: 'Call Out' },
+    { value: 'document_request', label: 'Document Request' },
+    { value: 'document_received', label: 'Document Received' },
+    { value: 'document_signed', label: 'Document Signed' },
+    { value: 'meeting_summary', label: 'Meeting Summary' },
+  ];
+
+  if (can(ACTIVITY_PERMISSIONS.ADD_BILLING_COMMENTARY)) {
+    typeOptions.push({ value: 'billing_commentary', label: 'Billing Commentary' });
+  }
+
+  if (can(ACTIVITY_PERMISSIONS.ADD_EXTERNAL_FOLDER_INSTRUCTIONS)) {
+    typeOptions.push({ value: 'external_folder_instructions', label: 'External Folder Instructions' });
+  }
+
+  if (can(ACTIVITY_PERMISSIONS.ADD_SOFTWARE_ACCESS_INSTRUCTIONS)) {
+    typeOptions.push({ value: 'software_access_instructions', label: 'Software Access Instructions' });
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      setType('note');
+      setDescription('');
+      setDate(new Date().toISOString().split('T')[0]);
+      setContactId(undefined);
+      setErrorMessage(null);
+    }
+  }, [isOpen]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onSubmit({ type, description, date });
-    onClose();
+    if (!description) {
+      setErrorMessage('Description is required');
+      return;
+    }
+    onSubmit({ type, description, date, contactId });
   }
 
+  if (!isOpen) return null;
   return (
-    <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 text-center">
-        <div className="fixed inset-0 bg-black opacity-30" />
-        <span className="inline-block align-middle h-screen" aria-hidden="true">&#8203;</span>
-        <div className="inline-block bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all align-middle max-w-md w-full p-6">
-          <Dialog.Title className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-            New Activity Item
-          </Dialog.Title>
-          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
-              <select
-                value={type}
-                onChange={e => setType(e.target.value)}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
-              >
-                <option value="note">Note</option>
-                <option value="email_sent">Email Sent</option>
-                <option value="email_received">Email Received</option>
-                <option value="call_in">Call In</option>
-                <option value="call_out">Call Out</option>
-                <option value="status_change">Status Change</option>
-                <option value="stage_change">Stage Change</option>
-                <option value="document_request">Document Request</option>
-                <option value="document_received">Document Received</option>
-                <option value="document_signed">Document Signed</option>
-                <option value="task_created">Task Created</option>
-                <option value="task_completed">Task Completed</option>
-                <option value="meeting_summary">Meeting Summary</option>
-                <option value="billing_commentary">Billing Commentary</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</label>
-              <input
-                type="date"
-                value={date}
-                onChange={e => setDate(e.target.value)}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-              <textarea
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                rows={3}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-theme focus:border-theme sm:text-sm"
-              />
-            </div>
-            <div className="flex justify-end space-x-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-theme text-white rounded-md hover:bg-theme-dark"
-              >
-                Add
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </Dialog>
+    <Modal isOpen={isOpen} onClose={onClose} overlayClassName="bg-black/90" className="max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <ComponentCard title="Add Activity Item">
+        {serverError && <Notification variant="error" title={serverError} />}
+        {errorMessage && <Notification variant="error" title={errorMessage} />}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="contactId">Contact</Label>
+            <Select
+              options={contacts.map(c => ({ value: c.id, label: c.name ?? c.id }))}
+              placeholder="Select contact"
+              defaultValue={contactId ?? ""}
+              onChange={val => setContactId(val || undefined)}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label htmlFor="type">Type</Label>
+            <Select
+              options={typeOptions}
+              defaultValue={type}
+              onChange={val => setType(val)}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <DatePicker
+              id="activityDate"
+              label="Date & Time"
+              defaultDate={initialDate}
+              onChange={(dates) => {
+                const d = Array.isArray(dates) ? dates[0] : dates;
+                if (d) setDate(d.toISOString().split('T')[0]);
+              }}
+              placeholder="Select date"
+            />
+          </div>
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <TextArea
+              placeholder="Description"
+              rows={3}
+              value={description}
+              onChange={val => setDescription(val)}
+              className="mt-1"
+            />
+          </div>
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
+            <Button type="submit">Add</Button>
+          </div>
+        </form>
+      </ComponentCard>
+    </Modal>
   );
 } 
