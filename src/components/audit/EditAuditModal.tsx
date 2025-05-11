@@ -149,8 +149,9 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
               <label className="block text-sm font-medium">Audit Year</label>
               <input
                 type="number"
+                disabled
                 {...register('auditYear', { valueAsNumber: true })}
-                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2"
+                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 bg-gray-100 cursor-not-allowed"
               />
               {errors.auditYear && <p className="text-sm text-red-600">{errors.auditYear.message}</p>}
             </div>
@@ -243,10 +244,6 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                 />
               )}
             />
-            <div className="flex items-center">
-              <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
-              <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
-            </div>
             <Controller
               control={control}
               name="invoiceIssueDate"
@@ -266,6 +263,10 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                 />
               )}
             />
+            <div className="flex items-center">
+              <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
+              <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
+            </div>
             {errorMsg && <p className="text-red-600">{errorMsg}</p>}
             <div className="flex justify-end space-x-2 pt-4">
               <Button variant="outline" type="button" onClick={closeModal}>Cancel</Button>
