@@ -102,9 +102,9 @@ export const authOptions: NextAuthOptions = {
       // console.log(">>> Returning session:", session); // REMOVED
       return session;
     },
-    // Always redirect authenticated users to the dashboard
+    // Always redirect authenticated users to the home clients page
     async redirect({ baseUrl }) {
-      return `${baseUrl}/dashboard`;
+      return `${baseUrl}/clients`;
     },
   },
   adapter: {

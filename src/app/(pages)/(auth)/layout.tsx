@@ -1,14 +1,22 @@
 import GridShape from "@/components/common/GridShape";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/server/auth";
 import { ThemeProvider } from "@/context/ThemeContext";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Redirect authenticated users to clients home
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect("/clients");
+  }
   return (
     <div className="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
       <ThemeProvider>
@@ -19,7 +27,7 @@ export default function AuthLayout({
               {/* <!-- ===== Common Grid Shape Start ===== --> */}
               <GridShape />
               <div className="flex max-w-xs flex-col items-center">
-                <Link href="/" className="mb-4 block">
+                <Link href="/clients" className="mb-4 block">
                   <Image
                     width={231}
                     height={48}

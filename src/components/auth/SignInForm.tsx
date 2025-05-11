@@ -22,7 +22,7 @@ export default function SignInForm() {
 
   const handleMicrosoftSignIn = () => {
     setLoading(true);
-    signIn("azure-ad", { callbackUrl: "/dashboard" });
+    signIn("azure-ad", { callbackUrl: "/clients" });
   };
 
   const onClientSubmit: SubmitHandler<ClientEmailFormInputs> = async (data) => {
