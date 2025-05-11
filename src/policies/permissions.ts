@@ -71,6 +71,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ...Object.values(AUDIT_PERMISSIONS),
     ...Object.values(TASK_PERMISSIONS),
     CLIENT_PERMISSIONS.VIEW,
+    CLIENT_PERMISSIONS.EDIT,
     NAV_PERMISSIONS.TEAM_CLIENTS,
     CONTACT_PERMISSIONS.EDIT,
     TRUST_ACCOUNTS_PERMISSIONS.EDIT,
