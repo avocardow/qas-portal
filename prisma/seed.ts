@@ -64,6 +64,41 @@ async function main() {
   }
 
   console.log("Seeded all audit stages and statuses successfully");
+
+  // Seed initial application users
+  const now = new Date();
+  const initialUsers = [
+    { id: '521d8e57-7a65-4f3c-9b12-8d3e4f6a7b1c', name: 'Rowan Cardow', email: 'rowan.cardow@qaspecialists.com.au', roleId: 0, isActive: true },
+    { id: '6f2b3c4d-5e6f-4a7b-8c9d-0a1b2c3d4e5f', name: 'Daren Cardow', email: 'daren.cardow@qaspecialists.com.au', roleId: 1, isActive: true },
+    { id: '0a1b2c3d-4e5f-4a6b-8c9d-1e2f3a4b5c6d', name: 'Anita Cardow', email: 'anita.cardow@qaspecialists.com.au', roleId: 2, isActive: true },
+    { id: '7e8f9a0b-1c2d-4e3f-5a6b-7c8d9e0f1a2b', name: 'Kaitlyn Pobar', email: 'kaitlyn.pobar@qaspecialists.com.au', roleId: 3, isActive: true },
+  ];
+  for (const user of initialUsers) {
+    await prisma.user.upsert({
+      where: { id: user.id },
+      update: {
+        name: user.name,
+        email: user.email,
+        roleId: user.roleId,
+        isActive: user.isActive,
+        createdAt: now,
+        updatedAt: now,
+      },
+      create: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        emailVerified: null,
+        image: null,
+        roleId: user.roleId,
+        m365ObjectId: null,
+        isActive: user.isActive,
+        createdAt: now,
+        updatedAt: now,
+      },
+    });
+    console.log(`Seeded user: ${user.email}`);
+  }
 }
 
 main()

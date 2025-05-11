@@ -78,14 +78,14 @@ export const authOptions: NextAuthOptions = {
   adapter: {
     ...PrismaAdapter(db),
     createUser: async (data: AdapterUser) => {
-      // Assign the 'Client' role by default
+      // Assign the 'Client' role by default and set m365ObjectId
       const defaultRoleName = "Client";
       const defaultRole = await db.role.findUnique({ where: { name: defaultRoleName } });
       if (!defaultRole) {
         throw new Error(`Default role '${defaultRoleName}' not found in database`);
       }
-      // Create user with the default roleId
-      return await db.user.create({ data: { ...data, roleId: defaultRole.id } });
+      // Create user with default roleId and store m365ObjectId for Azure logins
+      return await db.user.create({ data: { ...data, roleId: defaultRole.id, m365ObjectId: data.id } });
     },
   },
   providers: [
@@ -121,6 +121,20 @@ export const authOptions: NextAuthOptions = {
     strategy: "database",
   },
   // secret: env.NEXTAUTH_SECRET, // Ensure this is set
+  events: {
+    async signIn({ user, account, profile }) {
+      if (account.provider === 'azure-ad') {
+        await db.user.update({
+          where: { id: user.id },
+          data: {
+            m365ObjectId: profile?.oid || user.id,
+            image: (profile as any)?.picture || null,
+            emailVerified: (profile as any)?.email_verified ? new Date((profile as any).email_verified) : user.emailVerified,
+          },
+        });
+      }
+    },
+  },
 };
 
 export const getServerAuthSession = () => getServerSession(authOptions);

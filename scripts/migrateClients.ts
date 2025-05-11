@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import type { Prisma, ClientStatus, Contact } from "@prisma/client";
+import type { Prisma, ClientStatus, Contact, ActivityLogType } from "@prisma/client";
 import { parse } from "csv-parse";
 import * as fs from "fs";
 import * as path from "path";
@@ -24,9 +24,9 @@ process.on('unhandledRejection', (reason) => {
 });
 
 // --- Configuration ---
-const csvFilePath = path.resolve(__dirname, "../data/QASClientDatabase.csv"); // This line should now work
+const csvFilePath = path.resolve(__dirname, "../data/client-database-11may2025.csv");
 // !!!!! REPLACE 'YOUR_ADMIN_USER_ID' with the actual UUID of the user running the script !!!!!
-const scriptRunnerUserId = "149e554e-16ec-47b6-b3b2-8be18eadb5b1"; // <<<--- CONFIRM/CHANGE THIS
+const scriptRunnerUserId = "ad68638e-cad1-4340-9f38-8ab72e082433"; // <<<--- CONFIRM/CHANGE THIS
 const defaultAuditStatusName = "In Progress"; // Default status for initial audit
 
 // --- Helper Functions ---
@@ -159,6 +159,15 @@ function parseActivityLog(
   return results;
 }
 
+// Helper to infer activity log type from content (using string literals)
+function determineLogType(content: string): ActivityLogType {
+  const lc = content.toLowerCase();
+  if (/email/i.test(lc)) return 'email_sent';
+  if (/recd|received/i.test(lc)) return 'email_received';
+  if (/call|phoned/.test(lc)) return 'call_in';
+  return 'note';
+}
+
 // --- Main Migration Function ---
 async function main() {
   console.log(`Starting migration from ${csvFilePath}...`);
@@ -169,6 +178,7 @@ async function main() {
     trim: true,
     escape: "\\",
     relax_quotes: true,
+    relax_column_count: true,
   });
   let successCount = 0;
   let errorCount = 0;
@@ -229,23 +239,36 @@ async function main() {
           ? (clientStatusRaw as ClientStatus)
           : "active";
         // Determine actual CSV 'Fees' header key, trimming whitespace
-        const feesKey = Object.keys(record).find((k) => k.trim().toLowerCase() === "fees");
+        const feesKey = Object.keys(record).find((k) =>
+          k.trim().toLowerCase().includes("est ann fees")
+        );
         const feesValue = feesKey ? record[feesKey]?.trim() : undefined;
         const estAnnFeesVal = feesValue
           ? parseFloat(feesValue.replace(/[",\s]/g, ""))
           : null;
+        // Prepare External Folder field: extract URL if present, else keep raw value
+        const rawExternalFolder = record["External Folder"]?.trim() || null;
+        let externalFolderVal: string | null = null;
+        if (rawExternalFolder) {
+          const urlMatch = rawExternalFolder.match(/https?:\/\/\S+/);
+          externalFolderVal = urlMatch ? urlMatch[0] : rawExternalFolder;
+        }
+
         const client = await tx.client.create({
           data: {
-            clientName: clientName,
+            clientName,
             abn: record["ABN"] || null,
             address: record["Address"] || null,
             city: record["City"] || null,
             postcode: record["Postcode"] || null,
+            phone: record["Phone 1"] || null,
+            email: record["Email"]?.split(/[,;]/).map((e: string) => e.trim())[0] || null,
             status: clientStatus,
-            auditPeriodEndDate: parseCsvDate(record["Audit End"]),
-            nextContactDate: parseCsvDate(record["Next Contact"]),
+            // Map Audit Period End Date using Next Audit Year End (DD/MM/YYYY)
+            auditPeriodEndDate: parseCsvDate(record["Next Audit Year End"]),
+            nextContactDate: parseCsvDate(record["Next Contact Date"]),
             estAnnFees: estAnnFeesVal,
-            // softwareAccess field removed from Client model
+            externalFolder: externalFolderVal,
           },
         });
         console.log(`  Created client ${client.id}`);
@@ -257,26 +280,25 @@ async function main() {
           email: string | null;
         }[] = [];
         const emails = (record["Email"] || "")
-          .split(/[,;]/)
+          .split(/;/)
           .map((e: string) => e.trim())
           .filter(Boolean);
         const contactNames = [
           record["Contact 1"],
           record["Contact 2"],
           record["Contact 3"],
-        ].filter(Boolean);
+        ];
         const contactPhones = [
           record["Phone 1"],
           record["Phone 2"],
-          record["Phone 3"],
         ];
 
-        for (let i = 0; i < contactNames.length; i++) {
+        for (let i = 0; i < emails.length; i++) {
           const contactData = {
             clientId: client.id,
-            name: contactNames[i],
+            name: contactNames[i] || null,
             phone: contactPhones[i] || null,
-            email: emails[i] || null,
+            email: emails[i],
             title: `Contact ${i + 1}`,
             isPrimary: i === 0,
           };
@@ -309,48 +331,6 @@ async function main() {
                 `  Error creating contact ${contactData.name} for client ${clientName}:`,
                 e
               );
-            }
-          }
-        }
-        if (emails.length > contactNames.length) {
-          for (let i = contactNames.length; i < emails.length; i++) {
-            const email = emails[i];
-            let existingContactByEmail: Contact | null = null;
-            if (email) {
-              try {
-                existingContactByEmail = await tx.contact.findFirst({
-                  where: { email: email },
-                });
-              } catch (e: unknown) {
-                console.error(
-                  `  Error checking email uniqueness for ${email}:`,
-                  e
-                );
-              }
-            }
-            if (existingContactByEmail) {
-              console.warn(
-                `  Contact with email ${email} exists (ID: ${existingContactByEmail.id}). Skipping.`
-              );
-            } else if (email) {
-              try {
-                const created = await tx.contact.create({
-                  data: {
-                    clientId: client.id,
-                    name: null,
-                    email: email,
-                    title: `Email Contact ${i + 1}`,
-                    isPrimary: false,
-                  },
-                });
-                createdContacts.push(created);
-                console.log(`    Created contact (from extra email) ${email}`);
-              } catch (e: unknown) {
-                console.error(
-                  `  Error creating contact for email ${email} for client ${clientName}:`,
-                  e
-                );
-              }
             }
           }
         }
@@ -433,13 +413,11 @@ async function main() {
         // 4. Create Trust Account(s)
         if (record["Bank"]) {
           const softwareAccessRaw = record["Software & Access (y/n)"] || "";
-          const hasAccess = softwareAccessRaw
-            .trim()
-            .toUpperCase()
-            .startsWith("Y");
+          const softwareAccess = softwareAccessRaw.trim();
+          const hasAccess = softwareAccess.toUpperCase() === "Y";
           let softwareName: string | null = null;
-          if (hasAccess && softwareAccessRaw.includes("-")) {
-            softwareName = softwareAccessRaw.split("-")[1]?.trim() || null;
+          if (hasAccess && softwareAccess.includes("-")) {
+            softwareName = softwareAccess.split("-")[1]?.trim() || null;
           } else if (hasAccess) {
             console.warn(
               `  Software access marked 'Y' but no software name found for client ${clientName}. Raw value: "${softwareAccessRaw}"`
@@ -462,39 +440,45 @@ async function main() {
 
         // 5. Create Initial Audit Record
         let initialAudit: { id: string; createdAt: Date } | null = null;
-        const nextAuditYearEndStr = record["Next Audit Year End"];
-        const auditYearMatch = nextAuditYearEndStr?.match(/(\d{2}|\d{4})$/);
-        const auditYear = auditYearMatch
-          ? parseInt(auditYearMatch[1]) < 100
-            ? 2000 + parseInt(auditYearMatch[1])
-            : parseInt(auditYearMatch[1])
-          : new Date().getFullYear();
-        // Map Audit Stage using normalization
-        const rawStage = record["Audit Stage"]?.trim().toLowerCase() || "";
-        let stageId: number | undefined = auditStagesMap.get(rawStage);
-        if (!stageId && rawStage) {
-          // Try normalized match without spaces or hyphens
-          const normRaw = rawStage.replace(/[-\s]/g, "");
+        // Parse Next Audit Year End (DD/MM/YYYY) for audit period and year
+        const auditDate = parseCsvDate(record["Next Audit Year End"]);
+        const auditYear = auditDate ? auditDate.getUTCFullYear() : new Date().getFullYear();
+        // Map Audit Stage using normalization and alias for final audit
+        const rawStage = record["Stage"]?.trim().toLowerCase() || "";
+        const stageAliases: Record<string, string> = {
+          "final audit": "year-end audit",
+        };
+        const mappedStage = stageAliases[rawStage] || rawStage;
+        let stageId: number | undefined = auditStagesMap.get(mappedStage);
+        if (!stageId && mappedStage) {
+          const normRaw = mappedStage.replace(/[-\s]/g, "");
           stageId = auditStagesMapNormalized.get(normRaw);
         }
         if (!stageId) {
-          console.warn(`Could not map Audit Stage "${record["Audit Stage"]}" (raw: ${rawStage})`);
+          console.warn(`Could not map Audit Stage "${record["Stage"]}" (raw: ${rawStage})`);
         }
+        // Compute Report Due Date as auditDate + 4 months, last day of that month
         let reportDueDate: Date | null = null;
-        const auditMonthEndNum = monthToNumber(record["Audit End"]);
-        if (auditMonthEndNum) {
-          const yearEndMonthIndex = auditMonthEndNum - 1;
-          const dueMonthIndex = (yearEndMonthIndex + 3) % 12;
-          const dueYear = auditYear + (yearEndMonthIndex + 3 >= 12 ? 1 : 0);
+        if (auditDate) {
+          const year = auditDate.getUTCFullYear();
+          const monthIndex = auditDate.getUTCMonth();
+          const dueTotal = monthIndex + 4;
+          const dueYear = year + Math.floor(dueTotal / 12);
+          const dueMonthIndex = dueTotal % 12;
           reportDueDate = new Date(Date.UTC(dueYear, dueMonthIndex + 1, 0));
         } else {
           console.warn(
-            `  Cannot calculate reportDueDate for ${clientName} due to missing auditMonthEnd.`
+            `  Cannot calculate reportDueDate for ${clientName} due to invalid Next Audit Year End ("${record["Next Audit Year End"]}")`
           );
         }
 
         // Before creating audit, map the CSV 'Audit Status' column
-        const auditStatusRaw = record["Audit Status"]?.trim().toLowerCase();
+        const auditStatusCol = Object.keys(record).find(k =>
+          k.trim().toLowerCase() === "audit status"
+        );
+        const auditStatusRaw = auditStatusCol
+          ? record[auditStatusCol]?.trim().toLowerCase()
+          : undefined;
         const auditStatusId = auditStatusesMap.get(auditStatusRaw) ?? defaultStatusId;
 
         initialAudit = await tx.audit.create({
@@ -509,7 +493,7 @@ async function main() {
         });
         console.log(`    Created initial audit record for year ${auditYear}`);
 
-        // 6. Create Activity Log Entries
+        // 6. Create Activity Log Entries from "Notes" column
         const rawNotes = record["Notes"] || "";
         const activityLogEntries = parseActivityLog(rawNotes);
         if (activityLogEntries.length > 0 && initialAudit) {
@@ -517,7 +501,7 @@ async function main() {
             auditId: initialAudit!.id,
             clientId: client.id,
             createdBy: scriptRunnerUserId,
-            type: "note" as const,
+            type: determineLogType(entry.content),
             content: entry.content,
             createdAt: entry.date || initialAudit!.createdAt,
           }));
