@@ -120,6 +120,8 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "database",
   },
+  // Automatically link accounts with the same email to avoid OAuthAccountNotLinked errors
+  allowDangerousEmailAccountLinking: true,
   // secret: env.NEXTAUTH_SECRET, // Ensure this is set
   events: {
     async signIn({ user, account, profile }) {
