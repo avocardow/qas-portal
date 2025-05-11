@@ -53,7 +53,11 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
     status,
     invoicePaid,
     invoiceIssueDate,
+    assignments,
   } = audit;
+
+  // Compute assigned staff names from auditAssignments
+  const assignedNames = assignments?.map(a => a.user?.name).filter(Boolean).join(', ');
 
   return (
     <>
@@ -102,7 +106,7 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
           </div>
           <div className="col-span-full">
             <span className="font-semibold">Staff Assigned:</span>{" "}
-            {clientData?.assignedUser?.name ?? "Unassigned"}
+            {assignedNames || "Unassigned"}
           </div>
         </div>
       </ComponentCard>
