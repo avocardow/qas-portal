@@ -11,6 +11,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useImpersonationContext } from '@/contexts/ImpersonationContext';
 import { useSession } from 'next-auth/react';
 import type { Role } from '@/policies/permissions';
+import { useAbility } from '@/hooks/useAbility';
+import { IMPERSONATION_PERMISSIONS } from '@/constants/permissions';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -20,7 +22,8 @@ const AppHeader: React.FC = () => {
   const { data: session } = useSession();
   const actualRole = session?.user.role as Role;
   const allRoles: Role[] = ['Developer','Admin','Manager','Auditor','Staff','Client'];
-  const isDeveloper = actualRole === 'Developer';
+  const { can } = useAbility();
+  const canUseImpersonation = can(IMPERSONATION_PERMISSIONS.USE);
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -172,8 +175,8 @@ const AppHeader: React.FC = () => {
           } shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 lg:flex lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="2xsm:gap-3 flex items-center gap-2">
-            {/* Impersonation Dropdown for Developers */}
-            {isDeveloper && (
+            {/* Impersonation Dropdown */}
+            {canUseImpersonation && (
               <div className="relative flex items-center gap-2">
                 <select
                   className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"

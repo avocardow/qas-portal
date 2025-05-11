@@ -8,6 +8,7 @@ import {
   TRUST_ACCOUNTS_PERMISSIONS,
   ACTIVITY_PERMISSIONS,
   NAV_PERMISSIONS,
+  IMPERSONATION_PERMISSIONS,
 } from '../constants/permissions.ts';
 
 /**
@@ -22,7 +23,8 @@ export type Permission =
   | (typeof CONTACT_PERMISSIONS)[keyof typeof CONTACT_PERMISSIONS]
   | (typeof TRUST_ACCOUNTS_PERMISSIONS)[keyof typeof TRUST_ACCOUNTS_PERMISSIONS]
   | (typeof ACTIVITY_PERMISSIONS)[keyof typeof ACTIVITY_PERMISSIONS]
-  | (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS];
+  | (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS]
+  | (typeof IMPERSONATION_PERMISSIONS)[keyof typeof IMPERSONATION_PERMISSIONS];
 
 /**
  * Roles in the system.
@@ -63,6 +65,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ACTIVITY_PERMISSIONS.ADD_BILLING_COMMENTARY,
     ACTIVITY_PERMISSIONS.ADD_EXTERNAL_FOLDER_INSTRUCTIONS,
     ACTIVITY_PERMISSIONS.ADD_SOFTWARE_ACCESS_INSTRUCTIONS,
+    IMPERSONATION_PERMISSIONS.USE,
   ],
   Manager: [
     ...Object.values(AUDIT_PERMISSIONS),

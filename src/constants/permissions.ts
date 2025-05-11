@@ -101,4 +101,10 @@ export const NAV_PERMISSIONS = {
   PAGE_HEADINGS: 'nav.page.headings',
 } as const;
 
+export const IMPERSONATION_PERMISSIONS = {
+  USE: 'impersonation.use',
+} as const;
+
+export type ImpersonationPermission = (typeof IMPERSONATION_PERMISSIONS)[keyof typeof IMPERSONATION_PERMISSIONS];
+
 export type NavPermission = (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS];
