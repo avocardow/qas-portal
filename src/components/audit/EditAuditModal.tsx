@@ -27,6 +27,8 @@ const auditFormSchema = z.object({
   assignedUserId: z.string().nullable().optional(),
   reportDueDate: z.string().optional(),
   lodgedWithOFTDate: z.string().optional(),
+  invoicePaid: z.boolean().optional(),
+  invoiceIssueDate: z.string().optional(),
 });
 type AuditFormData = z.infer<typeof auditFormSchema>;
 
@@ -62,6 +64,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
       assignedUserId: existingAudit?.assignments?.[0]?.userId ?? null,
       reportDueDate: existingAudit?.reportDueDate ? existingAudit.reportDueDate.toISOString().split('T')[0] : undefined,
       lodgedWithOFTDate: existingAudit?.lodgedWithOFTDate ? existingAudit.lodgedWithOFTDate.toISOString().split('T')[0] : undefined,
+      invoicePaid: existingAudit?.invoicePaid ?? false,
+      invoiceIssueDate: existingAudit?.invoiceIssueDate ? existingAudit.invoiceIssueDate.toISOString().split('T')[0] : undefined,
     }
   });
   const [initAssign] = useState(existingAudit?.assignments?.[0]?.userId ?? null);
@@ -77,6 +81,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
         assignedUserId: existingAudit?.assignments?.[0]?.userId ?? null,
         reportDueDate: existingAudit?.reportDueDate ? existingAudit.reportDueDate.toISOString().split('T')[0] : undefined,
         lodgedWithOFTDate: existingAudit?.lodgedWithOFTDate ? existingAudit.lodgedWithOFTDate.toISOString().split('T')[0] : undefined,
+        invoicePaid: existingAudit?.invoicePaid ?? false,
+        invoiceIssueDate: existingAudit?.invoiceIssueDate ? existingAudit.invoiceIssueDate.toISOString().split('T')[0] : undefined,
       });
     }
   }, [isOpen, existingAudit, reset]);
@@ -93,6 +99,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
           statusId: formData.statusId,
           reportDueDate: formData.reportDueDate ? new Date(formData.reportDueDate) : undefined,
           lodgedWithOFTDate: formData.lodgedWithOFTDate ? new Date(formData.lodgedWithOFTDate) : undefined,
+          invoicePaid: formData.invoicePaid,
+          invoiceIssueDate: formData.invoiceIssueDate ? new Date(formData.invoiceIssueDate) : undefined,
         };
         await updateAuditMutation.mutateAsync(payload);
         auditId = existingAudit.id;
@@ -213,6 +221,28 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   <DatePicker
                     id="lodgedWithOFTDatePicker"
                     label="Lodged with OFT Date"
+                    placeholder="DD/MM/YYYY"
+                    defaultDate={field.value || undefined}
+                    onChange={(dates) => {
+                      if (dates.length) {
+                        const d = dates[0] as Date;
+                        field.onChange(d.toISOString().split('T')[0]);
+                      }
+                    }}
+                  />
+                )}
+              />
+              <div className="flex items-center">
+                <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
+                <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
+              </div>
+              <Controller
+                control={control}
+                name="invoiceIssueDate"
+                render={({ field }) => (
+                  <DatePicker
+                    id="invoiceIssueDatePicker"
+                    label="Invoice Issue Date"
                     placeholder="DD/MM/YYYY"
                     defaultDate={field.value || undefined}
                     onChange={(dates) => {

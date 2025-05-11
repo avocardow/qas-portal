@@ -8,6 +8,7 @@ import { useClientData } from "@/hooks/useClientData";
 import type { RouterOutput } from "@/utils/api";
 import { useAbility } from '@/hooks/useAbility';
 import { AUDIT_PERMISSIONS, CLIENT_PERMISSIONS } from "@/constants/permissions";
+import Badge from "@/components/ui/badge/Badge";
 
 interface CurrentAuditCardProps {
   clientId: string;
@@ -50,6 +51,8 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
     reportDueDate,
     stage,
     status,
+    invoicePaid,
+    invoiceIssueDate,
   } = audit;
 
   return (
@@ -63,6 +66,18 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
         }
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+          <div>
+            <span className="font-medium">Invoice Paid?</span>{" "}
+            <Badge variant="solid" color={invoicePaid ? "success" : "error"}>
+              {invoicePaid ? "Paid" : "Unpaid"}
+            </Badge>
+          </div>
+          {invoiceIssueDate && (
+            <div>
+              <span className="font-medium">Invoice Issue Date:</span>{" "}
+              {format(new Date(invoiceIssueDate), "PPP")}
+            </div>
+          )}
           <div>
             <span className="font-medium">Next Contact Date:</span>{" "}
             {clientData?.nextContactDate
