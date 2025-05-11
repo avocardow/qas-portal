@@ -42,6 +42,7 @@ const clientCreateSchema = z.object({
 });
 const clientUpdateSchema = clientCreateSchema.extend({
   clientId: z.string().uuid(),
+  assignedUserId: z.string().uuid().nullable().optional(),
 });
 
 // Add explicit Zod schema for getById response to ensure correct output types
@@ -324,9 +325,24 @@ export const clientRouter = createTRPCRouter({
     }),
   update: adminProcedure
     .input(clientUpdateSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { clientId, ...data } = input;
-      return ctx.db.client.update({ where: { id: clientId }, data });
+      // Retrieve old client to detect assignment changes
+      const oldClient = await ctx.db.client.findUnique({ where: { id: clientId }, select: { assignedUserId: true } });
+      const updatedClient = await ctx.db.client.update({ where: { id: clientId }, data });
+      // Log assignment activity if assignedUserId changed
+      if (input.assignedUserId !== undefined && input.assignedUserId !== oldClient?.assignedUserId) {
+        const user = await ctx.db.user.findUnique({ where: { id: input.assignedUserId as string }, select: { name: true } });
+        await ctx.db.activityLog.create({
+          data: {
+            clientId,
+            createdBy: ctx.session.user.id,
+            type: ActivityLogType.client_assigned,
+            content: `${user?.name} assigned to Client`,
+          },
+        });
+      }
+      return updatedClient;
     }),
   archive: protectedProcedure
     .use(enforceRole(["Admin", "Manager"]))

@@ -32,6 +32,8 @@ interface ActivityLogTimelineProps {
 function getActivityIcon(type: string) {
   const base = "text-xl text-gray-500 dark:text-gray-400 flex items-center justify-center";
   switch (type) {
+    case 'client_assigned': return <i className={`fa-solid fa-handshake-angle ${base}`} />;
+    case 'audit_assigned': return <i className={`fa-solid fa-list-check ${base}`} />;
     case 'note': return <i className={`fa-solid fa-note-sticky ${base}`} />;
     case 'email_sent': return <i className={`fa-solid fa-inbox-out ${base}`} />;
     case 'email_received': return <i className={`fa-solid fa-inbox-in ${base}`} />;

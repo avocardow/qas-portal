@@ -39,6 +39,8 @@ enum ActivityLogType {
   billing_commentary
   external_folder_instructions
   software_access_instructions
+  client_assigned
+  audit_assigned
 }
 
 // ========== Core Entities ==========
