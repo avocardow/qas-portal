@@ -43,6 +43,7 @@ export default function ClientDetailPage() {
   useEffect(() => {
     if (isAddActivityOpen) setActivityError(null);
   }, [isAddActivityOpen]);
+
   const addActivityMutation = api.clients.addActivityLog.useMutation({
     onMutate: async (newLog) => {
       await utils.clients.getById.cancel({ clientId });
@@ -78,9 +79,10 @@ export default function ClientDetailPage() {
       Notification({ variant: 'error', title: error instanceof Error ? error.message : 'Failed to archive client' });
     },
   });
+  // TODO: ensure the server-side API enforces clients.archive permission; do not rely solely on frontend gating
 
-  // Fetch client data using custom hook
-  const { data: _clientData, isLoading, isError, error } = useClientData(clientId, { staleTime: 5 * 60 * 1000 });
+  // Fetch client data using custom hook; prevent query when clientId is missing
+  const { data: _clientData, isLoading, isError, error } = useClientData(clientId, { enabled: Boolean(clientId) });
   // Cast raw data to typed ClientById for proper property inference
   type ClientById = RouterOutput["clients"]["getById"];
   const clientData = _clientData as ClientById | undefined;
@@ -171,6 +173,15 @@ export default function ClientDetailPage() {
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] ?? null;
   }, [clientData?.activityLogs]);
   
+  // Validate clientId parameter after hooks
+  if (!clientId) {
+    return (
+      <DashboardPlaceholderPageTemplate heading="Error">
+        <p>Invalid client ID.</p>
+      </DashboardPlaceholderPageTemplate>
+    );
+  }
+
   // Handle loading state
   if (isLoading) {
     return (
@@ -183,15 +194,6 @@ export default function ClientDetailPage() {
   // Handle error state
   if (isError) {
     return <ErrorFallback message={error?.message} />;
-  }
-
-  // Validate clientId param
-  if (!clientId) {
-    return (
-      <DashboardPlaceholderPageTemplate heading="Error">
-        <p>Invalid client ID.</p>
-      </DashboardPlaceholderPageTemplate>
-    );
   }
 
   return (
@@ -254,13 +256,13 @@ export default function ClientDetailPage() {
             <div>
               <span className="font-medium">Next Contact Date:</span>{" "}
               {nextContactDate
-                ? nextContactDate.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })
+                ? nextContactDate.toLocaleDateString('en-AU', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })
                 : "-"}
             </div>
             <div>
               <span className="font-medium">Audit Period End Date:</span>{" "}
               {clientData?.auditPeriodEndDate
-                ? new Date(clientData.auditPeriodEndDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long' })
+                ? new Date(clientData.auditPeriodEndDate).toLocaleDateString('en-AU', { day: '2-digit', month: 'long' })
                 : "-"}
             </div>
             <div>
