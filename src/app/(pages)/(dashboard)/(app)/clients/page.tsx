@@ -169,8 +169,15 @@ export default function ClientsPage() {
       {
         key: "assignedUser",
         header: "Staff Assigned",
-        sortable: true,
-        cell: (row: any) => row.assignedUser?.name ?? "Unassigned",
+        sortable: false,
+        cell: (row: any) => {
+          const assignments = row.audits?.[0]?.assignments;
+          const names = assignments
+            ?.map((a: any) => a.user?.name)
+            .filter((n: string | undefined) => !!n)
+            .join(', ');
+          return names || "Unassigned";
+        },
       },
       {
         key: "auditStageName",

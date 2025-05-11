@@ -198,7 +198,14 @@ export const clientRouter = createTRPCRouter({
             audits: {
               take: 1,
               orderBy: { auditYear: "desc" },
-              select: { stage: { select: { name: true } } },
+              select: {
+                stage: { select: { name: true } },
+                assignments: {
+                  select: {
+                    user: { select: { id: true, name: true } },
+                  },
+                },
+              },
             },
             assignedUser: { select: { id: true, name: true } },
           },
