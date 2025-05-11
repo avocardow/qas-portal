@@ -167,7 +167,12 @@ export const authOptions: NextAuthOptions = {
         // Fetch profile photo from Microsoft Graph
         if (account.access_token) {
           try {
-            const client = Client.initWithMiddleware({ authProvider: (done) => done(null, account.access_token) });
+            // Initialize Microsoft Graph client with async access token provider
+            const client = Client.initWithMiddleware({
+              authProvider: {
+                getAccessToken: async () => account.access_token ?? "",
+              },
+            });
             const photoBlob = await client.api('/me/photo/$value').get();
             const arrayBuffer = await photoBlob.arrayBuffer();
             const base64 = Buffer.from(arrayBuffer).toString('base64');
