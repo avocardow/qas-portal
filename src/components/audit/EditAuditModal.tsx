@@ -256,6 +256,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   label="Invoice Issue Date"
                   placeholder="DD/MM/YYYY"
                   defaultDate={field.value ? new Date(field.value) : undefined}
+                  maxDate={new Date()}
                   onChange={(dates) => {
                     if (dates.length) {
                       const d = dates[0] as Date;

@@ -17,6 +17,8 @@ type PropsType = {
   placeholder?: string;
   /** Minimum selectable date */
   minDate?: DateOption;
+  /** Maximum selectable date */
+  maxDate?: DateOption;
   /** Show time select (24hr). Defaults to false. */
   enableTime?: boolean;
 };
@@ -29,6 +31,7 @@ export default function DatePicker({
   defaultDate,
   placeholder,
   minDate,
+  maxDate,
   enableTime = false,
 }: PropsType) {
   useEffect(() => {
@@ -40,6 +43,7 @@ export default function DatePicker({
       dateFormat: enableTime ? "d/m/Y H:i" : "d/m/Y",
       defaultDate,
       minDate,
+      maxDate,
       onChange,
     });
 
@@ -48,7 +52,7 @@ export default function DatePicker({
         flatPickr.destroy();
       }
     };
-  }, [mode, onChange, id, defaultDate, minDate, enableTime]);
+  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime]);
 
   return (
     <div>
