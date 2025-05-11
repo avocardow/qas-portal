@@ -13,6 +13,7 @@ import { PencilIcon } from '@/icons';
 import ComponentCard from '@/components/common/ComponentCard';
 import DatePicker from '@/components/form/date-picker';
 import Button from '@/components/ui/button/Button';
+import { format } from 'date-fns';
 
 interface EditAuditModalProps {
   clientId: string;
@@ -204,11 +205,11 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                     id="reportDueDatePicker"
                     label="Report Due Date"
                     placeholder="DD/MM/YYYY"
-                    defaultDate={field.value || undefined}
+                    defaultDate={field.value ? new Date(field.value) : undefined}
                     onChange={(dates) => {
                       if (dates.length) {
                         const d = dates[0] as Date;
-                        field.onChange(d.toISOString().split('T')[0]);
+                        field.onChange(format(d, 'yyyy-MM-dd'));
                       }
                     }}
                   />
@@ -222,11 +223,11 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                     id="lodgedWithOFTDatePicker"
                     label="Lodged with OFT Date"
                     placeholder="DD/MM/YYYY"
-                    defaultDate={field.value || undefined}
+                    defaultDate={field.value ? new Date(field.value) : undefined}
                     onChange={(dates) => {
                       if (dates.length) {
                         const d = dates[0] as Date;
-                        field.onChange(d.toISOString().split('T')[0]);
+                        field.onChange(format(d, 'yyyy-MM-dd'));
                       }
                     }}
                   />
@@ -244,11 +245,11 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                     id="invoiceIssueDatePicker"
                     label="Invoice Issue Date"
                     placeholder="DD/MM/YYYY"
-                    defaultDate={field.value || undefined}
+                    defaultDate={field.value ? new Date(field.value) : undefined}
                     onChange={(dates) => {
                       if (dates.length) {
                         const d = dates[0] as Date;
-                        field.onChange(d.toISOString().split('T')[0]);
+                        field.onChange(format(d, 'yyyy-MM-dd'));
                       }
                     }}
                   />
