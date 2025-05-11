@@ -93,7 +93,7 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
               >
-                {`Open in ${row.managementSoftware}`}
+                {row.managementSoftware}
               </a>
               <Popover
                 position="right"

@@ -38,7 +38,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
 
   const trustAccountSchema = z.object({
     accountName: z.string().optional(),
-    bankName: z.string().optional(),
+    bankName: z.string(),
     bsb: z.string().optional(),
     accountNumber: z.string().optional(),
     managementSoftware: z.string().optional(),

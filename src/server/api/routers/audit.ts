@@ -49,7 +49,7 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditId: audit.id,
             clientId: audit.clientId,
-            userId: ctx.session.user.id,
+            createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
             content: `Created audit for year ${audit.auditYear}`,
           },
@@ -73,7 +73,7 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditId: audit.id,
             clientId: audit.clientId,
-            userId: ctx.session.user.id,
+            createdBy: ctx.session.user.id,
             type: ActivityLogType.stage_change,
             content: `Changed stage to ${stageId} and status to ${statusId}`,
           },
@@ -122,7 +122,7 @@ export const auditRouter = createTRPCRouter({
         await ctx.db.activityLog.create({
           data: {
             clientId: input.clientId,
-            userId: ctx.session.user.id,
+            createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
             content: `Viewed audits for client ${input.clientId}`,
           },
@@ -144,7 +144,7 @@ export const auditRouter = createTRPCRouter({
           assignments: { include: { user: true } },
           tasks: { include: { assignedUser: true } },
           activityLogs: {
-            include: { user: true },
+            include: { creator: true },
             orderBy: { createdAt: "desc" },
           },
         },
@@ -154,7 +154,7 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditId: audit.id,
             clientId: audit.clientId,
-            userId: ctx.session.user.id,
+            createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
             content: `Viewed audit details for ${input.auditId}`,
           },
@@ -199,7 +199,7 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditId,
             clientId: audit.clientId,
-            userId: ctx.session.user.id,
+            createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
             content: `Assigned user ${userId} to audit`,
           },
@@ -223,7 +223,7 @@ export const auditRouter = createTRPCRouter({
           data: {
             auditId,
             clientId: audit.clientId,
-            userId: ctx.session.user.id,
+            createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
             content: `Unassigned user ${userId} from audit`,
           },
