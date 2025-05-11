@@ -153,7 +153,15 @@ export const clientRouter = createTRPCRouter({
       const whereClause: Prisma.ClientWhereInput = {};
       if (statuses) whereClause.status = { in: statuses };
       if (assignedUserId !== undefined) {
-        whereClause.assignedUserId = assignedUserId === null ? null : assignedUserId;
+        if (assignedUserId === null) {
+          // Filter clients with no audit assignments
+          whereClause.audits = { every: { assignments: { none: {} } } };
+        } else {
+          // Filter clients assigned to the specified user in any audit
+          whereClause.audits = {
+            some: { assignments: { some: { userId: assignedUserId } } },
+          };
+        }
       }
       whereClause.OR = [
         { clientName: { contains: filter || "", mode: "insensitive" as const } },
