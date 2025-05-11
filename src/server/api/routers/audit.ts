@@ -93,10 +93,12 @@ export const auditRouter = createTRPCRouter({
         statusId: z.number().int().optional(),
         reportDueDate: z.date().optional(),
         lodgedWithOFTDate: z.date().optional(),
+        invoicePaid: z.boolean().optional(),
+        invoiceIssueDate: z.date().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { auditId, auditYear, stageId, statusId, reportDueDate, lodgedWithOFTDate } = input;
+      const { auditId, auditYear, stageId, statusId, reportDueDate, lodgedWithOFTDate, invoicePaid, invoiceIssueDate } = input;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = {};
       if (auditYear !== undefined) data.auditYear = auditYear;
@@ -104,8 +106,43 @@ export const auditRouter = createTRPCRouter({
       if (statusId !== undefined) data.statusId = statusId;
       if (reportDueDate !== undefined) data.reportDueDate = reportDueDate;
       if (lodgedWithOFTDate !== undefined) data.lodgedWithOFTDate = lodgedWithOFTDate;
+      if (invoicePaid !== undefined) data.invoicePaid = invoicePaid;
+      if (invoiceIssueDate !== undefined) data.invoiceIssueDate = invoiceIssueDate;
+
+      // Fetch previous values for comparison
+      const previous = await ctx.db.audit.findUnique({ where: { id: auditId }, select: { stageId: true, statusId: true } });
+
       const audit = await ctx.db.audit.update({ where: { id: auditId }, data });
-      // No activityLog here; reuse existing logs if needed
+
+      // Create activity logs for stage or status changes
+      if (ctx.db.activityLog) {
+        if (stageId !== undefined && stageId !== previous?.stageId) {
+          // Fetch stage name for readable log
+          const stage = await ctx.db.auditStage.findUnique({ where: { id: stageId } });
+          await ctx.db.activityLog.create({
+            data: {
+              auditId,
+              clientId: audit.clientId,
+              createdBy: ctx.session.user.id,
+              type: ActivityLogType.stage_change,
+              content: `Changed stage to ${stage?.name ?? stageId}`,
+            },
+          });
+        }
+        if (statusId !== undefined && statusId !== previous?.statusId) {
+          const status = await ctx.db.auditStatus.findUnique({ where: { id: statusId } });
+          await ctx.db.activityLog.create({
+            data: {
+              auditId,
+              clientId: audit.clientId,
+              createdBy: ctx.session.user.id,
+              type: ActivityLogType.status_change,
+              content: `Changed status to ${status?.name ?? statusId}`,
+            },
+          });
+        }
+      }
+
       return audit;
     }),
 
