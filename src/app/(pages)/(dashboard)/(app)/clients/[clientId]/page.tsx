@@ -127,6 +127,14 @@ export default function ClientDetailPage() {
   const title = clientData?.clientName ?? ("Client " + clientId);
   
   // Activity log filtering setup
+  const ACTIVITY_TYPE_GROUPS: Record<string, string[]> = {
+    note: ['note'],
+    email: ['email_sent', 'email_received'],
+    call: ['call_in', 'call_out'],
+    statusUpdate: ['status_change', 'stage_change', 'client_assigned', 'audit_assigned'],
+    document: ['document_request', 'document_received', 'document_signed'],
+    task: ['task_created', 'task_completed'],
+  };
   const tabs = [
     { label: 'All', type: 'all' },
     { label: 'Notes', type: 'note' },
@@ -138,7 +146,10 @@ export default function ClientDetailPage() {
   ];
   const filteredLogs = useMemo(() => {
     let logs = activityLogs;
-    if (filterType !== 'all') logs = logs.filter((entry) => entry.type === filterType);
+    if (filterType !== 'all') {
+      const types = ACTIVITY_TYPE_GROUPS[filterType] ?? [];
+      logs = logs.filter((entry) => types.includes(entry.type));
+    }
     if (startDate) {
       logs = logs.filter((entry) => {
         const entryDateStr = new Date(entry.createdAt).toISOString().split('T')[0];
