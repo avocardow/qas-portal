@@ -13,6 +13,7 @@ import { useSession } from 'next-auth/react';
 import type { Role } from '@/policies/permissions';
 import { useAbility } from '@/hooks/useAbility';
 import { IMPERSONATION_PERMISSIONS } from '@/constants/permissions';
+import { getPermissionsForRole } from '@/policies/permissions';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -24,6 +25,11 @@ const AppHeader: React.FC = () => {
   const allRoles: Role[] = ['Developer','Admin','Manager','Auditor','Staff','Client'];
   const { can } = useAbility();
   const canUseImpersonation = can(IMPERSONATION_PERMISSIONS.USE);
+  const originalRole = session?.user.role as Role;
+  const originalCanUseImpersonation = getPermissionsForRole(originalRole).includes(
+    IMPERSONATION_PERMISSIONS.USE
+  );
+  const showImpersonationDropdown = canUseImpersonation || originalCanUseImpersonation;
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -176,7 +182,7 @@ const AppHeader: React.FC = () => {
         >
           <div className="2xsm:gap-3 flex items-center gap-2">
             {/* Impersonation Dropdown */}
-            {canUseImpersonation && (
+            {showImpersonationDropdown && (
               <div className="relative flex items-center gap-2">
                 <select
                   className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
