@@ -15,6 +15,11 @@ import useDebounce from "@/hooks/useDebounce";
 import Button from "@/components/ui/button/Button";
 import Authorized from "@/components/Authorized";
 import { CLIENT_PERMISSIONS } from "@/constants/permissions";
+import type { RouterOutput } from '@/utils/api';
+
+// Extract only the full client shape (with contacts, audits, etc.) for table rows
+type RawClient = RouterOutput['clients']['getAll']['items'][number];
+type ClientTableRow = Extract<RawClient, { contacts: unknown }>;
 
 export default function ClientsPage() {
   const [notification, setNotification] = useState<{
@@ -93,6 +98,7 @@ export default function ClientsPage() {
         filter: debouncedSearchTerm,
         sortBy,
         sortOrder,
+        assignedUserId: assignedUserIdFilter,
       };
 
       // Prefetch next page
@@ -109,6 +115,7 @@ export default function ClientsPage() {
     pageSize,
     showAll,
     statusFilter,
+    assignedUserIdFilter,
     totalDbEntries,
     clientsQuery.data,
     utils,
@@ -152,7 +159,7 @@ export default function ClientsPage() {
         key: "clientName",
         header: "Client Name",
         sortable: true,
-        cell: (row: any) => {
+        cell: (row: ClientTableRow) => {
           const name = row.clientName ?? "-";
           return name.length > MAX_CLIENT_NAME_LENGTH
             ? name.slice(0, MAX_CLIENT_NAME_LENGTH) + "..."
@@ -163,18 +170,18 @@ export default function ClientsPage() {
         key: "primaryContact",
         header: "Primary Contact",
         sortable: false,
-        cell: (row: any) =>
-          row.contacts?.find((c: any) => c.isPrimary)?.name ?? "-",
+        cell: (row: ClientTableRow) =>
+          row.contacts.find((c) => c.isPrimary)?.name ?? "-",
       },
       {
         key: "assignedUser",
         header: "Staff Assigned",
         sortable: false,
-        cell: (row: any) => {
+        cell: (row: ClientTableRow) => {
           const assignments = row.audits?.[0]?.assignments;
           const names = assignments
-            ?.map((a: any) => a.user?.name)
-            .filter((n: string | undefined) => !!n)
+            ?.map((a) => a.user?.name)
+            .filter((n): n is string => n != null)
             .join(', ');
           return names || "Unassigned";
         },
@@ -183,13 +190,13 @@ export default function ClientsPage() {
         key: "auditStageName",
         header: "Audit Stage",
         sortable: true,
-        cell: (row: any) => row.audits?.[0]?.stage?.name ?? "-",
+        cell: (row: ClientTableRow) => row.audits[0]?.stage?.name ?? "-",
       },
       {
         key: "nextContactDate",
         header: "Next Contact",
         sortable: true,
-        cell: (row: any) =>
+        cell: (row: ClientTableRow) =>
           row.nextContactDate
             ? new Date(row.nextContactDate).toLocaleDateString("en-GB", {
                 weekday: "short",
@@ -203,7 +210,7 @@ export default function ClientsPage() {
         key: "auditPeriodEndDate",
         header: "Audit Period End",
         sortable: true,
-        cell: (row: any) =>
+        cell: (row: ClientTableRow) =>
           row.auditPeriodEndDate
             ? new Date(row.auditPeriodEndDate).toLocaleDateString("en-GB", {
                 day: "2-digit",
@@ -222,7 +229,7 @@ export default function ClientsPage() {
         key: "status",
         header: "Status",
         sortable: true,
-        cell: (row: any) => {
+        cell: (row: ClientTableRow) => {
           const status = String(row.status).toLowerCase();
           let color: "success" | "warning" | "error" | "info" | "primary" | "dark" | "light" = "info";
           switch (status) {
