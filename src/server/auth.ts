@@ -127,7 +127,8 @@ export const authOptions: NextAuthOptions = {
         await db.user.update({
           where: { id: user.id },
           data: {
-            m365ObjectId: profile?.oid || user.id,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            m365ObjectId: (profile as any)?.oid || user.id,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             image: (profile as any)?.picture || null,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
