@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "@/components/ui/modal";
 import { api } from "@/utils/api";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
@@ -56,7 +56,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   const unassignMutation = api.audit.unassignUser.useMutation({ onSuccess: () => utils.audit.getCurrent.invalidate() });
 
   // React Hook Form setup
-  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<AuditFormData>({
+  const { register, handleSubmit, reset, watch, control, formState: { errors, isSubmitting } } = useForm<AuditFormData>({
     resolver: zodResolver(auditFormSchema),
     defaultValues: {
       auditYear: existingAudit?.auditYear,
@@ -71,6 +71,14 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   });
   const [initAssign] = useState(existingAudit?.assignments?.[0]?.userId ?? null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const watchedReportDueDate = watch('reportDueDate');
+  const defaultReportDueMonth = useMemo(() => {
+    if (watchedReportDueDate) return watchedReportDueDate.slice(0,7);
+    const now = new Date();
+    const nextMonth = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    const mon = (nextMonth.getMonth()+1).toString().padStart(2, '0');
+    return `${nextMonth.getFullYear()}-${mon}`;
+  }, [watchedReportDueDate]);
 
   // Reset form when modal opens or existingAudit changes
   useEffect(() => {
@@ -197,64 +205,66 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                 )}
               />
             </div>
-              <Controller
-                control={control}
-                name="reportDueDate"
-                render={({ field }) => (
-                  <DatePicker
-                    id="reportDueDatePicker"
-                    label="Report Due Date"
-                    placeholder="DD/MM/YYYY"
-                    defaultDate={field.value ? new Date(field.value) : undefined}
-                    onChange={(dates) => {
-                      if (dates.length) {
-                        const d = dates[0] as Date;
-                        field.onChange(format(d, 'yyyy-MM-dd'));
-                      }
+            <Controller
+              control={control}
+              name="reportDueDate"
+              render={({ field }) => (
+                <div>
+                  <label className="block text-sm font-medium" htmlFor="reportDueMonth">Report Due Month</label>
+                  <input
+                    type="month"
+                    id="reportDueMonth"
+                    value={field.value ? field.value.slice(0,7) : defaultReportDueMonth}
+                    onChange={(e) => {
+                      const [year, mon] = e.target.value.split('-').map(Number);
+                      const lastDay = new Date(year, mon, 0);
+                      field.onChange(lastDay.toISOString().split('T')[0]);
                     }}
+                    className="mt-1 block w-full rounded border border-gray-300 px-3 py-2"
                   />
-                )}
-              />
-              <Controller
-                control={control}
-                name="lodgedWithOFTDate"
-                render={({ field }) => (
-                  <DatePicker
-                    id="lodgedWithOFTDatePicker"
-                    label="Lodged with OFT Date"
-                    placeholder="DD/MM/YYYY"
-                    defaultDate={field.value ? new Date(field.value) : undefined}
-                    onChange={(dates) => {
-                      if (dates.length) {
-                        const d = dates[0] as Date;
-                        field.onChange(format(d, 'yyyy-MM-dd'));
-                      }
-                    }}
-                  />
-                )}
-              />
-              <div className="flex items-center">
-                <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
-                <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
-              </div>
-              <Controller
-                control={control}
-                name="invoiceIssueDate"
-                render={({ field }) => (
-                  <DatePicker
-                    id="invoiceIssueDatePicker"
-                    label="Invoice Issue Date"
-                    placeholder="DD/MM/YYYY"
-                    defaultDate={field.value ? new Date(field.value) : undefined}
-                    onChange={(dates) => {
-                      if (dates.length) {
-                        const d = dates[0] as Date;
-                        field.onChange(format(d, 'yyyy-MM-dd'));
-                      }
-                    }}
-                  />
-                )}
-              />
+                </div>
+              )}
+            />
+            <Controller
+              control={control}
+              name="lodgedWithOFTDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="lodgedWithOFTDatePicker"
+                  label="Lodged with OFT Date"
+                  placeholder="DD/MM/YYYY"
+                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  onChange={(dates) => {
+                    if (dates.length) {
+                      const d = dates[0] as Date;
+                      field.onChange(format(d, 'yyyy-MM-dd'));
+                    }
+                  }}
+                />
+              )}
+            />
+            <div className="flex items-center">
+              <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
+              <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
+            </div>
+            <Controller
+              control={control}
+              name="invoiceIssueDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="invoiceIssueDatePicker"
+                  label="Invoice Issue Date"
+                  placeholder="DD/MM/YYYY"
+                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  onChange={(dates) => {
+                    if (dates.length) {
+                      const d = dates[0] as Date;
+                      field.onChange(format(d, 'yyyy-MM-dd'));
+                    }
+                  }}
+                />
+              )}
+            />
             {errorMsg && <p className="text-red-600">{errorMsg}</p>}
             <div className="flex justify-end space-x-2 pt-4">
               <Button variant="outline" type="button" onClick={closeModal}>Cancel</Button>
