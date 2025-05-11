@@ -9,6 +9,7 @@ import {
 import AzureADProvider from "next-auth/providers/azure-ad";
 import EmailProvider from "next-auth/providers/email";
 import { sendEmail } from "@/server/utils/msGraphEmail";
+import { Client } from "@microsoft/microsoft-graph-client";
 
 import { env } from "@/env.mjs";
 import { db } from "@/server/db";
@@ -153,17 +154,32 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user, account, profile }) {
       if (account?.provider === 'azure-ad') {
+        // Update m365ObjectId and emailVerified
         await db.user.update({
           where: { id: user.id },
           data: {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             m365ObjectId: (profile as any)?.oid || user.id,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            image: (profile as any)?.picture || null,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             emailVerified: (profile as any)?.email_verified ? new Date((profile as any).email_verified) : (user as any).emailVerified,
           },
         });
+        // Fetch profile photo from Microsoft Graph
+        if (account.access_token) {
+          try {
+            const client = Client.initWithMiddleware({ authProvider: (done) => done(null, account.access_token) });
+            const photoBlob = await client.api('/me/photo/$value').get();
+            const arrayBuffer = await photoBlob.arrayBuffer();
+            const base64 = Buffer.from(arrayBuffer).toString('base64');
+            const photoDataUrl = `data:image/jpeg;base64,${base64}`;
+            // Update image if different
+            if (photoDataUrl !== user.image) {
+              await db.user.update({ where: { id: user.id }, data: { image: photoDataUrl } });
+            }
+          } catch (error) {
+            console.error('Failed to update profile photo from Graph:', error);
+          }
+        }
       }
     },
   },
