@@ -2,7 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ActivityLogTimeline, { ActivityLogEntry } from './ActivityLogTimeline';
 import { vi } from 'vitest';
+import { PermissionProvider } from '@/contexts/PermissionContext';
 
+// Stub next-auth session to prevent requiring SessionProvider
+vi.mock('next-auth/react', () => ({ useSession: () => ({ data: { user: { role: 'Developer' } }, status: 'authenticated' }) }));
 // Stub TRPC hooks
 vi.mock('@/utils/api', () => ({
   api: {
@@ -20,7 +23,11 @@ vi.mock('@/components/ui/modal', () => ({ __esModule: true, Modal: ({ children }
 
 describe('ActivityLogTimeline', () => {
   it('renders no logs message when entries empty', () => {
-    render(<ActivityLogTimeline entries={[]} contacts={[]} clientId="test-client" />);
+    render(
+      <PermissionProvider>
+        <ActivityLogTimeline entries={[]} contacts={[]} clientId="test-client" />
+      </PermissionProvider>
+    );
     expect(screen.getByText(/no activity logs/i)).toBeInTheDocument();
   });
 
@@ -29,7 +36,11 @@ describe('ActivityLogTimeline', () => {
       { id: '1', type: 'note', content: 'Test log entry', createdAt: '2025-01-01T12:00:00Z', createdBy: 'user1' },
     ];
     const contacts = [{ id: 'user1', name: 'User One' }];
-    render(<ActivityLogTimeline entries={entries} contacts={contacts} clientId="test-client" />);
+    render(
+      <PermissionProvider>
+        <ActivityLogTimeline entries={entries} contacts={contacts} clientId="test-client" />
+      </PermissionProvider>
+    );
     expect(screen.getByText('Test log entry')).toBeInTheDocument();
     expect(screen.getByText(/2025/)).toBeInTheDocument();
   });
