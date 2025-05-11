@@ -31,13 +31,44 @@ interface UserForSignIn extends NextAuthUser {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    // --- signIn Callback (Unchanged) ---
-    async signIn({ user }) {
+    // --- signIn Callback (with account linking) ---
+    async signIn({ user, account, profile }) {
+      // Auto-link Azure AD accounts to existing users with the same email
+      if (account?.provider === 'azure-ad' && user.email) {
+        const existingUser = await db.user.findUnique({ where: { email: user.email } });
+        if (existingUser) {
+          // Check if this OAuth account is already linked
+          const linkedAccount = await db.account.findUnique({
+            where: {
+              provider_providerAccountId: {
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+              },
+            },
+          });
+          if (!linkedAccount) {
+            await db.account.create({ data: {
+              userId: existingUser.id,
+              type: account.type,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+              access_token: account.access_token,
+              refresh_token: account.refresh_token,
+              expires_at: account.expires_at,
+              token_type: account.token_type,
+              scope: account.scope,
+              id_token: account.id_token,
+            }});
+          }
+          // Use the existing user's ID
+          user.id = existingUser.id;
+        }
+      }
       // Assign default role for new users based on email
       if (user.email) {
         const userExists = await db.user.findUnique({ where: { email: user.email } });
         if (!userExists) {
-          const defaultRoleName = "Client"; // Change to desired default role
+          const defaultRoleName = "Client";
           const defaultRole = await db.role.findUnique({ where: { name: defaultRoleName } });
           if (!defaultRole) {
             throw new Error(`Default role '${defaultRoleName}' not found in database`);
@@ -117,11 +148,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  session: {
-    strategy: "database",
-  },
-  // Automatically link accounts with the same email to avoid OAuthAccountNotLinked errors
-  allowDangerousEmailAccountLinking: true,
+  session: { strategy: "database" },
   // secret: env.NEXTAUTH_SECRET, // Ensure this is set
   events: {
     async signIn({ user, account, profile }) {
