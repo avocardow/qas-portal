@@ -109,6 +109,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
                 if (d) setDate(d.toISOString().split('T')[0]);
               }}
               placeholder="Select date"
+              enableTime
             />
           </div>
           <div>

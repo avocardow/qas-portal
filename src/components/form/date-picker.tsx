@@ -17,6 +17,8 @@ type PropsType = {
   placeholder?: string;
   /** Minimum selectable date */
   minDate?: DateOption;
+  /** Show time select (24hr). Defaults to false. */
+  enableTime?: boolean;
 };
 
 export default function DatePicker({
@@ -27,14 +29,15 @@ export default function DatePicker({
   defaultDate,
   placeholder,
   minDate,
+  enableTime = false,
 }: PropsType) {
   useEffect(() => {
     const flatPickr = flatpickr(`#${id}`, {
       mode: mode || "single",
       monthSelectorType: "static",
-      enableTime: true,
-      time_24hr: true,
-      dateFormat: "d/m/Y H:i",
+      enableTime,
+      ...(enableTime ? { time_24hr: true } : {}),
+      dateFormat: enableTime ? "d/m/Y H:i" : "d/m/Y",
       defaultDate,
       minDate,
       onChange,
@@ -45,7 +48,7 @@ export default function DatePicker({
         flatPickr.destroy();
       }
     };
-  }, [mode, onChange, id, defaultDate, minDate]);
+  }, [mode, onChange, id, defaultDate, minDate, enableTime]);
 
   return (
     <div>
