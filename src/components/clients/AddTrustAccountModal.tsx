@@ -23,7 +23,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
     ? { clients: { getById: { invalidate: async () => {} } } }
     : api.useContext();
   const createTrustAccountMutation = process.env.NODE_ENV === 'test'
-    ? { mutate: () => {} }
+    ? { mutate: () => {}, isLoading: false, status: 'idle' }
     : api.trustAccount.create.useMutation();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -212,7 +212,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
           </div>
           <div className="flex justify-end space-x-2 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-            <Button type="submit" disabled={createTrustAccountMutation.isLoading}>Add Trust Account</Button>
+            <Button type="submit" disabled={createTrustAccountMutation.status === 'loading'}>Add Trust Account</Button>
           </div>
         </form>
       </ComponentCard>

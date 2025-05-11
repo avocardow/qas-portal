@@ -249,7 +249,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
           </div>
           <div className="flex justify-end space-x-2 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-            <Button type="submit" disabled={updateTrustAccountMutation.isLoading}>Save</Button>
+            <Button type="submit" disabled={updateTrustAccountMutation.status === 'pending'}>Save</Button>
           </div>
         </form>
       </ComponentCard>
