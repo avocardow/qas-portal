@@ -79,6 +79,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ACTIVITY_PERMISSIONS.ADD_SOFTWARE_ACCESS_INSTRUCTIONS,
   ],
   Auditor: [
+    ...Object.values(AUDIT_PERMISSIONS),
     AUDIT_PERMISSIONS.GET_BY_CLIENT_ID,
     AUDIT_PERMISSIONS.GET_BY_ID,
     AUDIT_PERMISSIONS.EDIT,
