@@ -68,8 +68,8 @@ describe('ClientTrustAccountsSection', () => {
         accountNumber: '000111',
         hasSoftwareAccess: true,
         updatedAt: '2025-01-01T00:00:00Z',
-        managementSoftware: 'Xero',
-        softwareUrl: 'https://app.xero.com',
+        managementSoftware: 'PropertyTree',
+        softwareUrl: 'https://propertytree.com',
       },
     ];
     render(
@@ -95,12 +95,12 @@ describe('ClientTrustAccountsSection', () => {
     expect(screen.getByText('123-456')).toBeInTheDocument();
     expect(screen.getByText('*****000111')).toBeInTheDocument();
 
-    // Management Software link should be 'Open in Xero'
-    const softwareLink = screen.getByText('Open in Xero');
-    expect(softwareLink).toHaveAttribute('href', 'https://app.xero.com');
+    // Management Software link should be 'PropertyTree'
+    const softwareLink = screen.getByText('PropertyTree');
+    expect(softwareLink).toHaveAttribute('href', 'https://propertytree.com');
 
     // Action Link
-    const actionLink = screen.getByText('Open in Xero');
-    expect(actionLink).toHaveAttribute('href', 'https://app.xero.com');
+    const actionLink = screen.getByText('PropertyTree');
+    expect(actionLink).toHaveAttribute('href', 'https://propertytree.com');
   });
 }); 
