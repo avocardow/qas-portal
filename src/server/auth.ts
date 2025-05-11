@@ -123,7 +123,7 @@ export const authOptions: NextAuthOptions = {
   // secret: env.NEXTAUTH_SECRET, // Ensure this is set
   events: {
     async signIn({ user, account, profile }) {
-      if (account.provider === 'azure-ad') {
+      if (account?.provider === 'azure-ad') {
         await db.user.update({
           where: { id: user.id },
           data: {
