@@ -32,7 +32,7 @@ interface UserForSignIn extends NextAuthUser {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     // --- signIn Callback (with account linking) ---
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       // Auto-link Azure AD accounts to existing users with the same email
       if (account?.provider === 'azure-ad' && user.email) {
         const existingUser = await db.user.findUnique({ where: { email: user.email } });
