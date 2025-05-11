@@ -84,6 +84,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     AUDIT_PERMISSIONS.GET_BY_ID,
     AUDIT_PERMISSIONS.EDIT,
     CLIENT_PERMISSIONS.VIEW,
+    CONTACT_PERMISSIONS.EDIT,
     NAV_PERMISSIONS.TEAM_CLIENTS,
   ],
   Staff: [
