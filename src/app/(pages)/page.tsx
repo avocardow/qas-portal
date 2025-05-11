@@ -1,5 +1,3 @@
-"use client";
-
 import AuthLayout from "@/app/(pages)/(auth)/layout";
 import SignInForm from "@/components/auth/SignInForm";
 
