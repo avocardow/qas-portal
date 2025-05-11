@@ -132,7 +132,7 @@ export const authOptions: NextAuthOptions = {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             image: (profile as any)?.picture || null,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            emailVerified: (profile as any)?.email_verified ? new Date((profile as any).email_verified) : user.emailVerified,
+            emailVerified: (profile as any)?.email_verified ? new Date((profile as any).email_verified) : (user as any).emailVerified,
           },
         });
       }
