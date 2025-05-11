@@ -78,8 +78,8 @@ describe('ClientsPage RBAC', () => {
       cannot: (permission) => permission !== 'clients.view.status',
     });
     renderWithPermissionProvider(<ClientsPage />);
-    const button = screen.getByRole('button', { name: /add new client/i });
-    expect(button.disabled).toBe(true);
+    const button = screen.queryByRole('button', { name: /add new client/i });
+    expect(button).toBeNull();
   });
 
   test('shows disabled Add New Client button for Client when lacking permissions', () => {
@@ -88,8 +88,8 @@ describe('ClientsPage RBAC', () => {
       cannot: (permission) => permission !== 'clients.view.status',
     });
     renderWithPermissionProvider(<ClientsPage />);
-    const button = screen.getByRole('button', { name: /add new client/i });
-    expect(button.disabled).toBe(true);
+    const button = screen.queryByRole('button', { name: /add new client/i });
+    expect(button).toBeNull();
   });
 
   test('routes to New Client page when Add New Client button is clicked', () => {

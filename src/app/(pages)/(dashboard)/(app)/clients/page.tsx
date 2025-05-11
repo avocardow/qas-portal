@@ -303,19 +303,7 @@ export default function ClientsPage() {
         <ComponentCard
           title="Client Directory"
           actions={
-            <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING}
-              fallback={
-                <Button
-                  aria-label="Add New Client"
-                  size="sm"
-                  variant="outline"
-                  disabled
-                  title="Insufficient permissions"
-                >
-                  Add New Client
-                </Button>
-              }
-            >
+            <Authorized action={CLIENT_PERMISSIONS.EDIT}>
               <Button
                 aria-label="Add New Client"
                 size="sm"
