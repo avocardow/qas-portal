@@ -56,17 +56,13 @@ function getActivityIcon(type: string) {
 
 export default function ActivityLogTimeline({ entries, contacts, clientId }: ActivityLogTimelineProps) {
   const { can } = useAbility();
-  // Filter out sensitive activity types for non-Admin/Developer roles
-  const visibleEntries = entries
-    .filter((entry) => {
-      if (entry.type === 'billing_commentary' && !can(ACTIVITY_PERMISSIONS.ADD_BILLING_COMMENTARY)) return false;
-      if (entry.type === 'external_folder_instructions' && !can(ACTIVITY_PERMISSIONS.ADD_EXTERNAL_FOLDER_INSTRUCTIONS)) return false;
-      if (entry.type === 'software_access_instructions' && !can(ACTIVITY_PERMISSIONS.ADD_SOFTWARE_ACCESS_INSTRUCTIONS)) return false;
-      return true;
-    })
-    .sort((a, b) =>
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
+  // Filter entries by permission; parent component handles overall sorting and pagination order
+  const visibleEntries = entries.filter((entry) => {
+    if (entry.type === 'billing_commentary' && !can(ACTIVITY_PERMISSIONS.ADD_BILLING_COMMENTARY)) return false;
+    if (entry.type === 'external_folder_instructions' && !can(ACTIVITY_PERMISSIONS.ADD_EXTERNAL_FOLDER_INSTRUCTIONS)) return false;
+    if (entry.type === 'software_access_instructions' && !can(ACTIVITY_PERMISSIONS.ADD_SOFTWARE_ACCESS_INSTRUCTIONS)) return false;
+    return true;
+  });
   const [editingEntry, setEditingEntry] = useState<ActivityLogEntry | null>(null);
   // Form state for editing
   const [editType, setEditType] = useState<string>('note');

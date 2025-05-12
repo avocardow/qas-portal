@@ -140,7 +140,6 @@ export default function ClientDetailPage() {
     { label: 'Notes', type: 'note' },
     { label: 'Emails', type: 'email' },
     { label: 'Calls', type: 'call' },
-    { label: 'Updates', type: 'statusUpdate' },
     { label: 'Documents', type: 'document' },
     { label: 'Tasks', type: 'task' },
   ];
@@ -166,10 +165,13 @@ export default function ClientDetailPage() {
   }, [activityLogs, filterType, startDate, endDate]);
   const logsPerPage = 6;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
-  const pagedLogs = useMemo(
-    () => filteredLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage),
-    [filteredLogs, logPage, logsPerPage]
-  );
+  const pagedLogs = useMemo(() => {
+    // Sort logs descending (newest first) before pagination
+    const sortedLogs = [...filteredLogs].sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    return sortedLogs.slice((logPage - 1) * logsPerPage, logPage * logsPerPage);
+  }, [filteredLogs, logPage, logsPerPage]);
   const latestBillingCommentary = useMemo(() => {
     if (!clientData?.activityLogs) return null;
     return [...clientData.activityLogs]
