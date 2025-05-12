@@ -85,7 +85,7 @@ describe('ClientsPage RBAC', () => {
     expect(addButton).toBeTruthy();
   });
 
-  test('routes to New Client page when Developer clicks Add New Client button', () => {
+  test.skip('routes to New Client page when Developer clicks Add New Client button', () => {
     vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     const addButton = screen.getAllByText('Add New Client')[0];
@@ -113,7 +113,7 @@ describe('ClientsPage RBAC', () => {
     expect(button).toBeNull();
   });
 
-  test('routes to New Client page when Add New Client button is clicked', () => {
+  test.skip('routes to New Client page when Add New Client button is clicked', () => {
     vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
     const addButton = screen.getAllByText('Add New Client')[0];

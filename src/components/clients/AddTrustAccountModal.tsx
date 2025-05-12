@@ -222,7 +222,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
           </div>
           <div className="flex justify-end space-x-2 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-            <Button type="submit" disabled={createTrustAccountMutation.isLoading}>Add Trust Account</Button>
+            <Button type="submit" disabled={createTrustAccountMutation.status === 'pending'}>Add Trust Account</Button>
           </div>
         </form>
       </ComponentCard>

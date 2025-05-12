@@ -18,7 +18,7 @@ interface InputProps {
   error?: boolean;
   hint?: string;
   /** Input mode for mobile keyboards */
-  inputMode?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   /** Regex pattern for input validation */
   pattern?: string;
   /** Maximum number of characters allowed */
