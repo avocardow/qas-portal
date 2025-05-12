@@ -130,14 +130,6 @@ export default function ClientDetailPage() {
   const title = clientData?.clientName ?? ("Client " + clientId);
   
   // Activity log filtering setup
-  const ACTIVITY_TYPE_GROUPS: Record<string, string[]> = {
-    note: ['note'],
-    email: ['email_sent', 'email_received'],
-    call: ['call_in', 'call_out'],
-    statusUpdate: ['status_change', 'stage_change', 'client_assigned', 'audit_assigned'],
-    document: ['document_request', 'document_received', 'document_signed'],
-    task: ['task_created', 'task_completed'],
-  };
   const tabs = [
     { label: 'All', type: 'all' },
     { label: 'Notes', type: 'note' },
@@ -147,6 +139,15 @@ export default function ClientDetailPage() {
     { label: 'Tasks', type: 'task' },
   ];
   const filteredLogs = useMemo(() => {
+    // Define activity type groups inside memo to avoid unstable external reference
+    const ACTIVITY_TYPE_GROUPS: Record<string, string[]> = {
+      note: ['note'],
+      email: ['email_sent', 'email_received'],
+      call: ['call_in', 'call_out'],
+      statusUpdate: ['status_change', 'stage_change', 'client_assigned', 'audit_assigned'],
+      document: ['document_request', 'document_received', 'document_signed'],
+      task: ['task_created', 'task_completed'],
+    };
     let logs = activityLogs;
     if (filterType !== 'all') {
       const types = ACTIVITY_TYPE_GROUPS[filterType] ?? [];
@@ -165,7 +166,7 @@ export default function ClientDetailPage() {
       });
     }
     return logs;
-  }, [activityLogs, filterType, startDate, endDate, ACTIVITY_TYPE_GROUPS]);
+  }, [activityLogs, filterType, startDate, endDate]);
   const logsPerPage = 6;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
   const pagedLogs = useMemo(() => {
