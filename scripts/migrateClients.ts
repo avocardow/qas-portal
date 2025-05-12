@@ -416,19 +416,26 @@ async function main() {
         // Parse Next Audit Year End (DD/MM/YYYY) for audit period and year
         const auditDate = parseCsvDate(record["Next Audit Year End"]);
         const auditYear = auditDate ? auditDate.getUTCFullYear() : new Date().getFullYear();
-        // Map Audit Stage using normalization and alias for final audit
-        const rawStage = record["Stage"]?.trim().toLowerCase() || "";
-        const stageAliases: Record<string, string> = {
-          "final audit": "year-end audit",
-        };
-        const mappedStage = stageAliases[rawStage] || rawStage;
-        let stageId: number | undefined = auditStagesMap.get(mappedStage);
-        if (!stageId && mappedStage) {
-          const normRaw = mappedStage.replace(/[-\s]/g, "");
-          stageId = auditStagesMapNormalized.get(normRaw);
+        // Map Audit Stage - accept numeric codes (0-4) or names with normalization and aliases
+        const rawStageRaw = record["Stage"]?.trim() || "";
+        const rawStage = rawStageRaw.toLowerCase();
+        let stageId: number | undefined;
+        // If Stage is numeric code, use directly
+        if (/^\d+$/.test(rawStageRaw)) {
+          stageId = parseInt(rawStageRaw, 10);
+        } else {
+          const stageAliases: Record<string, string> = {
+            "final audit": "year-end audit",
+          };
+          const mappedStage = stageAliases[rawStage] || rawStage;
+          stageId = auditStagesMap.get(mappedStage);
+          if (stageId === undefined && mappedStage) {
+            const normRaw = mappedStage.replace(/[-\s]/g, "");
+            stageId = auditStagesMapNormalized.get(normRaw);
+          }
         }
-        if (!stageId) {
-          console.warn(`Could not map Audit Stage "${record["Stage"]}" (raw: ${rawStage})`);
+        if (stageId === undefined) {
+          console.warn(`Could not map Audit Stage "${record["Stage"]}" (raw: ${rawStageRaw})`);
         }
         // Compute Report Due Date as auditDate + 4 months, last day of that month
         let reportDueDate: Date | null = null;

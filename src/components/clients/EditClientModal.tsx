@@ -61,6 +61,10 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
     resolver: zodResolver(clientFormSchema),
   });
 
+  // Compute date limits for next contact
+  const today = new Date();
+  const maxContactDate = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
+
   // Prefill form when modal opens and data is available
   useEffect(() => {
     if (isOpen && clientQuery.data) {
@@ -79,7 +83,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
         assignedUserId: data.assignedUserId ?? null,
         status: data.status,
         auditPeriodEndDate: data.auditPeriodEndDate
-          ? String(new Date(data.auditPeriodEndDate).getMonth() + 1).padStart(2, '0')
+          ? new Date(data.auditPeriodEndDate).toISOString().slice(0, 10)
           : '',
         nextContactDate: data.nextContactDate
           ? new Date(data.nextContactDate).toISOString().slice(0, 10)
@@ -92,15 +96,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
   const onSubmit = (formData: ClientFormData) => {
     // Compute actual Date objects
     const auditDate = formData.auditPeriodEndDate
-      ? (() => {
-          const month = Number(formData.auditPeriodEndDate);
-          const today = new Date();
-          const year = (() => {
-            const lastDay = new Date(today.getFullYear(), month, 0);
-            return lastDay > today ? today.getFullYear() : today.getFullYear() + 1;
-          })();
-          return new Date(year, month, 0);
-        })()
+      ? new Date(formData.auditPeriodEndDate)
       : undefined;
     const nextDate = formData.nextContactDate ? new Date(formData.nextContactDate) : undefined;
 
@@ -217,28 +213,26 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                 )}
               />
             </div>
-            {/* Audit Period Month End */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Audit Period Month End</label>
-              <Controller
-                control={control}
-                name="auditPeriodEndDate"
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    className="mt-1 block w-full rounded border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-                  >
-                    <option value="">Select month</option>
-                    {Array.from({ length: 12 }).map((_, idx) => {
-                      const monthNum = idx + 1;
-                      const monthValue = String(monthNum).padStart(2, '0');
-                      const monthName = new Date(0, idx).toLocaleString('en-GB', { month: 'long' });
-                      return <option key={monthValue} value={monthValue}>{monthName}</option>;
-                    })}
-                  </select>
-                )}
-              />
-            </div>
+            {/* Audit Period End Date */}
+            <Controller
+              control={control}
+              name="auditPeriodEndDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="auditPeriodEndDatePicker"
+                  label="Audit Period End Date"
+                  placeholder="Select date"
+                  minDate={new Date()}
+                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(d.toISOString().slice(0, 10));
+                    }
+                  }}
+                />
+              )}
+            />
             {/* Next Contact Date */}
             <Controller
               control={control}
@@ -247,13 +241,14 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                 <DatePicker
                   id="nextContactDatePicker"
                   label="Next Contact Date"
-                  placeholder="DD/MM/YYYY"
-                  defaultDate={field.value || undefined}
-                  minDate={new Date()}
+                  placeholder="Select date"
+                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  minDate={today}
+                  maxDate={maxContactDate}
                   onChange={(dates) => {
-                    if (dates.length) {
-                      const date = dates[0] as Date;
-                      field.onChange(date.toISOString().split('T')[0]);
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(d.toISOString().slice(0, 10));
                     }
                   }}
                 />

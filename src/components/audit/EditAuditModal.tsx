@@ -30,6 +30,8 @@ const auditFormSchema = z.object({
   lodgedWithOFTDate: z.string().optional(),
   invoicePaid: z.boolean().optional(),
   invoiceIssueDate: z.string().optional(),
+  auditPeriodEndDate: z.string().optional(),
+  nextContactDate: z.string().optional(),
 });
 type AuditFormData = z.infer<typeof auditFormSchema>;
 
@@ -38,7 +40,6 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   const { isOpen, openModal, closeModal } = useModal();
   const utils = api.useContext();
   const { data: managers = [] } = api.user.getAssignableManagers.useQuery();
-  const stagesQuery = api.audit.getStages.useQuery();
   const statusesQuery = api.audit.getStatuses.useQuery();
   const createMutation = api.audit.create.useMutation({
     onSuccess: () => {
@@ -54,6 +55,28 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   });
   const assignMutation = api.audit.assignUser.useMutation({ onSuccess: () => utils.audit.getCurrent.invalidate() });
   const unassignMutation = api.audit.unassignUser.useMutation({ onSuccess: () => utils.audit.getCurrent.invalidate() });
+  const updateClientMutation = api.clients.update.useMutation({
+    onSuccess: () => {
+      utils.clients.getById.invalidate({ clientId });
+      utils.clients.getAll.invalidate();
+    }
+  });
+  const { data: clientData } = api.clients.getById.useQuery({ clientId });
+  const computedReportDueDate = existingAudit?.reportDueDate
+    ? existingAudit.reportDueDate
+    : clientData?.auditPeriodEndDate
+      ? (() => {
+          const d = new Date(clientData.auditPeriodEndDate);
+          // Last day of the month four months after auditPeriodEndDate
+          return new Date(d.getFullYear(), d.getMonth() + 5, 0);
+        })()
+      : undefined;
+  const computedClientAuditPeriodEndDate = clientData?.auditPeriodEndDate
+    ? new Date(clientData.auditPeriodEndDate)
+    : undefined;
+  const computedClientNextContactDate = clientData?.nextContactDate
+    ? new Date(clientData.nextContactDate)
+    : undefined;
 
   // React Hook Form setup
   const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<AuditFormData>({
@@ -105,6 +128,14 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
         };
         await updateAuditMutation.mutateAsync(payload);
         auditId = existingAudit.id;
+        // Update client auditPeriodEndDate and nextContactDate
+        await updateClientMutation.mutateAsync({
+          clientId,
+          clientName: clientData?.clientName || '',
+          status: clientData?.status || 'active',
+          auditPeriodEndDate: formData.auditPeriodEndDate ? new Date(formData.auditPeriodEndDate) : undefined,
+          nextContactDate: formData.nextContactDate ? new Date(formData.nextContactDate) : undefined,
+        });
       } else {
         const created = await createMutation.mutateAsync({ clientId, auditYear: formData.auditYear!, stageId: formData.stageId, statusId: formData.statusId });
         auditId = created.id;
@@ -148,28 +179,32 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
               {errors.auditYear && <p className="text-sm text-red-600">{errors.auditYear.message}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium">Stage</label>
+              <label className="block text-sm font-medium">Audit Stage</label>
               <Controller
                 control={control}
                 name="stageId"
+                rules={{ required: 'Stage is required' }}
                 render={({ field }) => (
-                  <select {...field} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
-                    <option value=''>Select stage</option>
-                    {stagesQuery.data?.map((s) => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
+                  <select {...field} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
+                    <option value="">Select stage</option>
+                    <option value="0">Onboarding</option>
+                    <option value="1">1st interim review</option>
+                    <option value="2">2nd interim review</option>
+                    <option value="3">Year-end audit</option>
+                    <option value="4">Completed</option>
                   </select>
                 )}
               />
               {errors.stageId && <p className="text-sm text-red-600">{errors.stageId.message}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium">Status</label>
+              <label className="block text-sm font-medium">Audit Status</label>
               <Controller
                 control={control}
                 name="statusId"
+                rules={{ required: 'Status is required' }}
                 render={({ field }) => (
-                  <select {...field} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
+                  <select {...field} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
                     <option value=''>Select status</option>
                     {statusesQuery.data?.map((s) => (
                       <option key={s.id} value={s.id}>{s.name}</option>
@@ -180,7 +215,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
               {errors.statusId && <p className="text-sm text-red-600">{errors.statusId.message}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium">Staff</label>
+              <label className="block text-sm font-medium">Assign Staff</label>
               <Controller
                 control={control}
                 name="assignedUserId"
@@ -201,38 +236,61 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
             <Controller
               control={control}
               name="reportDueDate"
-              render={({ field }) => {
-                const months = [
-                  'January','February','March','April','May','June',
-                  'July','August','September','October','November','December'
-                ];
-                const currentMonth = new Date().getMonth();
-                return (
-                  <div>
-                    <label className="block text-sm font-medium" htmlFor="reportDueMonth">
-                      Report Due Month
-                    </label>
-                    <select
-                      id="reportDueMonth"
-                      value={field.value ? String(new Date(field.value).getMonth()) : ''}
-                      onChange={(e) => {
-                        const monIndex = Number(e.target.value);
-                        const year = new Date().getFullYear();
-                        const lastDay = new Date(year, monIndex + 1, 0);
-                        field.onChange(format(lastDay, 'yyyy-MM-dd'));
-                      }}
-                      className="mt-1 block w-full rounded border border-gray-300 px-3 py-2"
-                    >
-                      <option value="" disabled>Select month</option>
-                      {months.map((name, idx) => (
-                        <option key={name} value={idx} disabled={idx <= currentMonth}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                );
-              }}
+              render={({ field }) => (
+                <DatePicker
+                  id="reportDueDatePicker"
+                  label="Report Due Date"
+                  placeholder="Select date"
+                  minDate={new Date()}
+                  defaultDate={field.value ? new Date(field.value) : computedReportDueDate}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(format(d, 'yyyy-MM-dd'));
+                    }
+                  }}
+                />
+              )}
+            />
+            {/* Audit Period End Date */}
+            <Controller
+              control={control}
+              name="auditPeriodEndDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="auditPeriodEndDatePicker"
+                  label="Audit Period End Date"
+                  placeholder="Select date"
+                  minDate={new Date()}
+                  defaultDate={field.value ? new Date(field.value) : computedClientAuditPeriodEndDate}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(d.toISOString().slice(0, 10));
+                    }
+                  }}
+                />
+              )}
+            />
+            {/* Next Contact Date */}
+            <Controller
+              control={control}
+              name="nextContactDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="nextContactDatePicker"
+                  label="Next Contact Date"
+                  placeholder="Select date"
+                  minDate={new Date()}
+                  defaultDate={field.value ? new Date(field.value) : computedClientNextContactDate}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(d.toISOString().slice(0, 10));
+                    }
+                  }}
+                />
+              )}
             />
             <Controller
               control={control}
@@ -241,7 +299,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                 <DatePicker
                   id="lodgedWithOFTDatePicker"
                   label="Lodged with OFT Date"
-                  placeholder="DD/MM/YYYY"
+                  placeholder="Select date"
                   defaultDate={field.value ? new Date(field.value) : undefined}
                   onChange={(dates) => {
                     if (dates.length) {
@@ -259,7 +317,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                 <DatePicker
                   id="invoiceIssueDatePicker"
                   label="Invoice Issue Date"
-                  placeholder="DD/MM/YYYY"
+                  placeholder="Select date"
                   defaultDate={field.value ? new Date(field.value) : undefined}
                   maxDate={new Date()}
                   onChange={(dates) => {

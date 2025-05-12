@@ -24,12 +24,10 @@ async function main() {
   // Seed Audit Stages with explicit IDs
   const auditStages = [
     { id: 0, name: 'Onboarding', description: 'Initial setup and preparation tasks before the audit starts' },
-    { id: 1, name: 'Planning', description: 'Initial planning and risk assessment' },
-    { id: 2, name: '1st Interim Review', description: 'First periodic review during the year' },
-    { id: 3, name: '2nd Interim Review', description: 'Second periodic review during the year' },
-    { id: 4, name: 'Year-End Audit', description: 'Final audit procedures for the year end' },
-    { id: 5, name: 'Reporting', description: 'Preparation and finalization of the audit report' },
-    { id: 6, name: 'Post-Audit', description: 'Follow-up and completion tasks' },
+    { id: 1, name: '1st Interim Review', description: 'First periodic review during the year' },
+    { id: 2, name: '2nd Interim Review', description: 'Second periodic review during the year' },
+    { id: 3, name: 'Year-End Audit', description: 'Final audit procedures for the year end' },
+    { id: 4, name: 'Completed', description: 'Audit cycle fully completed for the year' },
   ];
   for (const stage of auditStages) {
     await prisma.auditStage.upsert({
