@@ -45,7 +45,14 @@ export default function DatePicker({
       minDate,
       maxDate,
       closeOnSelect: false,
-      onChange,
+      onChange: (selectedDates, dateStr, instance) => {
+        if (Array.isArray(onChange)) {
+          onChange.forEach(fn => fn(selectedDates, dateStr, instance));
+        } else if (onChange) {
+          onChange(selectedDates, dateStr, instance);
+        }
+        instance.open();
+      },
     });
 
     return () => {
