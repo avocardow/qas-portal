@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
+import confirmDatePlugin from "flatpickr/dist/plugins/confirmDate/confirmDate";
+import "flatpickr/dist/plugins/confirmDate/confirmDate.css";
 import Label from "./Label";
 import { CalenderIcon } from "../../icons";
 import Hook = flatpickr.Options.Hook;
@@ -39,20 +41,14 @@ export default function DatePicker({
       mode: mode || "single",
       monthSelectorType: "static",
       enableTime,
-      ...(enableTime ? { time_24hr: true, minuteIncrement: 1 } : {}),
+      ...(enableTime ? { time_24hr: false, minuteIncrement: 1 } : {}),
       dateFormat: enableTime ? "d/m/Y H:i" : "d/m/Y",
       defaultDate,
       minDate,
       maxDate,
       closeOnSelect: false,
-      onChange: (selectedDates, dateStr, instance) => {
-        if (Array.isArray(onChange)) {
-          onChange.forEach(fn => fn(selectedDates, dateStr, instance));
-        } else if (onChange) {
-          onChange(selectedDates, dateStr, instance);
-        }
-        instance.open();
-      },
+      plugins: [confirmDatePlugin({})],
+      onChange,
     });
 
     return () => {
