@@ -11,6 +11,8 @@ import TextArea from '@/components/form/input/TextArea';
 import DatePicker from '@/components/form/date-picker';
 import { useAbility } from '@/hooks/useAbility';
 import { ACTIVITY_PERMISSIONS } from '@/constants/permissions';
+import Authorized from '@/components/Authorized';
+import { api } from '@/utils/api';
 
 export interface AddActivityModalProps {
   isOpen: boolean;
@@ -22,13 +24,14 @@ export interface AddActivityModalProps {
 
 export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, serverError }: AddActivityModalProps) {
   const { can } = useAbility();
+  const { data: staffMembers = [] } = api.user.getAssignableManagers.useQuery();
   const [type, setType] = useState('note');
   const [description, setDescription] = useState('');
-  const now = new Date();
-  const initialDate = now;
-  const [date, setDate] = useState<string>(initialDate.toISOString().split('T')[0]);
+  const [dateValue, setDateValue] = useState<Date>(new Date());
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [contactId, setContactId] = useState<string | undefined>(undefined);
+
+  // contacts prop is used for Related Contact select below
 
   const typeOptions = [
     { value: 'note', label: 'Note' },
@@ -58,7 +61,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
     if (isOpen) {
       setType('note');
       setDescription('');
-      setDate(new Date().toISOString().split('T')[0]);
+      setDateValue(new Date());
       setContactId(undefined);
       setErrorMessage(null);
     }
@@ -70,7 +73,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
       setErrorMessage('Description is required');
       return;
     }
-    onSubmit({ type, description, date, contactId });
+    onSubmit({ type, description, date: dateValue.toISOString(), contactId });
   }
 
   if (!isOpen) return null;
@@ -80,18 +83,33 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
         {serverError && <Notification variant="error" title={serverError} />}
         {errorMessage && <Notification variant="error" title={errorMessage} />}
         <form onSubmit={handleSubmit} className="space-y-4">
+          <Authorized action={ACTIVITY_PERMISSIONS.ADD_STAFF_MEMBER_ACTIVITY}>
+            <div>
+              <Label htmlFor="staffMemberId">Staff Member</Label>
+              <Select
+                options={staffMembers.map(u => ({ value: u.id, label: u.name ?? u.email ?? '' }))}
+                placeholder="Select staff member"
+                defaultValue={contactId ?? ''}
+                onChange={val => setContactId(val || undefined)}
+                className="mt-1"
+              />
+            </div>
+          </Authorized>
           <div>
-            <Label htmlFor="contactId">Contact</Label>
-            <Select
-              options={contacts.map(c => ({ value: c.id, label: c.name ?? c.id }))}
-              placeholder="Select contact"
-              defaultValue={contactId ?? ""}
-              onChange={val => setContactId(val || undefined)}
-              className="mt-1"
+            <DatePicker
+              id="activityDate"
+              label="Date & Time"
+              defaultDate={dateValue}
+              onChange={(dates) => {
+                const d = Array.isArray(dates) ? dates[0] : dates;
+                if (d) setDateValue(d);
+              }}
+              placeholder="Select date"
+              enableTime
             />
           </div>
           <div>
-            <Label htmlFor="type">Type</Label>
+            <Label htmlFor="type">Activity Type</Label>
             <Select
               options={typeOptions}
               defaultValue={type}
@@ -100,20 +118,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
             />
           </div>
           <div>
-            <DatePicker
-              id="activityDate"
-              label="Date & Time"
-              defaultDate={initialDate}
-              onChange={(dates) => {
-                const d = Array.isArray(dates) ? dates[0] : dates;
-                if (d) setDate(d.toISOString().split('T')[0]);
-              }}
-              placeholder="Select date"
-              enableTime
-            />
-          </div>
-          <div>
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Note Content</Label>
             <TextArea
               placeholder="Description"
               rows={3}
@@ -122,9 +127,19 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               className="mt-1"
             />
           </div>
+          <div>
+            <Label htmlFor="contactId">Related Contact</Label>
+            <Select
+              options={contacts.map(c => ({ value: c.id, label: c.name ?? c.id }))}
+              placeholder="Select contact"
+              defaultValue={contactId ?? ""}
+              onChange={val => setContactId(val || undefined)}
+              className="mt-1"
+            />
+          </div>
           <div className="flex justify-end space-x-2 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-            <Button type="submit">Add</Button>
+            <Button type="submit">Add Activity</Button>
           </div>
         </form>
       </ComponentCard>

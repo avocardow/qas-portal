@@ -73,6 +73,7 @@ export const ACTIVITY_PERMISSIONS = {
   ADD_BILLING_COMMENTARY: 'activity.add.billing_commentary',
   ADD_EXTERNAL_FOLDER_INSTRUCTIONS: 'activity.add.external_folder_instructions',
   ADD_SOFTWARE_ACCESS_INSTRUCTIONS: 'activity.add.software_access_instructions',
+  ADD_STAFF_MEMBER_ACTIVITY: 'activity.add.staff_member_activity',
 } as const;
 
 export type ActivityPermission =
