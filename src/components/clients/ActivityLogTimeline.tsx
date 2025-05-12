@@ -123,7 +123,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
   return (
     <div className="relative">
       {/* Vertical timeline line */}
-      <div className="absolute top-4 bottom-0 left-9 w-px bg-gray-200 dark:bg-gray-800" />
+      <div className="absolute top-9 bottom-0 left-9 w-px bg-gray-200 dark:bg-gray-800" />
 
       {visibleEntries.map((entry) => (
         <div key={entry.id} className="relative rounded-xl px-3 py-2 mb-6 flex cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" onClick={() => setEditingEntry(entry)}>

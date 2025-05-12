@@ -2,7 +2,6 @@
 import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { useCurrentAudit } from "@/hooks/useCurrentAudit";
-import { format } from "date-fns";
 import EditAuditModal from "./EditAuditModal";
 import { useClientData } from "@/hooks/useClientData";
 import type { RouterOutput } from "@/utils/api";
@@ -59,44 +58,61 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
   // Compute assigned staff names from auditAssignments
   const assignedNames = assignments?.map(a => a.user?.name).filter(Boolean).join(', ');
 
+  // Determine badge color and text based on invoice state
+  let badgeColor: 'success' | 'warning' | 'error';
+  let badgeText: string;
+  if (invoicePaid) {
+    badgeColor = 'success';
+    badgeText = 'invoice paid';
+  } else if (!invoiceIssueDate) {
+    badgeColor = 'warning';
+    badgeText = 'invoice not issued';
+  } else {
+    badgeColor = 'error';
+    badgeText = 'invoice unpaid';
+  }
+
+  // Helper to format dates as 'Weekday, DD Month, YYYY'
+  const formatAUDate = (date: Date) =>
+    `${date.toLocaleDateString('en-AU', { weekday: 'long' })}, ${date.toLocaleDateString('en-AU', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}`;
+
   return (
     <>
       <ComponentCard
         title="Current Audit"
         actions={
-          canEditAudit && (
-            <EditAuditModal clientId={clientId} existingAudit={audit ?? null} />
-          )
+          <div className="flex items-center space-x-2">
+            <Badge variant="light" color={badgeColor}>
+              {badgeText}
+            </Badge>
+            {canEditAudit && (
+              <EditAuditModal clientId={clientId} existingAudit={audit ?? null} />
+            )}
+          </div>
         }
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
           <div>
-            <span className="font-medium">Invoice Paid?</span>{" "}
-            <Badge variant="solid" color={invoicePaid ? "success" : "error"}>
-              {invoicePaid ? "Paid" : "Unpaid"}
-            </Badge>
-          </div>
-          {invoiceIssueDate && (
-            <div>
-              <span className="font-medium">Invoice Issue Date:</span>{" "}
-              {format(new Date(invoiceIssueDate), "PPP")}
-            </div>
-          )}
-          <div>
             <span className="font-medium">Next Contact Date:</span>{" "}
             {clientData?.nextContactDate
-              ? clientData.nextContactDate.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })
+              ? formatAUDate(clientData.nextContactDate)
               : "-"}
           </div>
           <div>
             <span className="font-medium">Audit Period End Date:</span>{" "}
             {clientData?.auditPeriodEndDate
-              ? new Date(clientData.auditPeriodEndDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long' })
+              ? formatAUDate(new Date(clientData.auditPeriodEndDate))
               : "-"}
           </div>
           <div>
             <span className="font-semibold">Report Due Date:</span>{" "}
-            {reportDueDate ? format(new Date(reportDueDate), "PPP") : "N/A"}
+            {reportDueDate
+              ? formatAUDate(new Date(reportDueDate))
+              : "-"}
           </div>
           <div>
             <span className="font-semibold">Audit Stage:</span> {stage?.name ?? "N/A"}
