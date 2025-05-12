@@ -31,8 +31,12 @@ interface ActivityLogTimelineProps {
 }
 
 // Icon mapping based on activity type
-function getActivityIcon(type: string) {
+function getActivityIcon(type: string, content?: string) {
   const base = "text-xl text-gray-500 dark:text-gray-400 flex items-center justify-center";
+  // Use slash icon for unassign logs
+  if (type === 'note' && content?.startsWith('Unassigned user')) {
+    return <i className={`fa-solid fa-user-slash ${base}`} />;
+  }
   switch (type) {
     case 'stage_change': return <i className={`fa-solid fa-arrow-progress ${base}`} />;
     case 'status_change': return <i className={`fa-solid fa-stairs ${base}`} />;
@@ -125,7 +129,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
         <div key={entry.id} className="relative rounded-xl px-3 py-2 mb-6 flex cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" onClick={() => setEditingEntry(entry)}>
           <div className="z-10 shrink-0 content-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-              {getActivityIcon(entry.type)}
+              {getActivityIcon(entry.type, entry.content)}
             </div>
           </div>
           <div className="ml-4 flex flex-col justify-center">

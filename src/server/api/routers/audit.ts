@@ -258,13 +258,15 @@ export const auditRouter = createTRPCRouter({
       });
       const audit = await ctx.db.audit.findUnique({ where: { id: auditId } });
       if (audit && ctx.db.activityLog) {
+        // Fetch user name for readable log
+        const user = await ctx.db.user.findUnique({ where: { id: userId }, select: { name: true } });
         await ctx.db.activityLog.create({
           data: {
             auditId,
             clientId: audit.clientId,
             createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
-            content: `Unassigned user ${userId} from audit`,
+            content: `Unassigned user ${user?.name ?? userId} from audit`,
           },
         });
       }
