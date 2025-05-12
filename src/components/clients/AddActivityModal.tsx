@@ -106,6 +106,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               }}
               placeholder="Select date"
               enableTime
+              maxDate={new Date()}
             />
           </div>
           <div>
