@@ -165,7 +165,7 @@ export default function ClientDetailPage() {
       });
     }
     return logs;
-  }, [activityLogs, filterType, startDate, endDate]);
+  }, [activityLogs, filterType, startDate, endDate, ACTIVITY_TYPE_GROUPS]);
   const logsPerPage = 6;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
   const pagedLogs = useMemo(() => {
