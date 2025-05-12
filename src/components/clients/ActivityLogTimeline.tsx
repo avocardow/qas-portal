@@ -34,7 +34,7 @@ interface ActivityLogTimelineProps {
 function getActivityIcon(type: string, content?: string) {
   const base = "text-xl text-gray-500 dark:text-gray-400 flex items-center justify-center";
   // Use slash icon for unassign logs
-  if (type === 'note' && content?.startsWith('Unassigned user')) {
+  if (type === 'note' && content?.startsWith('Unassigned ')) {
     return <i className={`fa-solid fa-user-slash ${base}`} />;
   }
   switch (type) {

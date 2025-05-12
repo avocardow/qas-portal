@@ -266,7 +266,7 @@ export const auditRouter = createTRPCRouter({
             clientId: audit.clientId,
             createdBy: ctx.session.user.id,
             type: ActivityLogType.note,
-            content: `Unassigned user ${user?.name ?? userId} from audit`,
+            content: `Unassigned ${user?.name ?? userId}`,
           },
         });
       }
