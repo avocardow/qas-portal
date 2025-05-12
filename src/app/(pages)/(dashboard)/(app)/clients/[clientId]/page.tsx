@@ -85,7 +85,10 @@ export default function ClientDetailPage() {
   // Cast raw data to typed ClientById for proper property inference
   type ClientById = RouterOutput["clients"]["getById"];
   const clientData = _clientData as ClientById | undefined;
-  const activityLogs = clientData?.activityLogs ?? [];
+  const activityLogs = useMemo(
+    () => clientData?.activityLogs ?? [],
+    [clientData?.activityLogs]
+  );
 
   // Calculate next contact and report due dates
    
