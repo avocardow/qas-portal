@@ -30,6 +30,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
   const [dateValue, setDateValue] = useState<Date>(new Date());
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [contactId, setContactId] = useState<string | undefined>(undefined);
+  const [staffMemberId, setStaffMemberId] = useState<string | undefined>(undefined);
 
   // contacts prop is used for Related Contact select below
 
@@ -63,6 +64,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
       setDescription('');
       setDateValue(new Date());
       setContactId(undefined);
+      setStaffMemberId(undefined);
       setErrorMessage(null);
     }
   }, [isOpen]);
@@ -89,8 +91,8 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               <Select
                 options={staffMembers.map(u => ({ value: u.id, label: u.name ?? u.email ?? '' }))}
                 placeholder="Select staff member"
-                defaultValue={contactId ?? ''}
-                onChange={val => setContactId(val || undefined)}
+                defaultValue={staffMemberId ?? ''}
+                onChange={val => setStaffMemberId(val || undefined)}
                 className="mt-1"
               />
             </div>
@@ -133,7 +135,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
             <Select
               options={contacts.map(c => ({ value: c.id, label: c.name ?? c.id }))}
               placeholder="Select contact"
-              defaultValue={contactId ?? ""}
+              defaultValue={contactId ?? ''}
               onChange={val => setContactId(val || undefined)}
               className="mt-1"
             />
