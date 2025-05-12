@@ -41,13 +41,13 @@ export default function DatePicker({
       mode: mode || "single",
       monthSelectorType: "static",
       enableTime,
-      ...(enableTime ? { time_24hr: false, minuteIncrement: 1 } : {}),
+      ...(enableTime ? { time_24hr: true, minuteIncrement: 1 } : {}),
       dateFormat: enableTime ? "d/m/Y H:i" : "d/m/Y",
       defaultDate,
       minDate,
       maxDate,
       closeOnSelect: false,
-      plugins: [confirmDatePlugin({})],
+      plugins: [confirmDatePlugin({ showAlways: true })],
       onChange,
     });
 
