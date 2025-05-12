@@ -40,7 +40,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
     accountName: z.string().optional(),
     bankName: z.string(),
     bsb: z.string().optional(),
-    accountNumber: z.string().optional(),
+    accountNumber: z.string().regex(/^\d{4}$/, 'provide only the last 4 digits of the account number').optional(),
     managementSoftware: z.string().optional(),
     softwareUrl: z.preprocess(val => val === '' ? undefined : val, z.string().url("Invalid URL").optional()),
     hasSoftwareAccess: z.boolean().optional(),
@@ -194,8 +194,17 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
               id="accountNumber"
               name="accountNumber"
               placeholder="Account Number"
+              type="text"
+              inputMode="numeric"
+              pattern="\\d{4}"
+              maxLength={4}
               defaultValue={formData.accountNumber}
-              onChange={e => { setFormData({ ...formData, accountNumber: e.target.value }); validateField('accountNumber', e.target.value); }}
+              onChange={e => {
+                // Only allow digits
+                const val = e.target.value.replace(/[^\d]/g, '');
+                setFormData({ ...formData, accountNumber: val });
+                validateField('accountNumber', val);
+              }}
               error={!!formErrors.accountNumber}
               hint={formErrors.accountNumber}
             />
@@ -225,18 +234,6 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
               hint={formErrors.softwareUrl}
             />
           </div>
-          <div>
-            <Label htmlFor="licenseNumber">License Number</Label>
-            <InputField
-              id="licenseNumber"
-              name="licenseNumber"
-              placeholder="License Number"
-              defaultValue={formData.licenseNumber}
-              onChange={e => { setFormData({ ...formData, licenseNumber: e.target.value }); validateField('licenseNumber', e.target.value); }}
-              error={!!formErrors.licenseNumber}
-              hint={formErrors.licenseNumber}
-            />
-          </div>
           <div className="flex items-center space-x-2">
             <input
               id="hasSoftwareAccess"
@@ -245,11 +242,24 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
               onChange={e => setFormData({ ...formData, hasSoftwareAccess: e.target.checked })}
               className="h-4 w-4 text-brand-500"
             />
-            <Label htmlFor="hasSoftwareAccess">Software Access</Label>
+            <Label htmlFor="hasSoftwareAccess">Has Software Access</Label>
+          </div>
+          <div className="pt-2 pb-1 font-semibold text-gray-700">License Association (optional)</div>
+          <div>
+            <Label htmlFor="licenseNumber">License Number</Label>
+            <InputField
+              id="licenseNumber"
+              name="licenseNumber"
+              placeholder="License Number"
+              defaultValue={formData.licenseNumber ?? ''}
+              onChange={e => { setFormData({ ...formData, licenseNumber: e.target.value }); validateField('licenseNumber', e.target.value); }}
+              error={!!formErrors.licenseNumber}
+              hint={formErrors.licenseNumber}
+            />
           </div>
           <div className="flex justify-end space-x-2 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-            <Button type="submit" disabled={updateTrustAccountMutation.status === 'pending'}>Save</Button>
+            <Button type="submit" disabled={updateTrustAccountMutation.isLoading}>Save</Button>
           </div>
         </form>
       </ComponentCard>

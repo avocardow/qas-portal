@@ -85,18 +85,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
         {serverError && <Notification variant="error" title={serverError} />}
         {errorMessage && <Notification variant="error" title={errorMessage} />}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Authorized action={ACTIVITY_PERMISSIONS.ADD_STAFF_MEMBER_ACTIVITY}>
-            <div>
-              <Label htmlFor="staffMemberId">Staff Member</Label>
-              <Select
-                options={staffMembers.map(u => ({ value: u.id, label: u.name ?? u.email ?? '' }))}
-                placeholder="Select staff member"
-                defaultValue={staffMemberId ?? ''}
-                onChange={val => setStaffMemberId(val || undefined)}
-                className="mt-1"
-              />
-            </div>
-          </Authorized>
+          {/* Date & Time */}
           <div>
             <DatePicker
               id="activityDate"
@@ -111,6 +100,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               maxDate={new Date()}
             />
           </div>
+          {/* Activity Type */}
           <div>
             <Label htmlFor="type">Activity Type</Label>
             <Select
@@ -120,16 +110,22 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               className="mt-1"
             />
           </div>
-          <div>
-            <Label htmlFor="description">Note Content</Label>
-            <TextArea
-              placeholder="Description"
-              rows={3}
-              value={description}
-              onChange={val => setDescription(val)}
-              className="mt-1"
-            />
-          </div>
+          {/* Staff Member (if allowed) */}
+          <Authorized action={ACTIVITY_PERMISSIONS.ADD_STAFF_MEMBER_ACTIVITY}>
+            <div className="pt-2 pb-1 font-semibold text-gray-700">Staff Assignment</div>
+            <div>
+              <Label htmlFor="staffMemberId">Staff Member</Label>
+              <Select
+                options={staffMembers.map(u => ({ value: u.id, label: u.name ?? u.email ?? '' }))}
+                placeholder="Select staff member"
+                defaultValue={staffMemberId ?? ''}
+                onChange={val => setStaffMemberId(val || undefined)}
+                className="mt-1"
+              />
+            </div>
+          </Authorized>
+          {/* Related Contact */}
+          <div className="pt-2 pb-1 font-semibold text-gray-700">Related Contact</div>
           <div>
             <Label htmlFor="contactId">Related Contact</Label>
             <Select
@@ -137,6 +133,18 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               placeholder="Select contact"
               defaultValue={contactId ?? ''}
               onChange={val => setContactId(val || undefined)}
+              className="mt-1"
+            />
+          </div>
+          {/* Note Content */}
+          <div className="pt-2 pb-1 font-semibold text-gray-700">Note Content</div>
+          <div>
+            <Label htmlFor="description">Note Content</Label>
+            <TextArea
+              placeholder="Description"
+              rows={3}
+              value={description}
+              onChange={val => setDescription(val)}
               className="mt-1"
             />
           </div>

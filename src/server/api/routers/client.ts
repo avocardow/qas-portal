@@ -31,18 +31,23 @@ const clientGetAllSchema = z.object({
 const clientByIdSchema = z.object({ clientId: z.string().uuid() });
 const clientCreateSchema = z.object({
   clientName: z.string(),
-  abn: z.string().optional(),
-  address: z.string().optional(),
-  city: z.string().optional(),
-  postcode: z.string().optional(),
-  status: z.enum(["prospect", "active", "archived"]).optional(),
-  auditPeriodEndDate: z.date().optional(),
-  nextContactDate: z.date().optional(),
-  estAnnFees: z.number().optional(),
+  phone: z.string().nullable().optional(),
+  email: z.string().nullable().optional(),
+  abn: z.string().nullable().optional(),
+  address: z.string().nullable().optional(),
+  city: z.string().nullable().optional(),
+  postcode: z.string().nullable().optional(),
+  internalFolder: z.string().url("Invalid URL").nullable().optional(),
+  externalFolder: z.string().url("Invalid URL").nullable().optional(),
+  xeroContactId: z.string().nullable().optional(),
+  assignedUserId: z.string().uuid().nullable().optional(),
+  status: z.enum(["prospect", "active", "archived"]),
+  auditPeriodEndDate: z.date().nullable().optional(),
+  nextContactDate: z.date().nullable().optional(),
+  estAnnFees: z.number().nullable().optional(),
 });
 const clientUpdateSchema = clientCreateSchema.extend({
   clientId: z.string().uuid(),
-  assignedUserId: z.string().uuid().nullable().optional(),
 });
 
 // Add explicit Zod schema for getById response to ensure correct output types
@@ -396,17 +401,20 @@ export const clientRouter = createTRPCRouter({
         contactId: z.string().uuid().optional(),
         type: z.nativeEnum(ActivityLogType),
         content: z.string(),
+        date: z.date().optional(),
+        staffMemberId: z.string().uuid().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { clientId, contactId, type, content } = input;
+      const { clientId, contactId, type, content, date, staffMemberId } = input;
       return ctx.db.activityLog.create({
         data: {
           clientId,
           contactId,
-          createdBy: ctx.session.user.id,
+          createdBy: staffMemberId ?? ctx.session.user.id,
           type,
           content,
+          ...(date ? { createdAt: date } : {}),
         },
       });
     }),
@@ -419,15 +427,19 @@ export const clientRouter = createTRPCRouter({
         type: z.nativeEnum(ActivityLogType),
         content: z.string(),
         date: z.date().optional(),
+        contactId: z.string().uuid().nullable().optional(),
+        staffMemberId: z.string().uuid().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, type, content, date } = input;
+      const { id, type, content, date, contactId, staffMemberId } = input;
       const updateData: Prisma.ActivityLogUpdateInput = {
         type,
         content,
         modifier: { connect: { id: ctx.session.user.id } },
         ...(date ? { createdAt: date } : {}),
+        ...(contactId !== undefined ? { contactId } : {}),
+        ...(staffMemberId ? { createdBy: staffMemberId } : {}),
       };
       const updated = await ctx.db.activityLog.update({
         where: { id },
@@ -441,6 +453,7 @@ export const clientRouter = createTRPCRouter({
           modifiedBy: true,
           creator: { select: { name: true } },
           modifier: { select: { name: true } },
+          contactId: true,
         },
       });
       return updated;

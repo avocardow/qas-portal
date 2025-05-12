@@ -10,7 +10,6 @@ import ClientTrustAccountsSection from '@/components/clients/ClientTrustAccounts
 import { useClientData } from "@/hooks/useClientData";
 import { ActivityLogType } from '@prisma/client';
 import ErrorFallback from "@/components/common/ErrorFallback";
-import ClientProfile from "@/components/clients/ClientProfile";
 import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
@@ -53,7 +52,7 @@ export default function ClientDetailPage() {
           id: 'temp-' + Date.now(),
           type: newLog.type as ActivityLogType,
           content: newLog.content,
-          createdAt: new Date(),
+          createdAt: newLog.date ?? new Date(),
         };
         return { ...old, activityLogs: [optimisticEntry, ...(old.activityLogs ?? [])] };
       });
@@ -95,6 +94,14 @@ export default function ClientDetailPage() {
   const nextContactDate = useMemo(() => {
     return clientData?.nextContactDate ?? null;
   }, [clientData?.nextContactDate]);
+
+  // Helper to format dates as 'Weekday, DD Month, YYYY'
+  const formatAUDate = (date: Date) =>
+    `${date.toLocaleDateString('en-AU', { weekday: 'long' })}, ${date.toLocaleDateString('en-AU', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}`;
 
   // State for filters and pagination
   const [filterType, setFilterType] = useState('all');
@@ -167,7 +174,7 @@ export default function ClientDetailPage() {
     }
     return logs;
   }, [activityLogs, filterType, startDate, endDate]);
-  const logsPerPage = 6;
+  const logsPerPage = 5;
   const totalLogPages = Math.ceil(filteredLogs.length / logsPerPage);
   const pagedLogs = useMemo(() => {
     // Sort logs descending (newest first) before pagination
@@ -188,6 +195,8 @@ export default function ClientDetailPage() {
       .filter((log) => log.type === ("external_folder_instructions" as ActivityLogType))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] ?? null;
   }, [clientData?.activityLogs]);
+  // Primary email for mailto link
+  const primaryEmail = clientData?.email ?? clientData?.contacts.find((c) => c.isPrimary)?.email;
   
   // Validate clientId parameter after hooks
   if (!clientId) {
@@ -248,11 +257,11 @@ export default function ClientDetailPage() {
             canEditClient && <EditClientModal clientId={clientId} />
           }
         >
-          <ClientProfile clientId={clientId} showStatus={false} />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
           <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING}>
-            <div className="mt-2 flex items-start space-x-1">
-              <span className="font-medium">Current Fees:</span>
-              <span>{clientData?.estAnnFees?.toLocaleString(undefined, { style: "currency", currency: "USD" }) ?? "-"}</span>
+            <div className="flex items-center space-x-1">
+              <span className="font-medium">Current Fees (excl. GST):</span>
+              <span>{clientData?.estAnnFees?.toLocaleString(undefined, { style: 'currency', currency: 'USD' }) ?? '-'}</span>
               <Popover
                 position="right"
                 triggerOnHover
@@ -270,43 +279,45 @@ export default function ClientDetailPage() {
               </Popover>
             </div>
           </Authorized>
-          <div className="mt-4 grid grid-cols-1 gap-2">
             <div>
               <span className="font-medium">Next Contact Date:</span>{" "}
               {nextContactDate
-                ? nextContactDate.toLocaleDateString('en-AU', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })
+                ? formatAUDate(nextContactDate)
                 : "-"}
             </div>
             <div>
               <span className="font-medium">Audit Period End Date:</span>{" "}
               {clientData?.auditPeriodEndDate
-                ? new Date(clientData.auditPeriodEndDate).toLocaleDateString('en-AU', { day: '2-digit', month: 'long' })
+                ? formatAUDate(new Date(clientData.auditPeriodEndDate))
                 : "-"}
             </div>
             <div>
-              <span className="font-medium">Phone:</span>{" "}
+              <span className="font-semibold">Phone:</span>{" "}
               {clientData?.phone ?? clientData?.contacts.find((c) => c.isPrimary)?.phone ?? "-"}
             </div>
             <div>
-              <span className="font-medium">Email:</span>{" "}
-              {clientData?.email ?? clientData?.contacts.find((c) => c.isPrimary)?.email ?? "-"}
+              <span className="font-semibold">Email:</span>{" "}
+              {primaryEmail ? (
+                <a href={`mailto:${primaryEmail}`} className="text-blue-600 hover:underline">
+                  {primaryEmail}
+                </a>
+              ) : "-"}
             </div>
             <div>
-              <span className="font-medium">Address:</span>{" "}
-              {(clientData?.address || clientData?.city)
-                ? `${clientData.address ?? ""}${clientData.address && clientData.city ? ", " : ""}${clientData.city ?? ""}`
-                : "-"}
+              <span className="font-semibold">Address:</span>{" "}
+              {[clientData?.address, clientData?.city, clientData?.postcode]
+                .filter(Boolean)
+                .join(', ') || "-"}
             </div>
             <div>
-              <span className="font-medium">License:</span>{" "}
+              <span className="font-semibold">License:</span>{" "}
               {clientData?.licenses?.find((l) => l.isPrimary)?.licenseNumber ?? "-"}
             </div>
             <div>
-              <span className="font-medium">Client Manager:</span>{" "}
+              <span className="font-semibold">Client Manager:</span>{" "}
               {clientData?.assignedUser?.name ?? "Unassigned"}
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline">
+            <div className="flex items-baseline">
             <a
               href={clientData?.internalFolder ?? '#'}
               target="_blank"
@@ -331,7 +342,7 @@ export default function ClientDetailPage() {
               <Popover
                 position="right"
                 triggerOnHover
-                trigger={<InfoIcon width={12} height={12} className="text-gray-400 cursor-pointer self-start" />}
+                trigger={<InfoIcon width={12} height={12} className="text-gray-400 cursor-pointer" />}
               >
                 <div className="p-2">
                   {latestExternalInstructions ? (
@@ -346,6 +357,7 @@ export default function ClientDetailPage() {
                 </div>
               </Popover>
             </div>
+          </div>
           </div>
         </ComponentCard>
 
@@ -474,6 +486,7 @@ export default function ClientDetailPage() {
             contactId: data.contactId,
             type: data.type as ActivityLogType,
             content: data.description,
+            date: new Date(data.date),
           });
         } catch {
           // error handled by onError

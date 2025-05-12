@@ -91,19 +91,21 @@ export const auditRouter = createTRPCRouter({
         auditYear: z.number().int().optional(),
         stageId: z.number().int().optional(),
         statusId: z.number().int().optional(),
-        reportDueDate: z.date().optional(),
-        lodgedWithOFTDate: z.date().optional(),
+        assignedUserId: z.string().uuid().nullable().optional(),
+        reportDueDate: z.date().nullable().optional(),
+        lodgedWithOFTDate: z.date().nullable().optional(),
         invoicePaid: z.boolean().optional(),
-        invoiceIssueDate: z.date().optional(),
+        invoiceIssueDate: z.date().nullable().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { auditId, auditYear, stageId, statusId, reportDueDate, lodgedWithOFTDate, invoicePaid, invoiceIssueDate } = input;
+      const { auditId, auditYear, stageId, statusId, assignedUserId, reportDueDate, lodgedWithOFTDate, invoicePaid, invoiceIssueDate } = input;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = {};
       if (auditYear !== undefined) data.auditYear = auditYear;
       if (stageId !== undefined) data.stageId = stageId;
       if (statusId !== undefined) data.statusId = statusId;
+      if (assignedUserId !== undefined) data.assignedUserId = assignedUserId;
       if (reportDueDate !== undefined) data.reportDueDate = reportDueDate;
       if (lodgedWithOFTDate !== undefined) data.lodgedWithOFTDate = lodgedWithOFTDate;
       if (invoicePaid !== undefined) data.invoicePaid = invoicePaid;

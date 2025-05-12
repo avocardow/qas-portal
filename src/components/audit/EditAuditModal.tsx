@@ -90,6 +90,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
       lodgedWithOFTDate: existingAudit?.lodgedWithOFTDate ? existingAudit.lodgedWithOFTDate.toISOString().split('T')[0] : undefined,
       invoicePaid: existingAudit?.invoicePaid ?? false,
       invoiceIssueDate: existingAudit?.invoiceIssueDate ? existingAudit.invoiceIssueDate.toISOString().split('T')[0] : undefined,
+      auditPeriodEndDate: clientData?.auditPeriodEndDate ? new Date(clientData.auditPeriodEndDate).toISOString().split('T')[0] : undefined,
+      nextContactDate: clientData?.nextContactDate ? new Date(clientData.nextContactDate).toISOString().split('T')[0] : undefined,
     }
   });
   const [initAssign] = useState(existingAudit?.assignments?.[0]?.userId ?? null);
@@ -107,9 +109,11 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
         lodgedWithOFTDate: existingAudit?.lodgedWithOFTDate ? existingAudit.lodgedWithOFTDate.toISOString().split('T')[0] : undefined,
         invoicePaid: existingAudit?.invoicePaid ?? false,
         invoiceIssueDate: existingAudit?.invoiceIssueDate ? existingAudit.invoiceIssueDate.toISOString().split('T')[0] : undefined,
+        auditPeriodEndDate: clientData?.auditPeriodEndDate ? new Date(clientData.auditPeriodEndDate).toISOString().split('T')[0] : undefined,
+        nextContactDate: clientData?.nextContactDate ? new Date(clientData.nextContactDate).toISOString().split('T')[0] : undefined,
       });
     }
-  }, [isOpen, existingAudit, reset]);
+  }, [isOpen, existingAudit, reset, clientData]);
 
   const onSubmitForm = async (formData: AuditFormData) => {
     setErrorMsg(null);
@@ -121,10 +125,10 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
           auditYear: formData.auditYear,
           stageId: formData.stageId,
           statusId: formData.statusId,
-          reportDueDate: formData.reportDueDate ? new Date(formData.reportDueDate) : undefined,
-          lodgedWithOFTDate: formData.lodgedWithOFTDate ? new Date(formData.lodgedWithOFTDate) : undefined,
+          reportDueDate: formData.reportDueDate ? (() => { const [y,m,d] = formData.reportDueDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
+          lodgedWithOFTDate: formData.lodgedWithOFTDate ? (() => { const [y,m,d] = formData.lodgedWithOFTDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
           invoicePaid: formData.invoicePaid,
-          invoiceIssueDate: formData.invoiceIssueDate ? new Date(formData.invoiceIssueDate) : undefined,
+          invoiceIssueDate: formData.invoiceIssueDate ? (() => { const [y,m,d] = formData.invoiceIssueDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
         };
         await updateAuditMutation.mutateAsync(payload);
         auditId = existingAudit.id;
@@ -133,8 +137,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
           clientId,
           clientName: clientData?.clientName || '',
           status: clientData?.status || 'active',
-          auditPeriodEndDate: formData.auditPeriodEndDate ? new Date(formData.auditPeriodEndDate) : undefined,
-          nextContactDate: formData.nextContactDate ? new Date(formData.nextContactDate) : undefined,
+          auditPeriodEndDate: formData.auditPeriodEndDate ? (() => { const [y,m,d] = formData.auditPeriodEndDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
+          nextContactDate: formData.nextContactDate ? (() => { const [y,m,d] = formData.nextContactDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
         });
       } else {
         const created = await createMutation.mutateAsync({ clientId, auditYear: formData.auditYear!, stageId: formData.stageId, statusId: formData.statusId });
@@ -167,7 +171,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
       <Modal isOpen={isOpen} onClose={closeModal} overlayClassName="bg-black/90" className="max-w-2xl max-h-[90vh] overflow-y-auto p-6">
         <ComponentCard title={existingAudit ? 'Edit Audit' : 'Create Audit'}>
           <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-            {/* Audit Year */}
+            {/* Audit Details */}
+            <div className="pb-1 font-semibold text-gray-700">Audit Details</div>
             <div>
               <label className="block text-sm font-medium">Audit Year</label>
               <input
@@ -233,6 +238,28 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                 )}
               />
             </div>
+            {/* Period & Dates */}
+            <div className="pt-2 pb-1 font-semibold text-gray-700">Period & Dates</div>
+            <Controller
+              control={control}
+              name="auditPeriodEndDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="auditPeriodEndDatePicker"
+                  label="Audit Period End Date"
+                  placeholder="Select date"
+                  minDate={new Date()}
+                  defaultDate={field.value ? (() => { const [y,m,d] = field.value.split('-').map(Number); return new Date(y,(m??1)-1,d); })() : computedClientAuditPeriodEndDate}
+                  closeOnSelect={false}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
+                    }
+                  }}
+                />
+              )}
+            />
             <Controller
               control={control}
               name="reportDueDate"
@@ -243,50 +270,11 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   placeholder="Select date"
                   minDate={new Date()}
                   defaultDate={field.value ? new Date(field.value) : computedReportDueDate}
+                  closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
                     if (d) {
                       field.onChange(format(d, 'yyyy-MM-dd'));
-                    }
-                  }}
-                />
-              )}
-            />
-            {/* Audit Period End Date */}
-            <Controller
-              control={control}
-              name="auditPeriodEndDate"
-              render={({ field }) => (
-                <DatePicker
-                  id="auditPeriodEndDatePicker"
-                  label="Audit Period End Date"
-                  placeholder="Select date"
-                  minDate={new Date()}
-                  defaultDate={field.value ? new Date(field.value) : computedClientAuditPeriodEndDate}
-                  onChange={(dates) => {
-                    const d = Array.isArray(dates) ? dates[0] : dates;
-                    if (d) {
-                      field.onChange(d.toISOString().slice(0, 10));
-                    }
-                  }}
-                />
-              )}
-            />
-            {/* Next Contact Date */}
-            <Controller
-              control={control}
-              name="nextContactDate"
-              render={({ field }) => (
-                <DatePicker
-                  id="nextContactDatePicker"
-                  label="Next Contact Date"
-                  placeholder="Select date"
-                  minDate={new Date()}
-                  defaultDate={field.value ? new Date(field.value) : computedClientNextContactDate}
-                  onChange={(dates) => {
-                    const d = Array.isArray(dates) ? dates[0] : dates;
-                    if (d) {
-                      field.onChange(d.toISOString().slice(0, 10));
                     }
                   }}
                 />
@@ -301,6 +289,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   label="Lodged with OFT Date"
                   placeholder="Select date"
                   defaultDate={field.value ? new Date(field.value) : undefined}
+                  closeOnSelect={false}
                   onChange={(dates) => {
                     if (dates.length) {
                       const d = dates[0] as Date;
@@ -320,6 +309,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   placeholder="Select date"
                   defaultDate={field.value ? new Date(field.value) : undefined}
                   maxDate={new Date()}
+                  closeOnSelect={false}
                   onChange={(dates) => {
                     if (dates.length) {
                       const d = dates[0] as Date;
@@ -333,6 +323,26 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
               <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
               <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
             </div>
+            <Controller
+              control={control}
+              name="nextContactDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="nextContactDatePicker"
+                  label="Next Contact Date"
+                  placeholder="Select date"
+                  minDate={new Date()}
+                  defaultDate={field.value ? (() => { const [y,m,d] = field.value.split('-').map(Number); return new Date(y,(m??1)-1,d); })() : computedClientNextContactDate}
+                  closeOnSelect={false}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
+                    }
+                  }}
+                />
+              )}
+            />
             {errorMsg && <p className="text-red-600">{errorMsg}</p>}
             <div className="flex justify-end space-x-2 pt-4">
               <Button variant="outline" type="button" onClick={closeModal}>Cancel</Button>

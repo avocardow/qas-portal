@@ -83,8 +83,8 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
     onSuccess: () => {
       setEditingEntry(null);
       setEditError(null);
-      // Invalidate/refetch activity logs (assuming clients.getById is used for parent data)
-      void utils.clients.getById.invalidate();
+      // Invalidate/refetch activity logs for this client
+      void utils.clients.getById.invalidate({ clientId });
     },
     onError: (err) => {
       setEditError(err instanceof Error ? err.message : 'Failed to update activity');
@@ -126,7 +126,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
       <div className="absolute top-9 bottom-0 left-9 w-px bg-gray-200 dark:bg-gray-800" />
 
       {visibleEntries.map((entry) => (
-        <div key={entry.id} className="relative rounded-xl px-3 py-2 mb-6 flex cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" onClick={() => setEditingEntry(entry)}>
+        <div key={entry.id} className="relative rounded-xl p-3 mb-6 flex cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05]" onClick={() => setEditingEntry(entry)}>
           <div className="z-10 shrink-0 content-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
               {getActivityIcon(entry.type, entry.content)}
@@ -175,6 +175,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
                   clientId,
                   type: editType as ActivityLogType,
                   content: editDescription,
+                  contactId: editContactId,
                 });
               }}
               className="space-y-4"

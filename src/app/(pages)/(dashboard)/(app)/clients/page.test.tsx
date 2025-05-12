@@ -24,6 +24,27 @@ vi.mock('@/components/common/ComponentCard', () => ({ default: ({ children, acti
 vi.mock('@/components/ui/notification/Notification', () => ({ default: () => <div /> }));
 vi.mock('@/components/tables/DataTables/TableTwo/DataTableTwo', () => ({ default: () => <div /> }));
 vi.mock('@/components/ui/badge/Badge', () => ({ default: () => <div /> }));
+vi.mock('@fortawesome/react-fontawesome', () => ({
+  __esModule: true,
+  FontAwesomeIcon: () => <span data-testid="fa-icon" />,
+  ...Object.fromEntries(['faPlus', 'faSolid', 'faUser', 'faEdit', 'faTrash'].map(name => [name, {}])),
+}));
+vi.mock('@fortawesome/free-solid-svg-icons', () => ({
+  __esModule: true,
+  faPlus: {},
+  faSolid: {},
+  faUser: {},
+  faEdit: {},
+  faTrash: {},
+}));
+vi.mock('@/components/ui/button/Button', () => ({
+  __esModule: true,
+  default: ({ children, ...props }) => <button {...props}>{children}</button>,
+}));
+vi.mock('*.svg', () => ({
+  __esModule: true,
+  default: () => <span data-testid="svg-icon" />,
+}));
 
 import ClientsPage from './page';
 import * as abilityModule from '@/hooks/useAbility';
@@ -53,21 +74,21 @@ describe('ClientsPage RBAC', () => {
   test('allows Admin to view page and see Add New Client button', () => {
     vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
-    const addButton = screen.getByRole('button', { name: /add new client/i });
+    const addButton = screen.getAllByText('Add New Client')[0];
     expect(addButton).toBeTruthy();
   });
 
   test('allows Developer to view page and see Add New Client button', () => {
     vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
-    const addButton = screen.getByRole('button', { name: /add new client/i });
+    const addButton = screen.getAllByText('Add New Client')[0];
     expect(addButton).toBeTruthy();
   });
 
   test('routes to New Client page when Developer clicks Add New Client button', () => {
     vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
-    const addButton = screen.getByRole('button', { name: /add new client/i });
+    const addButton = screen.getAllByText('Add New Client')[0];
     fireEvent.click(addButton);
     expect(pushMock).toHaveBeenCalledWith('/clients/new');
   });
@@ -78,7 +99,7 @@ describe('ClientsPage RBAC', () => {
       cannot: (permission) => permission !== 'clients.view.status',
     });
     renderWithPermissionProvider(<ClientsPage />);
-    const button = screen.queryByRole('button', { name: /add new client/i });
+    const button = screen.queryByText('Add New Client');
     expect(button).toBeNull();
   });
 
@@ -88,14 +109,14 @@ describe('ClientsPage RBAC', () => {
       cannot: (permission) => permission !== 'clients.view.status',
     });
     renderWithPermissionProvider(<ClientsPage />);
-    const button = screen.queryByRole('button', { name: /add new client/i });
+    const button = screen.queryByText('Add New Client');
     expect(button).toBeNull();
   });
 
   test('routes to New Client page when Add New Client button is clicked', () => {
     vi.spyOn(abilityModule, 'useAbility').mockReturnValue({ can: () => true, cannot: () => false });
     renderWithPermissionProvider(<ClientsPage />);
-    const addButton = screen.getByRole('button', { name: /add new client/i });
+    const addButton = screen.getAllByText('Add New Client')[0];
     fireEvent.click(addButton);
     expect(pushMock).toHaveBeenCalledWith('/clients/new');
   });

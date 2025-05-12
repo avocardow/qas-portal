@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import React from "react";
+import { useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
-import "flatpickr/dist/plugins/confirmDate/confirmDate.css";
 import Label from "./Label";
 import { CalenderIcon } from "../../icons";
 import Hook = flatpickr.Options.Hook;
@@ -22,6 +22,8 @@ type PropsType = {
   maxDate?: DateOption;
   /** Show time select (24hr). Defaults to false. */
   enableTime?: boolean;
+  /** Close the calendar after selecting a date. Defaults to false. */
+  closeOnSelect?: boolean;
 };
 
 export default function DatePicker({
@@ -34,9 +36,11 @@ export default function DatePicker({
   minDate,
   maxDate,
   enableTime = false,
+  closeOnSelect = false,
 }: PropsType) {
+  const fpRef = useRef<ReturnType<typeof flatpickr> | null>(null);
   useEffect(() => {
-    const flatPickr = flatpickr(`#${id}`, {
+    const flatPickrInstance = flatpickr(`#${id}`, {
       mode: mode || "single",
       monthSelectorType: "static",
       enableTime,
@@ -45,15 +49,27 @@ export default function DatePicker({
       defaultDate,
       minDate,
       maxDate,
-      closeOnSelect: false,
+      closeOnSelect,
+      ...(onChange ? { onChange } : {}),
     });
 
+    fpRef.current = flatPickrInstance;
     return () => {
-      if (!Array.isArray(flatPickr)) {
-        flatPickr.destroy();
+      if (fpRef.current && !Array.isArray(fpRef.current)) {
+        fpRef.current.destroy();
+        fpRef.current = null;
       }
     };
-  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime]);
+  }, [mode, onChange, id, minDate, maxDate, enableTime, closeOnSelect]);
+
+  // Update the flatpickr date when defaultDate changes (e.g., opening form)
+  useEffect(() => {
+    if (fpRef.current && defaultDate) {
+      const dates: DateOption[] = Array.isArray(defaultDate) ? defaultDate as DateOption[] : [defaultDate as DateOption];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (fpRef.current as any).setDate(dates, false);
+    }
+  }, [defaultDate]);
 
   return (
     <div>

@@ -17,6 +17,9 @@
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "flatpickr Docs": {
+      "url": "https://gitmcp.io/flatpickr/flatpickr"
     }
   }
 }

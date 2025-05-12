@@ -10,6 +10,7 @@ import { PencilIcon } from '@/icons';
 import ComponentCard from '@/components/common/ComponentCard';
 import DatePicker from '@/components/form/date-picker';
 import Notification from '@/components/ui/notification/Notification';
+import { format } from 'date-fns';
 
 // Validation schema for client edit form
 const clientFormSchema = z.object({
@@ -94,11 +95,14 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
   }, [isOpen, clientQuery.data, reset]);
 
   const onSubmit = (formData: ClientFormData) => {
-    // Compute actual Date objects
-    const auditDate = formData.auditPeriodEndDate
-      ? new Date(formData.auditPeriodEndDate)
-      : undefined;
-    const nextDate = formData.nextContactDate ? new Date(formData.nextContactDate) : undefined;
+    // Convert date string YYYY-MM-DD to a Date at UTC midnight to avoid timezone shifts
+    const toUtcDate = (s?: string) => {
+      if (!s) return undefined;
+      const [y, m, d] = s.split('-').map(Number);
+      return new Date(Date.UTC(y, (m ?? 1) - 1, d));
+    };
+    const auditDate = toUtcDate(formData.auditPeriodEndDate);
+    const nextDate = toUtcDate(formData.nextContactDate);
 
     updateMutation.mutate({
       clientId,
@@ -124,7 +128,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
       <Modal isOpen={isOpen} onClose={closeModal} overlayClassName="bg-black/90" className="max-w-2xl max-h-[90vh] overflow-y-auto p-6">
         <ComponentCard title="Edit Client">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Client Name */}
+            {/* 1. Client Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Client Name</label>
               <input
@@ -133,49 +137,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
               />
               {errors.clientName && <p className="text-sm text-red-600">{errors.clientName.message}</p>}
             </div>
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
-              <input {...register('phone')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
-            </div>
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <input type="email" {...register('email')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
-            </div>
-            {/* ABN */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">ABN</label>
-              <input
-                {...register('abn')}
-                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
-              />
-            </div>
-            {/* Address, City, Postcode */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Address</label>
-              <input
-                {...register('address')}
-                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
-              />
-            </div>
-            {/* City */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">City</label>
-              <input
-                {...register('city')}
-                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
-              />
-            </div>
-            {/* Postcode */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Postcode</label>
-              <input
-                {...register('postcode')}
-                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
-              />
-            </div>
-            {/* Status */}
+            {/* 2. Status */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Status</label>
               <Controller
@@ -193,7 +155,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                 )}
               />
             </div>
-            {/* Assigned User */}
+            {/* 3. Assigned User */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Assigned User</label>
               <Controller
@@ -213,7 +175,49 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                 )}
               />
             </div>
-            {/* Audit Period End Date */}
+            {/* 4. Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Phone</label>
+              <input {...register('phone')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+            </div>
+            {/* 5. Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input type="email" {...register('email')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+            </div>
+            {/* 6. ABN */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">ABN</label>
+              <input
+                {...register('abn')}
+                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
+              />
+            </div>
+            {/* 7. Address */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Address</label>
+              <input
+                {...register('address')}
+                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
+              />
+            </div>
+            {/* 8. City */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">City</label>
+              <input
+                {...register('city')}
+                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
+              />
+            </div>
+            {/* 9. Postcode */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Postcode</label>
+              <input
+                {...register('postcode')}
+                className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
+              />
+            </div>
+            {/* 10. Audit Period End Date */}
             <Controller
               control={control}
               name="auditPeriodEndDate"
@@ -222,18 +226,19 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                   id="auditPeriodEndDatePicker"
                   label="Audit Period End Date"
                   placeholder="Select date"
-                  minDate={new Date()}
-                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  minDate={today}
+                  defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
+                  closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
                     if (d) {
-                      field.onChange(d.toISOString().slice(0, 10));
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
                     }
                   }}
                 />
               )}
             />
-            {/* Next Contact Date */}
+            {/* 11. Next Contact Date */}
             <Controller
               control={control}
               name="nextContactDate"
@@ -242,19 +247,20 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                   id="nextContactDatePicker"
                   label="Next Contact Date"
                   placeholder="Select date"
-                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
                   minDate={today}
                   maxDate={maxContactDate}
+                  closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
                     if (d) {
-                      field.onChange(d.toISOString().slice(0, 10));
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
                     }
                   }}
                 />
               )}
             />
-            {/* Estimated Annual Fees */}
+            {/* 12. Estimated Annual Fees */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Estimated Annual Fees</label>
               <input
@@ -264,17 +270,17 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                 className="mt-1 block w-full rounded border border-gray-300 px-3 py-2"
               />
             </div>
-            {/* Internal Folder ID */}
+            {/* 13. Internal Folder URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Internal Folder URL</label>
               <input {...register('internalFolder')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
             </div>
-            {/* External Folder ID */}
+            {/* 14. External Folder URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700">External Folder URL</label>
               <input {...register('externalFolder')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
             </div>
-            {/* Xero Contact ID */}
+            {/* 15. Xero Contact ID */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Xero Contact ID</label>
               <input {...register('xeroContactId')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />

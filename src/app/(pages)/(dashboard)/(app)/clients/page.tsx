@@ -12,10 +12,10 @@ import DataTableTwo, {
 } from "@/components/tables/DataTables/TableTwo/DataTableTwo";
 import Badge from "@/components/ui/badge/Badge";
 import useDebounce from "@/hooks/useDebounce";
-import Button from "@/components/ui/button/Button";
 import Authorized from "@/components/Authorized";
 import { CLIENT_PERMISSIONS } from "@/constants/permissions";
 import type { RouterOutput } from '@/utils/api';
+import AddClientModal from '@/components/clients/AddClientModal';
 
 // Extract only the full client shape (with contacts, audits, etc.) for table rows
 type RawClient = RouterOutput['clients']['getAll']['items'][number];
@@ -304,14 +304,7 @@ export default function ClientsPage() {
           title="Client Directory"
           actions={
             <Authorized action={CLIENT_PERMISSIONS.EDIT}>
-              <Button
-                aria-label="Add New Client"
-                size="sm"
-                variant="outline"
-                onClick={() => router.push('/clients/new')}
-              >
-                Add New Client
-              </Button>
+              <AddClientModal />
             </Authorized>
           }
         >

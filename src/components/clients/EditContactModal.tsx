@@ -155,6 +155,16 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
             />
           </div>
           <div>
+            <Label htmlFor="title">Title</Label>
+            <InputField
+              id="title"
+              name="title"
+              placeholder="Job Title"
+              defaultValue={formData.title}
+              onChange={e => setFormData({ ...formData, title: e.target.value })}
+            />
+          </div>
+          <div>
             <Label htmlFor="email">Email</Label>
             <InputField
               type="email"
@@ -180,16 +190,6 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
               hint={formErrors.phone}
             />
           </div>
-          <div>
-            <Label htmlFor="title">Title</Label>
-            <InputField
-              id="title"
-              name="title"
-              placeholder="Job Title"
-              defaultValue={formData.title}
-              onChange={e => setFormData({ ...formData, title: e.target.value })}
-            />
-          </div>
           <div className="flex items-center space-x-2">
             <input
               id="isPrimary"
@@ -200,6 +200,7 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
             />
             <Label htmlFor="isPrimary">Primary Contact</Label>
           </div>
+          <div className="pt-2 pb-1 font-semibold text-gray-700">License Information (optional)</div>
           <div>
             <Label htmlFor="licenseNumber">License Number</Label>
             <InputField id="licenseNumber" name="licenseNumber" placeholder="License Number" defaultValue={formData.licenseNumber ?? ''} onChange={e => setFormData({ ...formData, licenseNumber: e.target.value })} />

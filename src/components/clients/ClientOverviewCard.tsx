@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import { Tooltip } from "@/components/ui/tooltip/Tooltip";
 import type { RouterOutput } from "@/utils/api";
-import { api } from "@/utils/api";
-import EditableField from "@/components/common/EditableField";
-import Notification from "@/components/ui/notification/Notification";
+import { useAbility } from "@/hooks/useAbility";
+import { CLIENT_PERMISSIONS } from "@/constants/permissions";
+import EditClientModal from "@/components/clients/EditClientModal";
 
 // Use the return type from the clients.getById tRPC call
 export type ClientWithRelations = RouterOutput["clients"]["getById"];
@@ -18,47 +18,25 @@ export default function ClientOverviewCard({ client }: ClientOverviewCardProps) 
   const folderLink = client.externalFolder
     ? `https://sharepoint.com/sites/${client.externalFolder}`
     : null;
-  const utils = api.useContext();
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const updateClient = api.clients.update.useMutation({
-    onSuccess: () => {
-      utils.clients.getById.invalidate({ clientId: client.id });
-      setSuccessMessage("Client updated successfully");
-      setTimeout(() => setSuccessMessage(""), 3000);
-    },
-    onError: (error) => {
-      const msg = error?.message || "Failed to update client";
-      setErrorMessage(msg);
-      setTimeout(() => setErrorMessage(""), 3000);
-    },
-  });
+  const { can } = useAbility();
+  const canEditClient = can(CLIENT_PERMISSIONS.EDIT);
 
   return (
     <>
-      {successMessage && <Notification variant="success" title={successMessage} />}
-      {errorMessage && <Notification variant="error" title={errorMessage} />}
-      <ComponentCard title="Client Overview">
+      <ComponentCard
+        title="Client Overview"
+        actions={
+          <div className="flex items-center space-x-2">
+            {canEditClient && <EditClientModal clientId={client.id} />}
+          </div>
+        }
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <EditableField
-              label="Name"
-              value={client.clientName}
-              onSave={(value) => updateClient.mutate({ clientId: client.id, clientName: value })}
-            />
+            <span className="font-medium">Name:</span> {client.clientName}
           </div>
           <div>
-            <EditableField
-              label="Address"
-              value={client.address || ""}
-              onSave={(value) =>
-                updateClient.mutate({
-                  clientId: client.id,
-                  clientName: client.clientName,
-                  address: value,
-                })
-              }
-            />
+            <span className="font-medium">Address:</span> {client.address || "—"}
           </div>
           <div>
             <span className="font-medium">Folder Link:</span>{" "}

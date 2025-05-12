@@ -100,7 +100,7 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       return;
     }
     // Submit form data to API
-    createContactMutation.mutate(result.data, {
+    createContactMutation.mutate({ ...result.data, clientId }, {
       onSuccess: (newContact: RouterOutput['contact']['create']) => {
         // Refresh client data including contacts
         utils.clients.getById.invalidate({ clientId });
@@ -138,34 +138,40 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
                 {successMessage && <Notification variant="success" title={successMessage} />}
                 {errorMessage && <Notification variant="error" title={errorMessage} />}
         <form onSubmit={handleSubmitInternal} className="space-y-4">
-                      <div>
-                        <Label htmlFor="name">Name</Label>
+          {/* Core Identity */}
+          <div>
+            <Label htmlFor="name">Name</Label>
             <InputField id="name" name="name" placeholder="Full Name" defaultValue={formData.name} onChange={e => { setFormData({ ...formData, name: e.target.value }); validateField('name', e.target.value); }} error={!!formErrors.name} hint={formErrors.name} />
-                      </div>
-                      <div>
-            <Label htmlFor="email">Email</Label>
-            <InputField type="email" id="email" name="email" placeholder="Email Address" defaultValue={formData.email} onChange={e => { setFormData({ ...formData, email: e.target.value }); validateField('email', e.target.value); }} error={!!formErrors.email} hint={formErrors.email} />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">Phone</Label>
-            <InputField type="tel" id="phone" name="phone" placeholder="Phone Number" defaultValue={formData.phone} onChange={e => { setFormData({ ...formData, phone: e.target.value }); validateField('phone', e.target.value); }} error={!!formErrors.phone} hint={formErrors.phone} />
-                      </div>
-                      <div>
+          </div>
+          <div>
             <Label htmlFor="title">Title</Label>
             <InputField id="title" name="title" placeholder="Job Title" defaultValue={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
           </div>
+          {/* Contact Information */}
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <InputField type="email" id="email" name="email" placeholder="Email Address" defaultValue={formData.email} onChange={e => { setFormData({ ...formData, email: e.target.value }); validateField('email', e.target.value); }} error={!!formErrors.email} hint={formErrors.email} />
+          </div>
+          <div>
+            <Label htmlFor="phone">Phone</Label>
+            <InputField type="tel" id="phone" name="phone" placeholder="Phone Number" defaultValue={formData.phone} onChange={e => { setFormData({ ...formData, phone: e.target.value }); validateField('phone', e.target.value); }} error={!!formErrors.phone} hint={formErrors.phone} />
+          </div>
+          {/* Role/Primary Status */}
           <div className="flex items-center space-x-2">
             <input id="isPrimary" type="checkbox" checked={formData.isPrimary} onChange={e => setFormData({ ...formData, isPrimary: e.target.checked })} className="h-4 w-4 text-brand-500" />
             <Label htmlFor="isPrimary">Primary Contact</Label>
-                      </div>
-                      <div>
-                        <Label htmlFor="licenseNumber">License Number</Label>
+          </div>
+          {/* License Section Separator */}
+          <div className="pt-2 pb-1 font-semibold text-gray-700">License Information (optional)</div>
+          {/* License Information */}
+          <div>
+            <Label htmlFor="licenseNumber">License Number</Label>
             <InputField id="licenseNumber" name="licenseNumber" placeholder="License Number" defaultValue={formData.licenseNumber ?? ''} onChange={e => setFormData({ ...formData, licenseNumber: e.target.value })} />
-                      </div>
+          </div>
           <div>
             <Label htmlFor="licenseType">License Type</Label>
             <InputField id="licenseType" name="licenseType" placeholder="License Type" defaultValue={formData.licenseType ?? ''} onChange={e => setFormData({ ...formData, licenseType: e.target.value })} />
-                      </div>
+          </div>
           <div>
             <Label htmlFor="renewalMonth">Renewal Month</Label>
             <Select
@@ -176,7 +182,7 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
               className={formErrors.renewalMonth ? 'border-error-500' : ''}
             />
             {formErrors.renewalMonth && <p className="text-error-500 text-sm mt-1">{formErrors.renewalMonth}</p>}
-                </div>
+          </div>
           <div className="flex items-center space-x-2">
             <input id="licenseIsPrimary" type="checkbox" checked={formData.licenseIsPrimary} onChange={e => setFormData({ ...formData, licenseIsPrimary: e.target.checked })} className="h-4 w-4 text-brand-500" />
             <Label htmlFor="licenseIsPrimary">Primary License</Label>
@@ -184,7 +190,7 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
           <div className="flex justify-end space-x-2 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
             <Button type="submit" disabled={isCreating}>Add Contact</Button>
-        </div>
+          </div>
         </form>
       </ComponentCard>
     </ModalComponent>
