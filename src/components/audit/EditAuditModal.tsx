@@ -24,7 +24,7 @@ interface EditAuditModalProps {
 // Add Zod schema for audit form
 const auditFormSchema = z.object({
   auditYear: z.coerce.number().optional(),
-  stageId: z.coerce.number().min(1, 'Stage is required'),
+  stageId: z.coerce.number().refine(val => val !== undefined && val !== null, { message: 'Stage is required' }),
   statusId: z.coerce.number().min(1, 'Status is required'),
   assignedUserId: z.string().nullable().optional(),
   reportDueDate: z.string().optional(),
@@ -275,7 +275,6 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   id="auditPeriodEndDatePicker"
                   label="Audit Period End Date"
                   placeholder="Select date"
-                  minDate={new Date()}
                   defaultDate={field.value ? (() => { const [y,m,d] = field.value.split('-').map(Number); return new Date(y,(m??1)-1,d); })() : computedClientAuditPeriodEndDate}
                   closeOnSelect={false}
                   onChange={(dates) => {
