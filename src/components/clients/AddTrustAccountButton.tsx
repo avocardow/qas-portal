@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@/components/ui/button/Button';
-import { PlusIcon } from '@/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface AddTrustAccountButtonProps {
   onClick: () => void;
@@ -13,7 +14,7 @@ export default function AddTrustAccountButton({ onClick, className = '' }: AddTr
       onClick={onClick}
       variant="link"
       className={className}
-      startIcon={<PlusIcon className="h-4 w-4" />}
+      startIcon={<FontAwesomeIcon icon={faPlus} aria-hidden="true" className="h-4 w-4" />}
     >
       Add Trust Account
     </Button>

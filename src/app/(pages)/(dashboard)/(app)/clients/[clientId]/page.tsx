@@ -14,7 +14,7 @@ import Authorized from '@/components/Authorized';
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import CurrentAuditCard from '@/components/audit/CurrentAuditCard';
 import ActivityLogTimeline from '@/components/clients/ActivityLogTimeline';
-import { InfoIcon, PlusIcon } from '@/icons';
+import { InfoIcon } from '@/icons';
 import PaginationWithIcon from '@/components/ui/pagination/PaginationWithIcon';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import AddActivityModal from '@/components/clients/AddActivityModal';
@@ -30,6 +30,8 @@ import Notification from '@/components/ui/notification/Notification';
 import EditClientModal from '@/components/clients/EditClientModal';
 import DateRangePicker from '@/components/form/DateRangePicker';
 import AddAuditModal, { AddAuditFormData } from '@/components/audit/AddAuditModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
@@ -376,7 +378,7 @@ export default function ClientDetailPage() {
                 className="p-2 text-gray-500 opacity-75 hover:text-gray-600 hover:opacity-100"
                 aria-label="Add Activity Item"
               >
-                <PlusIcon className="h-5 w-5" />
+                <FontAwesomeIcon icon={faPlus} aria-hidden="true" className="h-5 w-5" />
               </button>
               <div className="relative">
                 <button onClick={toggleActionsDropdown} className="dropdown-toggle">

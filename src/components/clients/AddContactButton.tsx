@@ -1,5 +1,6 @@
 import React from "react";
-import { PlusIcon } from "@/icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface AddContactButtonProps {
   onClick: () => void;
@@ -14,7 +15,7 @@ export default function AddContactButton({ onClick, className = "" }: AddContact
       className={`p-2 text-gray-500 opacity-75 hover:text-gray-600 hover:opacity-100 ${className}`}
       aria-label="Add Contact"
     >
-      <PlusIcon className="h-5 w-5" />
+      <FontAwesomeIcon icon={faPlus} aria-hidden="true" className="h-5 w-5" />
     </button>
   );
 } 
