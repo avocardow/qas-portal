@@ -28,7 +28,7 @@ const addAuditFormSchema = z.object({
   invoicePaid: z.boolean().optional(),
   nextContactDate: z.string().optional(),
 });
-type AddAuditFormData = z.infer<typeof addAuditFormSchema>;
+export type AddAuditFormData = z.infer<typeof addAuditFormSchema>;
 
 interface AddAuditModalProps {
   clientId: string;
