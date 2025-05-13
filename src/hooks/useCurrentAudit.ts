@@ -20,22 +20,23 @@ export function useCurrentAudit(
   clientId: string,
   options: UseCurrentAuditOptions = {}
 ) {
+  const { enabled = true, onSuccess, onError } = options;
   const query = api.audit.getCurrent.useQuery(
     { clientId },
-    { enabled: !!clientId && options.enabled !== false }
+    { enabled: !!clientId && enabled }
   );
 
   React.useEffect(() => {
-    if (query.data && options.onSuccess) {
-      options.onSuccess(query.data);
+    if (query.data && onSuccess) {
+      onSuccess(query.data);
     }
-  }, [query.data, options.onSuccess]);
+  }, [query.data, onSuccess]);
 
   React.useEffect(() => {
-    if (query.error && options.onError) {
-      options.onError(query.error);
+    if (query.error && onError) {
+      onError(query.error);
     }
-  }, [query.error, options.onError]);
+  }, [query.error, onError]);
 
   return query;
 } 

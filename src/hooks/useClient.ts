@@ -32,25 +32,26 @@ export function useClient(
   id: string | undefined,
   options: UseClientOptions = {}
 ) {
-  // Execute the tRPC query
+  const { enabled = true, onSuccess, onError } = options;
+  // Execute the tRPC query with destructured enabled flag
   const query = api.clients.getById.useQuery(
     { clientId: id ?? "" },
-    { enabled: !!id && options.enabled !== false }
+    { enabled: !!id && enabled }
   );
 
   // Invoke onSuccess callback when data is fetched
   React.useEffect(() => {
-    if (query.data && options.onSuccess) {
-      options.onSuccess(query.data);
+    if (query.data && onSuccess) {
+      onSuccess(query.data);
     }
-  }, [query.data, options.onSuccess]);
+  }, [query.data, onSuccess]);
 
   // Invoke onError callback on error
   React.useEffect(() => {
-    if (query.error && options.onError) {
-      options.onError(query.error);
+    if (query.error && onError) {
+      onError(query.error);
     }
-  }, [query.error, options.onError]);
+  }, [query.error, onError]);
 
   return query;
 } 

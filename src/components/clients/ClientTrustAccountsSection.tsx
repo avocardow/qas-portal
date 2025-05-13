@@ -171,7 +171,7 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
       });
     }
     return cols;
-  }, [deleteMutation, canEdit]);
+  }, [deleteMutation, canEdit, latestSoftwareInstructions, clientData]);
   // Early UI returns after hooks
   if (taLoading) {
     return (
