@@ -65,7 +65,7 @@ export const contactRouter = createTRPCRouter({
       });
     }),
   // Delete a contact
-  deleteContact: adminOrManagerProcedure
+  deleteContact: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(contactByIdSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.contact.delete({ where: { id: input.contactId } });
