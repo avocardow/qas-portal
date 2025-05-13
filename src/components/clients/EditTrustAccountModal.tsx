@@ -117,24 +117,34 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
       return;
     }
 
-    // Map licenseNumber to primaryLicenseId
-    const { licenseNumber, ...rest } = result.data;
-    let primaryLicenseId: string | undefined;
-    if (licenseNumber) {
+    // Map optional string fields to null when empty and prepare cleaned payload
+    const { licenseNumber } = result.data;
+    const primaryLicenseId = licenseNumber ? (() => {
       if (!selectedLicense) {
         setErrorMessage('License not found');
-        return;
+        return undefined;
       }
-      primaryLicenseId = selectedLicense.id;
-    }
+      return selectedLicense.id;
+    })() : undefined;
+
+    const cleanedData = {
+      trustAccountId: existingTrustAccount.id,
+      clientId,
+      accountName: formData.accountName?.trim() === '' ? null : formData.accountName,
+      bankName: formData.bankName,
+      bsb: formData.bsb?.trim() === '' ? null : formData.bsb,
+      accountNumber: formData.accountNumber?.trim() === '' ? null : formData.accountNumber,
+      managementSoftware: formData.managementSoftware?.trim() === '' ? null : formData.managementSoftware,
+      softwareUrl: formData.softwareUrl?.trim() === '' ? null : formData.softwareUrl,
+      hasSoftwareAccess: formData.hasSoftwareAccess,
+      primaryLicenseId,
+    };
 
     updateTrustAccountMutation.mutate(
-      { trustAccountId: existingTrustAccount.id, clientId, ...rest, primaryLicenseId },
+      cleanedData,
       {
         onSuccess: () => {
-          // Invalidate client data to refresh trust accounts
           void utils.clients.getById.invalidate({ clientId });
-          // If there are trustAccount-specific queries, invalidate them here as well
           setSuccessMessage("Trust account updated successfully");
           onClose();
         },

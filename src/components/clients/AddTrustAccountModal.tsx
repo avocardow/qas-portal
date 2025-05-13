@@ -83,21 +83,31 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
       setFormErrors(newErrs);
       return;
     }
-    const { licenseNumber, ...rest } = result.data;
-    let primaryLicenseId: string | undefined;
-    if (licenseNumber) {
+    // Map optional string fields to undefined when empty and prepare cleaned payload
+    const { licenseNumber } = result.data;
+    const primaryLicenseId = licenseNumber ? (() => {
       if (!selectedLicense) {
         setErrorMessage('License not found');
-        return;
+        return undefined;
       }
-      primaryLicenseId = selectedLicense.id;
-    }
+      return selectedLicense.id;
+    })() : undefined;
+    const cleanedData = {
+      clientId,
+      accountName: formData.accountName?.trim() === '' ? undefined : formData.accountName,
+      bankName: formData.bankName,
+      bsb: formData.bsb?.trim() === '' ? undefined : formData.bsb,
+      accountNumber: formData.accountNumber?.trim() === '' ? undefined : formData.accountNumber,
+      managementSoftware: formData.managementSoftware?.trim() === '' ? undefined : formData.managementSoftware,
+      softwareUrl: formData.softwareUrl?.trim() === '' ? undefined : formData.softwareUrl,
+      hasSoftwareAccess: formData.hasSoftwareAccess,
+      primaryLicenseId,
+    };
     createTrustAccountMutation.mutate(
-      { clientId, ...rest, primaryLicenseId },
+      cleanedData,
       {
         onSuccess: () => {
           utils.clients.getById.invalidate({ clientId });
-          // If there are trustAccount-specific queries, invalidate them here as well
           setSuccessMessage("Trust account added successfully");
           onClose();
         },

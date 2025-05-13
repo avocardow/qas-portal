@@ -71,7 +71,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
   // Form state for editing
   const [editType, setEditType] = useState<string>('note');
   const [editDescription, setEditDescription] = useState<string>('');
-  const [editContactId, setEditContactId] = useState<string | undefined>(undefined);
+  const [editContactId, setEditContactId] = useState<string | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
   // Stub TRPC context in test environment
   const utils = process.env.NODE_ENV === 'test'
@@ -96,7 +96,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
     if (editingEntry) {
       setEditType(editingEntry.type);
       setEditDescription(editingEntry.content);
-      setEditContactId(editingEntry.contactId ?? undefined);
+      setEditContactId(editingEntry.contactId ?? null);
     }
   }, [editingEntry]);
 
@@ -188,7 +188,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
                 <Select
                   options={contacts.map(c => ({ value: c.id, label: c.name ?? c.id }))}
                   defaultValue={editContactId ?? ''}
-                  onChange={val => setEditContactId(val || undefined)}
+                  onChange={val => setEditContactId(val === '' ? null : val)}
                   className="mt-1"
                 />
               </div>

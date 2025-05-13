@@ -105,14 +105,26 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
     const auditDate = toUtcDate(formData.auditPeriodEndDate);
     const nextDate = toUtcDate(formData.nextContactDate);
 
-    // Clean up xeroContactId: send null instead of empty string
-    updateMutation.mutate({
+    // Map optional string fields to null if empty and prepare cleaned update payload
+    const cleanedData = {
       clientId,
-      ...formData,
+      clientName: formData.clientName,
+      phone: formData.phone?.trim() === '' ? null : formData.phone,
+      email: formData.email?.trim() === '' ? null : formData.email,
+      abn: formData.abn?.trim() === '' ? null : formData.abn,
+      address: formData.address?.trim() === '' ? null : formData.address,
+      city: formData.city?.trim() === '' ? null : formData.city,
+      postcode: formData.postcode?.trim() === '' ? null : formData.postcode,
+      internalFolder: formData.internalFolder?.trim() === '' ? null : formData.internalFolder,
+      externalFolder: formData.externalFolder?.trim() === '' ? null : formData.externalFolder,
       xeroContactId: formData.xeroContactId?.trim() === '' ? null : formData.xeroContactId,
+      assignedUserId: formData.assignedUserId,
+      status: formData.status,
       auditPeriodEndDate: auditDate,
       nextContactDate: nextDate,
-    });
+      estAnnFees: formData.estAnnFees ?? null,
+    };
+    updateMutation.mutate(cleanedData);
   };
 
   // If user cannot view or edit, don't render

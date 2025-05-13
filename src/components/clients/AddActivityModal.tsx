@@ -15,9 +15,11 @@ import Authorized from '@/components/Authorized';
 import { api } from '@/utils/api';
 
 export interface AddActivityModalProps {
+  /** ID of the client to fetch contacts for */
+  clientId: string;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { type: string; description: string; date: string; contactId?: string }) => void;
+  onSubmit: (data: { type: string; description: string; date: string; contactId: string | null }) => void;
   contacts: { id: string; name?: string | null }[];
   serverError?: string | null;
 }
@@ -75,7 +77,7 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
       setErrorMessage('Description is required');
       return;
     }
-    onSubmit({ type, description, date: dateValue.toISOString(), contactId });
+    onSubmit({ type, description, date: dateValue.toISOString(), contactId: contactId ?? null });
     // If you want to ensure fresh data, you could invalidate here as well:
     // const utils = api.useContext();
     // utils.clients.getById.invalidate({ clientId });

@@ -73,20 +73,21 @@ export default function AddClientModal() {
     };
     try {
       // 1. Create client (ensure blank xeroContactId is sent as null)
-      const client = await createClientMutation.mutateAsync({
+      const createPayload = {
         clientName: formData.clientName,
-        phone: formData.phone,
-        email: formData.email,
-        abn: formData.abn,
-        address: formData.address,
-        city: formData.city,
-        postcode: formData.postcode,
+        phone: formData.phone?.trim() === '' ? undefined : formData.phone,
+        email: formData.email?.trim() === '' ? undefined : formData.email,
+        abn: formData.abn?.trim() === '' ? undefined : formData.abn,
+        address: formData.address?.trim() === '' ? undefined : formData.address,
+        city: formData.city?.trim() === '' ? undefined : formData.city,
+        postcode: formData.postcode?.trim() === '' ? undefined : formData.postcode,
         status: formData.status,
         auditPeriodEndDate: toUtcDate(formData.auditPeriodEndDate),
         nextContactDate: toUtcDate(formData.nextContactDate),
         estAnnFees: formData.estAnnFees,
         xeroContactId: null,
-      });
+      };
+      const client = await createClientMutation.mutateAsync(createPayload);
       // 2. Create first audit for client
       await createAuditMutation.mutateAsync({
         clientId: client.id,
