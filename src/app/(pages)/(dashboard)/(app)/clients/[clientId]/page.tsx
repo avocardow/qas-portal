@@ -29,6 +29,7 @@ import { TrashBinIcon as ArchiveIcon } from '@/icons';
 import Notification from '@/components/ui/notification/Notification';
 import EditClientModal from '@/components/clients/EditClientModal';
 import DateRangePicker from '@/components/form/DateRangePicker';
+import AddAuditModal, { AddAuditFormData } from '@/components/audit/AddAuditModal';
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
@@ -38,6 +39,8 @@ export default function ClientDetailPage() {
   const canEditClient = can(CLIENT_PERMISSIONS.EDIT);
   const utils = api.useContext();
   const [activityError, setActivityError] = useState<string | null>(null);
+  const [nextAuditInitialValues, setNextAuditInitialValues] = useState<Partial<AddAuditFormData> | null>(null);
+  const [isAddAuditOpen, setIsAddAuditOpen] = useState<boolean>(false);
   useEffect(() => {
     if (isAddActivityOpen) setActivityError(null);
   }, [isAddActivityOpen]);
@@ -260,7 +263,7 @@ export default function ClientDetailPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
           <Authorized action={CLIENT_PERMISSIONS.VIEW_BILLING}>
             <div className="flex items-center space-x-1">
-              <span className="font-medium">Current Fees (excl. GST):</span>
+              <span className="font-medium">Current Fees <span className="text-xs">(excl. GST)</span>:</span>
               <span>{clientData?.estAnnFees?.toLocaleString(undefined, { style: 'currency', currency: 'USD' }) ?? '-'}</span>
               <Popover
                 position="right"
@@ -433,9 +436,67 @@ export default function ClientDetailPage() {
           )}
         </ComponentCard>
 
-        {/* Current Audit moved below Activities */}
-        <CurrentAuditCard clientId={clientId} />
-
+        {/* Current Audit moved below Activities with new onAfterSubmit callback */}
+        <CurrentAuditCard
+          clientId={clientId}
+          onAfterSubmit={(formData) => {
+            if (
+              formData.lodgedWithOFTDate &&
+              formData.invoiceIssueDate &&
+              formData.invoicePaid &&
+              formData.stageId === 4 &&
+              formData.statusId === 10 &&
+              formData.nextContactDate &&
+              new Date(formData.nextContactDate) > new Date()
+            ) {
+              // Prepare initial values for new audit
+              const nextYear = (formData.auditYear ?? new Date().getFullYear()) + 1;
+              // Compute auditPeriodEndDate: add 1 year to existing auditPeriodEndDate
+              let auditPeriodEndDate: string | undefined;
+              if (formData.auditPeriodEndDate) {
+                const [y, m, d] = formData.auditPeriodEndDate.split('-').map(Number);
+                const dt = new Date(Date.UTC(y + 1, (m ?? 1) - 1, d));
+                auditPeriodEndDate = dt.toISOString().split('T')[0];
+              }
+              // Compute reportDueDate: auditPeriodEndDate + 4 months, last day of month
+              let reportDueDate: string | undefined;
+              if (auditPeriodEndDate) {
+                const [yy, mm, dd] = auditPeriodEndDate.split('-').map(Number);
+                const base = new Date(Date.UTC(yy, mm - 1, dd));
+                const due = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth() + 5, 0));
+                reportDueDate = due.toISOString().split('T')[0];
+              }
+              setNextAuditInitialValues({
+                auditYear: nextYear,
+                stageId: 1,
+                statusId: 1,
+                assignedUserId: "",
+                auditPeriodEndDate,
+                reportDueDate,
+                lodgedWithOFTDate: undefined,
+                invoiceIssueDate: undefined,
+                invoicePaid: false,
+                nextContactDate: formData.nextContactDate,
+              });
+              setIsAddAuditOpen(true);
+            }
+          }}
+        />
+        {/* AddAuditModal triggered after edit criteria met */}
+        <AddAuditModal
+          clientId={clientId}
+          manualOpen={isAddAuditOpen}
+          hideTrigger
+          initialValues={nextAuditInitialValues ?? undefined}
+          onAfterSubmit={() => {
+            setIsAddAuditOpen(false);
+            setNextAuditInitialValues(null);
+          }}
+          onModalClose={() => {
+            setIsAddAuditOpen(false);
+            setNextAuditInitialValues(null);
+          }}
+        />
         {/* Placeholder for Contacts */}
         <div className="lg:col-span-2">
           <ClientContactsSection contacts={clientData!.contacts} />

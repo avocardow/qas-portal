@@ -33,11 +33,13 @@ interface ActivityLogTimelineProps {
 // Icon mapping based on activity type
 function getActivityIcon(type: string, content?: string) {
   const base = "text-xl text-gray-500 dark:text-gray-400 flex items-center justify-center";
-  // Use slash icon for unassign logs
+  // Use slash icon for unassigned logs
   if (type === 'note' && content?.startsWith('Unassigned ')) {
     return <i className={`fa-solid fa-user-slash ${base}`} />;
   }
   switch (type) {
+    case 'audit_create': return <i className={`fa-solid fa-traffic-light-go ${base}`} />;
+    case 'audit_complete': return <i className={`fa-solid fa-flag-checkered ${base}`} />;
     case 'stage_change': return <i className={`fa-solid fa-arrow-progress ${base}`} />;
     case 'status_change': return <i className={`fa-solid fa-stairs ${base}`} />;
     case 'client_assigned': return <i className={`fa-solid fa-handshake-angle ${base}`} />;

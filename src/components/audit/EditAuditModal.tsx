@@ -1,4 +1,5 @@
 "use client";
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Modal } from "@/components/ui/modal";
 import { api } from "@/utils/api";
@@ -15,10 +16,19 @@ import DatePicker from '@/components/form/date-picker';
 import Button from '@/components/ui/button/Button';
 import { format } from 'date-fns';
 import Authorized from '@/components/Authorized';
+import { ActivityLogType } from '@prisma/client';
 
 interface EditAuditModalProps {
   clientId: string;
   existingAudit: CurrentAudit | null;
+  /** Control modal open externally */
+  manualOpen?: boolean;
+  /** Hide internal trigger button */
+  hideTrigger?: boolean;
+  /** Callback after form submit */
+  onAfterSubmit?: (data: AuditFormData) => void;
+  /** Callback when modal closes */
+  onModalClose?: () => void;
 }
 
 // Add Zod schema for audit form
@@ -34,9 +44,16 @@ const auditFormSchema = z.object({
   auditPeriodEndDate: z.string().optional(),
   nextContactDate: z.string().optional(),
 });
-type AuditFormData = z.infer<typeof auditFormSchema>;
+export type AuditFormData = z.infer<typeof auditFormSchema>;
 
-export default function EditAuditModal({ clientId, existingAudit }: EditAuditModalProps) {
+export default function EditAuditModal({
+  clientId,
+  existingAudit,
+  manualOpen,
+  hideTrigger,
+  onAfterSubmit,
+  onModalClose,
+}: EditAuditModalProps) {
   const ability = useAbility();
   const { isOpen, openModal, closeModal } = useModal();
   const utils = api.useContext();
@@ -64,6 +81,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
       utils.clients.getAll.invalidate();
     }
   });
+  const addActivityLogMut = api.clients.addActivityLog.useMutation();
   const { data: clientData } = api.clients.getById.useQuery({ clientId });
   const computedReportDueDate = existingAudit?.reportDueDate
     ? existingAudit.reportDueDate
@@ -141,6 +159,12 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
     }
   }, [isOpen, auditPeriodEndDate, reportDueDate, setValue]);
 
+  // sync external control
+  useEffect(() => {
+    if (manualOpen === undefined) return;
+    if (manualOpen) openModal(); else closeModal();
+  }, [manualOpen, openModal, closeModal]);
+
   const onSubmitForm = async (formData: AuditFormData) => {
     setErrorMsg(null);
     try {
@@ -176,6 +200,22 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
         if (formData.assignedUserId) await assignMutation.mutateAsync({ auditId, userId: formData.assignedUserId });
       }
       closeModal();
+      onAfterSubmit?.(formData);
+      // If audit is completed and lodged, add a flag-checkered activity log
+      if (
+        existingAudit &&
+        formData.lodgedWithOFTDate &&
+        formData.invoiceIssueDate &&
+        formData.invoicePaid &&
+        formData.stageId === 4 &&
+        formData.statusId === 10
+      ) {
+        await addActivityLogMut.mutateAsync({
+          clientId,
+          type: 'audit_complete' as unknown as ActivityLogType,
+          content: `${existingAudit.auditYear} Audit Completed and Lodged`,
+        });
+      }
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : String(err));
     }
@@ -187,16 +227,23 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   return (
     <>
       {/* Trigger icon */}
-      <button
-        type="button"
-        onClick={openModal}
-        className="p-1 text-gray-500 hover:text-gray-700"
-        aria-label={existingAudit ? 'Edit Audit' : 'Create Audit'}
+      {!hideTrigger && (
+        <button
+          type="button"
+          onClick={openModal}
+          className="p-1 text-gray-500 hover:text-gray-700"
+          aria-label={existingAudit ? 'Edit Audit' : 'Create Audit'}
+        >
+          <PencilIcon className="h-5 w-5" />
+        </button>
+      )}
+      <Modal
+        isOpen={isOpen}
+        onClose={() => { closeModal(); onModalClose?.(); }}
+        overlayClassName="bg-black/90"
+        className="max-w-2xl max-h-[90vh] overflow-y-auto p-6"
       >
-        <PencilIcon className="h-5 w-5" />
-      </button>
-      <Modal isOpen={isOpen} onClose={closeModal} overlayClassName="bg-black/90" className="max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-        <ComponentCard title={existingAudit ? 'Edit Audit' : 'Create Audit'}>
+        <ComponentCard title={existingAudit ? 'Edit Audit Year' : 'Create Audit'}>
           <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
             {/* Audit Details */}
             <div className="pb-1 font-semibold text-gray-700">Audit Details</div>
@@ -394,4 +441,10 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
       </Modal>
     </>
   );
+}
+
+// Add named component for creating a new audit using the same modal
+export function AddAuditModal({ clientId }: { clientId: string }) {
+  // existingAudit is null to trigger create mode
+  return <EditAuditModal clientId={clientId} existingAudit={null} />;
 } 

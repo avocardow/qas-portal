@@ -8,15 +8,20 @@ import type { RouterOutput } from "@/utils/api";
 import { useAbility } from '@/hooks/useAbility';
 import { AUDIT_PERMISSIONS, CLIENT_PERMISSIONS } from "@/constants/permissions";
 import Badge from "@/components/ui/badge/Badge";
+import type { AuditFormData } from './EditAuditModal';
 
 interface CurrentAuditCardProps {
   clientId: string;
+  /** Hide the pencil icon trigger */
+  hideTrigger?: boolean;
+  /** Callback after audit save */
+  onAfterSubmit?: (data: AuditFormData) => void;
 }
 
 /**
  * Displays the current audit details for a client in a card layout.
  */
-export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
+export default function CurrentAuditCard({ clientId, hideTrigger, onAfterSubmit }: CurrentAuditCardProps) {
   const { can } = useAbility();
   const canEditAudit = can(AUDIT_PERMISSIONS.EDIT) || can(CLIENT_PERMISSIONS.EDIT);
   const { data: audit, isLoading, isError, error } = useCurrentAudit(clientId);
@@ -90,7 +95,12 @@ export default function CurrentAuditCard({ clientId }: CurrentAuditCardProps) {
               {badgeText}
             </Badge>
             {canEditAudit && (
-              <EditAuditModal clientId={clientId} existingAudit={audit ?? null} />
+              <EditAuditModal
+                clientId={clientId}
+                existingAudit={audit ?? null}
+                hideTrigger={hideTrigger}
+                onAfterSubmit={(data) => onAfterSubmit?.(data)}
+              />
             )}
           </div>
         }

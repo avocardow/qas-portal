@@ -5,7 +5,6 @@ import {
   enforcePermission,
   protectedProcedure,
   enforceRole,
-  adminOrManagerProcedure,
 } from "@/server/api/trpc";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 import { ActivityLogType } from "@prisma/client";
@@ -38,8 +37,9 @@ const unassignUserSchema = z.object({
 
 // Router for audit management
 export const auditRouter = createTRPCRouter({
-  // Create a new audit with logging and permission enforcement
-  create: adminOrManagerProcedure
+  // Create a new audit with logging and permission enforcement (now includes Auditor)
+  create: protectedProcedure
+    .use(enforcePermission(AUDIT_PERMISSIONS.CREATE))
     .input(auditCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const { clientId, auditYear, stageId, statusId } = input;
@@ -281,7 +281,10 @@ export const auditRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const audit = await ctx.db.audit.findFirst({
         where: { clientId: input.clientId },
-        orderBy: { auditYear: "desc" },
+        orderBy: [
+          { auditYear: "desc" },
+          { createdAt: "desc" },
+        ],
         include: { stage: true, status: true, assignments: { include: { user: true } } },
       });
       return audit;

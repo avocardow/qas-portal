@@ -41,6 +41,8 @@ enum ActivityLogType {
   software_access_instructions
   client_assigned
   audit_assigned
+  audit_create
+  audit_complete
 }
 
 // ========== Core Entities ==========
