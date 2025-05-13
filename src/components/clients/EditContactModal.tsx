@@ -166,12 +166,12 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
             />
           </div>
           <div>
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">Contact Role</Label>
             <InputField
               id="title"
               name="title"
-              placeholder="Job Title"
-              defaultValue={formData.title}
+              placeholder="Contact Role"
+              defaultValue={formData.title ?? ''}
               onChange={e => setFormData({ ...formData, title: e.target.value })}
             />
           </div>

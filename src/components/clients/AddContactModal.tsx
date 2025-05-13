@@ -56,7 +56,10 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       z.string().email('Invalid email').optional()
     ),
     phone: z.string().optional(),
-    title: z.string().optional(),
+    title: z.preprocess(
+      (val) => (typeof val === 'string' && val.trim() === '' ? null : val),
+      z.string().nullable()
+    ),
     isPrimary: z.boolean().optional(),
     licenseNumber: z.string().optional(),
     licenseType: z.string().optional(),
@@ -102,12 +105,11 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       setFormErrors(newErrors);
       return;
     }
-    // Clean up empty fields to undefined for backend compatibility
+    // Prepare data, letting Zod map empty title to null
     const cleanedData = {
       ...result.data,
       email: result.data.email?.trim() === '' ? undefined : result.data.email,
       phone: result.data.phone?.trim() === '' ? undefined : result.data.phone,
-      title: result.data.title?.trim() === '' ? undefined : result.data.title,
     };
     // Submit form data to API
     createContactMutation.mutate({ ...cleanedData, clientId }, {
@@ -157,8 +159,8 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
             <InputField id="name" name="name" placeholder="Full Name" defaultValue={formData.name} onChange={e => { setFormData({ ...formData, name: e.target.value }); validateField('name', e.target.value); }} error={!!formErrors.name} hint={formErrors.name} />
           </div>
           <div>
-            <Label htmlFor="title">Title</Label>
-            <InputField id="title" name="title" placeholder="Job Title" defaultValue={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
+            <Label htmlFor="title">Contact Role</Label>
+            <InputField id="title" name="title" placeholder="Contact Role" defaultValue={formData.title ?? ''} onChange={e => setFormData({ ...formData, title: e.target.value })} />
           </div>
           {/* Contact Information */}
           <div>
