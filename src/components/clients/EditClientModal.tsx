@@ -259,12 +259,9 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                   placeholder="Select date"
                   defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
                   minDate={(() => {
-                    const val = field.value ?? '';
-                    const parsed = /\d{4}-\d{2}-\d{2}/.test(val)
-                      ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })()
-                      : new Date();
+                    const initialDate = field.value ? new Date(field.value) : new Date();
                     const today = new Date();
-                    return parsed < today ? parsed : today;
+                    return initialDate < today ? initialDate : today;
                   })()}
                   closeOnSelect={false}
                   onChange={(dates) => {

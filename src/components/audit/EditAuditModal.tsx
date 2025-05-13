@@ -343,11 +343,11 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   placeholder="Select date"
                   defaultDate={field.value ? (() => { const [y, m, d] = field.value.split('-').map(Number); return new Date(y, (m ?? 1) - 1, d); })() : computedClientNextContactDate}
                   minDate={(() => {
-                    const parsed = field.value
-                      ? (() => { const [y, m, d] = field.value.split('-').map(Number); return new Date(y, (m ?? 1) - 1, d); })()
+                    const initialDate = field.value
+                      ? new Date(field.value)
                       : computedClientNextContactDate ?? new Date();
                     const today = new Date();
-                    return parsed < today ? parsed : today;
+                    return initialDate < today ? initialDate : today;
                   })()}
                   closeOnSelect={false}
                   onChange={(dates) => {
