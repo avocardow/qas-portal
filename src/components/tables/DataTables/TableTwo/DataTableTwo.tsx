@@ -444,8 +444,8 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       }}
                       className={
                         (onRowClick
-                          ? "group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] focus:outline-none focus:bg-gray-50 dark:focus:bg-white/[0.05]"
-                          : "group")
+                          ? "group odd:bg-gray-50 dark:odd:bg-white/[0.01] cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] focus:outline-none focus:bg-gray-50 dark:focus:bg-white/[0.05]"
+                          : "group odd:bg-gray-50 dark:odd:bg-white/[0.01]")
                       }
                     >
                       {cols.map(({ key, cell, permission }, idx) => {
