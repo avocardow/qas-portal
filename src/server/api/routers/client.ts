@@ -12,7 +12,7 @@ import { ActivityLogType, Prisma } from "@prisma/client";
 // Zod schemas for client operations
 const clientGetAllSchema = z.object({
   page: z.number().min(1).optional().default(1),
-  pageSize: z.number().min(1).optional().default(10),
+  pageSize: z.number().min(1).optional().default(15),
   filter: z.string().optional(),
   sortBy: z.enum([
     "clientName",        // Client Name column

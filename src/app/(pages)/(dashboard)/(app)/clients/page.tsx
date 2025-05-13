@@ -37,7 +37,7 @@ export default function ClientsPage() {
   // --- Pagination and Filter State ---
   const [selectedStatus, setSelectedStatus] = useState<'active' | 'prospect' | 'archived' | 'all'>('active');
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(15);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [sortBy, setSortBy] = useState<
