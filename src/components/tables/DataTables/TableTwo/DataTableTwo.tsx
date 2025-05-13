@@ -450,7 +450,9 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                     >
                       {cols.map(({ key, cell, permission }, idx) => {
                         // Freeze first column on desktop (no extra background)
-                        const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white dark:lg:bg-[#1c2539]' : '';
+                        const cellSticky = idx === 0
+                          ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white dark:lg:bg-[#1c2539] odd:lg:bg-gray-50 even:lg:bg-white dark:odd:lg:bg-white/[0.01] dark:even:lg:bg-[#1c2539]'
+                          : '';
                         // No odd row background on TableCell; handled by TableRow
                         const oddBg = '';
                         // Hover color for all columns, but first column gets group-hover
