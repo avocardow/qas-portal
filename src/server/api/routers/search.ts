@@ -25,6 +25,15 @@ export const searchRouter = createTRPCRouter({
                 },
               },
             },
+            {
+              audits: {
+                some: {
+                  stage: {
+                    name: { contains: term, mode: 'insensitive' },
+                  },
+                },
+              },
+            },
             { trustAccounts: { some: { bankName: { contains: term, mode: 'insensitive' } } } },
             { trustAccounts: { some: { accountName: { contains: term, mode: 'insensitive' } } } },
             { trustAccounts: { some: { managementSoftware: { contains: term, mode: 'insensitive' } } } },
