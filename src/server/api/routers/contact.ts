@@ -40,7 +40,7 @@ const contactBatchUpdateSchema = z.array(contactUpdateSchema);
 export const contactRouter = createTRPCRouter({
   // List contacts with pagination and optional filtering
   getAll: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Client"]))
+    .use(enforceRole(["Admin", "Manager", "Client", "Auditor"]))
     .input(contactGetAllSchema)
     .query(async ({ ctx, input }) => {
       const { take = 10, cursor, filter, sortBy = "name", sortOrder = "asc" } = input;
@@ -57,7 +57,7 @@ export const contactRouter = createTRPCRouter({
     }),
   // Get a single contact by ID
   getById: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Client"]))
+    .use(enforceRole(["Admin", "Manager", "Client", "Auditor"]))
     .input(contactByIdSchema)
     .query(({ ctx, input }) => {
       return ctx.db.contact.findUniqueOrThrow({
