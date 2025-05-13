@@ -114,6 +114,9 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       onSuccess: (newContact: RouterOutput['contact']['create']) => {
         // Refresh client data including contacts
         utils.clients.getById.invalidate({ clientId });
+        if (newContact?.id && 'contact' in utils && utils.contact.getById?.invalidate) {
+          utils.contact.getById.invalidate({ contactId: newContact.id });
+        }
         // Optionally create license if provided
         if (result.data.licenseNumber) {
           createLicenseMutation.mutate({

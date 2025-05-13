@@ -97,6 +97,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
       {
         onSuccess: () => {
           utils.clients.getById.invalidate({ clientId });
+          // If there are trustAccount-specific queries, invalidate them here as well
           setSuccessMessage("Trust account added successfully");
           onClose();
         },

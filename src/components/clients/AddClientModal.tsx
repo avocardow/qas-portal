@@ -93,6 +93,12 @@ export default function AddClientModal() {
         auditYear: formData.auditYear!,
         stageId: formData.stageId,
       });
+      // Invalidate queries for new client
+      if ('clients' in api.useContext()) {
+        const utils = api.useContext();
+        utils.clients.getById.invalidate({ clientId: client.id });
+        utils.clients.getAll.invalidate();
+      }
       setIsOpen(false);
       router.push(`/clients/${client.id}`);
     } catch (err) {

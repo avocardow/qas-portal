@@ -50,6 +50,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
       // Refresh client detail and client list
       utils.clients.getById.invalidate({ clientId });
       utils.clients.getAll.invalidate();
+      // If there are related queries (e.g., contacts), invalidate them here as well if needed
       closeModal();
     },
     onError: (error: unknown) => {

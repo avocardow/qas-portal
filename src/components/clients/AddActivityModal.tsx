@@ -76,6 +76,9 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
       return;
     }
     onSubmit({ type, description, date: dateValue.toISOString(), contactId });
+    // If you want to ensure fresh data, you could invalidate here as well:
+    // const utils = api.useContext();
+    // utils.clients.getById.invalidate({ clientId });
   }
 
   if (!isOpen) return null;

@@ -84,7 +84,7 @@ export default function ActivityLogTimeline({ entries, contacts, clientId }: Act
       setEditingEntry(null);
       setEditError(null);
       // Invalidate/refetch activity logs for this client
-      void utils.clients.getById.invalidate({ clientId });
+      void utils.clients.getById.invalidate({ clientId }); // ensures fresh data on next open
     },
     onError: (err) => {
       setEditError(err instanceof Error ? err.message : 'Failed to update activity');

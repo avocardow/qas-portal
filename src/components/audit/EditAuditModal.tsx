@@ -45,12 +45,14 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   const createMutation = api.audit.create.useMutation({
     onSuccess: () => {
       utils.audit.getCurrent.invalidate();
+      utils.clients.getById.invalidate({ clientId });
       closeModal();
     },
   });
   const updateAuditMutation = api.audit.updateAudit.useMutation({
     onSuccess: () => {
       utils.audit.getCurrent.invalidate();
+      utils.clients.getById.invalidate({ clientId });
       closeModal();
     },
   });

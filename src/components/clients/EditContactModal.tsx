@@ -135,6 +135,7 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
             }
           }
           utils.clients.getById.invalidate({ clientId });
+          utils.contact.getById.invalidate({ contactId });
           setSuccessMessage("Contact updated successfully");
           onClose();
         },

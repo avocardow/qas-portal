@@ -134,6 +134,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
         onSuccess: () => {
           // Invalidate client data to refresh trust accounts
           void utils.clients.getById.invalidate({ clientId });
+          // If there are trustAccount-specific queries, invalidate them here as well
           setSuccessMessage("Trust account updated successfully");
           onClose();
         },
