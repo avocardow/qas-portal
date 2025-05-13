@@ -8,8 +8,6 @@ import AddContactModal from '@/components/clients/AddContactModal';
 import { api } from '@/utils/api';
 import Authorized from '@/components/Authorized';
 import { CONTACT_PERMISSIONS } from '@/constants/permissions';
-import ModalTwo from '@/components/ui/modal/ModalTwo';
-// import type { Contact } from '@prisma/client';
 
 interface ClientContactsSectionProps {
   contacts: Array<{
