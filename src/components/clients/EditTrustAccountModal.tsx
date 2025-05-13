@@ -196,7 +196,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
               placeholder="Account Number"
               type="text"
               inputMode="numeric"
-              pattern="\\d{4}"
+              pattern="[0-9]{4}"
               maxLength={4}
               defaultValue={formData.accountNumber}
               onChange={e => {

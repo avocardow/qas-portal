@@ -38,27 +38,19 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
     },
   });
 
-  // Fetch licenses for each contact
-  const licenseQueries = contacts.map((contact) =>
-    contact.id ? api.license.getByContactId.useQuery({ contactId: contact.id }) : { data: [] }
-  );
+  // Fetch all licenses for all contacts in a single query
+  const contactIds = contacts.map(c => c.id).filter((id): id is string => typeof id === 'string');
+  const { data: licenses = [] } = api.license.getByContactIds.useQuery({ contactIds }, { enabled: contactIds.length > 0 });
 
   // Map contacts to include licenseNumber from the first license (if any)
-  const contactsWithLicense = contacts.map((contact, idx) => {
-    const licenses = licenseQueries[idx].data || [];
+  const contactsWithLicense = contacts.map(contact => {
+    const license = licenses.find(l => l.contactId === contact.id);
     return {
       ...contact,
-      licenseNumber: licenses.length > 0 ? licenses[0].licenseNumber : null,
+      licenseNumber: license?.licenseNumber ?? null,
     };
   });
 
-  if (!contacts || contacts.length === 0) {
-    return (
-      <ComponentCard title="Contacts">
-        <p>No contacts available.</p>
-      </ComponentCard>
-    );
-  }
   return (
     <>
       <ComponentCard
@@ -69,16 +61,20 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
           </Authorized>
         }
       >
-        <ContactsTable
-          data={contactsWithLicense}
-          clientId={clientId}
-          onRowClick={(row) => router.push(`/contacts/${row.id}`)}
-          onDelete={(row) => {
-            if (window.confirm('Are you sure you want to delete this contact?')) {
-              deleteMutation.mutate({ contactId: row.id! });
-            }
-          }}
-        />
+        {(!contacts || contacts.length === 0) ? (
+          <p>No contacts available.</p>
+        ) : (
+          <ContactsTable
+            data={contactsWithLicense}
+            clientId={clientId}
+            onRowClick={(row) => router.push(`/contacts/${row.id}`)}
+            onDelete={(row) => {
+              if (window.confirm('Are you sure you want to delete this contact?')) {
+                deleteMutation.mutate({ contactId: row.id! });
+              }
+            }}
+          />
+        )}
       </ComponentCard>
       <AddContactModal
         clientId={clientId}

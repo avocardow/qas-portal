@@ -51,7 +51,10 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
   // Validation schema for contact form matching contactCreateSchema
   const contactSchema = z.object({
     name: z.string().optional(),
-    email: z.string().optional(),
+    email: z.preprocess(
+      (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+      z.string().email('Invalid email').optional()
+    ),
     phone: z.string().optional(),
     title: z.string().optional(),
     isPrimary: z.boolean().optional(),
@@ -99,8 +102,15 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       setFormErrors(newErrors);
       return;
     }
+    // Clean up empty fields to undefined for backend compatibility
+    const cleanedData = {
+      ...result.data,
+      email: result.data.email?.trim() === '' ? undefined : result.data.email,
+      phone: result.data.phone?.trim() === '' ? undefined : result.data.phone,
+      title: result.data.title?.trim() === '' ? undefined : result.data.title,
+    };
     // Submit form data to API
-    createContactMutation.mutate({ ...result.data, clientId }, {
+    createContactMutation.mutate({ ...cleanedData, clientId }, {
       onSuccess: (newContact: RouterOutput['contact']['create']) => {
         // Refresh client data including contacts
         utils.clients.getById.invalidate({ clientId });

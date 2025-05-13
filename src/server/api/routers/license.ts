@@ -58,4 +58,10 @@ export const licenseRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.license.findUnique({ where: { licenseNumber: input.licenseNumber } });
     }),
+  // Fetch all licenses for a list of contact IDs
+  getByContactIds: adminOrManagerProcedure
+    .input(z.object({ contactIds: z.array(z.string().uuid()) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.license.findMany({ where: { contactId: { in: input.contactIds } } });
+    }),
 });

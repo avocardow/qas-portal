@@ -32,7 +32,10 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
   // form validation schema
   const contactSchema = z.object({
     name: z.string().optional(),
-    email: z.string().optional(),
+    email: z.preprocess(
+      (val) => (typeof val === 'string' && val.trim() === '' ? undefined : val),
+      z.string().email('Invalid email').optional()
+    ),
     phone: z.string().optional(),
     title: z.string().optional(),
     isPrimary: z.boolean().optional(),
@@ -97,8 +100,15 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
       return;
     }
 
+    // Clean up empty fields to undefined for backend compatibility
+    const cleanedData = {
+      ...result.data,
+      email: result.data.email?.trim() === '' ? undefined : result.data.email,
+      phone: result.data.phone?.trim() === '' ? undefined : result.data.phone,
+      title: result.data.title?.trim() === '' ? undefined : result.data.title,
+    };
     updateContactMutation.mutate(
-      { contactId, clientId, ...result.data },
+      { contactId, clientId, ...cleanedData },
       {
         onSuccess: () => {
           // Optionally update or create license
