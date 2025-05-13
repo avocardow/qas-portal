@@ -19,7 +19,6 @@ import PaginationWithIcon from '@/components/ui/pagination/PaginationWithIcon';
 import { Dropdown } from '@/components/ui/dropdown/Dropdown';
 import AddActivityModal from '@/components/clients/AddActivityModal';
 import { api } from '@/utils/api';
-import DatePicker from "@/components/form/date-picker";
 import type { RouterOutput } from "@/utils/api";
 import Popover from '@/components/ui/popover/Popover';
 import { useAbility } from '@/hooks/useAbility';
@@ -29,6 +28,7 @@ import Button from '@/components/ui/button/Button';
 import { TrashBinIcon as ArchiveIcon } from '@/icons';
 import Notification from '@/components/ui/notification/Notification';
 import EditClientModal from '@/components/clients/EditClientModal';
+import DateRangePicker from '@/components/form/DateRangePicker';
 
 export default function ClientDetailPage() {
   const params = (useParams() as { clientId: string }) || {};
@@ -381,21 +381,16 @@ export default function ClientDetailPage() {
                 </button>
                 <Dropdown isOpen={isActionsDropdownOpen} onClose={closeActionsDropdown} className="w-56 p-2">
                   <div className="mb-2">
-                    <DatePicker
-                      id="startDatePicker"
-                      label="Start Date"
-                      placeholder="Start Date"
-                      defaultDate={startDate || undefined}
-                      onChange={dates => setStartDate((dates as Date[])[0].toISOString().split('T')[0])}
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <DatePicker
-                      id="endDatePicker"
-                      label="End Date"
-                      placeholder="End Date"
-                      defaultDate={endDate || undefined}
-                      onChange={dates => setEndDate((dates as Date[])[0].toISOString().split('T')[0])}
+                    <DateRangePicker
+                      id="activityDateRange"
+                      label="Date Range"
+                      startDate={startDate || undefined}
+                      endDate={endDate || undefined}
+                      onChange={([start, end]) => {
+                        setStartDate(start);
+                        setEndDate(end);
+                        setLogPage(1);
+                      }}
                     />
                   </div>
                 </Dropdown>
