@@ -444,19 +444,22 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       }}
                       className={
                         (onRowClick
-                          ? "group odd:bg-gray-50 dark:odd:bg-white/[0.01] cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] focus:outline-none focus:bg-gray-50 dark:focus:bg-white/[0.05]"
+                          ? "group odd:bg-gray-50 dark:odd:bg-white/[0.01] cursor-pointer hover:bg-gray-100 dark:hover:bg-white/[0.08] focus:outline-none focus:bg-gray-100 dark:focus:bg-white/[0.08]"
                           : "group odd:bg-gray-50 dark:odd:bg-white/[0.01]")
                       }
                     >
                       {cols.map(({ key, cell, permission }, idx) => {
                         // Freeze first column on desktop (no extra background)
                         const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white lg:dark:bg-[#1c2539]' : '';
-                        const hoverBg = idx === 0 ? 'group-hover:bg-gray-50 dark:group-hover:bg-white/[0.05]' : '';
+                        // Odd row background for first column only
+                        const oddBg = idx === 0 ? 'odd:bg-gray-50 dark:odd:bg-white/[0.01]' : '';
+                        // Hover color for all columns, but first column gets group-hover
+                        const hoverBg = idx === 0 ? 'group-hover:bg-gray-100 dark:group-hover:bg-white/[0.08]' : '';
                         if (permission) {
                           return (
                             <Authorized key={key} action={permission} fallback={null}>
                               <TableCell
-                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${hoverBg}`}
+                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${oddBg} ${hoverBg}`}
                               >
                                 {cell ? cell(item) : (item[key] ?? "-")}
                               </TableCell>
@@ -466,7 +469,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                         return (
                           <TableCell
                             key={key}
-                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${hoverBg}`}
+                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${oddBg} ${hoverBg}`}
                           >
                             {cell ? cell(item) : (item[key] ?? "-")}
                           </TableCell>
