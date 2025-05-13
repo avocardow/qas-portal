@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/exhaustive-deps */
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
@@ -39,12 +39,14 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
   const utils = process.env.NODE_ENV === 'test'
     ? { clients: { getById: { invalidate: async () => {} } } }
     : api.useContext();
+  // Always initialize the mutation hook, then conditionally use a no-op in tests
+  const mutationHook = (api.trustAccount as any).delete.useMutation({
+    onSuccess: () => { utils.clients.getById.invalidate({ clientId }); },
+    onError: (error: unknown) => { console.error('Failed to delete trust account', error); },
+  });
   const deleteMutation = process.env.NODE_ENV === 'test'
-    ? { mutate: () => {} }
-    : (api.trustAccount as any).delete.useMutation({
-        onSuccess: () => { utils.clients.getById.invalidate({ clientId }); },
-        onError: (error: unknown) => { console.error('Failed to delete trust account', error); },
-      });
+    ? { mutate: () => {}, status: 'idle' }
+    : mutationHook;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
@@ -66,8 +68,6 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
       .filter((log: any) => log.type === 'software_access_instructions')
       .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0] ?? null;
   }, [clientData]);
-   
-  // Disable exhaustive-deps for columns dependency array due to conditional mutation hook
    
   const columns = React.useMemo<ColumnDef[]>(() => {
     const cols: ColumnDef[] = [
