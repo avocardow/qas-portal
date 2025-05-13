@@ -257,6 +257,7 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                   id="nextContactDatePicker"
                   label="Next Contact Date"
                   placeholder="Select date"
+                  value={field.value ? (() => { const [y, m, d] = field.value.split('-').map(Number); return d.toString().padStart(2, '0') + '/' + (m ?? 1).toString().padStart(2, '0') + '/' + y; })() : ''}
                   defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
                   minDate={(() => {
                     const initialDate = field.value ? new Date(field.value) : new Date();

@@ -439,7 +439,11 @@ export const clientRouter = createTRPCRouter({
         content,
         modifier: { connect: { id: ctx.session.user.id } },
         ...(date ? { createdAt: date } : {}),
-        ...(contactId !== undefined ? { contactId } : {}),
+        ...(contactId !== undefined
+          ? contactId === null
+            ? { contact: { disconnect: true } }
+            : { contact: { connect: { id: contactId } } }
+          : {}),
         ...(staffMemberId ? { createdBy: staffMemberId } : {}),
       };
       const updated = await ctx.db.activityLog.update({

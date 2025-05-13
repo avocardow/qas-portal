@@ -5,7 +5,7 @@ import { api } from "@/utils/api";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 import type { CurrentAudit } from "@/hooks/useCurrentAudit";
 import { useAbility } from "@/hooks/useAbility";
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useModal } from '@/hooks/useModal';
@@ -82,7 +82,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
     : undefined;
 
   // React Hook Form setup
-  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm<AuditFormData>({
+  const { register, handleSubmit, reset, control, formState: { errors, isSubmitting }, setValue } = useForm<AuditFormData>({
     resolver: zodResolver(auditFormSchema),
     defaultValues: {
       auditYear: existingAudit?.auditYear,
@@ -99,6 +99,9 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
   });
   const [initAssign] = useState(existingAudit?.assignments?.[0]?.userId ?? null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const auditPeriodEndDate = useWatch({ control, name: 'auditPeriodEndDate' });
+  const reportDueDate = useWatch({ control, name: 'reportDueDate' });
 
   // Reset form when modal opens or existingAudit changes
   useEffect(() => {
@@ -117,6 +120,26 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
       });
     }
   }, [isOpen, existingAudit, reset, clientData]);
+
+  // Auto-update reportDueDate when auditPeriodEndDate changes
+  useEffect(() => {
+    if (!isOpen) return;
+    if (auditPeriodEndDate) {
+      const [y, m, d] = auditPeriodEndDate.split('-').map(Number);
+      if (!y || !m || !d) return;
+      // Add 4 months, then set to last day of that month
+      const base = new Date(Date.UTC(y, m - 1, d));
+      const due = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth() + 5, 0));
+      // Format as yyyy-MM-dd
+      const yyyy = due.getUTCFullYear();
+      const mm = (due.getUTCMonth() + 1).toString().padStart(2, '0');
+      const dd = due.getUTCDate().toString().padStart(2, '0');
+      const dueStr = `${yyyy}-${mm}-${dd}`;
+      if (reportDueDate !== dueStr) {
+        setValue('reportDueDate', dueStr);
+      }
+    }
+  }, [isOpen, auditPeriodEndDate, reportDueDate, setValue]);
 
   const onSubmitForm = async (formData: AuditFormData) => {
     setErrorMsg(null);
@@ -341,6 +364,7 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   id="nextContactDatePicker"
                   label="Next Contact Date"
                   placeholder="Select date"
+                  value={field.value ? (() => { const [y, m, d] = field.value.split('-').map(Number); return d.toString().padStart(2, '0') + '/' + (m ?? 1).toString().padStart(2, '0') + '/' + y; })() : ''}
                   defaultDate={field.value ? (() => { const [y, m, d] = field.value.split('-').map(Number); return new Date(y, (m ?? 1) - 1, d); })() : computedClientNextContactDate}
                   minDate={(() => {
                     const initialDate = field.value

@@ -24,6 +24,8 @@ type PropsType = {
   enableTime?: boolean;
   /** Close the calendar after selecting a date. Defaults to false. */
   closeOnSelect?: boolean;
+  /** Controlled value for the input (ISO or display string) */
+  value?: string;
 };
 
 export default function DatePicker({
@@ -37,8 +39,11 @@ export default function DatePicker({
   maxDate,
   enableTime = false,
   closeOnSelect = false,
+  value,
 }: PropsType) {
   const fpRef = useRef<ReturnType<typeof flatpickr> | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const flatPickrInstance = flatpickr(`#${id}`, {
       mode: mode || "single",
@@ -71,6 +76,13 @@ export default function DatePicker({
     }
   }, [defaultDate]);
 
+  // Sync input value with controlled value
+  useEffect(() => {
+    if (inputRef.current && value !== undefined) {
+      inputRef.current.value = value;
+    }
+  }, [value]);
+
   return (
     <div>
       {label && <Label htmlFor={id}>{label}</Label>}
@@ -78,6 +90,7 @@ export default function DatePicker({
       <div className="relative">
         <input
           id={id}
+          ref={inputRef}
           placeholder={placeholder}
           className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/20 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-12 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-base text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
