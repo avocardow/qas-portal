@@ -25,7 +25,7 @@ interface EditAuditModalProps {
 const auditFormSchema = z.object({
   auditYear: z.coerce.number().optional(),
   stageId: z.coerce.number().refine(val => val !== undefined && val !== null, { message: 'Stage is required' }),
-  statusId: z.coerce.number().min(1, 'Status is required'),
+  statusId: z.coerce.number().refine(val => val !== undefined && val !== null, { message: 'Status is required' }),
   assignedUserId: z.string().nullable().optional(),
   reportDueDate: z.string().optional(),
   lodgedWithOFTDate: z.string().optional(),
