@@ -383,7 +383,7 @@ export default function ClientDetailPage() {
                   <div className="mb-2">
                     <DateRangePicker
                       id="activityDateRange"
-                      label="Date Range"
+                      label="Filter Activities"
                       startDate={startDate || undefined}
                       endDate={endDate || undefined}
                       onChange={([start, end]) => {

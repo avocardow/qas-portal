@@ -10,7 +10,7 @@ import {
 export const contactCreateSchema = z.object({
   clientId: z.string().uuid(),
   name: z.string().optional(),
-  email: z.string().email().optional(),
+  email: z.string().email().nullable().optional(),
   phone: z.string().optional(),
   title: z.string().nullable().optional(),
   isPrimary: z.boolean().optional(),

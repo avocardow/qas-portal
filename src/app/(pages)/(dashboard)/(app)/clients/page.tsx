@@ -48,7 +48,7 @@ export default function ClientsPage() {
     "status" |
     "auditStageName" |
     "assignedUser"
-  >("clientName");
+  >("nextContactDate");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   // --- End Pagination and Filter State ---
 
@@ -150,7 +150,9 @@ export default function ClientsPage() {
   }, [error]);
 
   // Maximum length for client names before truncation
-  const MAX_CLIENT_NAME_LENGTH = 60;
+  const MAX_CLIENT_NAME_LENGTH = 40;
+  // Maximum length for primary contact name before truncation
+  const MAX_PRIMARY_CONTACT_LENGTH = 20;
 
   // Base column definitions for Clients table (memoized)
   const baseColumns = React.useMemo<ColumnDef[]>(
@@ -170,8 +172,13 @@ export default function ClientsPage() {
         key: "primaryContact",
         header: "Primary Contact",
         sortable: false,
-        cell: (row: ClientTableRow) =>
-          row.contacts.find((c) => c.isPrimary)?.name ?? "-",
+        cell: (row: ClientTableRow) => {
+          const name = row.contacts.find((c) => c.isPrimary)?.name;
+          if (!name) return "-";
+          return name.length > MAX_PRIMARY_CONTACT_LENGTH
+            ? name.slice(0, MAX_PRIMARY_CONTACT_LENGTH) + "..."
+            : name;
+        },
       },
       {
         key: "assignedUser",
@@ -213,8 +220,10 @@ export default function ClientsPage() {
         cell: (row: ClientTableRow) =>
           row.auditPeriodEndDate
             ? new Date(row.auditPeriodEndDate).toLocaleDateString("en-GB", {
+                weekday: "short",
                 day: "2-digit",
-                month: "long",
+                month: "2-digit",
+                year: "2-digit",
               })
             : "-",
       },

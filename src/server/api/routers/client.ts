@@ -344,7 +344,7 @@ export const clientRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.client.create({ data: input });
     }),
-  update: adminOrManagerProcedure
+  update: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(clientUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { clientId, ...data } = input;

@@ -53,7 +53,7 @@ export default function DateRangePicker({
 
   return (
     <div>
-      {label && <label htmlFor={`${id}-start`} className="block mb-1 font-medium">{label}</label>}
+      {label && <label htmlFor={`${id}-start`} className="block mb-1 font-normal text-sm">{label}</label>}
       <div className="flex space-x-2">
         <input
           id={`${id}-start`}

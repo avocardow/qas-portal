@@ -323,11 +323,11 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
         <div>
           <Table>
             <caption className="sr-only" data-testid="datatable-caption">{caption}</caption>
-            <TableHeader className="border-t border-gray-100 dark:border-white/[0.05]">
+            <TableHeader className="bg-white dark:bg-white/[0.03] border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 {cols.map(({ key, header, sortable, permission }, idx) => {
-                  // Add lg:sticky to freeze the first column on desktop (no extra background)
-                  const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10' : '';
+                  // Add lg:sticky to freeze the first column on desktop, including background
+                  const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white lg:dark:bg-white/[0.03]' : '';
                   if (permission) {
                     return (
                       <Authorized key={key} action={permission} fallback={null}>
@@ -449,10 +449,15 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       }
                     >
                       {cols.map(({ key, cell, permission }, idx) => {
-                        // Freeze first column on desktop (no extra background)
-                        const cellSticky = idx === 0
-                          ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white dark:lg:bg-[#1c2539] odd:lg:bg-gray-50 even:lg:bg-white dark:odd:lg:bg-white/[0.01] dark:even:lg:bg-[#1c2539]'
-                          : '';
+                        let cellSticky = '';
+                        let cellBg = '';
+                        if (idx === 0) {
+                          cellSticky = 'lg:sticky lg:left-0 lg:z-10';
+                          cellBg =
+                            i % 2 === 0
+                              ? 'lg:bg-gray-50 dark:lg:bg-white/[0.01]'
+                              : 'lg:bg-white dark:lg:bg-[#1c2539]';
+                        }
                         // No odd row background on TableCell; handled by TableRow
                         const oddBg = '';
                         // Hover color for all columns, but first column gets group-hover
@@ -461,7 +466,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           return (
                             <Authorized key={key} action={permission} fallback={null}>
                               <TableCell
-                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${oddBg} ${hoverBg}`}
+                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${cellBg} ${oddBg} ${hoverBg}`}
                               >
                                 {cell ? cell(item) : (item[key] ?? "-")}
                               </TableCell>
@@ -471,7 +476,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                         return (
                           <TableCell
                             key={key}
-                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${oddBg} ${hoverBg}`}
+                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${cellBg} ${oddBg} ${hoverBg}`}
                           >
                             {cell ? cell(item) : (item[key] ?? "-")}
                           </TableCell>

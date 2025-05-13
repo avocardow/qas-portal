@@ -100,12 +100,12 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
       return;
     }
 
-    // Clean up empty fields to undefined for backend compatibility
+    // Clean up empty fields: clear email by setting to null, other optional fields to undefined
     const cleanedData = {
       ...result.data,
-      email: result.data.email?.trim() === '' ? undefined : result.data.email,
-      phone: result.data.phone?.trim() === '' ? undefined : result.data.phone,
-      title: result.data.title?.trim() === '' ? undefined : result.data.title,
+      email: (formData.email ?? '').trim() === '' ? null : formData.email,
+      phone: formData.phone?.trim() === '' ? undefined : formData.phone,
+      title: formData.title?.trim() === '' ? undefined : formData.title,
     };
     updateContactMutation.mutate(
       { contactId, clientId, ...cleanedData },
@@ -182,7 +182,7 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
               id="email"
               name="email"
               placeholder="Email Address"
-              defaultValue={formData.email}
+              value={formData.email ?? ''}
               onChange={e => { setFormData({ ...formData, email: e.target.value }); validateField('email', e.target.value); }}
               error={!!formErrors.email}
               hint={formErrors.email}

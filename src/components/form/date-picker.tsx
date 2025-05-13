@@ -65,7 +65,7 @@ export default function DatePicker({
         fpRef.current = null;
       }
     };
-  }, [mode, onChange, id, minDate, maxDate, enableTime, closeOnSelect]);
+  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime, closeOnSelect]);
 
   // Update the flatpickr date when defaultDate changes (e.g., opening form)
   useEffect(() => {
