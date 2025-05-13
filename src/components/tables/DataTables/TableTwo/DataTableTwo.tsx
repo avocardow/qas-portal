@@ -82,7 +82,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
   extraControls,
   totalDbEntries,
   currentPage = 1,
-  pageSize = 10,
+  pageSize = 15,
   onPageChange,
   onItemsPerPageChange,
   isLoading,
@@ -206,7 +206,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
 
   // Prepare dropdown options, including current itemsPerPage if not preset
   const pageOptions = React.useMemo<number[]>(() => {
-    const presets = [10, 25, 50, 100, 250, 500];
+    const presets = [15, 50, 100, 250, 500, 1000];
     return presets.includes(itemsPerPage) ? presets : [itemsPerPage, ...presets];
   }, [itemsPerPage]);
 
