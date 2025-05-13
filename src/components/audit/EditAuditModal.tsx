@@ -341,7 +341,14 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
                   id="nextContactDatePicker"
                   label="Next Contact Date"
                   placeholder="Select date"
-                  defaultDate={field.value ? (() => { const [y,m,d] = field.value.split('-').map(Number); return new Date(y,(m??1)-1,d); })() : computedClientNextContactDate}
+                  defaultDate={field.value ? (() => { const [y, m, d] = field.value.split('-').map(Number); return new Date(y, (m ?? 1) - 1, d); })() : computedClientNextContactDate}
+                  minDate={(() => {
+                    const parsed = field.value
+                      ? (() => { const [y, m, d] = field.value.split('-').map(Number); return new Date(y, (m ?? 1) - 1, d); })()
+                      : computedClientNextContactDate ?? new Date();
+                    const today = new Date();
+                    return parsed < today ? parsed : today;
+                  })()}
                   closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
