@@ -63,10 +63,6 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
     resolver: zodResolver(clientFormSchema),
   });
 
-  // Compute date limits for next contact
-  const today = new Date();
-  const maxContactDate = new Date(today.getFullYear(), today.getMonth() + 6, today.getDate());
-
   // Prefill form when modal opens and data is available
   useEffect(() => {
     if (isOpen && clientQuery.data) {
@@ -262,8 +258,6 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                   label="Next Contact Date"
                   placeholder="Select date"
                   defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
-                  minDate={today}
-                  maxDate={maxContactDate}
                   closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
