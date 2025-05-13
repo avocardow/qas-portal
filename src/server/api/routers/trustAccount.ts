@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, adminOrManagerProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, adminOrManagerProcedure, protectedProcedure, enforceRole } from "@/server/api/trpc";
 
 // Zod schemas for TrustAccount operations
 export const trustAccountCreateSchema = z.object({
@@ -24,7 +24,7 @@ const trustAccountBatchUpdateSchema = z.array(trustAccountUpdateSchema);
 
 // Router stub for TrustAccount (to be implemented in later subtasks)
 export const trustAccountRouter = createTRPCRouter({
-  create: adminOrManagerProcedure
+  create: protectedProcedure.use(enforceRole(["Admin", "Manager", "Developer"]))
     .input(trustAccountCreateSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.trustAccount.create({ data: input });

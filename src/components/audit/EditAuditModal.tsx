@@ -14,6 +14,7 @@ import ComponentCard from '@/components/common/ComponentCard';
 import DatePicker from '@/components/form/date-picker';
 import Button from '@/components/ui/button/Button';
 import { format } from 'date-fns';
+import Authorized from '@/components/Authorized';
 
 interface EditAuditModalProps {
   clientId: string;
@@ -155,7 +156,8 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
     }
   };
 
-  if (!ability.can(AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS)) return null;
+  // Only allow users with create or edit audit permission to open modal
+  if (!ability.can(AUDIT_PERMISSIONS.EDIT) && !ability.can(AUDIT_PERMISSIONS.CREATE)) return null;
 
   return (
     <>
@@ -284,45 +286,51 @@ export default function EditAuditModal({ clientId, existingAudit }: EditAuditMod
               control={control}
               name="lodgedWithOFTDate"
               render={({ field }) => (
-                <DatePicker
-                  id="lodgedWithOFTDatePicker"
-                  label="Lodged with OFT Date"
-                  placeholder="Select date"
-                  defaultDate={field.value ? new Date(field.value) : undefined}
-                  closeOnSelect={false}
-                  onChange={(dates) => {
-                    if (dates.length) {
-                      const d = dates[0] as Date;
-                      field.onChange(format(d, 'yyyy-MM-dd'));
-                    }
-                  }}
-                />
+                <Authorized action={AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS}>
+                  <DatePicker
+                    id="lodgedWithOFTDatePicker"
+                    label="Lodged with OFT Date"
+                    placeholder="Select date"
+                    defaultDate={field.value ? new Date(field.value) : undefined}
+                    closeOnSelect={false}
+                    onChange={(dates) => {
+                      if (dates.length) {
+                        const d = dates[0] as Date;
+                        field.onChange(format(d, 'yyyy-MM-dd'));
+                      }
+                    }}
+                  />
+                </Authorized>
               )}
             />
             <Controller
               control={control}
               name="invoiceIssueDate"
               render={({ field }) => (
-                <DatePicker
-                  id="invoiceIssueDatePicker"
-                  label="Invoice Issue Date"
-                  placeholder="Select date"
-                  defaultDate={field.value ? new Date(field.value) : undefined}
-                  maxDate={new Date()}
-                  closeOnSelect={false}
-                  onChange={(dates) => {
-                    if (dates.length) {
-                      const d = dates[0] as Date;
-                      field.onChange(format(d, 'yyyy-MM-dd'));
-                    }
-                  }}
-                />
+                <Authorized action={AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS}>
+                  <DatePicker
+                    id="invoiceIssueDatePicker"
+                    label="Invoice Issue Date"
+                    placeholder="Select date"
+                    defaultDate={field.value ? new Date(field.value) : undefined}
+                    maxDate={new Date()}
+                    closeOnSelect={false}
+                    onChange={(dates) => {
+                      if (dates.length) {
+                        const d = dates[0] as Date;
+                        field.onChange(format(d, 'yyyy-MM-dd'));
+                      }
+                    }}
+                  />
+                </Authorized>
               )}
             />
-            <div className="flex items-center">
-              <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
-              <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
-            </div>
+            <Authorized action={AUDIT_PERMISSIONS.UPDATE_STAGE_STATUS}>
+              <div className="flex items-center">
+                <input type="checkbox" id="invoicePaid" {...register('invoicePaid')} className="mr-2" />
+                <label htmlFor="invoicePaid" className="block text-sm font-medium">Invoice Paid</label>
+              </div>
+            </Authorized>
             <Controller
               control={control}
               name="nextContactDate"

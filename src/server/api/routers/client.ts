@@ -3,6 +3,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
   adminProcedure,
+  adminOrManagerProcedure,
   enforceRole,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
@@ -338,12 +339,12 @@ export const clientRouter = createTRPCRouter({
         estAnnFees: client.estAnnFees != null && typeof client.estAnnFees === 'object' && 'toNumber' in client.estAnnFees ? client.estAnnFees.toNumber() : client.estAnnFees,
       };
     }),
-  create: adminProcedure
+  create: adminOrManagerProcedure
     .input(clientCreateSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.client.create({ data: input });
     }),
-  update: adminProcedure
+  update: adminOrManagerProcedure
     .input(clientUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { clientId, ...data } = input;
@@ -394,7 +395,7 @@ export const clientRouter = createTRPCRouter({
       });
     }),
   addActivityLog: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Developer"]))
+    .use(enforceRole(["Admin", "Manager", "Developer", "Auditor", "Staff"]))
     .input(
       z.object({
         clientId: z.string().uuid(),
@@ -419,7 +420,7 @@ export const clientRouter = createTRPCRouter({
       });
     }),
   updateActivityLog: protectedProcedure
-    .use(enforceRole(["Admin", "Manager", "Developer"]))
+    .use(enforceRole(["Admin", "Manager", "Developer", "Auditor", "Staff"]))
     .input(
       z.object({
         id: z.string().uuid(),
