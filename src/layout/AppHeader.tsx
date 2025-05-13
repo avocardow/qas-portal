@@ -14,7 +14,7 @@ import type { Role } from '@/policies/permissions';
 import { useAbility } from '@/hooks/useAbility';
 import { IMPERSONATION_PERMISSIONS } from '@/constants/permissions';
 import { api } from '@/utils/api';
-import { XMarkIcon } from '@/icons';
+import { CloseLineIcon } from '@/icons';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -170,7 +170,7 @@ const AppHeader: React.FC = () => {
                   onClick={() => setGlobalSearchTerm('')}
                   className="absolute top-1/2 right-4 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 >
-                  <XMarkIcon className="h-4 w-4" />
+                  <CloseLineIcon className="h-4 w-4 fill-current" />
                 </button>
               )}
               {searchResults && searchResults.length > 0 && (
