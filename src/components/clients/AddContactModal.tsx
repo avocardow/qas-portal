@@ -77,6 +77,15 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
     licenseNumber: undefined, licenseType: undefined, renewalMonth: undefined, licenseIsPrimary: false,
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ name: "", email: "", phone: "", title: "", isPrimary: false, licenseNumber: undefined, licenseType: undefined, renewalMonth: undefined, licenseIsPrimary: false });
+      setFormErrors({});
+      setSuccessMessage(null);
+      setErrorMessage(null);
+    }
+  }, [isOpen]);
   // Validate individual field
   const validateField = (field: keyof ContactFormData, value: unknown) => {
     try {

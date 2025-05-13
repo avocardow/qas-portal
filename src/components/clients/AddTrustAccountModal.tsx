@@ -1,7 +1,7 @@
 "use client";
  
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "@/components/ui/modal";
 import ComponentCard from "@/components/common/ComponentCard";
 import Label from "@/components/form/Label";
@@ -51,6 +51,16 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
     licenseNumber: "",
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof TrustAccountFormData, string>>>({});
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ accountName: "", bankName: "", bsb: "", accountNumber: "", managementSoftware: "", softwareUrl: "", hasSoftwareAccess: false, licenseNumber: "" });
+      setFormErrors({});
+      setSuccessMessage(null);
+      setErrorMessage(null);
+    }
+  }, [isOpen]);
 
   const { data: selectedLicense } = api.license.getByLicenseNumber.useQuery(
     { licenseNumber: formData.licenseNumber! },
