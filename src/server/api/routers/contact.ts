@@ -75,7 +75,7 @@ export const contactRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.contact.create({ data: input });
     }),
-  update: adminOrManagerProcedure
+  update: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(contactUpdateSchema)
     .mutation(({ ctx, input }) => {
       const { contactId, ...data } = input;
