@@ -70,7 +70,7 @@ export const contactRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.contact.delete({ where: { id: input.contactId } });
     }),
-  create: adminOrManagerProcedure
+  create: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(contactCreateSchema)
     .mutation(({ ctx, input }) => {
       return ctx.db.contact.create({ data: input });
