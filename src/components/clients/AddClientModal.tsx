@@ -11,7 +11,7 @@ import Notification from '@/components/ui/notification/Notification';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
+import { format } from 'date-fns';
 // Client fields
 const clientFormSchema = z.object({
   clientName: z.string().min(1, 'Client name is required'),
@@ -27,8 +27,7 @@ const clientFormSchema = z.object({
   estAnnFees: z.coerce.number().optional(),
   // Audit fields (unique)
   auditYear: z.coerce.number().optional(),
-  stageId: z.coerce.number().min(1, 'Stage is required'),
-  statusId: z.coerce.number().min(1, 'Status is required'),
+  stageId: z.coerce.number().min(0, 'Stage is required'),
 });
 
 type AddClientFormData = z.infer<typeof clientFormSchema>;
@@ -59,7 +58,6 @@ export default function AddClientModal() {
       estAnnFees: undefined,
       auditYear: new Date().getFullYear(),
       stageId: undefined,
-      statusId: undefined,
     },
   });
   const today = new Date();
@@ -74,7 +72,7 @@ export default function AddClientModal() {
       return new Date(Date.UTC(y, (m ?? 1) - 1, d));
     };
     try {
-      // 1. Create client
+      // 1. Create client (ensure blank xeroContactId is sent as null)
       const client = await createClientMutation.mutateAsync({
         clientName: formData.clientName,
         phone: formData.phone,
@@ -87,13 +85,13 @@ export default function AddClientModal() {
         auditPeriodEndDate: toUtcDate(formData.auditPeriodEndDate),
         nextContactDate: toUtcDate(formData.nextContactDate),
         estAnnFees: formData.estAnnFees,
+        xeroContactId: null,
       });
       // 2. Create first audit for client
       await createAuditMutation.mutateAsync({
         clientId: client.id,
         auditYear: formData.auditYear!,
         stageId: formData.stageId,
-        statusId: formData.statusId,
       });
       setIsOpen(false);
       router.push(`/clients/${client.id}`);
@@ -182,6 +180,7 @@ export default function AddClientModal() {
                 render={({ field }) => (
                   <select {...field} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
                     <option value="">Select stage</option>
+                    <option value="0">Onboarding</option>
                     <option value="1">1st interim review</option>
                     <option value="2">2nd interim review</option>
                     <option value="3">Year-end audit</option>
@@ -200,11 +199,13 @@ export default function AddClientModal() {
                   label="Audit Period End Date"
                   placeholder="Select date"
                   minDate={today}
-                  defaultDate={field.value ? (() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })() : undefined}
+                  defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
                   closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
-                    if (d) field.onChange(d instanceof Date ? d.toISOString().slice(0, 10) : d);
+                    if (d) {
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
+                    }
                   }}
                 />
               )}
@@ -218,13 +219,15 @@ export default function AddClientModal() {
                   id="nextContactDatePicker"
                   label="Next Contact Date"
                   placeholder="Select date"
+                  defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
                   minDate={today}
                   maxDate={maxContactDate}
-                  defaultDate={field.value ? (() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })() : undefined}
                   closeOnSelect={false}
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
-                    if (d) field.onChange(d instanceof Date ? d.toISOString().slice(0, 10) : d);
+                    if (d) {
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
+                    }
                   }}
                 />
               )}

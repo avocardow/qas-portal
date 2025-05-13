@@ -104,9 +104,11 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
     const auditDate = toUtcDate(formData.auditPeriodEndDate);
     const nextDate = toUtcDate(formData.nextContactDate);
 
+    // Clean up xeroContactId: send null instead of empty string
     updateMutation.mutate({
       clientId,
       ...formData,
+      xeroContactId: formData.xeroContactId?.trim() === '' ? null : formData.xeroContactId,
       auditPeriodEndDate: auditDate,
       nextContactDate: nextDate,
     });
