@@ -83,40 +83,45 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
     {
         key: 'managementSoftware',
         header: 'Management Software',
-      sortable: false,
-      cell: (row) =>
-        row.hasSoftwareAccess ? (
-            <div className="flex items-center space-x-1">
-              <a
-                href={row.softwareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                {row.managementSoftware}
-              </a>
-              <Popover
-                position="right"
-                triggerOnHover
-                trigger={<sup><InfoIcon width={12} height={12} className="text-gray-400 cursor-pointer" /></sup>}
-              >
-                <div className="p-2">
-                  {latestSoftwareInstructions ? (
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                      {latestSoftwareInstructions.content}
-                    </p>
-                  ) : (
-                    <p className="text-sm text-gray-500">
-                      No software instructions available.
-                    </p>
-                  )}
-                </div>
-              </Popover>
-            </div>
-          ) : (
-            '-'
-        ),
-    },
+        sortable: false,
+        cell: (row) => {
+          if (!row.managementSoftware) return '-';
+          // Show as link+popover if softwareUrl exists and hasSoftwareAccess is true
+          if (row.softwareUrl && row.hasSoftwareAccess) {
+            return (
+              <div className="flex items-center space-x-1">
+                <a
+                  href={row.softwareUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  {row.managementSoftware}
+                </a>
+                <Popover
+                  position="right"
+                  triggerOnHover
+                  trigger={<sup><InfoIcon width={12} height={12} className="text-gray-400 cursor-pointer" /></sup>}
+                >
+                  <div className="p-2">
+                    {latestSoftwareInstructions ? (
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        {latestSoftwareInstructions.content}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-500">
+                        No software instructions available.
+                      </p>
+                    )}
+                  </div>
+                </Popover>
+              </div>
+            );
+          }
+          // Otherwise, just show the management software as plain text
+          return row.managementSoftware;
+        },
+      },
     {
         key: 'licenseNumber',
         header: 'License Number',
