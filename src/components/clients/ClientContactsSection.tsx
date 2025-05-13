@@ -7,7 +7,7 @@ import AddContactButton from '@/components/clients/AddContactButton';
 import AddContactModal from '@/components/clients/AddContactModal';
 import { api } from '@/utils/api';
 import Authorized from '@/components/Authorized';
-import { AUDIT_PERMISSIONS } from '@/constants/permissions';
+import { CONTACT_PERMISSIONS } from '@/constants/permissions';
 // import type { Contact } from '@prisma/client';
 
 interface ClientContactsSectionProps {
@@ -64,7 +64,7 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
       <ComponentCard
         title="Contacts"
         actions={
-          <Authorized action={AUDIT_PERMISSIONS.GET_BY_CLIENT_ID}>
+          <Authorized action={CONTACT_PERMISSIONS.EDIT}>
             <AddContactButton onClick={() => setIsModalOpen(true)} />
           </Authorized>
         }
