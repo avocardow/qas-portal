@@ -14,7 +14,8 @@ import type { Role } from '@/policies/permissions';
 import { useAbility } from '@/hooks/useAbility';
 import { IMPERSONATION_PERMISSIONS } from '@/constants/permissions';
 import { api } from '@/utils/api';
-import { CloseLineIcon } from '@/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -170,7 +171,7 @@ const AppHeader: React.FC = () => {
                   onClick={() => setGlobalSearchTerm('')}
                   className="absolute top-1/2 right-4 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 >
-                  <CloseLineIcon className="h-4 w-4 fill-current" />
+                  <FontAwesomeIcon icon={faXmark} className="h-4 w-4 fill-current" />
                 </button>
               )}
               {searchResults && searchResults.length > 0 && (
