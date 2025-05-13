@@ -8,6 +8,7 @@ import AddContactModal from '@/components/clients/AddContactModal';
 import { api } from '@/utils/api';
 import Authorized from '@/components/Authorized';
 import { CONTACT_PERMISSIONS } from '@/constants/permissions';
+import ModalTwo from '@/components/ui/modal/ModalTwo';
 // import type { Contact } from '@prisma/client';
 
 interface ClientContactsSectionProps {
@@ -68,11 +69,7 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
             data={contactsWithLicense}
             clientId={clientId}
             onRowClick={(row) => router.push(`/contacts/${row.id}`)}
-            onDelete={(row) => {
-              if (window.confirm('Are you sure you want to delete this contact?')) {
-                deleteMutation.mutate({ contactId: row.id! });
-              }
-            }}
+            onDelete={(row) => deleteMutation.mutate({ contactId: row.id! })}
           />
         )}
       </ComponentCard>
@@ -81,6 +78,7 @@ export default function ClientContactsSection({ contacts }: ClientContactsSectio
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+      {/* Delete handled in ContactsTable via ModalTwo */}
     </>
   );
 } 
