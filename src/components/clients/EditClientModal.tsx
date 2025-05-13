@@ -241,7 +241,6 @@ export default function EditClientModal({ clientId }: EditClientModalProps) {
                   id="auditPeriodEndDatePicker"
                   label="Audit Period End Date"
                   placeholder="Select date"
-                  minDate={today}
                   defaultDate={(() => { const val = field.value ?? ''; return /\d{4}-\d{2}-\d{2}/.test(val) ? (() => { const [y, m, d] = val.split('-').map(Number); return new Date(y, m-1, d); })() : undefined })()}
                   closeOnSelect={false}
                   onChange={(dates) => {
