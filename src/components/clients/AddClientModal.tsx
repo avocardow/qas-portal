@@ -123,8 +123,8 @@ export default function AddClientModal() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* 1. Client Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Client Name</label>
-              <input {...register('clientName')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900" />
+              <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">Client Name</label>
+              <input id="clientName" {...register('clientName')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900" />
               {errors.clientName && <p className="text-sm text-red-600">{errors.clientName.message}</p>}
             </div>
             {/* 2. Status */}
