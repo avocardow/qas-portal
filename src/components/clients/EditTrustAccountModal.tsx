@@ -117,7 +117,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
       return;
     }
 
-    // Map optional string fields to null when empty and prepare cleaned payload
+    // Map optional string fields to undefined when empty and prepare cleaned payload
     const { licenseNumber } = result.data;
     const primaryLicenseId = licenseNumber ? (() => {
       if (!selectedLicense) {
@@ -130,12 +130,12 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
     const cleanedData = {
       trustAccountId: existingTrustAccount.id,
       clientId,
-      accountName: formData.accountName?.trim() === '' ? null : formData.accountName,
+      accountName: formData.accountName?.trim() === '' ? undefined : formData.accountName,
       bankName: formData.bankName,
-      bsb: formData.bsb?.trim() === '' ? null : formData.bsb,
-      accountNumber: formData.accountNumber?.trim() === '' ? null : formData.accountNumber,
-      managementSoftware: formData.managementSoftware?.trim() === '' ? null : formData.managementSoftware,
-      softwareUrl: formData.softwareUrl?.trim() === '' ? null : formData.softwareUrl,
+      bsb: formData.bsb?.trim() === '' ? undefined : formData.bsb,
+      accountNumber: formData.accountNumber?.trim() === '' ? undefined : formData.accountNumber,
+      managementSoftware: formData.managementSoftware?.trim() === '' ? undefined : formData.managementSoftware,
+      softwareUrl: formData.softwareUrl?.trim() === '' ? undefined : formData.softwareUrl,
       hasSoftwareAccess: formData.hasSoftwareAccess,
       primaryLicenseId,
     };

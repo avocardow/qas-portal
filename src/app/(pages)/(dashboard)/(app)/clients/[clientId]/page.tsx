@@ -475,6 +475,7 @@ export default function ClientDetailPage() {
       </Authorized>
     </div>
     <AddActivityModal
+      clientId={clientId}
       isOpen={isAddActivityOpen}
       onClose={closeAddActivityModal}
       contacts={clientData?.contacts.map(c => ({ id: c.id!, name: c.name })) ?? []}
@@ -483,7 +484,7 @@ export default function ClientDetailPage() {
         try {
           await addActivityMutation.mutateAsync({
             clientId,
-            contactId: data.contactId,
+            contactId: data.contactId ?? undefined,
             type: data.type as ActivityLogType,
             content: data.description,
             date: new Date(data.date),
