@@ -443,19 +443,20 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                         }
                       }}
                       className={
-                        onRowClick
-                          ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] focus:outline-none focus:bg-gray-50 dark:focus:bg-white/[0.05]"
-                          : undefined
+                        (onRowClick
+                          ? "group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] focus:outline-none focus:bg-gray-50 dark:focus:bg-white/[0.05]"
+                          : "group")
                       }
                     >
                       {cols.map(({ key, cell, permission }, idx) => {
                         // Freeze first column on desktop (no extra background)
                         const cellSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white lg:dark:bg-[#1c2539]' : '';
+                        const hoverBg = idx === 0 ? 'group-hover:bg-gray-50 dark:group-hover:bg-white/[0.05]' : '';
                         if (permission) {
                           return (
                             <Authorized key={key} action={permission} fallback={null}>
                               <TableCell
-                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky}`}
+                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${hoverBg}`}
                               >
                                 {cell ? cell(item) : (item[key] ?? "-")}
                               </TableCell>
@@ -465,7 +466,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                         return (
                           <TableCell
                             key={key}
-                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky}`}
+                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${hoverBg}`}
                           >
                             {cell ? cell(item) : (item[key] ?? "-")}
                           </TableCell>
