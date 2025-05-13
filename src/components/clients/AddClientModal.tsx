@@ -114,7 +114,7 @@ export default function AddClientModal() {
         className="text-gray-500"
         onClick={() => { setIsOpen(true); reset(); }}
       >
-        <FontAwesomeIcon icon={faPlus} aria-hidden="true" className="mr-2" />
+        <FontAwesomeIcon icon={faPlus} aria-hidden="true" className="mr-2 h-4 w-4" />
         <span>Add New Client</span>
       </Button>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} overlayClassName="bg-black/90" className="max-w-2xl max-h-[90vh] overflow-y-auto p-6">
