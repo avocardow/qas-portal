@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, adminOrManagerProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, adminOrManagerProcedure, protectedProcedure, enforceRole } from "@/server/api/trpc";
 
 // Zod schemas for License operations
 export const licenseCreateSchema = z.object({
@@ -47,19 +47,19 @@ export const licenseRouter = createTRPCRouter({
       return ctx.db.$transaction(updates);
     }),
   // Fetch all licenses for a given contact
-  getByContactId: adminOrManagerProcedure
+  getByContactId: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(z.object({ contactId: z.string().uuid() }))
     .query(({ ctx, input }) => {
       return ctx.db.license.findMany({ where: { contactId: input.contactId } });
     }),
   // Fetch a single license by its licenseNumber
-  getByLicenseNumber: adminOrManagerProcedure
+  getByLicenseNumber: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(z.object({ licenseNumber: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.license.findUnique({ where: { licenseNumber: input.licenseNumber } });
     }),
   // Fetch all licenses for a list of contact IDs
-  getByContactIds: adminOrManagerProcedure
+  getByContactIds: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(z.object({ contactIds: z.array(z.string().uuid()) }))
     .query(({ ctx, input }) => {
       return ctx.db.license.findMany({ where: { contactId: { in: input.contactIds } } });
