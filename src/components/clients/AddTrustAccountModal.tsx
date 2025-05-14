@@ -106,7 +106,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
         try {
           await (createLicenseMutation.mutateAsync
             ? createLicenseMutation.mutateAsync({
-                holderType: "trustAccount",
+                holderType: "client",
                 trustAccountId: undefined,
                 clientId,
                 licenseNumber,
@@ -117,7 +117,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
             : new Promise<unknown>((resolve, reject) => {
                 createLicenseMutation.mutate(
                   {
-                    holderType: "trustAccount",
+                    holderType: "client",
                     trustAccountId: undefined,
                     clientId,
                     licenseNumber,
