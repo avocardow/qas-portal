@@ -101,9 +101,10 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       setFormErrors(prev => ({ ...prev, [field]: message }));
     }
   };
+  const trimmedLicenseNumber = formData.licenseNumber?.trim();
   const { data: selectedLicense } = api.license.getByLicenseNumber.useQuery(
-    { licenseNumber: formData.licenseNumber! },
-    { enabled: Boolean(formData.licenseNumber) }
+    { licenseNumber: trimmedLicenseNumber! },
+    { enabled: Boolean(trimmedLicenseNumber) }
   );
   const handleSubmitInternal = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -145,8 +146,9 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
           utils.contact.getById.invalidate({ contactId: newContact.id });
         }
         // Handle license creation/association
-        if (result.data.licenseNumber) {
-          const licenseNum = result.data.licenseNumber;
+        const licenseNumTrimmed = result.data.licenseNumber?.trim();
+        if (licenseNumTrimmed) {
+          const licenseNum = licenseNumTrimmed;
           if (selectedLicense) {
             const licenseContact = selectedLicense.contact;
             const nameMatches = licenseContact?.name?.trim().toLowerCase() === result.data.name?.trim().toLowerCase();
