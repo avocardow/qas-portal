@@ -176,9 +176,9 @@ export default function EditAuditModal({
           stageId: formData.stageId,
           statusId: formData.statusId,
           reportDueDate: formData.reportDueDate ? (() => { const [y,m,d] = formData.reportDueDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
-          lodgedWithOFTDate: formData.lodgedWithOFTDate ? (() => { const [y,m,d] = formData.lodgedWithOFTDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
+          lodgedWithOFTDate: formData.lodgedWithOFTDate === '' ? null : formData.lodgedWithOFTDate ? (() => { const [y,m,d] = formData.lodgedWithOFTDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
           invoicePaid: formData.invoicePaid,
-          invoiceIssueDate: formData.invoiceIssueDate ? (() => { const [y,m,d] = formData.invoiceIssueDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
+          invoiceIssueDate: formData.invoiceIssueDate === '' ? null : formData.invoiceIssueDate ? (() => { const [y,m,d] = formData.invoiceIssueDate.split('-').map(Number); return new Date(Date.UTC(y, (m??1)-1, d)); })() : undefined,
         };
         await updateAuditMutation.mutateAsync(payload);
         auditId = existingAudit.id;
@@ -369,6 +369,8 @@ export default function EditAuditModal({
                       if (dates.length) {
                         const d = dates[0] as Date;
                         field.onChange(format(d, 'yyyy-MM-dd'));
+                      } else {
+                        field.onChange('');
                       }
                     }}
                   />
@@ -392,6 +394,8 @@ export default function EditAuditModal({
                       if (dates.length) {
                         const d = dates[0] as Date;
                         field.onChange(format(d, 'yyyy-MM-dd'));
+                      } else {
+                        field.onChange('');
                       }
                     }}
                   />
