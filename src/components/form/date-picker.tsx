@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import Label from "./Label";
-import { CalenderIcon, XMarkIcon } from "../../icons";
+import { CalenderIcon } from "../../icons";
 import Hook = flatpickr.Options.Hook;
 import DateOption = flatpickr.Options.DateOption;
 
@@ -107,7 +107,6 @@ export default function DatePicker({
                 inputRef.current.value = '';
               }
               if (fpRef.current) {
-                // flatpickr can return an instance or an array of instances
                 let instance = fpRef.current;
                 if (Array.isArray(instance)) {
                   instance = instance[0];
@@ -116,10 +115,8 @@ export default function DatePicker({
                   instance.clear();
                 }
               }
-              // Trigger onChange handlers with empty value and correct signature
               if (onChange) {
                 const handlers = Array.isArray(onChange) ? onChange : [onChange];
-                // Use the same instance for passing to hooks
                 let inst = fpRef.current;
                 if (Array.isArray(inst)) {
                   inst = inst[0];
@@ -128,7 +125,7 @@ export default function DatePicker({
               }
             }}
           >
-            <XMarkIcon className="h-4 w-4" />
+            <i className="fa-solid fa-xmark h-4 w-4" aria-hidden="true"></i>
           </button>
         )}
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
