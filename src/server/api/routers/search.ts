@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import { ClientStatus } from '@prisma/client';
+import { Prisma, ClientStatus } from '@prisma/client';
 import { z } from 'zod';
 
 export const searchRouter = createTRPCRouter({
@@ -9,7 +9,7 @@ export const searchRouter = createTRPCRouter({
       const term = input;
       const role = ctx.session?.user?.role;
       const restrictActiveRoles = ['Admin', 'Manager', 'Auditor', 'Staff'];
-      const ORFilter = [
+      const ORFilter: Prisma.ClientWhereInput['OR'] = [
         { clientName: { contains: term, mode: 'insensitive' } },
         { city: { contains: term, mode: 'insensitive' } },
         { address: { contains: term, mode: 'insensitive' } },
@@ -41,11 +41,11 @@ export const searchRouter = createTRPCRouter({
         { trustAccounts: { some: { bsb: { contains: term, mode: 'insensitive' } } } },
         { trustAccounts: { some: { accountNumber: { contains: term, mode: 'insensitive' } } } },
       ];
-      const where = restrictActiveRoles.includes(role ?? '')
+      const where: Prisma.ClientWhereInput = restrictActiveRoles.includes(role ?? '')
         ? { status: ClientStatus.active, OR: ORFilter }
         : { OR: ORFilter };
       const clients = await ctx.db.client.findMany({
-        where,
+        where: where,
         distinct: ['id'],
         select: { id: true, clientName: true },
       });
