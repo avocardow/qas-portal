@@ -99,7 +99,7 @@ export default function DatePicker({
         {showClearButton && (
           <button
             type="button"
-            className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-14 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             onClick={() => {
               // Clear the input and calendar
               if (inputRef.current) {
