@@ -8,6 +8,8 @@ import Label from "./Label";
 import { CalenderIcon } from "../../icons";
 import Hook = flatpickr.Options.Hook;
 import DateOption = flatpickr.Options.DateOption;
+import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate';
+import 'flatpickr/dist/plugins/confirmDate/confirmDate.css';
 
 type PropsType = {
   id: string;
@@ -26,6 +28,8 @@ type PropsType = {
   closeOnSelect?: boolean;
   /** Controlled value for the input (ISO or display string) */
   value?: string;
+  /** Show a clear button in the calendar popup */
+  showClearButton?: boolean;
 };
 
 export default function DatePicker({
@@ -40,6 +44,7 @@ export default function DatePicker({
   enableTime = false,
   closeOnSelect = false,
   value,
+  showClearButton = false,
 }: PropsType) {
   const fpRef = useRef<ReturnType<typeof flatpickr> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,6 +61,7 @@ export default function DatePicker({
       maxDate,
       closeOnSelect,
       ...(onChange ? { onChange } : {}),
+      ...(showClearButton ? { plugins: [confirmDatePlugin({ showAlways: false, confirmText: "", clearText: "Clear" })] } : {}),
     });
 
     fpRef.current = flatPickrInstance;
@@ -65,7 +71,7 @@ export default function DatePicker({
         fpRef.current = null;
       }
     };
-  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime, closeOnSelect]);
+  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime, closeOnSelect, showClearButton]);
 
   // Update the flatpickr date when defaultDate changes (e.g., opening form)
   useEffect(() => {

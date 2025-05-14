@@ -364,6 +364,7 @@ export default function EditAuditModal({
                     placeholder="Select date"
                     defaultDate={field.value ? new Date(field.value) : undefined}
                     closeOnSelect={false}
+                    showClearButton
                     onChange={(dates) => {
                       if (dates.length) {
                         const d = dates[0] as Date;
@@ -386,6 +387,7 @@ export default function EditAuditModal({
                     defaultDate={field.value ? new Date(field.value) : undefined}
                     maxDate={new Date()}
                     closeOnSelect={false}
+                    showClearButton
                     onChange={(dates) => {
                       if (dates.length) {
                         const d = dates[0] as Date;
