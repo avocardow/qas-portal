@@ -24,7 +24,7 @@ export interface ClientTrustAccountsSectionProps {
   trustAccounts: ClientWithRelations['trustAccounts'];
 }
 
-const MAX_ACCOUNT_NUMBER_LENGTH = 40;
+const MAX_ACCOUNT_NAME_LENGTH = 40;
 
 /**
  * ClientTrustAccountsSection displays a paginated, filterable table of trust accounts.
@@ -73,19 +73,24 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
    
   const columns = React.useMemo<ColumnDef[]>(() => {
     const cols: ColumnDef[] = [
-    { key: 'accountName', header: 'Account Name', sortable: true },
+    {
+      key: 'accountName',
+      header: 'Account Name',
+      sortable: true,
+      cell: (row) => {
+        const name = row.accountName ?? '-';
+        return name.length > MAX_ACCOUNT_NAME_LENGTH
+          ? name.slice(0, MAX_ACCOUNT_NAME_LENGTH) + '...'
+          : name;
+      },
+    },
     { key: 'bankName', header: 'Bank Name', sortable: true },
     { key: 'bsb', header: 'BSB', sortable: false },
       {
         key: 'accountNumber',
         header: 'Account Number',
         sortable: false,
-        cell: (row) => {
-          const account = row.accountNumber ? `*****${row.accountNumber}` : '-';
-          return account.length > MAX_ACCOUNT_NUMBER_LENGTH
-            ? account.slice(0, MAX_ACCOUNT_NUMBER_LENGTH) + '...'
-            : account;
-        },
+        cell: (row) => row.accountNumber ? `*****${row.accountNumber}` : '-',
       },
     {
         key: 'managementSoftware',
