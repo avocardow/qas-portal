@@ -218,7 +218,7 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
             <Label htmlFor="isPrimary">Primary Contact</Label>
           </div>
           {/* License Section Separator */}
-          <div className="pt-2 pb-1 font-semibold text-gray-700">License Information (optional)</div>
+          <div className="pt-2 pb-1 font-semibold text-gray-700">License Information</div>
           {/* License Information */}
           <div>
             <Label htmlFor="licenseNumber">License Number</Label>

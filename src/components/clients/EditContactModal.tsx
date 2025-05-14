@@ -238,7 +238,7 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
             />
             <Label htmlFor="isPrimary">Primary Contact</Label>
           </div>
-          <div className="pt-2 pb-1 font-semibold text-gray-700">License Information (optional)</div>
+          <div className="pt-2 pb-1 font-semibold text-gray-700">License Information</div>
           <div>
             <Label htmlFor="licenseNumber">License Number</Label>
             <InputField id="licenseNumber" name="licenseNumber" placeholder="License Number" defaultValue={formData.licenseNumber ?? ''} onChange={e => setFormData({ ...formData, licenseNumber: e.target.value })} />

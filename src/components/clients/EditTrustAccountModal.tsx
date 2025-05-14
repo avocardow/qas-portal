@@ -284,7 +284,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
             />
             <Label htmlFor="hasSoftwareAccess">Has Software Access</Label>
           </div>
-          <div className="pt-2 pb-1 font-semibold text-gray-700">License Association (optional)</div>
+          <div className="pt-2 pb-1 font-semibold text-gray-700">License Association</div>
           <div>
             <Label htmlFor="licenseNumber">License Number</Label>
             <InputField
