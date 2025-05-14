@@ -96,7 +96,7 @@ export default function DatePicker({
           placeholder={placeholder}
           className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/20 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-12 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-base text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
-        {showClearButton && (
+        {(showClearButton && ((value && value.length > 0) || (inputRef.current && inputRef.current.value.length > 0))) && (
           <button
             type="button"
             className="absolute right-12 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
