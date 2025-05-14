@@ -6,7 +6,7 @@ import Label from "@/components/form/Label";
 import InputField from "@/components/form/input/InputField";
 import Button from "@/components/ui/button/Button";
 import { z } from "zod";
-import { api } from "@/utils/api";
+import { api, RouterOutput } from "@/utils/api";
 import Notification from "@/components/ui/notification/Notification";
 import Select from "@/components/form/Select";
 
@@ -21,7 +21,6 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
   const utils = api.useContext();
   const updateContactMutation = api.contact.update.useMutation();
   const createLicenseMutation = api.license.create.useMutation();
-  const updateLicenseMutation = api.license.update.useMutation();
   const { data: contact } = api.contact.getById.useQuery({ contactId });
   const { data: licenses } = api.license.getByContactId.useQuery({ contactId });
   const license = licenses && licenses.length > 0 ? licenses[0] : undefined;
@@ -85,80 +84,94 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
     }
   };
 
+  const { data: selectedLicense } = api.license.getByLicenseNumber.useQuery(
+    { licenseNumber: formData.licenseNumber || "" },
+    { enabled: Boolean(formData.licenseNumber) }
+  );
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSuccessMessage(null);
     setErrorMessage(null);
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
-      const fieldErrors = result.error.formErrors.fieldErrors as Record<string, string[]>;
-      const newErrors: Partial<Record<keyof ContactFormData, string>> = {};
-      for (const key in fieldErrors) {
-        if (fieldErrors[key]?.length) newErrors[key as keyof ContactFormData] = fieldErrors[key]![0];
+      const errors = result.error.formErrors.fieldErrors as Record<string, string[]>;
+      const newErrs: Partial<Record<keyof ContactFormData, string>> = {};
+      for (const key in errors) {
+        if (errors[key]?.length) newErrs[key as keyof ContactFormData] = errors[key]![0];
       }
-      setFormErrors(newErrors);
+      setFormErrors(newErrs);
       return;
     }
-
-    // Clean up empty fields: clear email by setting to null, other optional fields to undefined
+    // Prepare data, letting Zod map empty title to null
     const cleanedData = {
       ...result.data,
-      email: (formData.email ?? '').trim() === '' ? null : formData.email,
-      phone: formData.phone?.trim() === '' ? undefined : formData.phone,
-      title: formData.title?.trim() === '' ? undefined : formData.title,
+      email: result.data.email?.trim() === '' ? undefined : result.data.email,
+      phone: result.data.phone?.trim() === '' ? undefined : result.data.phone,
     };
-    updateContactMutation.mutate(
-      { contactId, clientId, ...cleanedData },
-      {
-        onSuccess: () => {
-          // Optionally update or create license
-          if (result.data.licenseNumber) {
-            if (license) {
-              updateLicenseMutation.mutate({
-                licenseId: license.id,
-                holderType: "contact",
-                contactId,
-                licenseNumber: result.data.licenseNumber,
-                licenseType: result.data.licenseType,
-                renewalMonth: result.data.renewalMonth,
-                isPrimary: result.data.licenseIsPrimary,
-              }, {
-                onSuccess: () => {
-                  // Invalidate license queries to fetch the updated license
-                  if ('license' in utils && utils.license.getByContactIds?.invalidate) {
-                    utils.license.getByContactIds.invalidate({ contactIds: [contactId] });
-                  }
-                }
-              });
-            } else {
-              createLicenseMutation.mutate({
-                holderType: "contact",
-                contactId,
-                licenseNumber: result.data.licenseNumber,
-                licenseType: result.data.licenseType,
-                renewalMonth: result.data.renewalMonth,
-                isPrimary: result.data.licenseIsPrimary,
-              }, {
-                onSuccess: () => {
-                  // Invalidate license queries to fetch the new license
-                  if ('license' in utils && utils.license.getByContactIds?.invalidate) {
-                    utils.license.getByContactIds.invalidate({ contactIds: [contactId] });
-                  }
-                }
-              });
+    // Update contact first
+    const updateContact = updateContactMutation.mutateAsync
+      ? updateContactMutation.mutateAsync({ ...cleanedData, contactId, clientId })
+      : new Promise<unknown>((resolve, reject) => {
+          updateContactMutation.mutate(
+            { ...cleanedData, contactId, clientId },
+            {
+              onSuccess: resolve,
+              onError: reject,
             }
+          );
+        });
+    updateContact
+      .then(async (value) => {
+        const updatedContact = value as RouterOutput['contact']['update'];
+        utils.clients.getById.invalidate({ clientId });
+        if (updatedContact?.id && 'contact' in utils && utils.contact.getById?.invalidate) {
+          utils.contact.getById.invalidate({ contactId: updatedContact.id });
+        }
+        // Handle license creation/association
+        if (!selectedLicense) {
+          try {
+            const licenseNumber = result.data.licenseNumber || "";
+            await (createLicenseMutation.mutateAsync
+              ? createLicenseMutation.mutateAsync({
+                  holderType: "contact",
+                  contactId,
+                  licenseNumber,
+                  licenseType: result.data.licenseType,
+                  renewalMonth: result.data.renewalMonth,
+                  isPrimary: result.data.licenseIsPrimary,
+                })
+              : new Promise<unknown>((resolve, reject) => {
+                  createLicenseMutation.mutate(
+                    {
+                      holderType: "contact",
+                      contactId,
+                      licenseNumber,
+                      licenseType: result.data.licenseType,
+                      renewalMonth: result.data.renewalMonth,
+                      isPrimary: result.data.licenseIsPrimary,
+                    },
+                    {
+                      onSuccess: resolve,
+                      onError: reject,
+                    }
+                  );
+                })
+            );
+          } catch {
+            setErrorMessage('Failed to create license');
+            return;
           }
-          utils.clients.getById.invalidate({ clientId });
-          utils.contact.getById.invalidate({ contactId });
-          setSuccessMessage("Contact updated successfully");
-          onClose();
-        },
-        onError: (error: unknown) => {
-          const msg = error instanceof Error ? error.message : "Failed to update contact";
-          setErrorMessage(msg);
-        },
-      }
-    );
+        }
+        if ('license' in utils && utils.license.getByContactIds?.invalidate) {
+          utils.license.getByContactIds.invalidate({ contactIds: [contactId] });
+        }
+        setSuccessMessage("Contact updated successfully");
+        onClose();
+      })
+      .catch((error: unknown) => {
+        const msg = error instanceof Error ? error.message : "Failed to update contact";
+        setErrorMessage(msg);
+      });
   };
 
   return (

@@ -29,10 +29,10 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
     ? { clients: { getById: { invalidate: async (_args: any) => {} } } }
     : api.useContext();
   const createContactMutation = process.env.NODE_ENV === 'test'
-    ? { mutate: (_data: any, _opts: any) => {} }
+    ? { mutate: (_data: any, _opts: any) => {}, mutateAsync: async (_data: any) => ({}) }
     : api.contact.create.useMutation();
   const createLicenseMutation = process.env.NODE_ENV === 'test'
-    ? { mutate: (_data: any, _opts: any) => {} }
+    ? { mutate: (_data: any, _opts: any) => {}, mutateAsync: async (_data: any) => ({ id: 'test-license-id' }) }
     : api.license.create.useMutation();
   /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -98,10 +98,12 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       setFormErrors(prev => ({ ...prev, [field]: message }));
     }
   };
-  // Handle full form submission
-  const handleSubmitInternal = (event: React.FormEvent<HTMLFormElement>) => {
+  const { data: selectedLicense } = api.license.getByLicenseNumber.useQuery(
+    { licenseNumber: formData.licenseNumber! },
+    { enabled: Boolean(formData.licenseNumber) }
+  );
+  const handleSubmitInternal = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Clear previous messages
     setSuccessMessage(null);
     setErrorMessage(null);
     const result = contactSchema.safeParse(formData);
@@ -120,42 +122,70 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
       email: result.data.email?.trim() === '' ? undefined : result.data.email,
       phone: result.data.phone?.trim() === '' ? undefined : result.data.phone,
     };
-    // Submit form data to API
-    createContactMutation.mutate({ ...cleanedData, clientId }, {
-      onSuccess: (newContact: RouterOutput['contact']['create']) => {
-        // Refresh client data including contacts
+    // Create contact first
+    (createContactMutation.mutateAsync
+      ? createContactMutation.mutateAsync({ ...cleanedData, clientId })
+      : new Promise<unknown>((resolve, reject) => {
+          createContactMutation.mutate(
+            { ...cleanedData, clientId },
+            {
+              onSuccess: resolve,
+              onError: reject,
+            }
+          );
+        })
+    )
+      .then(async (value) => {
+        const newContact = value as RouterOutput['contact']['create'];
         utils.clients.getById.invalidate({ clientId });
         if (newContact?.id && 'contact' in utils && utils.contact.getById?.invalidate) {
           utils.contact.getById.invalidate({ contactId: newContact.id });
         }
-        // Optionally create license if provided
-        if (result.data.licenseNumber) {
-          createLicenseMutation.mutate({
-            holderType: "contact",
-            clientId: undefined,
-            contactId: newContact.id,
-            licenseNumber: result.data.licenseNumber,
-            licenseType: result.data.licenseType,
-            renewalMonth: result.data.renewalMonth,
-            isPrimary: result.data.licenseIsPrimary,
-          }, {
-            onSuccess: () => {
-              // Invalidate license queries to fetch the newly created license
-              if ('license' in utils && utils.license.getByContactIds?.invalidate) {
-                utils.license.getByContactIds.invalidate({ contactIds: [newContact.id] });
-              }
-            }
-          });
+        // Handle license creation/association
+        if (!selectedLicense) {
+          try {
+            const licenseNumber = result.data.licenseNumber || "";
+            await (createLicenseMutation.mutateAsync
+              ? createLicenseMutation.mutateAsync({
+                  holderType: "contact",
+                  contactId: newContact.id,
+                  licenseNumber,
+                  licenseType: result.data.licenseType,
+                  renewalMonth: result.data.renewalMonth,
+                  isPrimary: result.data.licenseIsPrimary,
+                })
+              : new Promise<unknown>((resolve, reject) => {
+                  createLicenseMutation.mutate(
+                    {
+                      holderType: "contact",
+                      contactId: newContact.id,
+                      licenseNumber,
+                      licenseType: result.data.licenseType,
+                      renewalMonth: result.data.renewalMonth,
+                      isPrimary: result.data.licenseIsPrimary,
+                    },
+                    {
+                      onSuccess: resolve,
+                      onError: reject,
+                    }
+                  );
+                })
+            );
+          } catch {
+            setErrorMessage('Failed to create license');
+            return;
+          }
+        }
+        if ('license' in utils && utils.license.getByContactIds?.invalidate) {
+          utils.license.getByContactIds.invalidate({ contactIds: [newContact.id] });
         }
         setSuccessMessage("Contact added successfully");
-        // Close modal after saving
         onClose();
-      },
-      onError: (error: unknown) => {
+      })
+      .catch((error: unknown) => {
         const msg = error instanceof Error ? error.message : "Failed to add contact";
         setErrorMessage(msg);
-      },
-    });
+      });
   };
   
   return (

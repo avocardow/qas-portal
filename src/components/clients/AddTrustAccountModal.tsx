@@ -23,10 +23,10 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
     ? { clients: { getById: { invalidate: async () => {} } } }
     : api.useContext();
   const createTrustAccountMutation = process.env.NODE_ENV === 'test'
-    ? { mutateAsync: async () => {}, isLoading: false, status: 'idle' }
+    ? { mutate: () => {}, mutateAsync: async () => ({}) }
     : api.trustAccount.create.useMutation();
   const createLicenseMutation = process.env.NODE_ENV === 'test'
-    ? { mutateAsync: async () => ({ id: 'test-license-id' }) }
+    ? { mutate: () => {}, mutateAsync: async () => ({ id: 'test-license-id' }) }
     : api.license.create.useMutation();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -102,13 +102,37 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
       if (selectedLicense) {
         primaryLicenseId = selectedLicense.id;
       } else {
+        const licenseNumber = formData.licenseNumber || "";
         try {
-          const newLicense = await createLicenseMutation.mutateAsync({
-            holderType: "client",
-            clientId,
-            licenseNumber,
-          });
-          primaryLicenseId = newLicense.id;
+          await (createLicenseMutation.mutateAsync
+            ? createLicenseMutation.mutateAsync({
+                holderType: "trustAccount",
+                trustAccountId: undefined,
+                clientId,
+                licenseNumber,
+                licenseType: formData.licenseType,
+                renewalMonth: formData.renewalMonth,
+                isPrimary: true,
+              })
+            : new Promise<unknown>((resolve, reject) => {
+                createLicenseMutation.mutate(
+                  {
+                    holderType: "trustAccount",
+                    trustAccountId: undefined,
+                    clientId,
+                    licenseNumber,
+                    licenseType: formData.licenseType,
+                    renewalMonth: formData.renewalMonth,
+                    isPrimary: true,
+                  },
+                  {
+                    onSuccess: resolve,
+                    onError: reject,
+                  }
+                );
+              })
+          );
+          primaryLicenseId = selectedLicense?.id;
         } catch {
           setErrorMessage('Failed to create license');
           return;

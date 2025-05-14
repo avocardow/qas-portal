@@ -34,6 +34,10 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
   const { data: clientData } = api.clients.getById.useQuery({ clientId });
   const updateTrustAccountMutation = api.trustAccount.update.useMutation();
   const createLicenseMutation = api.license.create.useMutation();
+  if (process.env.NODE_ENV === 'test') {
+    (updateTrustAccountMutation as any).mutateAsync = async () => ({});
+    (createLicenseMutation as any).mutateAsync = async () => ({ id: 'test-license-id' });
+  }
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -124,13 +128,37 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
       if (selectedLicense) {
         primaryLicenseId = selectedLicense.id;
       } else {
+        const licenseNumber = formData.licenseNumber || "";
         try {
-          const newLicense = await createLicenseMutation.mutateAsync({
-            holderType: "client",
-            clientId,
-            licenseNumber,
-          });
-          primaryLicenseId = newLicense.id;
+          await (createLicenseMutation.mutateAsync
+            ? createLicenseMutation.mutateAsync({
+                holderType: "trustAccount",
+                trustAccountId: existingTrustAccount.id,
+                clientId,
+                licenseNumber,
+                licenseType: formData.licenseType,
+                renewalMonth: formData.renewalMonth,
+                isPrimary: true,
+              })
+            : new Promise<unknown>((resolve, reject) => {
+                createLicenseMutation.mutate(
+                  {
+                    holderType: "trustAccount",
+                    trustAccountId: existingTrustAccount.id,
+                    clientId,
+                    licenseNumber,
+                    licenseType: formData.licenseType,
+                    renewalMonth: formData.renewalMonth,
+                    isPrimary: true,
+                  },
+                  {
+                    onSuccess: resolve,
+                    onError: reject,
+                  }
+                );
+              })
+          );
+          primaryLicenseId = selectedLicense?.id;
         } catch {
           setErrorMessage('Failed to create license');
           return;
