@@ -24,6 +24,8 @@ export interface ClientTrustAccountsSectionProps {
   trustAccounts: ClientWithRelations['trustAccounts'];
 }
 
+const MAX_ACCOUNT_NUMBER_LENGTH = 40;
+
 /**
  * ClientTrustAccountsSection displays a paginated, filterable table of trust accounts.
  * @param trustAccounts - Array of trust account objects with fields: accountName, bankName, bsb, accountNumber,
@@ -78,7 +80,12 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
         key: 'accountNumber',
         header: 'Account Number',
         sortable: false,
-        cell: (row) => row.accountNumber ? `*****${row.accountNumber}` : '-',
+        cell: (row) => {
+          const account = row.accountNumber ? `*****${row.accountNumber}` : '-';
+          return account.length > MAX_ACCOUNT_NUMBER_LENGTH
+            ? account.slice(0, MAX_ACCOUNT_NUMBER_LENGTH) + '...'
+            : account;
+        },
       },
     {
         key: 'managementSoftware',

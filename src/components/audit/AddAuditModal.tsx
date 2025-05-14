@@ -5,7 +5,7 @@ import { useModal } from "@/hooks/useModal";
 import { api } from "@/utils/api";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 import { useAbility } from "@/hooks/useAbility";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { PlusIcon } from "@/icons";
@@ -71,7 +71,7 @@ export default function AddAuditModal({ clientId, onAfterSubmit,
     onSuccess: () => { utils.clients.getById.invalidate({ clientId }); },
   });
 
-  const { register, handleSubmit, control, reset, formState: { errors, isSubmitting } } = useForm<AddAuditFormData>({
+  const { register, handleSubmit, control, reset, setValue, formState: { errors, isSubmitting } } = useForm<AddAuditFormData>({
     resolver: zodResolver(addAuditFormSchema),
     defaultValues: {
       auditYear: new Date().getFullYear() + 1,
@@ -99,6 +99,27 @@ export default function AddAuditModal({ clientId, onAfterSubmit,
       });
     }
   }, [isOpen, initialValues, reset]);
+
+  // Auto-populate reportDueDate based on auditPeriodEndDate + 4 months (last day)
+  const auditPeriodEndDate = useWatch({ control, name: 'auditPeriodEndDate' });
+  const reportDueDate = useWatch({ control, name: 'reportDueDate' });
+  useEffect(() => {
+    if (!isOpen) return;
+    if (auditPeriodEndDate) {
+      const [y, m, d] = auditPeriodEndDate.split('-').map(Number);
+      if (!y || !m || !d) return;
+      const base = new Date(Date.UTC(y, m - 1, d));
+      // Add 4 months then get last day: monthIndex+5, day 0
+      const due = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth() + 5, 0));
+      const yyyy = due.getUTCFullYear();
+      const mm = String(due.getUTCMonth() + 1).padStart(2, '0');
+      const dd = String(due.getUTCDate()).padStart(2, '0');
+      const dueStr = `${yyyy}-${mm}-${dd}`;
+      if (reportDueDate !== dueStr) {
+        setValue('reportDueDate', dueStr);
+      }
+    }
+  }, [isOpen, auditPeriodEndDate, reportDueDate, setValue]);
 
   const onSubmitForm = async (data: AddAuditFormData) => {
     try {
@@ -179,7 +200,6 @@ export default function AddAuditModal({ clientId, onAfterSubmit,
             {/* Hidden inputs to include values in submission */}
             <input type="hidden" {...register('stageId', { valueAsNumber: true })} />
             <input type="hidden" {...register('statusId', { valueAsNumber: true })} />
-            <input type="hidden" {...register('reportDueDate')} />
             {/* Instructions for creating next audit year */}
             <div className="mb-4 text-sm text-gray-700">
               Please review the pre-filled fields below and confirm to create the next audit year.
@@ -226,6 +246,26 @@ export default function AddAuditModal({ clientId, onAfterSubmit,
                   onChange={(dates) => {
                     const d = Array.isArray(dates) ? dates[0] : dates;
                     if (d) field.onChange(format(d as Date, 'yyyy-MM-dd'));
+                  }}
+                />
+              )}
+            />
+            {/* Report Due Date field */}
+            <Controller
+              control={control}
+              name="reportDueDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="addReportDueDatePicker"
+                  label="Report Due Date"
+                  placeholder="Select date"
+                  defaultDate={field.value ? new Date(field.value) : undefined}
+                  closeOnSelect={false}
+                  onChange={(dates) => {
+                    const d = Array.isArray(dates) ? dates[0] : dates;
+                    if (d) {
+                      field.onChange(format(d as Date, 'yyyy-MM-dd'));
+                    }
                   }}
                 />
               )}

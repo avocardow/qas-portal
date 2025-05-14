@@ -327,6 +327,10 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
             <TableHeader className="bg-white dark:bg-white/[0.03] border-t border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 {cols.map(({ key, header, sortable, permission }, idx) => {
+                  // Status column width auto-fits, with reduced padding; others fixed min-width
+                  const isStatus = key === 'status';
+                  const headerWidthClasses = isStatus ? 'w-fit min-w-0' : 'min-w-[110px] whitespace-nowrap';
+                  const headerPaddingClasses = isStatus ? 'px-2 py-1' : 'px-4 py-3';
                   // Add lg:sticky to freeze the first column on desktop, including background
                   const headerSticky = idx === 0 ? 'lg:sticky lg:left-0 lg:z-10 lg:bg-white lg:dark:bg-white/[0.03]' : '';
                   if (permission) {
@@ -342,7 +346,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                                 : "descending"
                               : "none"
                           }
-                          className={`border border-gray-100 px-4 py-3 min-w-[110px] whitespace-nowrap dark:border-white/[0.05] ${headerSticky}`}
+                          className={`border border-gray-100 ${headerPaddingClasses} ${headerWidthClasses} dark:border-white/[0.05] ${headerSticky}`}
                         >
                           {sortable ? (
                             <button
@@ -388,7 +392,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                             : "descending"
                           : "none"
                       }
-                      className={`border border-gray-100 px-4 py-3 min-w-[110px] whitespace-nowrap dark:border-white/[0.05] ${headerSticky}`}
+                      className={`border border-gray-100 ${headerPaddingClasses} ${headerWidthClasses} dark:border-white/[0.05] ${headerSticky}`}
                     >
                       {sortable ? (
                         <button
@@ -450,6 +454,10 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                       }
                     >
                       {cols.map(({ key, cell, permission }, idx) => {
+                        // Status cell width auto-fits with reduced padding; others no-wrap
+                        const isStatus = key === 'status';
+                        const cellWidthClasses = isStatus ? 'w-fit min-w-0' : 'whitespace-nowrap';
+                        const cellPaddingClasses = isStatus ? 'px-2 py-1' : 'p-4';
                         let cellSticky = '';
                         let cellBg = '';
                         if (idx === 0) {
@@ -467,7 +475,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                           return (
                             <Authorized key={key} action={permission} fallback={null}>
                               <TableCell
-                                className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${cellBg} ${oddBg} ${hoverBg}`}
+                                className={`text-theme-sm border border-gray-100 ${cellPaddingClasses} font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${cellBg} ${oddBg} ${hoverBg} ${cellWidthClasses}`}
                               >
                                 {cell ? cell(item) : (item[key] ?? "-")}
                               </TableCell>
@@ -477,7 +485,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                         return (
                           <TableCell
                             key={key}
-                            className={`text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${cellBg} ${oddBg} ${hoverBg}`}
+                            className={`text-theme-sm border border-gray-100 ${cellPaddingClasses} font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400 ${cellSticky} ${cellBg} ${oddBg} ${hoverBg} ${cellWidthClasses}`}
                           >
                             {cell ? cell(item) : (item[key] ?? "-")}
                           </TableCell>
@@ -491,7 +499,7 @@ const DataTableTwo: React.FC<DataTableTwoProps> = ({
                         const showEdit = onEdit && safeCan('edit');
                         if (showView || showEdit) {
                           return (
-                            <TableCell key="actions" className="text-theme-sm border border-gray-100 p-4 font-normal whitespace-nowrap text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
+                            <TableCell key="actions" className="text-theme-sm border border-gray-100 p-4 font-normal text-gray-800 dark:border-white/[0.05] dark:text-gray-400">
                               {showView && <ViewActionButton onClick={() => onView(item)} />}
                               {showEdit && (
                                 <button aria-label="Edit" onClick={() => onEdit?.(item)} className="ml-2">

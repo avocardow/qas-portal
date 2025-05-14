@@ -6,8 +6,13 @@ export const searchRouter = createTRPCRouter({
     .input(z.string().min(1))
     .query(async ({ ctx, input }) => {
       const term = input;
+      // Restrict to active clients for certain roles
+      const role = ctx.session?.user?.role;
+      const restrictActiveRoles = ['Admin', 'Manager', 'Auditor', 'Staff'];
+      const statusFilter = restrictActiveRoles.includes(role ?? '') ? { status: 'active' } : {};
       const clients = await ctx.db.client.findMany({
         where: {
+          ...statusFilter,
           OR: [
             { clientName: { contains: term, mode: 'insensitive' } },
             { city: { contains: term, mode: 'insensitive' } },
