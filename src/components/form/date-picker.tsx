@@ -51,6 +51,7 @@ export default function DatePicker({
       mode: mode || "single",
       monthSelectorType: "static",
       enableTime,
+      allowInput: true,
       ...(enableTime ? { time_24hr: false, minuteIncrement: 1 } : {}),
       dateFormat: enableTime ? "d/m/Y H:i" : "d/m/Y",
       defaultDate,
