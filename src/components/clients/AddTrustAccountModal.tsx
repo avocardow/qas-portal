@@ -23,8 +23,11 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
     ? { clients: { getById: { invalidate: async () => {} } } }
     : api.useContext();
   const createTrustAccountMutation = process.env.NODE_ENV === 'test'
-    ? { mutate: () => {}, isLoading: false, status: 'idle' }
+    ? { mutateAsync: async () => {}, isLoading: false, status: 'idle' }
     : api.trustAccount.create.useMutation();
+  const createLicenseMutation = process.env.NODE_ENV === 'test'
+    ? { mutateAsync: async () => ({ id: 'test-license-id' }) }
+    : api.license.create.useMutation();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -79,7 +82,7 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -93,15 +96,25 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
       setFormErrors(newErrs);
       return;
     }
-    // Map optional string fields to undefined when empty and prepare cleaned payload
+    let primaryLicenseId = undefined;
     const { licenseNumber } = result.data;
-    const primaryLicenseId = licenseNumber ? (() => {
-      if (!selectedLicense) {
-        setErrorMessage('License not found');
-        return undefined;
+    if (licenseNumber) {
+      if (selectedLicense) {
+        primaryLicenseId = selectedLicense.id;
+      } else {
+        try {
+          const newLicense = await createLicenseMutation.mutateAsync({
+            holderType: "client",
+            clientId,
+            licenseNumber,
+          });
+          primaryLicenseId = newLicense.id;
+        } catch {
+          setErrorMessage('Failed to create license');
+          return;
+        }
       }
-      return selectedLicense.id;
-    })() : undefined;
+    }
     const cleanedData = {
       clientId,
       accountName: formData.accountName?.trim() === '' ? undefined : formData.accountName,
@@ -113,20 +126,16 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
       hasSoftwareAccess: formData.hasSoftwareAccess,
       primaryLicenseId,
     };
-    createTrustAccountMutation.mutate(
+    createTrustAccountMutation.mutateAsync(
       cleanedData,
-      {
-        onSuccess: () => {
-          utils.clients.getById.invalidate({ clientId });
-          setSuccessMessage("Trust account added successfully");
-          onClose();
-        },
-        onError: (error: unknown) => {
-          const msg = error instanceof Error ? error.message : "Failed to add trust account";
-          setErrorMessage(msg);
-        }
-      }
-    );
+    ).then(() => {
+      utils.clients.getById.invalidate({ clientId });
+      setSuccessMessage("Trust account added successfully");
+      onClose();
+    }).catch((error: unknown) => {
+      const msg = error instanceof Error ? error.message : "Failed to add trust account";
+      setErrorMessage(msg);
+    });
   };
 
   if (!isOpen) return null;

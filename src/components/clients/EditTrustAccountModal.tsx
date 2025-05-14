@@ -33,6 +33,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
   const utils = api.useContext();
   const { data: clientData } = api.clients.getById.useQuery({ clientId });
   const updateTrustAccountMutation = api.trustAccount.update.useMutation();
+  const createLicenseMutation = api.license.create.useMutation();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -102,7 +103,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSuccessMessage(null);
     setErrorMessage(null);
@@ -117,15 +118,25 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
       return;
     }
 
-    // Map optional string fields to undefined when empty and prepare cleaned payload
+    let primaryLicenseId = undefined;
     const { licenseNumber } = result.data;
-    const primaryLicenseId = licenseNumber ? (() => {
-      if (!selectedLicense) {
-        setErrorMessage('License not found');
-        return undefined;
+    if (licenseNumber) {
+      if (selectedLicense) {
+        primaryLicenseId = selectedLicense.id;
+      } else {
+        try {
+          const newLicense = await createLicenseMutation.mutateAsync({
+            holderType: "client",
+            clientId,
+            licenseNumber,
+          });
+          primaryLicenseId = newLicense.id;
+        } catch {
+          setErrorMessage('Failed to create license');
+          return;
+        }
       }
-      return selectedLicense.id;
-    })() : undefined;
+    }
 
     const cleanedData = {
       trustAccountId: existingTrustAccount.id,
@@ -140,20 +151,16 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
       primaryLicenseId,
     };
 
-    updateTrustAccountMutation.mutate(
+    updateTrustAccountMutation.mutateAsync(
       cleanedData,
-      {
-        onSuccess: () => {
-          void utils.clients.getById.invalidate({ clientId });
-          setSuccessMessage("Trust account updated successfully");
-          onClose();
-        },
-        onError: (error: unknown) => {
-          const msg = error instanceof Error ? error.message : "Failed to update trust account";
-          setErrorMessage(msg);
-        },
-      }
-    );
+    ).then(() => {
+      void utils.clients.getById.invalidate({ clientId });
+      setSuccessMessage("Trust account updated successfully");
+      onClose();
+    }).catch((error: unknown) => {
+      const msg = error instanceof Error ? error.message : "Failed to update trust account";
+      setErrorMessage(msg);
+    });
   };
 
   if (!isOpen) return null;
