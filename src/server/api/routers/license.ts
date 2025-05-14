@@ -56,12 +56,34 @@ export const licenseRouter = createTRPCRouter({
   getByLicenseNumber: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor", "Staff"]))
     .input(z.object({ licenseNumber: z.string() }))
     .query(({ ctx, input }) => {
-      return ctx.db.license.findUnique({ where: { licenseNumber: input.licenseNumber } });
+      return ctx.db.license.findUnique({
+        where: { licenseNumber: input.licenseNumber },
+        include: {
+          contact: true,
+          client: true,
+        },
+      });
     }),
   // Fetch all licenses for a list of contact IDs
   getByContactIds: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor", "Staff"]))
     .input(z.object({ contactIds: z.array(z.string().uuid()) }))
     .query(({ ctx, input }) => {
       return ctx.db.license.findMany({ where: { contactId: { in: input.contactIds } } });
+    }),
+  // Reassign a license to a different contact and client
+  reassign: adminOrManagerProcedure
+    .input(z.object({
+      licenseId: z.string().uuid(),
+      contactId: z.string().uuid(),
+      clientId: z.string().uuid(),
+    }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.license.update({
+        where: { id: input.licenseId },
+        data: {
+          contactId: input.contactId,
+          clientId: input.clientId,
+        },
+      });
     }),
 });

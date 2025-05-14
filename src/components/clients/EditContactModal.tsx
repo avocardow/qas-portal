@@ -21,6 +21,7 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
   const utils = api.useContext();
   const updateContactMutation = api.contact.update.useMutation();
   const createLicenseMutation = api.license.create.useMutation();
+  const reassignLicenseMutation = api.license.reassign.useMutation();
   const { data: contact } = api.contact.getById.useQuery({ contactId });
   const { data: licenses } = api.license.getByContactId.useQuery({ contactId });
   const license = licenses && licenses.length > 0 ? licenses[0] : undefined;
@@ -128,38 +129,36 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
           utils.contact.getById.invalidate({ contactId: updatedContact.id });
         }
         // Handle license creation/association
-        if (!selectedLicense) {
-          try {
-            const licenseNumber = result.data.licenseNumber || "";
-            await (createLicenseMutation.mutateAsync
-              ? createLicenseMutation.mutateAsync({
-                  holderType: "contact",
-                  contactId,
-                  licenseNumber,
-                  licenseType: result.data.licenseType,
-                  renewalMonth: result.data.renewalMonth,
-                  isPrimary: result.data.licenseIsPrimary,
-                })
-              : new Promise<unknown>((resolve, reject) => {
-                  createLicenseMutation.mutate(
-                    {
-                      holderType: "contact",
-                      contactId,
-                      licenseNumber,
-                      licenseType: result.data.licenseType,
-                      renewalMonth: result.data.renewalMonth,
-                      isPrimary: result.data.licenseIsPrimary,
-                    },
-                    {
-                      onSuccess: resolve,
-                      onError: reject,
-                    }
-                  );
-                })
-            );
-          } catch {
-            setErrorMessage('Failed to create license');
-            return;
+        if (result.data.licenseNumber) {
+          const licenseNum = result.data.licenseNumber;
+          if (selectedLicense) {
+            const licenseContact = selectedLicense.contact;
+            const nameMatches = licenseContact?.name?.trim().toLowerCase() === result.data.name?.trim().toLowerCase();
+            const emailMatches = licenseContact?.email?.trim().toLowerCase() === result.data.email?.trim().toLowerCase();
+            if (nameMatches || emailMatches) {
+              if (selectedLicense.contactId !== contactId || selectedLicense.clientId !== clientId) {
+                await reassignLicenseMutation.mutateAsync({ licenseId: selectedLicense.id, contactId, clientId });
+              }
+            } else {
+              setErrorMessage('This license number is already assigned to another contact.');
+              return;
+            }
+          } else {
+            // No existing license: create new
+            try {
+              await createLicenseMutation.mutateAsync({
+                holderType: "contact",
+                contactId,
+                clientId,
+                licenseNumber: licenseNum,
+                licenseType: result.data.licenseType,
+                renewalMonth: result.data.renewalMonth,
+                isPrimary: result.data.licenseIsPrimary,
+              });
+            } catch {
+              setErrorMessage('Failed to create license');
+              return;
+            }
           }
         }
         if ('license' in utils && utils.license.getByContactIds?.invalidate) {

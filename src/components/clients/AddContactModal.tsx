@@ -34,6 +34,9 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
   const createLicenseMutation = process.env.NODE_ENV === 'test'
     ? { mutate: (_data: any, _opts: any) => {}, mutateAsync: async (_data: any) => ({ id: 'test-license-id' }) }
     : api.license.create.useMutation();
+  const reassignLicenseMutation = process.env.NODE_ENV === 'test'
+    ? { mutateAsync: async (_data: any) => ({}) }
+    : api.license.reassign.useMutation();
   /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -142,38 +145,42 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
           utils.contact.getById.invalidate({ contactId: newContact.id });
         }
         // Handle license creation/association
-        if (!selectedLicense) {
-          try {
-            const licenseNumber = result.data.licenseNumber || "";
-            await (createLicenseMutation.mutateAsync
-              ? createLicenseMutation.mutateAsync({
-                  holderType: "contact",
-                  contactId: newContact.id,
-                  licenseNumber,
-                  licenseType: result.data.licenseType,
-                  renewalMonth: result.data.renewalMonth,
-                  isPrimary: result.data.licenseIsPrimary,
-                })
-              : new Promise<unknown>((resolve, reject) => {
-                  createLicenseMutation.mutate(
-                    {
-                      holderType: "contact",
-                      contactId: newContact.id,
-                      licenseNumber,
-                      licenseType: result.data.licenseType,
-                      renewalMonth: result.data.renewalMonth,
-                      isPrimary: result.data.licenseIsPrimary,
-                    },
-                    {
-                      onSuccess: resolve,
-                      onError: reject,
-                    }
-                  );
-                })
-            );
-          } catch {
-            setErrorMessage('Failed to create license');
-            return;
+        if (result.data.licenseNumber) {
+          const licenseNum = result.data.licenseNumber;
+          if (selectedLicense) {
+            const licenseContact = selectedLicense.contact;
+            const nameMatches = licenseContact?.name?.trim().toLowerCase() === result.data.name?.trim().toLowerCase();
+            const emailMatches = licenseContact?.email?.trim().toLowerCase() === result.data.email?.trim().toLowerCase();
+            if (nameMatches || emailMatches) {
+              if (selectedLicense.contactId !== newContact.id || selectedLicense.clientId !== clientId) {
+                await (reassignLicenseMutation.mutateAsync
+                  ? reassignLicenseMutation.mutateAsync({ licenseId: selectedLicense.id, contactId: newContact.id, clientId })
+                  : Promise.resolve()
+                );
+              }
+            } else {
+              setErrorMessage('This license number is already assigned to another contact.');
+              return;
+            }
+          } else {
+            // No existing license: create a new one
+            try {
+              await (createLicenseMutation.mutateAsync
+                ? createLicenseMutation.mutateAsync({
+                    holderType: "contact",
+                    contactId: newContact.id,
+                    clientId,
+                    licenseNumber: licenseNum,
+                    licenseType: result.data.licenseType,
+                    renewalMonth: result.data.renewalMonth,
+                    isPrimary: result.data.licenseIsPrimary,
+                  })
+                : Promise.resolve()
+              );
+            } catch {
+              setErrorMessage('Failed to create license');
+              return;
+            }
           }
         }
         if ('license' in utils && utils.license.getByContactIds?.invalidate) {
