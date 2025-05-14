@@ -11,8 +11,6 @@ import TextArea from '@/components/form/input/TextArea';
 import DatePicker from '@/components/form/date-picker';
 import { useAbility } from '@/hooks/useAbility';
 import { ACTIVITY_PERMISSIONS } from '@/constants/permissions';
-import Authorized from '@/components/Authorized';
-import { api } from '@/utils/api';
 
 export interface AddActivityModalProps {
   /** ID of the client to fetch contacts for */
@@ -26,15 +24,11 @@ export interface AddActivityModalProps {
 
 export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, serverError }: AddActivityModalProps) {
   const { can } = useAbility();
-  const { data: staffMembers = [] } = api.user.getAssignableManagers.useQuery();
   const [type, setType] = useState('note');
   const [description, setDescription] = useState('');
   const [dateValue, setDateValue] = useState<Date>(new Date());
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [contactId, setContactId] = useState<string | undefined>(undefined);
-  const [staffMemberId, setStaffMemberId] = useState<string | undefined>(undefined);
-
-  // contacts prop is used for Related Contact select below
 
   const typeOptions = [
     { value: 'note', label: 'Note' },
@@ -66,7 +60,6 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
       setDescription('');
       setDateValue(new Date());
       setContactId(undefined);
-      setStaffMemberId(undefined);
       setErrorMessage(null);
     }
   }, [isOpen]);
@@ -78,9 +71,6 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
       return;
     }
     onSubmit({ type, description, date: dateValue.toISOString(), contactId: contactId ?? null });
-    // If you want to ensure fresh data, you could invalidate here as well:
-    // const utils = api.useContext();
-    // utils.clients.getById.invalidate({ clientId });
   }
 
   if (!isOpen) return null;
@@ -115,20 +105,6 @@ export default function AddActivityModal({ isOpen, onClose, onSubmit, contacts, 
               className="mt-1"
             />
           </div>
-          {/* Staff Member (if allowed) */}
-          <Authorized action={ACTIVITY_PERMISSIONS.ADD_STAFF_MEMBER_ACTIVITY}>
-            <div className="pt-2 pb-1 font-semibold text-gray-700">Staff Assignment</div>
-            <div>
-              <Label htmlFor="staffMemberId">Staff Member</Label>
-              <Select
-                options={staffMembers.map(u => ({ value: u.id, label: u.name ?? u.email ?? '' }))}
-                placeholder="Select staff member"
-                defaultValue={staffMemberId ?? ''}
-                onChange={val => setStaffMemberId(val || undefined)}
-                className="mt-1"
-              />
-            </div>
-          </Authorized>
           {/* Related Contact */}
           <div className="pt-2 pb-1 font-semibold text-gray-700">Related Contact</div>
           <div>

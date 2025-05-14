@@ -122,6 +122,13 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
                 licenseType: result.data.licenseType,
                 renewalMonth: result.data.renewalMonth,
                 isPrimary: result.data.licenseIsPrimary,
+              }, {
+                onSuccess: () => {
+                  // Invalidate license queries to fetch the updated license
+                  if ('license' in utils && utils.license.getByContactIds?.invalidate) {
+                    utils.license.getByContactIds.invalidate({ contactIds: [contactId] });
+                  }
+                }
               });
             } else {
               createLicenseMutation.mutate({
@@ -131,6 +138,13 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
                 licenseType: result.data.licenseType,
                 renewalMonth: result.data.renewalMonth,
                 isPrimary: result.data.licenseIsPrimary,
+              }, {
+                onSuccess: () => {
+                  // Invalidate license queries to fetch the new license
+                  if ('license' in utils && utils.license.getByContactIds?.invalidate) {
+                    utils.license.getByContactIds.invalidate({ contactIds: [contactId] });
+                  }
+                }
               });
             }
           }
@@ -218,7 +232,17 @@ export default function EditContactModal({ contactId, clientId, isOpen, onClose 
           </div>
           <div>
             <Label htmlFor="licenseType">License Type</Label>
-            <InputField id="licenseType" name="licenseType" placeholder="License Type" defaultValue={formData.licenseType ?? ''} onChange={e => setFormData({ ...formData, licenseType: e.target.value })} />
+            <Select
+              options={[
+                { value: 'Agency', label: 'Agency' },
+                { value: 'Director', label: 'Director' },
+              ]}
+              placeholder="Select License Type (optional)"
+              defaultValue={formData.licenseType ?? ''}
+              onChange={val => setFormData({ ...formData, licenseType: val || undefined })}
+              className={formErrors.licenseType ? 'border-error-500' : ''}
+            />
+            {formErrors.licenseType && <p className="text-error-500 text-sm mt-1">{formErrors.licenseType}</p>}
           </div>
           <div>
             <Label htmlFor="renewalMonth">Renewal Month</Label>

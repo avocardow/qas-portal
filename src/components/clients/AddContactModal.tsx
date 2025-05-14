@@ -140,8 +140,10 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
             isPrimary: result.data.licenseIsPrimary,
           }, {
             onSuccess: () => {
-              // Optionally, fetch the licenses for the new contact if you want to display them
-              // const { data: licenses } = api.license.getByContactId.useQuery({ contactId: newContact.id });
+              // Invalidate license queries to fetch the newly created license
+              if ('license' in utils && utils.license.getByContactIds?.invalidate) {
+                utils.license.getByContactIds.invalidate({ contactIds: [newContact.id] });
+              }
             }
           });
         }
@@ -194,7 +196,17 @@ export default function AddContactModal({ clientId, isOpen, onClose }: AddContac
           </div>
           <div>
             <Label htmlFor="licenseType">License Type</Label>
-            <InputField id="licenseType" name="licenseType" placeholder="License Type" defaultValue={formData.licenseType ?? ''} onChange={e => setFormData({ ...formData, licenseType: e.target.value })} />
+            <Select
+              options={[
+                { value: 'Agency', label: 'Agency' },
+                { value: 'Director', label: 'Director' },
+              ]}
+              placeholder="Select License Type (optional)"
+              defaultValue={formData.licenseType ?? ''}
+              onChange={val => setFormData({ ...formData, licenseType: val || undefined })}
+              className={formErrors.licenseType ? 'border-error-500' : ''}
+            />
+            {formErrors.licenseType && <p className="text-error-500 text-sm mt-1">{formErrors.licenseType}</p>}
           </div>
           <div>
             <Label htmlFor="renewalMonth">Renewal Month</Label>

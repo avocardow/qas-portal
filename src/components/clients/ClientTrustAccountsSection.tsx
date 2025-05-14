@@ -84,7 +84,7 @@ export default function ClientTrustAccountsSection({ trustAccounts }: ClientTrus
           : name;
       },
     },
-    { key: 'bankName', header: 'Bank Name', sortable: true },
+    { key: 'bankName', header: 'Bank', sortable: true },
     { key: 'bsb', header: 'BSB', sortable: false },
       {
         key: 'accountNumber',
