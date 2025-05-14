@@ -130,23 +130,19 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
       } else {
         const licenseNumber = formData.licenseNumber || "";
         try {
-          await (createLicenseMutation.mutateAsync
+          const newLicense = await (createLicenseMutation.mutateAsync
             ? createLicenseMutation.mutateAsync({
                 holderType: "client",
                 clientId,
                 licenseNumber,
-                licenseType: formData.licenseType,
-                renewalMonth: formData.renewalMonth,
                 isPrimary: true,
               })
-            : new Promise<unknown>((resolve, reject) => {
+            : new Promise<{ id: string }>((resolve, reject) => {
                 createLicenseMutation.mutate(
                   {
                     holderType: "client",
                     clientId,
                     licenseNumber,
-                    licenseType: formData.licenseType,
-                    renewalMonth: formData.renewalMonth,
                     isPrimary: true,
                   },
                   {
@@ -156,7 +152,7 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
                 );
               })
           );
-          primaryLicenseId = selectedLicense?.id;
+          primaryLicenseId = newLicense.id;
         } catch {
           setErrorMessage('Failed to create license');
           return;
