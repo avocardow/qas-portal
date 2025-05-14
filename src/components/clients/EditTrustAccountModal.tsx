@@ -133,7 +133,6 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
           await (createLicenseMutation.mutateAsync
             ? createLicenseMutation.mutateAsync({
                 holderType: "client",
-                trustAccountId: existingTrustAccount.id,
                 clientId,
                 licenseNumber,
                 licenseType: formData.licenseType,
@@ -144,7 +143,6 @@ export default function EditTrustAccountModal({ clientId, existingTrustAccount, 
                 createLicenseMutation.mutate(
                   {
                     holderType: "client",
-                    trustAccountId: existingTrustAccount.id,
                     clientId,
                     licenseNumber,
                     licenseType: formData.licenseType,
