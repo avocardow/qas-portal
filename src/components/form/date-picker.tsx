@@ -5,11 +5,9 @@ import { useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import Label from "./Label";
-import { CalenderIcon } from "../../icons";
+import { CalenderIcon, XMarkIcon } from "../../icons";
 import Hook = flatpickr.Options.Hook;
 import DateOption = flatpickr.Options.DateOption;
-import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate';
-import 'flatpickr/dist/plugins/confirmDate/confirmDate.css';
 
 type PropsType = {
   id: string;
@@ -61,7 +59,6 @@ export default function DatePicker({
       maxDate,
       closeOnSelect,
       ...(onChange ? { onChange } : {}),
-      ...(showClearButton ? { plugins: [confirmDatePlugin({ showAlways: false, confirmText: "", clearText: "Clear" })] } : {}),
     });
 
     fpRef.current = flatPickrInstance;
@@ -71,7 +68,7 @@ export default function DatePicker({
         fpRef.current = null;
       }
     };
-  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime, closeOnSelect, showClearButton]);
+  }, [mode, onChange, id, defaultDate, minDate, maxDate, enableTime, closeOnSelect]);
 
   // Update the flatpickr date when defaultDate changes (e.g., opening form)
   useEffect(() => {
@@ -100,7 +97,40 @@ export default function DatePicker({
           placeholder={placeholder}
           className="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/20 dark:focus:border-brand-800 focus:ring-3 focus:outline-hidden h-12 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-base text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
-
+        {showClearButton && (
+          <button
+            type="button"
+            className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            onClick={() => {
+              // Clear the input and calendar
+              if (inputRef.current) {
+                inputRef.current.value = '';
+              }
+              if (fpRef.current) {
+                // flatpickr can return an instance or an array of instances
+                let instance = fpRef.current;
+                if (Array.isArray(instance)) {
+                  instance = instance[0];
+                }
+                if (instance) {
+                  instance.clear();
+                }
+              }
+              // Trigger onChange handlers with empty value and correct signature
+              if (onChange) {
+                const handlers = Array.isArray(onChange) ? onChange : [onChange];
+                // Use the same instance for passing to hooks
+                let inst = fpRef.current;
+                if (Array.isArray(inst)) {
+                  inst = inst[0];
+                }
+                handlers.forEach(fn => fn([], "", inst!));
+              }
+            }}
+          >
+            <XMarkIcon className="h-4 w-4" />
+          </button>
+        )}
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
           <CalenderIcon className="size-6" />
         </span>
