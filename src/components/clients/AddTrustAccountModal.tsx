@@ -109,8 +109,6 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
                 holderType: "client",
                 clientId,
                 licenseNumber,
-                licenseType: formData.licenseType,
-                renewalMonth: formData.renewalMonth,
                 isPrimary: true,
               })
             : new Promise<unknown>((resolve, reject) => {
@@ -119,8 +117,6 @@ export default function AddTrustAccountModal({ clientId, isOpen, onClose }: AddT
                     holderType: "client",
                     clientId,
                     licenseNumber,
-                    licenseType: formData.licenseType,
-                    renewalMonth: formData.renewalMonth,
                     isPrimary: true,
                   },
                   {
