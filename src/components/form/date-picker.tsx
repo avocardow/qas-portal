@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import Label from "./Label";
-import { CalenderIcon } from "../../icons";
 import Hook = flatpickr.Options.Hook;
 import DateOption = flatpickr.Options.DateOption;
 
@@ -125,11 +124,11 @@ export default function DatePicker({
               }
             }}
           >
-            <i className="fa-solid fa-xmark h-4 w-4" aria-hidden="true"></i>
+            <i className="fa-light fa-xmark-large h-4 w-4" aria-hidden="true"></i>
           </button>
         )}
         <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-          <CalenderIcon className="size-6" />
+          <i className="fa-light fa-calendar size-6" aria-hidden="true"></i>
         </span>
       </div>
     </div>
