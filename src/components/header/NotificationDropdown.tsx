@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+// import Link from "next/link"; // Removed - View All Notifications button hidden per user request
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Dropdown } from "../ui/dropdown/Dropdown";
@@ -24,6 +24,25 @@ export default function NotificationDropdown() {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const lastNotificationCountRef = useRef(0);
+  
+  // Accessibility: Screen reader announcement for new notifications
+  const [announceMessage, setAnnounceMessage] = useState<string>('');
+  const announceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Screen reader announcement function
+  const announceToScreenReader = useCallback((message: string) => {
+    setAnnounceMessage(message);
+    
+    // Clear previous timeout
+    if (announceTimeoutRef.current) {
+      clearTimeout(announceTimeoutRef.current);
+    }
+    
+    // Clear announcement after 1 second
+    announceTimeoutRef.current = setTimeout(() => {
+      setAnnounceMessage('');
+    }, 1000);
+  }, []);
 
   // tRPC queries and mutations
   const { 
@@ -140,7 +159,7 @@ export default function NotificationDropdown() {
     }
   }, [countData]);
 
-  // Detect new notifications and trigger browser notifications
+  // Detect new notifications and trigger browser notifications + screen reader announcements
   useEffect(() => {
     if (countData?.count !== undefined) {
       const currentCount = countData.count;
@@ -150,6 +169,12 @@ export default function NotificationDropdown() {
         // Find the newest notifications (those that weren't in the previous state)
         const newNotificationCount = currentCount - lastNotificationCountRef.current;
         const newestNotifications = unreadData.slice(0, newNotificationCount);
+        
+        // Announce new notifications to screen readers
+        const notificationText = newNotificationCount === 1 
+          ? `New notification: ${newestNotifications[0]?.message || 'You have a new notification'}`
+          : `${newNotificationCount} new notifications received`;
+        announceToScreenReader(notificationText);
         
         // Send browser notifications for new notifications
         newestNotifications.forEach(async (notification) => {
@@ -173,7 +198,7 @@ export default function NotificationDropdown() {
       
       lastNotificationCountRef.current = currentCount;
     }
-  }, [countData?.count, unreadData]);
+  }, [countData?.count, unreadData, announceToScreenReader]);
 
   // Helper function to get entity type from notification type
   const getEntityTypeFromNotificationType = (type: string): 'client' | 'audit' | 'task' | 'contact' | undefined => {
@@ -194,6 +219,9 @@ export default function NotificationDropdown() {
     return () => {
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
+      }
+      if (announceTimeoutRef.current) {
+        clearTimeout(announceTimeoutRef.current);
       }
     };
   }, []);
@@ -331,18 +359,48 @@ export default function NotificationDropdown() {
     toggleDropdown();
   };
 
+  // Keyboard navigation support
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleDropdown();
+    } else if (event.key === 'Escape' && isOpen) {
+      event.preventDefault();
+      closeDropdown();
+    }
+  }, [isOpen]);
+
   const showBadge = localUnreadCount > 0;
 
   return (
     <div className="relative">
+      {/* Screen reader announcement area */}
+      <div 
+        aria-live="polite" 
+        aria-atomic="true" 
+        className="sr-only"
+        role="status"
+      >
+        {announceMessage}
+      </div>
+      
       <button
-        className="dropdown-toggle relative flex size-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        className="dropdown-toggle relative flex size-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
         disabled={isLoadingUnread}
+        aria-label={`Notifications${showBadge ? ` (${localUnreadCount} unread)` : ''}`}
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        aria-describedby={connectionStatus !== 'connected' ? 'notification-status' : undefined}
+        type="button"
       >
         {/* Unread count badge */}
         {showBadge && (
-          <span className="absolute right-0 top-0.5 z-10 flex size-5 items-center justify-center rounded-full bg-orange-400 text-xs font-medium text-white">
+          <span 
+            className="absolute right-0 top-0.5 z-10 flex size-5 items-center justify-center rounded-full bg-orange-400 text-xs font-medium text-white"
+            aria-hidden="true"
+          >
             {localUnreadCount > 99 ? '99+' : localUnreadCount}
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
           </span>
@@ -369,6 +427,8 @@ export default function NotificationDropdown() {
         isOpen={isOpen}
         onClose={closeDropdown}
         className="shadow-theme-lg dark:bg-gray-dark absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 sm:w-[361px] lg:right-0 dark:border-gray-800"
+        role="menu"
+        aria-label="Notifications menu"
       >
         {/* Header with connection status */}
         <div className="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-700">
@@ -377,15 +437,23 @@ export default function NotificationDropdown() {
               Notifications
             </h5>
             {getConnectionStatusIcon()}
+            {/* Connection status for screen readers */}
+            {connectionStatus !== 'connected' && (
+              <span id="notification-status" className="sr-only">
+                Connection status: {connectionStatus}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {localUnreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 rounded px-2 py-1"
                 disabled={markAllAsReadMutation.isPending}
+                aria-label={`Mark all ${localUnreadCount} notifications as read`}
+                type="button"
               >
-                Mark all read
+                {markAllAsReadMutation.isPending ? 'Marking...' : 'Mark all read'}
               </button>
             )}
             <button
@@ -411,27 +479,46 @@ export default function NotificationDropdown() {
         </div>
 
         {/* Notifications list */}
-        <ul className="custom-scrollbar flex h-auto flex-col overflow-y-auto">
+        <ul 
+          className="custom-scrollbar flex h-auto flex-col overflow-y-auto"
+          role="menu"
+          aria-label={`${localNotifications.length} notifications`}
+        >
           {isLoadingUnread ? (
-            <li className="flex items-center justify-center p-8">
+            <li className="flex items-center justify-center p-8" role="status" aria-label="Loading notifications">
               <div className="size-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+              <span className="sr-only">Loading notifications...</span>
             </li>
           ) : unreadError ? (
-            <li className="flex items-center justify-center p-8 text-red-600">
+            <li className="flex items-center justify-center p-8 text-red-600" role="alert">
               <span>Failed to load notifications</span>
             </li>
           ) : localNotifications.length === 0 ? (
-            <li className="flex items-center justify-center p-8 text-gray-500">
+            <li className="flex items-center justify-center p-8 text-gray-500" role="status">
               <span>No notifications</span>
             </li>
           ) : (
-            localNotifications.map((notification) => (
-              <li key={notification.id}>
+            localNotifications.map((notification, index) => (
+              <li key={notification.id} role="none">
                 <DropdownItem
                   onItemClick={() => handleNotificationClick(notification)}
-                  className={`px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 cursor-pointer ${
+                  className={`px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
                     !notification.isRead ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                   }`}
+                  role="menuitem"
+                  tabIndex={0}
+                  aria-label={`${notification.isRead ? 'Read' : 'Unread'} notification: ${notification.message}. Created ${new Date(notification.createdAt).toLocaleDateString('en-AU', {
+                    day: 'numeric',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}. Press Enter to view.`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleNotificationClick(notification);
+                    }
+                  }}
                 >
                   <span className="z-1 relative block h-10 w-full max-w-10 rounded-full">
                     <div className="flex size-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
@@ -439,6 +526,7 @@ export default function NotificationDropdown() {
                         className="size-5 text-gray-600 dark:text-gray-300"
                         fill="currentColor"
                         viewBox="0 0 20 20"
+                        aria-hidden="true"
                       >
                         <path
                           fillRule="evenodd"
@@ -448,8 +536,11 @@ export default function NotificationDropdown() {
                       </svg>
                     </div>
                     {!notification.isRead && (
-                      <span className="bg-blue-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
-                    )}
+                      <span 
+                        className="bg-blue-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
+                        aria-hidden="true"
+                      ></span>
+    )}
                   </span>
 
                   <span className="block flex-1">
@@ -476,14 +567,7 @@ export default function NotificationDropdown() {
           )}
         </ul>
 
-        {/* Footer */}
-        <Link
-          href="/notifications"
-          className="mt-3 block rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
-          onClick={closeDropdown}
-        >
-          View All Notifications
-        </Link>
+        {/* Footer - View All Notifications button hidden per user request */}
       </Dropdown>
     </div>
   );

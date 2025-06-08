@@ -451,6 +451,8 @@ model Notification {
   @@index([userId, type])
   @@index([type, entityId])
   @@index([createdByUserId])
+  @@index([userId, createdAt(sort: Desc)]) // Optimizes cursor-based pagination
+  @@index([userId, isRead, createdAt(sort: Desc)]) // Optimizes unread filtering with pagination
   @@map("notifications")
 }
 

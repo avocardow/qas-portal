@@ -5,6 +5,8 @@ import { TRPCError } from '@trpc/server';
 import { NotificationType } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { notificationEventEmitter, type NotificationReadStatusEvent } from '@/server/services/eventEmitter';
+import { NotificationCache } from '@/lib/redis';
+import { MetricsCollector } from '@/lib/metrics';
 
 // Zod schemas for input validation
 const notificationPrioritySchema = z.enum(['low', 'medium', 'high', 'critical']);
@@ -33,6 +35,7 @@ const createAuditUpdateSchema = z.object({
 const getUserNotificationsSchema = z.object({
   limit: z.number().min(1).max(100).optional().default(20),
   offset: z.number().min(0).optional().default(0),
+  cursor: z.string().optional(), // Cursor-based pagination
   type: z.nativeEnum(NotificationType).optional(),
   unreadOnly: z.boolean().optional().default(false)
 });
@@ -100,19 +103,41 @@ export const notificationRouter = createTRPCRouter({
     }),
 
   /**
-   * Get unread notification count for the current user
+   * Get unread notification count for the current user with caching
    */
   getCount: protectedProcedure
     .query(async ({ ctx }) => {
       try {
-        const count = await ctx.db.notification.count({
-          where: {
-            userId: ctx.session.user.id,
-            isRead: false
-          }
-        });
+        // Try to get from cache first
+        const cachedCount = await MetricsCollector.trackCacheOperation('get', () =>
+          NotificationCache.getCachedNotificationCount(ctx.session.user.id, 'unread')
+        );
 
-        return { count };
+        return await MetricsCollector.trackQuery('getCount', async () => {
+          if (cachedCount !== null) {
+            // Track cache hit
+            MetricsCollector.updateActiveNotifications(cachedCount);
+            return { count: cachedCount };
+          }
+
+          // Not in cache, query database
+          const count = await ctx.db.notification.count({
+            where: {
+              userId: ctx.session.user.id,
+              isRead: false
+            }
+          });
+
+          // Cache the result
+          await MetricsCollector.trackCacheOperation('set', () =>
+            NotificationCache.cacheNotificationCount(ctx.session.user.id, count, 'unread')
+          );
+
+          // Update metrics
+          MetricsCollector.updateActiveNotifications(count);
+
+          return { count };
+        }, cachedCount !== null);
       } catch (error) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
@@ -259,18 +284,27 @@ export const notificationRouter = createTRPCRouter({
     }),
 
   /**
-   * Get notifications for the current user
+   * Get notifications for the current user with cursor-based pagination
    */
   getUserNotifications: protectedProcedure
     .input(getUserNotificationsSchema)
     .query(async ({ ctx, input }) => {
       try {
+        // Build where clause
+        const whereClause = {
+          userId: ctx.session.user.id,
+          ...(input.type && { type: input.type }),
+          ...(input.unreadOnly && { isRead: false }),
+          // Cursor-based pagination: get notifications older than cursor
+          ...(input.cursor && {
+            createdAt: {
+              lt: new Date(input.cursor)
+            }
+          })
+        };
+
         const notifications = await ctx.db.notification.findMany({
-          where: {
-            userId: ctx.session.user.id,
-            ...(input.type && { type: input.type }),
-            ...(input.unreadOnly && { isRead: false })
-          },
+          where: whereClause,
           select: {
             id: true,
             type: true,
@@ -295,30 +329,95 @@ export const notificationRouter = createTRPCRouter({
           orderBy: {
             createdAt: 'desc'
           },
-          take: input.limit,
-          skip: input.offset
+          take: input.limit + 1 // Get one extra to check if there are more
         });
 
-        const totalCount = await ctx.db.notification.count({
-          where: {
-            userId: ctx.session.user.id,
-            ...(input.type && { type: input.type }),
-            ...(input.unreadOnly && { isRead: false })
-          }
-        });
+        // Check if there are more notifications
+        const hasMore = notifications.length > input.limit;
+        if (hasMore) {
+          notifications.pop(); // Remove the extra notification
+        }
 
-        const unreadCount = await ctx.db.notification.count({
-          where: {
-            userId: ctx.session.user.id,
-            isRead: false
-          }
-        });
+        // Get next cursor from the last notification
+        const nextCursor = notifications.length > 0 
+          ? notifications[notifications.length - 1]?.createdAt.toISOString()
+          : null;
+
+        // Get total counts (cached for performance)
+        const filterHash = input.type ? `type:${input.type}` : '';
+        const unreadFilterHash = input.unreadOnly ? 'unread' : '';
+        
+        // Try to get cached counts first
+        const [cachedTotalCount, cachedUnreadCount] = await Promise.all([
+          NotificationCache.getCachedNotificationCount(
+            ctx.session.user.id, 
+            'total', 
+            `${filterHash}${unreadFilterHash}`
+          ),
+          NotificationCache.getCachedNotificationCount(
+            ctx.session.user.id, 
+            'unread'
+          )
+        ]);
+
+        let totalCount = cachedTotalCount;
+        let unreadCount = cachedUnreadCount;
+
+        // Query database for missing counts
+        const queries = [];
+        if (totalCount === null) {
+          queries.push(
+            ctx.db.notification.count({
+              where: {
+                userId: ctx.session.user.id,
+                ...(input.type && { type: input.type }),
+                ...(input.unreadOnly && { isRead: false })
+              }
+            }).then(count => {
+              totalCount = count;
+              // Cache the result
+              NotificationCache.cacheNotificationCount(
+                ctx.session.user.id, 
+                count, 
+                'total', 
+                `${filterHash}${unreadFilterHash}`
+              );
+            })
+          );
+        }
+
+        if (unreadCount === null) {
+          queries.push(
+            ctx.db.notification.count({
+              where: {
+                userId: ctx.session.user.id,
+                isRead: false
+              }
+            }).then(count => {
+              unreadCount = count;
+              // Cache the result
+              NotificationCache.cacheNotificationCount(
+                ctx.session.user.id, 
+                count, 
+                'unread'
+              );
+            })
+          );
+        }
+
+        // Wait for any missing counts to be fetched
+        if (queries.length > 0) {
+          await Promise.all(queries);
+        }
 
         return {
           notifications,
-          totalCount,
-          unreadCount,
-          hasMore: input.offset + input.limit < totalCount
+          totalCount: totalCount ?? 0,
+          unreadCount: unreadCount ?? 0,
+          hasMore,
+          nextCursor,
+          // Legacy support for offset-based pagination
+          hasMoreLegacy: input.offset + input.limit < (totalCount ?? 0)
         };
       } catch (error) {
         throw new TRPCError({
@@ -362,8 +461,17 @@ export const notificationRouter = createTRPCRouter({
           }
         });
 
-        // Broadcast read status change to all user sessions for multi-device sync
+        // Invalidate user's notification cache since counts have changed
         if (result.count > 0) {
+          await MetricsCollector.trackCacheOperation('invalidate', () =>
+            NotificationCache.invalidateUserCache(ctx.session.user.id)
+          );
+          
+          // Track notification read metrics
+          MetricsCollector.trackNotificationRead('mixed', 'single');
+          MetricsCollector.updateActiveNotifications(unreadCount);
+          
+          // Broadcast read status change to all user sessions for multi-device sync
           notificationEventEmitter.broadcastReadStatusChange({
             userId: ctx.session.user.id,
             notificationIds,
@@ -451,8 +559,17 @@ export const notificationRouter = createTRPCRouter({
           }
         });
 
-        // Broadcast bulk read status change to all user sessions for multi-device sync
+        // Invalidate user's notification cache since counts have changed
         if (result.count > 0) {
+          await MetricsCollector.trackCacheOperation('invalidate', () =>
+            NotificationCache.invalidateUserCache(ctx.session.user.id)
+          );
+          
+          // Track notification read metrics
+          MetricsCollector.trackNotificationRead('mixed', 'bulk');
+          MetricsCollector.updateActiveNotifications(0);
+          
+          // Broadcast bulk read status change to all user sessions for multi-device sync
           notificationEventEmitter.broadcastBulkReadStatusChange({
             userId: ctx.session.user.id,
             notificationIds,

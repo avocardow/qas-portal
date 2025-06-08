@@ -44,10 +44,39 @@ export default function TRPCProvider({
   );
 
   const [trpcClient] = useState(() => {
-    // Create WebSocket client for subscriptions (client-side only)
+    // Create WebSocket client for subscriptions with enhanced exponential backoff
     const wsClient = typeof window !== "undefined" ? createWSClient({
       url: getWebSocketUrl(),
-      retryDelayMs: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+             // Enhanced exponential backoff with jitter and max attempts
+       retryDelayMs: (attemptIndex) => {
+         // Cap at 10 attempts with very long delay for final attempts
+         if (attemptIndex >= 10) {
+           console.warn('WebSocket max retry attempts reached, using maximum delay');
+           return 60000; // 1 minute delay for final attempts
+         }
+         
+         // Exponential backoff: 1s, 2s, 4s, 8s, 16s, 30s (cap at 30s)
+         const baseDelay = 1000 * Math.pow(2, attemptIndex);
+         const maxDelay = 30000; // 30 seconds max
+         const cappedDelay = Math.min(baseDelay, maxDelay);
+         
+         // Add jitter (±20%) to prevent thundering herd
+         const jitter = cappedDelay * 0.2 * (Math.random() - 0.5);
+         const finalDelay = Math.max(500, cappedDelay + jitter);
+         
+         console.log(`WebSocket retry attempt ${attemptIndex + 1} in ${Math.round(finalDelay)}ms`);
+         return finalDelay;
+       },
+      // Connection-level event handlers
+      onOpen: () => {
+        console.log('✅ WebSocket connection established');
+      },
+             onClose: (cause) => {
+         console.log('🔌 WebSocket connection closed:', cause?.code);
+       },
+      onError: (error) => {
+        console.error('❌ WebSocket connection error:', error);
+      },
     }) : null;
 
     return api.createClient({

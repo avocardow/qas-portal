@@ -181,13 +181,9 @@ describe('NotificationDropdown', () => {
       
       render(<NotificationDropdown />);
       
-      // Open dropdown
+      // When loading, the button should be disabled - this IS the loading state
       const button = screen.getByRole('button');
-      fireEvent.click(button);
-      
-      await waitFor(() => {
-        expect(screen.getByText('Loading...')).toBeInTheDocument();
-      });
+      expect(button).toBeDisabled();
     });
 
     it('shows error state when there is an error', async () => {
@@ -262,7 +258,7 @@ describe('NotificationDropdown', () => {
         expect(screen.getByText(/John Smith/)).toBeInTheDocument();
       });
       
-      const notification = screen.getByText(/John Smith/).closest('li');
+      const notification = screen.getByText(/John Smith/).closest('button');
       if (notification) {
         fireEvent.click(notification);
         
@@ -284,7 +280,7 @@ describe('NotificationDropdown', () => {
         expect(screen.getByText(/John Smith/)).toBeInTheDocument();
       });
       
-      const notification = screen.getByText(/John Smith/).closest('li');
+      const notification = screen.getByText(/John Smith/).closest('button');
       if (notification) {
         fireEvent.click(notification);
         
