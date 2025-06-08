@@ -8,6 +8,7 @@ import {
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { ActivityLogType, Prisma } from "@prisma/client";
+import { NotificationService } from '@/server/services/notificationService';
 
 // Zod schemas for client operations
 const clientGetAllSchema = z.object({
@@ -341,16 +342,38 @@ export const clientRouter = createTRPCRouter({
     }),
   create: adminOrManagerProcedure
     .input(clientCreateSchema)
-    .mutation(({ ctx, input }) => {
-      return ctx.db.client.create({ data: input });
+    .mutation(async ({ ctx, input }) => {
+      // Create the client
+      const client = await ctx.db.client.create({ data: input });
+      
+      // Trigger notification if client is assigned to someone other than the creator
+      if (input.assignedUserId && input.assignedUserId !== ctx.session.user.id) {
+        try {
+          const notificationService = new NotificationService(ctx.db);
+          await notificationService.createClientAssignmentNotification({
+            clientId: client.id,
+            managerId: input.assignedUserId,
+            createdByUserId: ctx.session.user.id
+          });
+        } catch (error) {
+          // Log error but don't fail the main operation
+          console.error('Failed to create client assignment notification:', error);
+        }
+      }
+      
+      return client;
     }),
   update: protectedProcedure.use(enforceRole(["Admin", "Manager", "Auditor"]))
     .input(clientUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { clientId, ...data } = input;
       // Retrieve old client to detect assignment changes
-      const oldClient = await ctx.db.client.findUnique({ where: { id: clientId }, select: { assignedUserId: true } });
+      const oldClient = await ctx.db.client.findUnique({ 
+        where: { id: clientId }, 
+        select: { assignedUserId: true, clientName: true } 
+      });
       const updatedClient = await ctx.db.client.update({ where: { id: clientId }, data });
+      
       // Log assignment activity if assignedUserId changed
       if (input.assignedUserId !== undefined && input.assignedUserId !== oldClient?.assignedUserId) {
         const user = await ctx.db.user.findUnique({ where: { id: input.assignedUserId as string }, select: { name: true } });
@@ -362,7 +385,23 @@ export const clientRouter = createTRPCRouter({
             content: `${user?.name} assigned to Client`,
           },
         });
+        
+        // Trigger notification if assigned to someone other than the person making the change
+        if (input.assignedUserId && input.assignedUserId !== ctx.session.user.id) {
+          try {
+            const notificationService = new NotificationService(ctx.db);
+            await notificationService.createClientAssignmentNotification({
+              clientId,
+              managerId: input.assignedUserId,
+              createdByUserId: ctx.session.user.id
+            });
+          } catch (error) {
+            // Log error but don't fail the main operation
+            console.error('Failed to create client assignment notification:', error);
+          }
+        }
       }
+      
       return updatedClient;
     }),
   archive: protectedProcedure

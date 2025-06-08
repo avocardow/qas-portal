@@ -1,0 +1,84 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# 🚨 CRITICAL TIMEOUT PROTECTION RULES
+
+## NEVER FORGET: Commands Can Hang Indefinitely!
+
+### BEFORE EVERY SINGLE COMMAND EXECUTION:
+
+1. **CHECK THE TIMEOUT THRESHOLD** (see table below)
+2. **SET `is_background=false`** (unless specifically a background process)
+3. **MONITOR EXECUTION TIME** actively during command run
+4. **BE READY TO TERMINATE** hanging commands immediately
+5. **LOG TIMEOUT INCIDENTS** in workflow_state.mdc ## 5. Items
+
+---
+
+## Quick Timeout Reference Table
+
+| Command Type | Timeout | Examples |
+|--------------|---------|----------|
+| **Quick Operations** | 10s | `git status`, `ls`, `cd`, file operations |
+| **Package Management** | 3min | `pnpm install`, `npm install`, `pnpm update` |
+| **Build Commands** | 5min | `pnpm build`, `next build`, `npm run build` |
+| **Test Suites** | 5min | `pnpm test`, `npm test`, `playwright test` |
+| **Database Operations** | 90s | `prisma db push`, `prisma migrate`, `prisma generate` |
+| **Git Operations** | 90s | `git push`, `git pull`, `git clone`, `git fetch` |
+| **Linting/Formatting** | 60s | `eslint`, `prettier`, `pnpm lint` |
+| **Task-Master Commands** | 30s | `task-master next`, `task-master set-status` |
+| **Context/MCP Queries** | 90s | `@context7`, other MCP server queries |
+| **TypeScript Checking** | 90s | `tsc --noEmit`, `pnpm type-check` |
+
+---
+
+## 🔥 COMMANDS THAT COMMONLY HANG:
+
+- ❌ `pnpm install` - Network issues, registry problems
+- ❌ `npm test` - Infinite loops, resource exhaustion  
+- ❌ `git push` - Network timeouts, authentication issues
+- ❌ `prisma db push` - Database connection problems
+- ❌ `next build` - Memory exhaustion, infinite compilation
+- ❌ `tsc --noEmit` - Complex type checking, circular references
+
+---
+
+## TIMEOUT ESCALATION PATTERN:
+
+1. **First Timeout**: Terminate, retry with conservative parameters
+2. **Second Timeout (same command type)**: Terminate, retry with minimal scope
+3. **Third Timeout**: **ESCALATE TO HUMAN** - Document the issue
+
+---
+
+## LOGGING REQUIREMENTS:
+
+Always log in `workflow_state.mdc ## 5. Items > Command Timeout Tracking`:
+```
+- Recent timeouts: [command type, timeout duration, retry attempts]
+- Performance degradation: [commands taking longer than usual]  
+- Environment issues: [network, disk, CPU constraints affecting commands]
+```
+
+---
+
+## BACKGROUND PROCESS EXCEPTION:
+
+**ONLY set `is_background=true` for:**
+- Development servers (`pnpm dev`, `npm start`)
+- Long-running services designed to run continuously
+- **NEVER** for builds, tests, git operations, or package management
+
+---
+
+## 🚨 IMMEDIATE ACTION REQUIRED:
+
+If you see ANY command running longer than its timeout threshold:
+1. **TERMINATE IT IMMEDIATELY** 
+2. **LOG THE INCIDENT**
+3. **APPLY RECOVERY STRATEGY**
+4. **ESCALATE IF PATTERN CONTINUES**
+
+**Remember: A hanging command blocks ALL progress. Prevention is critical!**

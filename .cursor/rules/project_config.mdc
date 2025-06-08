@@ -194,7 +194,13 @@ alwaysApply: true
 
 ## 13. AI Operational Rules
 - **State Management:** Strictly follow instructions and maintain state in `workflow_state.mdc`. Update workflow state before starting and after completing each significant step.
-- **Command Execution:** Use terminal execution capabilities for all shell commands. Verify command success before proceeding to the next step.
+- **🚨 CRITICAL: Command Execution with Timeout Protection:** 
+  - **NEVER run commands without timeout awareness** - Commands can hang indefinitely and block progress
+  - **ALWAYS set is_background=false** unless command is designed to run in background (servers, long-running processes)
+  - **MONITOR command execution time** against defined thresholds in section 8a
+  - **TERMINATE commands exceeding timeout** and apply timeout recovery strategies immediately
+  - **LOG timeout incidents** for performance monitoring and escalation patterns
+  - **USE progressive retry strategy** with more conservative parameters on timeout retry
 - **File Modifications:** Use available editing capabilities to modify project files. Review changes carefully and ensure they align with project standards.
 - **Error Recovery:** Follow enhanced error classification and recovery strategies. After systematic attempts, document issues in workflow state and request human guidance if needed.
 - **Quality Assurance:** Ensure all code changes meet project standards, pass all tests, and are properly documented before considering a task complete.

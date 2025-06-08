@@ -1,6 +1,6 @@
 # Task ID: 3
 # Title: Implement tRPC Notification Router
-# Status: pending
+# Status: done
 # Dependencies: 1, 2
 # Priority: high
 # Description: Create a tRPC router for notifications with queries, mutations, and subscription endpoints.
@@ -11,37 +11,37 @@ Create src/server/api/routers/notification.ts with the following endpoints: 'get
 Test each endpoint with various input scenarios. Verify authentication requirements. Test subscription with multiple concurrent users. Ensure proper error handling for invalid inputs.
 
 # Subtasks:
-## 1. Create notification router file structure [pending]
+## 1. Create notification router file structure [done]
 ### Dependencies: None
 ### Description: Set up the basic file structure for the notification router with proper imports and router initialization
 ### Details:
 Create the file src/server/api/routers/notification.ts. Import the necessary tRPC components (router, procedure) from your tRPC server initialization file. Initialize an empty notification router using the router() function. Export the router for later integration with the main app router. Include any required validation libraries (like zod) and authentication utilities that will be needed for the endpoints.
 
-## 2. Implement query endpoints for notifications [pending]
+## 2. Implement query endpoints for notifications [done]
 ### Dependencies: 3.1
 ### Description: Create the 'getUnread' and 'getCount' query procedures for fetching unread notifications and counts
 ### Details:
 In the notification router, implement two query procedures: 1) 'getUnread' - Add authentication middleware to ensure only authenticated users can access their notifications. Use input validation to handle pagination/filtering parameters if needed. Implement the resolver function to fetch unread notifications for the current user from your data source. 2) 'getCount' - Similarly secure this endpoint and implement a resolver that returns just the count of unread notifications for the authenticated user. Both queries should properly handle error cases and return typed responses.
 
-## 3. Implement mutation endpoints for notifications [pending]
+## 3. Implement mutation endpoints for notifications [done]
 ### Dependencies: 3.1
 ### Description: Create the 'markAsRead' and 'markAllAsRead' mutation procedures
 ### Details:
 Add two mutation procedures to the notification router: 1) 'markAsRead' - Use input validation to ensure a valid notification ID is provided. Add authentication to verify the user owns the notification being marked. Implement the resolver to update the notification status in your data store. 2) 'markAllAsRead' - Add authentication to ensure only the user's own notifications are affected. Implement the resolver to update all unread notifications for the current user. Both mutations should return appropriate success/failure responses and handle error cases properly.
 
-## 4. Implement subscription endpoint for real-time notifications [pending]
+## 4. Implement subscription endpoint for real-time notifications [done]
 ### Dependencies: 3.1
 ### Description: Create the 'subscribe' subscription procedure with proper user filtering
 ### Details:
 Implement the 'subscribe' subscription procedure in the notification router. Add authentication to ensure users can only subscribe to their own notifications. Create a subscription resolver that establishes a real-time connection and emits new notifications as they arrive. Implement proper filtering logic to ensure users only receive notifications intended for them (filter by userId). Set up any necessary event emitters or pub/sub mechanisms needed for the subscription to work. Ensure proper cleanup when subscriptions are terminated.
 
-## 5. Add security and validation [pending]
+## 5. Add security and validation [done]
 ### Dependencies: 3.2, 3.3, 3.4
 ### Description: Enhance all endpoints with comprehensive input validation and security checks
 ### Details:
 Review all implemented endpoints and add thorough input validation using a schema validation library like Zod. Implement proper error handling for all procedures. Add security checks to ensure users can only access their own notifications. For the subscription endpoint, add additional validation to prevent unauthorized access to notification streams. Implement rate limiting if necessary to prevent abuse. Add logging for security-relevant events. Test all endpoints with various invalid inputs to ensure robust validation.
 
-## 6. Integrate notification router with main tRPC router [pending]
+## 6. Integrate notification router with main tRPC router [done]
 ### Dependencies: 3.5
 ### Description: Add the notification router to the main application router and test the complete implementation
 ### Details:

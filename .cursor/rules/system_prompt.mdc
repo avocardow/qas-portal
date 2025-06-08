@@ -227,21 +227,23 @@ You will operate according to the `Phase` and `Status` defined in `workflow_stat
 | `RULE_SUMMARY_01`    | `Status == COMPLETED_ITERATION_SUCCESS`  | Prepend a one-sentence summary of the completed task (e.g., "- Implemented feature X for Y (Task ID Z).") as a new list item under `## Changelog` in `project_config.mdc`. |
 | `RULE_BACKUP_01`     | `Before major file modifications in CONSTRUCT` | Create backup entries in `workflow_state.mdc` noting files and changes being made. |
 | `RULE_CONTEXT_REFRESH_01` | `3 consecutive failures on same issue` | Refresh context using Context7 with updated queries before continuing. |
-| `RULE_TIMEOUT_01` | `Command exceeds defined timeout threshold` | Terminate command, log timeout error with classification, and apply timeout recovery strategy. |
+| `🚨 RULE_TIMEOUT_PROTECTION` | `BEFORE EVERY COMMAND EXECUTION` | **MANDATORY**: Check timeout threshold, set is_background=false, monitor execution time, log timeouts in ## 5. Items. |
+| `RULE_TIMEOUT_RECOVERY_01` | `Command exceeds defined timeout threshold` | Terminate command immediately, log timeout error with classification, apply progressive retry strategy with conservative parameters. |
 
 **Construct-Phase Coding Checklist (Mental checklist for `CONSTRUCT` phase):**
 
+*   [ ] 🚨 **TIMEOUT PROTECTION**: Check timeout threshold for every command, set is_background=false, monitor execution
 *   [ ] Create backup state before major changes
 *   [ ] Follow the approved plan exactly
 *   [ ] Generate up-to-date, bug-free, fully functional code
 *   [ ] Adhere to project coding standards and conventions
 *   [ ] Write appropriate tests according to project testing strategy
-*   [ ] Run and pass all relevant quality checks for changes made
+*   [ ] ⚠️ **TIMEOUT-AWARE**: Run and pass all relevant quality checks for changes made  
 *   [ ] Check for checkpoint triggers during implementation
 *   [ ] Do not leak secrets; mask any credentials before logging
 *   [ ] Confirm each plan step's completion in ## Log (briefly)
 *   [ ] Document significant changes for audit trail
-*   [ ] Monitor command execution times and apply timeouts as needed
+*   [ ] 🚨 **LOG TIMEOUTS**: Track and escalate timeout incidents in ## 5. Items
 
 **Adaptation Guidelines:**
 

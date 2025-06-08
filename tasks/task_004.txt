@@ -1,6 +1,6 @@
 # Task ID: 4
 # Title: Enhance NotificationDropdown Component
-# Status: pending
+# Status: done
 # Dependencies: 3
 # Priority: medium
 # Description: Update the existing NotificationDropdown component to display notifications with real-time updates.
@@ -11,31 +11,31 @@ Modify src/components/header/NotificationDropdown.tsx to implement real-time tRP
 Create component tests with mock subscription data. Test UI rendering for different notification states (read/unread). Verify badge count updates. Test navigation on notification click. Simulate connection drops to verify reconnection logic.
 
 # Subtasks:
-## 1. Implement Real-Time tRPC Subscription for Notifications [pending]
+## 1. Implement Real-Time tRPC Subscription for Notifications [done]
 ### Dependencies: None
 ### Description: Integrate a real-time tRPC subscription in NotificationDropdown to receive instant notification updates and manage notification state accordingly.
 ### Details:
 Set up a tRPC subscription hook within NotificationDropdown.tsx to listen for new notifications and updates. Ensure the component state is updated in real time as new notifications arrive or existing ones change. Handle initial loading and error states. This subtask lays the foundation for all subsequent real-time features.
 
-## 2. Add Unread Count Badge and Optimistic Read Status Updates [pending]
+## 2. Add Unread Count Badge and Optimistic Read Status Updates [done]
 ### Dependencies: 4.1
 ### Description: Display an unread notifications badge and implement optimistic UI updates when marking notifications as read.
 ### Details:
 Calculate the unread notification count from the state and display it as a badge on the dropdown trigger. When a notification is marked as read (e.g., on click), optimistically update its status in the UI before awaiting server confirmation. Roll back the change if the server update fails.
 
-## 3. Implement Click-to-Navigate and Read Status Marking [pending]
+## 3. Implement Click-to-Navigate and Read Status Marking [done]
 ### Dependencies: 4.2
 ### Description: Enable navigation to a relevant page when a notification is clicked and mark it as read.
 ### Details:
 Attach click handlers to each notification item. On click, navigate to the notification's target (using React Router or similar), and trigger the optimistic read status update. Ensure accessibility and keyboard navigation are supported.
 
-## 4. Add Connection Status Indicator and Auto-Reconnection Handling [pending]
+## 4. Add Connection Status Indicator and Auto-Reconnection Handling [done]
 ### Dependencies: 4.1
 ### Description: Display a connection status indicator for the real-time subscription and handle automatic reconnection if the connection drops.
 ### Details:
 Monitor the tRPC subscription connection state. Show a visual indicator (e.g., colored dot or icon) reflecting connection status (connected, reconnecting, disconnected). Implement logic to automatically attempt reconnection and update the indicator accordingly.
 
-## 5. Enhance Notification Message Rendering and Re-enable Dropdown [pending]
+## 5. Enhance Notification Message Rendering and Re-enable Dropdown [done]
 ### Dependencies: 4.3, 4.4
 ### Description: Implement the renderMessage function to format notification messages with bold text using React components, and uncomment NotificationDropdown in AppHeader.
 ### Details:

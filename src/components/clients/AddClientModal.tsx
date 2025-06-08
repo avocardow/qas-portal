@@ -21,6 +21,7 @@ const clientFormSchema = z.object({
   address: z.string().optional(),
   city: z.string().optional(),
   postcode: z.string().optional(),
+  assignedUserId: z.string().uuid().nullable().optional(),
   status: z.enum(['prospect', 'active', 'archived']),
   auditPeriodEndDate: z.string().optional(),
   nextContactDate: z.string().optional(),
@@ -35,6 +36,7 @@ type AddClientFormData = z.infer<typeof clientFormSchema>;
 export default function AddClientModal() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { data: managers = [] } = api.user.getAssignableManagers.useQuery();
   const createClientMutation = process.env.NODE_ENV === 'test'
     ? { mutateAsync: async () => ({ id: 'test-client-id' }), status: 'idle' }
     : api.clients.create.useMutation();
@@ -52,6 +54,7 @@ export default function AddClientModal() {
       address: '',
       city: '',
       postcode: '',
+      assignedUserId: null,
       status: 'prospect',
       auditPeriodEndDate: '',
       nextContactDate: '',
@@ -86,6 +89,7 @@ export default function AddClientModal() {
         nextContactDate: toUtcDate(formData.nextContactDate),
         estAnnFees: formData.estAnnFees,
         xeroContactId: null,
+        assignedUserId: formData.assignedUserId,
       };
       const client = await createClientMutation.mutateAsync(createPayload);
       // 2. Create first audit for client
@@ -142,43 +146,63 @@ export default function AddClientModal() {
                 )}
               />
             </div>
-            {/* 3. Phone */}
+            {/* 3. Assigned User */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Assigned User</label>
+              <Controller
+                control={control}
+                name="assignedUserId"
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    value={field.value ?? ''}
+                    className="mt-1 block w-full rounded border border-gray-300 px-3 py-2"
+                  >
+                    <option value="">Unassigned</option>
+                    {managers.map((m) => (
+                      <option key={m.id} value={m.id}>{m.name ?? m.email}</option>
+                    ))}
+                  </select>
+                )}
+              />
+            </div>
+            {/* 4. Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Phone</label>
               <input {...register('phone')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
             </div>
-            {/* 4. Email */}
+            {/* 5. Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Email</label>
               <input type="email" {...register('email')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
             </div>
-            {/* 5. ABN */}
+            {/* 6. ABN */}
             <div>
               <label className="block text-sm font-medium text-gray-700">ABN</label>
               <input {...register('abn')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900" />
             </div>
-            {/* 6. Address */}
+            {/* 7. Address */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Address</label>
               <input {...register('address')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900" />
             </div>
-            {/* 7. City */}
+            {/* 8. City */}
             <div>
               <label className="block text-sm font-medium text-gray-700">City</label>
               <input {...register('city')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900" />
             </div>
-            {/* 8. Postcode */}
+            {/* 9. Postcode */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Postcode</label>
               <input {...register('postcode')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-gray-900" />
             </div>
-            {/* 9. Audit Year */}
+            {/* 10. Audit Year */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Audit Year</label>
               <input type="number" {...register('auditYear', { valueAsNumber: true })} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
               {errors.auditYear && <p className="text-sm text-red-600">{errors.auditYear.message}</p>}
             </div>
-            {/* 10. Audit Stage */}
+            {/* 11. Audit Stage */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Audit Stage</label>
               <Controller
@@ -196,7 +220,7 @@ export default function AddClientModal() {
                 )}
               />
             </div>
-            {/* 11. Audit Period End Date */}
+            {/* 12. Audit Period End Date */}
             <Controller
               control={control}
               name="auditPeriodEndDate"
@@ -217,7 +241,7 @@ export default function AddClientModal() {
                 />
               )}
             />
-            {/* 12. Next Contact Date */}
+            {/* 13. Next Contact Date */}
             <Controller
               control={control}
               name="nextContactDate"
@@ -239,7 +263,7 @@ export default function AddClientModal() {
                 />
               )}
             />
-            {/* 13. Estimated Annual Fees */}
+            {/* 14. Estimated Annual Fees */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Estimated Annual Fees</label>
               <input type="number" step="0.01" {...register('estAnnFees')} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
