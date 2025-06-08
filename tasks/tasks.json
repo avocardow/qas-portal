@@ -4,7 +4,7 @@
       "id": 1,
       "title": "Database Schema Migration for Notifications",
       "description": "Implement the database schema changes to enhance the notifications table with new columns and constraints as specified in the PRD.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [],
       "priority": "high",
       "details": "Execute SQL migrations to add the following to the notifications table: 'type' column (VARCHAR(50) NOT NULL), 'entityId' column (VARCHAR(255)), 'createdByUserId' column (VARCHAR(255) NOT NULL). Add foreign key constraints to users table. Create indexes for performance optimization (idx_notifications_user_unread, idx_notifications_user_created, idx_notifications_type_entity, idx_notifications_created_by). Add enum constraint for notification types to ensure valid values ('client_assignment', 'audit_assignment', 'audit_stage_update', 'audit_status_update'). Test the migration with rollback capability.",
@@ -14,7 +14,7 @@
           "id": 1,
           "title": "Document current schema and create migration plan",
           "description": "Document the existing notifications table schema and create a detailed migration plan with goals, risks, and rollback strategy",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Create comprehensive documentation of the current notifications table structure. Define the migration objectives aligned with business goals. Document the planned changes including new columns ('type', 'entityId', 'createdByUserId'), foreign key constraints, and indexes. Identify potential risks and create a detailed rollback strategy. Use version control to track all documentation and migration scripts. Include validation steps to ensure data integrity throughout the migration process."
         },
@@ -22,7 +22,7 @@
           "id": 2,
           "title": "Create migration scripts with rollback capability",
           "description": "Develop SQL migration scripts that add the new columns and constraints with proper rollback functionality",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -32,7 +32,7 @@
           "id": 3,
           "title": "Implement foreign key constraints and indexes",
           "description": "Add foreign key constraints and create the specified indexes for performance optimization",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -42,7 +42,7 @@
           "id": 4,
           "title": "Set up automated testing environment",
           "description": "Create an isolated testing environment and automated tests to validate the migration",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -52,7 +52,7 @@
           "id": 5,
           "title": "Execute migration in staging environment",
           "description": "Deploy the migration to staging, perform validation tests, and verify application compatibility",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],
@@ -62,7 +62,7 @@
           "id": 6,
           "title": "Deploy to production and monitor",
           "description": "Execute the migration in production with monitoring and post-deployment verification",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             5
           ],

@@ -18,6 +18,7 @@ import { chatRouter } from "@/server/api/routers/chat";
 import { phoneRouter } from "@/server/api/routers/phone";
 import { activityLogRouter } from "@/server/api/routers/activityLog";
 import { searchRouter } from "@/server/api/routers/search";
+import { notificationRouter } from "@/server/api/routers/notification";
 
 /**
  * This is the primary router for your server.
@@ -40,6 +41,7 @@ export const appRouter = createTRPCRouter({
   chat: chatRouter,
   activityLog: activityLogRouter,
   search: searchRouter,
+  notification: notificationRouter,
   health: publicProcedure.query(() => ({ status: "ok" })),
   // Add other routers here
 });
