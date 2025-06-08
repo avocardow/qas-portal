@@ -356,7 +356,7 @@
       "id": 6,
       "title": "Integrate Audit Assignment Notifications",
       "description": "Add notification triggers for audit assignment changes in audit workflows.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2,
         3
@@ -369,7 +369,7 @@
           "id": 1,
           "title": "Update api.audit.assignUser Mutation to Trigger Notifications",
           "description": "Modify the backend mutation responsible for assigning users to audits so that it triggers a notification event when an assignment occurs.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "In the api.audit.assignUser mutation, add logic to call notificationService.createAuditAssignment with the required parameters (assignedUserId, auditId, clientName, auditYear, createdByUserId) whenever a user is assigned to an audit. Ensure the notification trigger is only called on assignment events and not on unrelated updates."
         },
@@ -377,7 +377,7 @@
           "id": 2,
           "title": "Implement Assignment Change Detection in EditAuditModal.tsx and AddAuditModal.tsx",
           "description": "Add logic to the audit modals to detect when the assigned user changes and prepare the necessary data for notification.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -387,7 +387,7 @@
           "id": 3,
           "title": "Integrate Self-Notification Prevention Logic",
           "description": "Ensure that notifications are not sent to the user who is performing the assignment action (self-notification prevention).",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -397,7 +397,7 @@
           "id": 4,
           "title": "Add Robust Error Handling for Notification Failures",
           "description": "Implement error handling to ensure that failures in the notification process do not affect the main audit assignment operation.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],

@@ -116,6 +116,20 @@ export const auditRouter = createTRPCRouter({
       // Fetch previous values for comparison
       const previous = await ctx.db.audit.findUnique({ where: { id: auditId }, select: { stageId: true, statusId: true } });
 
+      // Fetch client data for notification purposes  
+      const auditWithClient = await ctx.db.audit.findUnique({
+        where: { id: auditId },
+        select: {
+          auditYear: true,
+          client: {
+            select: {
+              clientName: true,
+              assignedUserId: true
+            }
+          }
+        }
+      });
+
       const audit = await ctx.db.audit.update({ where: { id: auditId }, data });
 
       // Create activity logs for stage or status changes
@@ -144,6 +158,46 @@ export const auditRouter = createTRPCRouter({
               content: `Changed status to ${status?.name ?? statusId}`,
             },
           });
+        }
+      }
+
+      // Trigger notifications for stage or status changes to client manager
+      if (auditWithClient?.client?.assignedUserId && auditWithClient.client.assignedUserId !== ctx.session.user.id) {
+        try {
+          const notificationService = new NotificationService(ctx.db);
+          
+          // Handle stage change notification
+          if (stageId !== undefined && stageId !== previous?.stageId) {
+            const previousStage = previous?.stageId ? await ctx.db.auditStage.findUnique({ where: { id: previous.stageId } }) : null;
+            const newStage = await ctx.db.auditStage.findUnique({ where: { id: stageId } });
+            
+            await notificationService.createAuditUpdateNotification({
+              auditId,
+              changeType: 'stage',
+              previousValue: previousStage?.name ?? 'None',
+              newValue: newStage?.name ?? stageId.toString(),
+              createdByUserId: ctx.session.user.id,
+              recipientIds: [auditWithClient.client.assignedUserId],
+            });
+          }
+          
+          // Handle status change notification
+          if (statusId !== undefined && statusId !== previous?.statusId) {
+            const previousStatus = previous?.statusId ? await ctx.db.auditStatus.findUnique({ where: { id: previous.statusId } }) : null;
+            const newStatus = await ctx.db.auditStatus.findUnique({ where: { id: statusId } });
+            
+            await notificationService.createAuditUpdateNotification({
+              auditId,
+              changeType: 'status',
+              previousValue: previousStatus?.name ?? 'None',
+              newValue: newStatus?.name ?? statusId.toString(),
+              createdByUserId: ctx.session.user.id,
+              recipientIds: [auditWithClient.client.assignedUserId],
+            });
+          }
+        } catch (error) {
+          // Log error but don't fail the main operation
+          console.error('Failed to create audit update notification:', error);
         }
       }
 
