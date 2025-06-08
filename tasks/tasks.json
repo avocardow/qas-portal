@@ -302,7 +302,7 @@
       "id": 5,
       "title": "Integrate Client Assignment Notifications",
       "description": "Add notification triggers for client assignment changes in client creation and update flows.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2,
         3
@@ -315,7 +315,7 @@
           "id": 1,
           "title": "Implement notificationService.createClientAssignment method",
           "description": "Create the notification service method that will handle client assignment notifications with proper parameters and error handling",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Develop the notificationService.createClientAssignment method that accepts assignedUserId, clientId, clientName, and createdByUserId parameters. This method should create and send a notification when a client is assigned to a user. Implement error handling within this method to catch and log any issues without throwing exceptions that would affect the main client operations. The method should return a success/failure status that can be safely ignored by calling code. Include logic to prevent self-notifications by comparing the assignedUserId with the user creating the assignment."
         },
@@ -323,7 +323,7 @@
           "id": 2,
           "title": "Modify api.clients.create mutation to trigger notifications",
           "description": "Update the client creation API to detect and trigger notifications for initial client assignments",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -333,7 +333,7 @@
           "id": 3,
           "title": "Update AddClientModal.tsx with notification logic",
           "description": "Enhance the client creation modal to support the notification flow when assigning clients",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1,
             2
@@ -344,7 +344,7 @@
           "id": 4,
           "title": "Implement notification triggers in api.clients.update and EditClientModal.tsx",
           "description": "Add logic to detect assignment changes during client updates and trigger appropriate notifications",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],

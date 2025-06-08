@@ -8,6 +8,7 @@ import {
 } from "@/server/api/trpc";
 import { AUDIT_PERMISSIONS } from "@/constants/permissions";
 import { ActivityLogType } from "@prisma/client";
+import { NotificationService } from '@/server/services/notificationService';
 
 // Zod schemas for audit operations
 const auditCreateSchema = z.object({
@@ -227,12 +228,27 @@ export const auditRouter = createTRPCRouter({
     .input(assignUserSchema)
     .mutation(async ({ ctx, input }) => {
       const { auditId, userId, role } = input;
+      
+      // Check if this is a new assignment (not just an update)
+      const existingAssignment = await ctx.db.auditAssignment.findUnique({
+        where: { auditId_userId: { auditId, userId } }
+      });
+      
       const assignment = await ctx.db.auditAssignment.upsert({
         where: { auditId_userId: { auditId, userId } },
         update: { role },
         create: { auditId, userId, role },
       });
-      const audit = await ctx.db.audit.findUnique({ where: { id: auditId } });
+      
+      const audit = await ctx.db.audit.findUnique({ 
+        where: { id: auditId },
+        include: {
+          client: {
+            select: { clientName: true }
+          }
+        }
+      });
+      
       if (audit && ctx.db.activityLog) {
         // Fetch user name for log
         const user = await ctx.db.user.findUnique({ where: { id: userId }, select: { name: true } });
@@ -246,6 +262,22 @@ export const auditRouter = createTRPCRouter({
           },
         });
       }
+      
+      // Trigger notification for new assignments (not updates) and prevent self-notification
+      if (!existingAssignment && userId !== ctx.session.user.id && audit) {
+        try {
+          const notificationService = new NotificationService(ctx.db);
+          await notificationService.createAuditAssignmentNotification({
+            auditId,
+            auditorId: userId,
+            createdByUserId: ctx.session.user.id
+          });
+        } catch (error) {
+          // Log error but don't fail the main operation
+          console.error('Failed to create audit assignment notification:', error);
+        }
+      }
+      
       return assignment;
     }),
 
