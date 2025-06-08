@@ -33,6 +33,23 @@ vi.mock('@/utils/api', () => ({
   }
 }));
 
+// Mock browser notification provider
+vi.mock('@/components/providers/BrowserNotificationProvider', () => ({
+  useBrowserNotifications: () => ({
+    service: null,
+    isSupported: false,
+    permission: 'default'
+  })
+}));
+
+// Mock notification integration
+vi.mock('@/lib/notificationIntegration', () => ({
+  createAndSendBrowserNotification: vi.fn().mockResolvedValue({
+    success: true,
+    notification: null
+  })
+}));
+
 const mockRouter = {
   push: vi.fn(),
   replace: vi.fn(),

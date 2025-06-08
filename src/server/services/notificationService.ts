@@ -21,6 +21,7 @@ import { NotificationType } from '@prisma/client';
 import { NotificationTemplateService } from './notificationTemplates';
 import { logger } from '@/server/api/utils/logger';
 
+
 /**
  * Notification Service - Handles creation, validation, and management of notifications
  */
@@ -379,6 +380,8 @@ export class NotificationService {
       };
     }
   }
+
+
 
   /**
    * Create client assignment notification

@@ -6,6 +6,7 @@ import TRPCProvider from "@/app/_trpc/Provider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { PermissionProvider } from "@/contexts/PermissionContext";
+import { BrowserNotificationProvider } from "@/components/providers/BrowserNotificationProvider";
 
 interface ProvidersProps {
   session: Session | null;
@@ -19,7 +20,9 @@ export default function Providers({ session, children }: ProvidersProps) {
         <PermissionProvider>
           <ThemeProvider>
             <SidebarProvider>
-              {children}
+              <BrowserNotificationProvider>
+                {children}
+              </BrowserNotificationProvider>
             </SidebarProvider>
           </ThemeProvider>
         </PermissionProvider>

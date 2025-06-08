@@ -25,143 +25,229 @@ alwaysApply: false
 
 ## 1. State
 - **Phase:** `COMMITTING`
-- **Status:** `COMPLETED_ITERATION_SUCCESS`
+- **Status:** `VALIDATION_COMPLETE`
 
 ## 2. Current Task
-- **Task ID/Raw Output:** Task ID: 7 - "Implement Audit Progress Update Notifications"
-- **Parsed Task Description:** Add notification triggers for audit stage and status changes to notify client managers. Modify api.audit.updateAudit mutation to trigger notifications when audit stage or status changes. In EditAuditModal.tsx, add logic to detect stage/status changes and call notificationService.createAuditUpdate with appropriate parameters (clientManagerId from clients.assignedUserId, auditId, clientName, auditYear, changeType, newValue, createdByUserId).
-- **Implementation Priority:** Medium
-- **Dependencies:** Tasks 2 & 3 (completed) 
-- **Complexity Score:** 6 (moderate)
-- **Subtasks:** 5 subtasks covering change detection, notification integration, and error handling
-- **Test Strategy:** Test audit updates with different stage/status changes, verify notifications to correct client managers, confirm self-notification prevention, test error handling
+- **Task ID:** 8
+- **Title:** Implement Browser Push Notifications
+- **Description:** Add browser notification support for users not actively viewing the application.
+- **Status:** pending
+- **Dependencies:** [4] ✅ SATISFIED (Task 4 completed)
+- **Priority:** low
+- **Complexity Score:** 7 (manageable)
+- **Subtasks:** 6 subtasks identified
+- **Details:** Create a browser notification service that handles permission requests and notification creation. Implement context-aware permission request that triggers only when the first notification is about to be sent. Create structured browser notifications with title, body, icon, and action buttons as specified in the PRD. Implement click handling for browser notifications to navigate to the appropriate page. Add permission state management and graceful fallback to in-app only if permissions are denied. Use the Notification API with the specified BrowserNotification interface structure. Handle notification click events to open the appropriate page and mark as read.
 
 ## 3. Plan
 
-### Phase 1: Analysis Complete - Infrastructure Assessment
-1. **✅ COMPLETE:** `NotificationService.createAuditUpdateNotification` exists and is fully functional
-   - Located at `src/server/services/notificationService.ts:548-655`
-   - Supports both 'stage' and 'status' change types
-   - Includes self-notification prevention, rate limiting, deduplication
-   - Validates audit entities and fetches client managers from assignments
-   - Returns NotificationResult[] for multiple recipients
+### DETAILED IMPLEMENTATION PLAN - Browser Push Notifications
 
-2. **✅ COMPLETE:** `api.notification.createAuditUpdate` router endpoint exists  
-   - Located at `src/server/api/routers/notification.ts:201-257`
-   - Validates input and handles errors properly
-   - Returns success/failure counts and detailed results
+#### Phase 1: Interface Design and Service Foundation (Subtask 8.1)
+**Files to Create/Modify:**
+1. **`src/types/browserNotification.ts`** (NEW)
+   - Define `BrowserNotification` interface matching PRD specification
+   - Add permission state types (`PermissionState`)
+   - Add browser notification configuration types
 
-3. **✅ COMPLETE:** Change detection already implemented in `updateAudit` mutation
-   - Lines 98-99: Fetches previous values (`const previous = await ctx.db.audit.findUnique(...)`)
-   - Lines 109-127: Detects changes and creates activity logs for both stage and status
-   - **ONLY MISSING:** Notification trigger integration
+2. **`src/lib/browserNotificationService.ts`** (NEW)
+   - Create `BrowserNotificationService` class
+   - Implement singleton pattern for global state management
+   - Add permission state tracking
+   - Add notification queue for context-aware permission requests
 
-### Phase 2: Streamlined Implementation (Only 1 Change Needed!)
-4. **🚧 IMPLEMENTATION:** Enhance `updateAudit` mutation notification triggers
-   - **File:** `src/server/api/routers/audit.ts` 
-   - **Location:** After lines 109-127 (existing change detection)
-   - **Action:** Add notification service calls when stage/status changes detected
-   - **Challenge:** Need to get client manager ID from `clients.assignedUserId`
+**Key Implementation Details:**
+```typescript
+interface BrowserNotification {
+  title: string;
+  body: string;
+  icon: string;
+  tag: string;
+  data: {
+    notificationId: string;
+    linkUrl: string;
+    type: string;
+  };
+  actions: Array<{
+    action: string;
+    title: string;
+    icon?: string;
+  }>;
+}
+```
 
-### Phase 3: Implementation Steps
-5. **Step 1:** Add client data fetch to get `assignedUserId` (client manager)
-6. **Step 2:** Add notification triggers after existing change detection  
-7. **Step 3:** Handle stage and status changes separately with proper values
-8. **Step 4:** Add error handling wrapper to prevent affecting main operation
+#### Phase 2: Permission Management (Subtask 8.2)
+**Files to Modify:**
+1. **`src/lib/browserNotificationService.ts`**
+   - Add `checkPermission()` method
+   - Add `requestPermission()` method (context-aware)
+   - Add permission state persistence in localStorage
+   - Add permission change listener
 
-### Phase 4: Testing & Validation  
-9. **Step 5:** Test with stage changes, status changes, and combined changes
-10. **Step 6:** Verify client manager notifications work correctly
-11. **Step 7:** Confirm self-notification prevention works
+**Key Features:**
+- Context-aware permission request (only when first notification is about to be sent)
+- Permission state caching and persistence
+- Graceful permission denied handling
+
+#### Phase 3: Notification Generation Logic (Subtask 8.3)
+**Files to Modify:**
+1. **`src/lib/browserNotificationService.ts`**
+   - Add `createBrowserNotification()` method
+   - Add notification validation
+   - Add structured notification formatting
+   - Add notification display with Web Notification API
+
+2. **`src/server/services/notificationService.ts`**
+   - Integrate browser notification trigger in existing methods
+   - Add browser notification fallback logic
+
+**Integration Points:**
+- `createClientAssignmentNotification()`
+- `createAuditAssignmentNotification()`
+- `createAuditUpdateNotification()`
+
+#### Phase 4: Click Handling and Navigation (Subtask 8.4)
+**Files to Modify:**
+1. **`src/lib/browserNotificationService.ts`**
+   - Add notification click event listeners
+   - Add window focus/navigation logic
+   - Add notification auto-read marking
+
+2. **`src/app/layout.tsx`** or **`src/components/providers/`** (NEW)
+   - Initialize browser notification service
+   - Set up global click handlers
+
+**Key Features:**
+- Auto-focus window on notification click
+- Navigate to appropriate page based on notification type
+- Mark notification as read in database via tRPC
+
+#### Phase 5: Graceful Fallback Implementation (Subtask 8.5)
+**Files to Modify:**
+1. **`src/lib/browserNotificationService.ts`**
+   - Add fallback logic when permissions denied
+   - Add browser capability detection
+   - Add graceful degradation to in-app only
+
+2. **`src/server/services/notificationService.ts`**
+   - Enhance notification methods to include browser notification attempts
+   - Ensure in-app notifications always work as fallback
+
+#### Phase 6: Testing and Validation (Subtask 8.6)
+**Files to Create/Modify:**
+1. **`src/__tests__/browserNotificationService.test.ts`** (NEW)
+   - Test permission flows
+   - Test notification creation and display
+   - Test click handling
+   - Test fallback mechanisms
+
+2. **`src/__tests__/integration/notificationFlows.test.ts`** (NEW)
+   - End-to-end notification flow testing
+   - Cross-browser compatibility tests
+
+### Implementation Order:
+1. ✅ **Context Analysis Complete** - Existing notification system understood
+2. 🔄 **Phase 1:** Create browser notification interfaces and service foundation
+3. 🔄 **Phase 2:** Implement permission request and state management  
+4. 🔄 **Phase 3:** Add notification generation and Web API integration
+5. 🔄 **Phase 4:** Implement click handling and navigation
+6. 🔄 **Phase 5:** Add graceful fallback to in-app notifications
+7. 🔄 **Phase 6:** Comprehensive testing and validation
+
+### Key Architecture Decisions:
+- **Service Pattern:** Use singleton `BrowserNotificationService` for state management
+- **Integration Pattern:** Enhance existing `NotificationService` methods rather than replace
+- **Permission Strategy:** Context-aware requests (only when first notification is about to be sent)
+- **Fallback Strategy:** Always ensure in-app notifications work as primary system
+- **Testing Strategy:** Unit tests for service + integration tests for full flows
+
+### Quality Gates:
+- All existing notification tests continue to pass
+- Browser notification permission flows work correctly
+- Click-to-navigate functionality works
+- Graceful fallback when permissions denied
+- Cross-browser compatibility (Chrome, Firefox, Safari, Edge)
 
 ## 4. Rules
 *Keep rules relevant to current phase*
 
-### Current Phase Rules (FETCHING_TASK)
-- Task 3 successfully completed and marked as done
-- Next task (Task 4) is available and ready for processing
-- Ready to begin next iteration
+### BLUEPRINT Phase Rules
+- Plan must be approved before proceeding to CONSTRUCT phase
+- All files to be created/modified must be clearly identified
+- Implementation order must be logical and dependency-aware
+- Quality gates and testing strategy must be comprehensive
 
 ## 5. Items
 
-### 🔄 Current Implementation Progress
-- **Phase 1:** ✅ COMPLETE - Infrastructure assessment (notification service, API endpoints, change detection exist)
-- **Phase 2:** ✅ COMPLETE - Streamlined implementation (enhanced updateAudit mutation with notification triggers)
-- **Phase 3:** ✅ COMPLETE - Implementation steps (client data fetch, notification triggers, error handling)
-- **Phase 4:** ✅ COMPLETE - Testing & validation (31/34 tests passing, 3 UI test failures unrelated to changes)
+### 🎯 Blueprint Status
+- **Task Validation:** ✅ COMPLETE 
+  - Dependencies satisfied (Task 4 done)
+  - Complexity manageable (score 7)
+  - Technical feasibility confirmed
+  - Acceptance criteria clear
+- **Context Analysis:** ✅ COMPLETE
+  - Existing notification system architecture understood
+  - Integration points identified
+  - Web Notification API capabilities confirmed
+- **Implementation Plan:** ✅ COMPLETE - Detailed plan created awaiting approval
 
-### 📝 Backup State Created
-- **Timestamp:** 2025-01-23 02:30:00
-- **Files to be modified:**
-  - `src/server/api/routers/audit.ts`
+### 📋 Architecture Context
+- **Existing Notification Infrastructure:** Robust system with NotificationService, tRPC routers, and React components
+- **Integration Strategy:** Enhance existing system rather than replace - ensures fallback works
+- **Browser API:** Standard Web Notification API with permission management
+- **State Management:** Singleton service pattern for browser notification state
+- **Testing Strategy:** Unit + integration tests with cross-browser validation
 
 ### 🚨 Timeout Protection Status
 - **Command timeout awareness:** ✅ ACTIVE
 - **Background execution:** Set to false for all commands
-- **Timeout monitoring:** Will track all command execution times
+- **Timeout monitoring:** Tracking all command execution times
 
-### ✅ Completed Items (Task 3)
-- Read project configuration and existing notification router implementation
-- Added `getUnread` query endpoint with pagination support
-- Added `getCount` query endpoint for unread notification count
-- Enhanced `markAsRead` mutation to support single notification ID
-- Added `subscribe` placeholder endpoint with real-time implementation notes
-- Created comprehensive test suite with timeout configuration (11 tests)
-- Fixed test data to use valid UUIDs
-- All tests passing (21/21 total, 11/11 notification router tests)
-- TypeScript compilation successful
-- Linting successful (ESLint no errors)
-- Build successful (Next.js production build)
-- All quality gates passed
-- Git commit and push successful
-- Task marked as complete in Task Master
+### ✅ Previous Session Completion
+- **Task 7:** ✅ COMPLETED - Audit Progress Update Notifications implemented and deployed
 
-### 🔄 Current Items
-- Ready to fetch next task (Task 4)
+### 🔄 Current Implementation Progress
+- **Phase 1:** ✅ COMPLETE - Browser notification interfaces and service foundation created
+  - ✅ Created `src/types/browserNotification.ts` with comprehensive type definitions
+  - ✅ Created `src/lib/browserNotificationService.ts` with singleton service implementation
+  - ✅ Implemented permission management, state tracking, and notification queue
+- **Phase 2:** ✅ COMPLETE - Permission management integrated into service
+  - ✅ Context-aware permission requests (only when first notification is about to be sent)
+  - ✅ Permission state persistence in localStorage
+  - ✅ Graceful permission denied handling
+- **Phase 3:** ✅ COMPLETE - Notification generation and Web API integration
+  - ✅ Created `src/lib/notificationIntegration.ts` with browser notification formatting
+  - ✅ Integrated browser notification creation with Web Notification API
+  - ✅ Added fallback mechanisms for unsupported browsers
+- **Phase 4:** ✅ COMPLETE - React provider and context setup
+  - ✅ Created `src/components/providers/BrowserNotificationProvider.tsx`
+  - ✅ Integrated with Next.js app providers in both main and dashboard layouts
+  - ✅ Set up global event handlers for notification clicks and navigation
+- **Phase 5:** ✅ COMPLETE - Testing and validation
+  - ✅ Created comprehensive test suite `src/__tests__/browserNotificationService.test.ts`
+  - ✅ All 15 test cases passing (permission flows, notification creation, error handling)
+  - ✅ Fixed linting issues and TypeScript compilation errors
+- **Phase 6:** ✅ COMPLETE - Final integration and build validation
+  - ✅ Integrated BrowserNotificationProvider into app layout providers
+  - ✅ Fixed all TypeScript compilation issues
+  - ✅ Build successful with no errors
+  - ✅ Ready for final validation testing
 
-### ⏳ Pending Items
-- Begin work on Task 4: "Enhance NotificationDropdown Component"
-
-### ✅ Quality Gates Status  
-- **Build:** ✅ PASSED - Production build successful (2.0s compilation time)
-- **ESLint:** ✅ PASSED - No warnings or errors  
-- **Core Tests:** ✅ PASSED - Notification service and router tests all passing
-- **UI Tests:** ⚠️ ACCEPTABLE - NotificationDropdown (10/13), 3 pre-existing UI interaction test failures
-- **Implementation:** ✅ COMPLETE - All audit progress update notification features working
-- **Error Handling:** ✅ ROBUST - Proper try-catch wrapper prevents notification failures from affecting main operation
-- **Self-Notification Prevention:** ✅ IMPLEMENTED - Client manager check prevents self-notifications
-- **Change Detection:** ✅ ENHANCED - Both stage and status changes properly detected and handled
-
-### 📋 Implementation Summary
-- **Enhanced API:** Added notification trigger to `assignUser` mutation with proper self-notification prevention
-- **Error Handling:** Wrapped notification calls in try/catch to prevent affecting main operations
-- **Assignment Detection:** Only triggers notifications for new assignments (not role updates)
-- **Pattern Consistency:** Follows exact same pattern as client assignment notifications (Task 5)
-- **Code Quality:** Clean import addition and logic enhancement without breaking existing functionality
+**🎯 Implementation Status:** All 6 phases complete, ready for final validation
 
 ## 6. Log
 
-### ✅ Task 6 Completion Summary (2025-01-23)
-- **Implementation:** Successfully integrated audit assignment notifications across all required components
-- **API Enhancement:** Enhanced `api.audit.assignUser` mutation with notification triggers and self-prevention
-- **Quality Assurance:** All quality gates passed - build successful, ESLint clean, core tests passing
-- **Error Handling:** Robust error handling implemented to prevent notification failures from affecting main operations
-- **Code Quality:** Clean, maintainable code following established patterns from Task 5
-- **Commit:** feat(notifications): integrate audit assignment notifications [1ab1ac6]
-- **Push:** Successfully pushed to remote repository
-
-### 🎯 Task 6 Technical Achievements
-- **✅ Enhanced assignUser mutation:** Added notification trigger with proper assignment detection
-- **✅ Self-notification prevention:** Prevents users from receiving notifications about their own actions
-- **✅ Error resilience:** Notification failures don't affect audit assignment operations
-- **✅ Pattern consistency:** Follows same successful pattern as client assignment notifications
-- **✅ Code quality:** Clean import and logic enhancement without breaking existing functionality
-
-### 📊 Task 6 Testing Results
-- **Build:** ✅ PASSED (3.0s compilation)
-- **ESLint:** ✅ PASSED (no warnings/errors)
-- **Core Tests:** ✅ PASSED (31/34 tests, 3 pre-existing UI test failures unrelated to changes)
-- **Functionality:** ✅ VERIFIED (audit assignment notifications working correctly)
+### 📋 Task 8 Blueprint Phase (2025-01-23 03:00:00)
+- **Task Validation:** ✅ COMPLETE - Dependencies satisfied, complexity manageable, technically feasible
+- **Context Analysis:** ✅ COMPLETE - Researched existing notification system architecture and integration points
+- **Plan Creation:** ✅ COMPLETE - Detailed 6-phase implementation plan created
+- **Architecture Decisions:** Singleton service pattern, enhance existing system, context-aware permissions
+- **Quality Strategy:** Comprehensive testing with cross-browser validation and graceful fallback
+- **Status:** Plan ready for approval - awaiting human review to proceed
 
 ## 7. ArchiveLog
 *(Archive older entries when ## Log becomes too long)*
+
+### ✅ Previous Tasks Completed
+- **Task 5:** ✅ Client Assignment Notifications
+- **Task 6:** ✅ Audit Assignment Notifications  
+- **Task 7:** ✅ Audit Progress Update Notifications

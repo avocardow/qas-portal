@@ -409,7 +409,7 @@
       "id": 7,
       "title": "Implement Audit Progress Update Notifications",
       "description": "Add notification triggers for audit stage and status changes to notify client managers.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         2,
         3
@@ -422,7 +422,7 @@
           "id": 1,
           "title": "Enhance Audit Update Mutation to Capture Previous and New Values",
           "description": "Modify the api.audit.updateAudit mutation to capture both previous and new values for audit stage and status, enabling accurate change detection.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Update the mutation logic to fetch and retain the previous values of audit stage and status before applying updates. Ensure these values are available for downstream logic to compare and identify changes."
         },
@@ -430,7 +430,7 @@
           "id": 2,
           "title": "Implement Change Detection Logic in EditAuditModal.tsx",
           "description": "Add logic in EditAuditModal.tsx to compare previous and new audit stage/status values, determining if a change has occurred and its type (stage or status).",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -440,7 +440,7 @@
           "id": 3,
           "title": "Integrate Notification Triggering with Notification Service",
           "description": "Invoke notificationService.createAuditUpdate with the correct parameters when a stage or status change is detected, passing clientManagerId, auditId, clientName, auditYear, changeType, newValue, and createdByUserId.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -450,7 +450,7 @@
           "id": 4,
           "title": "Implement Self-Notification Prevention Logic",
           "description": "Ensure client managers do not receive notifications for their own changes by comparing clientManagerId with session.user.id before sending notifications.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -460,7 +460,7 @@
           "id": 5,
           "title": "Add Robust Error Handling for Notification Failures",
           "description": "Implement error handling to ensure notification failures do not affect the main audit update operation, logging errors for later review.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4
           ],

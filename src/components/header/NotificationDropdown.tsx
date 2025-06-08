@@ -7,6 +7,8 @@ import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { api } from "@/utils/api";
 import type { RouterOutput } from "@/utils/api";
 
+import { createAndSendBrowserNotification } from '@/lib/notificationIntegration';
+
 // Connection status types
 type ConnectionStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected' | 'error';
 
@@ -21,6 +23,7 @@ export default function NotificationDropdown() {
   const [localUnreadCount, setLocalUnreadCount] = useState(0);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
+  const lastNotificationCountRef = useRef(0);
 
   // tRPC queries and mutations
   const { 
@@ -123,6 +126,55 @@ export default function NotificationDropdown() {
       setLocalUnreadCount(countData.count);
     }
   }, [countData]);
+
+  // Detect new notifications and trigger browser notifications
+  useEffect(() => {
+    if (countData?.count !== undefined) {
+      const currentCount = countData.count;
+      const hasNewNotifications = currentCount > lastNotificationCountRef.current && lastNotificationCountRef.current > 0;
+      
+      if (hasNewNotifications && unreadData) {
+        // Find the newest notifications (those that weren't in the previous state)
+        const newNotificationCount = currentCount - lastNotificationCountRef.current;
+        const newestNotifications = unreadData.slice(0, newNotificationCount);
+        
+        // Send browser notifications for new notifications
+        newestNotifications.forEach(async (notification) => {
+          try {
+            await createAndSendBrowserNotification(
+              notification.id,
+              notification.type,
+              {
+                title: `New ${notification.type.replace('_', ' ')} notification`,
+                body: notification.message,
+                linkUrl: notification.linkUrl || '/notifications',
+                entityId: notification.entityId || undefined,
+                entityType: getEntityTypeFromNotificationType(notification.type)
+              }
+            );
+          } catch (error) {
+            console.warn('Failed to send browser notification:', error);
+          }
+        });
+      }
+      
+      lastNotificationCountRef.current = currentCount;
+    }
+  }, [countData?.count, unreadData]);
+
+  // Helper function to get entity type from notification type
+  const getEntityTypeFromNotificationType = (type: string): 'client' | 'audit' | 'task' | 'contact' | undefined => {
+    switch (type) {
+      case 'client_assignment':
+        return 'client';
+      case 'audit_assignment':
+      case 'audit_stage_update':
+      case 'audit_status_update':
+        return 'audit';
+      default:
+        return undefined;
+    }
+  };
 
   // Cleanup on unmount
   useEffect(() => {

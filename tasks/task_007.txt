@@ -1,6 +1,6 @@
 # Task ID: 7
 # Title: Implement Audit Progress Update Notifications
-# Status: pending
+# Status: done
 # Dependencies: 2, 3
 # Priority: medium
 # Description: Add notification triggers for audit stage and status changes to notify client managers.
@@ -11,31 +11,31 @@ Modify api.audit.updateAudit mutation to trigger notifications when audit stage 
 Test audit updates with different stage/status changes. Verify notifications are sent to correct client managers. Confirm managers don't receive notifications for their own changes. Test error handling by simulating notification service failures.
 
 # Subtasks:
-## 1. Enhance Audit Update Mutation to Capture Previous and New Values [pending]
+## 1. Enhance Audit Update Mutation to Capture Previous and New Values [done]
 ### Dependencies: None
 ### Description: Modify the api.audit.updateAudit mutation to capture both previous and new values for audit stage and status, enabling accurate change detection.
 ### Details:
 Update the mutation logic to fetch and retain the previous values of audit stage and status before applying updates. Ensure these values are available for downstream logic to compare and identify changes.
 
-## 2. Implement Change Detection Logic in EditAuditModal.tsx [pending]
+## 2. Implement Change Detection Logic in EditAuditModal.tsx [done]
 ### Dependencies: 7.1
 ### Description: Add logic in EditAuditModal.tsx to compare previous and new audit stage/status values, determining if a change has occurred and its type (stage or status).
 ### Details:
 Within the modal's save/update handler, compare the previous and new values for both stage and status. Set a changeType variable ('stage' or 'status') and newValue accordingly if a change is detected. Ensure this logic is robust to prevent false positives or missed changes.
 
-## 3. Integrate Notification Triggering with Notification Service [pending]
+## 3. Integrate Notification Triggering with Notification Service [done]
 ### Dependencies: 7.2
 ### Description: Invoke notificationService.createAuditUpdate with the correct parameters when a stage or status change is detected, passing clientManagerId, auditId, clientName, auditYear, changeType, newValue, and createdByUserId.
 ### Details:
 After detecting a change, call the notification service with all required parameters. Retrieve clientManagerId from clients.assignedUserId and ensure all contextual information (auditId, clientName, auditYear, etc.) is included in the notification payload.
 
-## 4. Implement Self-Notification Prevention Logic [pending]
+## 4. Implement Self-Notification Prevention Logic [done]
 ### Dependencies: 7.3
 ### Description: Ensure client managers do not receive notifications for their own changes by comparing clientManagerId with session.user.id before sending notifications.
 ### Details:
 Before triggering the notification, check if clientManagerId matches the current session user's ID. If they match, skip sending the notification. This prevents redundant or unnecessary notifications to the acting user.
 
-## 5. Add Robust Error Handling for Notification Failures [pending]
+## 5. Add Robust Error Handling for Notification Failures [done]
 ### Dependencies: 7.4
 ### Description: Implement error handling to ensure notification failures do not affect the main audit update operation, logging errors for later review.
 ### Details:

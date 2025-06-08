@@ -10,6 +10,7 @@ import { ToastProvider } from "@/context/ToastContext";
 // Add RbacProvider import
 import { PermissionProvider } from '@/contexts/PermissionContext';
 import { ImpersonationProvider } from '@/contexts/ImpersonationContext';
+import { BrowserNotificationProvider } from '@/components/providers/BrowserNotificationProvider';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +21,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <ThemeProvider>
               <SidebarProvider>
                 <ToastProvider>
-                  {children}
+                  <BrowserNotificationProvider>
+                    {children}
+                  </BrowserNotificationProvider>
                 </ToastProvider>
               </SidebarProvider>
             </ThemeProvider>
