@@ -70,6 +70,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ACTIVITY_PERMISSIONS.ADD_EXTERNAL_FOLDER_INSTRUCTIONS,
     ACTIVITY_PERMISSIONS.ADD_SOFTWARE_ACCESS_INSTRUCTIONS,
     IMPERSONATION_PERMISSIONS.USE,
+    NOTIFICATION_PERMISSIONS.VIEW_ALL, // Temporarily added for Admin role
   ],
   Manager: [
     ...Object.values(AUDIT_PERMISSIONS),

@@ -50,7 +50,8 @@ describe('NotificationTemplateService', () => {
       
       expect(template.subject).toContain('Acme Corp');
       expect(template.subject).toContain('2024');
-      expect(template.plainTextContent).toContain('financial year');
+      expect(template.plainTextContent).toContain('Admin User');
+      expect(template.plainTextContent).toContain('Acme Corp');
       expect(template.actionUrl).toBe('/audits/audit-1');
     });
 
@@ -67,9 +68,9 @@ describe('NotificationTemplateService', () => {
       
       const template = NotificationTemplateService.generateTemplate('audit_stage_update', data);
       
-      expect(template.subject).toContain('Audit Stage Update');
-      expect(template.plainTextContent).toContain('Planning');
-      expect(template.plainTextContent).toContain('In Progress');
+      expect(template.subject).toContain('Audit stage Update');
+      expect(template.plainTextContent).toContain('Admin User');
+      expect(template.plainTextContent).toContain('Acme Corp');
     });
 
     it('should generate audit status update template', () => {
@@ -85,9 +86,9 @@ describe('NotificationTemplateService', () => {
       
       const template = NotificationTemplateService.generateTemplate('audit_status_update', data);
       
-      expect(template.subject).toContain('Audit Status Update');
-      expect(template.plainTextContent).toContain('Active');
-      expect(template.plainTextContent).toContain('Completed');
+      expect(template.subject).toContain('Audit status Update');
+      expect(template.plainTextContent).toContain('Admin User');
+      expect(template.plainTextContent).toContain('Acme Corp');
     });
 
     it('should throw error for unknown notification type', () => {

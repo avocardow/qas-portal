@@ -7,7 +7,7 @@
 
 'use client';
 
-import { createContext, useContext, useEffect, useRef, useCallback } from 'react';
+import { createContext, useContext, useEffect, useRef, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { api } from '@/utils/api';
@@ -27,11 +27,15 @@ const logger = {
 interface BrowserNotificationContextType {
   service: IBrowserNotificationService | null;
   isSupported: boolean;
+  permission: string;
+  isRequestingPermission: boolean;
 }
 
 const BrowserNotificationContext = createContext<BrowserNotificationContextType>({
   service: null,
-  isSupported: false
+  isSupported: false,
+  permission: 'default',
+  isRequestingPermission: false
 });
 
 interface BrowserNotificationProviderProps {
@@ -40,9 +44,12 @@ interface BrowserNotificationProviderProps {
 
 export function BrowserNotificationProvider({ children }: BrowserNotificationProviderProps) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const serviceRef = useRef<IBrowserNotificationService | null>(null);
   const markAsReadMutation = api.notification.markAsRead.useMutation();
+  const [permission, setPermission] = useState<string>('default');
+  const [isRequestingPermission, setIsRequestingPermission] = useState(false);
+  const hasRequestedPermissionRef = useRef(false);
 
   /**
    * Handle notification click events
@@ -112,6 +119,50 @@ export function BrowserNotificationProvider({ children }: BrowserNotificationPro
     logger.debug('Browser notification shown', { data });
   }, []);
 
+  /**
+   * Request notification permission on app startup
+   */
+  const requestPermissionOnStartup = useCallback(async () => {
+    if (!serviceRef.current || hasRequestedPermissionRef.current) {
+      return;
+    }
+
+    const currentPermission = serviceRef.current.checkPermission();
+    setPermission(currentPermission);
+
+    // Only request permission if it's default (not already granted or denied)
+    if (currentPermission === 'default') {
+      try {
+        setIsRequestingPermission(true);
+        hasRequestedPermissionRef.current = true;
+        
+        logger.info('Requesting notification permission on app startup');
+        
+        const result = await serviceRef.current.requestPermission({
+          notificationType: 'system',
+          triggerAction: 'app_startup',
+          userMessage: 'Enable notifications to stay updated on important QAS Portal activities'
+        });
+
+        setPermission(result.permission);
+        
+        if (result.permission === 'granted') {
+          logger.info('Notification permission granted on startup');
+        } else {
+          logger.info('Notification permission denied or failed on startup', { 
+            permission: result.permission, 
+            error: result.error 
+          });
+        }
+      } catch (error) {
+        logger.error('Failed to request notification permission on startup:', error);
+      } finally {
+        setIsRequestingPermission(false);
+      }
+    }
+  }, []);
+
+  // Initialize browser notification service
   useEffect(() => {
     // Initialize browser notification service only on client side
     if (typeof window === 'undefined') return;
@@ -119,7 +170,7 @@ export function BrowserNotificationProvider({ children }: BrowserNotificationPro
     try {
       const service = getBrowserNotificationService({
         enabled: true,
-        requestPermissionOnFirstNotification: true,
+        requestPermissionOnFirstNotification: false, // Disable automatic permission request on first notification
         fallbackToInApp: true,
         defaultIcon: '/images/logo/logo-icon.png',
         defaultBadge: '/images/logo/logo-badge.png',
@@ -140,6 +191,9 @@ export function BrowserNotificationProvider({ children }: BrowserNotificationPro
 
       service.setEventHandlers(eventHandlers);
 
+      // Set initial permission state
+      setPermission(service.checkPermission());
+
       logger.info('Browser notification service initialized', {
         isSupported: service.isSupported(),
         permission: service.checkPermission()
@@ -150,9 +204,23 @@ export function BrowserNotificationProvider({ children }: BrowserNotificationPro
     }
   }, [handleNotificationClick, handleNotificationClose, handleNotificationError, handleNotificationShow]);
 
+  // Request permission when user is authenticated and service is ready
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user && serviceRef.current) {
+      // Add a small delay to ensure the app has fully loaded
+      const timeoutId = setTimeout(() => {
+        requestPermissionOnStartup();
+      }, 1000); // 1 second delay
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [status, session?.user, requestPermissionOnStartup]);
+
   const contextValue: BrowserNotificationContextType = {
     service: serviceRef.current,
-    isSupported: serviceRef.current?.isSupported() ?? false
+    isSupported: serviceRef.current?.isSupported() ?? false,
+    permission,
+    isRequestingPermission
   };
 
   return (
@@ -179,13 +247,14 @@ export function useBrowserNotification() {
  * Hook to get browser notification permission status
  */
 export function useBrowserNotificationPermission() {
-  const { service } = useBrowserNotification();
+  const { service, permission, isRequestingPermission } = useBrowserNotification();
   
   return {
     isSupported: service?.isSupported() ?? false,
-    permission: service?.checkPermission() ?? 'denied',
+    permission,
     requestPermission: service?.requestPermission.bind(service),
-    canRequest: (service?.checkPermission() ?? 'denied') === 'default'
+    canRequest: permission === 'default',
+    isRequestingPermission
   };
 }
 

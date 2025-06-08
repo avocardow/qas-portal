@@ -172,7 +172,7 @@ describe('Notification Router', () => {
     it('should return unread notification count', async () => {
       mockCount.mockResolvedValue(5);
 
-      const result = await caller.getCount();
+      const result = await caller.getCount({});
 
       expect(mockCount).toHaveBeenCalledWith({
         where: {

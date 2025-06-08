@@ -38,9 +38,11 @@ The QAS Portal browser notification system provides real-time push notifications
 ## Features
 
 ### Permission Management
-- **Context-aware requests**: Only requests permissions when first notification is about to be sent
+- **App startup requests**: Requests permissions when the user opens the app and is authenticated
+- **One-time request**: Only requests permissions once per browser session
 - **Persistent state**: Stores permission status in localStorage
 - **Graceful degradation**: Falls back to in-app notifications when permissions denied
+- **Non-blocking flow**: App continues to function normally regardless of permission status
 
 ### Notification Types
 - **Client notifications**: New client registrations, updates, and activities

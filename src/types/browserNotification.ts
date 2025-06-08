@@ -120,7 +120,7 @@ export interface BrowserNotificationEventHandlers {
  */
 export const DEFAULT_BROWSER_NOTIFICATION_CONFIG: BrowserNotificationConfig = {
   enabled: true,
-  requestPermissionOnFirstNotification: true,
+  requestPermissionOnFirstNotification: false,
   fallbackToInApp: true,
   defaultIcon: '/images/logo/logo-icon.png',
   defaultBadge: '/images/logo/logo-badge.png',

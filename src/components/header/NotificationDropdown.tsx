@@ -10,6 +10,7 @@ import type { RouterOutput } from "@/utils/api";
 import Image from "next/image";
 
 import { createAndSendBrowserNotification } from '@/lib/notificationIntegration';
+import { useBrowserNotificationPermission } from '@/components/providers/BrowserNotificationProvider';
 
 // Connection status types
 type ConnectionStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected' | 'error';
@@ -39,6 +40,13 @@ export default function NotificationDropdown() {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const lastNotificationCountRef = useRef(0);
+  
+  // Browser notification permission status
+  const { 
+    isSupported: isBrowserNotificationSupported, 
+    permission: browserPermission, 
+    isRequestingPermission 
+  } = useBrowserNotificationPermission();
   
   // Developer debugging features
   const [viewAllNotifications, setViewAllNotifications] = useState(false);
@@ -223,7 +231,15 @@ export default function NotificationDropdown() {
         // Send browser notifications for new notifications
         newestNotifications.forEach(async (notification) => {
           try {
-            await createAndSendBrowserNotification(
+            console.log('[NotificationDropdown] Attempting to create browser notification:', {
+              notificationId: notification.id,
+              type: notification.type,
+              browserPermission,
+              isBrowserNotificationSupported,
+              isRequestingPermission
+            });
+
+            const result = await createAndSendBrowserNotification(
               notification.id,
               notification.type,
               {
@@ -234,15 +250,17 @@ export default function NotificationDropdown() {
                 entityType: getEntityTypeFromNotificationType(notification.type)
               }
             );
+
+            console.log('[NotificationDropdown] Browser notification result:', result);
           } catch (error) {
-            console.warn('Failed to send browser notification:', error);
+            console.warn('[NotificationDropdown] Failed to send browser notification:', error);
           }
         });
       }
       
       lastNotificationCountRef.current = currentCount;
     }
-  }, [serverUnreadCount, notifications, announceToScreenReader]);
+  }, [serverUnreadCount, notifications, announceToScreenReader, browserPermission, isBrowserNotificationSupported, isRequestingPermission]);
 
   // Helper function to get entity type from notification type
   const getEntityTypeFromNotificationType = (type: string): 'client' | 'audit' | 'task' | 'contact' | undefined => {
@@ -516,6 +534,18 @@ export default function NotificationDropdown() {
             </div>
             
             <div className="space-y-2">
+              {/* Browser notification status */}
+              <div className="rounded border border-blue-200 bg-blue-50 p-2 dark:border-blue-800 dark:bg-blue-900/20">
+                <div className="text-xs font-medium text-blue-800 dark:text-blue-200 mb-1">
+                  Browser Notifications:
+                </div>
+                <div className="text-xs text-blue-700 dark:text-blue-300 space-y-1">
+                  <div>Supported: {isBrowserNotificationSupported ? '✅ Yes' : '❌ No'}</div>
+                  <div>Permission: {browserPermission} {isRequestingPermission ? '(requesting...)' : ''}</div>
+                  <div>Status: {browserPermission === 'granted' ? '✅ Ready' : browserPermission === 'denied' ? '❌ Blocked' : '⏳ Pending'}</div>
+                </div>
+              </div>
+              
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"

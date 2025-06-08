@@ -14,6 +14,9 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/utils/api', () => ({
   api: {
     notification: {
+      getUserNotifications: {
+        useQuery: vi.fn()
+      },
       getUnread: {
         useQuery: vi.fn()
       },

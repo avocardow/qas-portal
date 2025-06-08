@@ -7,6 +7,7 @@ import { useAbility } from "@/hooks/useAbility";
 import { CLIENT_PERMISSIONS } from '@/constants/permissions';
 import { TASK_PERMISSIONS, AUDIT_PERMISSIONS } from "@/constants/permissions";
 import Authorized from "@/components/Authorized";
+import TestBrowserNotifications from "@/components/dashboard/TestBrowserNotifications";
 
 export default function DashboardPage() {
   const { can } = useAbility();
@@ -47,6 +48,11 @@ export default function DashboardPage() {
           </ComponentCard>
         )}
         </Authorized>
+        
+        {/* Temporary test component for browser notifications */}
+        <ComponentCard title="Browser Notifications Test">
+          <TestBrowserNotifications />
+        </ComponentCard>
       </div>
     </DashboardPlaceholderPageTemplate>
   );
