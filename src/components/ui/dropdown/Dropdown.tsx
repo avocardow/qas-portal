@@ -6,6 +6,8 @@ interface DropdownProps {
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
+  role?: string;
+  "aria-label"?: string;
 }
 
 export const Dropdown: React.FC<DropdownProps> = ({
@@ -13,6 +15,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
   onClose,
   children,
   className = "",
+  role,
+  "aria-label": ariaLabel,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -39,6 +43,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
     <div
       ref={dropdownRef}
       className={`shadow-theme-lg dark:bg-gray-dark absolute right-0 z-40 mt-2 rounded-xl border border-gray-200 bg-white dark:border-gray-800 ${className}`}
+      role={role}
+      aria-label={ariaLabel}
     >
       {children}
     </div>
