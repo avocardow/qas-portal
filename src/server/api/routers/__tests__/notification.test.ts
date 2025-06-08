@@ -94,15 +94,15 @@ const mockDb = {
 // Mock context with proper types including expires
 const mockContext = {
   headers: new Headers(),
-  db: mockDb,
+  db: mockDb as typeof mockDb, // Use proper type instead of any
   session: {
     user: {
       id: 'test-user-id',
-      name: 'Test User',
       email: 'test@example.com',
-      role: 'Staff'
+      name: 'Test User',
+      role: 'admin' // Should be string, not object
     },
-    expires: '2025-01-01T00:00:00.000Z'
+    expires: '2024-12-31T23:59:59.999Z'
   }
 };
 
