@@ -347,9 +347,9 @@ export default function NotificationDropdown() {
     }
   }, [connectionStatus]);
 
-  function toggleDropdown() {
+  const toggleDropdown = useCallback(() => {
     setIsOpen(!isOpen);
-  }
+  }, [isOpen]);
 
   function closeDropdown() {
     setIsOpen(false);
@@ -368,7 +368,7 @@ export default function NotificationDropdown() {
       event.preventDefault();
       closeDropdown();
     }
-  }, [isOpen]);
+  }, [isOpen, toggleDropdown]);
 
   const showBadge = localUnreadCount > 0;
 
@@ -498,7 +498,7 @@ export default function NotificationDropdown() {
               <span>No notifications</span>
             </li>
           ) : (
-            localNotifications.map((notification, index) => (
+            localNotifications.map((notification) => (
               <li key={notification.id} role="none">
                 <DropdownItem
                   onItemClick={() => handleNotificationClick(notification)}
