@@ -45,13 +45,6 @@ enum ActivityLogType {
   audit_complete
 }
 
-enum NotificationType {
-  client_assignment
-  audit_assignment
-  audit_stage_update
-  audit_status_update
-}
-
 // ========== Core Entities ==========
 
 model Client {
@@ -182,7 +175,6 @@ model User {
   uploadedDocuments DocumentReference[] @relation("UploadedDocuments")
   managedClients    Client[]            @relation(name: "ClientManager")
   notifications     Notification[]
-  createdNotifications Notification[]   @relation("CreatedNotifications")
   sentMessages      Message[]           @relation("SentMessages")
   callLogs          CallLog[]
   activityLogs      ActivityLog[]       @relation("UserLogs")
@@ -434,23 +426,16 @@ model DocumentReference {
 }
 
 model Notification {
-  id              String           @id @default(uuid()) @db.Uuid
-  userId          String           @db.Uuid
-  message         String           @db.Text
-  linkUrl         String?
-  isRead          Boolean          @default(false)
-  type            NotificationType
-  entityId        String?
-  createdByUserId String           @db.Uuid
-  createdAt       DateTime         @default(now()) @db.Timestamptz
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  message   String   @db.Text
+  linkUrl   String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Timestamptz
 
-  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdByUser User @relation("CreatedNotifications", fields: [createdByUserId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, isRead])
-  @@index([userId, type])
-  @@index([type, entityId])
-  @@index([createdByUserId])
   @@map("notifications")
 }
 
