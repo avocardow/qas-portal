@@ -23,6 +23,9 @@ vi.mock('@/utils/api', () => ({
       subscribe: {
         useQuery: vi.fn()
       },
+      subscribeToReadStatus: {
+        useSubscription: vi.fn()
+      },
       markAsRead: {
         useMutation: vi.fn()
       },
@@ -109,13 +112,8 @@ describe('NotificationDropdown', () => {
       refetch: vi.fn().mockResolvedValue({ data: { count: 1 } })
     });
     
-    (api.notification.subscribe.useQuery as vi.Mock).mockReturnValue({
-      data: {
-        type: 'initial_state',
-        notifications: [mockNotifications[0]], // only unread ones
-        timestamp: '2024-01-15T12:00:00Z',
-        note: 'This is a placeholder'
-      },
+    (api.notification.subscribeToReadStatus.useSubscription as vi.Mock).mockReturnValue({
+      data: null,
       error: null
     });
     

@@ -3,6 +3,8 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
 import { NotificationService } from '@/server/services/notificationService';
 import { TRPCError } from '@trpc/server';
 import { NotificationType } from '@prisma/client';
+import { observable } from '@trpc/server/observable';
+import { notificationEventEmitter, type NotificationReadStatusEvent } from '@/server/services/eventEmitter';
 
 // Zod schemas for input validation
 const notificationPrioritySchema = z.enum(['low', 'medium', 'high', 'critical']);
@@ -352,9 +354,29 @@ export const notificationRouter = createTRPCRouter({
           }
         });
 
+        // Get updated unread count for real-time sync
+        const unreadCount = await ctx.db.notification.count({
+          where: {
+            userId: ctx.session.user.id,
+            isRead: false
+          }
+        });
+
+        // Broadcast read status change to all user sessions for multi-device sync
+        if (result.count > 0) {
+          notificationEventEmitter.broadcastReadStatusChange({
+            userId: ctx.session.user.id,
+            notificationIds,
+            isRead: true,
+            unreadCount,
+            timestamp: new Date()
+          });
+        }
+
         return {
           success: true,
           updatedCount: result.count,
+          unreadCount,
           message: `Marked ${result.count} notification(s) as read`
         };
       } catch (error) {
@@ -406,6 +428,19 @@ export const notificationRouter = createTRPCRouter({
   markAllAsRead: protectedProcedure
     .mutation(async ({ ctx }) => {
       try {
+        // Get all unread notification IDs before marking them as read
+        const unreadNotifications = await ctx.db.notification.findMany({
+          where: {
+            userId: ctx.session.user.id,
+            isRead: false
+          },
+          select: {
+            id: true
+          }
+        });
+
+        const notificationIds = unreadNotifications.map(n => n.id);
+
         const result = await ctx.db.notification.updateMany({
           where: {
             userId: ctx.session.user.id,
@@ -416,9 +451,21 @@ export const notificationRouter = createTRPCRouter({
           }
         });
 
+        // Broadcast bulk read status change to all user sessions for multi-device sync
+        if (result.count > 0) {
+          notificationEventEmitter.broadcastBulkReadStatusChange({
+            userId: ctx.session.user.id,
+            notificationIds,
+            isRead: true,
+            unreadCount: 0, // All notifications are now read
+            timestamp: new Date()
+          });
+        }
+
         return {
           success: true,
           updatedCount: result.count,
+          unreadCount: 0,
           message: `Marked ${result.count} notification(s) as read`
         };
       } catch (error) {
@@ -505,23 +552,52 @@ export const notificationRouter = createTRPCRouter({
     }),
 
   /**
-   * Real-time notification subscription endpoint
+   * Real-time notification read status subscription
    * 
-   * NOTE: This endpoint requires WebSocket infrastructure to be set up.
-   * Current implementation is a placeholder that shows the intended structure.
+   * Subscribes to read status changes for the current user across all devices.
+   * Emits events when notifications are marked as read on any device.
+   */
+  subscribeToReadStatus: protectedProcedure
+    .subscription(({ ctx }) => {
+      return observable<NotificationReadStatusEvent>((emit) => {
+        const userId = ctx.session.user.id;
+
+        // Handler for individual read status changes
+        const onReadStatusChange = (data: NotificationReadStatusEvent) => {
+          // Only emit events for the current user
+          if (data.userId === userId) {
+            emit.next(data);
+          }
+        };
+
+        // Handler for bulk read status changes (mark all as read)
+        const onBulkReadStatusChange = (data: NotificationReadStatusEvent) => {
+          // Only emit events for the current user
+          if (data.userId === userId) {
+            emit.next(data);
+          }
+        };
+
+        // Subscribe to user-specific events
+        notificationEventEmitter.subscribeToUserReadStatus(userId, onReadStatusChange);
+        notificationEventEmitter.subscribeToUserBulkReadStatus(userId, onBulkReadStatusChange);
+
+        // Cleanup function when subscription ends
+        return () => {
+          notificationEventEmitter.unsubscribeFromUser(userId, onReadStatusChange);
+          notificationEventEmitter.unsubscribeFromUser(userId, onBulkReadStatusChange);
+        };
+      });
+    }),
+
+  /**
+   * Legacy subscription endpoint (for backward compatibility)
    * 
-   * To implement full real-time subscriptions:
-   * 1. Add WebSocket support to tRPC server configuration
-   * 2. Install @trpc/server with WebSocket adapter
-   * 3. Set up event emitters/pub-sub system
-   * 4. Configure subscription resolver with user filtering
-   * 
-   * For now, clients should use polling with getUnread/getCount endpoints.
+   * @deprecated Use subscribeToReadStatus for real-time read status updates
    */
   subscribe: protectedProcedure
     .query(async ({ ctx }) => {
-      // Placeholder implementation that returns current state
-      // In full implementation, this would be a subscription that emits events
+      // Legacy implementation for backward compatibility
       try {
         const notifications = await ctx.db.notification.findMany({
           where: {
@@ -547,7 +623,7 @@ export const notificationRouter = createTRPCRouter({
           type: 'initial_state',
           notifications,
           timestamp: new Date().toISOString(),
-          note: 'This is a placeholder. Full real-time subscriptions require WebSocket infrastructure setup.'
+          note: 'This is a legacy endpoint. Use subscribeToReadStatus for real-time updates.'
         };
       } catch (error) {
         throw new TRPCError({

@@ -472,7 +472,7 @@
       "id": 8,
       "title": "Implement Browser Push Notifications",
       "description": "Add browser notification support for users not actively viewing the application.",
-      "status": "pending",
+      "status": "done",
       "dependencies": [
         4
       ],
@@ -484,7 +484,7 @@
           "id": 1,
           "title": "Design Browser Notification Interface and Service",
           "description": "Define the BrowserNotification interface structure and create a notification service module to encapsulate all browser notification logic.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [],
           "details": "Specify the BrowserNotification interface with fields for title, body, icon, and action buttons as per the PRD. Implement a notification service class or module that exposes methods for requesting permission, creating notifications, and handling notification events. Ensure the service is modular and reusable."
         },
@@ -492,7 +492,7 @@
           "id": 2,
           "title": "Implement Permission Request and State Management",
           "description": "Handle browser notification permission requests and manage the user's permission state within the application.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             1
           ],
@@ -502,7 +502,7 @@
           "id": 3,
           "title": "Create Structured Notification Generation Logic",
           "description": "Implement the logic to generate and display browser notifications using the Notification API, following the structured format defined in the interface.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -512,7 +512,7 @@
           "id": 4,
           "title": "Implement Notification Click Handling and Navigation",
           "description": "Handle click events on browser notifications to navigate users to the appropriate page and mark notifications as read.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             3
           ],
@@ -522,7 +522,7 @@
           "id": 5,
           "title": "Add Graceful Fallback to In-App Notifications",
           "description": "Implement fallback logic to display in-app notifications if browser notification permissions are denied or unavailable.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             2
           ],
@@ -532,7 +532,7 @@
           "id": 6,
           "title": "Test and Validate Notification Flows Across Browsers",
           "description": "Thoroughly test browser notification flows, permission handling, click actions, and fallback mechanisms on all supported browsers and platforms.",
-          "status": "pending",
+          "status": "done",
           "dependencies": [
             4,
             5

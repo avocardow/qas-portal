@@ -194,6 +194,7 @@ describe('Notification Router', () => {
   describe('markAsRead', () => {
     it('should mark single notification as read', async () => {
       mockUpdateMany.mockResolvedValue({ count: 1 });
+      mockCount.mockResolvedValue(4); // Remaining unread count after marking one as read
 
       const result = await caller.markAsRead({ notificationId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' });
 
@@ -206,15 +207,24 @@ describe('Notification Router', () => {
         data: { isRead: true }
       });
 
+      expect(mockCount).toHaveBeenCalledWith({
+        where: {
+          userId: 'test-user-id',
+          isRead: false
+        }
+      });
+
       expect(result).toEqual({
         success: true,
         updatedCount: 1,
+        unreadCount: 4,
         message: 'Marked 1 notification(s) as read'
       });
     }, 5000);
 
     it('should mark multiple notifications as read', async () => {
       mockUpdateMany.mockResolvedValue({ count: 2 });
+      mockCount.mockResolvedValue(3); // Remaining unread count after marking two as read
 
       const result = await caller.markAsRead({ 
         notificationIds: ['a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'b2c3d4e5-f6a7-8901-bcde-f23456789012'] 
@@ -229,9 +239,17 @@ describe('Notification Router', () => {
         data: { isRead: true }
       });
 
+      expect(mockCount).toHaveBeenCalledWith({
+        where: {
+          userId: 'test-user-id',
+          isRead: false
+        }
+      });
+
       expect(result).toEqual({
         success: true,
         updatedCount: 2,
+        unreadCount: 3,
         message: 'Marked 2 notification(s) as read'
       });
     }, 5000);
@@ -245,9 +263,26 @@ describe('Notification Router', () => {
 
   describe('markAllAsRead', () => {
     it('should mark all unread notifications as read', async () => {
+      const mockUnreadNotifications = [
+        { id: 'notif-1' },
+        { id: 'notif-2' },
+        { id: 'notif-3' }
+      ];
+      
+      mockFindMany.mockResolvedValue(mockUnreadNotifications);
       mockUpdateMany.mockResolvedValue({ count: 3 });
 
       const result = await caller.markAllAsRead();
+
+      expect(mockFindMany).toHaveBeenCalledWith({
+        where: {
+          userId: 'test-user-id',
+          isRead: false
+        },
+        select: {
+          id: true
+        }
+      });
 
       expect(mockUpdateMany).toHaveBeenCalledWith({
         where: {
@@ -260,6 +295,7 @@ describe('Notification Router', () => {
       expect(result).toEqual({
         success: true,
         updatedCount: 3,
+        unreadCount: 0,
         message: 'Marked 3 notification(s) as read'
       });
     }, 5000);
@@ -311,7 +347,7 @@ describe('Notification Router', () => {
         type: 'initial_state',
         notifications: mockNotifications,
         timestamp: expect.any(String),
-        note: 'This is a placeholder. Full real-time subscriptions require WebSocket infrastructure setup.'
+        note: 'This is a legacy endpoint. Use subscribeToReadStatus for real-time updates.'
       });
     }, 5000);
 

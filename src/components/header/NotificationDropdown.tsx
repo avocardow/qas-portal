@@ -86,24 +86,37 @@ export default function NotificationDropdown() {
     }
   }, [refetchUnread]);
 
-  // Subscription placeholder - using regular query for now since subscribe is not a true subscription
+  // Real-time subscription for read status changes across devices
   const { 
-    data: subscriptionData,
     error: subscriptionError 
-  } = api.notification.subscribe.useQuery(undefined, {
-    enabled: true,
-    refetchInterval: 30000, // Poll every 30 seconds for updates
-    refetchOnWindowFocus: false
+  } = api.notification.subscribeToReadStatus.useSubscription(undefined, {
+    onData: (data) => {
+      console.log('Received read status update:', data);
+      
+      // Update local state optimistically
+      setLocalNotifications(prev => 
+        prev.map(notification => 
+          data.notificationIds.includes(notification.id)
+            ? { ...notification, isRead: data.isRead }
+            : notification
+        )
+      );
+      
+      // Update unread count from server
+      setLocalUnreadCount(data.unreadCount);
+      
+      // Refetch to ensure consistency
+      refetchUnread();
+      refetchCount();
+    },
+    onError: (error) => {
+      console.error('Read status subscription error:', error);
+      setConnectionStatus('error');
+      handleReconnection();
+    },
   });
 
-  // Handle subscription data changes
-  useEffect(() => {
-    if (subscriptionData) {
-      console.log('Received subscription data:', subscriptionData);
-      setConnectionStatus('connected');
-      reconnectAttemptsRef.current = 0;
-    }
-  }, [subscriptionData]);
+  // Connection status updates are now handled in subscription callbacks
 
   // Handle subscription errors
   useEffect(() => {
