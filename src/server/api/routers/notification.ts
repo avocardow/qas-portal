@@ -39,7 +39,87 @@ const markAsReadSchema = z.object({
   notificationIds: z.array(z.string().uuid()).min(1, 'At least one notification ID is required')
 });
 
+const markSingleAsReadSchema = z.object({
+  notificationId: z.string().uuid('Invalid notification ID format')
+});
+
 export const notificationRouter = createTRPCRouter({
+  /**
+   * Get unread notifications for the current user
+   */
+  getUnread: protectedProcedure
+    .input(z.object({
+      limit: z.number().min(1).max(100).optional().default(20),
+      offset: z.number().min(0).optional().default(0)
+    }))
+    .query(async ({ ctx, input }) => {
+      try {
+        const notifications = await ctx.db.notification.findMany({
+          where: {
+            userId: ctx.session.user.id,
+            isRead: false
+          },
+          select: {
+            id: true,
+            type: true,
+            message: true,
+            linkUrl: true,
+            isRead: true,
+            entityId: true,
+            createdAt: true,
+            createdByUser: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            }
+          },
+          orderBy: {
+            createdAt: 'desc'
+          },
+          take: input.limit,
+          skip: input.offset
+        });
+
+        return notifications;
+      } catch (error) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to fetch unread notifications',
+          cause: error
+        });
+      }
+    }),
+
+  /**
+   * Get unread notification count for the current user
+   */
+  getCount: protectedProcedure
+    .query(async ({ ctx }) => {
+      try {
+        const count = await ctx.db.notification.count({
+          where: {
+            userId: ctx.session.user.id,
+            isRead: false
+          }
+        });
+
+        return { count };
+      } catch (error) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to fetch notification count',
+          cause: error
+        });
+      }
+    }),
+
   /**
    * Create a client assignment notification
    */
@@ -248,9 +328,48 @@ export const notificationRouter = createTRPCRouter({
     }),
 
   /**
-   * Mark notifications as read
+   * Mark a single notification as read (alias for compatibility)
    */
   markAsRead: protectedProcedure
+    .input(z.union([markAsReadSchema, markSingleAsReadSchema]))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // Handle both single notification ID and array of IDs
+        const notificationIds = 'notificationId' in input 
+          ? [input.notificationId] 
+          : input.notificationIds;
+
+        const result = await ctx.db.notification.updateMany({
+          where: {
+            id: {
+              in: notificationIds
+            },
+            userId: ctx.session.user.id, // Security: only update user's own notifications
+            isRead: false // Only update unread notifications
+          },
+          data: {
+            isRead: true
+          }
+        });
+
+        return {
+          success: true,
+          updatedCount: result.count,
+          message: `Marked ${result.count} notification(s) as read`
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to mark notifications as read',
+          cause: error
+        });
+      }
+    }),
+
+  /**
+   * Mark multiple notifications as read (explicit array endpoint)
+   */
+  markMultipleAsRead: protectedProcedure
     .input(markAsReadSchema)
     .mutation(async ({ ctx, input }) => {
       try {
@@ -380,6 +499,60 @@ export const notificationRouter = createTRPCRouter({
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to cleanup old notifications',
+          cause: error
+        });
+      }
+    }),
+
+  /**
+   * Real-time notification subscription endpoint
+   * 
+   * NOTE: This endpoint requires WebSocket infrastructure to be set up.
+   * Current implementation is a placeholder that shows the intended structure.
+   * 
+   * To implement full real-time subscriptions:
+   * 1. Add WebSocket support to tRPC server configuration
+   * 2. Install @trpc/server with WebSocket adapter
+   * 3. Set up event emitters/pub-sub system
+   * 4. Configure subscription resolver with user filtering
+   * 
+   * For now, clients should use polling with getUnread/getCount endpoints.
+   */
+  subscribe: protectedProcedure
+    .query(async ({ ctx }) => {
+      // Placeholder implementation that returns current state
+      // In full implementation, this would be a subscription that emits events
+      try {
+        const notifications = await ctx.db.notification.findMany({
+          where: {
+            userId: ctx.session.user.id,
+            isRead: false
+          },
+          select: {
+            id: true,
+            type: true,
+            message: true,
+            linkUrl: true,
+            isRead: true,
+            entityId: true,
+            createdAt: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          },
+          take: 10 // Latest 10 unread notifications
+        });
+
+        return {
+          type: 'initial_state',
+          notifications,
+          timestamp: new Date().toISOString(),
+          note: 'This is a placeholder. Full real-time subscriptions require WebSocket infrastructure setup.'
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to fetch notification subscription data',
           cause: error
         });
       }
