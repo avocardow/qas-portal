@@ -9,6 +9,7 @@ import {
   ACTIVITY_PERMISSIONS,
   NAV_PERMISSIONS,
   IMPERSONATION_PERMISSIONS,
+  NOTIFICATION_PERMISSIONS,
 } from '../constants/permissions.ts';
 
 /**
@@ -24,7 +25,8 @@ export type Permission =
   | (typeof TRUST_ACCOUNTS_PERMISSIONS)[keyof typeof TRUST_ACCOUNTS_PERMISSIONS]
   | (typeof ACTIVITY_PERMISSIONS)[keyof typeof ACTIVITY_PERMISSIONS]
   | (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS]
-  | (typeof IMPERSONATION_PERMISSIONS)[keyof typeof IMPERSONATION_PERMISSIONS];
+  | (typeof IMPERSONATION_PERMISSIONS)[keyof typeof IMPERSONATION_PERMISSIONS]
+  | (typeof NOTIFICATION_PERMISSIONS)[keyof typeof NOTIFICATION_PERMISSIONS];
 
 /**
  * Roles in the system.
@@ -48,6 +50,7 @@ export const permissionSchema: Record<Role, Permission[]> = {
     ...Object.values(DOCUMENT_PERMISSIONS),
     ...Object.values(PHONE_PERMISSIONS),
     ...Object.values(ACTIVITY_PERMISSIONS),
+    ...Object.values(NOTIFICATION_PERMISSIONS),
   ],
   Admin: [
     ...Object.values(AUDIT_PERMISSIONS),

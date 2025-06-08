@@ -2,6 +2,7 @@
 // import Link from "next/link"; // Removed - View All Notifications button hidden per user request
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { useAbility } from "@/hooks/useAbility";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { api } from "@/utils/api";
@@ -16,8 +17,21 @@ type ConnectionStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnec
 // Notification type from tRPC router output
 type NotificationItem = RouterOutput['notification']['getUserNotifications']['notifications'][0];
 
+// Extended notification type for Developer mode
+type ExtendedNotificationItem = NotificationItem & {
+  user?: {
+    id: string;
+    name: string | null;
+    email: string | null;
+    role: {
+      name: string;
+    } | null;
+  };
+};
+
 export default function NotificationDropdown() {
   const router = useRouter();
+  const { can } = useAbility();
   const [isOpen, setIsOpen] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected');
   const [localNotifications, setLocalNotifications] = useState<NotificationItem[]>([]);
@@ -25,6 +39,11 @@ export default function NotificationDropdown() {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const lastNotificationCountRef = useRef(0);
+  
+  // Developer debugging features
+  const [viewAllNotifications, setViewAllNotifications] = useState(false);
+  const [targetUserId, setTargetUserId] = useState<string>('');
+  const canViewAllNotifications = can('notification.viewAll');
   
   // Accessibility: Screen reader announcement for new notifications
   const [announceMessage, setAnnounceMessage] = useState<string>('');
@@ -76,7 +95,12 @@ export default function NotificationDropdown() {
   } = api.notification.getUserNotifications.useQuery({
     limit: 20,
     offset: 0,
-    unreadOnly: false // Get all notifications, not just unread
+    unreadOnly: false, // Get all notifications, not just unread
+    // Developer debugging parameters
+    ...(canViewAllNotifications && {
+      allUsers: viewAllNotifications,
+      targetUserId: targetUserId || undefined
+    })
   }, {
     refetchOnWindowFocus: false,
     staleTime: 30000 // 30 seconds
@@ -479,6 +503,58 @@ export default function NotificationDropdown() {
           </div>
         </div>
 
+        {/* Developer debugging controls */}
+        {canViewAllNotifications && (
+          <div className="mb-3 rounded-lg border border-orange-200 bg-orange-50 p-3 dark:border-orange-800 dark:bg-orange-900/20">
+            <div className="mb-2 flex items-center gap-2">
+              <svg className="size-4 text-orange-600 dark:text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              <span className="text-xs font-medium text-orange-800 dark:text-orange-200">
+                Developer Mode
+              </span>
+            </div>
+            
+            <div className="space-y-2">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={viewAllNotifications}
+                  onChange={(e) => setViewAllNotifications(e.target.checked)}
+                  className="size-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="text-xs text-gray-700 dark:text-gray-300">
+                  View all notifications (system-wide)
+                </span>
+              </label>
+              
+              {viewAllNotifications && (
+                <div>
+                  <label className="block text-xs text-gray-700 dark:text-gray-300 mb-1">
+                    Filter by User ID (optional):
+                  </label>
+                  <input
+                    type="text"
+                    value={targetUserId}
+                    onChange={(e) => setTargetUserId(e.target.value)}
+                    placeholder="Enter user ID..."
+                    className="w-full rounded border border-gray-300 px-2 py-1 text-xs dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                  />
+                </div>
+              )}
+              
+              {allNotificationsData?.debugInfo && (
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  <div>Viewing: {allNotificationsData.debugInfo.queriedAllUsers ? 'All Users' : 'Current User'}</div>
+                  {allNotificationsData.debugInfo.targetUserId && (
+                    <div>User: {allNotificationsData.debugInfo.targetUserId}</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Notifications list */}
         <ul 
           className="custom-scrollbar flex h-auto flex-col overflow-y-auto"
@@ -559,6 +635,13 @@ export default function NotificationDropdown() {
                       {renderMessage(notification.message)}
                     </span>
 
+                    {/* Developer mode: Show recipient info when viewing all notifications */}
+                    {canViewAllNotifications && viewAllNotifications && (notification as ExtendedNotificationItem).user && (
+                      <span className="text-theme-xs mb-1 block text-blue-600 dark:text-blue-400">
+                        → {(notification as ExtendedNotificationItem).user!.name || (notification as ExtendedNotificationItem).user!.email} ({(notification as ExtendedNotificationItem).user!.role?.name})
+                      </span>
+                    )}
+
                     <span className="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
                       <span>{getFriendlyNotificationType(notification.type)}</span>
                       <span className="size-1 rounded-full bg-gray-400"></span>
@@ -570,6 +653,13 @@ export default function NotificationDropdown() {
                           minute: '2-digit'
                         })}
                       </span>
+                      {/* Developer mode: Show notification ID */}
+                      {canViewAllNotifications && (
+                        <>
+                          <span className="size-1 rounded-full bg-gray-400"></span>
+                          <span className="text-xs text-gray-400">ID: {notification.id.slice(0, 8)}</span>
+                        </>
+                      )}
                     </span>
                   </span>
                 </DropdownItem>

@@ -108,4 +108,11 @@ export const IMPERSONATION_PERMISSIONS = {
 
 export type ImpersonationPermission = (typeof IMPERSONATION_PERMISSIONS)[keyof typeof IMPERSONATION_PERMISSIONS];
 
+// Permissions for notification operations
+export const NOTIFICATION_PERMISSIONS = {
+  VIEW_ALL: 'notification.viewAll', // Developer-only permission to see all notifications
+} as const;
+
+export type NotificationPermission = (typeof NOTIFICATION_PERMISSIONS)[keyof typeof NOTIFICATION_PERMISSIONS];
+
 export type NavPermission = (typeof NAV_PERMISSIONS)[keyof typeof NAV_PERMISSIONS];

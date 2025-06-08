@@ -7,6 +7,7 @@ import { observable } from '@trpc/server/observable';
 import { notificationEventEmitter, type NotificationReadStatusEvent } from '@/server/services/eventEmitter';
 import { NotificationCache } from '@/lib/redis';
 import { MetricsCollector } from '@/lib/metrics';
+import { roleHasPermission, type Role } from '@/policies/permissions';
 
 // Zod schemas for input validation
 const notificationPrioritySchema = z.enum(['low', 'medium', 'high', 'critical']);
@@ -51,19 +52,26 @@ const markSingleAsReadSchema = z.object({
 export const notificationRouter = createTRPCRouter({
   /**
    * Get unread notifications for the current user
+   * Developers can see all notifications for debugging
    */
   getUnread: protectedProcedure
     .input(z.object({
       limit: z.number().min(1).max(100).optional().default(20),
-      offset: z.number().min(0).optional().default(0)
+      offset: z.number().min(0).optional().default(0),
+      allUsers: z.boolean().optional().default(false) // Developer-only flag
     }))
     .query(async ({ ctx, input }) => {
       try {
+        // Check if user has Developer permissions and wants to see all notifications
+        const userRoleName = ctx.session.user.role;
+        const canSeeAllNotifications = userRoleName && roleHasPermission(userRoleName as Role, 'notification.viewAll') && input.allUsers;
+        
+        const whereClause = canSeeAllNotifications 
+          ? { isRead: false } // Developers see all unread notifications
+          : { userId: ctx.session.user.id, isRead: false }; // Regular users see only their own
+
         const notifications = await ctx.db.notification.findMany({
-          where: {
-            userId: ctx.session.user.id,
-            isRead: false
-          },
+          where: whereClause,
           select: {
             id: true,
             type: true,
@@ -72,6 +80,19 @@ export const notificationRouter = createTRPCRouter({
             isRead: true,
             entityId: true,
             createdAt: true,
+            userId: true, // Include userId for Developer view
+            user: canSeeAllNotifications ? { // Include recipient info for Developer view
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            } : undefined,
             createdByUser: {
               select: {
                 id: true,
@@ -105,13 +126,23 @@ export const notificationRouter = createTRPCRouter({
 
   /**
    * Get unread notification count for the current user with caching
+   * Developers can get counts for all users
    */
   getCount: protectedProcedure
-    .query(async ({ ctx }) => {
+    .input(z.object({
+      allUsers: z.boolean().optional().default(false) // Developer-only flag
+    }))
+    .query(async ({ ctx, input }) => {
       try {
+        // Check if user has Developer permissions
+        const userRoleName = ctx.session.user.role;
+        const canSeeAllNotifications = userRoleName && roleHasPermission(userRoleName as Role, 'notification.viewAll') && input.allUsers;
+        
+        const cacheKey = canSeeAllNotifications ? 'system_all_unread' : ctx.session.user.id;
+        
         // Try to get from cache first
         const cachedCount = await MetricsCollector.trackCacheOperation('get', () =>
-          NotificationCache.getCachedNotificationCount(ctx.session.user.id, 'unread')
+          NotificationCache.getCachedNotificationCount(cacheKey, 'unread')
         );
 
         return await MetricsCollector.trackQuery('getCount', async () => {
@@ -122,16 +153,17 @@ export const notificationRouter = createTRPCRouter({
           }
 
           // Not in cache, query database
+          const whereClause = canSeeAllNotifications 
+            ? { isRead: false } // All unread notifications
+            : { userId: ctx.session.user.id, isRead: false }; // User's unread notifications
+
           const count = await ctx.db.notification.count({
-            where: {
-              userId: ctx.session.user.id,
-              isRead: false
-            }
+            where: whereClause
           });
 
           // Cache the result
           await MetricsCollector.trackCacheOperation('set', () =>
-            NotificationCache.cacheNotificationCount(ctx.session.user.id, count, 'unread')
+            NotificationCache.cacheNotificationCount(cacheKey, count, 'unread')
           );
 
           // Update metrics
@@ -286,23 +318,59 @@ export const notificationRouter = createTRPCRouter({
 
   /**
    * Get notifications for the current user with cursor-based pagination
+   * Developers can view notifications for all users
    */
   getUserNotifications: protectedProcedure
-    .input(getUserNotificationsSchema)
+    .input(getUserNotificationsSchema.extend({
+      allUsers: z.boolean().optional().default(false), // Developer-only flag
+      targetUserId: z.string().uuid().optional() // Developer can specify a specific user
+    }))
     .query(async ({ ctx, input }) => {
       try {
-        // Build where clause
-        const whereClause = {
-          userId: ctx.session.user.id,
-          ...(input.type && { type: input.type }),
-          ...(input.unreadOnly && { isRead: false }),
-          // Cursor-based pagination: get notifications older than cursor
-          ...(input.cursor && {
-            createdAt: {
-              lt: new Date(input.cursor)
-            }
-          })
-        };
+        // Check if user has Developer permissions
+        const userRoleName = ctx.session.user.role;
+        const canSeeAllNotifications = userRoleName && roleHasPermission(userRoleName as Role, 'notification.viewAll') && input.allUsers;
+        
+        // Build where clause based on permissions
+        let whereClause;
+        if (canSeeAllNotifications) {
+          if (input.targetUserId) {
+            // Developer viewing specific user's notifications
+            whereClause = {
+              userId: input.targetUserId,
+              ...(input.type && { type: input.type }),
+              ...(input.unreadOnly && { isRead: false }),
+              ...(input.cursor && {
+                createdAt: {
+                  lt: new Date(input.cursor)
+                }
+              })
+            };
+          } else {
+            // Developer viewing all notifications
+            whereClause = {
+              ...(input.type && { type: input.type }),
+              ...(input.unreadOnly && { isRead: false }),
+              ...(input.cursor && {
+                createdAt: {
+                  lt: new Date(input.cursor)
+                }
+              })
+            };
+          }
+        } else {
+          // Regular user - only their own notifications
+          whereClause = {
+            userId: ctx.session.user.id,
+            ...(input.type && { type: input.type }),
+            ...(input.unreadOnly && { isRead: false }),
+            ...(input.cursor && {
+              createdAt: {
+                lt: new Date(input.cursor)
+              }
+            })
+          };
+        }
 
         const notifications = await ctx.db.notification.findMany({
           where: whereClause,
@@ -314,6 +382,19 @@ export const notificationRouter = createTRPCRouter({
             isRead: true,
             entityId: true,
             createdAt: true,
+            userId: true, // Always include for Developer debugging
+            user: canSeeAllNotifications ? { // Include recipient info for Developer view
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            } : undefined,
             createdByUser: {
               select: {
                 id: true,
@@ -345,19 +426,23 @@ export const notificationRouter = createTRPCRouter({
           ? notifications[notifications.length - 1]?.createdAt.toISOString()
           : null;
 
-        // Get total counts (cached for performance)
+        // Get counts based on permissions
+        const countUserId = canSeeAllNotifications 
+          ? (input.targetUserId || 'system_all') 
+          : ctx.session.user.id;
+        
         const filterHash = input.type ? `type:${input.type}` : '';
         const unreadFilterHash = input.unreadOnly ? 'unread' : '';
         
         // Try to get cached counts first
         const [cachedTotalCount, cachedUnreadCount] = await Promise.all([
           NotificationCache.getCachedNotificationCount(
-            ctx.session.user.id, 
+            countUserId, 
             'total', 
             `${filterHash}${unreadFilterHash}`
           ),
           NotificationCache.getCachedNotificationCount(
-            ctx.session.user.id, 
+            countUserId, 
             'unread'
           )
         ]);
@@ -368,18 +453,26 @@ export const notificationRouter = createTRPCRouter({
         // Query database for missing counts
         const queries = [];
         if (totalCount === null) {
-          queries.push(
-            ctx.db.notification.count({
-              where: {
-                userId: ctx.session.user.id,
+          const countWhereClause = canSeeAllNotifications
+            ? {
+                ...(input.targetUserId && { userId: input.targetUserId }),
                 ...(input.type && { type: input.type }),
                 ...(input.unreadOnly && { isRead: false })
               }
+            : {
+                userId: ctx.session.user.id,
+                ...(input.type && { type: input.type }),
+                ...(input.unreadOnly && { isRead: false })
+              };
+
+          queries.push(
+            ctx.db.notification.count({
+              where: countWhereClause
             }).then(count => {
               totalCount = count;
               // Cache the result
               NotificationCache.cacheNotificationCount(
-                ctx.session.user.id, 
+                countUserId, 
                 count, 
                 'total', 
                 `${filterHash}${unreadFilterHash}`
@@ -389,17 +482,24 @@ export const notificationRouter = createTRPCRouter({
         }
 
         if (unreadCount === null) {
-          queries.push(
-            ctx.db.notification.count({
-              where: {
-                userId: ctx.session.user.id,
+          const unreadWhereClause = canSeeAllNotifications
+            ? {
+                ...(input.targetUserId && { userId: input.targetUserId }),
                 isRead: false
               }
+            : {
+                userId: ctx.session.user.id,
+                isRead: false
+              };
+
+          queries.push(
+            ctx.db.notification.count({
+              where: unreadWhereClause
             }).then(count => {
               unreadCount = count;
               // Cache the result
               NotificationCache.cacheNotificationCount(
-                ctx.session.user.id, 
+                countUserId, 
                 count, 
                 'unread'
               );
@@ -419,7 +519,15 @@ export const notificationRouter = createTRPCRouter({
           hasMore,
           nextCursor,
           // Legacy support for offset-based pagination
-          hasMoreLegacy: input.offset + input.limit < (totalCount ?? 0)
+          hasMoreLegacy: input.offset + input.limit < (totalCount ?? 0),
+          // Developer debugging info
+          ...(canSeeAllNotifications && {
+            debugInfo: {
+              queriedAllUsers: input.allUsers,
+              targetUserId: input.targetUserId,
+              whereClause: JSON.stringify(whereClause)
+            }
+          })
         };
       } catch (error) {
         throw new TRPCError({
