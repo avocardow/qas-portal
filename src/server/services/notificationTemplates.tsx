@@ -147,15 +147,7 @@ export class NotificationTemplateService {
   ): NotificationTemplate {
     const content = <ClientAssignmentTemplate data={data} />;
     
-    const plainTextContent = `
-New Client Assignment
-
-      You have been assigned as the manager for client: ${data.clientName}.
-
-Assignment Date: ${data.assignmentDate.toLocaleDateString('en-AU')}
-
-Please review the client details and ensure all necessary documentation is up to date.
-    `.trim();
+    const plainTextContent = `[${data.managerName}] assigned you as the manager for [${data.clientName}].`;
 
     return {
       subject: `New Client Assignment: ${data.clientName}`,
@@ -174,17 +166,7 @@ Please review the client details and ensure all necessary documentation is up to
   ): NotificationTemplate {
     const content = <AuditAssignmentTemplate data={data} />;
     
-    const plainTextContent = `
-New Audit Assignment
-
-You have been assigned to audit ${data.clientName} for the ${data.auditYear} financial year.
-
-${data.periodEndDate ? `Period End Date: ${data.periodEndDate.toLocaleDateString('en-AU')}` : ''}
-
-Assignment Date: ${data.assignmentDate.toLocaleDateString('en-AU')}
-
-Please begin the audit process by reviewing the client's documentation and planning the audit procedures.
-    `.trim();
+    const plainTextContent = `[${data.assignedByName}] assigned you to audit [${data.clientName}] for [${data.auditYear}].`;
 
     return {
       subject: `New Audit Assignment: ${data.clientName} (${data.auditYear})`,
@@ -203,7 +185,7 @@ Please begin the audit process by reviewing the client's documentation and plann
     updateType: 'stage' | 'status'
   ): NotificationTemplate {
     const isStage = updateType === 'stage';
-    const updateTypeText = isStage ? 'Stage' : 'Status';
+    const updateTypeText = isStage ? 'stage' : 'status';
     
     const content = isStage ? (
       <AuditStageUpdateTemplate data={data} />
@@ -211,18 +193,7 @@ Please begin the audit process by reviewing the client's documentation and plann
       <AuditStatusUpdateTemplate data={data} />
     );
     
-    const plainTextContent = `
-Audit ${updateTypeText} Update
-
-The audit ${updateType} for ${data.clientName} (${data.auditYear}) has been updated.
-
-Previous ${updateTypeText}: ${data.previousValue}
-New ${updateTypeText}: ${data.newValue}
-
-Updated by: ${data.updatedBy}
-
-Please review the updated audit ${updateType} and ${isStage ? 'adjust your workflow accordingly' : 'take any necessary actions'}.
-    `.trim();
+    const plainTextContent = `[${data.updatedBy}] updated the audit ${updateTypeText} for [${data.clientName}] - [${data.auditYear}].`;
 
     return {
       subject: `Audit ${updateTypeText} Update: ${data.clientName} (${data.auditYear})`,

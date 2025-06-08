@@ -52,6 +52,7 @@ export interface ClientAssignmentData {
   clientId: string;
   clientName: string;
   managerName: string;
+  assignedByName: string;
   assignmentDate: Date;
 }
 
@@ -63,6 +64,7 @@ export interface AuditAssignmentData {
   clientName: string;
   auditYear: number;
   auditorName: string;
+  assignedByName: string;
   assignmentDate: Date;
   periodEndDate?: Date;
 }

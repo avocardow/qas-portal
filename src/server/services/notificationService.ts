@@ -449,6 +449,7 @@ export class NotificationService {
       clientId,
       clientName: clientValidation.entity!.clientName,
       managerName: recipient.name || 'Unknown',
+      assignedByName: sender.name || 'Unknown',
       assignmentDate: new Date()
     };
 
@@ -508,8 +509,8 @@ export class NotificationService {
       };
     }
 
-    // Check for duplicates
-    const isDuplicate = await this.checkDuplicateNotification(auditorId, 'audit_assignment', auditId);
+    // Check for duplicates using clientId since that's what we store in entityId
+    const isDuplicate = await this.checkDuplicateNotification(auditorId, 'audit_assignment', auditValidation.entity!.client.id);
     if (isDuplicate) {
       return {
         success: false,
@@ -535,6 +536,7 @@ export class NotificationService {
       clientName: auditValidation.entity!.client.clientName,
       auditYear: auditValidation.entity!.auditYear,
       auditorName: recipient.name || 'Unknown',
+      assignedByName: sender.name || 'Unknown',
       assignmentDate: new Date(),
       periodEndDate: auditValidation.entity!.client.auditPeriodEndDate || undefined
     };
@@ -544,12 +546,12 @@ export class NotificationService {
       auditAssignmentData
     );
 
-    // Create notification
+    // Create notification with clientId as entityId for navigation purposes
     return this.createNotification(
       'audit_assignment',
       auditorId,
       createdByUserId,
-      auditId,
+      auditValidation.entity!.client.id, // Use clientId instead of auditId
       template.plainTextContent,
       template.actionUrl
     );
@@ -617,8 +619,8 @@ export class NotificationService {
 
     // Create notifications for each recipient
     for (const recipientId of filteredRecipientIds) {
-      // Check for duplicates
-      const isDuplicate = await this.checkDuplicateNotification(recipientId, notificationType, auditId);
+      // Check for duplicates using clientId since that's what we store in entityId
+      const isDuplicate = await this.checkDuplicateNotification(recipientId, notificationType, auditValidation.entity!.client.id);
       if (isDuplicate) {
         results.push({
           success: false,
@@ -640,12 +642,12 @@ export class NotificationService {
         continue;
       }
 
-      // Create notification
+      // Create notification with clientId as entityId for navigation purposes
       const result = await this.createNotification(
         notificationType,
         recipientId,
         createdByUserId,
-        auditId,
+        auditValidation.entity!.client.id, // Use clientId instead of auditId
         template.plainTextContent,
         template.actionUrl
       );

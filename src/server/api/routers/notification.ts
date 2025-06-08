@@ -77,6 +77,7 @@ export const notificationRouter = createTRPCRouter({
                 id: true,
                 name: true,
                 email: true,
+                image: true,
                 role: {
                   select: {
                     name: true
@@ -318,6 +319,7 @@ export const notificationRouter = createTRPCRouter({
                 id: true,
                 name: true,
                 email: true,
+                image: true,
                 role: {
                   select: {
                     name: true

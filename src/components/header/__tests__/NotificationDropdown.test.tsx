@@ -100,16 +100,25 @@ describe('NotificationDropdown', () => {
     (useRouter as vi.Mock).mockReturnValue(mockRouter);
     
     // Default mock implementations
-    (api.notification.getUnread.useQuery as vi.Mock).mockReturnValue({
-      data: mockNotifications,
+    (api.notification.getUserNotifications.useQuery as vi.Mock).mockReturnValue({
+      data: {
+        notifications: mockNotifications,
+        unreadCount: 1,
+        totalCount: 1,
+        hasMore: false,
+        nextCursor: null
+      },
       isLoading: false,
-      refetch: vi.fn().mockResolvedValue({ data: mockNotifications }),
+      refetch: vi.fn().mockResolvedValue({ 
+        data: {
+          notifications: mockNotifications,
+          unreadCount: 1,
+          totalCount: 1,
+          hasMore: false,
+          nextCursor: null
+        }
+      }),
       error: null
-    });
-    
-    (api.notification.getCount.useQuery as vi.Mock).mockReturnValue({
-      data: { count: 1 },
-      refetch: vi.fn().mockResolvedValue({ data: { count: 1 } })
     });
     
     (api.notification.subscribeToReadStatus.useSubscription as vi.Mock).mockReturnValue({
@@ -137,9 +146,17 @@ describe('NotificationDropdown', () => {
     });
 
     it('does not show badge when unread count is 0', () => {
-      (api.notification.getCount.useQuery as vi.Mock).mockReturnValue({
-        data: { count: 0 },
-        refetch: vi.fn()
+      (api.notification.getUserNotifications.useQuery as vi.Mock).mockReturnValue({
+        data: {
+          notifications: [],
+          unreadCount: 0,
+          totalCount: 0,
+          hasMore: false,
+          nextCursor: null
+        },
+        isLoading: false,
+        refetch: vi.fn(),
+        error: null
       });
       
       render(<NotificationDropdown />);
@@ -148,9 +165,17 @@ describe('NotificationDropdown', () => {
     });
 
     it('shows 99+ when unread count exceeds 99', () => {
-      (api.notification.getCount.useQuery as vi.Mock).mockReturnValue({
-        data: { count: 150 },
-        refetch: vi.fn()
+      (api.notification.getUserNotifications.useQuery as vi.Mock).mockReturnValue({
+        data: {
+          notifications: mockNotifications,
+          unreadCount: 150,
+          totalCount: 150,
+          hasMore: false,
+          nextCursor: null
+        },
+        isLoading: false,
+        refetch: vi.fn(),
+        error: null
       });
       
       render(<NotificationDropdown />);
@@ -172,7 +197,7 @@ describe('NotificationDropdown', () => {
     });
 
     it('shows loading state when notifications are loading', async () => {
-      (api.notification.getUnread.useQuery as vi.Mock).mockReturnValue({
+      (api.notification.getUserNotifications.useQuery as vi.Mock).mockReturnValue({
         data: null,
         isLoading: true,
         refetch: vi.fn(),
@@ -187,7 +212,7 @@ describe('NotificationDropdown', () => {
     });
 
     it('shows error state when there is an error', async () => {
-      (api.notification.getUnread.useQuery as vi.Mock).mockReturnValue({
+      (api.notification.getUserNotifications.useQuery as vi.Mock).mockReturnValue({
         data: null,
         isLoading: false,
         refetch: vi.fn(),
@@ -205,8 +230,14 @@ describe('NotificationDropdown', () => {
     });
 
     it('shows empty state when there are no notifications', async () => {
-      (api.notification.getUnread.useQuery as vi.Mock).mockReturnValue({
-        data: [],
+      (api.notification.getUserNotifications.useQuery as vi.Mock).mockReturnValue({
+        data: {
+          notifications: [],
+          unreadCount: 0,
+          totalCount: 0,
+          hasMore: false,
+          nextCursor: null
+        },
         isLoading: false,
         refetch: vi.fn(),
         error: null

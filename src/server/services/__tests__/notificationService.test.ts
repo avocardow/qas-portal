@@ -23,6 +23,7 @@ describe('NotificationTemplateService', () => {
         clientId: 'client-1',
         clientName: 'Acme Corp',
         managerName: 'Jane Smith',
+        assignedByName: 'Admin User',
         assignmentDate: new Date('2024-01-15')
       };
       
@@ -40,6 +41,7 @@ describe('NotificationTemplateService', () => {
         clientName: 'Acme Corp',
         auditYear: 2024,
         auditorName: 'Bob Wilson',
+        assignedByName: 'Admin User',
         assignmentDate: new Date('2024-01-15'),
         periodEndDate: new Date('2024-06-30')
       };
@@ -111,6 +113,7 @@ describe('NotificationTemplateService', () => {
         clientId: 'client-1',
         clientName: 'Acme Corp',
         managerName: 'Jane Smith',
+        assignedByName: 'Admin User',
         assignmentDate: new Date()
       };
       
@@ -134,6 +137,7 @@ describe('NotificationTemplateService', () => {
         clientName: 'Acme Corp',
         auditYear: 2024,
         auditorName: 'Bob Wilson',
+        assignedByName: 'Admin User',
         assignmentDate: new Date()
       };
       
@@ -148,6 +152,7 @@ describe('NotificationTemplateService', () => {
         clientId: 'client-1',
         clientName: 'Acme Corp',
         managerName: 'Jane Smith',
+        assignedByName: 'Admin User',
         assignmentDate: new Date()
       };
       

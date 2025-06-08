@@ -1,11 +1,12 @@
 "use client";
 // import Link from "next/link"; // Removed - View All Notifications button hidden per user request
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { api } from "@/utils/api";
 import type { RouterOutput } from "@/utils/api";
+import Image from "next/image";
 
 import { createAndSendBrowserNotification } from '@/lib/notificationIntegration';
 
@@ -13,7 +14,7 @@ import { createAndSendBrowserNotification } from '@/lib/notificationIntegration'
 type ConnectionStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected' | 'error';
 
 // Notification type from tRPC router output
-type NotificationItem = RouterOutput['notification']['getUnread'][0];
+type NotificationItem = RouterOutput['notification']['getUserNotifications']['notifications'][0];
 
 export default function NotificationDropdown() {
   const router = useRouter();
@@ -28,6 +29,28 @@ export default function NotificationDropdown() {
   // Accessibility: Screen reader announcement for new notifications
   const [announceMessage, setAnnounceMessage] = useState<string>('');
   const announceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Helper function to get friendly notification type display text
+  const getFriendlyNotificationType = useCallback((type: string): string => {
+    switch (type) {
+      case 'client_assignment':
+        return 'Client Assigned';
+      case 'audit_assignment':
+        return 'Audit Assigned';
+      case 'audit_stage_update':
+        return 'Stage Updated';
+      case 'audit_status_update':
+        return 'Status Updated';
+      default:
+        return type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+  }, []);
+
+  // Helper function to get client ID from notification
+  const getClientIdFromNotification = useCallback((notification: NotificationItem): string => {
+    // All notifications now store clientId in entityId field
+    return notification.entityId || '';
+  }, []);
 
   // Screen reader announcement function
   const announceToScreenReader = useCallback((message: string) => {
@@ -46,25 +69,22 @@ export default function NotificationDropdown() {
 
   // tRPC queries and mutations
   const { 
-    data: unreadData, 
-    isLoading: isLoadingUnread,
-    refetch: refetchUnread,
-    error: unreadError
-  } = api.notification.getUnread.useQuery({
+    data: allNotificationsData, 
+    isLoading: isLoadingNotifications,
+    refetch: refetchNotifications,
+    error: notificationsError
+  } = api.notification.getUserNotifications.useQuery({
     limit: 20,
-    offset: 0
+    offset: 0,
+    unreadOnly: false // Get all notifications, not just unread
   }, {
     refetchOnWindowFocus: false,
     staleTime: 30000 // 30 seconds
   });
 
-  const { 
-    data: countData, 
-    refetch: refetchCount 
-  } = api.notification.getCount.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-    staleTime: 10000 // 10 seconds
-  });
+  // Extract notifications data from the response with memoization to prevent unnecessary re-renders
+  const notifications = useMemo(() => allNotificationsData?.notifications || [], [allNotificationsData?.notifications]);
+  const serverUnreadCount = allNotificationsData?.unreadCount || 0;
 
   const markAsReadMutation = api.notification.markAsRead.useMutation();
   const markAllAsReadMutation = api.notification.markAllAsRead.useMutation();
@@ -87,7 +107,7 @@ export default function NotificationDropdown() {
         console.log(`Reconnection attempt ${reconnectAttemptsRef.current}/${maxAttempts}`);
         
         // Trigger refetch to test connection
-        refetchUnread()
+        refetchNotifications()
           .then(() => {
             setConnectionStatus('connected');
             reconnectAttemptsRef.current = 0;
@@ -103,7 +123,7 @@ export default function NotificationDropdown() {
     } else {
       setConnectionStatus('error');
     }
-  }, [refetchUnread]);
+  }, [refetchNotifications]);
 
   // Real-time subscription for read status changes across devices
   const { 
@@ -125,8 +145,7 @@ export default function NotificationDropdown() {
       setLocalUnreadCount(data.unreadCount);
       
       // Refetch to ensure consistency
-      refetchUnread();
-      refetchCount();
+      refetchNotifications();
     },
     onError: (error) => {
       console.error('Read status subscription error:', error);
@@ -148,27 +167,28 @@ export default function NotificationDropdown() {
 
   // Update local state when data changes
   useEffect(() => {
-    if (unreadData) {
-      setLocalNotifications(unreadData);
+    if (notifications) {
+      setLocalNotifications(notifications);
     }
-  }, [unreadData]);
+  }, [notifications]);
 
   useEffect(() => {
-    if (countData?.count !== undefined) {
-      setLocalUnreadCount(countData.count);
+    if (serverUnreadCount !== undefined) {
+      setLocalUnreadCount(serverUnreadCount);
     }
-  }, [countData]);
+  }, [serverUnreadCount]);
 
   // Detect new notifications and trigger browser notifications + screen reader announcements
   useEffect(() => {
-    if (countData?.count !== undefined) {
-      const currentCount = countData.count;
+    if (serverUnreadCount !== undefined) {
+      const currentCount = serverUnreadCount;
       const hasNewNotifications = currentCount > lastNotificationCountRef.current && lastNotificationCountRef.current > 0;
       
-      if (hasNewNotifications && unreadData) {
-        // Find the newest notifications (those that weren't in the previous state)
+      if (hasNewNotifications && notifications) {
+        // Find the newest unread notifications (those that weren't in the previous state)
         const newNotificationCount = currentCount - lastNotificationCountRef.current;
-        const newestNotifications = unreadData.slice(0, newNotificationCount);
+        const unreadNotifications = notifications.filter(n => !n.isRead);
+        const newestNotifications = unreadNotifications.slice(0, newNotificationCount);
         
         // Announce new notifications to screen readers
         const notificationText = newNotificationCount === 1 
@@ -198,7 +218,7 @@ export default function NotificationDropdown() {
       
       lastNotificationCountRef.current = currentCount;
     }
-  }, [countData?.count, unreadData, announceToScreenReader]);
+  }, [serverUnreadCount, notifications, announceToScreenReader]);
 
   // Helper function to get entity type from notification type
   const getEntityTypeFromNotificationType = (type: string): 'client' | 'audit' | 'task' | 'contact' | undefined => {
@@ -247,7 +267,7 @@ export default function NotificationDropdown() {
       });
       
       // Refresh data to ensure consistency
-      await Promise.all([refetchUnread(), refetchCount()]);
+      await refetchNotifications();
     } catch (error) {
       console.error('Failed to mark notifications as read:', error);
       
@@ -261,7 +281,7 @@ export default function NotificationDropdown() {
       );
       setLocalUnreadCount(prev => prev + notificationIds.length);
     }
-  }, [markAsReadMutation, refetchUnread, refetchCount]);
+  }, [markAsReadMutation, refetchNotifications]);
 
   // Handle notification click with navigation and read marking
   const handleNotificationClick = useCallback(async (notification: NotificationItem) => {
@@ -270,33 +290,14 @@ export default function NotificationDropdown() {
       await optimisticMarkAsRead([notification.id]);
     }
 
-    // Determine navigation URL based on notification type and entity
-    let targetUrl = '/dashboard';
-    
-    if (notification.entityId) {
-      // Note: we'll need to determine the entity type based on notification type
-      // This is a simplified mapping - in a real implementation, you might want
-      // to include entityType in the notification data or determine it from type
-      switch (notification.type) {
-        case 'client_assignment':
-          targetUrl = `/clients/${notification.entityId}`;
-          break;
-        case 'audit_assignment':
-        case 'audit_stage_update':
-        case 'audit_status_update':
-          targetUrl = `/audits/${notification.entityId}`;
-          break;
-        default:
-          targetUrl = notification.linkUrl || '/dashboard';
-      }
-    } else if (notification.linkUrl) {
-      targetUrl = notification.linkUrl;
-    }
+    // All notifications should redirect to the client page for now
+    const clientId = getClientIdFromNotification(notification);
+    const targetUrl = clientId ? `/clients/${clientId}` : '/dashboard';
 
     // Close dropdown and navigate
     setIsOpen(false);
     router.push(targetUrl);
-  }, [optimisticMarkAsRead, router]);
+  }, [optimisticMarkAsRead, router, getClientIdFromNotification]);
 
   // Mark all as read
   const handleMarkAllAsRead = useCallback(async () => {
@@ -311,15 +312,15 @@ export default function NotificationDropdown() {
 
   // Helper function to render notification message with formatting
   const renderMessage = useCallback((message: string) => {
-    // Simple implementation - split on common bold markers and wrap in React components
-    const parts = message.split(/(\*\*.*?\*\*)/g);
+    // Split on bracket markers [text] and wrap in React components
+    const parts = message.split(/(\[[^\]]*\])/g);
     
     return parts.map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        // Bold text
-        const boldText = part.slice(2, -2);
+      if (part.startsWith('[') && part.endsWith(']')) {
+        // Bold text (content within brackets)
+        const boldText = part.slice(1, -1);
         return (
-          <span key={index} className="font-medium text-gray-800 dark:text-white/90">
+          <span key={index} className="font-semibold text-gray-800 dark:text-white">
             {boldText}
           </span>
         );
@@ -388,7 +389,7 @@ export default function NotificationDropdown() {
         className="dropdown-toggle relative flex size-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        disabled={isLoadingUnread}
+        disabled={isLoadingNotifications}
         aria-label={`Notifications${showBadge ? ` (${localUnreadCount} unread)` : ''}`}
         aria-expanded={isOpen}
         aria-haspopup="menu"
@@ -484,12 +485,12 @@ export default function NotificationDropdown() {
           role="menu"
           aria-label={`${localNotifications.length} notifications`}
         >
-          {isLoadingUnread ? (
+          {isLoadingNotifications ? (
             <li className="flex items-center justify-center p-8" role="status" aria-label="Loading notifications">
               <div className="size-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
               <span className="sr-only">Loading notifications...</span>
             </li>
-          ) : unreadError ? (
+          ) : notificationsError ? (
             <li className="flex items-center justify-center p-8 text-red-600" role="alert">
               <span>Failed to load notifications</span>
             </li>
@@ -521,26 +522,36 @@ export default function NotificationDropdown() {
                   }}
                 >
                   <span className="z-1 relative block h-10 w-full max-w-10 rounded-full">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                      <svg
-                        className="size-5 text-gray-600 dark:text-gray-300"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
+                    {notification.createdByUser?.image ? (
+                      <Image
+                        src={notification.createdByUser.image}
+                        alt={notification.createdByUser.name || 'User'}
+                        width={40}
+                        height={40}
+                        className="size-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex size-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                        <svg
+                          className="size-5 text-gray-600 dark:text-gray-300"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    )}
                     {!notification.isRead && (
                       <span 
                         className="bg-blue-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
                         aria-hidden="true"
                       ></span>
-    )}
+                    )}
                   </span>
 
                   <span className="block flex-1">
@@ -549,7 +560,7 @@ export default function NotificationDropdown() {
                     </span>
 
                     <span className="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                      <span>{notification.type}</span>
+                      <span>{getFriendlyNotificationType(notification.type)}</span>
                       <span className="size-1 rounded-full bg-gray-400"></span>
                       <span>
                         {new Date(notification.createdAt).toLocaleDateString('en-AU', {
