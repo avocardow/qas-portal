@@ -1,0 +1,257 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Configuration (LTM)
+
+## 1. Project Overview
+- **Project Name:** QAS Portal (QLD Audit Specialists Portal)
+- **Goal:** A comprehensive SaaS platform for managing audit workflows, client relationships, and internal team collaboration for Queensland Audit Specialists. The system provides both internal team member functionality and client portal access.
+- **Primary Objective for AI:** To autonomously implement tasks provided by Task-Master (derived from project requirements and detailed task lists), ensuring code quality, comprehensive testing, and adherence to project standards and version control best practices.
+
+## 2. Technology Stack
+- **Programming Languages:** TypeScript, JavaScript
+- **Frameworks/Libraries:** Next.js 15 (App Router), React 18, Tailwind CSS, Shadcn UI, TailAdmin components
+- **Databases:** Supabase (PostgreSQL)
+- **ORM:** Prisma
+- **API Layer:** tRPC v11
+- **Authentication:** NextAuth.js with Microsoft 365 OAuth and Email (Magic Link) providers
+- **Testing Tools:** Jest, Vitest, React Testing Library
+- **Build/Package Management:** pnpm
+- **Key APIs/Services Used:** 
+    - Microsoft Graph API (Email, Teams Chat, Teams Phone, SharePoint)
+    - Supabase (PostgreSQL, Auth, Real-time)
+    - Perplexity AI (for research-backed task generation)
+    - Anthropic Claude (AI task management)
+
+## 3. Core Principles & Coding Standards
+- **Clarity & Readability:** Code should be well-commented and easy to understand. Follow TypeScript best practices and maintain consistent naming conventions using camelCase for variables/functions and PascalCase for components/types.
+- **Modularity:** Design components, services, and functions to be reusable and focused (Single Responsibility Principle). Use Shadcn UI and TailAdmin components consistently.
+- **DRY (Don't Repeat Yourself):** Avoid redundant code; create utility functions, shared components, and reusable modules where appropriate.
+- **Error Handling:** Implement robust error handling with proper logging, user-friendly messages, and graceful degradation. Use TRPCError for API errors.
+- **Security:** Follow security best practices: input validation with Zod, output encoding, secure credential management, authentication/authorization with NextAuth.js, and protection against common vulnerabilities.
+- **Style Guide:** Prettier, ESLint with Next.js/TypeScript rules, Tailwind CSS for styling
+
+## 4. Task Management Workflow
+- **Task Source:** Tasks are fetched sequentially using the command `task-master next` which serves tasks from the project's task management system.
+- **Task Completion:** A task is considered complete after successful implementation of all requirements, passing all relevant tests (unit, integration, E2E), and pushing changes to the remote repository with proper commit messages.
+- **End Condition:** The process stops when `task-master next` indicates no more tasks are available.
+- **Task Status Updates:** Use `task-master set-status --id=<taskId> --status=done` to mark completed tasks.
+
+## 5. Context Gathering Strategy
+- **Primary Context Tool:** Context7 (invoked via `@context7 [query]`) for accessing project documentation, API references, and existing codebase patterns.
+- **Usage:** Before starting implementation, use `@context7` with keywords from the task description, relevant file paths, function names, or technology stack components to gather existing project context, architectural patterns, and implementation examples.
+- **Additional MCP Servers:**
+    - `@flatpickr_docs`: For date picker documentation and best practices
+    - `@context7`: For resolving library IDs and fetching official documentation
+- **Information Integration:** Synthesize information from these sources, project requirements, and existing codebase to inform implementation decisions. Prioritize project-specific requirements and established patterns.
+
+## 6. Enhanced Testing Strategy
+- **Test Commands:** 
+    - Unit/Integration Tests: `pnpm test`
+    - E2E Tests: `pnpm test:e2e` (Playwright)
+    - Linting: `pnpm lint`
+    - Type Checking: `pnpm type-check`
+    - Security Scans: `pnpm audit`
+    - Build: `pnpm build`
+- **Test Coverage Requirements:** 
+    - **Minimum Coverage:** 70% for business logic, 60% overall
+    - **Critical Path Coverage:** 90% for authentication, client data, audit workflows
+    - **New Feature Coverage:** 80% for all new functionality
+- **Quality Gates:** 100% test success and passing linting/type checks are required before marking a task complete.
+- **Test File Patterns:**
+    - Unit tests: `*.test.ts`, `*.test.tsx`
+    - Integration tests: `*.integration.test.ts`
+    - E2E tests: `*.e2e.spec.ts`
+
+## 7. Enhanced Quality Gates
+- **Code Quality Gates:**
+    - **Syntax & Formatting:** Code passes ESLint and Prettier checks
+    - **Type Safety:** Strict TypeScript checking with no errors
+    - **Security:** No new security vulnerabilities introduced, all API endpoints properly authenticated
+    - **Performance:** No significant performance regressions, Next.js build optimization
+    - **Documentation:** All public APIs, complex logic, and tRPC procedures documented
+- **Test Quality Gates:**
+    - **Coverage Thresholds:** Meet or exceed defined coverage requirements
+    - **Test Quality:** Tests are meaningful and test actual behavior
+    - **Test Performance:** Tests complete within acceptable time limits
+    - **Test Reliability:** Tests are stable and not flaky
+- **Integration Quality Gates:**
+    - **Dependencies:** All dependencies are up-to-date and secure
+    - **Backwards Compatibility:** No breaking changes unless explicitly planned
+    - **API Contracts:** All tRPC contracts maintained unless versioned
+    - **Database Migrations:** Prisma schema changes are backward-compatible
+
+## 8. Error Recovery Configuration
+- **Error Classification Thresholds:**
+    - **Syntax Errors:** Fix immediately, unlimited retries (should always be solvable)
+    - **Dependency Errors:** 2 retry attempts, then escalate
+    - **Test Failures:** 3 retry attempts with different strategies
+    - **Build Errors:** 2 retry attempts, check environment
+    - **Infrastructure Errors:** 0 retries, immediate escalation
+    - **Context/Understanding:** 2 retries with context refresh
+    - **Command Timeouts:** 2 retries with optimized parameters, then escalate
+- **Escalation Triggers:**
+    - Multiple consecutive failures of the same type
+    - Security-related issues
+    - Breaking changes to external dependencies
+    - Infrastructure or environment problems
+    - Consistent command timeouts indicating environment issues
+- **Recovery Strategies:**
+    - **Context Refresh:** Use Context7 with updated queries after failures
+    - **Dependency Reset:** Clear node_modules and reinstall with pnpm
+    - **Environment Check:** Validate development environment setup
+    - **Rollback Points:** Automatic backup creation before major changes
+    - **Command Optimization:** Reduce scope or add incremental flags on timeout retry
+
+## 8a. Command Timeout Configuration
+- **Timeout Thresholds:**
+    - **Quick Commands:** 10 seconds (git status, ls, cd, file operations)
+    - **Package Management:** 3 minutes (pnpm install, pnpm update)
+    - **Build Commands:** 5 minutes (pnpm build, Next.js build)
+    - **Test Suites:** 5 minutes (pnpm test, Playwright tests)
+    - **Database Operations:** 90 seconds (Prisma migrations, seeding)
+    - **Git Operations:** 90 seconds (push, pull, clone, fetch)
+    - **Linting/Formatting:** 60 seconds (ESLint, Prettier)
+    - **Task-Master Commands:** 30 seconds (task-master next, status updates)
+    - **Context/MCP Queries:** 90 seconds (@context7, other MCP server queries)
+    - **Prisma Commands:** 60 seconds (prisma generate, prisma db push)
+    - **TypeScript Checking:** 90 seconds (tsc --noEmit)
+- **Timeout Handling:**
+    - **Immediate Termination:** Force kill processes exceeding timeout
+    - **Background Process Management:** Proper cleanup of background jobs
+    - **Resource Monitoring:** Track CPU/memory usage during long commands
+    - **Progressive Retry Strategy:** Each retry uses more conservative parameters
+    - **Escalation Pattern:** 2 consecutive timeouts = human escalation
+- **Performance Monitoring:**
+    - **Baseline Performance:** Track normal execution times for comparison
+    - **Performance Degradation Alerts:** Commands taking >150% of baseline
+    - **Environment Health Checks:** Monitor disk space, memory, network connectivity
+
+## 9. Checkpoint Configuration
+- **Mandatory Checkpoints (Human Approval Required):**
+    - **Security Changes:** Authentication, authorization, encryption modifications
+    - **Database Schema Changes:** Prisma migrations affecting production data
+    - **External API Integration:** New Microsoft Graph API integrations
+    - **Breaking Changes:** Changes that affect public APIs or existing contracts
+    - **Infrastructure Changes:** Deployment configuration or infrastructure modifications
+    - **RBAC Changes:** Role-based access control modifications
+- **Optional Checkpoints (Progress Reviews):**
+    - **50% Task Completion:** Mid-task progress review for complex tasks
+    - **Major Refactoring:** Large-scale code restructuring
+    - **Performance Optimization:** Changes affecting system performance
+    - **UI/UX Changes:** Significant changes to user interfaces
+- **Checkpoint Documentation Requirements:**
+    - Clear description of what is being changed and why
+    - Impact assessment on existing functionality
+    - Rollback plan if changes need to be reverted
+    - Testing strategy for validating the changes
+
+## 10. Build & Development
+- **Development Server:** `pnpm dev` (Next.js development server)
+- **Build Command:** `pnpm build` (Next.js production build)
+- **Environment Variables:** Managed via `.env.local` for local development, Vercel environment variables for deployment
+- **Dependencies:** 
+    - Install: `pnpm install`
+    - Update: `pnpm update`
+- **Pre-commit Hooks:** ESLint, Prettier, TypeScript checking
+- **Build Performance:**
+    - **Build Time Threshold:** <3 minutes for full build
+    - **Test Time Threshold:** <2 minutes for unit tests, <5 minutes for E2E
+    - **Development Feedback Loop:** <5 seconds for hot reload
+
+## 11. Version Control & Git Workflow
+- **Branching Strategy:** Feature-based branching with main as primary branch
+    - Feature branches: `feature/[task-id]-[short-description]` (e.g., `feature/auth-implementation`)
+    - Hotfix branches: `hotfix/[issue-description]`
+    - Release branches: `release/[version-number]` (if applicable)
+- **Staging Strategy:** Stage meaningful changes related to the current task. Be selective with `git add` to ensure only relevant changes are included.
+- **Commit Message Format:** Conventional commits recommended
+    - Examples:
+        - `feat(auth): implement Microsoft 365 authentication`
+        - `fix(api): resolve tRPC validation error`
+        - `test(clients): add unit tests for client management`
+        - `docs(readme): update installation instructions`
+        - `chore(deps): upgrade Next.js to latest version`
+    - Include task references when applicable: `feat(auth): implement login page (#task-123)`
+- **Pre-commit Validation:**
+    - **Automated Checks:** ESLint, Prettier, TypeScript checking
+    - **Test Requirements:** Unit tests must pass before commit
+    - **Security Scans:** npm audit for vulnerabilities
+- **Backup & Recovery:**
+    - **Automatic Backups:** Before major file modifications
+    - **Rollback Strategy:** Maintain rollback points for quick recovery
+    - **Change Documentation:** Track all modifications for audit purposes
+
+## 12. Deployment & Infrastructure
+- **Deployment Strategy:** Vercel deployment with automatic deployments from main branch
+- **Environment Management:** Development (local), Staging (Vercel preview), Production (Vercel production)
+- **CI/CD Pipeline:** GitHub Actions for testing, Vercel for deployment
+- **Monitoring & Logging:** Vercel Analytics, console logging, error boundaries
+- **Performance Monitoring:** Next.js built-in performance metrics, Vercel Speed Insights
+- **Security Monitoring:** Dependabot for dependency updates, npm audit
+
+## 13. AI Operational Rules
+- **State Management:** Strictly follow instructions and maintain state in `workflow_state.mdc`. Update workflow state before starting and after completing each significant step.
+- **Command Execution:** Use terminal execution capabilities for all shell commands. Verify command success before proceeding to the next step.
+- **File Modifications:** Use available editing capabilities to modify project files. Review changes carefully and ensure they align with project standards.
+- **Error Recovery:** Follow enhanced error classification and recovery strategies. After systematic attempts, document issues in workflow state and request human guidance if needed.
+- **Quality Assurance:** Ensure all code changes meet project standards, pass all tests, and are properly documented before considering a task complete.
+- **Context Utilization:** Leverage Context7 and available MCP servers to gather relevant information before making implementation decisions.
+- **Checkpoint Management:** Stop at mandatory checkpoints and request human approval before proceeding with sensitive or complex changes.
+- **Backup Protocol:** Create backups before major changes and maintain rollback capability.
+
+## 14. Project-Specific Patterns & Conventions
+- **Database Schema Conventions:** Use Prisma schema with camelCase field names, proper relationships, and constraints
+- **API Design Standards:** tRPC procedures with Zod validation, consistent error handling with TRPCError
+- **Component Architecture:** Next.js App Router structure, Server/Client components separation, Shadcn UI and TailAdmin components
+- **Security Requirements:** NextAuth.js for authentication, RBAC with useAbility hook, input validation with Zod
+- **Performance Standards:** Next.js optimization, lazy loading, proper image optimization
+- **Accessibility Requirements:** WCAG 2.1 AA compliance, semantic HTML, proper ARIA labels
+- **Code Organization:** 
+    - `src/app/` for Next.js App Router pages
+    - `src/components/` for reusable React components
+    - `src/server/` for tRPC routers and server utilities
+    - `src/lib/` for utility functions and configurations
+    - `src/types/` for TypeScript type definitions
+- **Documentation Standards:** TSDoc comments for functions, README files for major features, inline comments for complex logic
+
+## 15. Context Validation Rules
+- **Documentation Freshness:** Verify Context7 results are current and relevant to Next.js 15, React 18, and tRPC v11
+- **Code Pattern Matching:** Ensure examples align with current project patterns using Shadcn UI and TailAdmin
+- **Dependency Compatibility:** Validate that suggested libraries are compatible with Next.js App Router and TypeScript
+- **Performance Impact:** Assess performance implications using Next.js best practices
+- **Security Implications:** Evaluate security impact using NextAuth.js and RBAC patterns
+
+## 16. Changelog
+[Automatically maintained by AI agents using RULE_SUMMARY_01]
+- [Date] - [Brief summary of completed work]
+
+## 17. Learning & Improvement Tracking
+- **Pattern Recognition:** Document recurring patterns and solutions for audit workflows, client management, and Microsoft integrations
+- **Error Analysis:** Track common error types with tRPC, Prisma, and NextAuth.js, and successful resolution strategies
+- **Performance Insights:** Record Next.js optimization techniques and their impact on build times and runtime performance
+- **Best Practices Evolution:** Document how audit management, RBAC, and Microsoft Graph API integration practices evolve
+- **Tool Effectiveness:** Track which tools and approaches work best for different types of tasks (frontend vs backend, API integration vs UI components)
+
+## 18. QAS Portal Specific Configuration
+- **User Roles:** Developer, Admin, Manager, Auditor, Staff, Client
+- **Core Entities:** Clients, Contacts, Audits, Tasks, Trust Accounts, Licenses, Activity Logs
+- **Microsoft Graph API Integrations:** Email (personal and shared mailbox), Teams Chat, Teams Phone, SharePoint document access
+- **Authentication Flows:** 
+    - Team Members: Microsoft 365 OAuth
+    - Clients: Passwordless email (magic link) via Microsoft Graph API
+- **Permission System:** RBAC using useAbility hook and <Authorized> component
+- **Notification System:** Real-time notifications via tRPC subscriptions and browser notifications
+- **Document Management:** SharePoint folder linking and document access
+- **Activity Logging:** Comprehensive audit trail for all client and audit interactions
+- **Task Management:** Integrated with audit workflows, assignment tracking, and progress monitoring
+
+---
+
+**QAS Portal Development Phases:**
+- **Phase 0:** Infrastructure setup (authentication, database, basic scaffolding)
+- **Phase 1:** Core internal functionality (Client/Audit/Task CRUD)
+- **Phase 2:** Internal collaboration & data usability (M365 integrations, UI polish)
+- **Phase 3:** Client portal features and advanced functionality

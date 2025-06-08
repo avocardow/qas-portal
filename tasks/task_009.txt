@@ -1,102 +1,43 @@
 # Task ID: 9
-# Title: Implement Client Contacts Table and CRUD
-# Status: done
-# Dependencies: 4
-# Priority: high
-# Description: Create the Client Contacts table with add, edit, and delete functionality.
+# Title: Implement Multi-device Read Status Synchronization
+# Status: pending
+# Dependencies: 3, 4
+# Priority: low
+# Description: Ensure notification read status is synchronized across multiple devices for the same user.
 # Details:
-1. Create a data table to display contacts showing Name, Phone, Email, Contact Type, and License Number
-2. Reuse the Add Contact modal from Task 4 for adding new contacts
-3. Implement edit modal for updating existing contacts
-4. Add delete functionality with confirmation dialog
-5. Connect to `contacts.*` mutations for CRUD operations
-6. Implement sorting and basic filtering if needed
-7. Refresh table after successful operations
+Enhance the markAsRead and markAllAsRead mutations to broadcast read status changes to all connected clients. Update the frontend subscription handler to process read status updates from other sessions. Implement optimistic UI updates for read status changes to improve perceived performance. Add logic to handle conflicts when multiple devices attempt to mark the same notification as read. Ensure the unread count badge updates in real-time across all devices when a notification is read on any device.
 
 # Test Strategy:
-Test all CRUD operations for contacts. Verify data displays correctly and updates after operations. Test sorting and filtering if implemented.
+Test with multiple browser sessions for the same user. Verify read status synchronizes across sessions. Test conflict resolution with simultaneous read operations. Measure performance impact of synchronization.
 
 # Subtasks:
-## 1. Create Client Contacts Database Schema and API Endpoints [done]
+## 1. Enhance Backend Mutations to Broadcast Read Status Changes [pending]
 ### Dependencies: None
-### Description: Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.
+### Description: Modify the markAsRead and markAllAsRead backend mutations to broadcast notification read status updates to all active sessions/devices for the user.
 ### Details:
-1. Create a database migration for the client_contacts table with fields: id, client_id, name, email, phone, contact_type, license_number, created_at, updated_at
-2. Add appropriate constraints (NOT NULL, UNIQUE for email)
-3. Create indexes on client_id and other frequently queried fields
-4. Implement API endpoints for CRUD operations (/contacts.create, /contacts.update, /contacts.delete, /contacts.list)
-5. Add comprehensive input validation on all endpoints
-6. Implement proper error handling with descriptive messages
-7. Add audit logging for all operations
-8. Test endpoints with Postman or similar tool to verify functionality
+Update the backend logic so that when a notification is marked as read (individually or in bulk), a real-time event (e.g., via WebSocket, GraphQL subscription, or push notification) is emitted to all connected clients for the user. Ensure the event payload includes notification IDs and the new read status. This lays the foundation for cross-device synchronization[1][2][4].
 
-## 2. Implement Client Contacts Data Table Component [done]
+## 2. Update Frontend Subscription Handler for Real-Time Read Status [pending]
 ### Dependencies: 9.1
-### Description: Create a reusable data table component to display client contacts with sorting, pagination, and basic filtering capabilities.
+### Description: Implement or update the frontend logic to listen for read status updates from the backend and update the UI accordingly.
 ### Details:
-1. Create a new ContactsTable component that accepts a clientId prop
-2. Implement data fetching from the contacts.list API endpoint with proper loading states
-3. Configure table columns for Name, Phone, Email, Contact Type, and License Number
-4. Add sorting functionality for all columns
-5. Implement pagination with configurable page size
-6. Add basic filtering capability (search by name/email)
-7. Include empty state handling and error state handling
-8. Style the table according to application design guidelines
-9. Test the component with various data scenarios (empty, few items, many items)
+On the frontend, subscribe to the backend's real-time read status events. When an event is received, update the notification list and unread count badge to reflect the new read status. Ensure the UI updates seamlessly, even if the change originated from another device[2][4].
 
-## 3. Integrate Add Contact Modal from Task 4 [done]
-### Dependencies: 9.1, 9.2
-### Description: Reuse and integrate the existing Add Contact modal from Task 4, connecting it to the contacts.create mutation.
+## 3. Implement Optimistic UI Updates for Read Actions [pending]
+### Dependencies: 9.2
+### Description: Provide immediate UI feedback when a user marks a notification as read, before receiving backend confirmation.
 ### Details:
-1. Import the existing AddContactModal component from Task 4
-2. Create a wrapper component that manages the modal's open/close state
-3. Connect the form submission to the contacts.create mutation
-4. Add proper validation for all form fields
-5. Implement loading state during submission
-6. Add success and error handling with user feedback
-7. Ensure the contacts table refreshes after successful creation
-8. Test the integration by adding new contacts and verifying they appear in the table
-9. Verify that validation works correctly for all required fields
+When the user marks a notification as read, immediately update the UI to reflect the change (optimistic update). If the backend later reports a failure or conflict, revert the UI change and notify the user as appropriate. This improves perceived performance and responsiveness.
 
-## 4. Implement Edit Contact Modal [done]
-### Dependencies: 9.1, 9.2, 9.3
-### Description: Create an edit modal for updating existing contacts, pre-populated with the contact's current data and connected to the contacts.update mutation.
+## 4. Add Conflict Resolution Logic for Simultaneous Read Actions [pending]
+### Dependencies: 9.1
+### Description: Handle cases where multiple devices attempt to mark the same notification as read at the same time, ensuring consistency.
 ### Details:
-1. Create an EditContactModal component based on the AddContactModal structure
-2. Add functionality to pre-populate the form with existing contact data
-3. Connect form submission to the contacts.update mutation
-4. Implement proper validation for all fields
-5. Add loading state during submission
-6. Provide clear success and error messages
-7. Ensure the contacts table refreshes after successful updates
-8. Add an edit button/icon in each table row that opens the edit modal
-9. Test editing various fields and verify changes are reflected in the table after submission
+Implement backend logic to detect and resolve conflicts when concurrent read actions occur. Use event identifiers or timestamps to determine the correct state, ensuring all devices converge on the same read status[1]. Optionally, notify clients of any conflict resolution outcomes.
 
-## 5. Implement Delete Contact Functionality with Confirmation [done]
-### Dependencies: 9.1, 9.2
-### Description: Add the ability to delete contacts with a confirmation dialog to prevent accidental deletions, connected to the contacts.delete mutation.
+## 5. Synchronize and Update Unread Count Badge in Real-Time [pending]
+### Dependencies: 9.2, 9.4
+### Description: Ensure the unread count badge updates instantly across all devices when a notification is read on any device.
 ### Details:
-1. Create a DeleteConfirmationDialog component with clear messaging
-2. Add a delete button/icon in each table row
-3. Connect the confirmation dialog to the contacts.delete mutation
-4. Implement loading state during deletion
-5. Add success and error handling with user feedback
-6. Ensure the contacts table refreshes after successful deletion
-7. Consider implementing soft delete if appropriate for the application
-8. Add role-based access control to restrict deletion to authorized users
-9. Test the delete functionality and verify contacts are removed from the table
-
-## 6. Implement Advanced Filtering and Table Refresh Logic [done]
-### Dependencies: 9.2, 9.3, 9.4, 9.5
-### Description: Enhance the contacts table with advanced filtering options and implement a robust table refresh mechanism that updates after all CRUD operations.
-### Details:
-1. Create a FilterPanel component with options for filtering by contact type, date added, etc.
-2. Implement client-side filtering for quick responses
-3. Add server-side filtering for large datasets by extending the contacts.list endpoint
-4. Create a centralized table refresh mechanism that can be triggered by all CRUD operations
-5. Implement optimistic updates where appropriate to improve perceived performance
-6. Add a manual refresh button for users
-7. Implement proper loading states during refresh operations
-8. Consider adding export functionality (CSV/Excel) for the filtered data
-9. Test all filtering options and verify the table refreshes correctly after all CRUD operations
+Tie the unread count badge to the real-time subscription handler so it updates immediately upon receiving read status events. Test across multiple devices to confirm that the badge remains accurate and consistent, regardless of where the action originated.
 

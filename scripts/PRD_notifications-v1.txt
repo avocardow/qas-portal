@@ -1,0 +1,378 @@
+# Overview
+The QAS Portal Notifications System v1 provides real-time in-app and browser notifications to keep team members informed of critical assignment and status changes. This foundational notification system focuses on three core scenarios: client assignments, audit assignments, and audit progress updates, ensuring team members stay coordinated on client management and audit workflows.
+
+**Implementation Strategy:** Use tRPC subscriptions for real-time notifications, leveraging the existing tRPC infrastructure for seamless integration.
+
+# Core Features
+- **In-App Notification Dropdown**
+  - Integration with existing NotificationDropdown component in AppHeader (currently commented out)
+  - Real-time notification delivery using tRPC subscriptions over WebSocket
+  - Formatted messages with bold key elements using React component patterns
+  - Click-to-navigate functionality to related audit/client pages
+  - Automatic read status marking upon interaction
+  - Unread count badge on notification icon
+  - Multi-device read status synchronization
+
+- **Browser Push Notifications**
+  - Native browser notifications for users not actively viewing the application
+  - Permission request flow triggered only when first notification is about to be sent (with clear context)
+  - Structured notification format: title, body, icon, and action buttons
+  - Consistent message formatting matching in-app notifications
+  - Graceful fallback to in-app only if permissions denied
+
+- **Core Notification Types**
+  1. **Client Assignment**: "[**User**] has assigned you to manage [**Client Name**]"
+  2. **Audit Assignment**: "[**User**] has assigned you to [**Client Name**] - [**Year**] Audit"  
+  3. **Audit Progress Updates**: "[**User**] has updated [**Client Name**] - [**Year**] Audit stage/status to [**Stage/Status Name**]"
+
+- **Smart Notification Logic**
+  - Self-notification prevention (users don't receive notifications for their own actions)
+  - Deduplication to prevent spam from rapid successive changes
+  - Client manager identification via `clients.assignedUserId`
+  - Rate limiting to prevent notification flooding
+
+# User Experience
+- **User Personas**:
+  - **Client Managers**: Receive audit progress notifications from assigned auditors
+  - **Team Members**: Receive assignment notifications for clients and audits
+  - **Admins**: Assign team members and receive all notification types
+
+- **Key User Flows**:
+  1. **Assignment Flow**: Admin assigns team member → notification created (if assignee ≠ assigner) → team member receives real-time notification
+  2. **Progress Update Flow**: Auditor updates audit stage → client manager receives instant notification (if manager ≠ auditor)
+  3. **Navigation Flow**: User clicks notification → navigates to relevant page → notification marked as read across all devices
+
+- **UI/UX Considerations**:
+  - Notifications appear instantly in dropdown with unread count badge
+  - Bold formatting using React component composition for type safety
+  - Clear visual distinction between read/unread notifications
+  - Responsive design for mobile notification viewing
+  - Context-aware browser permission request
+  - Connection status indicator for real-time updates
+  - Accessibility support with screen reader announcements
+
+# Technical Architecture
+
+## Database Schema Enhancements
+The existing `notifications` table needs the following additions:
+
+```sql
+-- Add new columns to notifications table
+ALTER TABLE notifications ADD COLUMN type VARCHAR(50) NOT NULL;
+ALTER TABLE notifications ADD COLUMN entityId VARCHAR(255);
+ALTER TABLE notifications ADD COLUMN createdByUserId VARCHAR(255) NOT NULL;
+
+-- Add foreign key constraints
+ALTER TABLE notifications ADD CONSTRAINT fk_notifications_user 
+  FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE notifications ADD CONSTRAINT fk_notifications_created_by 
+  FOREIGN KEY (createdByUserId) REFERENCES users(id) ON DELETE CASCADE;
+
+-- Add indexes for performance
+CREATE INDEX idx_notifications_user_unread ON notifications(userId, isRead);
+CREATE INDEX idx_notifications_user_created ON notifications(userId, createdAt DESC);
+CREATE INDEX idx_notifications_type_entity ON notifications(type, entityId);
+CREATE INDEX idx_notifications_created_by ON notifications(createdByUserId);
+
+-- Add enum constraint for notification types
+ALTER TABLE notifications ADD CONSTRAINT chk_notification_type 
+  CHECK (type IN ('client_assignment', 'audit_assignment', 'audit_stage_update', 'audit_status_update'));
+```
+
+**Updated Schema Fields:**
+- `id`: Primary key (existing)
+- `userId`: Recipient user ID (existing)
+- `message`: Notification message text (existing)
+- `linkUrl`: Navigation URL (existing)
+- `isRead`: Read status (existing)
+- `createdAt`: Timestamp (existing)
+- `type`: Notification type enum (NEW)
+- `entityId`: Related client/audit ID (NEW)
+- `createdByUserId`: User who triggered notification (NEW)
+
+## Frontend Components
+- **Enhanced NotificationDropdown**: `src/components/header/NotificationDropdown.tsx`
+  - Remove comment from AppHeader to re-enable component
+  - Real-time tRPC subscription for instant notification updates
+  - Unread count badge integration
+  - Click-to-navigate with read status marking
+  - Connection status indicator
+  - Auto-reconnection handling for dropped connections
+  - Optimistic updates for read status changes
+
+- **Browser Notification Integration**:
+  - Permission request service with contextual messaging
+  - Native browser notification creation with structured format
+  - Permission state management and graceful degradation
+  - Browser notification click handling for navigation
+
+## Backend Infrastructure
+
+### tRPC Real-time Integration
+- **Notification Router**: `src/server/api/routers/notification.ts`
+  - `getUnread` query: Fetch unread notifications for current user
+  - `markAsRead` mutation: Mark notification as read (sync across devices)
+  - `markAllAsRead` mutation: Mark all notifications as read
+  - `subscribe` subscription: Real-time notification stream with user filtering
+  - `getCount` query: Get unread notification count
+
+- **Notification Service**: `src/server/services/notificationService.ts`
+  - Message template generation with React-compatible formatting
+  - Notification creation with proper type categorization
+  - User lookup and validation
+  - Entity existence verification
+  - Self-notification prevention logic
+  - Deduplication for identical notifications within time window
+  - Rate limiting per user to prevent spam
+
+### Client Manager Detection Logic
+- **Client Manager**: Identified by `clients.assignedUserId` field
+- **Audit Progress Notifications**: Sent to client manager (not audit assignee)
+- **Assignment Notifications**: Sent to newly assigned user (not the assigner)
+
+### Form Integration Analysis
+Based on the existing modal patterns, notifications will be triggered in these scenarios:
+
+**Client Assignment Changes** (`EditClientModal.tsx`, `AddClientModal.tsx`):
+```typescript
+// In api.clients.update and api.clients.create mutations
+if (assignedUserId !== previousAssignedUserId && assignedUserId !== session.user.id) {
+  await notificationService.createClientAssignment({
+    assignedUserId,
+    clientId,
+    clientName,
+    createdByUserId: session.user.id
+  });
+}
+```
+
+**Audit Assignment Changes** (`EditAuditModal.tsx`, `AddAuditModal.tsx`):
+```typescript
+// In api.audit.assignUser mutation
+if (assignedUserId !== session.user.id) {
+  await notificationService.createAuditAssignment({
+    assignedUserId,
+    auditId,
+    clientName,
+    auditYear,
+    createdByUserId: session.user.id
+  });
+}
+```
+
+**Audit Progress Updates** (`EditAuditModal.tsx`):
+```typescript
+// In api.audit.updateAudit mutation
+if ((stageId !== previousStageId || statusId !== previousStatusId) && clientManagerId !== session.user.id) {
+  await notificationService.createAuditUpdate({
+    clientManagerId, // from clients.assignedUserId
+    auditId,
+    clientName,
+    auditYear,
+    changeType: stageId !== previousStageId ? 'stage' : 'status',
+    newValue: stageId !== previousStageId ? stageName : statusName,
+    createdByUserId: session.user.id
+  });
+}
+```
+
+## Message Formatting System
+Replace HTML `<strong>` tags with React component composition:
+
+```typescript
+// Message template types
+type NotificationMessage = {
+  template: string;
+  variables: Record<string, { text: string; bold?: boolean }>;
+};
+
+// Example message generation
+const clientAssignmentMessage: NotificationMessage = {
+  template: "{user} has assigned you to manage {client}",
+  variables: {
+    user: { text: assignerName, bold: true },
+    client: { text: clientName, bold: true }
+  }
+};
+
+// React component rendering
+const renderMessage = (message: NotificationMessage) => {
+  // Replace template variables with React components
+  // Return JSX with proper bold formatting
+};
+```
+
+## Browser Notification Structure
+```typescript
+// Browser notification format
+interface BrowserNotification {
+  title: string; // e.g., "New Assignment"
+  body: string;  // e.g., "John has assigned you to manage ABC Corp"
+  icon: string;  // QAS Portal logo
+  tag: string;   // notification ID for replacement
+  data: {
+    notificationId: string;
+    linkUrl: string;
+    type: string;
+  };
+  actions: [{
+    action: 'view',
+    title: 'View',
+    icon: '/icons/view.png'
+  }];
+}
+```
+
+## Error Handling Strategy
+- **Notification Creation Failures**: Log error, continue with main operation
+- **WebSocket Connection Issues**: Auto-reconnect with exponential backoff
+- **Browser Permission Denied**: Graceful fallback to in-app only
+- **Invalid Entity References**: Skip notification creation, log warning
+- **Rate Limit Exceeded**: Queue notifications, process in batch
+
+## Data Lifecycle Management
+- **Read Notifications**: Keep for 90 days for audit trail
+- **Unread Notifications**: No automatic deletion (user action required)
+- **Performance**: Implement pagination for large notification lists
+- **Cleanup**: Manual cleanup tools for administrators
+
+# Development Roadmap
+
+## Phase 1: Database & Infrastructure (Priority 1)
+- Database schema migration for notification enhancements
+- tRPC notification router with subscription endpoint
+- Basic notification service with message templating
+- Re-enable NotificationDropdown component in AppHeader
+- Self-notification prevention and deduplication logic
+
+## Phase 2: Real-time Notifications (Priority 2)
+- tRPC subscription implementation for real-time updates
+- Frontend subscription client in NotificationDropdown
+- Unread count badge and real-time updates
+- Connection status indicator and auto-reconnection
+- Basic notification creation testing
+
+## Phase 3: Form Integration (Priority 3)
+- Client assignment notification triggers in `clients.update/create` mutations
+- Audit assignment notification triggers in `audit.assignUser` mutation
+- Audit progress notification triggers in `audit.updateAudit` mutation
+- Message template system with React component formatting
+- Error handling and rate limiting implementation
+
+## Phase 4: Browser Notifications (Priority 4)
+- Browser notification permission service
+- Context-aware permission request (only on first notification)
+- Structured browser notification creation
+- Click handling and navigation integration
+- Permission state management and fallback handling
+
+## Phase 5: Navigation & Polish (Priority 5)
+- Click-to-navigate functionality with proper URL generation
+- Read status marking system with multi-device sync
+- Error handling for invalid/deleted entities
+- Mobile responsiveness and accessibility improvements
+- Performance optimization and testing
+
+## Phase 6: Testing & Quality (Priority 6)
+- Unit tests for notification service
+- Integration tests for real-time subscriptions
+- Mock notification service for component testing
+- Performance testing with high notification volumes
+- Accessibility testing with screen readers
+
+# Logical Dependency Chain
+1. **Database Schema Updates** → enables proper notification categorization and tracking
+2. **tRPC Infrastructure** → provides real-time notification delivery mechanism
+3. **Form Integration** → triggers notification creation on assignments/updates
+4. **UI Integration** → displays notifications with real-time updates and navigation
+5. **Browser Notifications** → extends reach beyond active app usage
+6. **Testing & Polish** → ensures production readiness
+
+Each phase builds on the previous, with database and tRPC infrastructure being foundational.
+
+# Risks and Mitigations
+
+- **tRPC Subscription Complexity**: WebSocket connections may be complex to set up
+  - **Mitigation**: Use tRPC's built-in subscription support, follow existing patterns in codebase
+
+- **Browser Permission UX**: Users may be confused by permission request
+  - **Mitigation**: Clear contextual messaging when first notification is sent, fallback to in-app only
+
+- **Message Accuracy Risk**: Notifications may reference deleted/archived entities
+  - **Mitigation**: Validate entity existence before creating notifications, graceful handling of broken links
+
+- **Form Integration Complexity**: Adding notification triggers to all mutations could introduce bugs
+  - **Mitigation**: Create reusable notification service, unit test all triggers, gradual rollout
+
+- **Real-time Performance**: High subscription load could impact server performance
+  - **Mitigation**: Implement user-specific subscriptions, connection pooling, monitor resource usage
+
+- **Notification Spam**: Users could receive too many notifications
+  - **Mitigation**: Rate limiting, deduplication, self-notification prevention
+
+- **Connection Reliability**: WebSocket connections may drop frequently
+  - **Mitigation**: Auto-reconnection with exponential backoff, connection status indicators
+
+- **Testing Complexity**: Real-time features are difficult to test
+  - **Mitigation**: Mock services, integration test suite, manual testing protocols
+
+# Implementation Notes
+
+## Trigger Points Analysis
+Based on form analysis, notification triggers occur in these mutations:
+
+1. **`api.clients.update`** - Client assignment changes (`assignedUserId`)
+2. **`api.clients.create`** - New client with assigned manager
+3. **`api.audit.assignUser`** - Direct audit assignment
+4. **`api.audit.updateAudit`** - Stage/status changes for manager notification
+
+## tRPC Subscription Pattern
+```typescript
+// Client-side subscription with error handling
+const { data: notifications, error } = api.notifications.subscribe.useSubscription(
+  { userId: session.user.id },
+  {
+    onData: (notification) => {
+      // Update UI with new notification
+      // Show browser notification if appropriate
+      // Play notification sound (optional)
+    },
+    onError: (error) => {
+      // Handle connection errors
+      // Show connection status indicator
+    },
+    retry: true,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
+  }
+);
+```
+
+## Permission Integration
+- **Notification Reception**: No special permissions required (users receive notifications for their assignments)
+- **RBAC Compatibility**: Notifications respect existing view permissions for clients/audits
+- **Admin Override**: Admins may receive broader notification types in future versions
+
+## Testing Strategy
+```typescript
+// Mock notification service for testing
+const mockNotificationService = {
+  createClientAssignment: jest.fn(),
+  createAuditAssignment: jest.fn(),
+  createAuditUpdate: jest.fn()
+};
+
+// Integration test for real-time subscriptions
+describe('Notification Subscriptions', () => {
+  it('should receive real-time notifications', async () => {
+    // Test subscription setup and notification delivery
+  });
+});
+```
+
+## Context7 References
+- tRPC subscription documentation and patterns
+- Browser Notification API implementation guides
+- React component composition for dynamic content
+- WebSocket connection management best practices
+- Accessibility guidelines for dynamic content
+- Performance optimization for real-time applications 

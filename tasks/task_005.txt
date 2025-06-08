@@ -1,61 +1,37 @@
 # Task ID: 5
-# Title: Implement Archive Client Button
-# Status: done
-# Dependencies: 2
+# Title: Integrate Client Assignment Notifications
+# Status: pending
+# Dependencies: 2, 3
 # Priority: medium
-# Description: Create the Archive Client button with permission checking and confirmation flow.
+# Description: Add notification triggers for client assignment changes in client creation and update flows.
 # Details:
-1. Add Archive Client button with tertiary styling (low visual hierarchy)
-2. Implement permission gating using `useAbility()` hook
-3. Create confirmation modal using Headless UI Dialog
-4. Connect to `useMutation('clients.update')` to set status to 'Archived'
-5. Handle success and error states
-6. Update UI after successful archiving
+Modify api.clients.update and api.clients.create mutations to trigger notifications when assignedUserId changes. In EditClientModal.tsx and AddClientModal.tsx, add logic to detect assignment changes and call notificationService.createClientAssignment with appropriate parameters (assignedUserId, clientId, clientName, createdByUserId). Ensure self-notification prevention by comparing assignedUserId with session.user.id. Add error handling to prevent notification failures from affecting the main operation.
 
 # Test Strategy:
-Test permission gating to ensure only authorized users see the button. Verify confirmation flow works and client status updates correctly after archiving.
+Test client creation and updates with different assignment scenarios. Verify notifications are created with correct data. Confirm self-assignments don't create notifications. Test error handling by simulating notification service failures.
 
 # Subtasks:
-## 1. Implement Permission-Gated Archive Button UI Component [done]
+## 1. Implement notificationService.createClientAssignment method [pending]
 ### Dependencies: None
-### Description: Create a tertiary-styled Archive Client button component that is only visible to users with appropriate permissions. This component will be the entry point for the archiving flow.
+### Description: Create the notification service method that will handle client assignment notifications with proper parameters and error handling
 ### Details:
-1. Create a new React component `ArchiveClientButton.tsx` with tertiary styling for low visual hierarchy
-2. Implement permission checking using the `useAbility()` hook to verify the user has 'archive:client' permissions
-3. Add conditional rendering logic to hide the button completely when permissions are missing
-4. Include a disabled state with tooltip for cases where archiving might be temporarily unavailable
-5. Add appropriate icon (archive/box) and label
-6. Implement click handler that will trigger the confirmation modal
-7. Test the component with different permission scenarios using mock data
-8. Ensure the button follows accessibility guidelines with proper ARIA attributes and keyboard navigation
+Develop the notificationService.createClientAssignment method that accepts assignedUserId, clientId, clientName, and createdByUserId parameters. This method should create and send a notification when a client is assigned to a user. Implement error handling within this method to catch and log any issues without throwing exceptions that would affect the main client operations. The method should return a success/failure status that can be safely ignored by calling code. Include logic to prevent self-notifications by comparing the assignedUserId with the user creating the assignment.
 
-## 2. Build Confirmation Modal with Description Field [done]
+## 2. Modify api.clients.create mutation to trigger notifications [pending]
 ### Dependencies: 5.1
-### Description: Create a confirmation dialog using Headless UI that explains the archiving process, requests confirmation, and allows users to add an optional description for the archive.
+### Description: Update the client creation API to detect and trigger notifications for initial client assignments
 ### Details:
-1. Implement a modal dialog using Headless UI Dialog component
-2. Create a clear title and explanation of what archiving means for the client data
-3. Add a text field for archive description with appropriate validation
-4. Include warning about the consequences of archiving
-5. Add Cancel and Confirm buttons with appropriate styling
-6. Implement state management for the modal visibility and form inputs
-7. Add loading state for the Confirm button during the archiving process
-8. Ensure the modal is keyboard accessible and follows WAI-ARIA best practices
-9. Test the modal with screen readers and keyboard navigation
-10. Add appropriate animations for modal opening/closing
+Modify the api.clients.create mutation to capture the assignedUserId value during client creation. After successfully creating the client record, call the notificationService.createClientAssignment method with the appropriate parameters (assignedUserId, the newly created clientId, clientName, and the session.user.id as createdByUserId). Wrap the notification call in a try/catch block to ensure that any notification failures don't affect the client creation process. Add a comparison check between assignedUserId and session.user.id to prevent self-notifications when users create clients assigned to themselves.
 
-## 3. Implement Archive Mutation and Success/Error Handling [done]
+## 3. Update AddClientModal.tsx with notification logic [pending]
 ### Dependencies: 5.1, 5.2
-### Description: Connect the confirmation flow to the backend using the useMutation hook, handle success and error states, and update the UI after successful archiving.
+### Description: Enhance the client creation modal to support the notification flow when assigning clients
 ### Details:
-1. Implement `useMutation('clients.update')` hook to connect to the backend API
-2. Create a mutation function that sends the client ID and archive description to the API
-3. Set the client status to 'Archived' in the mutation payload
-4. Implement comprehensive error handling with specific error messages for different failure scenarios
-5. Add success feedback with a toast notification or inline message
-6. Update the client list UI after successful archiving (remove from list or update status)
-7. Implement optimistic updates for better user experience
-8. Add logging for successful archiving and failures for audit purposes
-9. Implement retry logic for transient failures
-10. Test the full flow from button click to UI update with various scenarios (success, network error, permission error, etc.)
+Modify the AddClientModal.tsx component to work with the updated api.clients.create mutation. Ensure the component correctly passes the assignedUserId parameter when creating a new client. If the API doesn't automatically trigger notifications, add client-side logic to detect when a client is being created with an assignedUserId and call notificationService.createClientAssignment directly. Implement proper error handling to prevent notification failures from affecting the client creation UI flow. Update any form validation or submission logic as needed to support the new notification requirements.
+
+## 4. Implement notification triggers in api.clients.update and EditClientModal.tsx [pending]
+### Dependencies: 5.1
+### Description: Add logic to detect assignment changes during client updates and trigger appropriate notifications
+### Details:
+Modify the api.clients.update mutation to detect changes in assignedUserId by comparing the new value with the previous value stored in the database. Only trigger notifications when the assignedUserId actually changes. In the EditClientModal.tsx component, implement logic to track the original assignedUserId when the modal opens and compare it with the new value on submission. If changed, call notificationService.createClientAssignment with the new assignedUserId, clientId, clientName, and session.user.id. Add proper error handling in both the API and UI components to ensure notification failures don't disrupt the main client update functionality. Include the self-notification prevention check by comparing the new assignedUserId with session.user.id.
 

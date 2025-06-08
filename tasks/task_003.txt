@@ -1,74 +1,49 @@
 # Task ID: 3
-# Title: Build Client Overview Card
-# Status: done
-# Dependencies: 2
+# Title: Implement tRPC Notification Router
+# Status: pending
+# Dependencies: 1, 2
 # Priority: high
-# Description: Create the client overview card displaying essential client metadata with inline edit controls.
+# Description: Create a tRPC router for notifications with queries, mutations, and subscription endpoints.
 # Details:
-1. Create a TailAdmin card component to display client details
-2. Display Client Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager
-3. Add tooltip for External Folder Link with instructions
-4. Implement inline edit controls for editable fields
-5. Connect edit functionality to `useMutation('clients.update')` for saving changes
+Create src/server/api/routers/notification.ts with the following endpoints: 'getUnread' query to fetch unread notifications for current user, 'markAsRead' mutation to mark a notification as read, 'markAllAsRead' mutation to mark all notifications as read, 'getCount' query to get unread notification count, and 'subscribe' subscription for real-time notification stream with user filtering. Implement proper authentication and validation. Ensure the subscription endpoint filters notifications by userId for security. Add the notification router to the main tRPC router.
 
 # Test Strategy:
-Verify all client fields display correctly. Test inline editing functionality and confirm data updates correctly after edits.
+Test each endpoint with various input scenarios. Verify authentication requirements. Test subscription with multiple concurrent users. Ensure proper error handling for invalid inputs.
 
 # Subtasks:
-## 1. Create Base Card Component with Client Metadata Display [done]
+## 1. Create notification router file structure [pending]
 ### Dependencies: None
-### Description: Develop the foundational card component that displays all required client metadata fields in read-only mode using TailAdmin styling. This component will serve as the container for all client information and inline edit functionality.
+### Description: Set up the basic file structure for the notification router with proper imports and router initialization
 ### Details:
-1. Create a new `ClientOverviewCard` component using TailAdmin card styling
-2. Implement the layout to display all required client fields: Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager
-3. Add a tooltip for External Folder Link with instructions using TailAdmin tooltip component
-4. Ensure proper spacing and typography following TailAdmin design system
-5. Make the component responsive for different screen sizes
-6. Add appropriate ARIA attributes for accessibility
-7. Test the component with mock data to ensure proper display
-8. Implement proper error states if client data is missing or undefined
+Create the file src/server/api/routers/notification.ts. Import the necessary tRPC components (router, procedure) from your tRPC server initialization file. Initialize an empty notification router using the router() function. Export the router for later integration with the main app router. Include any required validation libraries (like zod) and authentication utilities that will be needed for the endpoints.
 
-## 2. Implement Editable Field Component with Toggle Controls [done]
+## 2. Implement query endpoints for notifications [pending]
 ### Dependencies: 3.1
-### Description: Create a reusable EditableField component that can switch between display and edit modes, handling the UI state transitions and providing clear visual cues for editable fields.
+### Description: Create the 'getUnread' and 'getCount' query procedures for fetching unread notifications and counts
 ### Details:
-1. Create an `EditableField` component that accepts field label, value, and onChange handlers
-2. Implement toggle functionality between read-only and edit modes
-3. Add visual indicators (pencil icon, hover effects) to show which fields are editable
-4. Include appropriate form controls based on field type (text input, select dropdown, etc.)
-5. Support keyboard navigation (Tab, Enter, Escape) for accessibility
-6. Add inline validation to prevent invalid data entry
-7. Implement focus management to automatically focus the input when entering edit mode
-8. Test the component in isolation with various field types
-9. Ensure the component maintains TailAdmin styling consistency
+In the notification router, implement two query procedures: 1) 'getUnread' - Add authentication middleware to ensure only authenticated users can access their notifications. Use input validation to handle pagination/filtering parameters if needed. Implement the resolver function to fetch unread notifications for the current user from your data source. 2) 'getCount' - Similarly secure this endpoint and implement a resolver that returns just the count of unread notifications for the authenticated user. Both queries should properly handle error cases and return typed responses.
 
-## 3. Connect Edit Functionality to Client Mutation API [done]
-### Dependencies: 3.1, 3.2
-### Description: Integrate the editable fields with the client update mutation API, implementing proper state management, optimistic updates, and error handling for a seamless editing experience.
+## 3. Implement mutation endpoints for notifications [pending]
+### Dependencies: 3.1
+### Description: Create the 'markAsRead' and 'markAllAsRead' mutation procedures
 ### Details:
-1. Set up state management for tracking original and edited values
-2. Implement the useMutation('clients.update') hook for saving changes
-3. Add save and cancel buttons for edit operations
-4. Implement optimistic UI updates to immediately reflect changes while saving
-5. Add loading indicators during save operations
-6. Implement error handling with user-friendly error messages
-7. Add rollback functionality if server-side validation fails
-8. Ensure all user inputs are properly sanitized and validated
-9. Test the complete edit-save flow with various scenarios (success, network error, validation error)
-10. Implement debouncing for rapid consecutive edits
+Add two mutation procedures to the notification router: 1) 'markAsRead' - Use input validation to ensure a valid notification ID is provided. Add authentication to verify the user owns the notification being marked. Implement the resolver to update the notification status in your data store. 2) 'markAllAsRead' - Add authentication to ensure only the user's own notifications are affected. Implement the resolver to update all unread notifications for the current user. Both mutations should return appropriate success/failure responses and handle error cases properly.
 
-## 4. Enhance UX with Feedback and Accessibility Features [done]
-### Dependencies: 3.1, 3.2, 3.3
-### Description: Improve the overall user experience by adding success/error feedback, keyboard shortcuts, and ensuring full accessibility compliance for the client overview card.
+## 4. Implement subscription endpoint for real-time notifications [pending]
+### Dependencies: 3.1
+### Description: Create the 'subscribe' subscription procedure with proper user filtering
 ### Details:
-1. Add toast notifications for successful updates and errors
-2. Implement keyboard shortcuts for common actions (Esc to cancel, Ctrl+Enter to save)
-3. Add confirmation dialogs for potentially destructive actions
-4. Enhance tooltip content with keyboard shortcut information
-5. Conduct thorough accessibility testing (screen reader compatibility, keyboard navigation)
-6. Add ARIA live regions for dynamic content changes
-7. Implement focus trapping within the edit mode to improve keyboard navigation
-8. Add visual indicators for required fields
-9. Create comprehensive unit and integration tests
-10. Document the component API and usage patterns for other developers
+Implement the 'subscribe' subscription procedure in the notification router. Add authentication to ensure users can only subscribe to their own notifications. Create a subscription resolver that establishes a real-time connection and emits new notifications as they arrive. Implement proper filtering logic to ensure users only receive notifications intended for them (filter by userId). Set up any necessary event emitters or pub/sub mechanisms needed for the subscription to work. Ensure proper cleanup when subscriptions are terminated.
+
+## 5. Add security and validation [pending]
+### Dependencies: 3.2, 3.3, 3.4
+### Description: Enhance all endpoints with comprehensive input validation and security checks
+### Details:
+Review all implemented endpoints and add thorough input validation using a schema validation library like Zod. Implement proper error handling for all procedures. Add security checks to ensure users can only access their own notifications. For the subscription endpoint, add additional validation to prevent unauthorized access to notification streams. Implement rate limiting if necessary to prevent abuse. Add logging for security-relevant events. Test all endpoints with various invalid inputs to ensure robust validation.
+
+## 6. Integrate notification router with main tRPC router [pending]
+### Dependencies: 3.5
+### Description: Add the notification router to the main application router and test the complete implementation
+### Details:
+Import the notification router in your main tRPC router file (typically src/server/api/root.ts or similar). Add the notification router to the main router object using the appropriate key (e.g., 'notification'). Verify that all endpoints are accessible through the main router. Test the complete implementation to ensure all notification endpoints work correctly with proper authentication, validation, and error handling. Verify that the subscription endpoint correctly filters notifications by userId. Document any specific usage patterns or requirements for frontend developers.
 

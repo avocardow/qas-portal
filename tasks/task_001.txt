@@ -1,60 +1,49 @@
 # Task ID: 1
-# Title: Setup Page Scaffolding
-# Status: done
+# Title: Database Schema Migration for Notifications
+# Status: pending
 # Dependencies: None
 # Priority: high
-# Description: Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.
+# Description: Implement the database schema changes to enhance the notifications table with new columns and constraints as specified in the PRD.
 # Details:
-Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the following:
-1. Import necessary components from TailAdmin
-2. Setup page layout with responsive grid using TailAdmin components
-3. Implement PageBreadcrumb component with Home > Clients > [Client Name] structure
-4. Add sidebar navigation link to this page
-5. Create placeholder sections for all required components (Client Overview, Current Audit, etc.)
+Execute SQL migrations to add the following to the notifications table: 'type' column (VARCHAR(50) NOT NULL), 'entityId' column (VARCHAR(255)), 'createdByUserId' column (VARCHAR(255) NOT NULL). Add foreign key constraints to users table. Create indexes for performance optimization (idx_notifications_user_unread, idx_notifications_user_created, idx_notifications_type_entity, idx_notifications_created_by). Add enum constraint for notification types to ensure valid values ('client_assignment', 'audit_assignment', 'audit_stage_update', 'audit_status_update'). Test the migration with rollback capability.
 
 # Test Strategy:
-Verify page renders without errors and breadcrumbs display correctly. Check responsive layout at different screen sizes.
+Verify schema changes using database inspection tools. Test foreign key constraints with sample data. Validate indexes with EXPLAIN queries. Ensure constraint enforcement by attempting invalid insertions.
 
 # Subtasks:
-## 1. Create Basic Page Structure with Layout Components [done]
+## 1. Document current schema and create migration plan [pending]
 ### Dependencies: None
-### Description: Set up the client profile page file with the basic structure, imports, and TailAdmin layout components to establish the foundation for the page.
+### Description: Document the existing notifications table schema and create a detailed migration plan with goals, risks, and rollback strategy
 ### Details:
-1. Create the file `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`
-2. Import necessary components from TailAdmin such as Breadcrumb, Card, and Grid components
-3. Create a functional component that uses Next.js dynamic routing to access the clientId parameter
-4. Implement a responsive container using TailAdmin's layout system with appropriate padding and margin
-5. Add basic error handling for invalid client IDs
-6. Set up the page title and metadata using Next.js head components
-7. Test the basic page rendering with different viewport sizes to ensure responsive behavior
-8. Ensure the page follows the application's established design patterns and styling conventions
+Create comprehensive documentation of the current notifications table structure. Define the migration objectives aligned with business goals. Document the planned changes including new columns ('type', 'entityId', 'createdByUserId'), foreign key constraints, and indexes. Identify potential risks and create a detailed rollback strategy. Use version control to track all documentation and migration scripts. Include validation steps to ensure data integrity throughout the migration process.
 
-## 2. Implement Breadcrumb Navigation and Sidebar Link [done]
+## 2. Create migration scripts with rollback capability [pending]
 ### Dependencies: 1.1
-### Description: Add the breadcrumb navigation component showing the hierarchical path and update the sidebar navigation to include a link to the client profile page.
+### Description: Develop SQL migration scripts that add the new columns and constraints with proper rollback functionality
 ### Details:
-1. Import the PageBreadcrumb component from TailAdmin
-2. Configure the breadcrumb with the Home > Clients > [Client Name] structure
-3. Implement dynamic client name fetching for the breadcrumb based on the clientId parameter
-4. Add proper linking to each breadcrumb segment (Home and Clients list)
-5. Update the sidebar navigation configuration to include a link to the clients section
-6. Ensure the sidebar highlights the current page when on the client profile
-7. Test breadcrumb navigation to verify all links work correctly
-8. Implement proper accessibility attributes for the breadcrumb navigation (aria-current, etc.)
-9. Add hover states and visual indicators for interactive breadcrumb elements
+Write SQL migration scripts to add the new columns: 'type' (VARCHAR(50) NOT NULL), 'entityId' (VARCHAR(255)), and 'createdByUserId' (VARCHAR(255) NOT NULL) to the notifications table. Create corresponding rollback scripts that can revert these changes. Implement the enum constraint for notification types ('client_assignment', 'audit_assignment', 'audit_stage_update', 'audit_status_update'). Ensure scripts are idempotent and can be safely run multiple times. Store all scripts in version control with clear naming conventions that indicate execution order.
 
-## 3. Create Content Section Placeholders with Grid Layout [done]
-### Dependencies: 1.1, 1.2
-### Description: Implement the responsive grid layout for the client profile page and add placeholder sections for all required components that will be developed in future tasks.
+## 3. Implement foreign key constraints and indexes [pending]
+### Dependencies: 1.2
+### Description: Add foreign key constraints and create the specified indexes for performance optimization
 ### Details:
-1. Use TailAdmin's grid system to create a responsive layout with appropriate breakpoints
-2. Implement a two-column layout for desktop that collapses to a single column on mobile
-3. Create placeholder Card components for each section: Client Overview, Current Audit, Client History, etc.
-4. Add appropriate headings and skeleton UI elements in each placeholder section
-5. Implement proper spacing between sections using TailAdmin's spacing utilities
-6. Add comments in the code indicating where future components will be integrated
-7. Ensure the grid layout maintains proper alignment and spacing across all viewport sizes
-8. Test the layout with various screen sizes to verify responsive behavior
-9. Add subtle visual indicators (like borders or background colors) to distinguish different sections
-10. Implement container queries if needed for more complex responsive behaviors within sections
+Create SQL scripts to add foreign key constraints linking the 'createdByUserId' column to the users table. Implement the four required indexes: idx_notifications_user_unread (for filtering unread notifications by user), idx_notifications_user_created (for sorting notifications by creation date), idx_notifications_type_entity (for filtering by notification type and entity), and idx_notifications_created_by (for filtering by creator). Include rollback scripts that drop these constraints and indexes. Test the constraint behavior to ensure it properly enforces referential integrity.
+
+## 4. Set up automated testing environment [pending]
+### Dependencies: 1.3
+### Description: Create an isolated testing environment and automated tests to validate the migration
+### Details:
+Set up a dedicated testing environment that mirrors the production database. Create automated tests that verify: successful column addition, constraint enforcement, index creation and performance, and rollback functionality. Implement data validation tests to ensure existing data remains intact. Create tests for the enum constraint to verify it properly restricts values. Develop performance tests to confirm the new indexes improve query performance as expected. Document all test cases and expected results.
+
+## 5. Execute migration in staging environment [pending]
+### Dependencies: 1.4
+### Description: Deploy the migration to staging, perform validation tests, and verify application compatibility
+### Details:
+Execute the migration scripts in the staging environment following the dual-write pattern: first deploy code that can handle both old and new schema, then migrate the schema while maintaining backward compatibility. Verify that the application correctly interacts with the new schema. Run performance tests to ensure the new indexes improve query efficiency. Validate that the enum constraint properly restricts notification types. Test the rollback procedure to confirm it works as expected. Document any issues encountered and their resolutions.
+
+## 6. Deploy to production and monitor [pending]
+### Dependencies: 1.5
+### Description: Execute the migration in production with monitoring and post-deployment verification
+### Details:
+Schedule the production migration during a low-traffic period. Implement monitoring to track database performance during and after migration. Execute the migration scripts with careful validation at each step. Verify that all new columns, constraints, and indexes are created correctly. Monitor application performance and database query execution times. Have the rollback plan ready for immediate execution if issues arise. After successful deployment, document the completed migration, including any deviations from the original plan. Remove any temporary dual-write code after confirming stability.
 

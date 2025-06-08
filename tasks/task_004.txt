@@ -1,112 +1,43 @@
 # Task ID: 4
-# Title: Implement Add Contact Button and Modal
-# Status: done
-# Dependencies: 2
-# Priority: high
-# Description: Create the Add Contact button and modal form for adding new client contacts.
+# Title: Enhance NotificationDropdown Component
+# Status: pending
+# Dependencies: 3
+# Priority: medium
+# Description: Update the existing NotificationDropdown component to display notifications with real-time updates.
 # Details:
-1. Create an Add Contact button in the appropriate section
-2. Implement a modal using Headless UI Dialog
-3. Build form using TailAdmin form components from `src/components/form`
-4. Include fields for name, type, phone, email, and license number
-5. Implement form validation
-6. Connect to `useMutation('clients.createContact')` for saving
-7. Refresh contact list on successful submission
+Modify src/components/header/NotificationDropdown.tsx to implement real-time tRPC subscription for instant notification updates. Add unread count badge integration. Implement click-to-navigate functionality with read status marking. Add connection status indicator and auto-reconnection handling for dropped connections. Use optimistic updates for read status changes. Uncomment the NotificationDropdown component in AppHeader to re-enable it. Implement the renderMessage function to properly format notification messages with bold text using React components.
 
 # Test Strategy:
-Test form validation, submission process, and verify new contacts appear in the list after adding. Test error handling for failed submissions.
+Create component tests with mock subscription data. Test UI rendering for different notification states (read/unread). Verify badge count updates. Test navigation on notification click. Simulate connection drops to verify reconnection logic.
 
 # Subtasks:
-## 1. Create Add Contact Button Component [done]
+## 1. Implement Real-Time tRPC Subscription for Notifications [pending]
 ### Dependencies: None
-### Description: Implement a visually prominent Add Contact button that will trigger the contact modal. The button should be positioned appropriately in the contacts section and follow accessibility best practices.
+### Description: Integrate a real-time tRPC subscription in NotificationDropdown to receive instant notification updates and manage notification state accordingly.
 ### Details:
-1. Create a new component `AddContactButton.jsx` in the appropriate directory
-2. Style the button using TailAdmin design system classes for consistency
-3. Add appropriate aria-label for accessibility
-4. Implement onClick handler that will control modal visibility state
-5. Test the button's visual appearance and focus states
-6. Ensure the button has a clear, explicit label ('Add Contact') that matches the modal title
+Set up a tRPC subscription hook within NotificationDropdown.tsx to listen for new notifications and updates. Ensure the component state is updated in real time as new notifications arrive or existing ones change. Handle initial loading and error states. This subtask lays the foundation for all subsequent real-time features.
 
-## 2. Implement Modal Dialog Structure using Headless UI [done]
+## 2. Add Unread Count Badge and Optimistic Read Status Updates [pending]
 ### Dependencies: 4.1
-### Description: Create the modal dialog structure using Headless UI Dialog component with proper accessibility attributes and focus management.
+### Description: Display an unread notifications badge and implement optimistic UI updates when marking notifications as read.
 ### Details:
-1. Import Dialog components from Headless UI
-2. Create a new component `AddContactModal.jsx`
-3. Implement modal open/close state management
-4. Set up proper focus trapping within the modal
-5. Ensure the modal has proper ARIA attributes (role='dialog', aria-modal='true')
-6. Add overlay with appropriate styling and backdrop click handling
-7. Test keyboard navigation (Tab, Escape to close)
-8. Verify focus returns to the Add Contact button when modal closes
+Calculate the unread notification count from the state and display it as a badge on the dropdown trigger. When a notification is marked as read (e.g., on click), optimistically update its status in the UI before awaiting server confirmation. Roll back the change if the server update fails.
 
-## 3. Build Contact Form Layout with TailAdmin Components [done]
+## 3. Implement Click-to-Navigate and Read Status Marking [pending]
 ### Dependencies: 4.2
-### Description: Create the form structure inside the modal using TailAdmin form components with all required fields for contact information.
+### Description: Enable navigation to a relevant page when a notification is clicked and mark it as read.
 ### Details:
-1. Import form components from `src/components/form`
-2. Create form layout with fields for name, type, phone, email, and license number
-3. Use appropriate input types (text, email, tel) for each field
-4. Add proper labels and placeholder text for each field
-5. Implement form reset functionality when modal closes
-6. Style the form according to TailAdmin design system
-7. Test the form layout on different screen sizes
-8. Ensure the first input field receives focus when modal opens
+Attach click handlers to each notification item. On click, navigate to the notification's target (using React Router or similar), and trigger the optimistic read status update. Ensure accessibility and keyboard navigation are supported.
 
-## 4. Implement Form State Management and Validation [done]
-### Dependencies: 4.3
-### Description: Set up form state management and implement client-side validation for all contact form fields.
+## 4. Add Connection Status Indicator and Auto-Reconnection Handling [pending]
+### Dependencies: 4.1
+### Description: Display a connection status indicator for the real-time subscription and handle automatic reconnection if the connection drops.
 ### Details:
-1. Create form state using React state or a form library
-2. Implement validation rules for each field:
-   - Name: Required
-   - Email: Required, valid email format
-   - Phone: Required, valid phone format
-   - Type: Required selection
-   - License number: Optional but validate format if provided
-3. Add visual feedback for validation errors
-4. Implement inline validation as user types
-5. Disable submit button until form is valid
-6. Test validation with various input scenarios
-7. Ensure validation errors are accessible to screen readers
+Monitor the tRPC subscription connection state. Show a visual indicator (e.g., colored dot or icon) reflecting connection status (connected, reconnecting, disconnected). Implement logic to automatically attempt reconnection and update the indicator accordingly.
 
-## 5. Connect Form to API using useMutation Hook [done]
-### Dependencies: 4.4
-### Description: Integrate the form with the API using the useMutation hook to save new contacts to the backend.
+## 5. Enhance Notification Message Rendering and Re-enable Dropdown [pending]
+### Dependencies: 4.3, 4.4
+### Description: Implement the renderMessage function to format notification messages with bold text using React components, and uncomment NotificationDropdown in AppHeader.
 ### Details:
-1. Import and set up useMutation hook with 'clients.createContact' endpoint
-2. Create form submission handler that calls the mutation
-3. Transform form data into the format expected by the API
-4. Implement loading state during submission
-5. Add error handling for failed submissions
-6. Test the API integration with valid and invalid data
-7. Verify that the correct data is being sent to the API
-8. Implement retry logic for network failures
-
-## 6. Implement Success and Error Handling [done]
-### Dependencies: 4.5
-### Description: Add proper success and error handling for the contact creation process, including user feedback and error messages.
-### Details:
-1. Create success notification or toast message
-2. Implement error message display within the form
-3. Add specific error handling for common errors (duplicate contact, validation failures)
-4. Close modal on successful submission
-5. Keep modal open with error messages on failed submission
-6. Reset form state after successful submission
-7. Test error scenarios by mocking API failures
-8. Ensure error messages are clear and actionable
-
-## 7. Implement Contact List Refresh After Submission [done]
-### Dependencies: 4.6
-### Description: Update the contacts list to reflect newly added contacts without requiring a full page refresh.
-### Details:
-1. Implement a callback function to refresh the contact list data
-2. Call the refresh function after successful contact creation
-3. Use optimistic updates to immediately show the new contact
-4. Handle any discrepancies between optimistic update and server response
-5. Add subtle animation or highlight for newly added contacts
-6. Test that the contact list updates correctly after submission
-7. Ensure the list maintains proper sorting/filtering after updates
-8. Verify that focus management works correctly after list refresh
+Write the renderMessage function to parse and render notification messages, applying bold formatting where appropriate using React elements. Ensure messages are visually clear and accessible. Finally, uncomment and re-integrate NotificationDropdown in AppHeader to make the enhanced component available in the UI.
 

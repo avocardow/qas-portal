@@ -1,58 +1,43 @@
 # Task ID: 7
-# Title: Implement Current Fees Card
-# Status: done
-# Dependencies: 2
+# Title: Implement Audit Progress Update Notifications
+# Status: pending
+# Dependencies: 2, 3
 # Priority: medium
-# Description: Create the Current Fees card with permission restrictions for Admin and Developer roles.
+# Description: Add notification triggers for audit stage and status changes to notify client managers.
 # Details:
-1. Create a small card to display estimated annual fees (`clients.estAnnFees`)
-2. Wrap the component in `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>` to restrict visibility
-3. Add tooltip for 'Billing Commentary' that shows the commentary note
-4. Style as a small, simple card with appropriate formatting for currency values
-5. Handle loading and empty states
+Modify api.audit.updateAudit mutation to trigger notifications when audit stage or status changes. In EditAuditModal.tsx, add logic to detect stage/status changes and call notificationService.createAuditUpdate with appropriate parameters (clientManagerId from clients.assignedUserId, auditId, clientName, auditYear, changeType, newValue, createdByUserId). Determine if the change is stage or status based on comparison with previous values. Ensure client managers don't receive notifications for their own changes by comparing clientManagerId with session.user.id. Add error handling to prevent notification failures from affecting the main operation.
 
 # Test Strategy:
-Test permission gating to ensure only Admin and Developer roles can see the fees. Verify tooltip displays correctly with billing commentary.
+Test audit updates with different stage/status changes. Verify notifications are sent to correct client managers. Confirm managers don't receive notifications for their own changes. Test error handling by simulating notification service failures.
 
 # Subtasks:
-## 1. Create base Current Fees Card component with loading states [done]
+## 1. Enhance Audit Update Mutation to Capture Previous and New Values [pending]
 ### Dependencies: None
-### Description: Implement the foundational card component that displays the estimated annual fees with proper loading and empty states. This component will handle the core display logic without permissions yet.
+### Description: Modify the api.audit.updateAudit mutation to capture both previous and new values for audit stage and status, enabling accurate change detection.
 ### Details:
-1. Create a new React component called `CurrentFeesCard` that accepts client data as props
-2. Implement the card layout using your UI library (likely Material-UI based on research)
-3. Display the estimated annual fees (`clients.estAnnFees`) with proper currency formatting
-4. Add a skeleton loader for the loading state
-5. Implement empty state handling with appropriate messaging
-6. Set up basic styling for the card with responsive design considerations
-7. Test the component with various data states (loading, empty, populated)
-8. Ensure the component follows the application's design system for consistency
+Update the mutation logic to fetch and retain the previous values of audit stage and status before applying updates. Ensure these values are available for downstream logic to compare and identify changes.
 
-## 2. Add Billing Commentary tooltip and enhance styling [done]
+## 2. Implement Change Detection Logic in EditAuditModal.tsx [pending]
 ### Dependencies: 7.1
-### Description: Enhance the Current Fees Card by adding the tooltip functionality for Billing Commentary and refining the card's visual presentation.
+### Description: Add logic in EditAuditModal.tsx to compare previous and new audit stage/status values, determining if a change has occurred and its type (stage or status).
 ### Details:
-1. Add a tooltip component that displays the billing commentary note
-2. Position the tooltip trigger (icon or text) appropriately within the card layout
-3. Implement hover/focus interactions for the tooltip
-4. Ensure the tooltip is accessible (keyboard navigable and screen-reader friendly)
-5. Refine the card styling to be compact yet informative
-6. Format currency values using appropriate number formatting utilities
-7. Add subtle visual indicators for fee amounts (e.g., color coding based on amount thresholds)
-8. Test tooltip functionality across different browsers and devices
-9. Ensure the component maintains responsive behavior on all screen sizes
+Within the modal's save/update handler, compare the previous and new values for both stage and status. Set a changeType variable ('stage' or 'status') and newValue accordingly if a change is detected. Ensure this logic is robust to prevent false positives or missed changes.
 
-## 3. Implement permission restrictions with Authorized wrapper [done]
-### Dependencies: 7.1, 7.2
-### Description: Wrap the Current Fees Card component with permission restrictions to ensure only users with Admin and Developer roles can view the fee information.
+## 3. Integrate Notification Triggering with Notification Service [pending]
+### Dependencies: 7.2
+### Description: Invoke notificationService.createAuditUpdate with the correct parameters when a stage or status change is detected, passing clientManagerId, auditId, clientName, auditYear, changeType, newValue, and createdByUserId.
 ### Details:
-1. Import the `Authorized` component from your permissions system
-2. Wrap the CurrentFeesCard component with `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>`
-3. Ensure the component correctly handles unauthorized states (either hiding completely or showing an appropriate message)
-4. Test the component with different user roles to verify permission restrictions work correctly
-5. Implement any necessary fallback UI for users without proper permissions
-6. Add unit tests to verify the permission logic works as expected
-7. Document the permission requirements in component comments
-8. Verify that the component integrates properly with the application's authentication context
-9. Test edge cases such as role changes while the component is mounted
+After detecting a change, call the notification service with all required parameters. Retrieve clientManagerId from clients.assignedUserId and ensure all contextual information (auditId, clientName, auditYear, etc.) is included in the notification payload.
+
+## 4. Implement Self-Notification Prevention Logic [pending]
+### Dependencies: 7.3
+### Description: Ensure client managers do not receive notifications for their own changes by comparing clientManagerId with session.user.id before sending notifications.
+### Details:
+Before triggering the notification, check if clientManagerId matches the current session user's ID. If they match, skip sending the notification. This prevents redundant or unnecessary notifications to the acting user.
+
+## 5. Add Robust Error Handling for Notification Failures [pending]
+### Dependencies: 7.4
+### Description: Implement error handling to ensure notification failures do not affect the main audit update operation, logging errors for later review.
+### Details:
+Wrap the notification trigger in a try-catch block. Log any errors encountered during notification sending, but allow the main audit update process to complete successfully regardless of notification outcome.
 

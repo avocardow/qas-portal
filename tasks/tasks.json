@@ -1,942 +1,716 @@
 {
   "tasks": [
     {
-      "id": 0,
-      "title": "Refactor DataTableOne to dynamic, prop-driven component using DataTableTwo functionality",
-      "description": "Convert `DataTableOne` to accept `data`, `columns`, `onRowClick`, and `caption` props, derive columns from `data` when not provided, and reuse filtering, sorting, pagination, and search logic modeled after `DataTableTwo`.",
-      "status": "done",
-      "dependencies": [],
-      "priority": "high",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Define DataTableOneProps and import ColumnDef",
-          "description": "Define the interface for DataTableOneProps and import the ColumnDef type.",
-          "details": "Add DataTableOneProps interface and import ColumnDef type.",
-          "status": "done"
-        },
-        {
-          "id": 2,
-          "title": "Remove static tableRowData and fixed SortKey/SortOrder types",
-          "description": "Remove hard-coded sample data and static sort type definitions.",
-          "details": "Delete static data and remove sort type definitions.",
-          "status": "done"
-        },
-        {
-          "id": 3,
-          "title": "Implement dynamic props handling (data, columns, onRowClick, caption)",
-          "description": "Update component to accept props for data, columns, onRowClick, and caption.",
-          "details": "Use props to replace static values in DataTableOne.",
-          "status": "done"
-        },
-        {
-          "id": 4,
-          "title": "Derive defaultColumns from props.data when no columns provided",
-          "description": "Compute table columns from data keys when no columns prop is provided.",
-          "details": "Generate defaultColumns from data structure.",
-          "status": "done"
-        },
-        {
-          "id": 5,
-          "title": "Wire up filtering, sorting, search and pagination based on props.data",
-          "description": "Implement filtering, sorting, search, and pagination behaviors.",
-          "details": "Add state and memoized logic for table behaviors.",
-          "status": "done"
-        },
-        {
-          "id": 6,
-          "title": "Update header/body loops to use dynamic cols and data",
-          "description": "Replace static rows with dynamic rendering loops over columns and data.",
-          "details": "Use cols and current data to render table.",
-          "status": "done"
-        },
-        {
-          "id": 7,
-          "title": "Update ClientContactsSection to use DataTableOne and remove DataTableThree",
-          "description": "Swap DataTableThree for DataTableOne and pass appropriate props.",
-          "details": "Update imports and props in ClientContactsSection.",
-          "status": "done"
-        }
-      ]
-    },
-    {
       "id": 1,
-      "title": "Setup Page Scaffolding",
-      "description": "Create the client profile page file with basic structure, breadcrumbs, and TailAdmin grid layout.",
-      "status": "done",
+      "title": "Database Schema Migration for Notifications",
+      "description": "Implement the database schema changes to enhance the notifications table with new columns and constraints as specified in the PRD.",
+      "status": "pending",
       "dependencies": [],
       "priority": "high",
-      "details": "Create `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx` with the following:\n1. Import necessary components from TailAdmin\n2. Setup page layout with responsive grid using TailAdmin components\n3. Implement PageBreadcrumb component with Home > Clients > [Client Name] structure\n4. Add sidebar navigation link to this page\n5. Create placeholder sections for all required components (Client Overview, Current Audit, etc.)",
-      "testStrategy": "Verify page renders without errors and breadcrumbs display correctly. Check responsive layout at different screen sizes.",
+      "details": "Execute SQL migrations to add the following to the notifications table: 'type' column (VARCHAR(50) NOT NULL), 'entityId' column (VARCHAR(255)), 'createdByUserId' column (VARCHAR(255) NOT NULL). Add foreign key constraints to users table. Create indexes for performance optimization (idx_notifications_user_unread, idx_notifications_user_created, idx_notifications_type_entity, idx_notifications_created_by). Add enum constraint for notification types to ensure valid values ('client_assignment', 'audit_assignment', 'audit_stage_update', 'audit_status_update'). Test the migration with rollback capability.",
+      "testStrategy": "Verify schema changes using database inspection tools. Test foreign key constraints with sample data. Validate indexes with EXPLAIN queries. Ensure constraint enforcement by attempting invalid insertions.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Basic Page Structure with Layout Components",
-          "description": "Set up the client profile page file with the basic structure, imports, and TailAdmin layout components to establish the foundation for the page.",
+          "title": "Document current schema and create migration plan",
+          "description": "Document the existing notifications table schema and create a detailed migration plan with goals, risks, and rollback strategy",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create the file `src/app/(pages)/(dashboard)/(app)/clients/[clientId]/page.tsx`\n2. Import necessary components from TailAdmin such as Breadcrumb, Card, and Grid components\n3. Create a functional component that uses Next.js dynamic routing to access the clientId parameter\n4. Implement a responsive container using TailAdmin's layout system with appropriate padding and margin\n5. Add basic error handling for invalid client IDs\n6. Set up the page title and metadata using Next.js head components\n7. Test the basic page rendering with different viewport sizes to ensure responsive behavior\n8. Ensure the page follows the application's established design patterns and styling conventions",
-          "status": "done",
-          "parentTaskId": 1
+          "details": "Create comprehensive documentation of the current notifications table structure. Define the migration objectives aligned with business goals. Document the planned changes including new columns ('type', 'entityId', 'createdByUserId'), foreign key constraints, and indexes. Identify potential risks and create a detailed rollback strategy. Use version control to track all documentation and migration scripts. Include validation steps to ensure data integrity throughout the migration process."
         },
         {
           "id": 2,
-          "title": "Implement Breadcrumb Navigation and Sidebar Link",
-          "description": "Add the breadcrumb navigation component showing the hierarchical path and update the sidebar navigation to include a link to the client profile page.",
+          "title": "Create migration scripts with rollback capability",
+          "description": "Develop SQL migration scripts that add the new columns and constraints with proper rollback functionality",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Import the PageBreadcrumb component from TailAdmin\n2. Configure the breadcrumb with the Home > Clients > [Client Name] structure\n3. Implement dynamic client name fetching for the breadcrumb based on the clientId parameter\n4. Add proper linking to each breadcrumb segment (Home and Clients list)\n5. Update the sidebar navigation configuration to include a link to the clients section\n6. Ensure the sidebar highlights the current page when on the client profile\n7. Test breadcrumb navigation to verify all links work correctly\n8. Implement proper accessibility attributes for the breadcrumb navigation (aria-current, etc.)\n9. Add hover states and visual indicators for interactive breadcrumb elements",
-          "status": "done",
-          "parentTaskId": 1
+          "details": "Write SQL migration scripts to add the new columns: 'type' (VARCHAR(50) NOT NULL), 'entityId' (VARCHAR(255)), and 'createdByUserId' (VARCHAR(255) NOT NULL) to the notifications table. Create corresponding rollback scripts that can revert these changes. Implement the enum constraint for notification types ('client_assignment', 'audit_assignment', 'audit_stage_update', 'audit_status_update'). Ensure scripts are idempotent and can be safely run multiple times. Store all scripts in version control with clear naming conventions that indicate execution order."
         },
         {
           "id": 3,
-          "title": "Create Content Section Placeholders with Grid Layout",
-          "description": "Implement the responsive grid layout for the client profile page and add placeholder sections for all required components that will be developed in future tasks.",
+          "title": "Implement foreign key constraints and indexes",
+          "description": "Add foreign key constraints and create the specified indexes for performance optimization",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "1. Use TailAdmin's grid system to create a responsive layout with appropriate breakpoints\n2. Implement a two-column layout for desktop that collapses to a single column on mobile\n3. Create placeholder Card components for each section: Client Overview, Current Audit, Client History, etc.\n4. Add appropriate headings and skeleton UI elements in each placeholder section\n5. Implement proper spacing between sections using TailAdmin's spacing utilities\n6. Add comments in the code indicating where future components will be integrated\n7. Ensure the grid layout maintains proper alignment and spacing across all viewport sizes\n8. Test the layout with various screen sizes to verify responsive behavior\n9. Add subtle visual indicators (like borders or background colors) to distinguish different sections\n10. Implement container queries if needed for more complex responsive behaviors within sections",
-          "status": "done",
-          "parentTaskId": 1
+          "details": "Create SQL scripts to add foreign key constraints linking the 'createdByUserId' column to the users table. Implement the four required indexes: idx_notifications_user_unread (for filtering unread notifications by user), idx_notifications_user_created (for sorting notifications by creation date), idx_notifications_type_entity (for filtering by notification type and entity), and idx_notifications_created_by (for filtering by creator). Include rollback scripts that drop these constraints and indexes. Test the constraint behavior to ensure it properly enforces referential integrity."
+        },
+        {
+          "id": 4,
+          "title": "Set up automated testing environment",
+          "description": "Create an isolated testing environment and automated tests to validate the migration",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Set up a dedicated testing environment that mirrors the production database. Create automated tests that verify: successful column addition, constraint enforcement, index creation and performance, and rollback functionality. Implement data validation tests to ensure existing data remains intact. Create tests for the enum constraint to verify it properly restricts values. Develop performance tests to confirm the new indexes improve query performance as expected. Document all test cases and expected results."
+        },
+        {
+          "id": 5,
+          "title": "Execute migration in staging environment",
+          "description": "Deploy the migration to staging, perform validation tests, and verify application compatibility",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Execute the migration scripts in the staging environment following the dual-write pattern: first deploy code that can handle both old and new schema, then migrate the schema while maintaining backward compatibility. Verify that the application correctly interacts with the new schema. Run performance tests to ensure the new indexes improve query efficiency. Validate that the enum constraint properly restricts notification types. Test the rollback procedure to confirm it works as expected. Document any issues encountered and their resolutions."
+        },
+        {
+          "id": 6,
+          "title": "Deploy to production and monitor",
+          "description": "Execute the migration in production with monitoring and post-deployment verification",
+          "status": "pending",
+          "dependencies": [
+            5
+          ],
+          "details": "Schedule the production migration during a low-traffic period. Implement monitoring to track database performance during and after migration. Execute the migration scripts with careful validation at each step. Verify that all new columns, constraints, and indexes are created correctly. Monitor application performance and database query execution times. Have the rollback plan ready for immediate execution if issues arise. After successful deployment, document the completed migration, including any deviations from the original plan. Remove any temporary dual-write code after confirming stability."
         }
       ]
     },
     {
       "id": 2,
-      "title": "Implement Client Data Fetching",
-      "description": "Set up tRPC query hooks to fetch client data and implement loading states.",
-      "status": "done",
+      "title": "Create Notification Service",
+      "description": "Develop a notification service that handles message templating, notification creation, and implements smart notification logic.",
+      "status": "pending",
       "dependencies": [
         1
       ],
       "priority": "high",
-      "details": "1. Implement `useQuery('clients.getById')` to fetch client data\n2. Create loading and error states for data fetching\n3. Setup React Query caching configuration\n4. Create type definitions based on the Client data model\n5. Implement fallback UI for when data is loading or errors occur",
-      "testStrategy": "Test data fetching with mock API responses. Verify loading states display correctly and error handling works as expected.",
+      "details": "Create src/server/services/notificationService.ts with functions for different notification types: createClientAssignment, createAuditAssignment, and createAuditUpdate. Implement message template generation with React-compatible formatting using the NotificationMessage type structure. Add logic for self-notification prevention (skip if creator = recipient), deduplication (check for identical notifications within time window), entity validation, and rate limiting. Include helper functions for user lookup and message formatting. Implement the message formatting system using React component composition instead of HTML tags.",
+      "testStrategy": "Write unit tests for each notification creation function. Test edge cases like self-notifications, duplicate notifications, and rate limiting. Mock database interactions for isolated testing.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Define Client Data Model and Type Definitions",
-          "description": "Create TypeScript interfaces and Zod schemas for the client data model to ensure type safety across the application.",
+          "title": "Create NotificationMessage type structure",
+          "description": "Define the core data structure for notification messages that supports React-compatible formatting",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a `types/client.ts` file with TypeScript interfaces for the Client model\n2. Define Zod schemas for validation that match the TypeScript interfaces\n3. Export type definitions to be used by both server and client\n4. Include all necessary client fields (id, name, email, etc.)\n5. Add documentation comments for each field\n6. Test the type definitions by validating sample data\n\nExample implementation:\n```typescript\n// types/client.ts\nimport { z } from 'zod';\n\nexport const clientSchema = z.object({\n  id: z.string(),\n  name: z.string(),\n  email: z.string().email(),\n  phone: z.string().optional(),\n  company: z.string(),\n  status: z.enum(['active', 'inactive', 'prospect']),\n  createdAt: z.date(),\n  updatedAt: z.date()\n});\n\nexport type Client = z.infer<typeof clientSchema>;\n```",
-          "status": "done",
-          "parentTaskId": 2
+          "details": "Create a TypeScript interface for NotificationMessage that includes fields for message content, formatting options, metadata, and React component composition. The structure should support different notification types (client assignment, audit assignment, audit update) and include properties for sender, recipient, timestamp, priority level, and notification status. Ensure the type structure is extensible for future notification types."
         },
         {
           "id": 2,
-          "title": "Implement tRPC Server Procedures for Client Data",
-          "description": "Create type-safe tRPC procedures on the server side to fetch client data by ID and handle other client-related queries.",
+          "title": "Implement message templating system",
+          "description": "Develop a flexible templating system that generates React-compatible notification content",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Create a `server/routers/client.ts` file to define client-related procedures\n2. Implement the `getById` procedure with proper input validation using Zod\n3. Add error handling for cases like client not found\n4. Implement any additional client data procedures needed (getAll, search, etc.)\n5. Export and include the client router in the main app router\n6. Test the procedures with sample data\n\nExample implementation:\n```typescript\n// server/routers/client.ts\nimport { z } from 'zod';\nimport { procedure, router } from '../trpc';\nimport { clientSchema } from '../../types/client';\n\nexport const clientRouter = router({\n  getById: procedure\n    .input(z.object({ id: z.string() }))\n    .query(async ({ input, ctx }) => {\n      try {\n        const client = await ctx.db.client.findUnique({\n          where: { id: input.id }\n        });\n        \n        if (!client) {\n          throw new Error('Client not found');\n        }\n        \n        return clientSchema.parse(client);\n      } catch (error) {\n        throw new Error(`Failed to fetch client: ${error.message}`);\n      }\n    }),\n  // Add other client procedures as needed\n});\n```",
-          "status": "done",
-          "parentTaskId": 2
+          "details": "Create helper functions for message formatting that use React component composition instead of HTML tags. Implement template generators for different notification types that populate the NotificationMessage structure. Include support for dynamic content insertion, conditional formatting based on notification type, and internationalization capabilities. Design the system to be extensible for future template additions."
         },
         {
           "id": 3,
-          "title": "Configure tRPC Client with React Query Integration",
-          "description": "Set up the tRPC client with React Query integration, including optimal caching configuration for client data.",
+          "title": "Create user lookup and entity validation functions",
+          "description": "Implement utility functions for user identification and entity validation",
+          "status": "pending",
           "dependencies": [
-            2
+            1
           ],
-          "details": "1. Create a `utils/trpc.ts` file to set up the tRPC client\n2. Configure httpBatchLink for efficient network requests\n3. Set up React Query with appropriate caching settings\n4. Configure error handling and retry logic\n5. Export the tRPC hooks for use in components\n6. Test the configuration by making a simple query\n\nExample implementation:\n```typescript\n// utils/trpc.ts\nimport { createTRPCReact } from '@trpc/react-query';\nimport { httpBatchLink } from '@trpc/client';\nimport { QueryClient } from '@tanstack/react-query';\nimport type { AppRouter } from '../server/routers/_app';\n\nexport const trpc = createTRPCReact<AppRouter>();\n\nexport const queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      staleTime: 5 * 60 * 1000, // 5 minutes\n      cacheTime: 10 * 60 * 1000, // 10 minutes\n      retry: 1,\n      refetchOnWindowFocus: false,\n    },\n  },\n});\n\nexport const trpcClient = trpc.createClient({\n  links: [\n    httpBatchLink({\n      url: '/api/trpc',\n      // Include credentials for cookie-based auth if needed\n      fetch(url, options) {\n        return fetch(url, {\n          ...options,\n          credentials: 'include',\n        });\n      },\n    }),\n  ],\n});\n```",
-          "status": "done",
-          "parentTaskId": 2
+          "details": "Develop helper functions to look up user information needed for notifications. Create validation functions to verify that entities referenced in notifications (clients, audits, assignments) exist and are valid. Implement error handling for cases where entities cannot be found or are invalid. These functions will be used by the notification creation functions to ensure data integrity."
         },
         {
           "id": 4,
-          "title": "Create Custom Hook for Client Data Fetching",
-          "description": "Develop a custom React hook that encapsulates the tRPC query logic for fetching client data, with proper typing and error handling.",
+          "title": "Implement core notification creation functions",
+          "description": "Create the primary notification generation functions for different notification types",
+          "status": "pending",
           "dependencies": [
             1,
+            2,
             3
           ],
-          "details": "1. Create a `hooks/useClient.ts` file to implement the custom hook\n2. Use the tRPC hook to fetch client data by ID\n3. Add proper TypeScript typing for the hook parameters and return values\n4. Include error handling and data transformation if needed\n5. Add documentation for the hook usage\n6. Test the hook in isolation\n\nExample implementation:\n```typescript\n// hooks/useClient.ts\nimport { trpc } from '../utils/trpc';\nimport type { Client } from '../types/client';\n\ninterface UseClientOptions {\n  enabled?: boolean;\n  onSuccess?: (data: Client) => void;\n  onError?: (error: Error) => void;\n}\n\n/**\n * Hook to fetch client data by ID\n * @param id The client ID to fetch\n * @param options Additional query options\n * @returns Query result with client data, loading state, and error\n */\nexport function useClient(id: string | undefined, options: UseClientOptions = {}) {\n  return trpc.client.getById.useQuery(\n    { id: id || '' },\n    {\n      enabled: !!id && (options.enabled !== false),\n      onSuccess: options.onSuccess,\n      onError: options.onError,\n    }\n  );\n}\n```",
-          "status": "done",
-          "parentTaskId": 2
+          "details": "Implement the three main notification functions: createClientAssignment, createAuditAssignment, and createAuditUpdate. Each function should accept appropriate parameters, validate inputs, generate the notification message using the templating system, and return a properly formatted NotificationMessage object. Include proper error handling and logging for each function."
         },
         {
           "id": 5,
-          "title": "Implement Loading and Error UI Components",
-          "description": "Create reusable UI components for handling loading states, errors, and empty states when fetching client data.",
-          "dependencies": [],
-          "details": "1. Create `components/ui/LoadingState.tsx` for showing loading indicators\n2. Create `components/ui/ErrorState.tsx` for displaying error messages\n3. Create `components/ui/EmptyState.tsx` for when no data is available\n4. Ensure components are accessible and provide clear feedback\n5. Make components customizable with props for different contexts\n6. Test components with various states and screen sizes\n\nExample implementation:\n```typescript\n// components/ui/LoadingState.tsx\nimport React from 'react';\n\ninterface LoadingStateProps {\n  message?: string;\n  size?: 'small' | 'medium' | 'large';\n}\n\nexport function LoadingState({ message = 'Loading...', size = 'medium' }: LoadingStateProps) {\n  return (\n    <div className=\"loading-container\" aria-live=\"polite\" role=\"status\">\n      <div className={`spinner spinner-${size}`} />\n      <p className=\"loading-text\">{message}</p>\n    </div>\n  );\n}\n\n// components/ui/ErrorState.tsx\ninterface ErrorStateProps {\n  error: Error | null;\n  onRetry?: () => void;\n}\n\nexport function ErrorState({ error, onRetry }: ErrorStateProps) {\n  return (\n    <div className=\"error-container\" role=\"alert\">\n      <h3>Something went wrong</h3>\n      <p>{error?.message || 'An unknown error occurred'}</p>\n      {onRetry && (\n        <button onClick={onRetry} className=\"retry-button\">\n          Try Again\n        </button>\n      )}\n    </div>\n  );\n}\n```",
-          "status": "done",
-          "parentTaskId": 2
+          "title": "Develop self-notification prevention and deduplication logic",
+          "description": "Implement logic to prevent unnecessary notifications",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Add logic to skip notification creation when the creator is the same as the recipient (self-notification prevention). Implement deduplication logic that checks for identical notifications within a configurable time window. Create a mechanism to compare notification content and metadata to identify duplicates. This should include a caching strategy or database query approach to efficiently check recent notifications."
         },
         {
           "id": 6,
-          "title": "Integrate Client Data Fetching in Client Profile Component",
-          "description": "Create a ClientProfile component that uses the custom hook to fetch and display client data with proper loading, error, and empty states.",
+          "title": "Implement rate limiting functionality",
+          "description": "Create a rate limiting system to prevent notification flooding",
+          "status": "pending",
           "dependencies": [
             4,
             5
           ],
-          "details": "1. Create `components/ClientProfile.tsx` component\n2. Use the `useClient` hook to fetch data based on client ID\n3. Implement conditional rendering for loading, error, and data states\n4. Add a refetch capability for error recovery\n5. Implement proper data display with all client fields\n6. Test the component with various data scenarios\n\nExample implementation:\n```typescript\n// components/ClientProfile.tsx\nimport React from 'react';\nimport { useClient } from '../hooks/useClient';\nimport { LoadingState } from './ui/LoadingState';\nimport { ErrorState } from './ui/ErrorState';\n\ninterface ClientProfileProps {\n  clientId: string;\n}\n\nexport function ClientProfile({ clientId }: ClientProfileProps) {\n  const { data: client, isLoading, error, refetch } = useClient(clientId);\n\n  if (isLoading) {\n    return <LoadingState message=\"Loading client data...\" />;\n  }\n\n  if (error) {\n    return <ErrorState error={error} onRetry={() => refetch()} />;\n  }\n\n  if (!client) {\n    return (\n      <div className=\"empty-state\">\n        <h3>Client Not Found</h3>\n        <p>The requested client could not be found or may have been deleted.</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"client-profile\">\n      <h2>{client.name}</h2>\n      <div className=\"client-details\">\n        <div className=\"detail-row\">\n          <span className=\"label\">Email:</span>\n          <span className=\"value\">{client.email}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Phone:</span>\n          <span className=\"value\">{client.phone || 'N/A'}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Company:</span>\n          <span className=\"value\">{client.company}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Status:</span>\n          <span className={`value status-${client.status}`}>{client.status}</span>\n        </div>\n        <div className=\"detail-row\">\n          <span className=\"label\">Client since:</span>\n          <span className=\"value\">{new Date(client.createdAt).toLocaleDateString()}</span>\n        </div>\n      </div>\n    </div>\n  );\n}\n```",
-          "status": "done",
-          "parentTaskId": 2
+          "details": "Develop a rate limiting mechanism that restricts the number of notifications sent to a user within a specific time period. Implement configurable thresholds for different notification types and priorities. Create a storage solution to track notification counts and timestamps. Add logic to queue or delay notifications that exceed rate limits, ensuring important notifications are still delivered appropriately."
+        },
+        {
+          "id": 7,
+          "title": "Integrate and test the complete notification service",
+          "description": "Combine all components into a cohesive service and create comprehensive tests",
+          "status": "pending",
+          "dependencies": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "details": "Create the main notificationService.ts file that exports all notification functions and utilities. Implement proper error handling, logging, and performance monitoring. Write unit tests for each component of the service, including template generation, notification creation, deduplication, and rate limiting. Create integration tests that verify the complete notification workflow. Document the API and usage patterns for the notification service."
         }
       ]
     },
     {
       "id": 3,
-      "title": "Build Client Overview Card",
-      "description": "Create the client overview card displaying essential client metadata with inline edit controls.",
-      "status": "done",
+      "title": "Implement tRPC Notification Router",
+      "description": "Create a tRPC router for notifications with queries, mutations, and subscription endpoints.",
+      "status": "pending",
       "dependencies": [
+        1,
         2
       ],
       "priority": "high",
-      "details": "1. Create a TailAdmin card component to display client details\n2. Display Client Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager\n3. Add tooltip for External Folder Link with instructions\n4. Implement inline edit controls for editable fields\n5. Connect edit functionality to `useMutation('clients.update')` for saving changes",
-      "testStrategy": "Verify all client fields display correctly. Test inline editing functionality and confirm data updates correctly after edits.",
+      "details": "Create src/server/api/routers/notification.ts with the following endpoints: 'getUnread' query to fetch unread notifications for current user, 'markAsRead' mutation to mark a notification as read, 'markAllAsRead' mutation to mark all notifications as read, 'getCount' query to get unread notification count, and 'subscribe' subscription for real-time notification stream with user filtering. Implement proper authentication and validation. Ensure the subscription endpoint filters notifications by userId for security. Add the notification router to the main tRPC router.",
+      "testStrategy": "Test each endpoint with various input scenarios. Verify authentication requirements. Test subscription with multiple concurrent users. Ensure proper error handling for invalid inputs.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Base Card Component with Client Metadata Display",
-          "description": "Develop the foundational card component that displays all required client metadata fields in read-only mode using TailAdmin styling. This component will serve as the container for all client information and inline edit functionality.",
+          "title": "Create notification router file structure",
+          "description": "Set up the basic file structure for the notification router with proper imports and router initialization",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a new `ClientOverviewCard` component using TailAdmin card styling\n2. Implement the layout to display all required client fields: Name, Address, External Folder Link, Primary License, Business Phone, Business Email, and Assigned Client Manager\n3. Add a tooltip for External Folder Link with instructions using TailAdmin tooltip component\n4. Ensure proper spacing and typography following TailAdmin design system\n5. Make the component responsive for different screen sizes\n6. Add appropriate ARIA attributes for accessibility\n7. Test the component with mock data to ensure proper display\n8. Implement proper error states if client data is missing or undefined",
-          "status": "done",
-          "parentTaskId": 3
+          "details": "Create the file src/server/api/routers/notification.ts. Import the necessary tRPC components (router, procedure) from your tRPC server initialization file. Initialize an empty notification router using the router() function. Export the router for later integration with the main app router. Include any required validation libraries (like zod) and authentication utilities that will be needed for the endpoints."
         },
         {
           "id": 2,
-          "title": "Implement Editable Field Component with Toggle Controls",
-          "description": "Create a reusable EditableField component that can switch between display and edit modes, handling the UI state transitions and providing clear visual cues for editable fields.",
+          "title": "Implement query endpoints for notifications",
+          "description": "Create the 'getUnread' and 'getCount' query procedures for fetching unread notifications and counts",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Create an `EditableField` component that accepts field label, value, and onChange handlers\n2. Implement toggle functionality between read-only and edit modes\n3. Add visual indicators (pencil icon, hover effects) to show which fields are editable\n4. Include appropriate form controls based on field type (text input, select dropdown, etc.)\n5. Support keyboard navigation (Tab, Enter, Escape) for accessibility\n6. Add inline validation to prevent invalid data entry\n7. Implement focus management to automatically focus the input when entering edit mode\n8. Test the component in isolation with various field types\n9. Ensure the component maintains TailAdmin styling consistency",
-          "status": "done",
-          "parentTaskId": 3
+          "details": "In the notification router, implement two query procedures: 1) 'getUnread' - Add authentication middleware to ensure only authenticated users can access their notifications. Use input validation to handle pagination/filtering parameters if needed. Implement the resolver function to fetch unread notifications for the current user from your data source. 2) 'getCount' - Similarly secure this endpoint and implement a resolver that returns just the count of unread notifications for the authenticated user. Both queries should properly handle error cases and return typed responses."
         },
         {
           "id": 3,
-          "title": "Connect Edit Functionality to Client Mutation API",
-          "description": "Integrate the editable fields with the client update mutation API, implementing proper state management, optimistic updates, and error handling for a seamless editing experience.",
+          "title": "Implement mutation endpoints for notifications",
+          "description": "Create the 'markAsRead' and 'markAllAsRead' mutation procedures",
+          "status": "pending",
           "dependencies": [
-            1,
-            2
+            1
           ],
-          "details": "1. Set up state management for tracking original and edited values\n2. Implement the useMutation('clients.update') hook for saving changes\n3. Add save and cancel buttons for edit operations\n4. Implement optimistic UI updates to immediately reflect changes while saving\n5. Add loading indicators during save operations\n6. Implement error handling with user-friendly error messages\n7. Add rollback functionality if server-side validation fails\n8. Ensure all user inputs are properly sanitized and validated\n9. Test the complete edit-save flow with various scenarios (success, network error, validation error)\n10. Implement debouncing for rapid consecutive edits",
-          "status": "done",
-          "parentTaskId": 3
+          "details": "Add two mutation procedures to the notification router: 1) 'markAsRead' - Use input validation to ensure a valid notification ID is provided. Add authentication to verify the user owns the notification being marked. Implement the resolver to update the notification status in your data store. 2) 'markAllAsRead' - Add authentication to ensure only the user's own notifications are affected. Implement the resolver to update all unread notifications for the current user. Both mutations should return appropriate success/failure responses and handle error cases properly."
         },
         {
           "id": 4,
-          "title": "Enhance UX with Feedback and Accessibility Features",
-          "description": "Improve the overall user experience by adding success/error feedback, keyboard shortcuts, and ensuring full accessibility compliance for the client overview card.",
+          "title": "Implement subscription endpoint for real-time notifications",
+          "description": "Create the 'subscribe' subscription procedure with proper user filtering",
+          "status": "pending",
           "dependencies": [
-            1,
-            2,
-            3
+            1
           ],
-          "details": "1. Add toast notifications for successful updates and errors\n2. Implement keyboard shortcuts for common actions (Esc to cancel, Ctrl+Enter to save)\n3. Add confirmation dialogs for potentially destructive actions\n4. Enhance tooltip content with keyboard shortcut information\n5. Conduct thorough accessibility testing (screen reader compatibility, keyboard navigation)\n6. Add ARIA live regions for dynamic content changes\n7. Implement focus trapping within the edit mode to improve keyboard navigation\n8. Add visual indicators for required fields\n9. Create comprehensive unit and integration tests\n10. Document the component API and usage patterns for other developers",
-          "status": "done",
-          "parentTaskId": 3
+          "details": "Implement the 'subscribe' subscription procedure in the notification router. Add authentication to ensure users can only subscribe to their own notifications. Create a subscription resolver that establishes a real-time connection and emits new notifications as they arrive. Implement proper filtering logic to ensure users only receive notifications intended for them (filter by userId). Set up any necessary event emitters or pub/sub mechanisms needed for the subscription to work. Ensure proper cleanup when subscriptions are terminated."
+        },
+        {
+          "id": 5,
+          "title": "Add security and validation",
+          "description": "Enhance all endpoints with comprehensive input validation and security checks",
+          "status": "pending",
+          "dependencies": [
+            2,
+            3,
+            4
+          ],
+          "details": "Review all implemented endpoints and add thorough input validation using a schema validation library like Zod. Implement proper error handling for all procedures. Add security checks to ensure users can only access their own notifications. For the subscription endpoint, add additional validation to prevent unauthorized access to notification streams. Implement rate limiting if necessary to prevent abuse. Add logging for security-relevant events. Test all endpoints with various invalid inputs to ensure robust validation."
+        },
+        {
+          "id": 6,
+          "title": "Integrate notification router with main tRPC router",
+          "description": "Add the notification router to the main application router and test the complete implementation",
+          "status": "pending",
+          "dependencies": [
+            5
+          ],
+          "details": "Import the notification router in your main tRPC router file (typically src/server/api/root.ts or similar). Add the notification router to the main router object using the appropriate key (e.g., 'notification'). Verify that all endpoints are accessible through the main router. Test the complete implementation to ensure all notification endpoints work correctly with proper authentication, validation, and error handling. Verify that the subscription endpoint correctly filters notifications by userId. Document any specific usage patterns or requirements for frontend developers."
         }
       ]
     },
     {
       "id": 4,
-      "title": "Implement Add Contact Button and Modal",
-      "description": "Create the Add Contact button and modal form for adding new client contacts.",
-      "status": "done",
+      "title": "Enhance NotificationDropdown Component",
+      "description": "Update the existing NotificationDropdown component to display notifications with real-time updates.",
+      "status": "pending",
       "dependencies": [
-        2
+        3
       ],
-      "priority": "high",
-      "details": "1. Create an Add Contact button in the appropriate section\n2. Implement a modal using Headless UI Dialog\n3. Build form using TailAdmin form components from `src/components/form`\n4. Include fields for name, type, phone, email, and license number\n5. Implement form validation\n6. Connect to `useMutation('clients.createContact')` for saving\n7. Refresh contact list on successful submission",
-      "testStrategy": "Test form validation, submission process, and verify new contacts appear in the list after adding. Test error handling for failed submissions.",
+      "priority": "medium",
+      "details": "Modify src/components/header/NotificationDropdown.tsx to implement real-time tRPC subscription for instant notification updates. Add unread count badge integration. Implement click-to-navigate functionality with read status marking. Add connection status indicator and auto-reconnection handling for dropped connections. Use optimistic updates for read status changes. Uncomment the NotificationDropdown component in AppHeader to re-enable it. Implement the renderMessage function to properly format notification messages with bold text using React components.",
+      "testStrategy": "Create component tests with mock subscription data. Test UI rendering for different notification states (read/unread). Verify badge count updates. Test navigation on notification click. Simulate connection drops to verify reconnection logic.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Add Contact Button Component",
-          "description": "Implement a visually prominent Add Contact button that will trigger the contact modal. The button should be positioned appropriately in the contacts section and follow accessibility best practices.",
+          "title": "Implement Real-Time tRPC Subscription for Notifications",
+          "description": "Integrate a real-time tRPC subscription in NotificationDropdown to receive instant notification updates and manage notification state accordingly.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a new component `AddContactButton.jsx` in the appropriate directory\n2. Style the button using TailAdmin design system classes for consistency\n3. Add appropriate aria-label for accessibility\n4. Implement onClick handler that will control modal visibility state\n5. Test the button's visual appearance and focus states\n6. Ensure the button has a clear, explicit label ('Add Contact') that matches the modal title",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Set up a tRPC subscription hook within NotificationDropdown.tsx to listen for new notifications and updates. Ensure the component state is updated in real time as new notifications arrive or existing ones change. Handle initial loading and error states. This subtask lays the foundation for all subsequent real-time features."
         },
         {
           "id": 2,
-          "title": "Implement Modal Dialog Structure using Headless UI",
-          "description": "Create the modal dialog structure using Headless UI Dialog component with proper accessibility attributes and focus management.",
+          "title": "Add Unread Count Badge and Optimistic Read Status Updates",
+          "description": "Display an unread notifications badge and implement optimistic UI updates when marking notifications as read.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Import Dialog components from Headless UI\n2. Create a new component `AddContactModal.jsx`\n3. Implement modal open/close state management\n4. Set up proper focus trapping within the modal\n5. Ensure the modal has proper ARIA attributes (role='dialog', aria-modal='true')\n6. Add overlay with appropriate styling and backdrop click handling\n7. Test keyboard navigation (Tab, Escape to close)\n8. Verify focus returns to the Add Contact button when modal closes",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Calculate the unread notification count from the state and display it as a badge on the dropdown trigger. When a notification is marked as read (e.g., on click), optimistically update its status in the UI before awaiting server confirmation. Roll back the change if the server update fails."
         },
         {
           "id": 3,
-          "title": "Build Contact Form Layout with TailAdmin Components",
-          "description": "Create the form structure inside the modal using TailAdmin form components with all required fields for contact information.",
+          "title": "Implement Click-to-Navigate and Read Status Marking",
+          "description": "Enable navigation to a relevant page when a notification is clicked and mark it as read.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "1. Import form components from `src/components/form`\n2. Create form layout with fields for name, type, phone, email, and license number\n3. Use appropriate input types (text, email, tel) for each field\n4. Add proper labels and placeholder text for each field\n5. Implement form reset functionality when modal closes\n6. Style the form according to TailAdmin design system\n7. Test the form layout on different screen sizes\n8. Ensure the first input field receives focus when modal opens",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Attach click handlers to each notification item. On click, navigate to the notification's target (using React Router or similar), and trigger the optimistic read status update. Ensure accessibility and keyboard navigation are supported."
         },
         {
           "id": 4,
-          "title": "Implement Form State Management and Validation",
-          "description": "Set up form state management and implement client-side validation for all contact form fields.",
+          "title": "Add Connection Status Indicator and Auto-Reconnection Handling",
+          "description": "Display a connection status indicator for the real-time subscription and handle automatic reconnection if the connection drops.",
+          "status": "pending",
           "dependencies": [
-            3
+            1
           ],
-          "details": "1. Create form state using React state or a form library\n2. Implement validation rules for each field:\n   - Name: Required\n   - Email: Required, valid email format\n   - Phone: Required, valid phone format\n   - Type: Required selection\n   - License number: Optional but validate format if provided\n3. Add visual feedback for validation errors\n4. Implement inline validation as user types\n5. Disable submit button until form is valid\n6. Test validation with various input scenarios\n7. Ensure validation errors are accessible to screen readers",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Monitor the tRPC subscription connection state. Show a visual indicator (e.g., colored dot or icon) reflecting connection status (connected, reconnecting, disconnected). Implement logic to automatically attempt reconnection and update the indicator accordingly."
         },
         {
           "id": 5,
-          "title": "Connect Form to API using useMutation Hook",
-          "description": "Integrate the form with the API using the useMutation hook to save new contacts to the backend.",
+          "title": "Enhance Notification Message Rendering and Re-enable Dropdown",
+          "description": "Implement the renderMessage function to format notification messages with bold text using React components, and uncomment NotificationDropdown in AppHeader.",
+          "status": "pending",
           "dependencies": [
+            3,
             4
           ],
-          "details": "1. Import and set up useMutation hook with 'clients.createContact' endpoint\n2. Create form submission handler that calls the mutation\n3. Transform form data into the format expected by the API\n4. Implement loading state during submission\n5. Add error handling for failed submissions\n6. Test the API integration with valid and invalid data\n7. Verify that the correct data is being sent to the API\n8. Implement retry logic for network failures",
-          "status": "done",
-          "parentTaskId": 4
-        },
-        {
-          "id": 6,
-          "title": "Implement Success and Error Handling",
-          "description": "Add proper success and error handling for the contact creation process, including user feedback and error messages.",
-          "dependencies": [
-            5
-          ],
-          "details": "1. Create success notification or toast message\n2. Implement error message display within the form\n3. Add specific error handling for common errors (duplicate contact, validation failures)\n4. Close modal on successful submission\n5. Keep modal open with error messages on failed submission\n6. Reset form state after successful submission\n7. Test error scenarios by mocking API failures\n8. Ensure error messages are clear and actionable",
-          "status": "done",
-          "parentTaskId": 4
-        },
-        {
-          "id": 7,
-          "title": "Implement Contact List Refresh After Submission",
-          "description": "Update the contacts list to reflect newly added contacts without requiring a full page refresh.",
-          "dependencies": [
-            6
-          ],
-          "details": "1. Implement a callback function to refresh the contact list data\n2. Call the refresh function after successful contact creation\n3. Use optimistic updates to immediately show the new contact\n4. Handle any discrepancies between optimistic update and server response\n5. Add subtle animation or highlight for newly added contacts\n6. Test that the contact list updates correctly after submission\n7. Ensure the list maintains proper sorting/filtering after updates\n8. Verify that focus management works correctly after list refresh",
-          "status": "done",
-          "parentTaskId": 4
+          "details": "Write the renderMessage function to parse and render notification messages, applying bold formatting where appropriate using React elements. Ensure messages are visually clear and accessible. Finally, uncomment and re-integrate NotificationDropdown in AppHeader to make the enhanced component available in the UI."
         }
       ]
     },
     {
       "id": 5,
-      "title": "Implement Archive Client Button",
-      "description": "Create the Archive Client button with permission checking and confirmation flow.",
-      "status": "done",
+      "title": "Integrate Client Assignment Notifications",
+      "description": "Add notification triggers for client assignment changes in client creation and update flows.",
+      "status": "pending",
       "dependencies": [
-        2
+        2,
+        3
       ],
       "priority": "medium",
-      "details": "1. Add Archive Client button with tertiary styling (low visual hierarchy)\n2. Implement permission gating using `useAbility()` hook\n3. Create confirmation modal using Headless UI Dialog\n4. Connect to `useMutation('clients.update')` to set status to 'Archived'\n5. Handle success and error states\n6. Update UI after successful archiving",
-      "testStrategy": "Test permission gating to ensure only authorized users see the button. Verify confirmation flow works and client status updates correctly after archiving.",
+      "details": "Modify api.clients.update and api.clients.create mutations to trigger notifications when assignedUserId changes. In EditClientModal.tsx and AddClientModal.tsx, add logic to detect assignment changes and call notificationService.createClientAssignment with appropriate parameters (assignedUserId, clientId, clientName, createdByUserId). Ensure self-notification prevention by comparing assignedUserId with session.user.id. Add error handling to prevent notification failures from affecting the main operation.",
+      "testStrategy": "Test client creation and updates with different assignment scenarios. Verify notifications are created with correct data. Confirm self-assignments don't create notifications. Test error handling by simulating notification service failures.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Permission-Gated Archive Button UI Component",
-          "description": "Create a tertiary-styled Archive Client button component that is only visible to users with appropriate permissions. This component will be the entry point for the archiving flow.",
+          "title": "Implement notificationService.createClientAssignment method",
+          "description": "Create the notification service method that will handle client assignment notifications with proper parameters and error handling",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a new React component `ArchiveClientButton.tsx` with tertiary styling for low visual hierarchy\n2. Implement permission checking using the `useAbility()` hook to verify the user has 'archive:client' permissions\n3. Add conditional rendering logic to hide the button completely when permissions are missing\n4. Include a disabled state with tooltip for cases where archiving might be temporarily unavailable\n5. Add appropriate icon (archive/box) and label\n6. Implement click handler that will trigger the confirmation modal\n7. Test the component with different permission scenarios using mock data\n8. Ensure the button follows accessibility guidelines with proper ARIA attributes and keyboard navigation",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Develop the notificationService.createClientAssignment method that accepts assignedUserId, clientId, clientName, and createdByUserId parameters. This method should create and send a notification when a client is assigned to a user. Implement error handling within this method to catch and log any issues without throwing exceptions that would affect the main client operations. The method should return a success/failure status that can be safely ignored by calling code. Include logic to prevent self-notifications by comparing the assignedUserId with the user creating the assignment."
         },
         {
           "id": 2,
-          "title": "Build Confirmation Modal with Description Field",
-          "description": "Create a confirmation dialog using Headless UI that explains the archiving process, requests confirmation, and allows users to add an optional description for the archive.",
+          "title": "Modify api.clients.create mutation to trigger notifications",
+          "description": "Update the client creation API to detect and trigger notifications for initial client assignments",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Implement a modal dialog using Headless UI Dialog component\n2. Create a clear title and explanation of what archiving means for the client data\n3. Add a text field for archive description with appropriate validation\n4. Include warning about the consequences of archiving\n5. Add Cancel and Confirm buttons with appropriate styling\n6. Implement state management for the modal visibility and form inputs\n7. Add loading state for the Confirm button during the archiving process\n8. Ensure the modal is keyboard accessible and follows WAI-ARIA best practices\n9. Test the modal with screen readers and keyboard navigation\n10. Add appropriate animations for modal opening/closing",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Modify the api.clients.create mutation to capture the assignedUserId value during client creation. After successfully creating the client record, call the notificationService.createClientAssignment method with the appropriate parameters (assignedUserId, the newly created clientId, clientName, and the session.user.id as createdByUserId). Wrap the notification call in a try/catch block to ensure that any notification failures don't affect the client creation process. Add a comparison check between assignedUserId and session.user.id to prevent self-notifications when users create clients assigned to themselves."
         },
         {
           "id": 3,
-          "title": "Implement Archive Mutation and Success/Error Handling",
-          "description": "Connect the confirmation flow to the backend using the useMutation hook, handle success and error states, and update the UI after successful archiving.",
+          "title": "Update AddClientModal.tsx with notification logic",
+          "description": "Enhance the client creation modal to support the notification flow when assigning clients",
+          "status": "pending",
           "dependencies": [
             1,
             2
           ],
-          "details": "1. Implement `useMutation('clients.update')` hook to connect to the backend API\n2. Create a mutation function that sends the client ID and archive description to the API\n3. Set the client status to 'Archived' in the mutation payload\n4. Implement comprehensive error handling with specific error messages for different failure scenarios\n5. Add success feedback with a toast notification or inline message\n6. Update the client list UI after successful archiving (remove from list or update status)\n7. Implement optimistic updates for better user experience\n8. Add logging for successful archiving and failures for audit purposes\n9. Implement retry logic for transient failures\n10. Test the full flow from button click to UI update with various scenarios (success, network error, permission error, etc.)",
-          "status": "done",
-          "parentTaskId": 5
+          "details": "Modify the AddClientModal.tsx component to work with the updated api.clients.create mutation. Ensure the component correctly passes the assignedUserId parameter when creating a new client. If the API doesn't automatically trigger notifications, add client-side logic to detect when a client is being created with an assignedUserId and call notificationService.createClientAssignment directly. Implement proper error handling to prevent notification failures from affecting the client creation UI flow. Update any form validation or submission logic as needed to support the new notification requirements."
+        },
+        {
+          "id": 4,
+          "title": "Implement notification triggers in api.clients.update and EditClientModal.tsx",
+          "description": "Add logic to detect assignment changes during client updates and trigger appropriate notifications",
+          "status": "pending",
+          "dependencies": [
+            1
+          ],
+          "details": "Modify the api.clients.update mutation to detect changes in assignedUserId by comparing the new value with the previous value stored in the database. Only trigger notifications when the assignedUserId actually changes. In the EditClientModal.tsx component, implement logic to track the original assignedUserId when the modal opens and compare it with the new value on submission. If changed, call notificationService.createClientAssignment with the new assignedUserId, clientId, clientName, and session.user.id. Add proper error handling in both the API and UI components to ensure notification failures don't disrupt the main client update functionality. Include the self-notification prevention check by comparing the new assignedUserId with session.user.id."
         }
       ]
     },
     {
       "id": 6,
-      "title": "Build Current Audit Section",
-      "description": "Create the Current Audit section showing audit details with edit functionality.",
-      "status": "done",
+      "title": "Integrate Audit Assignment Notifications",
+      "description": "Add notification triggers for audit assignment changes in audit workflows.",
+      "status": "pending",
       "dependencies": [
-        2
+        2,
+        3
       ],
-      "priority": "high",
-      "details": "1. Implement `useQuery('audits.getCurrent')` to fetch latest audit data\n2. Create a card to display Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned\n3. Add edit button to open a modal form\n4. Build form using TailAdmin components\n5. Connect to `useMutation('audits.createOrUpdate')` for saving changes\n6. Handle case where no current audit exists with option to create one",
-      "testStrategy": "Verify audit data displays correctly. Test edit functionality and confirm data updates after edits. Test creating a new audit when none exists.",
+      "priority": "medium",
+      "details": "Modify api.audit.assignUser mutation to trigger notifications when users are assigned to audits. In EditAuditModal.tsx and AddAuditModal.tsx, add logic to detect assignment changes and call notificationService.createAuditAssignment with appropriate parameters (assignedUserId, auditId, clientName, auditYear, createdByUserId). Ensure self-notification prevention by comparing assignedUserId with session.user.id. Add error handling to prevent notification failures from affecting the main operation.",
+      "testStrategy": "Test audit assignment with different scenarios. Verify notifications are created with correct data. Confirm self-assignments don't create notifications. Test error handling by simulating notification service failures.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Implement Current Audit Data Fetching and State Management",
-          "description": "Set up the data fetching logic using React Query to retrieve the current audit information and implement the state management structure to handle audit data, loading states, and error handling.",
+          "title": "Update api.audit.assignUser Mutation to Trigger Notifications",
+          "description": "Modify the backend mutation responsible for assigning users to audits so that it triggers a notification event when an assignment occurs.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a custom hook `useCurrentAudit` that implements `useQuery('audits.getCurrent')` to fetch the latest audit data\n2. Handle loading, error, and empty states within the hook\n3. Implement proper TypeScript interfaces for audit data structure (including Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned fields)\n4. Add a function to check if an audit exists and provide appropriate default values\n5. Set up proper caching and refetching strategies in React Query\n6. Implement test cases using React Testing Library to verify data fetching behavior\n7. Add error boundaries to gracefully handle API failures",
-          "status": "done",
-          "parentTaskId": 6
+          "details": "In the api.audit.assignUser mutation, add logic to call notificationService.createAuditAssignment with the required parameters (assignedUserId, auditId, clientName, auditYear, createdByUserId) whenever a user is assigned to an audit. Ensure the notification trigger is only called on assignment events and not on unrelated updates."
         },
         {
           "id": 2,
-          "title": "Build Current Audit Display Card Component",
-          "description": "Create a responsive card component that displays the current audit information in a clear, organized manner following best practices for data presentation and accessibility.",
+          "title": "Implement Assignment Change Detection in EditAuditModal.tsx and AddAuditModal.tsx",
+          "description": "Add logic to the audit modals to detect when the assigned user changes and prepare the necessary data for notification.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Design and implement a TailAdmin card component to display audit information\n2. Create formatted displays for each audit field (Next Contact Date, Audit Period-End Date, Audit Stage, Audit Status, and Staff Assigned)\n3. Implement proper date formatting using a library like date-fns\n4. Add conditional rendering for different audit statuses with appropriate visual indicators\n5. Implement a placeholder state for when no current audit exists\n6. Ensure the component is fully responsive across device sizes\n7. Add accessibility attributes (aria-labels, proper heading hierarchy)\n8. Include an edit button that will trigger the edit modal\n9. Write unit tests to verify the component renders correctly with different data scenarios",
-          "status": "done",
-          "parentTaskId": 6
+          "details": "In EditAuditModal.tsx and AddAuditModal.tsx, compare the previous and new assignedUserId values to detect assignment changes. When a change is detected, gather auditId, clientName, auditYear, assignedUserId, and createdByUserId for the notification service call."
         },
         {
           "id": 3,
-          "title": "Develop Edit Audit Modal Form",
-          "description": "Create a modal form component that allows users to edit the current audit details or create a new audit if none exists, with proper validation and user feedback.",
+          "title": "Integrate Self-Notification Prevention Logic",
+          "description": "Ensure that notifications are not sent to the user who is performing the assignment action (self-notification prevention).",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "1. Build a modal component using TailAdmin components that opens when the edit button is clicked\n2. Implement form fields for all audit properties with appropriate input types\n3. Add form validation using a form library (React Hook Form recommended based on research)\n4. Create date picker components for date fields with proper formatting\n5. Implement dropdown selectors for Audit Stage and Status with predefined options\n6. Add staff assignment field with user search/selection capability\n7. Include proper error messaging and field validation\n8. Implement conditional logic to show different form fields based on audit stage\n9. Add cancel and save buttons with appropriate confirmation dialogs\n10. Ensure the form is accessible with keyboard navigation and screen reader support\n11. Write tests for form validation and submission behavior",
-          "status": "done",
-          "parentTaskId": 6
+          "details": "Before calling notificationService.createAuditAssignment, compare assignedUserId with session.user.id. Only trigger the notification if they are different, thereby preventing users from receiving notifications about their own actions."
         },
         {
           "id": 4,
-          "title": "Implement Audit Creation/Update Functionality with Error Handling",
-          "description": "Connect the edit form to the backend API using React Query mutations, implement proper error handling, success notifications, and handle the special case of creating a new audit when none exists.",
+          "title": "Add Robust Error Handling for Notification Failures",
+          "description": "Implement error handling to ensure that failures in the notification process do not affect the main audit assignment operation.",
+          "status": "pending",
           "dependencies": [
-            1,
-            2,
             3
           ],
-          "details": "1. Implement `useMutation('audits.createOrUpdate')` hook to handle saving changes to the server\n2. Add optimistic updates to immediately reflect changes in the UI\n3. Implement proper error handling with user-friendly error messages\n4. Add success notifications when an audit is successfully created or updated\n5. Create a special flow for when no current audit exists, with a button to create a new one\n6. Implement audit history tracking to maintain a record of changes\n7. Add confirmation dialogs for important actions\n8. Ensure proper RBAC (Role-Based Access Control) is respected for edit permissions\n9. Implement form state persistence in case of accidental navigation\n10. Add loading indicators during submission\n11. Write integration tests to verify the complete create/update flow\n12. Implement proper invalidation of queries to ensure data consistency",
-          "status": "done",
-          "parentTaskId": 6
+          "details": "Wrap the notification service call in a try-catch block or use a promise-based error handler. Log any errors or report them to an error monitoring service, but ensure that the audit assignment proceeds regardless of notification success or failure."
         }
       ]
     },
     {
       "id": 7,
-      "title": "Implement Current Fees Card",
-      "description": "Create the Current Fees card with permission restrictions for Admin and Developer roles.",
-      "status": "done",
+      "title": "Implement Audit Progress Update Notifications",
+      "description": "Add notification triggers for audit stage and status changes to notify client managers.",
+      "status": "pending",
       "dependencies": [
-        2
+        2,
+        3
       ],
       "priority": "medium",
-      "details": "1. Create a small card to display estimated annual fees (`clients.estAnnFees`)\n2. Wrap the component in `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>` to restrict visibility\n3. Add tooltip for 'Billing Commentary' that shows the commentary note\n4. Style as a small, simple card with appropriate formatting for currency values\n5. Handle loading and empty states",
-      "testStrategy": "Test permission gating to ensure only Admin and Developer roles can see the fees. Verify tooltip displays correctly with billing commentary.",
+      "details": "Modify api.audit.updateAudit mutation to trigger notifications when audit stage or status changes. In EditAuditModal.tsx, add logic to detect stage/status changes and call notificationService.createAuditUpdate with appropriate parameters (clientManagerId from clients.assignedUserId, auditId, clientName, auditYear, changeType, newValue, createdByUserId). Determine if the change is stage or status based on comparison with previous values. Ensure client managers don't receive notifications for their own changes by comparing clientManagerId with session.user.id. Add error handling to prevent notification failures from affecting the main operation.",
+      "testStrategy": "Test audit updates with different stage/status changes. Verify notifications are sent to correct client managers. Confirm managers don't receive notifications for their own changes. Test error handling by simulating notification service failures.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create base Current Fees Card component with loading states",
-          "description": "Implement the foundational card component that displays the estimated annual fees with proper loading and empty states. This component will handle the core display logic without permissions yet.",
+          "title": "Enhance Audit Update Mutation to Capture Previous and New Values",
+          "description": "Modify the api.audit.updateAudit mutation to capture both previous and new values for audit stage and status, enabling accurate change detection.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a new React component called `CurrentFeesCard` that accepts client data as props\n2. Implement the card layout using your UI library (likely Material-UI based on research)\n3. Display the estimated annual fees (`clients.estAnnFees`) with proper currency formatting\n4. Add a skeleton loader for the loading state\n5. Implement empty state handling with appropriate messaging\n6. Set up basic styling for the card with responsive design considerations\n7. Test the component with various data states (loading, empty, populated)\n8. Ensure the component follows the application's design system for consistency",
-          "status": "done",
-          "parentTaskId": 7
+          "details": "Update the mutation logic to fetch and retain the previous values of audit stage and status before applying updates. Ensure these values are available for downstream logic to compare and identify changes."
         },
         {
           "id": 2,
-          "title": "Add Billing Commentary tooltip and enhance styling",
-          "description": "Enhance the Current Fees Card by adding the tooltip functionality for Billing Commentary and refining the card's visual presentation.",
+          "title": "Implement Change Detection Logic in EditAuditModal.tsx",
+          "description": "Add logic in EditAuditModal.tsx to compare previous and new audit stage/status values, determining if a change has occurred and its type (stage or status).",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Add a tooltip component that displays the billing commentary note\n2. Position the tooltip trigger (icon or text) appropriately within the card layout\n3. Implement hover/focus interactions for the tooltip\n4. Ensure the tooltip is accessible (keyboard navigable and screen-reader friendly)\n5. Refine the card styling to be compact yet informative\n6. Format currency values using appropriate number formatting utilities\n7. Add subtle visual indicators for fee amounts (e.g., color coding based on amount thresholds)\n8. Test tooltip functionality across different browsers and devices\n9. Ensure the component maintains responsive behavior on all screen sizes",
-          "status": "done",
-          "parentTaskId": 7
+          "details": "Within the modal's save/update handler, compare the previous and new values for both stage and status. Set a changeType variable ('stage' or 'status') and newValue accordingly if a change is detected. Ensure this logic is robust to prevent false positives or missed changes."
         },
         {
           "id": 3,
-          "title": "Implement permission restrictions with Authorized wrapper",
-          "description": "Wrap the Current Fees Card component with permission restrictions to ensure only users with Admin and Developer roles can view the fee information.",
+          "title": "Integrate Notification Triggering with Notification Service",
+          "description": "Invoke notificationService.createAuditUpdate with the correct parameters when a stage or status change is detected, passing clientManagerId, auditId, clientName, auditYear, changeType, newValue, and createdByUserId.",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "1. Import the `Authorized` component from your permissions system\n2. Wrap the CurrentFeesCard component with `<Authorized action={CLIENT_PERMISSIONS.FEES_VIEW}>`\n3. Ensure the component correctly handles unauthorized states (either hiding completely or showing an appropriate message)\n4. Test the component with different user roles to verify permission restrictions work correctly\n5. Implement any necessary fallback UI for users without proper permissions\n6. Add unit tests to verify the permission logic works as expected\n7. Document the permission requirements in component comments\n8. Verify that the component integrates properly with the application's authentication context\n9. Test edge cases such as role changes while the component is mounted",
-          "status": "done",
-          "parentTaskId": 7
+          "details": "After detecting a change, call the notification service with all required parameters. Retrieve clientManagerId from clients.assignedUserId and ensure all contextual information (auditId, clientName, auditYear, etc.) is included in the notification payload."
+        },
+        {
+          "id": 4,
+          "title": "Implement Self-Notification Prevention Logic",
+          "description": "Ensure client managers do not receive notifications for their own changes by comparing clientManagerId with session.user.id before sending notifications.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Before triggering the notification, check if clientManagerId matches the current session user's ID. If they match, skip sending the notification. This prevents redundant or unnecessary notifications to the acting user."
+        },
+        {
+          "id": 5,
+          "title": "Add Robust Error Handling for Notification Failures",
+          "description": "Implement error handling to ensure notification failures do not affect the main audit update operation, logging errors for later review.",
+          "status": "pending",
+          "dependencies": [
+            4
+          ],
+          "details": "Wrap the notification trigger in a try-catch block. Log any errors encountered during notification sending, but allow the main audit update process to complete successfully regardless of notification outcome."
         }
       ]
     },
     {
       "id": 8,
-      "title": "Build Trust Accounts Table and CRUD",
-      "description": "Implement the Trust Accounts table with add, edit, and remove functionality.",
-      "status": "done",
+      "title": "Implement Browser Push Notifications",
+      "description": "Add browser notification support for users not actively viewing the application.",
+      "status": "pending",
       "dependencies": [
-        2
+        4
       ],
-      "priority": "medium",
-      "details": "1. Fetch trust accounts data using appropriate tRPC query\n2. Create a table layout showing Account Name, Account Number, BSB, and Software\n3. Add tooltip for Software field with access instructions\n4. Implement add/edit modals using TailAdmin form components\n5. Connect to `trustAccounts.*` mutations for CRUD operations\n6. Add confirmation dialog for delete operations\n7. Refresh table after successful operations",
-      "testStrategy": "Test all CRUD operations for trust accounts. Verify data displays correctly in the table and updates after operations. Test tooltips and confirm dialogs.",
+      "priority": "low",
+      "details": "Create a browser notification service that handles permission requests and notification creation. Implement context-aware permission request that triggers only when the first notification is about to be sent. Create structured browser notifications with title, body, icon, and action buttons as specified in the PRD. Implement click handling for browser notifications to navigate to the appropriate page. Add permission state management and graceful fallback to in-app only if permissions are denied. Use the Notification API with the specified BrowserNotification interface structure. Handle notification click events to open the appropriate page and mark as read.",
+      "testStrategy": "Test permission request flow with different browser settings. Verify notification display with various message types. Test click handling and navigation. Verify graceful fallback when permissions are denied. Test across different browsers for compatibility.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set up Trust Accounts data fetching with tRPC",
-          "description": "Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.",
+          "title": "Design Browser Notification Interface and Service",
+          "description": "Define the BrowserNotification interface structure and create a notification service module to encapsulate all browser notification logic.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a tRPC query endpoint for fetching trust accounts data\n2. Implement proper error handling and loading states\n3. Set up React state to store and manage the fetched data\n4. Add pagination support for large datasets\n5. Implement sorting functionality for table columns\n6. Test the query with mock data to ensure proper data retrieval\n7. Add type definitions for trust account data structure",
-          "status": "done",
-          "parentTaskId": 8
+          "details": "Specify the BrowserNotification interface with fields for title, body, icon, and action buttons as per the PRD. Implement a notification service class or module that exposes methods for requesting permission, creating notifications, and handling notification events. Ensure the service is modular and reusable."
         },
         {
           "id": 2,
-          "title": "Build Trust Accounts table UI with required fields",
-          "description": "Create a responsive table component that displays trust account information with all required fields and tooltips.",
+          "title": "Implement Permission Request and State Management",
+          "description": "Handle browser notification permission requests and manage the user's permission state within the application.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Create a table layout using TailAdmin components\n2. Implement columns for Account Name, Account Number, BSB, and Software\n3. Add tooltip for Software field with access instructions\n4. Implement row selection functionality\n5. Add responsive design for different screen sizes\n6. Implement loading states and empty state handling\n7. Test the table rendering with sample data\n8. Ensure accessibility compliance with proper ARIA attributes",
-          "status": "done",
-          "parentTaskId": 8
+          "details": "Add logic to request notification permissions only when the first notification is about to be sent (context-aware). Store and track the permission state (granted, denied, default) in the service. Ensure that permission requests are not shown unnecessarily and that the UI reflects the current permission state."
         },
         {
           "id": 3,
-          "title": "Implement Add Trust Account functionality",
-          "description": "Create an Add Trust Account modal with form validation and integration with the backend mutation.",
-          "dependencies": [
-            1
-          ],
-          "details": "1. Create a modal component using TailAdmin form components\n2. Implement form fields for Account Name, Account Number, BSB, and Software\n3. Add client-side validation for all fields\n4. Connect the form to the trustAccounts.create mutation\n5. Handle success and error states\n6. Implement form reset functionality\n7. Add loading state during submission\n8. Test the form submission with valid and invalid data\n9. Refresh the table after successful creation",
-          "status": "done",
-          "parentTaskId": 8
-        },
-        {
-          "id": 4,
-          "title": "Implement Edit Trust Account functionality",
-          "description": "Create an Edit Trust Account modal that pre-populates with existing data and connects to the update mutation.",
-          "dependencies": [
-            2,
-            3
-          ],
-          "details": "1. Create an edit modal component reusing TailAdmin form components\n2. Pre-populate form fields with existing trust account data\n3. Implement form validation for all fields\n4. Connect the form to the trustAccounts.update mutation\n5. Handle success and error states\n6. Add loading state during submission\n7. Test the form submission with valid and invalid data\n8. Refresh the table after successful update\n9. Ensure proper state management between add and edit modes",
-          "status": "done",
-          "parentTaskId": 8
-        },
-        {
-          "id": 5,
-          "title": "Implement Delete Trust Account functionality",
-          "description": "Add delete functionality with confirmation dialog and integration with the delete mutation.",
+          "title": "Create Structured Notification Generation Logic",
+          "description": "Implement the logic to generate and display browser notifications using the Notification API, following the structured format defined in the interface.",
+          "status": "pending",
           "dependencies": [
             2
           ],
-          "details": "1. Create a confirmation dialog component\n2. Display account details in the confirmation to prevent accidental deletion\n3. Connect to the trustAccounts.delete mutation\n4. Handle success and error states\n5. Add loading state during deletion process\n6. Implement proper error handling for failed deletions\n7. Refresh the table after successful deletion\n8. Test the deletion flow with various scenarios\n9. Add audit logging for deletion operations",
-          "status": "done",
-          "parentTaskId": 8
+          "details": "Use the Notification API to create notifications with the specified title, body, icon, and action buttons. Ensure the notification payload is validated and structured according to the interface. Integrate with the service worker if required for background notifications[3]."
+        },
+        {
+          "id": 4,
+          "title": "Implement Notification Click Handling and Navigation",
+          "description": "Handle click events on browser notifications to navigate users to the appropriate page and mark notifications as read.",
+          "status": "pending",
+          "dependencies": [
+            3
+          ],
+          "details": "Add event listeners for notification click events, either in the main app or in the service worker for background notifications[3]. Implement logic to open the relevant page (using window focus or navigation) and update the notification state to 'read' in the application."
+        },
+        {
+          "id": 5,
+          "title": "Add Graceful Fallback to In-App Notifications",
+          "description": "Implement fallback logic to display in-app notifications if browser notification permissions are denied or unavailable.",
+          "status": "pending",
+          "dependencies": [
+            2
+          ],
+          "details": "Check the permission state before attempting to send a browser notification. If permissions are denied or unsupported, trigger the existing in-app notification system instead, ensuring users are always notified regardless of browser capabilities."
         },
         {
           "id": 6,
-          "title": "Implement data refresh and error handling",
-          "description": "Add comprehensive error handling, success notifications, and automatic table refresh after CRUD operations.",
+          "title": "Test and Validate Notification Flows Across Browsers",
+          "description": "Thoroughly test browser notification flows, permission handling, click actions, and fallback mechanisms on all supported browsers and platforms.",
+          "status": "pending",
           "dependencies": [
-            3,
             4,
             5
           ],
-          "details": "1. Implement a consistent notification system for success and error messages\n2. Add automatic table refresh after successful CRUD operations\n3. Implement optimistic updates for better UX\n4. Add retry mechanisms for failed operations\n5. Create comprehensive error handling for all API calls\n6. Implement proper loading states during operations\n7. Add data validation before submission\n8. Test all error scenarios and edge cases\n9. Ensure proper state synchronization between operations",
-          "status": "done",
-          "parentTaskId": 8
+          "details": "Verify that notifications are displayed correctly with all specified fields, permission requests are context-aware, click actions work as intended, and fallback to in-app notifications occurs when necessary. Address any browser-specific quirks or limitations discovered during testing."
         }
       ]
     },
     {
       "id": 9,
-      "title": "Implement Client Contacts Table and CRUD",
-      "description": "Create the Client Contacts table with add, edit, and delete functionality.",
-      "status": "done",
+      "title": "Implement Multi-device Read Status Synchronization",
+      "description": "Ensure notification read status is synchronized across multiple devices for the same user.",
+      "status": "pending",
       "dependencies": [
+        3,
         4
       ],
-      "priority": "high",
-      "details": "1. Create a data table to display contacts showing Name, Phone, Email, Contact Type, and License Number\n2. Reuse the Add Contact modal from Task 4 for adding new contacts\n3. Implement edit modal for updating existing contacts\n4. Add delete functionality with confirmation dialog\n5. Connect to `contacts.*` mutations for CRUD operations\n6. Implement sorting and basic filtering if needed\n7. Refresh table after successful operations",
-      "testStrategy": "Test all CRUD operations for contacts. Verify data displays correctly and updates after operations. Test sorting and filtering if implemented.",
+      "priority": "low",
+      "details": "Enhance the markAsRead and markAllAsRead mutations to broadcast read status changes to all connected clients. Update the frontend subscription handler to process read status updates from other sessions. Implement optimistic UI updates for read status changes to improve perceived performance. Add logic to handle conflicts when multiple devices attempt to mark the same notification as read. Ensure the unread count badge updates in real-time across all devices when a notification is read on any device.",
+      "testStrategy": "Test with multiple browser sessions for the same user. Verify read status synchronizes across sessions. Test conflict resolution with simultaneous read operations. Measure performance impact of synchronization.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Create Client Contacts Database Schema and API Endpoints",
-          "description": "Design and implement the database schema for client contacts with proper indexing and constraints. Create the necessary API endpoints for CRUD operations with input validation.",
+          "title": "Enhance Backend Mutations to Broadcast Read Status Changes",
+          "description": "Modify the markAsRead and markAllAsRead backend mutations to broadcast notification read status updates to all active sessions/devices for the user.",
+          "status": "pending",
           "dependencies": [],
-          "details": "1. Create a database migration for the client_contacts table with fields: id, client_id, name, email, phone, contact_type, license_number, created_at, updated_at\n2. Add appropriate constraints (NOT NULL, UNIQUE for email)\n3. Create indexes on client_id and other frequently queried fields\n4. Implement API endpoints for CRUD operations (/contacts.create, /contacts.update, /contacts.delete, /contacts.list)\n5. Add comprehensive input validation on all endpoints\n6. Implement proper error handling with descriptive messages\n7. Add audit logging for all operations\n8. Test endpoints with Postman or similar tool to verify functionality",
-          "status": "done",
-          "parentTaskId": 9
+          "details": "Update the backend logic so that when a notification is marked as read (individually or in bulk), a real-time event (e.g., via WebSocket, GraphQL subscription, or push notification) is emitted to all connected clients for the user. Ensure the event payload includes notification IDs and the new read status. This lays the foundation for cross-device synchronization[1][2][4]."
         },
         {
           "id": 2,
-          "title": "Implement Client Contacts Data Table Component",
-          "description": "Create a reusable data table component to display client contacts with sorting, pagination, and basic filtering capabilities.",
+          "title": "Update Frontend Subscription Handler for Real-Time Read Status",
+          "description": "Implement or update the frontend logic to listen for read status updates from the backend and update the UI accordingly.",
+          "status": "pending",
           "dependencies": [
             1
           ],
-          "details": "1. Create a new ContactsTable component that accepts a clientId prop\n2. Implement data fetching from the contacts.list API endpoint with proper loading states\n3. Configure table columns for Name, Phone, Email, Contact Type, and License Number\n4. Add sorting functionality for all columns\n5. Implement pagination with configurable page size\n6. Add basic filtering capability (search by name/email)\n7. Include empty state handling and error state handling\n8. Style the table according to application design guidelines\n9. Test the component with various data scenarios (empty, few items, many items)",
-          "status": "done",
-          "parentTaskId": 9
+          "details": "On the frontend, subscribe to the backend's real-time read status events. When an event is received, update the notification list and unread count badge to reflect the new read status. Ensure the UI updates seamlessly, even if the change originated from another device[2][4]."
         },
         {
           "id": 3,
-          "title": "Integrate Add Contact Modal from Task 4",
-          "description": "Reuse and integrate the existing Add Contact modal from Task 4, connecting it to the contacts.create mutation.",
+          "title": "Implement Optimistic UI Updates for Read Actions",
+          "description": "Provide immediate UI feedback when a user marks a notification as read, before receiving backend confirmation.",
+          "status": "pending",
           "dependencies": [
-            1,
             2
           ],
-          "details": "1. Import the existing AddContactModal component from Task 4\n2. Create a wrapper component that manages the modal's open/close state\n3. Connect the form submission to the contacts.create mutation\n4. Add proper validation for all form fields\n5. Implement loading state during submission\n6. Add success and error handling with user feedback\n7. Ensure the contacts table refreshes after successful creation\n8. Test the integration by adding new contacts and verifying they appear in the table\n9. Verify that validation works correctly for all required fields",
-          "status": "done",
-          "parentTaskId": 9
+          "details": "When the user marks a notification as read, immediately update the UI to reflect the change (optimistic update). If the backend later reports a failure or conflict, revert the UI change and notify the user as appropriate. This improves perceived performance and responsiveness."
         },
         {
           "id": 4,
-          "title": "Implement Edit Contact Modal",
-          "description": "Create an edit modal for updating existing contacts, pre-populated with the contact's current data and connected to the contacts.update mutation.",
+          "title": "Add Conflict Resolution Logic for Simultaneous Read Actions",
+          "description": "Handle cases where multiple devices attempt to mark the same notification as read at the same time, ensuring consistency.",
+          "status": "pending",
           "dependencies": [
-            1,
-            2,
-            3
+            1
           ],
-          "details": "1. Create an EditContactModal component based on the AddContactModal structure\n2. Add functionality to pre-populate the form with existing contact data\n3. Connect form submission to the contacts.update mutation\n4. Implement proper validation for all fields\n5. Add loading state during submission\n6. Provide clear success and error messages\n7. Ensure the contacts table refreshes after successful updates\n8. Add an edit button/icon in each table row that opens the edit modal\n9. Test editing various fields and verify changes are reflected in the table after submission",
-          "status": "done",
-          "parentTaskId": 9
+          "details": "Implement backend logic to detect and resolve conflicts when concurrent read actions occur. Use event identifiers or timestamps to determine the correct state, ensuring all devices converge on the same read status[1]. Optionally, notify clients of any conflict resolution outcomes."
         },
         {
           "id": 5,
-          "title": "Implement Delete Contact Functionality with Confirmation",
-          "description": "Add the ability to delete contacts with a confirmation dialog to prevent accidental deletions, connected to the contacts.delete mutation.",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Create a DeleteConfirmationDialog component with clear messaging\n2. Add a delete button/icon in each table row\n3. Connect the confirmation dialog to the contacts.delete mutation\n4. Implement loading state during deletion\n5. Add success and error handling with user feedback\n6. Ensure the contacts table refreshes after successful deletion\n7. Consider implementing soft delete if appropriate for the application\n8. Add role-based access control to restrict deletion to authorized users\n9. Test the delete functionality and verify contacts are removed from the table",
-          "status": "done",
-          "parentTaskId": 9
-        },
-        {
-          "id": 6,
-          "title": "Implement Advanced Filtering and Table Refresh Logic",
-          "description": "Enhance the contacts table with advanced filtering options and implement a robust table refresh mechanism that updates after all CRUD operations.",
+          "title": "Synchronize and Update Unread Count Badge in Real-Time",
+          "description": "Ensure the unread count badge updates instantly across all devices when a notification is read on any device.",
+          "status": "pending",
           "dependencies": [
             2,
-            3,
-            4,
-            5
+            4
           ],
-          "details": "1. Create a FilterPanel component with options for filtering by contact type, date added, etc.\n2. Implement client-side filtering for quick responses\n3. Add server-side filtering for large datasets by extending the contacts.list endpoint\n4. Create a centralized table refresh mechanism that can be triggered by all CRUD operations\n5. Implement optimistic updates where appropriate to improve perceived performance\n6. Add a manual refresh button for users\n7. Implement proper loading states during refresh operations\n8. Consider adding export functionality (CSV/Excel) for the filtered data\n9. Test all filtering options and verify the table refreshes correctly after all CRUD operations",
-          "status": "done",
-          "parentTaskId": 9
+          "details": "Tie the unread count badge to the real-time subscription handler so it updates immediately upon receiving read status events. Test across multiple devices to confirm that the badge remains accurate and consistent, regardless of where the action originated."
         }
       ]
     },
     {
       "id": 10,
-      "title": "Create Upcoming Schedule Section",
-      "description": "Implement the Upcoming Schedule section showing next contact date and report due date.",
-      "status": "done",
-      "dependencies": [
-        2,
-        6
-      ],
-      "priority": "low",
-      "details": "1. Extract Next Contact Date from client and audit records\n2. Extract Report Due Date from relevant data sources\n3. Create a simple, read-only list to display these dates\n4. Format dates appropriately\n5. Handle empty or null date values\n6. Style as a small summary section",
-      "testStrategy": "Verify dates display correctly and format properly. Test handling of missing or null date values.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Implement Data Retrieval and Processing for Schedule Dates",
-          "description": "Create the backend functionality to extract, process, and format the Next Contact Date and Report Due Date from client records and audit data sources.",
-          "dependencies": [],
-          "details": "1. Create a ScheduleService class to handle data retrieval:\n   - Implement methods to extract Next Contact Date from client records\n   - Implement methods to extract Report Due Date from audit records\n   - Add logic to handle null/empty date values with appropriate fallbacks\n   - Implement date formatting using date-fns library for consistent display\n\n2. Create API endpoints to serve schedule data:\n   - Develop a GET endpoint that returns both contact and report dates\n   - Implement proper error handling and response formatting\n   - Add sorting to ensure dates are returned in chronological order\n   - Include pagination support if multiple dates exist\n\n3. Add data processing logic:\n   - Implement status categorization (overdue, today, upcoming)\n   - Add buffer time calculation for approaching deadlines\n   - Create utility functions for date comparison and validation\n\n4. Testing approach:\n   - Write unit tests for the ScheduleService methods\n   - Create integration tests for the API endpoints\n   - Test edge cases like missing dates, past dates, and future dates",
-          "status": "done",
-          "parentTaskId": 10
-        },
-        {
-          "id": 2,
-          "title": "Build UI Component for Upcoming Schedule Display",
-          "description": "Develop a responsive React component to display the schedule information in a clean, user-friendly format that highlights important dates and their status.",
-          "dependencies": [
-            1
-          ],
-          "details": "1. Create the UpcomingSchedule React component:\n   - Implement useState and useEffect hooks to manage schedule data\n   - Add axios API call to fetch data from endpoints created in subtask 1\n   - Implement loading states and error handling\n   - Create conditional rendering for empty states\n\n2. Design the schedule item display:\n   - Create styled components for each schedule item\n   - Implement visual indicators for different status types (overdue, today, upcoming)\n   - Use date-fns to format dates consistently (e.g., 'MMM dd, yyyy')\n   - Add tooltips for additional context on hover\n\n3. Implement responsive design:\n   - Ensure the component works well on both desktop and mobile\n   - Use CSS Grid or Flexbox for layout\n   - Add appropriate spacing and typography\n   - Implement collapsible sections if needed\n\n4. Add accessibility features:\n   - Include proper ARIA attributes\n   - Ensure keyboard navigation works correctly\n   - Add screen reader-friendly text alternatives\n   - Test with accessibility tools\n\n5. Testing approach:\n   - Write unit tests using React Testing Library\n   - Test rendering with various data scenarios\n   - Verify responsive behavior with different viewport sizes\n   - Test accessibility compliance",
-          "status": "done",
-          "parentTaskId": 10
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "title": "Implement Activity Log Timeline",
-      "description": "Create the Client Activity Log with infinite scroll, filtering, and form for new entries.",
-      "status": "done",
-      "dependencies": [
-        2
-      ],
-      "priority": "medium",
-      "details": "1. Implement query to fetch activity logs with pagination\n2. Create infinite scroll functionality with \"Load More\" button\n3. Implement tabs for filtering (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)\n4. Build timeline UI showing activity entries with appropriate icons and formatting\n5. Create form for adding new activity logs\n6. Connect to `activityLogs.*` mutations for creating new entries\n7. Implement optimistic updates for better UX",
-      "testStrategy": "Test infinite scroll and pagination. Verify filtering tabs work correctly. Test adding new activity logs and confirm they appear in the timeline.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Set up Activity Log Data Fetching with Cursor-based Pagination",
-          "description": "Implement the API query to fetch activity logs with cursor-based pagination for efficient data loading and better performance with large datasets.",
-          "dependencies": [],
-          "details": "1. Create a GraphQL query for fetching activity logs with parameters for cursor, limit, and filters\n2. Implement cursor-based pagination instead of offset-based for better performance\n3. Include fields for id, type, timestamp, description, user, and any type-specific data\n4. Add proper indexing in the database for timestamp and activity type fields\n5. Implement error handling for failed queries\n6. Test the query with various cursor positions and filter combinations\n7. Document the API interface for team reference",
-          "status": "done",
-          "parentTaskId": 11
-        },
-        {
-          "id": 2,
-          "title": "Build Timeline UI Component with Appropriate Styling",
-          "description": "Create a visually appealing timeline component that displays activity entries with appropriate icons, formatting, and visual hierarchy.",
-          "dependencies": [
-            1
-          ],
-          "details": "1. Design a responsive timeline layout with clear visual separation between entries\n2. Implement activity type-specific icons (email, call, note, etc.) using a consistent icon library\n3. Format timestamps in a user-friendly way using date-fns library\n4. Style different activity types with distinct visual cues (colors, borders)\n5. Ensure proper spacing and alignment for readability\n6. Make the timeline accessible with proper ARIA attributes and keyboard navigation\n7. Test the UI across different screen sizes and with various activity types\n8. Implement skeleton loading states for better UX during data fetching",
-          "status": "done",
-          "parentTaskId": 11
-        },
-        {
-          "id": 3,
-          "title": "Implement Infinite Scroll with Load More Button",
-          "description": "Create an infinite scroll mechanism with a fallback 'Load More' button to efficiently load and display large sets of activity log entries.",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Integrate react-infinite-scroll-component or similar library for efficient rendering\n2. Implement scroll detection to trigger loading of more items when user approaches bottom\n3. Add a 'Load More' button as an alternative to automatic loading\n4. Maintain scroll position when new items are loaded to prevent jumps\n5. Implement virtualization for rendering only visible items to improve performance\n6. Add loading indicators during data fetching\n7. Handle edge cases like empty results or end of data\n8. Test with various network conditions and large datasets",
-          "status": "done",
-          "parentTaskId": 11
-        },
-        {
-          "id": 4,
-          "title": "Create Filtering System with Tabs and Advanced Filters",
-          "description": "Implement a filtering system with tabs for quick filtering by activity type and additional filters for more granular control.",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Create tab components for filtering by activity type (All, Notes, Emails, Calls, Status Updates, Documents, Tasks)\n2. Implement state management for selected filters using React context or a state management library\n3. Add debounced filter application to prevent excessive API calls\n4. Create additional filter options for date ranges and other metadata\n5. Ensure filters are reflected in the URL for shareable filtered views\n6. Implement filter reset functionality\n7. Add visual indicators for active filters\n8. Test filter combinations for correctness and performance",
-          "status": "done",
-          "parentTaskId": 11
-        },
-        {
-          "id": 5,
-          "title": "Develop Form for Adding New Activity Entries",
-          "description": "Create a user-friendly form with validation for adding new activity log entries of different types.",
-          "dependencies": [
-            2
-          ],
-          "details": "1. Implement a form using Formik or React Hook Form for robust validation\n2. Create dynamic form fields that change based on selected activity type\n3. Add client-side validation with helpful error messages\n4. Implement auto-save functionality for drafts\n5. Add rich text editing for description fields where appropriate\n6. Include file upload capabilities for document-type activities\n7. Ensure the form is fully accessible with keyboard navigation and screen reader support\n8. Test form submission with various input combinations and edge cases\n\n<info added on 2025-05-09T02:00:37.813Z>\nHere's additional implementation information for the activity log form:\n\n```typescript\n// Suggested schema structure in src/utils/validation/activityLogSchema.ts\nexport const activityLogSchema = z.object({\n  type: z.enum(['call', 'email', 'meeting', 'note', 'document']),\n  title: z.string().min(3, \"Title must be at least 3 characters\"),\n  description: z.string().optional(),\n  contactId: z.string().uuid(),\n  timestamp: z.date(),\n  // Dynamic fields based on type\n  callDuration: z.number().optional(),\n  meetingAttendees: z.array(z.string()).optional(),\n  documentUrl: z.string().url().optional(),\n});\n\n// Form component structure with conditional fields\nconst ActivityLogForm = ({ contactId, onSuccess }) => {\n  const { register, handleSubmit, watch, formState: { errors } } = useForm({\n    resolver: zodResolver(activityLogSchema),\n    defaultValues: { contactId, timestamp: new Date() }\n  });\n  \n  const selectedType = watch(\"type\");\n  const utils = api.useContext();\n  const addActivity = api.activityLogs.create.useMutation({\n    onSuccess: () => {\n      utils.activityLogs.getAll.invalidate();\n      toast.success(\"Activity added successfully\");\n      onSuccess?.();\n    },\n    onError: (error) => toast.error(`Error: ${error.message}`)\n  });\n\n  // Implement auto-save with useEffect and localStorage\n  useEffect(() => {\n    const subscription = watch((value) => {\n      localStorage.setItem(`activityDraft_${contactId}`, JSON.stringify(value));\n    });\n    return () => subscription.unsubscribe();\n  }, [watch, contactId]);\n\n  // Load draft on initial render\n  useEffect(() => {\n    const draft = localStorage.getItem(`activityDraft_${contactId}`);\n    if (draft) {\n      // Logic to restore form state from draft\n    }\n  }, []);\n  \n  return (\n    <form onSubmit={handleSubmit(data => addActivity.mutate(data))}>\n      {/* Common fields */}\n      \n      {/* Conditional fields based on type */}\n      {selectedType === 'call' && (\n        <div className=\"mt-4\">\n          <label htmlFor=\"callDuration\">Duration (minutes)</label>\n          <input \n            type=\"number\" \n            id=\"callDuration\"\n            {...register(\"callDuration\")}\n          />\n          {errors.callDuration && <p className=\"text-red-500\">{errors.callDuration.message}</p>}\n        </div>\n      )}\n      \n      {/* Similar conditional blocks for other activity types */}\n      \n      {/* File upload for document type */}\n      {selectedType === 'document' && (\n        <FileUpload \n          onUploadComplete={(url) => setValue(\"documentUrl\", url)} \n        />\n      )}\n    </form>\n  );\n};\n```\n\nIntegration with the timeline component should include:\n- Modal trigger button with proper positioning in the timeline header\n- Optimistic UI updates after form submission\n- Keyboard shortcuts (Alt+N) for quick entry creation\n- Form state persistence between modal open/close events\n- Accessibility features including focus management and ARIA attributes\n</info added on 2025-05-09T02:00:37.813Z>",
-          "status": "done",
-          "parentTaskId": 11
-        },
-        {
-          "id": 6,
-          "title": "Connect Activity Log Form to Mutation APIs",
-          "description": "Integrate the new activity form with backend mutation APIs to create and update activity log entries.",
-          "dependencies": [
-            5
-          ],
-          "details": "1. Implement GraphQL mutations for creating new activity logs of each type\n2. Add proper error handling for failed submissions\n3. Implement loading states during submission\n4. Add success notifications after successful submissions\n5. Create retry mechanisms for failed submissions\n6. Implement validation on both client and server sides\n7. Add security measures to prevent unauthorized submissions\n8. Test mutations with various activity types and edge cases",
-          "status": "done",
-          "parentTaskId": 11
-        },
-        {
-          "id": 7,
-          "title": "Implement Optimistic Updates for Improved UX",
-          "description": "Add optimistic updates to immediately reflect new entries in the timeline before server confirmation, providing a more responsive user experience.",
-          "dependencies": [
-            3,
-            6
-          ],
-          "details": "1. Implement client-side state updates that immediately show new entries in the timeline\n2. Create temporary IDs for new entries until server confirmation\n3. Add visual indicators for entries that are pending server confirmation\n4. Implement rollback functionality for failed submissions\n5. Ensure proper ordering of optimistically added entries in the timeline\n6. Handle conflicts between optimistic updates and subsequent data fetches\n7. Test various network conditions including slow connections and failures\n8. Measure and optimize performance impact of optimistic updates",
-          "status": "done",
-          "parentTaskId": 11
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "title": "Implement Form Validation and Error Handling",
-      "description": "Add comprehensive form validation and error handling across all forms and API interactions.",
-      "status": "done",
+      "title": "Performance Optimization and Testing",
+      "description": "Optimize notification system performance and conduct comprehensive testing.",
+      "status": "pending",
       "dependencies": [
         4,
         5,
         6,
+        7,
         8,
-        9,
-        11
+        9
       ],
-      "priority": "medium",
-      "details": "1. Implement client-side validation for all forms using a validation library or custom logic\n2. Add appropriate error messages for validation failures\n3. Handle API errors gracefully with user-friendly messages\n4. Implement toast notifications for success and error states\n5. Add loading indicators during API calls\n6. Ensure all forms maintain state during validation errors",
-      "testStrategy": "Test validation by submitting invalid data in all forms. Verify error messages display correctly. Test API error handling by simulating API failures.",
+      "priority": "low",
+      "details": "Implement pagination for large notification lists to improve loading performance. Add connection pooling for WebSocket connections to reduce server load. Implement exponential backoff for reconnection attempts. Add monitoring for notification service performance. Optimize database queries with proper indexing. Conduct load testing with high notification volumes. Implement accessibility improvements including screen reader announcements for new notifications. Add responsive design adjustments for mobile notification viewing. Create comprehensive test suite covering all notification scenarios.",
+      "testStrategy": "Conduct performance testing with simulated high loads. Measure response times and resource usage. Test with screen readers for accessibility compliance. Verify mobile responsiveness on different devices. Run integration tests covering the full notification lifecycle. Test error recovery scenarios and connection reliability.",
       "subtasks": [
         {
           "id": 1,
-          "title": "Set up validation library and create validation schemas",
-          "description": "Select and integrate a validation library (Yup or Zod recommended) and define reusable validation schemas for all form types in the application.",
+          "title": "Implement Pagination for Notification Lists",
+          "description": "Create an efficient pagination system for notification lists to improve frontend performance and reduce server load when handling large volumes of notifications.",
           "dependencies": [],
-          "details": "1. Install the chosen validation library (e.g., `npm install yup` or `npm install zod`)\n2. Create a dedicated `/validation` directory to house all validation schemas\n3. Define base validation schemas for common fields (email, password, names, etc.) with appropriate rules and error messages\n4. Create form-specific schemas by composing base schemas\n5. Ensure schemas enforce standardized data formats\n6. Add TypeScript types that align with validation schemas\n7. Test schemas with various inputs to verify validation rules work as expected",
-          "status": "done",
-          "parentTaskId": 12
+          "details": "Implementation steps:\n1. Add cursor-based pagination to notification API endpoints using limit and cursor parameters\n2. Implement database query optimization with LIMIT and OFFSET clauses\n3. Create indexed queries to support efficient pagination\n4. Add infinite scroll functionality in the frontend using IntersectionObserver API\n5. Implement skeleton loading states for paginated content\n6. Cache paginated results using Redis with appropriate TTL\n7. Add proper HTTP headers for cache control\n\nTesting approach:\n- Unit test pagination logic with various page sizes\n- Measure and compare load times before and after implementation\n- Test with large datasets (10,000+ notifications)\n- Verify memory usage remains stable during scrolling",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 2,
-          "title": "Implement client-side form validation with real-time feedback",
-          "description": "Integrate the validation schemas with form components to provide real-time, inline validation feedback as users interact with form fields.",
-          "dependencies": [
-            1
-          ],
-          "details": "1. Integrate validation schemas with React Hook Form or Formik\n2. Implement field-level validation that triggers on blur and input events\n3. Add debouncing for real-time validation to prevent excessive validation calls\n4. Display inline error messages adjacent to form fields\n5. Style error states for form inputs (red borders, error icons, etc.)\n6. Ensure validation maintains form state when errors occur\n7. Add accessibility attributes (aria-invalid, aria-describedby) for screen readers\n8. Test validation with keyboard navigation and screen readers",
-          "status": "done",
-          "parentTaskId": 12
+          "title": "Implement WebSocket Connection Pooling",
+          "description": "Set up connection pooling for WebSockets to efficiently manage connections, reduce server resource consumption, and improve scalability for the notification system.",
+          "dependencies": [],
+          "details": "Implementation steps:\n1. Configure a connection pool manager using a library like ws or Socket.IO\n2. Implement connection reuse patterns to avoid creating new connections unnecessarily\n3. Set appropriate pool size limits based on expected concurrent users\n4. Add connection timeout and idle connection cleanup mechanisms\n5. Implement health checks for connections in the pool\n6. Add metrics collection for connection pool usage\n7. Configure graceful shutdown procedures for the connection pool\n\nTesting approach:\n- Measure connection establishment time before and after pooling\n- Test with simulated concurrent connections (1000+)\n- Monitor server resource usage under load\n- Verify connections are properly recycled and not leaking",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 3,
-          "title": "Create error handling utilities for API interactions",
-          "description": "Develop utility functions to standardize API error handling across the application, mapping server errors to user-friendly messages.",
-          "dependencies": [],
-          "details": "1. Create an `apiErrorHandler.ts` utility\n2. Implement functions to parse and normalize error responses from different API endpoints\n3. Define a standard error response format\n4. Create a mapping of error codes/types to user-friendly messages\n5. Add support for field-specific errors returned from the server\n6. Implement retry logic for transient errors when appropriate\n7. Add logging for errors to aid debugging\n8. Test with mocked API responses to verify correct error handling",
-          "status": "done",
-          "parentTaskId": 12
+          "title": "Implement Exponential Backoff for Reconnection",
+          "description": "Create a robust reconnection strategy with exponential backoff to handle network interruptions gracefully and prevent overwhelming the server with reconnection attempts.",
+          "dependencies": [
+            2
+          ],
+          "details": "Implementation steps:\n1. Design a backoff algorithm with configurable initial delay, maximum delay, and jitter\n2. Implement client-side reconnection logic that increases wait time between attempts\n3. Add randomized jitter to prevent thundering herd problems\n4. Create a connection state machine (disconnected, connecting, connected)\n5. Implement event handlers for connection failures and successful reconnections\n6. Add user feedback during reconnection attempts\n7. Set maximum retry limits and fallback to polling if needed\n\nTesting approach:\n- Simulate network interruptions to verify reconnection behavior\n- Test with various network conditions (high latency, packet loss)\n- Verify backoff intervals increase correctly\n- Ensure the system recovers and synchronizes state after reconnection",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 4,
-          "title": "Implement toast notification system",
-          "description": "Create a toast notification system to display success and error messages across the application.",
-          "dependencies": [],
-          "details": "1. Select a toast library (e.g., react-toastify, react-hot-toast) or implement a custom solution\n2. Create a Toast context/provider to manage toast state\n3. Implement different toast types (success, error, warning, info)\n4. Add customizable duration, position, and dismissal options\n5. Ensure toasts are accessible (can be dismissed with keyboard, readable by screen readers)\n6. Style toasts to match application design system\n7. Create utility functions for common toast operations\n8. Test toast functionality across different screen sizes",
-          "status": "done",
-          "parentTaskId": 12
+          "title": "Set Up Monitoring for Notification Service",
+          "description": "Implement comprehensive monitoring and alerting for the notification system to track performance metrics, identify bottlenecks, and ensure reliable operation.",
+          "dependencies": [
+            2,
+            3
+          ],
+          "details": "Implementation steps:\n1. Integrate Prometheus for metrics collection with custom metrics for notification delivery rates, queue lengths, and latency\n2. Set up Grafana dashboards for visualization of key performance indicators\n3. Implement distributed tracing using OpenTelemetry to track notification flow across services\n4. Configure alerting thresholds for critical metrics (queue backlog, error rates, latency spikes)\n5. Add logging with structured format and appropriate log levels\n6. Implement health check endpoints for service status monitoring\n7. Create a notification delivery status tracking system\n\nTesting approach:\n- Verify metrics are correctly collected under various load conditions\n- Test alert triggering with simulated failure scenarios\n- Validate dashboard accuracy with known workloads\n- Ensure tracing captures the complete notification lifecycle",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 5,
-          "title": "Add loading indicators and API request state management",
-          "description": "Implement loading indicators and state management for API requests to provide visual feedback during form submissions and data fetching.",
+          "title": "Optimize Database Queries with Proper Indexing",
+          "description": "Analyze and optimize database queries related to notifications, implementing appropriate indexes to improve query performance and reduce database load.",
           "dependencies": [
-            3
+            1
           ],
-          "details": "1. Create reusable loading components (spinners, skeleton loaders, etc.)\n2. Implement a request state management system (loading, success, error states)\n3. Add loading indicators to form submit buttons that disable during submission\n4. Implement full-page or section loading states for initial data fetching\n5. Add progress indicators for multi-step forms or file uploads\n6. Ensure loading states preserve form data to prevent data loss\n7. Add appropriate aria attributes for accessibility during loading states\n8. Test loading indicators with simulated slow network connections",
-          "status": "done",
-          "parentTaskId": 12
+          "details": "Implementation steps:\n1. Analyze query patterns using database profiling tools to identify slow queries\n2. Create compound indexes for frequently used query patterns (user_id + created_at, status + priority)\n3. Implement database query caching using Redis for frequently accessed notification data\n4. Optimize JOIN operations and consider denormalization where appropriate\n5. Implement database connection pooling to manage concurrent connections efficiently\n6. Add query timeout handling to prevent long-running queries\n7. Consider partitioning strategies for the notifications table if volume is very high\n\nTesting approach:\n- Benchmark query performance before and after optimization\n- Use EXPLAIN ANALYZE to verify index usage\n- Test with production-scale data volumes\n- Monitor database load during peak notification periods",
+          "status": "pending",
+          "parentTaskId": 10
         },
         {
           "id": 6,
-          "title": "Integrate all components into a complete form validation system",
-          "description": "Connect all previously built components into a cohesive system and apply it across all application forms with server-side validation.",
+          "title": "Conduct Load Testing and Implement UI Improvements",
+          "description": "Perform comprehensive load testing of the notification system and implement accessibility and responsive design improvements for better user experience across devices.",
+          "dependencies": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "details": "Implementation steps:\n1. Set up load testing environment using k6 or JMeter to simulate high notification volumes\n2. Create test scenarios for various load patterns (steady, spike, gradual increase)\n3. Implement accessibility improvements including ARIA attributes for notification elements\n4. Add screen reader announcements for new notifications using aria-live regions\n5. Enhance responsive design with specific breakpoints for mobile notification viewing\n6. Optimize notification rendering for touch interfaces\n7. Implement performance budgets for notification UI components\n\nTesting approach:\n- Run load tests with gradually increasing concurrent users (up to 10,000)\n- Measure system behavior under sustained high load\n- Test accessibility with screen readers and automated tools (Axe, Lighthouse)\n- Verify responsive design across various device sizes and orientations",
+          "status": "pending",
+          "parentTaskId": 10
+        },
+        {
+          "id": 7,
+          "title": "Create Comprehensive Test Suite for Notification Scenarios",
+          "description": "Develop a complete test suite covering all notification scenarios, including unit tests, integration tests, and end-to-end tests to ensure system reliability.",
           "dependencies": [
             1,
             2,
             3,
             4,
-            5
+            5,
+            6
           ],
-          "details": "1. Create a FormWrapper component that combines validation, error handling, loading states, and toast notifications\n2. Implement server-side validation that mirrors client-side schemas\n3. Synchronize error messages between client and server validation\n4. Add form submission handlers that properly manage the entire submission lifecycle\n5. Implement form state persistence during validation errors\n6. Create comprehensive documentation for the validation system\n7. Apply the complete system to all forms in the application\n8. Write integration tests that verify the entire form submission flow from validation to success/error handling",
-          "status": "done",
-          "parentTaskId": 12
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "title": "Finalize Page Integration and Testing",
-      "description": "Complete final integration, perform comprehensive testing, and add documentation.",
-      "status": "done",
-      "dependencies": [
-        3,
-        7,
-        10,
-        11,
-        12
-      ],
-      "priority": "high",
-      "details": "1. Ensure all components are properly integrated on the page\n2. Optimize component rendering and data fetching\n3. Test all interactions and flows end-to-end\n4. Verify responsive behavior across different screen sizes\n5. Check accessibility compliance\n6. Write unit tests for key components and hooks\n7. Add integration tests for critical user flows\n8. Update README and internal documentation\n9. Perform final code review and cleanup",
-      "testStrategy": "Conduct end-to-end testing of all features. Verify all components work together correctly. Test on different devices and screen sizes. Run automated tests and fix any issues.",
-      "subtasks": [
-        {
-          "id": 1,
-          "title": "Implement Component Integration and Data Flow",
-          "description": "Ensure all components are properly integrated on the page with correct data flow between them. Focus on component hierarchy, props passing, and state management.",
-          "dependencies": [],
-          "details": "1. Implement component-based integration following the hierarchy pattern identified in research\n2. Verify parent-child relationships between components\n3. Ensure proper data flow using props and context where appropriate\n4. Implement lazy loading for heavy components using React.lazy() and Suspense\n5. Test component integration by verifying all components render without console errors\n6. Verify that state changes in one component correctly propagate to dependent components\n7. Testing approach: Create a simple smoke test that renders the full page and checks for major rendering issues",
-          "status": "done",
-          "parentTaskId": 13
-        },
-        {
-          "id": 2,
-          "title": "Optimize Performance and API Integration",
-          "description": "Optimize component rendering, implement efficient data fetching patterns, and ensure proper API integration with error handling.",
-          "dependencies": [
-            1
-          ],
-          "details": "1. Implement API integration using modern async/await patterns with proper error handling\n2. Add loading states for asynchronous operations\n3. Implement data caching strategies to minimize redundant API calls\n4. Optimize rendering performance by memoizing expensive components with React.memo()\n5. Implement code splitting for route-based components\n6. Use performance monitoring tools to identify and fix bottlenecks\n7. Testing approach: Create performance tests that measure initial load time, time to interactive, and API response handling",
-          "status": "done",
-          "parentTaskId": 13
-        },
-        {
-          "id": 3,
-          "title": "Implement Comprehensive Testing Suite",
-          "description": "Create a robust testing suite including unit tests for key components and hooks, integration tests for critical user flows, and end-to-end tests for complete user journeys.",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Write unit tests for individual components using Jest and React Testing Library\n2. Create integration tests for component interactions\n3. Implement end-to-end tests for critical user flows using Selenium or Cypress\n4. Test form submissions and API interactions with mock data\n5. Verify that error states and edge cases are handled correctly\n6. Implement continuous integration to run tests automatically\n7. Testing approach: Follow the testing pyramid with more unit tests than integration tests, and fewer end-to-end tests focused on critical paths",
-          "status": "done",
-          "parentTaskId": 13
-        },
-        {
-          "id": 4,
-          "title": "Ensure Responsive Design and Accessibility Compliance",
-          "description": "Verify responsive behavior across different screen sizes and ensure the application meets accessibility standards.",
-          "dependencies": [
-            1,
-            2
-          ],
-          "details": "1. Test responsive layouts across mobile, tablet, and desktop viewports\n2. Implement media queries for breakpoints identified during design\n3. Verify touch interactions work correctly on mobile devices\n4. Run accessibility audits using tools like axe or Lighthouse\n5. Ensure proper semantic HTML structure throughout the application\n6. Add appropriate ARIA attributes where needed\n7. Verify keyboard navigation works for all interactive elements\n8. Test with screen readers to ensure compatibility\n9. Testing approach: Create a checklist of WCAG 2.1 AA requirements and verify compliance for each item",
-          "status": "done",
-          "parentTaskId": 13
-        },
-        {
-          "id": 5,
-          "title": "Finalize Documentation and Code Cleanup",
-          "description": "Complete all documentation requirements and perform final code review and cleanup to ensure maintainability.",
-          "dependencies": [
-            1,
-            2,
-            3,
-            4
-          ],
-          "details": "1. Update README with project overview, setup instructions, and usage guidelines\n2. Document component structure and integration points as shown in research\n3. Add JSDoc comments to key functions and components\n4. Create API documentation for all data fetching functions\n5. Document known limitations and browser compatibility\n6. Perform code cleanup by removing unused code and console logs\n7. Standardize code formatting using ESLint and Prettier\n8. Conduct final code review focusing on maintainability and readability\n9. Testing approach: Have team members review documentation for clarity and completeness",
-          "status": "done",
-          "parentTaskId": 13
+          "details": "Implementation steps:\n1. Create unit tests for core notification logic (formatting, prioritization, routing)\n2. Implement integration tests for notification delivery across different channels\n3. Develop end-to-end tests for complete notification workflows\n4. Set up test fixtures and factories for generating test notification data\n5. Implement property-based testing for edge cases and boundary conditions\n6. Create visual regression tests for notification UI components\n7. Set up continuous integration pipeline to run tests automatically\n\nTesting approach:\n- Aim for high test coverage (>80%) for critical notification components\n- Include tests for error handling and edge cases\n- Test notification delivery across all supported channels\n- Verify correct behavior for various notification types and priorities\n- Test notification preferences and user-specific settings",
+          "status": "pending",
+          "parentTaskId": 10
         }
       ]
     }
   ],
   "metadata": {
-    "projectName": "Simplified Client Profile Page",
-    "totalTasks": 13,
-    "sourceFile": "scripts/PRD_phase2-clientPage2.txt",
+    "projectName": "QAS Portal Notifications System",
+    "totalTasks": 10,
+    "sourceFile": "PRD_notifications-v1.txt",
     "generatedAt": "2023-11-09"
   }
 }

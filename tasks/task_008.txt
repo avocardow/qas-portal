@@ -1,100 +1,49 @@
 # Task ID: 8
-# Title: Build Trust Accounts Table and CRUD
-# Status: done
-# Dependencies: 2
-# Priority: medium
-# Description: Implement the Trust Accounts table with add, edit, and remove functionality.
+# Title: Implement Browser Push Notifications
+# Status: pending
+# Dependencies: 4
+# Priority: low
+# Description: Add browser notification support for users not actively viewing the application.
 # Details:
-1. Fetch trust accounts data using appropriate tRPC query
-2. Create a table layout showing Account Name, Account Number, BSB, and Software
-3. Add tooltip for Software field with access instructions
-4. Implement add/edit modals using TailAdmin form components
-5. Connect to `trustAccounts.*` mutations for CRUD operations
-6. Add confirmation dialog for delete operations
-7. Refresh table after successful operations
+Create a browser notification service that handles permission requests and notification creation. Implement context-aware permission request that triggers only when the first notification is about to be sent. Create structured browser notifications with title, body, icon, and action buttons as specified in the PRD. Implement click handling for browser notifications to navigate to the appropriate page. Add permission state management and graceful fallback to in-app only if permissions are denied. Use the Notification API with the specified BrowserNotification interface structure. Handle notification click events to open the appropriate page and mark as read.
 
 # Test Strategy:
-Test all CRUD operations for trust accounts. Verify data displays correctly in the table and updates after operations. Test tooltips and confirm dialogs.
+Test permission request flow with different browser settings. Verify notification display with various message types. Test click handling and navigation. Verify graceful fallback when permissions are denied. Test across different browsers for compatibility.
 
 # Subtasks:
-## 1. Set up Trust Accounts data fetching with tRPC [done]
+## 1. Design Browser Notification Interface and Service [pending]
 ### Dependencies: None
-### Description: Implement the tRPC query to fetch trust accounts data from the backend and set up the state management for the Trust Accounts table component.
+### Description: Define the BrowserNotification interface structure and create a notification service module to encapsulate all browser notification logic.
 ### Details:
-1. Create a tRPC query endpoint for fetching trust accounts data
-2. Implement proper error handling and loading states
-3. Set up React state to store and manage the fetched data
-4. Add pagination support for large datasets
-5. Implement sorting functionality for table columns
-6. Test the query with mock data to ensure proper data retrieval
-7. Add type definitions for trust account data structure
+Specify the BrowserNotification interface with fields for title, body, icon, and action buttons as per the PRD. Implement a notification service class or module that exposes methods for requesting permission, creating notifications, and handling notification events. Ensure the service is modular and reusable.
 
-## 2. Build Trust Accounts table UI with required fields [done]
+## 2. Implement Permission Request and State Management [pending]
 ### Dependencies: 8.1
-### Description: Create a responsive table component that displays trust account information with all required fields and tooltips.
+### Description: Handle browser notification permission requests and manage the user's permission state within the application.
 ### Details:
-1. Create a table layout using TailAdmin components
-2. Implement columns for Account Name, Account Number, BSB, and Software
-3. Add tooltip for Software field with access instructions
-4. Implement row selection functionality
-5. Add responsive design for different screen sizes
-6. Implement loading states and empty state handling
-7. Test the table rendering with sample data
-8. Ensure accessibility compliance with proper ARIA attributes
+Add logic to request notification permissions only when the first notification is about to be sent (context-aware). Store and track the permission state (granted, denied, default) in the service. Ensure that permission requests are not shown unnecessarily and that the UI reflects the current permission state.
 
-## 3. Implement Add Trust Account functionality [done]
-### Dependencies: 8.1
-### Description: Create an Add Trust Account modal with form validation and integration with the backend mutation.
-### Details:
-1. Create a modal component using TailAdmin form components
-2. Implement form fields for Account Name, Account Number, BSB, and Software
-3. Add client-side validation for all fields
-4. Connect the form to the trustAccounts.create mutation
-5. Handle success and error states
-6. Implement form reset functionality
-7. Add loading state during submission
-8. Test the form submission with valid and invalid data
-9. Refresh the table after successful creation
-
-## 4. Implement Edit Trust Account functionality [done]
-### Dependencies: 8.2, 8.3
-### Description: Create an Edit Trust Account modal that pre-populates with existing data and connects to the update mutation.
-### Details:
-1. Create an edit modal component reusing TailAdmin form components
-2. Pre-populate form fields with existing trust account data
-3. Implement form validation for all fields
-4. Connect the form to the trustAccounts.update mutation
-5. Handle success and error states
-6. Add loading state during submission
-7. Test the form submission with valid and invalid data
-8. Refresh the table after successful update
-9. Ensure proper state management between add and edit modes
-
-## 5. Implement Delete Trust Account functionality [done]
+## 3. Create Structured Notification Generation Logic [pending]
 ### Dependencies: 8.2
-### Description: Add delete functionality with confirmation dialog and integration with the delete mutation.
+### Description: Implement the logic to generate and display browser notifications using the Notification API, following the structured format defined in the interface.
 ### Details:
-1. Create a confirmation dialog component
-2. Display account details in the confirmation to prevent accidental deletion
-3. Connect to the trustAccounts.delete mutation
-4. Handle success and error states
-5. Add loading state during deletion process
-6. Implement proper error handling for failed deletions
-7. Refresh the table after successful deletion
-8. Test the deletion flow with various scenarios
-9. Add audit logging for deletion operations
+Use the Notification API to create notifications with the specified title, body, icon, and action buttons. Ensure the notification payload is validated and structured according to the interface. Integrate with the service worker if required for background notifications[3].
 
-## 6. Implement data refresh and error handling [done]
-### Dependencies: 8.3, 8.4, 8.5
-### Description: Add comprehensive error handling, success notifications, and automatic table refresh after CRUD operations.
+## 4. Implement Notification Click Handling and Navigation [pending]
+### Dependencies: 8.3
+### Description: Handle click events on browser notifications to navigate users to the appropriate page and mark notifications as read.
 ### Details:
-1. Implement a consistent notification system for success and error messages
-2. Add automatic table refresh after successful CRUD operations
-3. Implement optimistic updates for better UX
-4. Add retry mechanisms for failed operations
-5. Create comprehensive error handling for all API calls
-6. Implement proper loading states during operations
-7. Add data validation before submission
-8. Test all error scenarios and edge cases
-9. Ensure proper state synchronization between operations
+Add event listeners for notification click events, either in the main app or in the service worker for background notifications[3]. Implement logic to open the relevant page (using window focus or navigation) and update the notification state to 'read' in the application.
+
+## 5. Add Graceful Fallback to In-App Notifications [pending]
+### Dependencies: 8.2
+### Description: Implement fallback logic to display in-app notifications if browser notification permissions are denied or unavailable.
+### Details:
+Check the permission state before attempting to send a browser notification. If permissions are denied or unsupported, trigger the existing in-app notification system instead, ensuring users are always notified regardless of browser capabilities.
+
+## 6. Test and Validate Notification Flows Across Browsers [pending]
+### Dependencies: 8.4, 8.5
+### Description: Thoroughly test browser notification flows, permission handling, click actions, and fallback mechanisms on all supported browsers and platforms.
+### Details:
+Verify that notifications are displayed correctly with all specified fields, permission requests are context-aware, click actions work as intended, and fallback to in-app notifications occurs when necessary. Address any browser-specific quirks or limitations discovered during testing.
 

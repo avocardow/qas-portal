@@ -1,300 +1,55 @@
 # Task ID: 2
-# Title: Implement Client Data Fetching
-# Status: done
+# Title: Create Notification Service
+# Status: pending
 # Dependencies: 1
 # Priority: high
-# Description: Set up tRPC query hooks to fetch client data and implement loading states.
+# Description: Develop a notification service that handles message templating, notification creation, and implements smart notification logic.
 # Details:
-1. Implement `useQuery('clients.getById')` to fetch client data
-2. Create loading and error states for data fetching
-3. Setup React Query caching configuration
-4. Create type definitions based on the Client data model
-5. Implement fallback UI for when data is loading or errors occur
+Create src/server/services/notificationService.ts with functions for different notification types: createClientAssignment, createAuditAssignment, and createAuditUpdate. Implement message template generation with React-compatible formatting using the NotificationMessage type structure. Add logic for self-notification prevention (skip if creator = recipient), deduplication (check for identical notifications within time window), entity validation, and rate limiting. Include helper functions for user lookup and message formatting. Implement the message formatting system using React component composition instead of HTML tags.
 
 # Test Strategy:
-Test data fetching with mock API responses. Verify loading states display correctly and error handling works as expected.
+Write unit tests for each notification creation function. Test edge cases like self-notifications, duplicate notifications, and rate limiting. Mock database interactions for isolated testing.
 
 # Subtasks:
-## 1. Define Client Data Model and Type Definitions [done]
+## 1. Create NotificationMessage type structure [pending]
 ### Dependencies: None
-### Description: Create TypeScript interfaces and Zod schemas for the client data model to ensure type safety across the application.
+### Description: Define the core data structure for notification messages that supports React-compatible formatting
 ### Details:
-1. Create a `types/client.ts` file with TypeScript interfaces for the Client model
-2. Define Zod schemas for validation that match the TypeScript interfaces
-3. Export type definitions to be used by both server and client
-4. Include all necessary client fields (id, name, email, etc.)
-5. Add documentation comments for each field
-6. Test the type definitions by validating sample data
+Create a TypeScript interface for NotificationMessage that includes fields for message content, formatting options, metadata, and React component composition. The structure should support different notification types (client assignment, audit assignment, audit update) and include properties for sender, recipient, timestamp, priority level, and notification status. Ensure the type structure is extensible for future notification types.
 
-Example implementation:
-```typescript
-// types/client.ts
-import { z } from 'zod';
-
-export const clientSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  company: z.string(),
-  status: z.enum(['active', 'inactive', 'prospect']),
-  createdAt: z.date(),
-  updatedAt: z.date()
-});
-
-export type Client = z.infer<typeof clientSchema>;
-```
-
-## 2. Implement tRPC Server Procedures for Client Data [done]
+## 2. Implement message templating system [pending]
 ### Dependencies: 2.1
-### Description: Create type-safe tRPC procedures on the server side to fetch client data by ID and handle other client-related queries.
+### Description: Develop a flexible templating system that generates React-compatible notification content
 ### Details:
-1. Create a `server/routers/client.ts` file to define client-related procedures
-2. Implement the `getById` procedure with proper input validation using Zod
-3. Add error handling for cases like client not found
-4. Implement any additional client data procedures needed (getAll, search, etc.)
-5. Export and include the client router in the main app router
-6. Test the procedures with sample data
+Create helper functions for message formatting that use React component composition instead of HTML tags. Implement template generators for different notification types that populate the NotificationMessage structure. Include support for dynamic content insertion, conditional formatting based on notification type, and internationalization capabilities. Design the system to be extensible for future template additions.
 
-Example implementation:
-```typescript
-// server/routers/client.ts
-import { z } from 'zod';
-import { procedure, router } from '../trpc';
-import { clientSchema } from '../../types/client';
-
-export const clientRouter = router({
-  getById: procedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
-      try {
-        const client = await ctx.db.client.findUnique({
-          where: { id: input.id }
-        });
-        
-        if (!client) {
-          throw new Error('Client not found');
-        }
-        
-        return clientSchema.parse(client);
-      } catch (error) {
-        throw new Error(`Failed to fetch client: ${error.message}`);
-      }
-    }),
-  // Add other client procedures as needed
-});
-```
-
-## 3. Configure tRPC Client with React Query Integration [done]
-### Dependencies: 2.2
-### Description: Set up the tRPC client with React Query integration, including optimal caching configuration for client data.
+## 3. Create user lookup and entity validation functions [pending]
+### Dependencies: 2.1
+### Description: Implement utility functions for user identification and entity validation
 ### Details:
-1. Create a `utils/trpc.ts` file to set up the tRPC client
-2. Configure httpBatchLink for efficient network requests
-3. Set up React Query with appropriate caching settings
-4. Configure error handling and retry logic
-5. Export the tRPC hooks for use in components
-6. Test the configuration by making a simple query
+Develop helper functions to look up user information needed for notifications. Create validation functions to verify that entities referenced in notifications (clients, audits, assignments) exist and are valid. Implement error handling for cases where entities cannot be found or are invalid. These functions will be used by the notification creation functions to ensure data integrity.
 
-Example implementation:
-```typescript
-// utils/trpc.ts
-import { createTRPCReact } from '@trpc/react-query';
-import { httpBatchLink } from '@trpc/client';
-import { QueryClient } from '@tanstack/react-query';
-import type { AppRouter } from '../server/routers/_app';
-
-export const trpc = createTRPCReact<AppRouter>();
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
-export const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: '/api/trpc',
-      // Include credentials for cookie-based auth if needed
-      fetch(url, options) {
-        return fetch(url, {
-          ...options,
-          credentials: 'include',
-        });
-      },
-    }),
-  ],
-});
-```
-
-## 4. Create Custom Hook for Client Data Fetching [done]
-### Dependencies: 2.1, 2.3
-### Description: Develop a custom React hook that encapsulates the tRPC query logic for fetching client data, with proper typing and error handling.
+## 4. Implement core notification creation functions [pending]
+### Dependencies: 2.1, 2.2, 2.3
+### Description: Create the primary notification generation functions for different notification types
 ### Details:
-1. Create a `hooks/useClient.ts` file to implement the custom hook
-2. Use the tRPC hook to fetch client data by ID
-3. Add proper TypeScript typing for the hook parameters and return values
-4. Include error handling and data transformation if needed
-5. Add documentation for the hook usage
-6. Test the hook in isolation
+Implement the three main notification functions: createClientAssignment, createAuditAssignment, and createAuditUpdate. Each function should accept appropriate parameters, validate inputs, generate the notification message using the templating system, and return a properly formatted NotificationMessage object. Include proper error handling and logging for each function.
 
-Example implementation:
-```typescript
-// hooks/useClient.ts
-import { trpc } from '../utils/trpc';
-import type { Client } from '../types/client';
-
-interface UseClientOptions {
-  enabled?: boolean;
-  onSuccess?: (data: Client) => void;
-  onError?: (error: Error) => void;
-}
-
-/**
- * Hook to fetch client data by ID
- * @param id The client ID to fetch
- * @param options Additional query options
- * @returns Query result with client data, loading state, and error
- */
-export function useClient(id: string | undefined, options: UseClientOptions = {}) {
-  return trpc.client.getById.useQuery(
-    { id: id || '' },
-    {
-      enabled: !!id && (options.enabled !== false),
-      onSuccess: options.onSuccess,
-      onError: options.onError,
-    }
-  );
-}
-```
-
-## 5. Implement Loading and Error UI Components [done]
-### Dependencies: None
-### Description: Create reusable UI components for handling loading states, errors, and empty states when fetching client data.
+## 5. Develop self-notification prevention and deduplication logic [pending]
+### Dependencies: 2.4
+### Description: Implement logic to prevent unnecessary notifications
 ### Details:
-1. Create `components/ui/LoadingState.tsx` for showing loading indicators
-2. Create `components/ui/ErrorState.tsx` for displaying error messages
-3. Create `components/ui/EmptyState.tsx` for when no data is available
-4. Ensure components are accessible and provide clear feedback
-5. Make components customizable with props for different contexts
-6. Test components with various states and screen sizes
+Add logic to skip notification creation when the creator is the same as the recipient (self-notification prevention). Implement deduplication logic that checks for identical notifications within a configurable time window. Create a mechanism to compare notification content and metadata to identify duplicates. This should include a caching strategy or database query approach to efficiently check recent notifications.
 
-Example implementation:
-```typescript
-// components/ui/LoadingState.tsx
-import React from 'react';
-
-interface LoadingStateProps {
-  message?: string;
-  size?: 'small' | 'medium' | 'large';
-}
-
-export function LoadingState({ message = 'Loading...', size = 'medium' }: LoadingStateProps) {
-  return (
-    <div className="loading-container" aria-live="polite" role="status">
-      <div className={`spinner spinner-${size}`} />
-      <p className="loading-text">{message}</p>
-    </div>
-  );
-}
-
-// components/ui/ErrorState.tsx
-interface ErrorStateProps {
-  error: Error | null;
-  onRetry?: () => void;
-}
-
-export function ErrorState({ error, onRetry }: ErrorStateProps) {
-  return (
-    <div className="error-container" role="alert">
-      <h3>Something went wrong</h3>
-      <p>{error?.message || 'An unknown error occurred'}</p>
-      {onRetry && (
-        <button onClick={onRetry} className="retry-button">
-          Try Again
-        </button>
-      )}
-    </div>
-  );
-}
-```
-
-## 6. Integrate Client Data Fetching in Client Profile Component [done]
+## 6. Implement rate limiting functionality [pending]
 ### Dependencies: 2.4, 2.5
-### Description: Create a ClientProfile component that uses the custom hook to fetch and display client data with proper loading, error, and empty states.
+### Description: Create a rate limiting system to prevent notification flooding
 ### Details:
-1. Create `components/ClientProfile.tsx` component
-2. Use the `useClient` hook to fetch data based on client ID
-3. Implement conditional rendering for loading, error, and data states
-4. Add a refetch capability for error recovery
-5. Implement proper data display with all client fields
-6. Test the component with various data scenarios
+Develop a rate limiting mechanism that restricts the number of notifications sent to a user within a specific time period. Implement configurable thresholds for different notification types and priorities. Create a storage solution to track notification counts and timestamps. Add logic to queue or delay notifications that exceed rate limits, ensuring important notifications are still delivered appropriately.
 
-Example implementation:
-```typescript
-// components/ClientProfile.tsx
-import React from 'react';
-import { useClient } from '../hooks/useClient';
-import { LoadingState } from './ui/LoadingState';
-import { ErrorState } from './ui/ErrorState';
-
-interface ClientProfileProps {
-  clientId: string;
-}
-
-export function ClientProfile({ clientId }: ClientProfileProps) {
-  const { data: client, isLoading, error, refetch } = useClient(clientId);
-
-  if (isLoading) {
-    return <LoadingState message="Loading client data..." />;
-  }
-
-  if (error) {
-    return <ErrorState error={error} onRetry={() => refetch()} />;
-  }
-
-  if (!client) {
-    return (
-      <div className="empty-state">
-        <h3>Client Not Found</h3>
-        <p>The requested client could not be found or may have been deleted.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="client-profile">
-      <h2>{client.name}</h2>
-      <div className="client-details">
-        <div className="detail-row">
-          <span className="label">Email:</span>
-          <span className="value">{client.email}</span>
-        </div>
-        <div className="detail-row">
-          <span className="label">Phone:</span>
-          <span className="value">{client.phone || 'N/A'}</span>
-        </div>
-        <div className="detail-row">
-          <span className="label">Company:</span>
-          <span className="value">{client.company}</span>
-        </div>
-        <div className="detail-row">
-          <span className="label">Status:</span>
-          <span className={`value status-${client.status}`}>{client.status}</span>
-        </div>
-        <div className="detail-row">
-          <span className="label">Client since:</span>
-          <span className="value">{new Date(client.createdAt).toLocaleDateString()}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-```
+## 7. Integrate and test the complete notification service [pending]
+### Dependencies: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6
+### Description: Combine all components into a cohesive service and create comprehensive tests
+### Details:
+Create the main notificationService.ts file that exports all notification functions and utilities. Implement proper error handling, logging, and performance monitoring. Write unit tests for each component of the service, including template generation, notification creation, deduplication, and rate limiting. Create integration tests that verify the complete notification workflow. Document the API and usage patterns for the notification service.
 

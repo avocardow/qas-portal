@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2025-04-22T14:00:40.869Z",
-    "tasksAnalyzed": 8,
+    "generatedAt": "2025-06-08T05:24:17.759Z",
+    "tasksAnalyzed": 10,
     "thresholdScore": 5,
     "projectName": "Your Project Name",
     "usedResearch": true
@@ -9,67 +9,83 @@
   "complexityAnalysis": [
     {
       "taskId": 1,
-      "taskTitle": "Implement Personal Email Integration",
-      "complexityScore": 9,
-      "recommendedSubtasks": 7,
-      "expansionPrompt": "Break down the implementation of personal M365 email integration into backend API development, Graph API permissions setup, frontend UI layout, pagination, compose/reply/forward modals, HTML sanitization, and robust loading/error handling.",
-      "reasoning": "This task requires full-stack development, secure integration with Microsoft Graph API, complex UI/UX (3-column layout, modals), and careful handling of email content (HTML sanitization, error/loading states). Each component is interdependent and must be robust, making the overall complexity high."
+      "taskTitle": "Database Schema Migration for Notifications",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the schema migration into subtasks covering: requirements review, migration script creation, adding columns and constraints, implementing indexes, enum constraint enforcement, rollback script development, and comprehensive migration testing.",
+      "reasoning": "Database schema migrations are moderately complex due to the need for careful planning, rollback capability, and ensuring data integrity. Best practices include documentation, version control, automation, and thorough testing, all of which require distinct subtasks for a robust migration process.[1][5]"
     },
     {
       "taskId": 2,
-      "taskTitle": "Implement Admin Shared Mailbox Access",
-      "complexityScore": 7,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Detail the steps to extend email integration for shared mailbox access, including backend procedure updates, additional API permissions, RBAC enforcement, UI mailbox switcher, component adaptation, and correct email attribution.",
-      "reasoning": "This builds on the personal email integration, adding role-based access control, new API endpoints, and UI logic for mailbox switching. While leveraging existing infrastructure, it introduces new security and attribution challenges, raising complexity moderately."
+      "taskTitle": "Create Notification Service",
+      "complexityScore": 8,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Expand the notification service implementation into subtasks for: service scaffolding, message templating, notification logic (creation, deduplication, self-notification prevention), entity validation, rate limiting, helper utilities, and comprehensive unit/integration testing.",
+      "reasoning": "Developing a notification service involves multiple layers: message formatting, business logic, validation, and performance considerations. Implementing deduplication, rate limiting, and React-compatible templating adds to the complexity, requiring careful modularization and testing."
     },
     {
       "taskId": 3,
-      "taskTitle": "Enhance Client and Audit Detail Pages",
-      "complexityScore": 8,
-      "recommendedSubtasks": 7,
-      "expansionPrompt": "Expand the enhancement of Client and Audit detail pages into API optimization for relational data, tabbed interface design, table/list creation with sorting/filtering, audit page improvements, consistent component usage, and responsive design.",
-      "reasoning": "This task involves significant backend optimization for relational data, advanced frontend UI/UX (tabs, tables, responsive design), and consistent use of design systems. The breadth of entities and data relationships increases the implementation complexity."
+      "taskTitle": "Implement tRPC Notification Router",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down the tRPC router implementation into subtasks for: endpoint scaffolding, query/mutation logic, subscription setup, authentication/validation, user filtering, and router integration with the main API.",
+      "reasoning": "Building a tRPC router with real-time subscriptions, authentication, and multiple endpoints is moderately complex. Security, validation, and integration with the notification service require careful attention and clear separation of concerns."
     },
     {
       "taskId": 4,
-      "taskTitle": "Implement Teams Chat Integration",
-      "complexityScore": 8,
-      "recommendedSubtasks": 7,
-      "expansionPrompt": "Divide Teams chat integration into backend chat API creation, Graph API permission setup, chat UI layout, message pagination/infinite scroll, user search, chat creation flows, and error/loading state management.",
-      "reasoning": "Integrating real-time chat requires backend and frontend coordination, handling of chat history, user search, and new chat flows. The need for reliable state management and responsive UI increases complexity, especially with Microsoft Graph API integration."
+      "taskTitle": "Enhance NotificationDropdown Component",
+      "complexityScore": 6,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Divide the component enhancement into subtasks for: integrating real-time subscriptions, unread badge display, click-to-navigate and read marking, connection status/auto-reconnect, and message formatting with React components.",
+      "reasoning": "Enhancing a UI component for real-time updates and optimistic UI requires frontend expertise, but is less complex than backend service design. The main challenges are state management, UX, and integrating with the notification system."
     },
     {
       "taskId": 5,
-      "taskTitle": "Implement Teams Phone Integration",
-      "complexityScore": 8,
-      "recommendedSubtasks": 7,
-      "expansionPrompt": "Break down Teams Phone integration into backend call procedures, Graph API permissions, call log schema design, phone UI with search, call buttons, admin dial pad, call logging, and RBAC for phone features.",
-      "reasoning": "This task involves telephony integration, secure API usage, database design for call logs, and nuanced UI/UX for different roles. Handling real-time events and ensuring accurate logging add to the technical and operational complexity."
+      "taskTitle": "Integrate Client Assignment Notifications",
+      "complexityScore": 5,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the integration into subtasks for: mutation modification, assignment change detection, notification trigger logic, and error handling to isolate notification failures.",
+      "reasoning": "Integrating notification triggers into existing flows is straightforward but requires careful handling of edge cases (self-notification, error isolation). The logic is well-scoped and mostly involves code changes in specific areas."
     },
     {
       "taskId": 6,
-      "taskTitle": "Implement SharePoint Folder Linking",
-      "complexityScore": 7,
-      "recommendedSubtasks": 6,
-      "expansionPrompt": "Detail the SharePoint folder linking process into automated script development, backend API for folder access, RBAC for linking, UI for folder selection, document display, and web link integration.",
-      "reasoning": "This task combines backend scripting, API integration, RBAC, and UI for folder management. While leveraging SharePoint APIs, it requires careful mapping and user interaction design, making it moderately complex."
+      "taskTitle": "Integrate Audit Assignment Notifications",
+      "complexityScore": 5,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Expand the integration into subtasks for: updating audit assignment mutation, detecting assignment changes, triggering notifications, and implementing robust error handling.",
+      "reasoning": "Similar to client assignment, this task involves integrating notification logic into existing flows. The complexity is moderate, mainly due to the need for accurate change detection and error handling."
     },
     {
       "taskId": 7,
-      "taskTitle": "Implement UI Polish and Theme Switcher",
+      "taskTitle": "Implement Audit Progress Update Notifications",
       "complexityScore": 6,
       "recommendedSubtasks": 5,
-      "expansionPrompt": "Expand UI polish and theme switcher into feedback review, UI refinement, design system consistency, responsive improvements, theme switcher implementation, and theme persistence.",
-      "reasoning": "This is primarily a frontend/UI task involving design consistency and theme management. While important for user experience, it is less technically complex than deep integrations or backend-heavy tasks."
+      "expansionPrompt": "Break down the implementation into subtasks for: mutation update for stage/status changes, change detection logic, notification trigger for client managers, self-notification prevention, and error handling.",
+      "reasoning": "This task adds complexity due to the need to compare previous and new values, determine notification recipients, and prevent self-notifications. It requires careful logic to ensure correct and non-redundant notifications."
     },
     {
       "taskId": 8,
-      "taskTitle": "Integration Testing and Final Polishing",
-      "complexityScore": 10,
+      "taskTitle": "Implement Browser Push Notifications",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Divide browser notification implementation into subtasks for: permission management, notification creation, context-aware permission requests, click handling/navigation, permission state management, and graceful fallback logic.",
+      "reasoning": "Browser push notifications involve dealing with browser APIs, permission flows, and cross-platform nuances. Ensuring a seamless user experience and fallback mechanisms adds to the complexity."
+    },
+    {
+      "taskId": 9,
+      "taskTitle": "Implement Multi-device Read Status Synchronization",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Expand synchronization into subtasks for: backend broadcast logic, frontend subscription handler updates, optimistic UI implementation, conflict resolution for concurrent updates, and real-time badge update logic.",
+      "reasoning": "Synchronizing read status across devices requires real-time communication, conflict handling, and UI consistency. The need for robust backend and frontend coordination increases the complexity."
+    },
+    {
+      "taskId": 10,
+      "taskTitle": "Performance Optimization and Testing",
+      "complexityScore": 9,
       "recommendedSubtasks": 7,
-      "expansionPrompt": "Break down integration testing and final polish into end-to-end test creation, cross-component interaction testing, PRD acceptance verification, performance optimization, error/feedback consistency, UI/UX fixes, documentation updates, and cross-browser/device testing.",
-      "reasoning": "This task is the culmination of all previous work, requiring comprehensive testing, bug fixing, performance tuning, and documentation. It demands coordination across all features and systems, making it the most complex and critical phase."
+      "expansionPrompt": "Break down optimization and testing into subtasks for: pagination implementation, WebSocket connection pooling, reconnection/backoff logic, monitoring setup, query/index optimization, load/accessibility/responsive testing, and comprehensive test suite creation.",
+      "reasoning": "This task is highly complex due to the breadth of concerns: performance, scalability, monitoring, accessibility, and comprehensive testing. Each area requires specialized knowledge and thorough implementation to ensure system robustness."
     }
   ]
 }
