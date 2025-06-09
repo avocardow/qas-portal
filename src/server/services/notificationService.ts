@@ -359,11 +359,36 @@ export class NotificationService {
         }
       });
 
+      // Get updated unread count for the user
+      const unreadCount = await this.prisma.notification.count({
+        where: {
+          userId: recipientId,
+          isRead: false
+        }
+      });
+
+      // Import notificationEventEmitter here to avoid circular dependency
+      const { notificationEventEmitter } = await import('../services/eventEmitter');
+
+      // Broadcast new notification event for real-time updates
+      notificationEventEmitter.broadcastNewNotification({
+        userId: recipientId,
+        notificationId: notification.id,
+        type: notification.type,
+        message: notification.message,
+        linkUrl: notification.linkUrl || undefined,
+        entityId: notification.entityId || undefined,
+        createdAt: notification.createdAt,
+        unreadCount,
+        timestamp: new Date()
+      });
+
       logger.info(`Notification created successfully: ${notification.id}`, {
         type,
         recipientId,
         createdByUserId,
-        entityId
+        entityId,
+        unreadCount
       });
 
       return {

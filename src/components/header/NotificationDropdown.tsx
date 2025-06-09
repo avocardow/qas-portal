@@ -11,6 +11,7 @@ import Image from "next/image";
 
 import { createAndSendBrowserNotification } from '@/lib/notificationIntegration';
 import { useBrowserNotificationPermission } from '@/components/providers/BrowserNotificationProvider';
+import type { NotificationType } from '@prisma/client';
 
 // Connection status types
 type ConnectionStatus = 'connecting' | 'connected' | 'reconnecting' | 'disconnected' | 'error';
@@ -186,16 +187,100 @@ export default function NotificationDropdown() {
     },
   });
 
+  // Real-time subscription for new notifications
+  const { 
+    error: newNotificationSubscriptionError 
+  } = api.notification.subscribeToNewNotifications.useSubscription(undefined, {
+    onData: (data) => {
+      console.log('[NotificationDropdown] Received new notification:', data);
+      
+      // Create the new notification object in the format expected by the UI
+      const newNotification: NotificationItem = {
+        id: data.notificationId,
+        type: data.type as NotificationItem['type'],
+        message: data.message,
+        linkUrl: data.linkUrl || null,
+        isRead: false,
+        entityId: data.entityId || null,
+        createdAt: data.createdAt,
+        userId: data.userId,
+        user: {
+          id: data.userId,
+          name: null,
+          email: null,
+          emailVerified: null,
+          image: null,
+          roleId: 0,
+          m365ObjectId: null,
+          isActive: true,
+          createdAt: data.createdAt,
+          updatedAt: data.createdAt
+        },
+        createdByUser: null // Will be filled by refetch
+      };
+      
+      // Add to local notifications (at the beginning since they're sorted by createdAt desc)
+      setLocalNotifications(prev => [newNotification, ...prev]);
+      
+      // Update unread count
+      setLocalUnreadCount(data.unreadCount);
+      
+      // Announce to screen readers
+      const notificationText = `New notification: ${data.message}`;
+      announceToScreenReader(notificationText);
+      
+      // Send browser notification immediately
+      (async () => {
+        try {
+          console.log('[NotificationDropdown] Attempting to create browser notification for new notification:', {
+            notificationId: data.notificationId,
+            type: data.type,
+            browserPermission,
+            isBrowserNotificationSupported,
+            isRequestingPermission
+          });
+
+          const result = await createAndSendBrowserNotification(
+            data.notificationId,
+            data.type as NotificationType,
+            {
+              title: `New ${data.type.replace('_', ' ')} notification`,
+              body: data.message,
+              linkUrl: data.linkUrl || '/notifications',
+              entityId: data.entityId || undefined,
+              entityType: getEntityTypeFromNotificationType(data.type)
+            }
+          );
+
+          console.log('[NotificationDropdown] Browser notification result:', result);
+        } catch (error) {
+          console.warn('[NotificationDropdown] Failed to send browser notification:', error);
+        }
+      })();
+      
+      // Refetch to get complete data including createdByUser
+      refetchNotifications();
+    },
+    onError: (error) => {
+      console.error('New notification subscription error:', error);
+      setConnectionStatus('error');
+      handleReconnection();
+    },
+  });
+
   // Connection status updates are now handled in subscription callbacks
 
   // Handle subscription errors
   useEffect(() => {
-    if (subscriptionError) {
-      console.error('Subscription error:', subscriptionError);
+    if (subscriptionError || newNotificationSubscriptionError) {
+      console.error('Subscription error:', {
+        readStatus: subscriptionError,
+        newNotifications: newNotificationSubscriptionError
+      });
       setConnectionStatus('error');
       handleReconnection();
     }
-  }, [subscriptionError, handleReconnection]);
+  }, [subscriptionError, newNotificationSubscriptionError, handleReconnection]);
 
   // Update local state when data changes
   useEffect(() => {
@@ -210,57 +295,12 @@ export default function NotificationDropdown() {
     }
   }, [serverUnreadCount]);
 
-  // Detect new notifications and trigger browser notifications + screen reader announcements
+  // Update last notification count for legacy compatibility (now managed by real-time subscription)
   useEffect(() => {
     if (serverUnreadCount !== undefined) {
-      const currentCount = serverUnreadCount;
-      const hasNewNotifications = currentCount > lastNotificationCountRef.current && lastNotificationCountRef.current > 0;
-      
-      if (hasNewNotifications && notifications) {
-        // Find the newest unread notifications (those that weren't in the previous state)
-        const newNotificationCount = currentCount - lastNotificationCountRef.current;
-        const unreadNotifications = notifications.filter(n => !n.isRead);
-        const newestNotifications = unreadNotifications.slice(0, newNotificationCount);
-        
-        // Announce new notifications to screen readers
-        const notificationText = newNotificationCount === 1 
-          ? `New notification: ${newestNotifications[0]?.message || 'You have a new notification'}`
-          : `${newNotificationCount} new notifications received`;
-        announceToScreenReader(notificationText);
-        
-        // Send browser notifications for new notifications
-        newestNotifications.forEach(async (notification) => {
-          try {
-            console.log('[NotificationDropdown] Attempting to create browser notification:', {
-              notificationId: notification.id,
-              type: notification.type,
-              browserPermission,
-              isBrowserNotificationSupported,
-              isRequestingPermission
-            });
-
-            const result = await createAndSendBrowserNotification(
-              notification.id,
-              notification.type,
-              {
-                title: `New ${notification.type.replace('_', ' ')} notification`,
-                body: notification.message,
-                linkUrl: notification.linkUrl || '/notifications',
-                entityId: notification.entityId || undefined,
-                entityType: getEntityTypeFromNotificationType(notification.type)
-              }
-            );
-
-            console.log('[NotificationDropdown] Browser notification result:', result);
-          } catch (error) {
-            console.warn('[NotificationDropdown] Failed to send browser notification:', error);
-          }
-        });
-      }
-      
-      lastNotificationCountRef.current = currentCount;
+      lastNotificationCountRef.current = serverUnreadCount;
     }
-  }, [serverUnreadCount, notifications, announceToScreenReader, browserPermission, isBrowserNotificationSupported, isRequestingPermission]);
+  }, [serverUnreadCount]);
 
   // Helper function to get entity type from notification type
   const getEntityTypeFromNotificationType = (type: string): 'client' | 'audit' | 'task' | 'contact' | undefined => {

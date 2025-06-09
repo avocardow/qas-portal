@@ -4,7 +4,7 @@ import { NotificationService } from '@/server/services/notificationService';
 import { TRPCError } from '@trpc/server';
 import { NotificationType } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
-import { notificationEventEmitter, type NotificationReadStatusEvent } from '@/server/services/eventEmitter';
+import { notificationEventEmitter, type NotificationReadStatusEvent, type NewNotificationEvent } from '@/server/services/eventEmitter';
 import { NotificationCache } from '@/lib/redis';
 import { MetricsCollector } from '@/lib/metrics';
 import { roleHasPermission, type Role } from '@/policies/permissions';
@@ -813,6 +813,39 @@ export const notificationRouter = createTRPCRouter({
         return () => {
           notificationEventEmitter.unsubscribeFromUser(userId, onReadStatusChange);
           notificationEventEmitter.unsubscribeFromUser(userId, onBulkReadStatusChange);
+        };
+      });
+    }),
+
+  /**
+   * Real-time new notification subscription
+   * 
+   * Subscribes to new notifications for the current user in real-time.
+   * Emits events immediately when new notifications are created.
+   */
+  subscribeToNewNotifications: protectedProcedure
+    .subscription(({ ctx }) => {
+      return observable<NewNotificationEvent>((emit) => {
+        const userId = ctx.session.user.id;
+
+        // Handler for new notifications
+        const onNewNotification = (data: NewNotificationEvent) => {
+          // Only emit events for the current user
+          if (data.userId === userId) {
+            console.log(`[subscribeToNewNotifications] Emitting new notification for user ${userId}:`, data);
+            emit.next(data);
+          }
+        };
+
+        // Subscribe to new notification events
+        notificationEventEmitter.subscribeToUserNewNotifications(userId, onNewNotification);
+
+        console.log(`[subscribeToNewNotifications] User ${userId} subscribed to new notifications`);
+
+        // Cleanup function when subscription ends
+        return () => {
+          console.log(`[subscribeToNewNotifications] User ${userId} unsubscribed from new notifications`);
+          notificationEventEmitter.unsubscribeFromUserNewNotifications(userId, onNewNotification);
         };
       });
     }),

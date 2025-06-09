@@ -12,6 +12,21 @@ export interface NotificationReadStatusEvent {
 }
 
 /**
+ * New Notification Event Data
+ */
+export interface NewNotificationEvent {
+  userId: string;
+  notificationId: string;
+  type: string;
+  message: string;
+  linkUrl?: string;
+  entityId?: string;
+  createdAt: Date;
+  unreadCount: number;
+  timestamp: Date;
+}
+
+/**
  * Notification Event Types
  */
 export type NotificationEventType = 
@@ -73,6 +88,17 @@ class NotificationEventEmitter extends EventEmitter {
   }
 
   /**
+   * Broadcast new notification to user sessions
+   */
+  public broadcastNewNotification(data: NewNotificationEvent): void {
+    const eventKey = `notification:new:${data.userId}`;
+    this.emit(eventKey, data);
+    
+    // Also emit to general new notification channel for debugging
+    this.emit('notification:new', data);
+  }
+
+  /**
    * Subscribe to read status changes for a specific user
    */
   public subscribeToUserReadStatus(userId: string, callback: (data: NotificationReadStatusEvent) => void): void {
@@ -89,6 +115,14 @@ class NotificationEventEmitter extends EventEmitter {
   }
 
   /**
+   * Subscribe to new notifications for a specific user
+   */
+  public subscribeToUserNewNotifications(userId: string, callback: (data: NewNotificationEvent) => void): void {
+    const eventKey = `notification:new:${userId}`;
+    this.on(eventKey, callback);
+  }
+
+  /**
    * Unsubscribe from user events (cleanup on disconnect)
    */
   public unsubscribeFromUser(userId: string, callback: (data: NotificationReadStatusEvent) => void): void {
@@ -97,6 +131,14 @@ class NotificationEventEmitter extends EventEmitter {
     
     this.off(readStatusKey, callback);
     this.off(bulkReadKey, callback);
+  }
+
+  /**
+   * Unsubscribe from new notification events
+   */
+  public unsubscribeFromUserNewNotifications(userId: string, callback: (data: NewNotificationEvent) => void): void {
+    const newNotificationKey = `notification:new:${userId}`;
+    this.off(newNotificationKey, callback);
   }
 
   /**
