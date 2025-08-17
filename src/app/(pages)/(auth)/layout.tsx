@@ -13,7 +13,15 @@ export default async function AuthLayout({
   children: React.ReactNode;
 }) {
   // Redirect authenticated users to clients home
-  const session = await getServerSession(authOptions);
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    console.error(
+      "[AuthLayout] getServerSession failed; continuing as unauthenticated:",
+      error
+    );
+  }
   if (session) {
     redirect("/clients");
   }
@@ -36,8 +44,8 @@ export default async function AuthLayout({
                   />
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                QLD Audit Specialists Portal
-               </p>
+                  QLD Audit Specialists Portal
+                </p>
               </div>
             </div>
           </div>

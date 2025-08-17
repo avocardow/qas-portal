@@ -31,12 +31,17 @@ type ExtendedNotificationItem = NotificationItem & {
   };
 };
 
+// Local notification type allows optimistic items where createdByUser may be null
+type LocalNotificationItem = Omit<NotificationItem, 'createdByUser'> & {
+  createdByUser: NotificationItem['createdByUser'] | null;
+};
+
 export default function NotificationDropdown() {
   const router = useRouter();
   const { can } = useAbility();
   const [isOpen, setIsOpen] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('disconnected');
-  const [localNotifications, setLocalNotifications] = useState<NotificationItem[]>([]);
+  const [localNotifications, setLocalNotifications] = useState<LocalNotificationItem[]>([]);
   const [localUnreadCount, setLocalUnreadCount] = useState(0);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
@@ -75,7 +80,7 @@ export default function NotificationDropdown() {
   }, []);
 
   // Helper function to get client ID from notification
-  const getClientIdFromNotification = useCallback((notification: NotificationItem): string => {
+  const getClientIdFromNotification = useCallback((notification: LocalNotificationItem): string => {
     // All notifications now store clientId in entityId field
     return notification.entityId || '';
   }, []);
@@ -195,7 +200,7 @@ export default function NotificationDropdown() {
       console.log('[NotificationDropdown] Received new notification:', data);
       
       // Create the new notification object in the format expected by the UI
-      const newNotification: NotificationItem = {
+      const newNotification: LocalNotificationItem = {
         id: data.notificationId,
         type: data.type as NotificationItem['type'],
         message: data.message,
@@ -366,7 +371,7 @@ export default function NotificationDropdown() {
   }, [markAsReadMutation, refetchNotifications]);
 
   // Handle notification click with navigation and read marking
-  const handleNotificationClick = useCallback(async (notification: NotificationItem) => {
+  const handleNotificationClick = useCallback(async (notification: LocalNotificationItem) => {
     // Mark as read if unread
     if (!notification.isRead) {
       await optimisticMarkAsRead([notification.id]);

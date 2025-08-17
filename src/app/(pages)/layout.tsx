@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "QAS Portal",
   description: "A question and answer support portal",
   icons: {
-    icon: "/images/favicon.ico",
+    icon: "/favicon.ico",
   },
 };
 
