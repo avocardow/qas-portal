@@ -46,6 +46,13 @@ export default function NotificationDropdown() {
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const lastNotificationCountRef = useRef(0);
+
+  // Check if WebSocket is available (only in production with NEXT_PUBLIC_WS_URL set)
+  const isWebSocketAvailable = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    if (process.env.NODE_ENV !== 'production') return true; // Assume available in dev
+    return !!process.env.NEXT_PUBLIC_WS_URL;
+  }, []);
   
   // Browser notification permission status
   const { 
@@ -164,24 +171,25 @@ export default function NotificationDropdown() {
   }, [refetchNotifications]);
 
   // Real-time subscription for read status changes across devices
-  const { 
-    error: subscriptionError 
+  const {
+    error: subscriptionError
   } = api.notification.subscribeToReadStatus.useSubscription(undefined, {
+    enabled: isWebSocketAvailable,
     onData: (data) => {
       console.log('Received read status update:', data);
-      
+
       // Update local state optimistically
-      setLocalNotifications(prev => 
-        prev.map(notification => 
+      setLocalNotifications(prev =>
+        prev.map(notification =>
           data.notificationIds.includes(notification.id)
             ? { ...notification, isRead: data.isRead }
             : notification
         )
       );
-      
+
       // Update unread count from server
       setLocalUnreadCount(data.unreadCount);
-      
+
       // Refetch to ensure consistency
       refetchNotifications();
     },
@@ -193,12 +201,13 @@ export default function NotificationDropdown() {
   });
 
   // Real-time subscription for new notifications
-  const { 
-    error: newNotificationSubscriptionError 
+  const {
+    error: newNotificationSubscriptionError
   } = api.notification.subscribeToNewNotifications.useSubscription(undefined, {
+    enabled: isWebSocketAvailable,
     onData: (data) => {
       console.log('[NotificationDropdown] Received new notification:', data);
-      
+
       // Create the new notification object in the format expected by the UI
       const newNotification: LocalNotificationItem = {
         id: data.notificationId,
@@ -223,17 +232,17 @@ export default function NotificationDropdown() {
         },
         createdByUser: null // Will be filled by refetch
       };
-      
+
       // Add to local notifications (at the beginning since they're sorted by createdAt desc)
       setLocalNotifications(prev => [newNotification, ...prev]);
-      
+
       // Update unread count
       setLocalUnreadCount(data.unreadCount);
-      
+
       // Announce to screen readers
       const notificationText = `New notification: ${data.message}`;
       announceToScreenReader(notificationText);
-      
+
       // Send browser notification immediately
       (async () => {
         try {
@@ -262,7 +271,7 @@ export default function NotificationDropdown() {
           console.warn('[NotificationDropdown] Failed to send browser notification:', error);
         }
       })();
-      
+
       // Refetch to get complete data including createdByUser
       refetchNotifications();
     },

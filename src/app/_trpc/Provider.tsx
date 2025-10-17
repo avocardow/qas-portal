@@ -84,6 +84,19 @@ export default function TRPCProvider({
       },
     }) : null;
 
+    const httpLink = httpBatchLink({
+      url: `${getBaseUrl()}/api/trpc`,
+      transformer: superjson,
+      headers: () => {
+        const headers: Record<string, string> = {};
+        const impRole = impersonationService.getImpersonatedRole();
+        if (impRole) {
+          headers['x-impersonate-role'] = impRole;
+        }
+        return headers;
+      },
+    });
+
     return api.createClient({
       links: [
         loggerLink({
@@ -91,37 +104,20 @@ export default function TRPCProvider({
             process.env.NODE_ENV === "development" ||
             (op.direction === "down" && op.result instanceof Error),
         }),
-        // Split link: WebSocket for subscriptions, HTTP for queries/mutations
-        splitLink({
-          condition: (op) => op.type === 'subscription',
-          true: wsClient ? wsLink({
-            client: wsClient,
-            transformer: superjson,
-          }) : httpBatchLink({
-            url: `${getBaseUrl()}/api/trpc`,
-            transformer: superjson,
-            headers: () => {
-              const headers: Record<string, string> = {};
-              const impRole = impersonationService.getImpersonatedRole();
-              if (impRole) {
-                headers['x-impersonate-role'] = impRole;
-              }
-              return headers;
-            },
-          }),
-          false: httpBatchLink({
-            url: `${getBaseUrl()}/api/trpc`,
-            transformer: superjson,
-            headers: () => {
-              const headers: Record<string, string> = {};
-              const impRole = impersonationService.getImpersonatedRole();
-              if (impRole) {
-                headers['x-impersonate-role'] = impRole;
-              }
-              return headers;
-            },
-          }),
-        }),
+        // Only use split link if WebSocket is available
+        ...(wsClient ? [
+          splitLink({
+            condition: (op) => op.type === 'subscription',
+            true: wsLink({
+              client: wsClient,
+              transformer: superjson,
+            }),
+            false: httpLink,
+          })
+        ] : [
+          // No WebSocket - just use HTTP for everything (subscriptions will fail gracefully)
+          httpLink
+        ]),
       ],
     });
   });
