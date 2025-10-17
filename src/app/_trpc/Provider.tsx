@@ -17,8 +17,12 @@ const getBaseUrl = () => {
 const getWebSocketUrl = () => {
   if (typeof window === "undefined") return ""; // SSR - no WebSocket on server
   if (process.env.NODE_ENV === "production") {
-    // In production, use secure WebSocket
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || `wss://${window.location.host}`;
+    // In production, only enable WebSocket if explicitly configured
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL;
+    if (!wsUrl) {
+      console.warn('⚠️ WebSocket not configured in production. Real-time features disabled. Set NEXT_PUBLIC_WS_URL to enable.');
+      return ""; // Return empty string to disable WebSocket in production
+    }
     return wsUrl;
   }
   // Development - use local WebSocket server
@@ -45,8 +49,9 @@ export default function TRPCProvider({
 
   const [trpcClient] = useState(() => {
     // Create WebSocket client for subscriptions with enhanced exponential backoff
-    const wsClient = typeof window !== "undefined" ? createWSClient({
-      url: getWebSocketUrl(),
+    const wsUrl = getWebSocketUrl();
+    const wsClient = typeof window !== "undefined" && wsUrl ? createWSClient({
+      url: wsUrl,
              // Enhanced exponential backoff with jitter and max attempts
        retryDelayMs: (attemptIndex) => {
          // Cap at 10 attempts with very long delay for final attempts
@@ -54,16 +59,16 @@ export default function TRPCProvider({
            console.warn('WebSocket max retry attempts reached, using maximum delay');
            return 60000; // 1 minute delay for final attempts
          }
-         
+
          // Exponential backoff: 1s, 2s, 4s, 8s, 16s, 30s (cap at 30s)
          const baseDelay = 1000 * Math.pow(2, attemptIndex);
          const maxDelay = 30000; // 30 seconds max
          const cappedDelay = Math.min(baseDelay, maxDelay);
-         
+
          // Add jitter (±20%) to prevent thundering herd
          const jitter = cappedDelay * 0.2 * (Math.random() - 0.5);
          const finalDelay = Math.max(500, cappedDelay + jitter);
-         
+
          console.log(`WebSocket retry attempt ${attemptIndex + 1} in ${Math.round(finalDelay)}ms`);
          return finalDelay;
        },
